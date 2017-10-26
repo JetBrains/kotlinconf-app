@@ -1,0 +1,7 @@
+.terraform
+*.tfstate
+*.tfstate.backup
+.idea
+deploy/image
+.database
+local.properties
