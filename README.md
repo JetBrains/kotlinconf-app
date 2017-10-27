@@ -4,11 +4,8 @@
 
 This is the official KotlinConf App! We hope you enjoy(ed) the conference and sessions. This repository contains the source code of the application. 
 
-**Kotlin though and through**
-
-All pieces of the application are implemented in [Kotlin](https://kotlinlang.org). Backend, frontend and mobile apps (both Android and iOS) are Kotlin applications. Yes, Kotlin is powering all parts of the story. 
-
-Now let's dig into the details:
+All pieces of the application are implemented in *Kotlin*. Backend, frontend and mobile apps are Kotlin applications.
+Yes, Kotlin is powering all parts of the story. Did I already say that? Okay, let's get to the details:
 
 ### Server
 
@@ -39,3 +36,30 @@ platform natively with Kotlin, it is already a fully functional, connected appli
 native frameworks, and otherwise indistinguishable from Objective C or Swift application. While there are still
 rough edges and no multiplatform support ready for this kind of application, it's already showing the huge potential
 in enabling development of native applications for all platforms.
+
+## How to build and run
+
+### Building the code
+
+ * Make sure you have the Android SDK installed
+ * Open the project in IntelliJ IDEA (2017.3 EAP recommended)
+ * Create a file `local.properties` in the root directory of the project, pointing to your Android SDK installation. On Mac OS,
+the contents should be `sdk.dir=/Users/<your username>/Library/Android/sdk`. On other OSes, please adjust accordingly.
+ * Run `./gradlew build`
+
+### Running the backend
+ 
+ * Run `./gradlew backend:run` from the command line or from Gradle toolwindow
+ * The backend will start serving on localhost:8080, with data stored in a local H2 database
+
+### Running the Android app
+
+ * Create a run configuration of type "Android App"
+ * Select module "app" in the run configuration settings
+ * Run the configuration
+ * Select the emulator or connected device, as normal
+
+### Running the Web client
+
+ * Make sure the backend is running on localhost:8080
+ * Run `npm run serve` in the 'web' directory to run webpack development server

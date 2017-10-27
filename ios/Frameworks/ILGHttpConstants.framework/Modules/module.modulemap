@@ -1,0 +1,6 @@
+framework module ILGHttpConstants {
+  umbrella header "ILGHttpConstants-umbrella.h"
+
+  export *
+  module * { export * }
+}

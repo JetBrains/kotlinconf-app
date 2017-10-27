@@ -1,0 +1,6 @@
+framework module Groot {
+  umbrella header "Groot-umbrella.h"
+
+  export *
+  module * { export * }
+}

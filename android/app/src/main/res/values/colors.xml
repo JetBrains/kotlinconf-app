@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#35304E</color>
+    <color name="colorPrimaryDark">#24203D</color>
+    <color name="colorAccent">#F37021</color>
+    <color name="appbar_title_scrim_start">#50000000</color>
+    <color name="appbar_title_scrim_center">#20000000</color>
+    <color name="appbar_title_scrim_end">@android:color/transparent</color>
+    <color name="appbar_buttons_scrim_start">#20000000</color>
+    <color name="appbar_buttons_scrim_center">#10000000</color>
+    <color name="appbar_buttons_scrim_end">@android:color/transparent</color>
+</resources>

@@ -1,0 +1,7 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="270"
+        android:startColor="@color/appbar_buttons_scrim_start"
+        android:centerColor="@color/appbar_buttons_scrim_center"
+        android:endColor="@color/appbar_buttons_scrim_end"/>
+</shape>

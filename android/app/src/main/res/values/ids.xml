@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="session_title" type="id" />
+    <item name="session_room" type="id" />
+    <item name="session_start" type="id" />
+    <item name="session_speakers" type="id" />
+    <item name="session_image" type="id" />
+    <item name="sessions_view_pager" type="id" />
+    <item name="fragment_container" type="id" />
+    <item name="rating_bad" type="id" />
+    <item name="rating_ok" type="id" />
+    <item name="rating_good" type="id" />
+    <item name="info_fragment_container" type="id" />
+    <item name="session_layout" type="id" />
+    <item name="app_bar_layout" type="id" />
+    <item name="icon_location" type="id" />
+    <item name="icon_website" type="id" />
+    <item name="icon_twitter" type="id" />
+    <item name="header_item_type" type="id" />
+    <item name="session_item_type" type="id" />
+    <item name="session_list_header_title" type="id" />
+    <item name="session_details" type="id" />
+    <item name="icon_github" type="id" />
+</resources>
