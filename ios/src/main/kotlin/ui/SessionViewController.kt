@@ -67,8 +67,6 @@ class SessionViewController(aDecoder: NSCoder) : UIViewController(aDecoder) {
         DispatchQueue.main.async {
             highlightRatingButtons()
         }
-        
-        sessionForm.hidden = session.startsAtDate.orDefault() < NSDate()
     }
     
     private fun setupSpeakers() {
