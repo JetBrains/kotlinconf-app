@@ -1,0 +1,10 @@
+{
+  "name": "KotlinConf app",
+  "description": "This is the official KotlinConf App!",
+  "env": {
+    "GRADLE_TASK": {
+      "description": "The Gradle task that Heroku will run to build this app",
+      "value": "-Dorg.gradle.project.INCLUDE_ANDROID=false :backend:build"
+    }
+  }
+}

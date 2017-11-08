@@ -52,6 +52,10 @@ the contents should be `sdk.dir=/Users/<your username>/Library/Android/sdk`. On 
  * Run `./gradlew backend:run` from the command line or from Gradle toolwindow
  * The backend will start serving on localhost:8080, with data stored in a local H2 database
 
+Or deploy to Heroku with this button:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 ### Running the Android app
 
  * Create a run configuration of type "Android App"
