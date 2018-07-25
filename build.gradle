@@ -1,7 +1,7 @@
 allprojects {
     buildscript {
-        ext.kotlin_version = '1.2.0-rc-39'
-        ext.serialization_version = '0.2'
+        ext.kotlin_version = '1.2.51'
+        ext.serialization_version = '0.5.1'
         ext.anko_version = '0.10.1'
 
         repositories {
