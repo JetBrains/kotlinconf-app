@@ -2,11 +2,11 @@ apply plugin: 'kotlin-platform-jvm'
 apply plugin: 'kotlinx-serialization'
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
-    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
-    testCompile "junit:junit:4.12"
-    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
     expectedBy project(":common")
 }
 

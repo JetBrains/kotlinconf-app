@@ -1,5 +1,5 @@
 rootProject.name = 'kotlinconf-app'
-include 'web'
+// include 'web' TODO: Fixme
 include 'backend'
 include 'common'
 include 'common-jvm'

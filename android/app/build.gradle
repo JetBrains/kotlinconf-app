@@ -1,7 +1,10 @@
 buildscript {
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-    }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:3.3.0-alpha03'
+  }
+  repositories {
+    google()
+  }
 }
 
 apply plugin: 'com.android.application'
@@ -13,62 +16,62 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
-    defaultConfig {
-        applicationId "org.jetbrains.kotlinconf"
-        minSdkVersion 18
-        targetSdkVersion 26
-        versionCode 7
-        versionName "1.0.6"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  compileSdkVersion 28
+  defaultConfig {
+    applicationId "org.jetbrains.kotlinconf"
+    minSdkVersion 18
+    targetSdkVersion 28
+    versionCode 7
+    versionName "1.0.6"
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+  }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:recyclerview-v7:26.1.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:3.0.1', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  implementation 'com.android.support:appcompat-v7:28.0.0-beta01'
+  implementation "com.android.support:support-v4:28.0.0-beta01"
+  implementation 'com.android.support:recyclerview-v7:28.0.0-beta01'
+  implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+  testImplementation 'junit:junit:4.12'
+  androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  })
 
-    compile 'com.android.support:design:26.1.0'
+  implementation 'com.android.support:design:28.0.0-beta01'
 
-    compile"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    compile "android.arch.lifecycle:runtime:1.0.0"
-    compile "android.arch.lifecycle:extensions:1.0.0-alpha9-1"
-    kapt "android.arch.lifecycle:compiler:1.0.0-alpha9-1"
+  implementation "android.arch.lifecycle:runtime:1.1.1"
+  implementation "android.arch.lifecycle:extensions:1.1.1"
+  kapt "android.arch.lifecycle:compiler:1.1.1"
 
-    compile "org.jetbrains.anko:anko-sdk25:$anko_version"
-    compile "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
-    compile "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
-    compile "org.jetbrains.anko:anko-commons:$anko_version"
-    compile "org.jetbrains.anko:anko-design:$anko_version"
-    compile "org.jetbrains.anko:anko-coroutines:$anko_version"
+  implementation "org.jetbrains.anko:anko-sdk25:$anko_version"
+  implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
+  implementation "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
+  implementation "org.jetbrains.anko:anko-commons:$anko_version"
+  implementation "org.jetbrains.anko:anko-design:$anko_version"
+  implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+  implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+  implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
-    compile 'net.opacapp:multiline-collapsingtoolbar:1.5.0'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.brandongogetap:stickyheaders:0.4.9'
-    compile 'ru.gildor.coroutines:kotlin-coroutines-retrofit:0.8.2'
+  implementation 'net.opacapp:multiline-collapsingtoolbar:1.5.0'
+  implementation 'com.github.bumptech.glide:glide:3.7.0'
+  implementation 'com.brandongogetap:stickyheaders:0.4.9'
+  implementation 'ru.gildor.coroutines:kotlin-coroutines-retrofit:0.8.2'
 
-    compile project(":common-jvm")
+  implementation project(":common-jvm")
 }
 
 kotlin {
-    experimental {
-        coroutines "enable"
-    }
+  experimental {
+    coroutines "enable"
+  }
 }

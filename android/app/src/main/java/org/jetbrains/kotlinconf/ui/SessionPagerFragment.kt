@@ -4,7 +4,9 @@ import android.arch.lifecycle.LiveData
 import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
-import android.support.design.widget.AppBarLayout.LayoutParams.*
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
@@ -14,8 +16,6 @@ import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.jetbrains.kotlinconf.R
-import org.jetbrains.kotlinconf.SessionModel
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.appcompat.v7.toolbar
@@ -25,6 +25,8 @@ import org.jetbrains.anko.design.themedAppBarLayout
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.support.v4.viewPager
 import org.jetbrains.anko.wrapContent
+import org.jetbrains.kotlinconf.R
+import org.jetbrains.kotlinconf.SessionModel
 
 class SessionPagerFragment : Fragment(), AnkoComponent<Context> {
 
@@ -53,11 +55,11 @@ class SessionPagerFragment : Fragment(), AnkoComponent<Context> {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        return createView(AnkoContext.create(context))
+        return createView(AnkoContext.create(context!!))
     }
 
     override fun createView(ui: AnkoContext<Context>): View = with(ui) {

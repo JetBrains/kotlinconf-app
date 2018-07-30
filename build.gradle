@@ -1,8 +1,8 @@
 allprojects {
     buildscript {
-        ext.kotlin_version = '1.2.0-rc-39'
-        ext.serialization_version = '0.2'
-        ext.anko_version = '0.10.1'
+        ext.kotlin_version = '1.2.51'
+        ext.serialization_version = '0.6.0'
+        ext.anko_version = '0.10.5'
 
         repositories {
             maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.2' }
