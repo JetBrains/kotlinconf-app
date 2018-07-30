@@ -15,15 +15,45 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.text.util.Linkify
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
-import org.jetbrains.kotlinconf.*
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.appcompat.v7.toolbar
+import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.bottomOf
+import org.jetbrains.anko.centerHorizontally
+import org.jetbrains.anko.centerVertically
 import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.themedAppBarLayout
+import org.jetbrains.anko.dimen
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.imageView
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.margin
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.padding
+import org.jetbrains.anko.relativeLayout
+import org.jetbrains.anko.rightOf
 import org.jetbrains.anko.support.v4.nestedScrollView
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.view
+import org.jetbrains.anko.wrapContent
+import org.jetbrains.kotlinconf.R
+import org.jetbrains.kotlinconf.getColor
+import org.jetbrains.kotlinconf.getHtmlText
+import org.jetbrains.kotlinconf.getResourceId
+import org.jetbrains.kotlinconf.multilineCollapsingToolbarLayout
+import org.jetbrains.kotlinconf.theme
 
 class InfoFragment : Fragment(), AnkoComponent<Context> {
 
@@ -48,11 +78,11 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        return createView(AnkoContext.create(context))
+        return createView(AnkoContext.create(context!!))
     }
 
     override fun createView(ui: AnkoContext<Context>): View = with(ui) {

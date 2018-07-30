@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.ui
 
+import android.arch.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -13,23 +14,49 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.model.SessionRating
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
-import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
+import org.jetbrains.anko.applyRecursively
+import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.floatingActionButton
 import org.jetbrains.anko.design.themedAppBarLayout
+import org.jetbrains.anko.dimen
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.imageButton
+import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.imageView
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.margin
+import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.anko.support.v4.nestedScrollView
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.view
+import org.jetbrains.anko.wrapContent
+import org.jetbrains.kotlinconf.R
+import org.jetbrains.kotlinconf.SessionModel
+import org.jetbrains.kotlinconf.getColor
+import org.jetbrains.kotlinconf.getResourceId
+import org.jetbrains.kotlinconf.model.SessionRating
+import org.jetbrains.kotlinconf.multilineCollapsingToolbarLayout
+import org.jetbrains.kotlinconf.observe
+import org.jetbrains.kotlinconf.theme
+import org.jetbrains.kotlinconf.toReadableString
 
 class SessionDetailsFragment : Fragment() {
 
@@ -58,10 +85,10 @@ class SessionDetailsFragment : Fragment() {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
-        val sessionId = arguments.get(KEY_SESSION_ID) as String
+        val sessionId = arguments?.get(KEY_SESSION_ID) as String
         val viewModel = ViewModelProviders.of(
                 this,
-                ViewModelProviders.DefaultFactory(activity.application))
+                AndroidViewModelFactory.getInstance(activity!!.application))
                 .get(SessionDetailsViewModel::class.java)
                 .apply { setSession(sessionId) }
 
@@ -81,8 +108,7 @@ class SessionDetailsFragment : Fragment() {
                 if (rating != null) {
                     if (viewModel.rating.value != rating) {
                         viewModel.setRating(rating)
-                    }
-                    else {
+                    } else {
                         viewModel.removeRating()
                     }
                 }
@@ -94,8 +120,7 @@ class SessionDetailsFragment : Fragment() {
         viewModel.isFavorite.observe(this) { isFavorite ->
             if (isFavorite == true) {
                 favoriteButton.setImageResource(R.drawable.ic_favorite_white_24dp)
-            }
-            else {
+            } else {
                 favoriteButton.setImageResource(R.drawable.ic_favorite_border_white_24dp)
             }
         }
@@ -140,7 +165,7 @@ class SessionDetailsFragment : Fragment() {
             return
         }
 
-        with (session) {
+        with(session) {
             collapsingToolbar.title = session.title
             speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName ?: "" }
             val time = (session.startsAt to session.endsAt).toReadableString()
@@ -171,7 +196,7 @@ class SessionDetailsFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {

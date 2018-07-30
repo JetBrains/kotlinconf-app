@@ -38,20 +38,20 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    compile project(":common-jvm")
-    compile "io.ktor:ktor-server-netty:$ktor_version"
-    compile "io.ktor:ktor-gson:$ktor_version"
-    compile "io.ktor:ktor-auth:$ktor_version"
-    compile "io.ktor:ktor-websockets:$ktor_version"
-    compile "org.jetbrains.squash:squash:$squash_version"
-    compile "org.jetbrains.squash:squash-h2:$squash_version"
-    compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
-    compile "ch.qos.logback:logback-classic:1.2.1"
-    compile group: 'com.zaxxer', name: 'HikariCP', version: '2.7.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation project(":common-jvm")
+    implementation "io.ktor:ktor-server-netty:$ktor_version"
+    implementation "io.ktor:ktor-gson:$ktor_version"
+    implementation "io.ktor:ktor-auth:$ktor_version"
+    implementation "io.ktor:ktor-websockets:$ktor_version"
+    implementation "org.jetbrains.squash:squash:$squash_version"
+    implementation "org.jetbrains.squash:squash-h2:$squash_version"
+    implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
+    implementation "ch.qos.logback:logback-classic:1.2.1"
+    implementation group: 'com.zaxxer', name: 'HikariCP', version: '2.7.2'
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
 compileKotlin {

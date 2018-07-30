@@ -2,10 +2,10 @@ apply plugin: 'kotlin-platform-js'
 apply plugin: 'kotlinx-serialization'
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
-    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version"
-    testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
     expectedBy project(":common")
 }
 
