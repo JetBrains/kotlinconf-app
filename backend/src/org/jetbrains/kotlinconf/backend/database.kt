@@ -39,13 +39,13 @@ class Database(application: Application) {
         }
     }
 
-    suspend fun validateUser(uuid: String): Boolean = run(dispatcher) {
+    suspend fun validateUser(uuid: String): Boolean = withContext(dispatcher) {
         connection.transaction {
             Users.select { Users.id.count() }.where { Users.uuid eq uuid }.execute().single().get<Int>(0) != 0
         }
     }
 
-    suspend fun createUser(uuid: String, remote: String, timestamp: LocalDateTime): Boolean = run(dispatcher) {
+    suspend fun createUser(uuid: String, remote: String, timestamp: LocalDateTime): Boolean = withContext(dispatcher) {
         connection.transaction {
             val count = Users.select { Users.id.count() }.where { Users.uuid eq uuid }.execute().single().get<Int>(0)
             if (count == 0) {
@@ -59,13 +59,13 @@ class Database(application: Application) {
         }
     }
 
-    suspend fun usersCount(): Int = run(dispatcher) {
+    suspend fun usersCount(): Int = withContext(dispatcher) {
         connection.transaction {
             Users.select { Users.id.count() }.execute().single().get<Int>(0)
         }
     }
 
-    suspend fun deleteFavorite(uuid: String, sessionId: String): Unit = run(dispatcher) {
+    suspend fun deleteFavorite(uuid: String, sessionId: String): Unit = withContext(dispatcher) {
         connection.transaction {
             deleteFrom(Favorites)
                     .where { (Favorites.uuid eq uuid) and (Favorites.sessionId eq sessionId) }
@@ -73,7 +73,7 @@ class Database(application: Application) {
         }
     }
 
-    suspend fun createFavorite(uuid: String, sessionId: String) = run(dispatcher) {
+    suspend fun createFavorite(uuid: String, sessionId: String) = withContext(dispatcher) {
         connection.transaction {
             val count = Favorites.select { Favorites.id.count() }
                     .where { (Favorites.uuid eq uuid) and (Favorites.sessionId eq sessionId) }
@@ -88,7 +88,7 @@ class Database(application: Application) {
         }
     }
 
-    suspend fun getFavorites(uuid: String): List<Favorite> = run(dispatcher) {
+    suspend fun getFavorites(uuid: String): List<Favorite> = withContext(dispatcher) {
         connection.transaction {
             Favorites.select(Favorites.sessionId)
                     .where { Favorites.uuid eq uuid }
@@ -100,7 +100,7 @@ class Database(application: Application) {
         }
     }
 
-    suspend fun getAllFavorites(): List<Favorite> = run(dispatcher) {
+    suspend fun getAllFavorites(): List<Favorite> = withContext(dispatcher) {
         connection.transaction {
             Favorites.select(Favorites.sessionId).execute().map {
                 Favorite().apply {
@@ -110,7 +110,7 @@ class Database(application: Application) {
         }
     }
 
-    suspend fun getVotes(uuid: String): List<Vote> = run(dispatcher) {
+    suspend fun getVotes(uuid: String): List<Vote> = withContext(dispatcher) {
         connection.transaction {
             Votes.select(Votes.sessionId, Votes.rating).where { Votes.uuid eq uuid }
                     .execute().map {
@@ -122,7 +122,7 @@ class Database(application: Application) {
         }
     }
 
-    suspend fun getAllVotes(): List<Vote> = run(dispatcher) {
+    suspend fun getAllVotes(): List<Vote> = withContext(dispatcher) {
         connection.transaction {
             Votes.select(Votes.sessionId, Votes.rating).execute().map {
                 Vote().apply {
@@ -133,7 +133,7 @@ class Database(application: Application) {
         }
     }
 
-    suspend fun changeVote(uuid: String, sessionId: String, rating: Int, timestamp: LocalDateTime): Boolean = run(dispatcher) {
+    suspend fun changeVote(uuid: String, sessionId: String, rating: Int, timestamp: LocalDateTime): Boolean = withContext(dispatcher) {
         connection.transaction {
             val count = Votes.select { Votes.id.count() }
                     .where { (Votes.uuid eq uuid) and (Votes.sessionId eq sessionId) }
@@ -155,7 +155,7 @@ class Database(application: Application) {
         }
     }
 
-    suspend fun deleteVote(uuid: String, sessionId: String): Unit = run(dispatcher) {
+    suspend fun deleteVote(uuid: String, sessionId: String): Unit = withContext(dispatcher) {
         connection.transaction {
             deleteFrom(Votes)
                     .where { (Votes.uuid eq uuid) and (Votes.sessionId eq sessionId) }
@@ -164,7 +164,7 @@ class Database(application: Application) {
         }
     }
 
-    suspend fun getVotesSummary(sessionId: String): Map<String, Int> = run(dispatcher) {
+    suspend fun getVotesSummary(sessionId: String): Map<String, Int> = withContext(dispatcher) {
         connection.transaction {
             val votes = Votes.select(Votes.rating).select { Votes.id.count() }
                     .where { Votes.sessionId eq sessionId }
