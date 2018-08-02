@@ -4,6 +4,6 @@ import kotlinx.serialization.*
 
 @Serializable
 data class QuestionAnswer(
-	val questionId: Int? = null,
-	val answerValue: String? = null
+    val questionId: Int? = null,
+    val answerValue: String? = null
 )

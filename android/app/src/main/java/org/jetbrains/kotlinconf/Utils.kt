@@ -1,30 +1,26 @@
 package org.jetbrains.kotlinconf
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.Transformations
-import android.content.Context
-import android.content.res.Resources
-import android.os.Build.VERSION_CODES.N
-import android.support.annotation.AttrRes
-import android.support.annotation.ColorInt
-import android.text.Html
-import android.text.Spanned
-import android.util.TypedValue
-import android.view.ViewManager
-import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.custom.ankoView
-import ru.gildor.coroutines.retrofit.ErrorResult
-import ru.gildor.coroutines.retrofit.Result
-import ru.gildor.coroutines.retrofit.getOrNull
+import android.arch.lifecycle.*
+import android.content.*
+import android.content.res.*
+import android.os.Build.VERSION_CODES.*
+import android.support.annotation.*
+import android.text.*
+import android.util.*
+import android.view.*
+import net.opacapp.multilinecollapsingtoolbar.*
+import org.jetbrains.anko.*
+import org.jetbrains.anko.custom.*
+import ru.gildor.coroutines.retrofit.*
 
-inline fun ViewManager.multilineCollapsingToolbarLayout(theme: Int = 0, init: CollapsingToolbarLayout.() -> Unit): CollapsingToolbarLayout {
+inline fun ViewManager.multilineCollapsingToolbarLayout(
+    theme: Int = 0,
+    init: CollapsingToolbarLayout.() -> Unit
+): CollapsingToolbarLayout {
     return ankoView({ CollapsingToolbarLayout(it) }, theme = theme, init = init)
 }
 
-fun Context.getResourceId(@AttrRes attribute: Int) : Int {
+fun Context.getResourceId(@AttrRes attribute: Int): Int {
     val typedValue = TypedValue()
     theme.resolveAttribute(attribute, typedValue, true)
     return typedValue.resourceId
@@ -54,10 +50,10 @@ val AnkoContext<*>.theme: Resources.Theme
 
 // Needed for better type inference
 inline fun <X, Y> map(source: LiveData<X>, noinline func: (X?) -> Y): LiveData<Y> =
-        Transformations.map(source, func)
+    Transformations.map(source, func)
 
 inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) =
-        observe(owner, Observer { observer(it) })
+    observe(owner, Observer { observer(it) })
 
 
 inline fun <T : Any> Result<T>.ifFailed(handler: () -> Unit): Result<T> {

@@ -7,7 +7,6 @@ enum class SessionRating(val value: Int) {
     GOOD(1);
 
     companion object {
-        fun valueOf(value: Int): SessionRating? =
-                SessionRating.values().find { it.value == value }
+        fun valueOf(value: Int): SessionRating? = SessionRating.values().find { it.value == value }
     }
 }

@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.ui
 
+import android.arch.lifecycle.*
 import android.content.*
 import android.os.*
 import android.support.design.widget.*
@@ -17,6 +18,7 @@ import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.support.v4.*
 import org.jetbrains.anko.wrapContent
 import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.R
 
 class SessionPagerFragment : Fragment(), AnkoComponent<Context> {
 
@@ -45,9 +47,9 @@ class SessionPagerFragment : Fragment(), AnkoComponent<Context> {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return createView(AnkoContext.create(context!!))
     }
@@ -73,6 +75,7 @@ class SessionPagerFragment : Fragment(), AnkoComponent<Context> {
     }
 
     class AllSessionsFragment : SessionListFragment() {
+
         override val title: String = "All"
         override fun onUpdate(sessions: List<SessionModel>, favorites: List<SessionModel>) {
             sessionsAdapter.sessions = sessions
