@@ -1,7 +1,7 @@
 package org.jetbrains.kotlinconf.presentation
 
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.model.*
+import org.jetbrains.kotlinconf.data.*
 
 interface SessionDetailsView {
     fun updateView(session: SessionModel)

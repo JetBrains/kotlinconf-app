@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.model
+package org.jetbrains.kotlinconf.data
 
 
 enum class SessionRating(val value: Int) {
@@ -7,6 +7,6 @@ enum class SessionRating(val value: Int) {
     GOOD(1);
 
     companion object {
-        fun valueOf(value: Int): SessionRating? = SessionRating.values().find { it.value == value }
+        fun valueOf(value: Int): SessionRating = SessionRating.values().find { it.value == value }!!
     }
 }

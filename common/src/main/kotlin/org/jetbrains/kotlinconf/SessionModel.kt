@@ -4,49 +4,64 @@ import io.ktor.util.date.*
 import org.jetbrains.kotlinconf.data.*
 
 class SessionModel(
-    var id: String,
-    var title: String,
+    val id: String,
+    val title: String,
     val category: String?,
-    var description: String,
-    var startsAt: GMTDate,
-    var endsAt: GMTDate,
+    val description: String,
+    val startsAt: GMTDate,
+    val endsAt: GMTDate,
     val room: String?,
-    var speakers: Array<Speaker>
+    val speakers: Array<Speaker>
 ) {
     companion object {
-        fun forSession(all: AllData, sessionId: String): SessionModel? {
-            val briefSession = all.sessions?.firstOrNull { it.id == sessionId } ?: return null
-            val speakerMap = all.speakers?.associateBy { it.id } ?: emptyMap()
-            val roomMap = all.rooms?.associateBy { it.id } ?: emptyMap()
-            val categoryMap =
-                all.categories?.flatMap { it.items?.filterNotNull() ?: emptyList() }?.associateBy { it.id }
-                    ?: emptyMap()
+        fun forSession(all: AllData, sessionId: String): SessionModel {
+            val briefSession = all.sessions.first { it.id == sessionId }
+            val speakerMap = all.speakers.associateBy { it.id }
+            val roomMap = all.rooms.associateBy { it.id }
+            val categoryMap = all.categories
+                .flatMap { it.items }
+                .associateBy { it.id }
+
             return forSession(briefSession,
                 speakerProvider = { id -> speakerMap[id] },
                 categoryProvider = { id -> categoryMap[id] },
-                roomProvider = { id -> roomMap[id] }
+                roomProvider = { id -> roomMap[id]!! }
             )
         }
 
-        fun forSession(
+        private fun forSession(
             briefSession: Session,
             speakerProvider: (String) -> Speaker?,
             categoryProvider: (Int) -> CategoryItem?,
-            roomProvider: (Int) -> Room?
-        ): SessionModel? {
-            val startsAt = briefSession.startsAt ?: return null
-            val endsAt = briefSession.endsAt ?: return null
+            roomProvider: (Int) -> Room
+        ): SessionModel {
+            val startsAt = briefSession.startsAt
+            val endsAt = briefSession.endsAt
+
             return SessionModel(
-                id = briefSession.id!!,
-                title = briefSession.title ?: "<untitled>",
-                category = briefSession.categoryItems?.filterNotNull()?.map(categoryProvider)?.firstOrNull()?.name,
-                description = briefSession.description ?: "",
+                id = briefSession.id,
+                title = briefSession.title,
+                category = briefSession.categoryItems.map(categoryProvider).firstOrNull()?.name,
+                description = briefSession.description,
                 startsAt = parseDate(startsAt),
                 endsAt = parseDate(endsAt),
-                speakers = (briefSession.speakers
-                    ?: emptyList()).filterNotNull().mapNotNull { speakerProvider(it) }.toTypedArray(),
-                room = briefSession.roomId?.let(roomProvider)?.name
+                speakers = briefSession.speakers.mapNotNull { speakerProvider(it) }.toTypedArray(),
+                room = briefSession.roomId.let(roomProvider).name
             )
         }
     }
 }
+
+fun AllData.allSessions(): List<SessionModel> {
+    return sessions.map { it.id }.map { SessionModel.forSession(this, it) }
+        .sortedWith(Comparator { first, second ->
+            return@Comparator if (first.startsAt != second.startsAt) {
+                first.startsAt.compareTo(second.startsAt)
+            } else {
+                first.description.compareTo(second.description)
+            }
+        })
+}
+
+fun AllData.favoriteSessions(): List<SessionModel> =
+    favorites.map { it.sessionId }.map { SessionModel.forSession(this, it) }

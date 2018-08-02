@@ -2,7 +2,7 @@ package org.jetbrains.kotlinconf.presentation
 
 import kotlinx.coroutines.experimental.*
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.model.*
+import org.jetbrains.kotlinconf.data.*
 import kotlin.coroutines.experimental.*
 import kotlin.properties.Delegates.observable
 
@@ -10,7 +10,7 @@ class SessionDetailsPresenter(
     private val uiContext: CoroutineContext,
     private val view: SessionDetailsView,
     private val sessionId: String,
-    private val repository: KotlinConfDataRepository
+    private val repository: DataRepository
 ) {
     private lateinit var session: SessionModel
     private var isFavorite: Boolean by observable(false) { _, _, isFavorite ->
@@ -21,18 +21,11 @@ class SessionDetailsPresenter(
 
     fun onCreate() {
         refreshDataFromRepo()
-        repository.onUpdateListeners += onRefreshListener
+//        repository.addUpdateListener(onRefreshListener)
     }
 
     fun onDestroy() {
-        repository.onUpdateListeners -= onRefreshListener
-    }
-
-    private fun refreshDataFromRepo() {
-        session = repository.getSessionById(sessionId)!!
-        view.updateView(session)
-        isFavorite = repository.isFavorite(sessionId)
-        rating = repository.getRating(sessionId)
+//        repository.removeUpdateListener(onRefreshListener)
     }
 
     fun rateSession(newRating: SessionRating) {
@@ -56,4 +49,12 @@ class SessionDetailsPresenter(
             repository.setFavorite(session.id, isFavorite)
         }
     }
+
+    private fun refreshDataFromRepo() {
+        session = repository.getSessionById(sessionId)
+        view.updateView(session)
+        isFavorite = repository.isFavorite(sessionId)
+        rating = repository.getRating(sessionId)
+    }
+
 }

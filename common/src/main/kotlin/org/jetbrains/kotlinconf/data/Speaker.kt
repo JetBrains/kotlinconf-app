@@ -1,17 +1,15 @@
 package org.jetbrains.kotlinconf.data
 
-import kotlinx.serialization.*
-
-@Serializable
+//@Serializable
 data class Speaker(
-    val firstName: String? = null,
-    val lastName: String? = null,
-    val profilePicture: String? = null,
-    val sessions: List<Int?>? = null,
-    val tagLine: String? = null,
-    val isTopSpeaker: Boolean? = null,
-    val bio: String? = null,
-    val fullName: String? = null,
-    val links: List<Link?>? = null,
-    val id: String? = null
+    val firstName: String,
+    val lastName: String,
+    val profilePicture: String,
+    val sessions: List<Int>,
+    val tagLine: String,
+    val isTopSpeaker: Boolean,
+    val bio: String,
+    val fullName: String,
+    val links: List<Link>,
+    val id: String
 )

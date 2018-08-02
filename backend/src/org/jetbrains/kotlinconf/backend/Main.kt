@@ -13,7 +13,7 @@ import io.ktor.routing.*
 import io.ktor.util.*
 import io.ktor.websocket.*
 
-val gson = GsonBuilder().setPrettyPrinting().serializeNulls().create()
+val gson = GsonBuilder().setPrettyPrinting().serializeNulls().create()!!
 
 fun Application.main() {
     val config = environment.config

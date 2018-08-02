@@ -11,7 +11,6 @@ import android.view.*
 import net.opacapp.multilinecollapsingtoolbar.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.custom.*
-import ru.gildor.coroutines.retrofit.*
 
 inline fun ViewManager.multilineCollapsingToolbarLayout(
     theme: Int = 0,
@@ -54,24 +53,3 @@ inline fun <X, Y> map(source: LiveData<X>, noinline func: (X?) -> Y): LiveData<Y
 
 inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) =
     observe(owner, Observer { observer(it) })
-
-
-inline fun <T : Any> Result<T>.ifFailed(handler: () -> Unit): Result<T> {
-    if (this is ErrorResult) handler()
-    return this
-}
-
-inline fun <T : Any> Result<T>.ifSucceeded(handler: (data: T) -> Unit): Result<T> {
-    (this as? Result.Ok)?.getOrNull()?.let { handler(it) }
-    return this
-}
-
-inline fun <T : Any> Result<T>.ifError(handler: (code: Int) -> Unit): Result<T> {
-    (this as? Result.Error)?.response?.code()?.let { handler(it) }
-    return this
-}
-
-inline fun <T : Any> Result<T>.ifException(handler: (exception: Throwable) -> Unit): Result<T> {
-    (this as? Result.Exception)?.exception?.let { handler(it) }
-    return this
-}
