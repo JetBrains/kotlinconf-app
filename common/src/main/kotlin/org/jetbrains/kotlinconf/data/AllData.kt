@@ -1,16 +1,14 @@
 package org.jetbrains.kotlinconf.data
 
-import kotlinx.serialization.*
-
-@Serializable
+//@Serializable
 data class AllData(
-    val sessions: List<Session>? = null,
-    val rooms: List<Room>? = null,
-    val speakers: List<Speaker>? = null,
-    val questions: List<Question>? = null,
-    val categories: List<Category>? = null,
-    val favorites: List<Favorite>? = null,
-    val votes: List<Vote>? = null
+    val sessions: List<Session> = emptyList(),
+    val rooms: List<Room> = emptyList(),
+    val speakers: List<Speaker> = emptyList(),
+    val questions: List<Question> = emptyList(),
+    val categories: List<Category> = emptyList(),
+    val favorites: List<Favorite> = emptyList(),
+    val votes: List<Vote> = emptyList()
 )
 
 class SessionizeData(val allData: AllData, val etag: String = allData.hashCode().toString())

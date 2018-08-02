@@ -9,16 +9,9 @@ import org.jetbrains.anko.*
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.presentation.*
 
-class MainActivity :
-    AppCompatActivity(),
-    AnkoComponent<Context>,
-    NavigationManager,
-    SearchQueryProvider,
-    AnkoLogger {
-
-    private var _searchQuery: String = ""
-    override val searchQuery: String
-        get() = _searchQuery
+class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationManager, SearchQueryProvider, AnkoLogger {
+    override var searchQuery: String = ""
+        private set
 
     private val queryTextChangedListeners: MutableList<(String) -> Unit> = mutableListOf()
 
@@ -33,13 +26,13 @@ class MainActivity :
         if (savedInstanceState == null) {
             showSessionList()
         } else {
-            savedInstanceState.getString(SEARCH_QUERY_KEY)?.let { _searchQuery = it }
+            savedInstanceState.getString(SEARCH_QUERY_KEY)?.let { searchQuery = it }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putString(SEARCH_QUERY_KEY, _searchQuery)
+        outState?.putString(SEARCH_QUERY_KEY, searchQuery)
     }
 
     override fun createView(ui: AnkoContext<Context>): View = with(ui) {
@@ -52,8 +45,8 @@ class MainActivity :
         menuInflater.inflate(R.menu.main_menu, menu)
         val searchViewMenuItem = menu.findItem(R.id.search)
         val searchView = searchViewMenuItem.actionView as SearchView
-        if (_searchQuery.isNotEmpty()) {
-            searchView.setQuery(_searchQuery, false)
+        if (searchQuery.isNotEmpty()) {
+            searchView.setQuery(searchQuery, false)
             searchView.isIconified = false
         }
 
@@ -61,7 +54,7 @@ class MainActivity :
             override fun onQueryTextSubmit(query: String): Boolean = false
             override fun onQueryTextChange(newText: String): Boolean {
                 queryTextChangedListeners.forEach { it.invoke(newText) }
-                _searchQuery = newText
+                searchQuery = newText
                 return true
             }
         })

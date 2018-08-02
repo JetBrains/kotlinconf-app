@@ -128,7 +128,7 @@ abstract class SessionListFragment : Fragment(), AnkoComponent<Context> {
                     with(holder) {
                         setTitle(session.title)
                         val detailStrings: List<String> =
-                            session.speakers.map { it.fullName ?: "" } + listOfNotNull(session.roomText)
+                            session.speakers.map { it.fullName } + listOfNotNull(session.roomText)
 
                         setDetails(detailStrings.joinToString(", "))
                         setStartsAt(session.startsAt.toReadableTimeString())

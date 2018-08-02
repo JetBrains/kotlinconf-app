@@ -1,9 +1,9 @@
 package org.jetbrains.kotlinconf.backend
 
-import org.jetbrains.kotlinconf.data.*
 import com.zaxxer.hikari.*
 import io.ktor.application.*
 import kotlinx.coroutines.experimental.*
+import org.jetbrains.kotlinconf.data.*
 import org.jetbrains.squash.connection.*
 import org.jetbrains.squash.definition.*
 import org.jetbrains.squash.dialects.h2.*
@@ -68,16 +68,16 @@ class Database(application: Application) {
     suspend fun deleteFavorite(uuid: String, sessionId: String): Unit = withContext(dispatcher) {
         connection.transaction {
             deleteFrom(Favorites)
-                    .where { (Favorites.uuid eq uuid) and (Favorites.sessionId eq sessionId) }
-                    .execute()
+                .where { (Favorites.uuid eq uuid) and (Favorites.sessionId eq sessionId) }
+                .execute()
         }
     }
 
     suspend fun createFavorite(uuid: String, sessionId: String) = withContext(dispatcher) {
         connection.transaction {
             val count = Favorites.select { Favorites.id.count() }
-                    .where { (Favorites.uuid eq uuid) and (Favorites.sessionId eq sessionId) }
-                    .execute().single().get<Int>(0)
+                .where { (Favorites.uuid eq uuid) and (Favorites.sessionId eq sessionId) }
+                .execute().single().get<Int>(0)
             if (count == 0) {
                 insertInto(Favorites).values {
                     it[Favorites.uuid] = uuid
@@ -91,75 +91,58 @@ class Database(application: Application) {
     suspend fun getFavorites(uuid: String): List<Favorite> = withContext(dispatcher) {
         connection.transaction {
             Favorites.select(Favorites.sessionId)
-                    .where { Favorites.uuid eq uuid }
-                    .execute().map {
-                Favorite().apply {
-                    sessionId = it.get<String>(0)
-                }
-            }.toList()
+                .where { Favorites.uuid eq uuid }
+                .execute().map { Favorite(it[0]) }.toList()
         }
     }
 
     suspend fun getAllFavorites(): List<Favorite> = withContext(dispatcher) {
         connection.transaction {
-            Favorites.select(Favorites.sessionId).execute().map {
-                Favorite().apply {
-                    sessionId = it.get<String>(0)
-                }
-            }.toList()
+            Favorites.select(Favorites.sessionId).execute().map { Favorite(it[0]) }.toList()
         }
     }
 
     suspend fun getVotes(uuid: String): List<Vote> = withContext(dispatcher) {
         connection.transaction {
             Votes.select(Votes.sessionId, Votes.rating).where { Votes.uuid eq uuid }
-                    .execute().map {
-                Vote().apply {
-                    sessionId = it.get<String>(0)
-                    rating = it.get<Int>(1)
-                }
-            }.toList()
+                .execute().map { Vote(sessionId = it[0], rating = it[1]) }.toList()
         }
     }
 
     suspend fun getAllVotes(): List<Vote> = withContext(dispatcher) {
         connection.transaction {
-            Votes.select(Votes.sessionId, Votes.rating).execute().map {
-                Vote().apply {
-                    sessionId = it.get<String>(0)
-                    rating = it.get<Int>(1)
-                }
-            }.toList()
+            Votes.select(Votes.sessionId, Votes.rating).execute().map { Vote(it[0], it[1]) }.toList()
         }
     }
 
-    suspend fun changeVote(uuid: String, sessionId: String, rating: Int, timestamp: LocalDateTime): Boolean = withContext(dispatcher) {
-        connection.transaction {
-            val count = Votes.select { Votes.id.count() }
+    suspend fun changeVote(uuid: String, sessionId: String, rating: Int, timestamp: LocalDateTime): Boolean =
+        withContext(dispatcher) {
+            connection.transaction {
+                val count = Votes.select { Votes.id.count() }
                     .where { (Votes.uuid eq uuid) and (Votes.sessionId eq sessionId) }
                     .execute().single().get<Int>(0)
-            if (count == 0) {
-                insertInto(Votes).values {
-                    it[Votes.uuid] = uuid
-                    it[Votes.sessionId] = sessionId
-                    it[Votes.rating] = rating
-                    it[Votes.timestamp] = timestamp.toString()
-                }.execute()
-                true
-            } else {
-                update(Votes).where { (Votes.uuid eq uuid) and (Votes.sessionId eq sessionId) }.set {
-                    it[Votes.rating] = rating
-                }.execute()
-                false
+                if (count == 0) {
+                    insertInto(Votes).values {
+                        it[Votes.uuid] = uuid
+                        it[Votes.sessionId] = sessionId
+                        it[Votes.rating] = rating
+                        it[Votes.timestamp] = timestamp.toString()
+                    }.execute()
+                    true
+                } else {
+                    update(Votes).where { (Votes.uuid eq uuid) and (Votes.sessionId eq sessionId) }.set {
+                        it[Votes.rating] = rating
+                    }.execute()
+                    false
+                }
             }
         }
-    }
 
     suspend fun deleteVote(uuid: String, sessionId: String): Unit = withContext(dispatcher) {
         connection.transaction {
             deleteFrom(Votes)
-                    .where { (Votes.uuid eq uuid) and (Votes.sessionId eq sessionId) }
-                    .execute()
+                .where { (Votes.uuid eq uuid) and (Votes.sessionId eq sessionId) }
+                .execute()
 
         }
     }
@@ -167,9 +150,9 @@ class Database(application: Application) {
     suspend fun getVotesSummary(sessionId: String): Map<String, Int> = withContext(dispatcher) {
         connection.transaction {
             val votes = Votes.select(Votes.rating).select { Votes.id.count() }
-                    .where { Votes.sessionId eq sessionId }
-                    .groupBy(Votes.rating)
-                    .execute()
+                .where { Votes.sessionId eq sessionId }
+                .groupBy(Votes.rating)
+                .execute()
             val map = votes.associateTo(mutableMapOf()) {
                 val rating = when (it.get<Int>(0)) {
                     0 -> "soso"
