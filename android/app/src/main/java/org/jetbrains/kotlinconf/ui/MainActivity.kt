@@ -1,24 +1,20 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.content.Context
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.SearchView
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import org.jetbrains.kotlinconf.R
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.frameLayout
+import android.content.*
+import android.os.*
+import android.support.v7.app.*
+import android.support.v7.widget.*
+import android.view.*
+import org.jetbrains.anko.*
+import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.presentation.*
 
 class MainActivity :
-        AppCompatActivity(),
-        AnkoComponent<Context>,
-        NavigationManager,
-        SearchQueryProvider,
-        AnkoLogger {
+    AppCompatActivity(),
+    AnkoComponent<Context>,
+    NavigationManager,
+    SearchQueryProvider,
+    AnkoLogger {
 
     private var _searchQuery: String = ""
     override val searchQuery: String
@@ -36,8 +32,7 @@ class MainActivity :
 
         if (savedInstanceState == null) {
             showSessionList()
-        }
-        else {
+        } else {
             savedInstanceState.getString(SEARCH_QUERY_KEY)?.let { _searchQuery = it }
         }
     }
@@ -87,38 +82,38 @@ class MainActivity :
             return
 
         supportFragmentManager
-                .beginTransaction()
-                .setCustomAnimations(
-                        R.anim.enter_from_right,
-                        R.anim.exit_to_left,
-                        R.anim.enter_from_left,
-                        R.anim.exit_to_right
-                )
-                .addToBackStack("Info")
-                .replace(R.id.fragment_container, InfoFragment(), InfoFragment.TAG)
-                .commit()
+            .beginTransaction()
+            .setCustomAnimations(
+                R.anim.enter_from_right,
+                R.anim.exit_to_left,
+                R.anim.enter_from_left,
+                R.anim.exit_to_right
+            )
+            .addToBackStack("Info")
+            .replace(R.id.fragment_container, InfoFragment(), InfoFragment.TAG)
+            .commit()
     }
 
     override fun showSessionList() {
         supportFragmentManager
-                .beginTransaction()
-                .add(R.id.fragment_container, SessionPagerFragment(), SessionListFragment.TAG)
-                .commit()
+            .beginTransaction()
+            .add(R.id.fragment_container, SessionPagerFragment(), SessionListFragment.TAG)
+            .commit()
     }
 
     override fun showSessionDetails(sessionId: String) {
         val fragment = SessionDetailsFragment.forSession(sessionId)
         supportFragmentManager
-                .beginTransaction()
-                .setCustomAnimations(
-                        R.anim.enter_from_right,
-                        R.anim.exit_to_left,
-                        R.anim.enter_from_left,
-                        R.anim.exit_to_right
-                )
-                .addToBackStack("Session")
-                .replace(R.id.fragment_container, fragment, SessionDetailsFragment.TAG)
-                .commit()
+            .beginTransaction()
+            .setCustomAnimations(
+                R.anim.enter_from_right,
+                R.anim.exit_to_left,
+                R.anim.enter_from_left,
+                R.anim.exit_to_right
+            )
+            .addToBackStack("Session")
+            .replace(R.id.fragment_container, fragment, SessionDetailsFragment.TAG)
+            .commit()
     }
 
     companion object {

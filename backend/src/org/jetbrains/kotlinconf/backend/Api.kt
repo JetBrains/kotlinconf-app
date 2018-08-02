@@ -11,7 +11,7 @@ import io.ktor.pipeline.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import io.ktor.http.cio.websocket.*
+import io.ktor.http.cio.websocket.Frame
 import io.ktor.websocket.webSocket
 import kotlinx.coroutines.experimental.channels.*
 import java.time.*

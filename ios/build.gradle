@@ -5,7 +5,6 @@ dependencies {
     expectedBy project(':common')
 
     implementation "io.ktor:ktor-client-ios:$ktor_version"
-    implementation "io.ktor:ktor-client-json-ios:$ktor_version"
 }
 
 sourceSets {
