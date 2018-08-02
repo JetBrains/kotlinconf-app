@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.ui
+package org.jetbrains.kotlinconf.presentation
 
 
 interface SearchQueryProvider {

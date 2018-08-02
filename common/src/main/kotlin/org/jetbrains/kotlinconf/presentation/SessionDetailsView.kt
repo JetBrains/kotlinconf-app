@@ -1,4 +1,4 @@
-package com.jetbrains.kotlinconf.presentation
+package org.jetbrains.kotlinconf.presentation
 
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.model.*

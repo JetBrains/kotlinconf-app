@@ -1,6 +1,6 @@
-package com.jetbrains.kotlinconf.presentation
+package org.jetbrains.kotlinconf.presentation
 
-import org.jetbrains.kotlinconf.SessionModel
+import org.jetbrains.kotlinconf.*
 
 interface SessionListView {
     var isUpdating: Boolean

@@ -6,10 +6,10 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.jetbrains.kotlinconf.presentation.KotlinConfDataRepository
+import org.jetbrains.kotlinconf.presentation.KotlinConfDataRepository
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.api.KotlinConfApi
-import org.jetbrains.kotlinconf.api.KotlinConfApi.Companion.DATE_FORMAT
+import com.jetbrains.kotlinconf.api.KotlinConfApi
+import com.jetbrains.kotlinconf.api.KotlinConfApi.Companion.DATE_FORMAT
 import org.jetbrains.kotlinconf.data.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -21,7 +21,6 @@ import org.jetbrains.anko.defaultSharedPreferences
 import org.jetbrains.anko.info
 import org.jetbrains.anko.warn
 import retrofit2.Retrofit
-import ru.gildor.coroutines.retrofit.awaitResult
 import java.io.File
 import java.util.*
 import kotlin.properties.Delegates.observable

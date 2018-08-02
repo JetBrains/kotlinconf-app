@@ -1,16 +1,15 @@
-package com.jetbrains.kotlinconf.presentation
+package org.jetbrains.kotlinconf.presentation
 
 import kotlinx.coroutines.experimental.*
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.ui.*
 import kotlin.coroutines.experimental.*
 
 class SessionListPresenter(
-        private val uiContext: CoroutineContext,
-        private val view: SessionListView,
-        private val repository: KotlinConfDataRepository,
-        private val navigationManager: NavigationManager,
-        private val searchQueryProvider: SearchQueryProvider
+    private val uiContext: CoroutineContext,
+    private val view: SessionListView,
+    private val repository: KotlinConfDataRepository,
+    private val navigationManager: NavigationManager,
+    private val searchQueryProvider: SearchQueryProvider
 
 ) {
     private val onRefreshListener: () -> Unit = this::refreshDataFromRepo
@@ -55,7 +54,8 @@ private fun List<SessionModel>.filter(searchQuery: String?): List<SessionModel> 
     searchQuery?.takeUnless { it.isEmpty() } ?: return this
     val searchQueryLower = searchQuery.toLowerCase()
     return filter { session ->
-        searchQueryLower in session.title.toLowerCase()
-                || session.speakers.mapNotNull { it.fullName }.any { fullName -> searchQueryLower in fullName.toLowerCase() }
+        searchQueryLower in session.title.toLowerCase() || session.speakers.mapNotNull { it.fullName }.any { fullName ->
+            searchQueryLower in fullName.toLowerCase()
+        }
     }
 }

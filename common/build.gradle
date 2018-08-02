@@ -2,6 +2,8 @@ apply plugin: 'kotlin-platform-common'
 apply plugin: 'kotlinx-serialization'
 
 dependencies {
+    implementation "io.ktor:ktor-client:$ktor_version"
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialization_version"

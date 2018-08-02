@@ -1,4 +1,4 @@
-package com.jetbrains.kotlinconf.presentation
+package org.jetbrains.kotlinconf.presentation
 
 import kotlinx.coroutines.experimental.*
 import org.jetbrains.kotlinconf.*
@@ -7,10 +7,10 @@ import kotlin.coroutines.experimental.*
 import kotlin.properties.Delegates.observable
 
 class SessionDetailsPresenter(
-        private val uiContext: CoroutineContext,
-        private val view: SessionDetailsView,
-        private val sessionId: String,
-        private val repository: KotlinConfDataRepository
+    private val uiContext: CoroutineContext,
+    private val view: SessionDetailsView,
+    private val sessionId: String,
+    private val repository: KotlinConfDataRepository
 ) {
     private lateinit var session: SessionModel
     private var isFavorite: Boolean by observable(false) { _, _, isFavorite ->

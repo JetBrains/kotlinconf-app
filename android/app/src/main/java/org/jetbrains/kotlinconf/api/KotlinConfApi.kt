@@ -1,22 +1,14 @@
 package org.jetbrains.kotlinconf.api
 
-import com.google.gson.GsonBuilder
-import okhttp3.Interceptor
-import org.jetbrains.kotlinconf.data.AllData
-import org.jetbrains.kotlinconf.data.Favorite
-import org.jetbrains.kotlinconf.data.Vote
-import okhttp3.OkHttpClient
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
-import okhttp3.logging.HttpLoggingInterceptor
-import org.jetbrains.kotlinconf.BuildConfig
+import com.google.gson.*
+import okhttp3.*
+import okhttp3.logging.*
+import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.data.*
+import retrofit2.*
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.HTTP
-import retrofit2.http.POST
+import retrofit2.converter.gson.*
+import retrofit2.http.*
 
 interface KotlinConfApi {
     @GET("all")
@@ -42,32 +34,32 @@ interface KotlinConfApi {
         const val DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
 
         val gson = GsonBuilder()
-                .setDateFormat(DATE_FORMAT)
-                .create()
+            .setDateFormat(DATE_FORMAT)
+            .create()
 
         fun create(userId: String): KotlinConfApi {
             val client = makeOkHttpClient(userId)
 
             val retrofit = Retrofit.Builder()
-                    .client(client)
-                    .baseUrl(KotlinConfApi.END_POINT)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build()
+                .client(client)
+                .baseUrl(END_POINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build()
 
             return retrofit.create(KotlinConfApi::class.java)
         }
 
         private fun makeOkHttpClient(userId: String) = OkHttpClient.Builder()
-                .addInterceptor(makeLoggingInterceptor())
-                .addInterceptor(makeHeadersInterceptor(userId))
-                .build()
+            .addInterceptor(makeLoggingInterceptor())
+            .addInterceptor(makeHeadersInterceptor(userId))
+            .build()
 
         private fun makeHeadersInterceptor(userId: String) = Interceptor { chain ->
             val newRequest = chain.request()
-                    .newBuilder()
-                    .addHeader("Authorization", "Bearer $userId")
-                    .addHeader("Accept", "application/json")
-                    .build()
+                .newBuilder()
+                .addHeader("Authorization", "Bearer $userId")
+                .addHeader("Accept", "application/json")
+                .build()
             chain.proceed(newRequest)
         }
 

@@ -1,16 +1,16 @@
 package org.jetbrains.kotlinconf
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import io.ktor.util.date.*
+import kotlin.test.*
 
 class DateTest {
-    @Test fun testParse() {
+    @Test
+    fun testParse() {
         val date = parseDate("2017-10-24T13:31:19")
-        assertEquals(2017, date.getFullYear())
-        assertEquals(9, date.getMonth())
-        assertEquals(24, date.getDate())
-        assertEquals(13, date.getHours())
-        assertEquals(31, date.getMinutes())
-
+        assertEquals(2017, date.year)
+        assertEquals(Month.OCTOBER, date.month)
+        assertEquals(24, date.dayOfMonth)
+        assertEquals(13, date.hours)
+        assertEquals(31, date.minutes)
     }
 }
