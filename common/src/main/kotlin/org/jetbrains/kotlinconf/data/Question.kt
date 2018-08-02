@@ -1,11 +1,9 @@
 package org.jetbrains.kotlinconf.data
 
-import kotlinx.serialization.*
-
-@Serializable
+//@Serializable
 data class Question(
-    val question: String? = null,
-    val id: Int? = null,
-    val sort: Int? = null,
-    val questionType: String? = null
+    val question: String,
+    val id: Int,
+    val sort: Int,
+    val questionType: String
 )

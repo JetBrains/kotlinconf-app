@@ -1,10 +1,9 @@
 package org.jetbrains.kotlinconf.data
 
-import kotlinx.serialization.*
 
-@Serializable
+//@Serializable
 data class CategoryItem(
-    val name: String? = null,
-    val id: Int? = null,
-    val sort: Int? = null
+    val name: String,
+    val id: Int,
+    val sort: Int
 )

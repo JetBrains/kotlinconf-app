@@ -37,10 +37,9 @@ import org.jetbrains.anko.view
 import org.jetbrains.anko.wrapContent
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.R
-import org.jetbrains.kotlinconf.model.*
+import org.jetbrains.kotlinconf.data.*
 
 class SessionDetailsFragment : Fragment() {
-
     private lateinit var toolbar: Toolbar
     private lateinit var speakersTextView: TextView
     private lateinit var timeTextView: TextView
@@ -107,9 +106,7 @@ class SessionDetailsFragment : Fragment() {
             }
         }
 
-        viewModel.rating.value.let { rating ->
-            setupRatingButtons(rating)
-        }
+        setupRatingButtons(viewModel.rating.value)
 
         viewModel.rating.observe(this) { rating ->
             setupRatingButtons(rating)
@@ -149,7 +146,7 @@ class SessionDetailsFragment : Fragment() {
 
         with(session) {
             collapsingToolbar.title = session.title
-            speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName ?: "" }
+            speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName }
             val time = (session.startsAt to session.endsAt).toReadableString()
             timeTextView.text = time
             detailsTextView.text = listOfNotNull(roomText, category).joinToString(", ")
@@ -157,7 +154,7 @@ class SessionDetailsFragment : Fragment() {
 
             session.speakers
                 .takeIf { it.size < 3 }
-                ?.mapNotNull { it.profilePicture }
+                ?.map { it.profilePicture }
                 ?.apply {
                     forEachIndexed { index, imageUrl ->
                         speakerImageViews[index].showSpeakerImage(imageUrl)

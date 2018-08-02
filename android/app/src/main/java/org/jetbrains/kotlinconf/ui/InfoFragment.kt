@@ -1,59 +1,26 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.net.Uri
-import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
-import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import android.content.*
+import android.graphics.*
+import android.graphics.drawable.*
+import android.net.*
+import android.os.*
+import android.support.design.widget.*
+import android.support.design.widget.AppBarLayout.LayoutParams.*
+import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.*
+import android.support.v4.app.*
+import android.support.v7.app.*
 import android.support.v7.widget.Toolbar
-import android.text.util.Linkify
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
+import android.text.util.*
+import android.view.*
+import android.widget.*
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.backgroundColor
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.bottomOf
-import org.jetbrains.anko.centerHorizontally
-import org.jetbrains.anko.centerVertically
-import org.jetbrains.anko.design.coordinatorLayout
-import org.jetbrains.anko.design.themedAppBarLayout
-import org.jetbrains.anko.dimen
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.imageView
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.margin
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.padding
-import org.jetbrains.anko.relativeLayout
-import org.jetbrains.anko.rightOf
-import org.jetbrains.anko.support.v4.nestedScrollView
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.view
-import org.jetbrains.anko.wrapContent
+import org.jetbrains.anko.design.*
+import org.jetbrains.anko.support.v4.*
+import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.R
-import org.jetbrains.kotlinconf.getColor
-import org.jetbrains.kotlinconf.getHtmlText
-import org.jetbrains.kotlinconf.getResourceId
-import org.jetbrains.kotlinconf.multilineCollapsingToolbarLayout
-import org.jetbrains.kotlinconf.theme
 
 class InfoFragment : Fragment(), AnkoComponent<Context> {
 
@@ -77,11 +44,7 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
         menu.clear()
     }
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return createView(AnkoContext.create(context!!))
     }
 

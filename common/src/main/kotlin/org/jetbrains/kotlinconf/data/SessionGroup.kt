@@ -1,10 +1,8 @@
 package org.jetbrains.kotlinconf.data
 
-import kotlinx.serialization.*
-
-@Serializable
+//@Serializable
 data class SessionGroup(
-    val groupName: String? = null,
-    val sessions: List<Session?>? = null,
-    val groupId: Int? = null
+    val groupName: String,
+    val sessions: List<Session>,
+    val groupId: Int
 )

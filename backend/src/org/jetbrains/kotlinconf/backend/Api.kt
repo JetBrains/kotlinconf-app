@@ -1,17 +1,17 @@
 package org.jetbrains.kotlinconf.backend
 
-import org.jetbrains.kotlinconf.data.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
 import io.ktor.http.*
+import io.ktor.http.cio.websocket.Frame
 import io.ktor.pipeline.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import io.ktor.http.cio.websocket.Frame
-import io.ktor.websocket.webSocket
+import io.ktor.websocket.*
 import kotlinx.coroutines.experimental.channels.*
+import org.jetbrains.kotlinconf.data.*
 import java.time.*
 import java.time.format.*
 import java.util.*
@@ -47,7 +47,7 @@ private fun PipelineContext<Unit, ApplicationCall>.simulatedTime(production: Boo
 }
 
 /*
-POST http://localhost:8080/user
+POST http://localhost:8080/users
 1238476512873162837
  */
 fun Routing.apiRegister(database: Database, production: Boolean) {
@@ -95,14 +95,14 @@ fun Routing.apiFavorite(database: Database, production: Boolean) {
         post {
             val principal = call.validatePrincipal(database) ?: return@post call.respond(HttpStatusCode.Unauthorized)
             val favorite = call.receive<Favorite>()
-            val sessionId = favorite.sessionId ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val sessionId = favorite.sessionId
             database.createFavorite(principal.token, sessionId)
             call.respond(HttpStatusCode.Created)
         }
         delete {
             val principal = call.validatePrincipal(database) ?: return@delete call.respond(HttpStatusCode.Unauthorized)
             val favorite = call.receive<Favorite>()
-            val sessionId = favorite.sessionId ?: return@delete call.respond(HttpStatusCode.BadRequest)
+            val sessionId = favorite.sessionId
             database.deleteFavorite(principal.token, sessionId)
             call.respond(HttpStatusCode.OK)
         }
@@ -142,8 +142,8 @@ fun Routing.apiVote(database: Database, production: Boolean) {
         post {
             val principal = call.validatePrincipal(database) ?: return@post call.respond(HttpStatusCode.Unauthorized)
             val vote = call.receive<Vote>()
-            val sessionId = vote.sessionId ?: return@post call.respond(HttpStatusCode.BadRequest)
-            val rating = vote.rating ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val sessionId = vote.sessionId
+            val rating = vote.rating
 
             val session = sessionizeData?.allData?.sessions?.firstOrNull { it.id == sessionId } ?: return@post call.respond(HttpStatusCode.NotFound)
             val nowTime = simulatedTime(production)
@@ -171,7 +171,7 @@ fun Routing.apiVote(database: Database, production: Boolean) {
         delete {
             val principal = call.validatePrincipal(database) ?: return@delete call.respond(HttpStatusCode.Unauthorized)
             val vote = call.receive<Vote>()
-            val sessionId = vote.sessionId ?: return@delete call.respond(HttpStatusCode.BadRequest)
+            val sessionId = vote.sessionId
             database.deleteVote(principal.token, sessionId)
             call.respond(HttpStatusCode.OK)
             signalSession(sessionId)
@@ -207,7 +207,7 @@ fun Routing.apiSession(database: Database, production: Boolean) {
     route("sessions") {
         get {
             val data = sessionizeData ?: return@get call.respond(HttpStatusCode.ServiceUnavailable)
-            val sessions = data.allData.sessions ?: mutableListOf()
+            val sessions = data.allData.sessions
             call.withETag(sessions.hashCode().toString(), putHeader = true) {
                 call.respond(sessions)
             }
