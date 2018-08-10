@@ -17,7 +17,7 @@ class SessionDetailsPresenter(
         view.setIsFavorite(isFavorite)
     }
     private var rating: SessionRating? = null
-    private val onRefreshListener: ()->Unit = this::refreshDataFromRepo
+    private val onRefreshListener: () -> Unit = this::refreshDataFromRepo
 
     fun onCreate() {
         refreshDataFromRepo()
