@@ -125,4 +125,3 @@ class MainActivity :
         private const val SEARCH_QUERY_KEY = "SearchQuery"
     }
 }
-
