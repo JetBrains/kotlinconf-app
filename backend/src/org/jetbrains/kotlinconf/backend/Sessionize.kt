@@ -22,8 +22,8 @@ val apiDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
 var sessionizeData: SessionizeData? = null
 val comeBackLater = HttpStatusCode(477, "Come Back Later")
 val tooLate = HttpStatusCode(478, "Too Late")
-val keynoteTimeZone = ZoneId.of("America/Los_Angeles")
-val keynoteEndDateTime = ZonedDateTime.of(2017, 11, 2, 10, 0, 0, 0, keynoteTimeZone)
+val keynoteTimeZone = ZoneId.of("Europe/Paris")
+val keynoteEndDateTime = ZonedDateTime.of(2018, 10, 4, 10, 0, 0, 0, keynoteTimeZone)
 
 val fakeSessionId = "007"
 
