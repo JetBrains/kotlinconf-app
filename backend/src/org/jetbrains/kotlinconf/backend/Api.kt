@@ -19,8 +19,8 @@ import java.util.*
 import java.util.concurrent.*
 
 fun Routing.api(database: Database, production: Boolean, sessionizeUrl: String) {
-    apiKeynote(database, production)
-    apiRegister(database, production)
+    apiKeynote(production)
+    apiUsers(database)
     apiAll(database)
     apiSession()
     apiVote(database, production)
@@ -32,7 +32,7 @@ fun Routing.api(database: Database, production: Boolean, sessionizeUrl: String) 
 /*
 GET http://localhost:8080/keynote?datetimeoverride=2017-10-24T10:00-07:00
  */
-fun Routing.apiKeynote(database: Database, production: Boolean) {
+fun Routing.apiKeynote(production: Boolean) {
     get("keynote") {
         val nowTime = simulatedTime(production)
         if (nowTime.isAfter(keynoteEndDateTime))
@@ -49,10 +49,16 @@ private fun PipelineContext<Unit, ApplicationCall>.simulatedTime(production: Boo
 }
 
 /*
-POST http://localhost:8080/user
-1238476512873162837
+POST http://localhost:8080/users
+201 or 409
+
+GET http://localhost:8080/users/verify/{token}
+200 or 406
+
+GET http://localhost:8080/users/count
+1234
  */
-fun Routing.apiRegister(database: Database, production: Boolean) {
+fun Routing.apiUsers(database: Database) {
     route("users") {
         post {
             val userUUID = call.receive<String>()
@@ -63,6 +69,11 @@ fun Routing.apiRegister(database: Database, production: Boolean) {
                 call.respond(HttpStatusCode.Created)
             else
                 call.respond(HttpStatusCode.Conflict)
+        }
+        get("verify/{token}") {
+            val token = call.parameters["token"] ?: throw BadRequest()
+            val responseCode = if (database.validateUser(token)) HttpStatusCode.OK else HttpStatusCode.NotAcceptable
+            call.respond(responseCode)
         }
         get("count") {
             call.respondText(database.usersCount().toString())

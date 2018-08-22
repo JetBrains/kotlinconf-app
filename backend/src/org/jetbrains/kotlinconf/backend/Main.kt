@@ -16,10 +16,11 @@ import io.ktor.websocket.*
 val gson = GsonBuilder().setPrettyPrinting().serializeNulls().create()
 
 fun Application.main() {
-    val config = environment.config.config("service")
-    val mode = config.property("environment").getString()
+    val config = environment.config
+    val serviceConfig = config.config("service")
+    val mode = serviceConfig.property("environment").getString()
     log.info("Environment: $mode")
-    val sessionizeConfig = environment.config.config("sessionize")
+    val sessionizeConfig = config.config("sessionize")
     val sessionizeUrl = sessionizeConfig.property("url").getString()
     val sessionizeInterval = sessionizeConfig.property("interval").getString().toLong()
     val production = mode == "production"
