@@ -21,8 +21,8 @@ import java.util.concurrent.*
 fun Routing.api(database: Database, production: Boolean, sessionizeUrl: String) {
     apiKeynote(database, production)
     apiRegister(database, production)
-    apiAll(database, production)
-    apiSession(database, production)
+    apiAll(database)
+    apiSession()
     apiVote(database, production)
     apiFavorite(database, production)
     apiSynchronize(sessionizeUrl)
@@ -70,9 +70,9 @@ fun Routing.apiRegister(database: Database, production: Boolean) {
     }
 }
 
-suspend fun ApplicationCall.validatePrincipal(database: Database): KotlinConfPrincipal? {
-    val principal = principal<KotlinConfPrincipal>() ?: return null
-    if (!database.validateUser(principal.token)) return null
+suspend fun ApplicationCall.validatePrincipal(database: Database): KotlinConfPrincipal {
+    val principal = principal<KotlinConfPrincipal>() ?: throw Unauthorized()
+    if (!database.validateUser(principal.token)) throw Unauthorized()
     return principal
 }
 
@@ -84,7 +84,7 @@ Authorization: Bearer 1238476512873162837
 fun Routing.apiFavorite(database: Database, production: Boolean) {
     route("favorites") {
         get {
-            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
+            val principal = call.validatePrincipal(database)
             val favorites = database.getFavorites(principal.token)
             call.respond(favorites)
         }
@@ -95,14 +95,14 @@ fun Routing.apiFavorite(database: Database, production: Boolean) {
             }
         }
         post {
-            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
+            val principal = call.validatePrincipal(database)
             val favorite = call.receive<Favorite>()
             val sessionId = favorite.sessionId ?: throw BadRequest()
             database.createFavorite(principal.token, sessionId)
             call.respond(HttpStatusCode.Created)
         }
         delete {
-            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
+            val principal = call.validatePrincipal(database)
             val favorite = call.receive<Favorite>()
             val sessionId = favorite.sessionId ?: throw BadRequest()
             database.deleteFavorite(principal.token, sessionId)
@@ -121,7 +121,7 @@ Authorization: Bearer 1238476512873162837
 fun Routing.apiVote(database: Database, production: Boolean) {
     route("votes") {
         get {
-            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
+            val principal = call.validatePrincipal(database)
             val votes = database.getVotes(principal.token)
             call.respond(votes)
         }
@@ -142,7 +142,7 @@ fun Routing.apiVote(database: Database, production: Boolean) {
             }
         }
         post {
-            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
+            val principal = call.validatePrincipal(database)
             val vote = call.receive<Vote>()
             val sessionId = vote.sessionId ?: throw BadRequest()
             val rating = vote.rating ?: throw BadRequest()
@@ -171,7 +171,7 @@ fun Routing.apiVote(database: Database, production: Boolean) {
             signalSession(sessionId)
         }
         delete {
-            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
+            val principal = call.validatePrincipal(database)
             val vote = call.receive<Vote>()
             val sessionId = vote.sessionId ?: throw BadRequest()
             database.deleteVote(principal.token, sessionId)
@@ -187,17 +187,18 @@ GET http://localhost:8080/all
 Accept: application/json
 Authorization: Bearer 1238476512873162837
 */
-fun Routing.apiAll(database: Database, production: Boolean) {
+fun Routing.apiAll(database: Database) {
     get("all") {
         val data = getSessionizeData()
-        val principal = call.validatePrincipal(database)
-        val responseData = if (principal != null) {
+        val responseData = try {
+            val principal = call.validatePrincipal(database)
             val votes = database.getVotes(principal.token)
             val favorites = database.getFavorites(principal.token)
             val personalizedData = data.allData.copy(votes = votes, favorites = favorites)
             SessionizeData(personalizedData)
-        } else
+        } catch (e: Unauthorized) {
             data
+        }
 
         call.withETag(responseData.etag, putHeader = true) {
             call.respond(responseData.allData)
@@ -205,7 +206,7 @@ fun Routing.apiAll(database: Database, production: Boolean) {
     }
 }
 
-fun Routing.apiSession(database: Database, production: Boolean) {
+fun Routing.apiSession() {
     route("sessions") {
         get {
             val data = getSessionizeData()
