@@ -33,6 +33,18 @@ fun Application.main() {
     install(WebSockets)
     install(XForwardedHeadersSupport)
     install(StatusPages) {
+        exception<ServiceUnavailable> { _ ->
+            call.respond(HttpStatusCode.ServiceUnavailable)
+        }
+        exception<BadRequest> { _ ->
+            call.respond(HttpStatusCode.BadRequest)
+        }
+        exception<Unauthorized> { _ ->
+            call.respond(HttpStatusCode.Unauthorized)
+        }
+        exception<NotFound> { _ ->
+            call.respond(HttpStatusCode.NotFound)
+        }
         exception<Throwable> { cause ->
             environment.log.error(cause)
             call.respond(HttpStatusCode.InternalServerError)

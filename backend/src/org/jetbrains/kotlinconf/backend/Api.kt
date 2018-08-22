@@ -1,3 +1,5 @@
+@file:Suppress("NestedLambdaShadowedImplicitParameter")
+
 package org.jetbrains.kotlinconf.backend
 
 import org.jetbrains.kotlinconf.data.*
@@ -82,7 +84,7 @@ Authorization: Bearer 1238476512873162837
 fun Routing.apiFavorite(database: Database, production: Boolean) {
     route("favorites") {
         get {
-            val principal = call.validatePrincipal(database) ?: return@get call.respond(HttpStatusCode.Unauthorized)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val favorites = database.getFavorites(principal.token)
             call.respond(favorites)
         }
@@ -93,16 +95,16 @@ fun Routing.apiFavorite(database: Database, production: Boolean) {
             }
         }
         post {
-            val principal = call.validatePrincipal(database) ?: return@post call.respond(HttpStatusCode.Unauthorized)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val favorite = call.receive<Favorite>()
-            val sessionId = favorite.sessionId ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val sessionId = favorite.sessionId ?: throw BadRequest()
             database.createFavorite(principal.token, sessionId)
             call.respond(HttpStatusCode.Created)
         }
         delete {
-            val principal = call.validatePrincipal(database) ?: return@delete call.respond(HttpStatusCode.Unauthorized)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val favorite = call.receive<Favorite>()
-            val sessionId = favorite.sessionId ?: return@delete call.respond(HttpStatusCode.BadRequest)
+            val sessionId = favorite.sessionId ?: throw BadRequest()
             database.deleteFavorite(principal.token, sessionId)
             call.respond(HttpStatusCode.OK)
         }
@@ -119,7 +121,7 @@ Authorization: Bearer 1238476512873162837
 fun Routing.apiVote(database: Database, production: Boolean) {
     route("votes") {
         get {
-            val principal = call.validatePrincipal(database) ?: return@get call.respond(HttpStatusCode.Unauthorized)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val votes = database.getVotes(principal.token)
             call.respond(votes)
         }
@@ -134,18 +136,18 @@ fun Routing.apiVote(database: Database, production: Boolean) {
                 call.respond(votes)
             }
             get("summary/{sessionId}") {
-                val id = call.parameters["sessionId"] ?: return@get call.respond(HttpStatusCode.BadRequest)
+                val id = call.parameters["sessionId"] ?: throw BadRequest()
                 val votesSummary = database.getVotesSummary(id)
                 call.respond(votesSummary)
             }
         }
         post {
-            val principal = call.validatePrincipal(database) ?: return@post call.respond(HttpStatusCode.Unauthorized)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val vote = call.receive<Vote>()
-            val sessionId = vote.sessionId ?: return@post call.respond(HttpStatusCode.BadRequest)
-            val rating = vote.rating ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val sessionId = vote.sessionId ?: throw BadRequest()
+            val rating = vote.rating ?: throw BadRequest()
 
-            val session = sessionizeData?.allData?.sessions?.firstOrNull { it.id == sessionId } ?: return@post call.respond(HttpStatusCode.NotFound)
+            val session = sessionizeData?.allData?.sessions?.firstOrNull { it.id == sessionId } ?: throw NotFound()
             val nowTime = simulatedTime(production)
             val startVotesAt = LocalDateTime.parse(session.startsAt, dateFormat)
             val endVotesAt = LocalDateTime.parse(session.endsAt, dateFormat).plusMinutes(15)
@@ -169,9 +171,9 @@ fun Routing.apiVote(database: Database, production: Boolean) {
             signalSession(sessionId)
         }
         delete {
-            val principal = call.validatePrincipal(database) ?: return@delete call.respond(HttpStatusCode.Unauthorized)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val vote = call.receive<Vote>()
-            val sessionId = vote.sessionId ?: return@delete call.respond(HttpStatusCode.BadRequest)
+            val sessionId = vote.sessionId ?: throw BadRequest()
             database.deleteVote(principal.token, sessionId)
             call.respond(HttpStatusCode.OK)
             signalSession(sessionId)
@@ -187,7 +189,7 @@ Authorization: Bearer 1238476512873162837
 */
 fun Routing.apiAll(database: Database, production: Boolean) {
     get("all") {
-        val data = sessionizeData ?: return@get call.respond(HttpStatusCode.ServiceUnavailable)
+        val data = sessionizeData ?: throw ServiceUnavailable()
         val principal = call.validatePrincipal(database)
         val responseData = if (principal != null) {
             val votes = database.getVotes(principal.token)
@@ -206,16 +208,16 @@ fun Routing.apiAll(database: Database, production: Boolean) {
 fun Routing.apiSession(database: Database, production: Boolean) {
     route("sessions") {
         get {
-            val data = sessionizeData ?: return@get call.respond(HttpStatusCode.ServiceUnavailable)
+            val data = sessionizeData ?: throw ServiceUnavailable()
             val sessions = data.allData.sessions ?: mutableListOf()
             call.withETag(sessions.hashCode().toString(), putHeader = true) {
                 call.respond(sessions)
             }
         }
         get("{sessionId}") {
-            val data = sessionizeData ?: return@get call.respond(HttpStatusCode.ServiceUnavailable)
-            val id = call.parameters["sessionId"] ?: return@get call.respond(HttpStatusCode.BadRequest)
-            val sessions = data.allData.sessions?.singleOrNull { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
+            val data = sessionizeData ?: throw ServiceUnavailable()
+            val id = call.parameters["sessionId"] ?: throw BadRequest()
+            val sessions = data.allData.sessions?.singleOrNull { it.id == id } ?: throw NotFound()
             call.withETag(sessions.hashCode().toString(), putHeader = true) {
                 call.respond(sessions)
             }
