@@ -1,20 +1,18 @@
 package org.jetbrains.kotlinconf.backend
 
 import com.github.salomonbrys.kotson.*
-import org.jetbrains.kotlinconf.data.*
 import io.ktor.application.*
 import io.ktor.client.*
-import io.ktor.client.backend.apache.*
 import io.ktor.client.call.*
+import io.ktor.client.engine.apache.*
 import io.ktor.http.*
 import kotlinx.coroutines.experimental.*
+import org.jetbrains.kotlinconf.data.*
 import java.net.*
-import java.text.SimpleDateFormat
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.text.*
+import java.time.*
 import java.util.*
-import java.util.concurrent.TimeUnit
-import java.util.Date
+import java.util.concurrent.*
 
 val apiDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
 
@@ -54,9 +52,9 @@ fun Application.launchSyncJob(sessionizeUrl: String, sessionizeInterval: Long) {
 }
 
 suspend fun synchronizeWithSessionize(url: String) {
-    val client = HttpClient(ApacheBackend)
+    val client = HttpClient(Apache)
     val response = client.call(URL(url)) {}
-    val text = response.readText()
+    val text = response.receive<String>()
     var data = gson.fromJson<AllData>(text)
     data = data.copy(sessions = data.sessions?.plus(fakeVotingSession))
     sessionizeData = SessionizeData(data)

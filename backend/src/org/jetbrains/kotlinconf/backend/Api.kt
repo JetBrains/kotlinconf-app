@@ -11,7 +11,8 @@ import io.ktor.pipeline.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import io.ktor.websocket.*
+import io.ktor.http.cio.websocket.*
+import io.ktor.websocket.webSocket
 import kotlinx.coroutines.experimental.channels.*
 import java.time.*
 import java.time.format.*
@@ -250,8 +251,8 @@ fun Routing.wsVotes(database: Database, production: Boolean) {
     val route = if (production) fakeSessionId else "{sessionId}"
     webSocket("sessions/$route/votes") {
         val id = call.parameters["sessionId"] ?: fakeSessionId
-        trackSession(id).openSubscription().use { subscription ->
-            subscription.consumeEach {
+        trackSession(id).openSubscription().consume {
+            consumeEach {
                 outgoing.send(Frame.Text(gson.toJson(database.getVotesSummary(id))))
             }
         }
