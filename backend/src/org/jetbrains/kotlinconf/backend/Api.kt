@@ -6,7 +6,6 @@ import org.jetbrains.kotlinconf.data.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
-import io.ktor.gson.*
 import io.ktor.http.*
 import io.ktor.pipeline.*
 import io.ktor.request.*
@@ -19,13 +18,14 @@ import java.time.format.*
 import java.util.*
 import java.util.concurrent.*
 
-fun Routing.api(database: Database, production: Boolean) {
+fun Routing.api(database: Database, production: Boolean, sessionizeUrl: String) {
     apiKeynote(database, production)
     apiRegister(database, production)
     apiAll(database, production)
     apiSession(database, production)
     apiVote(database, production)
     apiFavorite(database, production)
+    apiSynchronize(database, production, sessionizeUrl)
     wsVotes(database, production)
 }
 
@@ -240,9 +240,15 @@ fun Routing.wsVotes(database: Database, production: Boolean) {
         val id = call.parameters["sessionId"] ?: fakeSessionId
         trackSession(id).openSubscription().use { subscription ->
             subscription.consumeEach {
-
                 outgoing.send(Frame.Text(gson.toJson(database.getVotesSummary(id))))
             }
         }
+    }
+}
+
+fun Routing.apiSynchronize(database: Database, production: Boolean, sessionizeUrl: String) {
+    get("sessionizeSync") {
+        synchronizeWithSessionize(sessionizeUrl)
+        call.respond(HttpStatusCode.OK)
     }
 }

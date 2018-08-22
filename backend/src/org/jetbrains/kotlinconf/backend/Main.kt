@@ -19,6 +19,9 @@ fun Application.main() {
     val config = environment.config.config("service")
     val mode = config.property("environment").getString()
     log.info("Environment: $mode")
+    val sessionizeConfig = environment.config.config("sessionize")
+    val sessionizeUrl = sessionizeConfig.property("url").getString()
+    val sessionizeInterval = sessionizeConfig.property("interval").getString().toLong()
     val production = mode == "production"
 
     if (!production) {
@@ -69,10 +72,10 @@ fun Application.main() {
             default("static/index.html")
             files("static")
         }
-        api(database, production)
+        api(database, production, sessionizeUrl)
     }
 
-    launchSyncJob()
+    launchSyncJob(sessionizeUrl, sessionizeInterval)
 }
 
 fun Route.authenticate() {

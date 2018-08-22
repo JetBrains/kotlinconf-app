@@ -41,23 +41,23 @@ val fakeVotingSession = Session(
         roomId = 220
 )
 
-fun Application.launchSyncJob() {
-    val config = environment.config.config("sessionize")
-    val url = config.property("url").getString()
-    val interval = config.property("interval").getString().toLong()
-
-    log.info("Synchronizing each $interval minutes with $url")
+fun Application.launchSyncJob(sessionizeUrl: String, sessionizeInterval: Long) {
+    log.info("Synchronizing each $sessionizeInterval minutes with $sessionizeUrl")
     launch(CommonPool) {
         while (true) {
             log.trace("Synchronizing to Sessionize…")
-            val client = HttpClient(ApacheBackend)
-            val response = client.call(URL(url)) {}
-            val text = response.readText()
-            var data = gson.fromJson<AllData>(text)
-            data = data.copy(sessions = data.sessions?.plus(fakeVotingSession))
+            synchronizeWithSessionize(sessionizeUrl)
             log.trace("Finished loading data from Sessionize.")
-            sessionizeData = SessionizeData(data)
-            delay(interval, TimeUnit.MINUTES)
+            delay(sessionizeInterval, TimeUnit.MINUTES)
         }
     }
+}
+
+suspend fun synchronizeWithSessionize(url: String) {
+    val client = HttpClient(ApacheBackend)
+    val response = client.call(URL(url)) {}
+    val text = response.readText()
+    var data = gson.fromJson<AllData>(text)
+    data = data.copy(sessions = data.sessions?.plus(fakeVotingSession))
+    sessionizeData = SessionizeData(data)
 }
