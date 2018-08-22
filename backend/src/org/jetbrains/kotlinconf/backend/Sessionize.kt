@@ -19,7 +19,7 @@ import java.util.Date
 val apiDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
 
 @Volatile
-var sessionizeData: SessionizeData? = null
+private var sessionizeData: SessionizeData? = null
 val comeBackLater = HttpStatusCode(477, "Come Back Later")
 val tooLate = HttpStatusCode(478, "Too Late")
 val keynoteTimeZone = ZoneId.of("Europe/Paris")
@@ -61,3 +61,5 @@ suspend fun synchronizeWithSessionize(url: String) {
     data = data.copy(sessions = data.sessions?.plus(fakeVotingSession))
     sessionizeData = SessionizeData(data)
 }
+
+fun getSessionizeData() = sessionizeData ?: throw ServiceUnavailable()

@@ -25,7 +25,7 @@ fun Routing.api(database: Database, production: Boolean, sessionizeUrl: String) 
     apiSession(database, production)
     apiVote(database, production)
     apiFavorite(database, production)
-    apiSynchronize(database, production, sessionizeUrl)
+    apiSynchronize(sessionizeUrl)
     wsVotes(database, production)
 }
 
@@ -147,7 +147,7 @@ fun Routing.apiVote(database: Database, production: Boolean) {
             val sessionId = vote.sessionId ?: throw BadRequest()
             val rating = vote.rating ?: throw BadRequest()
 
-            val session = sessionizeData?.allData?.sessions?.firstOrNull { it.id == sessionId } ?: throw NotFound()
+            val session = getSessionizeData().allData.sessions?.firstOrNull { it.id == sessionId } ?: throw NotFound()
             val nowTime = simulatedTime(production)
             val startVotesAt = LocalDateTime.parse(session.startsAt, dateFormat)
             val endVotesAt = LocalDateTime.parse(session.endsAt, dateFormat).plusMinutes(15)
@@ -189,7 +189,7 @@ Authorization: Bearer 1238476512873162837
 */
 fun Routing.apiAll(database: Database, production: Boolean) {
     get("all") {
-        val data = sessionizeData ?: throw ServiceUnavailable()
+        val data = getSessionizeData()
         val principal = call.validatePrincipal(database)
         val responseData = if (principal != null) {
             val votes = database.getVotes(principal.token)
@@ -208,14 +208,14 @@ fun Routing.apiAll(database: Database, production: Boolean) {
 fun Routing.apiSession(database: Database, production: Boolean) {
     route("sessions") {
         get {
-            val data = sessionizeData ?: throw ServiceUnavailable()
+            val data = getSessionizeData()
             val sessions = data.allData.sessions ?: mutableListOf()
             call.withETag(sessions.hashCode().toString(), putHeader = true) {
                 call.respond(sessions)
             }
         }
         get("{sessionId}") {
-            val data = sessionizeData ?: throw ServiceUnavailable()
+            val data = getSessionizeData()
             val id = call.parameters["sessionId"] ?: throw BadRequest()
             val sessions = data.allData.sessions?.singleOrNull { it.id == id } ?: throw NotFound()
             call.withETag(sessions.hashCode().toString(), putHeader = true) {
@@ -246,7 +246,10 @@ fun Routing.wsVotes(database: Database, production: Boolean) {
     }
 }
 
-fun Routing.apiSynchronize(database: Database, production: Boolean, sessionizeUrl: String) {
+/*
+GET http://localhost:8080/sessionizeSync
+*/
+fun Routing.apiSynchronize(sessionizeUrl: String) {
     get("sessionizeSync") {
         synchronizeWithSessionize(sessionizeUrl)
         call.respond(HttpStatusCode.OK)
