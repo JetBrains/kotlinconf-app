@@ -179,7 +179,7 @@
         liability.</p> ]]></string>
     <string name="code_enter_label">Please enter your code</string>
     <string name="terms_text">By submitting this code you are agreeing with our <u>terms and conditions</u></string>
-    <string name="terms_url">https://www.jetbrains.com/company/privacy.html</string>
+    <string name="terms_url">https://www.jetbrains.com/company/useterms.html</string>
     <string name="terms_agree">I agree to the terms and conditions</string>
     <string name="submit_button">Submit</string>
     <string name="code_verification_failed">Failed to verify code</string>
