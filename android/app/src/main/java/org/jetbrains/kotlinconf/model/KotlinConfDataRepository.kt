@@ -26,8 +26,8 @@ class KotlinConfDataRepository(private val context: Context) : AnkoLogger {
 
     private val gson: Gson by lazy {
         GsonBuilder()
-            .setDateFormat(DATE_FORMAT)
-            .create()
+                .setDateFormat(DATE_FORMAT)
+                .create()
     }
 
     private val kotlinConfApi: KotlinConfApi by lazy {
@@ -40,6 +40,10 @@ class KotlinConfDataRepository(private val context: Context) : AnkoLogger {
 
     private val ratingPreferences: SharedPreferences by lazy {
         context.getSharedPreferences(VOTES_PREFERENCES_NAME, MODE_PRIVATE)
+    }
+
+    private val codePreferences: SharedPreferences by lazy {
+        context.getSharedPreferences(CODE_PREFERENCES_NAME, MODE_PRIVATE)
     }
 
     private val _data: MutableLiveData<AllData> = MutableLiveData()
@@ -63,6 +67,9 @@ class KotlinConfDataRepository(private val context: Context) : AnkoLogger {
 
     private val _ratings: MutableLiveData<Map<String, SessionRating>> = MutableLiveData()
     val ratings: LiveData<Map<String, SessionRating>> = _ratings
+
+    private val _codeVerified: MutableLiveData<Boolean> = MutableLiveData()
+    val codeVerified: MutableLiveData<Boolean> = _codeVerified
 
     private fun createSessionModel(session: Session): SessionModel? {
         return SessionModel.forSession(session,
@@ -108,8 +115,7 @@ class KotlinConfDataRepository(private val context: Context) : AnkoLogger {
         if (isFavorite) {
             addLocalFavorite(sessionId)
             kotlinConfApi.postFavorite(Favorite(sessionId)).awaitResult()
-        }
-        else {
+        } else {
             deleteLocalFavorite(sessionId)
             kotlinConfApi.deleteFavorite(Favorite(sessionId)).awaitResult()
         }
@@ -124,6 +130,11 @@ class KotlinConfDataRepository(private val context: Context) : AnkoLogger {
     private fun saveLocalRating(sessionId: String, rating: SessionRating) {
         ratingPreferences.edit().putInt(sessionId, rating.value).apply()
         _ratings.value = getAllLocalRatings()
+    }
+
+    private fun saveCodeVerified() {
+        codePreferences.edit().putBoolean("code_verified", true).apply()
+        _codeVerified.value = true
     }
 
     private fun deleteLocalRating(sessionId: String) {
@@ -254,21 +265,45 @@ class KotlinConfDataRepository(private val context: Context) : AnkoLogger {
         _isUpdating.value = false
     }
 
+    suspend fun submitCode(code: String) {
+        kotlinConfApi
+                .submitCode(code)
+                .awaitResult()
+                .ifSucceeded {
+                    saveCodeVerified()
+                }
+                .ifError { httpCode ->
+                    when (httpCode) {
+                        HTTP_NOT_ACCEPTABLE -> onError?.invoke(Error.CODE_INCORRECT)
+                        else -> onError?.invoke(Error.FAILED_TO_VERIFY_CODE)
+                    }
+                    _codeVerified.value = true
+                }
+                .ifFailed {
+                    onError?.invoke(Error.FAILED_TO_VERIFY_CODE)
+                    _codeVerified.value = true
+                }
+    }
+
     companion object {
         const val FAVORITES_PREFERENCES_NAME = "favorites"
         const val VOTES_PREFERENCES_NAME = "votes"
+        const val CODE_PREFERENCES_NAME = "code"
         const val FAVORITES_KEY = "favorites"
         const val CACHED_DATA_FILE_NAME = "data.json"
 
         const val HTTP_COME_BACK_LATER = 477
+        const val HTTP_NOT_ACCEPTABLE = 406
         const val HTTP_TOO_LATE = 478
     }
 
     enum class Error {
         FAILED_TO_POST_RATING,
+        FAILED_TO_VERIFY_CODE,
         FAILED_TO_DELETE_RATING,
         FAILED_TO_GET_DATA,
         EARLY_TO_VOTE,
-        LATE_TO_VOTE
+        LATE_TO_VOTE,
+        CODE_INCORRECT
     }
 }

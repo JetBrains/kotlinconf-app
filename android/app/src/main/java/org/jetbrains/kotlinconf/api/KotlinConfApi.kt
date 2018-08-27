@@ -34,6 +34,9 @@ interface KotlinConfApi {
     @HTTP(method = "DELETE", path = "votes", hasBody = true)
     fun deleteVote(@Body vote: Vote): Call<ResponseBody>
 
+    @GET("users/verify/{code}")
+    fun submitCode(@Path("code") code: String): Call<ResponseBody>
+
     companion object {
         const val END_POINT = "https://api.kotlinconf.com"
 
