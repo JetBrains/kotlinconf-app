@@ -68,10 +68,16 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                             collapseMode = COLLAPSE_MODE_PARALLAX
                         }
 
-                        imageView(R.drawable.kotlin_conf_app_header).lparams {
+                        imageView(R.drawable.info_header_background) {
+                            scaleType = ImageView.ScaleType.FIT_START
+                        }.lparams(width = matchParent, height = matchParent) {
+                            leftMargin = dip(4)
+                            topMargin = dip(4)
+                        }
+
+                        imageView(R.drawable.info_header_image).lparams {
                             margin = dip(20)
                         }
-                        imageView(R.drawable.kotlin_conf_app_header).scaleType = ImageView.ScaleType.FIT_CENTER
                     }
 
                     toolbar = toolbar {
@@ -112,7 +118,7 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                             id = R.id.icon_location
 
                             setOnClickListener {
-                                val gmmIntentUri = Uri.parse("geo:52.3752,4.8960?z=17")
+                                val gmmIntentUri = Uri.parse("geo:37.8051965,-122.4011537?z=17")
                                 val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
                                 mapIntent.`package` = "com.google.android.apps.maps"
                                 if (mapIntent.resolveActivity(context.packageManager) != null) {
