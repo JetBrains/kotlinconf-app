@@ -6,15 +6,15 @@
     <string name="room_format_details">Room \"%s\"</string>
     <string name="room_format_list">room \"%s\"</string>
     <string name="kotlin_conf_description">KotlinConf is a two-day conference taking place in San Francisco, providing deep-dive technical content on Kotlin.</string>
-    <string name="kotlin_conf_address">Pier 27, The Embarcadero\nSan Francisco, CA 94111</string>
+    <string name="kotlin_conf_address">Beurs Van Berlage, Damrak 243, 1012 ZJ Amsterdam, Netherlands</string>
     <string name="msg_failed_to_get_data">Failed to get data from server, please check your internet connection</string>
     <string name="msg_failed_to_post_vote">Failed to post vote to server, please check your internet connection</string>
     <string name="msg_failed_to_delete_vote">Failed to delete vote from server, please check your internet connection</string>
     <string name="msg_early_vote">Voting is not allowed before the session starts</string>
     <string name="msg_late_vote">Voting is not allowed later than 15 minutes after the session ends</string>
-    <string name="copyright">Copyright © 2017 JetBrains s. r. o.</string>
+    <string name="copyright">Copyright © 2018 JetBrains s. r. o.</string>
     <string name="legal_notice_title">LEGAL NOTICE</string>
-    <string name="app_description"><![CDATA[The official KotlinConf 2017 App.<br/><br/>This App was developed amongst other reasons to showcase Kotlin/JVM. Get more information and source code from <a href="https://github.com/jetbrains/kotlinconf-app">github.com/jetbrains/kotlinconf-app</a><br/><br/>Powered by Kotlin/JVM]]></string>
+    <string name="app_description"><![CDATA[The official KotlinConf 2018 App.<br/><br/>This App was developed amongst other reasons to showcase Kotlin/JVM. Get more information and source code from <a href="https://github.com/jetbrains/kotlinconf-app">github.com/jetbrains/kotlinconf-app</a><br/><br/>Powered by Kotlin/JVM]]></string>
     <string name="libraries">
         KotlinConf application is built using the following open source libraries:\n
           &#8226; Anko\n
