@@ -31,7 +31,7 @@ class SessionPagerFragment : Fragment(), AnkoComponent<Context> {
             setSupportActionBar(toolbar)
             supportActionBar?.setDisplayShowHomeEnabled(true)
             supportActionBar?.setDisplayShowTitleEnabled(false)
-            supportActionBar?.setLogo(R.mipmap.kotlinconf_logo_text)
+            supportActionBar?.setLogo(R.drawable.kotlinconf_logo_text)
         }
 
         viewPager.adapter = object : FragmentPagerAdapter(childFragmentManager) {
