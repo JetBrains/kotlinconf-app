@@ -1,5 +1,0 @@
-headers = Groot/Groot.h SDWebImage/UIImageView+WebCache.h OMGHTTPURLRQ/OMGHTTPURLRQ.h ILGHttpConstants/HTTPMethods.h ILGHttpConstants/HTTPStatusCodes.h MBProgressHUD/MBProgressHUD.h helperlib/helperlib.h
-headerFilter = SDWebImage/** Groot/** OMGHTTPURLRQ/** ILGHttpConstants/** MBProgressHUD/** helperlib/**
-language = Objective-C
-linkerOpts = -framework Groot -framework ILGHttpConstants -framework MBProgressHUD -framework OMGHTTPURLRQ -framework SDWebImage -framework helperlib
-compilerOpts = -framework Groot -framework ILGHttpConstants -framework MBProgressHUD -framework OMGHTTPURLRQ -framework SDWebImage -framework helperlib
