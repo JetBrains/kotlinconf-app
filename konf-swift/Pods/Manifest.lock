@@ -1,0 +1,26 @@
+PODS:
+  - MBProgressHUD (1.0.0)
+  - SDWebImage (4.1.0):
+    - SDWebImage/Core (= 4.1.0)
+  - SDWebImage/Core (4.1.0)
+  - TagListView-ObjC (0.1.1)
+
+DEPENDENCIES:
+  - MBProgressHUD (~> 1.0.0)
+  - SDWebImage (~> 4.1.0)
+  - TagListView-ObjC (~> 0.1.1)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - MBProgressHUD
+    - SDWebImage
+    - TagListView-ObjC
+
+SPEC CHECKSUMS:
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
+  TagListView-ObjC: 432991e24c5177eb4fa7d721de7084f09f39a0b8
+
+PODFILE CHECKSUM: 725e5d8b71c2625f4e0b1d8473e56f59b75bde3d
+
+COCOAPODS: 1.5.0.beta.1

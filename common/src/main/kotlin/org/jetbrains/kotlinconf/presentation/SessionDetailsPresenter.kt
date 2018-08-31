@@ -1,9 +1,9 @@
 package org.jetbrains.kotlinconf.presentation
 
-import kotlinx.coroutines.experimental.*
+import kotlin.coroutines.*
+import kotlinx.coroutines.*
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.data.*
-import kotlin.coroutines.experimental.*
 import kotlin.properties.Delegates.observable
 
 class SessionDetailsPresenter(
