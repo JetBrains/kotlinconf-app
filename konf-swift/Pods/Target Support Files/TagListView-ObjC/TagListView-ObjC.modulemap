@@ -1,0 +1,6 @@
+framework module TagListView_ObjC {
+  umbrella header "TagListView-ObjC-umbrella.h"
+
+  export *
+  module * { export * }
+}

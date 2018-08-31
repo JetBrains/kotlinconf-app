@@ -2,7 +2,8 @@ package org.jetbrains.kotlinconf.backend
 
 import com.zaxxer.hikari.*
 import io.ktor.application.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
+import kotlin.coroutines.*
 import org.jetbrains.kotlinconf.data.*
 import org.jetbrains.squash.connection.*
 import org.jetbrains.squash.definition.*
@@ -12,7 +13,6 @@ import org.jetbrains.squash.query.*
 import org.jetbrains.squash.results.*
 import org.jetbrains.squash.statements.*
 import java.time.*
-import kotlin.coroutines.experimental.*
 
 class Database(application: Application) {
     private val dispatcher: CoroutineContext

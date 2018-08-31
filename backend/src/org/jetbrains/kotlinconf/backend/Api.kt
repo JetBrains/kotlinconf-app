@@ -12,7 +12,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.experimental.channels.*
+import kotlinx.coroutines.channels.*
 import org.jetbrains.kotlinconf.data.*
 import java.time.*
 import java.time.format.*

@@ -4,7 +4,7 @@ enableFeaturePreview('GRADLE_METADATA')
 
 include 'backend'
 include 'common'
-//include 'ios'
+include 'konf-swift-framework'
 
 //include 'web' TODO: Fixme
 //include 'common-js'
