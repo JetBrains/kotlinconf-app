@@ -16,9 +16,13 @@ import io.ktor.websocket.*
 val gson = GsonBuilder().setPrettyPrinting().serializeNulls().create()
 
 fun Application.main() {
-    val config = environment.config.config("service")
-    val mode = config.property("environment").getString()
+    val config = environment.config
+    val serviceConfig = config.config("service")
+    val mode = serviceConfig.property("environment").getString()
     log.info("Environment: $mode")
+    val sessionizeConfig = config.config("sessionize")
+    val sessionizeUrl = sessionizeConfig.property("url").getString()
+    val sessionizeInterval = sessionizeConfig.property("interval").getString().toLong()
     val production = mode == "production"
 
     if (!production) {
@@ -33,6 +37,18 @@ fun Application.main() {
     install(WebSockets)
     install(XForwardedHeadersSupport)
     install(StatusPages) {
+        exception<ServiceUnavailable> { _ ->
+            call.respond(HttpStatusCode.ServiceUnavailable)
+        }
+        exception<BadRequest> { _ ->
+            call.respond(HttpStatusCode.BadRequest)
+        }
+        exception<Unauthorized> { _ ->
+            call.respond(HttpStatusCode.Unauthorized)
+        }
+        exception<NotFound> { _ ->
+            call.respond(HttpStatusCode.NotFound)
+        }
         exception<Throwable> { cause ->
             environment.log.error(cause)
             call.respond(HttpStatusCode.InternalServerError)
@@ -57,10 +73,10 @@ fun Application.main() {
             default("static/index.html")
             files("static")
         }
-        api(database, production)
+        api(database, production, sessionizeUrl)
     }
 
-    launchSyncJob()
+    launchSyncJob(sessionizeUrl, sessionizeInterval)
 }
 
 fun Route.authenticate() {

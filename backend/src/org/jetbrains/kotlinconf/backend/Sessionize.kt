@@ -17,11 +17,11 @@ import java.util.concurrent.*
 val apiDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
 
 @Volatile
-var sessionizeData: SessionizeData? = null
+private var sessionizeData: SessionizeData? = null
 val comeBackLater = HttpStatusCode(477, "Come Back Later")
 val tooLate = HttpStatusCode(478, "Too Late")
-val keynoteTimeZone = ZoneId.of("America/Los_Angeles")
-val keynoteEndDateTime = ZonedDateTime.of(2017, 11, 2, 10, 0, 0, 0, keynoteTimeZone)
+val keynoteTimeZone = ZoneId.of("Europe/Paris")
+val keynoteEndDateTime = ZonedDateTime.of(2018, 10, 4, 10, 0, 0, 0, keynoteTimeZone)
 
 val fakeSessionId = "007"
 
@@ -39,23 +39,25 @@ val fakeVotingSession = Session(
         roomId = 220
 )
 
-fun Application.launchSyncJob() {
-    val config = environment.config.config("sessionize")
-    val url = config.property("url").getString()
-    val interval = config.property("interval").getString().toLong()
-
-    log.info("Synchronizing each $interval minutes with $url")
+fun Application.launchSyncJob(sessionizeUrl: String, sessionizeInterval: Long) {
+    log.info("Synchronizing each $sessionizeInterval minutes with $sessionizeUrl")
     launch(CommonPool) {
         while (true) {
             log.trace("Synchronizing to Sessionize…")
-            val client = HttpClient(Apache)
-            val response = client.call(URL(url)) {}
-            val text = response.receive<String>()
-            var data = gson.fromJson<AllData>(text)
-            data = data.copy(sessions = data.sessions?.plus(fakeVotingSession))
+            synchronizeWithSessionize(sessionizeUrl)
             log.trace("Finished loading data from Sessionize.")
-            sessionizeData = SessionizeData(data)
-            delay(interval, TimeUnit.MINUTES)
+            delay(sessionizeInterval, TimeUnit.MINUTES)
         }
     }
 }
+
+suspend fun synchronizeWithSessionize(url: String) {
+    val client = HttpClient(Apache)
+    val response = client.call(URL(url)) {}
+    val text = response.receive<String>()
+    var data = gson.fromJson<AllData>(text)
+    data = data.copy(sessions = data.sessions?.plus(fakeVotingSession))
+    sessionizeData = SessionizeData(data)
+}
+
+fun getSessionizeData() = sessionizeData ?: throw ServiceUnavailable()
