@@ -1,6 +1,8 @@
 package org.jetbrains.kotlinconf.data
 
-//@Serializable
+import kotlinx.serialization.*
+
+@Serializable
 data class Link(
     val linkType: String,
     val title: String,

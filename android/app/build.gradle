@@ -11,13 +11,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-platform-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlinx-serialization'
 apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId 'org.jetbrains.kotlinconf'
-        minSdkVersion 19
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 7
         versionName '1.0.6'
@@ -25,6 +26,7 @@ android {
         multiDexEnabled true
     }
     buildTypes {
+
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -34,7 +36,7 @@ android {
     flavorDimensions "server"
     productFlavors {
         local {
-            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080/\"")
+            buildConfigField("String", "API_URL", "\"10.0.2.2\"")
             dimension "server"
         }
         prod {
@@ -46,6 +48,8 @@ android {
 
 dependencies {
     expectedBy project(':common')
+
+    implementation 'com.android.support:multidex:1.0.3'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -63,8 +67,9 @@ dependencies {
     implementation 'android.arch.lifecycle:runtime:1.1.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
 
-    implementation "org.jetbrains.anko:anko-sdk25:$anko_version"
+    implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$anko_version"
     implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
+    implementation "org.jetbrains.anko:anko-sdk25:$anko_version"
     implementation "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     implementation "org.jetbrains.anko:anko-design:$anko_version"
@@ -74,10 +79,10 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.brandongogetap:stickyheaders:0.4.9'
 
-    implementation 'com.android.support:multidex:1.0.3'
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation "io.ktor:ktor-client-android:$ktor_version"
+    implementation "io.ktor:ktor-client-gson:$ktor_version"
 
     api "io.ktor:ktor-client-json-jvm:$ktor_version"
 
@@ -90,5 +95,3 @@ dependencies {
     })
 
 }
-
-kotlin.experimental.coroutines 'enable'

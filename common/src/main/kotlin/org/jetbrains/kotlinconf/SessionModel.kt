@@ -7,7 +7,7 @@ class SessionModel(
     val id: String,
     val title: String,
     val category: String?,
-    val description: String,
+    val descriptionText: String,
     val startsAt: GMTDate,
     val endsAt: GMTDate,
     val room: String?,
@@ -42,7 +42,7 @@ class SessionModel(
                 id = briefSession.id,
                 title = briefSession.title,
                 category = briefSession.categoryItems.map(categoryProvider).firstOrNull()?.name,
-                description = briefSession.description,
+                descriptionText = briefSession.descriptionText ?: "",
                 startsAt = parseDate(startsAt),
                 endsAt = parseDate(endsAt),
                 speakers = briefSession.speakers.mapNotNull { speakerProvider(it) }.toTypedArray(),
@@ -58,7 +58,7 @@ fun AllData.allSessions(): List<SessionModel> {
             return@Comparator if (first.startsAt != second.startsAt) {
                 first.startsAt.compareTo(second.startsAt)
             } else {
-                first.description.compareTo(second.description)
+                first.title.compareTo(second.title)
             }
         })
 }

@@ -19,3 +19,12 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-dontwarn io.netty.**
+-dontwarn io.ktor.**
+-dontwarn com.typesafe.**
+-dontwarn org.jetbrains.anko.appcompat.**
+-dontwarn org.jetbrains.anko.coroutines.**
+-dontwarn org.slf4j.**
+-dontwarn kotlin.reflect.jvm.**
+-dontwarn androidx.media.**

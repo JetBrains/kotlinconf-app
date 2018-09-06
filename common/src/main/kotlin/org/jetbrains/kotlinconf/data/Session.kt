@@ -1,13 +1,15 @@
 package org.jetbrains.kotlinconf.data
 
-//@Serializable
+import kotlinx.serialization.*
+
+@Serializable
 data class Session(
     val id: String,
     val isServiceSession: Boolean,
     val isPlenumSession: Boolean,
     val questionAnswers: List<QuestionAnswer>,
     val speakers: List<String>,
-    val description: String,
+    val descriptionText: String?,
     val startsAt: String,
     val title: String,
     val endsAt: String,
