@@ -35,6 +35,8 @@ fun GMTDate.toReadableTimeString(): String = "${readableHours()}:${minutes.asMin
 fun GMTDate.toReadableDateString(): String = "$year ${month.value} $dayOfMonth"
 fun GMTDate.toReadableDateTimeString() = "${toReadableDateString()} ${toReadableTimeString()}"
 
+fun GMTDate.Companion.renderDateInterval(from: GMTDate, to: GMTDate) = (from to to).toReadableString()
+
 /**
  * According to mask: "yyyy-MM-dd'T'HH:mm:ss"
  */

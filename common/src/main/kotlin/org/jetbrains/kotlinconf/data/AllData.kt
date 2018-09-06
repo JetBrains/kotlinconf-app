@@ -1,6 +1,8 @@
 package org.jetbrains.kotlinconf.data
 
-//@Serializable
+import kotlinx.serialization.*
+
+@Serializable
 data class AllData(
     val sessions: List<Session> = emptyList(),
     val rooms: List<Room> = emptyList(),

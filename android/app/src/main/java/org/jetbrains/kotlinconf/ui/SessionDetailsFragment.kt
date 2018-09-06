@@ -14,8 +14,8 @@ import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.*
 import com.bumptech.glide.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.android.*
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.applyRecursively
@@ -123,20 +123,15 @@ class SessionDetailsFragment : Fragment() {
     }
 
     private fun setupRatingButtons(rating: SessionRating?) {
-        goodButton.backgroundResource = if (rating == SessionRating.GOOD)
-            R.drawable.round_toggle_button_background_selected
-        else
-            R.drawable.round_toggle_button_background
+        fun selectButton(target: SessionRating): Int =
+            if (rating == target)
+                R.drawable.round_toggle_button_background_selected
+            else
+                R.drawable.round_toggle_button_background
 
-        okButton.backgroundResource = if (rating == SessionRating.OK)
-            R.drawable.round_toggle_button_background_selected
-        else
-            R.drawable.round_toggle_button_background
-
-        badButton.backgroundResource = if (rating == SessionRating.BAD)
-            R.drawable.round_toggle_button_background_selected
-        else
-            R.drawable.round_toggle_button_background
+        goodButton.backgroundResource = selectButton(SessionRating.GOOD)
+        okButton.backgroundResource = selectButton(SessionRating.OK)
+        badButton.backgroundResource = selectButton(SessionRating.BAD)
     }
 
     private fun updateView(session: SessionModel?) {
@@ -150,14 +145,14 @@ class SessionDetailsFragment : Fragment() {
             val time = (session.startsAt to session.endsAt).toReadableString()
             timeTextView.text = time
             detailsTextView.text = listOfNotNull(roomText, category).joinToString(", ")
-            descriptionTextView.text = session.description
+            descriptionTextView.text = session.descriptionText
 
             session.speakers
                 .takeIf { it.size < 3 }
                 ?.map { it.profilePicture }
                 ?.apply {
                     forEachIndexed { index, imageUrl ->
-                        speakerImageViews[index].showSpeakerImage(imageUrl)
+                        imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
                     }
                 }
         }

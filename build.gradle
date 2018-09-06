@@ -12,10 +12,9 @@ allprojects {
         }
         dependencies {
             classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-            classpath "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:$serialization_version"
+            classpath "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:$serialization_plugin"
             classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:$kotlin_native_version"
         }
-
     }
     repositories {
         maven { url "http://kotlin.bintray.com/kotlin-eap" }

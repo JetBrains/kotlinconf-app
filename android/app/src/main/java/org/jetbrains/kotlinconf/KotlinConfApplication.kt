@@ -1,12 +1,14 @@
 package org.jetbrains.kotlinconf
 
+import android.app.*
+import android.content.*
 import android.support.multidex.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import org.jetbrains.anko.*
 import org.jetbrains.kotlinconf.model.*
 import java.util.*
 
-class KotlinConfApplication : MultiDexApplication(), AnkoLogger {
+class KotlinConfApplication : Application(), AnkoLogger {
     lateinit var viewModel: KotlinConfViewModel
 
     override fun onCreate() {
@@ -15,6 +17,7 @@ class KotlinConfApplication : MultiDexApplication(), AnkoLogger {
         Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
             println(throwable)
             throwable.printStackTrace()
+            throwable?.cause?.printStackTrace()
         }
 
         val userId = getUserId()
@@ -34,6 +37,11 @@ class KotlinConfApplication : MultiDexApplication(), AnkoLogger {
         launch {
             viewModel.update()
         }
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
     }
 
     private fun getUserId(): String {

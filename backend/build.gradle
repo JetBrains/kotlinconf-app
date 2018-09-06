@@ -10,6 +10,7 @@ buildscript {
 }
 
 apply plugin: 'kotlin-platform-jvm'
+apply plugin: 'kotlinx-serialization'
 
 apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
@@ -31,6 +32,7 @@ dependencies {
     implementation "io.ktor:ktor-auth:$ktor_version"
     implementation "io.ktor:ktor-websockets:$ktor_version"
     implementation "io.ktor:ktor-client-apache:$ktor_version"
+    implementation "io.ktor:ktor-client-gson:$ktor_version"
     implementation "org.jetbrains.squash:squash:$squash_version"
     implementation "org.jetbrains.squash:squash-h2:$squash_version"
     implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
@@ -59,5 +61,3 @@ shadowJar {
     classifier = null
     version = null
 }
-
-kotlin.experimental.coroutines 'enable'
