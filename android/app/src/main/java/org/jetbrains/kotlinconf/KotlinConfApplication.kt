@@ -33,6 +33,10 @@ class KotlinConfApplication : Application(), AnkoLogger {
 
                 KotlinConfDataRepositoryImpl.Error.LATE_TO_VOTE ->
                     toast(R.string.msg_late_vote)
+                KotlinConfDataRepositoryImpl.Error.FAILED_TO_VERIFY_CODE ->
+                    toast(R.string.code_verification_failed)
+                KotlinConfDataRepositoryImpl.Error.CODE_INCORRECT ->
+                    toast(R.string.code_incorrect)
             }
         }
     }

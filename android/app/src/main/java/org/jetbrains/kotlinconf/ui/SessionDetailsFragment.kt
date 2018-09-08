@@ -10,7 +10,11 @@ import android.support.v4.app.*
 import android.support.v7.app.*
 import android.support.v7.widget.Toolbar
 import android.view.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.*
+import android.widget.LinearLayout.FOCUS_AFTER_DESCENDANTS
+import android.widget.LinearLayout.VERTICAL
 import com.bumptech.glide.*
 import com.jetbrains.kotlinconf.presentation.*
 import kotlinx.coroutines.experimental.android.*
@@ -37,10 +41,13 @@ class SessionDetailsFragment : Fragment(), SessionDetailsView {
     private lateinit var goodButton: ImageButton
     private lateinit var badButton: ImageButton
     private lateinit var okButton: ImageButton
+    private lateinit var votingButtonsLayout: LinearLayout
+    private lateinit var votingPromptLayout: LinearLayout
 
     private val sessionId by lazy { arguments!!.get(KEY_SESSION_ID) as String }
     private val repository by lazy { (activity!!.application as KotlinConfApplication).repository }
     private val presenter by lazy { SessionDetailsPresenter(UI, this, sessionId, repository) }
+    private val navigationManager by lazy { activity as NavigationManager }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -75,12 +82,15 @@ class SessionDetailsFragment : Fragment(), SessionDetailsView {
 
     override fun updateView(session: SessionModel) {
         collapsingToolbar.title = session.title
-        speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName ?: "" }
+        speakersTextView.text = session.speakers.joinToString(separator = ", ") {
+            it.fullName ?: ""
+        }
         timeTextView.text = (session.startsAt to session.endsAt).toReadableString()
         val roomText = session.room?.let { room -> getString(R.string.room_format_details, room) }
         detailsTextView.text = listOfNotNull(roomText, session.category).joinToString(separator = ", ")
         descriptionTextView.text = session.description
-
+        votingButtonsLayout.visibility = if (codeVerified()) VISIBLE else GONE
+        votingPromptLayout.visibility = if (codeVerified()) GONE else VISIBLE
         session.speakers
                 .takeIf { it.size < 3 }
                 ?.mapNotNull { it.profilePicture }
@@ -208,7 +218,7 @@ class SessionDetailsFragment : Fragment(), SessionDetailsView {
                             topMargin = dip(20)
                         }
 
-                        linearLayout {
+                        votingButtonsLayout = linearLayout {
                             goodButton = imageButton {
                                 imageResource = R.drawable.ic_thumb_up_white_24dp
                             }
@@ -235,6 +245,28 @@ class SessionDetailsFragment : Fragment(), SessionDetailsView {
                             }
                         }
 
+                        votingPromptLayout = linearLayout {
+                            gravity = Gravity.CENTER
+                            orientation = VERTICAL
+                            textView(R.string.voting_text) {
+                                textSize = 20f
+                                padding = 10
+                            }
+                            button(R.string.verify_button_text) {
+                                setOnClickListener {
+                                    navigationManager.showCodeEnterFragment()
+                                }
+                                //Hack: For whatever reason the first click was being ignored
+                                setOnFocusChangeListener { view, b ->
+                                    if (b) {
+                                        view.performClick()
+                                    }
+                                }
+                            }
+                        }.lparams(width = matchParent, height = matchParent) {
+                            topMargin = dip(30)
+                        }
+
                     }.lparams(width = matchParent, height = wrapContent) {
                         margin = dip(20)
                     }.applyRecursively { view ->
@@ -246,6 +278,10 @@ class SessionDetailsFragment : Fragment(), SessionDetailsView {
                 }
             }
         }.view
+    }
+
+    private fun codeVerified(): Boolean {
+        return repository.getCodeVerified()
     }
 
     companion object {

@@ -18,14 +18,17 @@ class SessionDetailsPresenter(
     }
     private var rating: SessionRating? = null
     private val onRefreshListener: () -> Unit = this::refreshDataFromRepo
+    private val codeValidatedListener: () -> Unit = this::refreshDataFromRepo
 
     fun onCreate() {
         refreshDataFromRepo()
         repository.onUpdateListeners += onRefreshListener
+        repository.onCodeValidated += codeValidatedListener
     }
 
     fun onDestroy() {
         repository.onUpdateListeners -= onRefreshListener
+        repository.onCodeValidated -= codeValidatedListener
     }
 
     private fun refreshDataFromRepo() {
@@ -33,6 +36,7 @@ class SessionDetailsPresenter(
         view.updateView(session)
         isFavorite = repository.isFavorite(sessionId)
         rating = repository.getRating(sessionId)
+        view.setupRatingButtons(rating)
     }
 
     fun rateSession(newRating: SessionRating) {
