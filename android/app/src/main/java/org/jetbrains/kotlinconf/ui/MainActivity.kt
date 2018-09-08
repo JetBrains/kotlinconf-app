@@ -12,6 +12,8 @@ import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.frameLayout
+import org.jetbrains.kotlinconf.KotlinConfApplication
+import org.jetbrains.kotlinconf.model.KotlinConfDataRepositoryImpl
 
 class MainActivity :
         AppCompatActivity(),
@@ -30,16 +32,25 @@ class MainActivity :
         queryTextChangedListeners.add(listener)
     }
 
+    private val repository by lazy {
+        (application as KotlinConfApplication).repository
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(createView(AnkoContext.create(this)))
 
         if (savedInstanceState == null) {
             showSessionList()
-        }
-        else {
+            if (!codeVerified())
+                showCodeEnterFragment()
+        } else {
             savedInstanceState.getString(SEARCH_QUERY_KEY)?.let { _searchQuery = it }
         }
+    }
+
+    private fun codeVerified(): Boolean {
+        return repository.getCodeVerified()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -99,10 +110,25 @@ class MainActivity :
                 .commit()
     }
 
+    override fun showCodeEnterFragment() {
+        if (supportFragmentManager.findFragmentByTag(CodeEnterFragment.TAG) != null)
+            return
+
+        val fragment = CodeEnterFragment()
+        fragment.show(supportFragmentManager.beginTransaction(), "dialog")
+    }
+
+
+    override fun removeCodePromptFragment() {
+        if (supportFragmentManager.findFragmentByTag(CodeEnterFragment.TAG) == null)
+            return
+        supportFragmentManager.popBackStack()
+    }
+
     override fun showSessionList() {
         supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragment_container, SessionPagerFragment(), SessionListFragment.TAG)
+                .replace(R.id.fragment_container, SessionPagerFragment(), SessionListFragment.TAG)
                 .commit()
     }
 

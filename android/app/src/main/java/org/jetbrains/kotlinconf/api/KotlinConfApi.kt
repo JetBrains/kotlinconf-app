@@ -13,10 +13,7 @@ import org.jetbrains.kotlinconf.BuildConfig
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.HTTP
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface KotlinConfApi {
     @GET("all")
@@ -36,6 +33,9 @@ interface KotlinConfApi {
 
     @HTTP(method = "DELETE", path = "votes", hasBody = true)
     fun deleteVote(@Body vote: Vote): Call<ResponseBody>
+
+    @GET("users/verify/{code}")
+    fun submitCode(@Path("code") code: String): Call<ResponseBody>
 
     companion object {
         const val END_POINT = BuildConfig.API_URL

@@ -29,7 +29,8 @@ import kotlin.properties.Delegates.observable
 class KotlinConfDataRepositoryImpl(private val context: Context) : AnkoLogger, KotlinConfDataRepository {
 
     var onError: ((action: Error) -> Unit)? = null
-    override var onUpdateListeners: List<()->Unit> = emptyList()
+    override var onCodeValidated: List<() -> Unit> = emptyList()
+    override var onUpdateListeners: List<() -> Unit> = emptyList()
 
     private val userId: String by lazy { getOrSetUserId() }
 
@@ -47,6 +48,10 @@ class KotlinConfDataRepositoryImpl(private val context: Context) : AnkoLogger, K
 
     private val ratingPreferences: SharedPreferences by lazy {
         context.getSharedPreferences(VOTES_PREFERENCES_NAME, MODE_PRIVATE)
+    }
+
+    private val codePreferences: SharedPreferences by lazy {
+        context.getSharedPreferences(CODE_PREFERENCES_NAME, MODE_PRIVATE)
     }
 
     private var data by observable<AllData?>(null) { _, _, data ->
@@ -177,6 +182,34 @@ class KotlinConfDataRepositoryImpl(private val context: Context) : AnkoLogger, K
         }
     }
 
+    private fun saveCodeVerified() {
+        codePreferences.edit().putBoolean(CODE_VERIFIED_KEY, true).apply()
+    }
+
+    fun getCodeVerified(): Boolean {
+        return codePreferences.getBoolean(CODE_VERIFIED_KEY, false)
+    }
+
+    override suspend fun submitCode(code: String) {
+        kotlinConfApi
+                .submitCode(code)
+                .awaitResult()
+                .ifSucceeded {
+                    saveCodeVerified()
+                    onCodeValidated.forEach { it() }
+                }
+                .ifError { httpCode ->
+                    when (httpCode) {
+                        HTTP_NOT_ACCEPTABLE -> onError?.invoke(Error.CODE_INCORRECT)
+                        else -> onError?.invoke(Error.FAILED_TO_VERIFY_CODE)
+                    }
+                }
+                .ifFailed {
+                    onError?.invoke(Error.FAILED_TO_VERIFY_CODE)
+                }
+    }
+
+
     private fun syncLocalFavorites(allData: AllData) {
         val sessionIds = allData.favorites?.mapNotNull { it.sessionId } ?: return
         modifyLocalFavorites { favorites ->
@@ -189,7 +222,7 @@ class KotlinConfDataRepositoryImpl(private val context: Context) : AnkoLogger, K
         }
     }
 
-    private fun modifyLocalFavorites(modifier: (favorites: MutableSet<String>)->Unit) {
+    private fun modifyLocalFavorites(modifier: (favorites: MutableSet<String>) -> Unit) {
         val localFavorites = favoritePreferences.getStringSet(FAVORITES_KEY, setOf()).toMutableSet()
         modifier(localFavorites)
         favoritePreferences
@@ -298,16 +331,21 @@ class KotlinConfDataRepositoryImpl(private val context: Context) : AnkoLogger, K
     companion object {
         const val FAVORITES_PREFERENCES_NAME = "favorites"
         const val VOTES_PREFERENCES_NAME = "votes"
+        const val CODE_PREFERENCES_NAME = "code"
         const val FAVORITES_KEY = "favorites"
         const val CACHED_DATA_FILE_NAME = "data.json"
         const val USER_ID_KEY = "UserId"
+        const val CODE_VERIFIED_KEY = "code_verified"
 
         const val HTTP_COME_BACK_LATER = 477
+        const val HTTP_NOT_ACCEPTABLE = 406
         const val HTTP_TOO_LATE = 478
     }
 
     enum class Error {
         FAILED_TO_POST_RATING,
+        FAILED_TO_VERIFY_CODE,
+        CODE_INCORRECT,
         FAILED_TO_DELETE_RATING,
         FAILED_TO_GET_DATA,
         EARLY_TO_VOTE,
