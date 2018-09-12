@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf.ui
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
@@ -13,7 +14,9 @@ import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.frameLayout
 import org.jetbrains.kotlinconf.KotlinConfApplication
-import org.jetbrains.kotlinconf.model.KotlinConfDataRepositoryImpl
+
+const val PROMPT_PREFERENCES_NAME = "prompt_pref"
+const val PROMPT_KEY = "prompt_key"
 
 class MainActivity :
         AppCompatActivity(),
@@ -27,6 +30,10 @@ class MainActivity :
         get() = _searchQuery
 
     private val queryTextChangedListeners: MutableList<(String) -> Unit> = mutableListOf()
+
+    private val promptPreferences: SharedPreferences by lazy {
+        getSharedPreferences(PROMPT_PREFERENCES_NAME, MODE_PRIVATE)
+    }
 
     override fun addOnQueryChangedListener(listener: (String) -> Unit) {
         queryTextChangedListeners.add(listener)
@@ -42,8 +49,10 @@ class MainActivity :
 
         if (savedInstanceState == null) {
             showSessionList()
-            if (!codeVerified())
+            if (!codeVerified() && !getCodePromptShown()) {
                 showCodeEnterFragment()
+                setCodePromptShown()
+            }
         } else {
             savedInstanceState.getString(SEARCH_QUERY_KEY)?.let { _searchQuery = it }
         }
@@ -51,6 +60,17 @@ class MainActivity :
 
     private fun codeVerified(): Boolean {
         return repository.getCodeVerified()
+    }
+
+    private fun getCodePromptShown(): Boolean {
+        return promptPreferences.getBoolean(PROMPT_KEY, false)
+    }
+
+    private fun setCodePromptShown() {
+        promptPreferences
+                .edit()
+                .putBoolean(PROMPT_KEY, true)
+                .apply()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -116,13 +136,6 @@ class MainActivity :
 
         val fragment = CodeEnterFragment()
         fragment.show(supportFragmentManager.beginTransaction(), "dialog")
-    }
-
-
-    override fun removeCodePromptFragment() {
-        if (supportFragmentManager.findFragmentByTag(CodeEnterFragment.TAG) == null)
-            return
-        supportFragmentManager.popBackStack()
     }
 
     override fun showSessionList() {
