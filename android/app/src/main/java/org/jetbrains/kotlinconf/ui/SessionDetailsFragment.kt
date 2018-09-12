@@ -220,13 +220,13 @@ class SessionDetailsFragment : Fragment(), SessionDetailsView {
 
                         votingButtonsLayout = linearLayout {
                             goodButton = imageButton {
-                                imageResource = R.drawable.ic_thumb_up_white_24dp
+                                imageResource = R.drawable.ic_happy
                             }
                             okButton = imageButton {
-                                imageResource = R.drawable.ic_sentiment_neutral_white_36dp
+                                imageResource = R.drawable.ic_neutral
                             }
                             badButton = imageButton {
-                                imageResource = R.drawable.ic_thumb_down_white_24dp
+                                imageResource = R.drawable.ic_sad
                             }
                         }.lparams {
                             topMargin = dip(10)
