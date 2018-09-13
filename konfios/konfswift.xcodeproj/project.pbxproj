@@ -10,8 +10,6 @@
 		2C024B1A1F7494B400A7EAEC /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C024B191F7494B400A7EAEC /* AboutViewController.swift */; };
 		2C4F0184213ED71700FCD207 /* Pods_konfswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F0183213ED71700FCD207 /* Pods_konfswift.framework */; };
 		2C4F0185213ED71700FCD207 /* Pods_konfswift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F0183213ED71700FCD207 /* Pods_konfswift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2C4F0187213ED71700FCD207 /* Pods_konfswiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F0186213ED71700FCD207 /* Pods_konfswiftTests.framework */; };
-		2C4F0188213ED71700FCD207 /* Pods_konfswiftTests.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F0186213ED71700FCD207 /* Pods_konfswiftTests.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2C4F018B213ED72800FCD207 /* konfios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F018A213ED72700FCD207 /* konfios.framework */; };
 		2C4F018C213ED72800FCD207 /* konfios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F018A213ED72700FCD207 /* konfios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2C50FD941F729FE000B3F845 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C50FD931F729FE000B3F845 /* AppDelegate.swift */; };
@@ -43,7 +41,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2C4F0188213ED71700FCD207 /* Pods_konfswiftTests.framework in Embed Frameworks */,
 				2C4F018C213ED72800FCD207 /* konfios.framework in Embed Frameworks */,
 				2C4F0185213ED71700FCD207 /* Pods_konfswift.framework in Embed Frameworks */,
 			);
@@ -82,7 +79,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C4F0187213ED71700FCD207 /* Pods_konfswiftTests.framework in Frameworks */,
 				2C4F018B213ED72800FCD207 /* konfios.framework in Frameworks */,
 				2C4F0184213ED71700FCD207 /* Pods_konfswift.framework in Frameworks */,
 			);
@@ -245,8 +241,9 @@
 				TargetAttributes = {
 					2C50FD8F1F729FE000B3F845 = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = 29C3V4PUK8;
 						LastSwiftMigration = 0830;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					2C50FDA61F729FE000B3F845 = {
 						CreatedOnToolsVersion = 8.3.3;
@@ -524,8 +521,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 29C3V4PUK8;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)-framework/build/konan/bin/ios_x64",
@@ -535,13 +534,14 @@
 				INFOPLIST_FILE = konfswift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.kotlinlang.konfswift;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.e5l;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -551,8 +551,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 29C3V4PUK8;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)-framework/build/konan/bin/ios_x64",
@@ -562,12 +564,13 @@
 				INFOPLIST_FILE = konfswift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.kotlinlang.konfswift;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.e5l;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
