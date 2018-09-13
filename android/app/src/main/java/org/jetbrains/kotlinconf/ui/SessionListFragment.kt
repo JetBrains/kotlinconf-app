@@ -22,42 +22,38 @@ import org.jetbrains.anko.support.v4.*
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.R
 import org.jetbrains.kotlinconf.presentation.*
+import kotlin.properties.Delegates.observable
 
-abstract class SessionListFragment : Fragment(), AnkoComponent<Context> {
+abstract class SessionListFragment : Fragment(), AnkoComponent<Context>, SessionListView {
+
     private lateinit var sessionsRecyclerView: RecyclerView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var sessionsAdapter: SessionsAdapter
+    lateinit var sessionsAdapter: SessionsAdapter
     private var sessionsListState: Parcelable? = null
 
-    abstract fun getSessions(model: SessionListViewModel): LiveData<List<SessionModel>>
     abstract val title: String
+
+    override var isUpdating: Boolean by observable(false) { _, _, isUpdating ->
+        swipeRefreshLayout.isRefreshing = isUpdating
+    }
+
+    private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
+    private val navigationManager by lazy { activity as NavigationManager }
+    private val searchQueryProvider by lazy { activity as SearchQueryProvider }
+    private val presenter by lazy {
+        SessionListPresenter(UI, this, repository, navigationManager, searchQueryProvider)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val viewModel = ViewModelProviders.of(this, AndroidViewModelFactory.getInstance(activity!!.application))
-            .get(SessionListViewModel::class.java)
-            .apply {
-                setNavigationManager(activity as NavigationManager)
-                setSearchQueryProvider(activity as SearchQueryProvider)
-            }
 
-        swipeRefreshLayout.setOnRefreshListener {
-            launch(UI) { viewModel.updateData() }
-        }
+        swipeRefreshLayout.setOnRefreshListener(presenter::updateData)
+        sessionsAdapter = SessionsAdapter(context!!, presenter::showSessionDetails)
 
-        sessionsAdapter = SessionsAdapter(context!!, viewModel::showSessionDetails)
         sessionsRecyclerView.layoutManager = StickyLayoutManager(context, sessionsAdapter).apply {
             elevateHeaders(2)
         }
         sessionsRecyclerView.adapter = sessionsAdapter
-
-        getSessions(viewModel).observe(this) {
-            sessionsAdapter.sessions = it ?: emptyList()
-        }
-
-        viewModel.isUpdating.observe(this) {
-            swipeRefreshLayout.isRefreshing = it ?: false
-        }
 
         sessionsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -75,6 +71,8 @@ abstract class SessionListFragment : Fragment(), AnkoComponent<Context> {
         sessionsListState?.let {
             sessionsRecyclerView.layoutManager!!.onRestoreInstanceState(it)
         }
+
+        presenter.onCreate()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

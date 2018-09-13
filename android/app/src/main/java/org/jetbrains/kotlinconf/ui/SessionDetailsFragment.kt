@@ -1,7 +1,5 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.arch.lifecycle.*
-import android.arch.lifecycle.ViewModelProvider.*
 import android.graphics.*
 import android.graphics.drawable.*
 import android.os.*
@@ -38,8 +36,11 @@ import org.jetbrains.anko.wrapContent
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.R
 import org.jetbrains.kotlinconf.data.*
+import org.jetbrains.kotlinconf.presentation.SessionDetailsPresenter
+import org.jetbrains.kotlinconf.presentation.SessionDetailsView
 
-class SessionDetailsFragment : Fragment() {
+class SessionDetailsFragment : Fragment(), SessionDetailsView {
+
     private lateinit var toolbar: Toolbar
     private lateinit var speakersTextView: TextView
     private lateinit var timeTextView: TextView
@@ -53,68 +54,19 @@ class SessionDetailsFragment : Fragment() {
     private lateinit var badButton: ImageButton
     private lateinit var okButton: ImageButton
 
+    private val sessionId by lazy { arguments!!.get(KEY_SESSION_ID) as String }
+    private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
+    private val presenter by lazy { SessionDetailsPresenter(UI, this, sessionId, repository) }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        setUpActionBar()
 
-        setHasOptionsMenu(true)
-
-        (activity as AppCompatActivity).apply {
-            setSupportActionBar(toolbar)
-            supportActionBar?.setDisplayShowHomeEnabled(true)
-            supportActionBar?.setDisplayShowTitleEnabled(false)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
-
-        val sessionId = arguments?.get(KEY_SESSION_ID) as String
-        val viewModel = ViewModelProviders.of(
-            this,
-            AndroidViewModelFactory.getInstance(activity!!.application)
-        )
-            .get(SessionDetailsViewModel::class.java)
-            .apply { setSession(sessionId) }
-
-        favoriteButton.setOnClickListener {
-            launch(UI) { viewModel.toggleFavorite() }
-        }
-
-        val clickListener = View.OnClickListener { view: View ->
-            val rating = when (view) {
-                goodButton -> SessionRating.GOOD
-                okButton -> SessionRating.OK
-                badButton -> SessionRating.BAD
-                else -> null
-            }
-
-            launch(UI) {
-                if (rating != null) {
-                    if (viewModel.rating.value != rating) {
-                        viewModel.setRating(rating)
-                    } else {
-                        viewModel.removeRating()
-                    }
-                }
-            }
-        }
-
-        viewModel.session.observe(this, this::updateView)
-
-        viewModel.isFavorite.observe(this) { isFavorite ->
-            if (isFavorite == true) {
-                favoriteButton.setImageResource(R.drawable.ic_favorite_white_24dp)
-            } else {
-                favoriteButton.setImageResource(R.drawable.ic_favorite_border_white_24dp)
-            }
-        }
-
-        setupRatingButtons(viewModel.rating.value)
-
-        viewModel.rating.observe(this) { rating ->
-            setupRatingButtons(rating)
-        }
-
-        goodButton.setOnClickListener(clickListener)
-        okButton.setOnClickListener(clickListener)
-        badButton.setOnClickListener(clickListener)
+        favoriteButton.setOnClickListener { presenter.onFavoriteButtonClicked() }
+        goodButton.setOnClickListener { presenter.rateSessionClicked(SessionRating.GOOD) }
+        okButton.setOnClickListener { presenter.rateSessionClicked(SessionRating.OK) }
+        badButton.setOnClickListener { presenter.rateSessionClicked(SessionRating.BAD) }
+        presenter.onCreate()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -122,23 +74,29 @@ class SessionDetailsFragment : Fragment() {
         menu.clear()
     }
 
-    private fun setupRatingButtons(rating: SessionRating?) {
-        fun selectButton(target: SessionRating): Int =
-            if (rating == target)
-                R.drawable.round_toggle_button_background_selected
-            else
-                R.drawable.round_toggle_button_background
+    override fun setIsFavorite(isFavorite: Boolean) {
+        val favoriteIcon = if (isFavorite) R.drawable.ic_favorite_white_24dp else R.drawable.ic_favorite_border_white_24dp
+        favoriteButton.setImageResource(favoriteIcon)
+    }
+
+    override fun setupRatingButtons(rating: SessionRating?) {
+        fun selectButton(target: SessionRating): Int = when (rating) {
+            target -> R.drawable.round_toggle_button_background_selected
+            else -> R.drawable.round_toggle_button_background
+        }
 
         goodButton.backgroundResource = selectButton(SessionRating.GOOD)
         okButton.backgroundResource = selectButton(SessionRating.OK)
         badButton.backgroundResource = selectButton(SessionRating.BAD)
     }
 
-    private fun updateView(session: SessionModel?) {
-        if (session == null) {
-            return
-        }
+    override fun setRatingClickable(clickable: Boolean) {
+        goodButton.isClickable = clickable
+        okButton.isClickable = clickable
+        badButton.isClickable = clickable
+    }
 
+    override fun updateView(session: SessionModel) {
         with(session) {
             collapsingToolbar.title = session.title
             speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName }
@@ -148,31 +106,41 @@ class SessionDetailsFragment : Fragment() {
             descriptionTextView.text = session.descriptionText
 
             session.speakers
-                .takeIf { it.size < 3 }
-                ?.map { it.profilePicture }
-                ?.apply {
-                    forEachIndexed { index, imageUrl ->
-                        imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
+                    .takeIf { it.size < 3 }
+                    ?.map { it.profilePicture }
+                    ?.apply {
+                        forEachIndexed { index, imageUrl ->
+                            imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
+                        }
                     }
-                }
         }
     }
 
     private val SessionModel.roomText: String?
         get() = room?.let { getString(R.string.room_format_details, it) }
 
+    private fun setUpActionBar() {
+        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).apply {
+            setSupportActionBar(toolbar)
+            supportActionBar?.setDisplayShowHomeEnabled(true)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
     private fun ImageView.showSpeakerImage(imageUrl: String) {
         visibility = View.VISIBLE
         Glide.with(this@SessionDetailsFragment)
-            .load(imageUrl)
-            .centerCrop()
-            .into(this)
+                .load(imageUrl)
+                .centerCrop()
+                .into(this)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return UI {
             coordinatorLayout {
@@ -207,8 +175,8 @@ class SessionDetailsFragment : Fragment() {
                         view {
                             backgroundResource = R.drawable.appbar_buttons_scrim
                             layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                matchParent,
-                                dimen(context.getResourceId(R.attr.actionBarSize))
+                                    matchParent,
+                                    dimen(context.getResourceId(R.attr.actionBarSize))
                             ).apply {
                                 gravity = Gravity.TOP
                             }
@@ -223,8 +191,8 @@ class SessionDetailsFragment : Fragment() {
 
                         toolbar = toolbar {
                             layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                matchParent,
-                                dimen(context.getResourceId(R.attr.actionBarSize))
+                                    matchParent,
+                                    dimen(context.getResourceId(R.attr.actionBarSize))
                             ).apply {
                                 collapseMode = COLLAPSE_MODE_PIN
                             }

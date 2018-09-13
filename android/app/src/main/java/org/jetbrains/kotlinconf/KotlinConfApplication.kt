@@ -3,12 +3,16 @@ package org.jetbrains.kotlinconf
 import android.app.*
 import android.content.*
 import android.support.multidex.*
+import android.widget.Toast
 import kotlinx.coroutines.*
+import kotlinx.coroutines.android.UI
 import org.jetbrains.anko.*
 import org.jetbrains.kotlinconf.model.*
+import org.jetbrains.kotlinconf.presentation.DataRepository
 import java.util.*
 
 class KotlinConfApplication : Application(), AnkoLogger {
+    lateinit var dataRepository: DataRepository
     lateinit var viewModel: KotlinConfViewModel
 
     override fun onCreate() {
@@ -22,19 +26,10 @@ class KotlinConfApplication : Application(), AnkoLogger {
 
         val userId = getUserId()
 
-        viewModel = KotlinConfViewModel(
-            this, userId
-        ) { action ->
-            when (action) {
-                KotlinConfViewModel.Error.FAILED_TO_DELETE_RATING -> toast(R.string.msg_failed_to_delete_vote)
-                KotlinConfViewModel.Error.FAILED_TO_POST_RATING -> toast(R.string.msg_failed_to_post_vote)
-                KotlinConfViewModel.Error.FAILED_TO_GET_DATA -> toast(R.string.msg_failed_to_get_data)
-                KotlinConfViewModel.Error.EARLY_TO_VOTE -> toast(R.string.msg_early_vote)
-                KotlinConfViewModel.Error.LATE_TO_VOTE -> toast(R.string.msg_late_vote)
-            }
-        }
+        dataRepository = KonfAppDataModel(userId)
+        viewModel = KotlinConfViewModel(this, dataRepository, this::showError)
 
-        launch {
+        launch(UI) {
             viewModel.update()
         }
     }
@@ -44,14 +39,25 @@ class KotlinConfApplication : Application(), AnkoLogger {
         MultiDex.install(this)
     }
 
+    private fun showError(error: KotlinConfViewModel.Error) {
+        val message = when (error) {
+            KotlinConfViewModel.Error.FAILED_TO_DELETE_RATING -> R.string.msg_failed_to_delete_vote
+            KotlinConfViewModel.Error.FAILED_TO_POST_RATING -> R.string.msg_failed_to_post_vote
+            KotlinConfViewModel.Error.FAILED_TO_GET_DATA -> R.string.msg_failed_to_get_data
+            KotlinConfViewModel.Error.EARLY_TO_VOTE -> R.string.msg_early_vote
+            KotlinConfViewModel.Error.LATE_TO_VOTE -> R.string.msg_late_vote
+        }
+        toast(message)
+    }
+
     private fun getUserId(): String {
         defaultSharedPreferences.getString(USER_ID_KEY, null)?.let { return it }
 
         val userId = "android-" + UUID.randomUUID().toString()
         defaultSharedPreferences
-            .edit()
-            .putString(USER_ID_KEY, userId)
-            .apply()
+                .edit()
+                .putString(USER_ID_KEY, userId)
+                .apply()
 
         return userId
     }

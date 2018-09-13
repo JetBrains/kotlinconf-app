@@ -7,19 +7,20 @@ import android.widget.*
 import com.google.gson.*
 import io.ktor.client.call.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.android.UI
 import org.jetbrains.anko.*
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.api.*
 import org.jetbrains.kotlinconf.data.*
+import org.jetbrains.kotlinconf.presentation.DataRepository
 import java.io.*
 
 class KotlinConfViewModel(
     private val context: Context,
-    userId: String,
-    private val onError: (Error) -> Toast
+    private val data: DataRepository,
+    private val onError: (Error) -> Unit
 ) : AnkoLogger {
     private val gson: Gson by lazy { GsonBuilder().create() } //().setDateFormat(DATE_FORMAT).create() }
-    private val data = KonfAppDataModel(userId)
 
     private val favoritePreferences: SharedPreferences by lazy {
         context.getSharedPreferences(FAVORITES_PREFERENCES_NAME, MODE_PRIVATE)
@@ -48,7 +49,7 @@ class KotlinConfViewModel(
 
     init {
         loadLocalData()
-        launch {
+        launch(UI) {
             update()
         }
     }

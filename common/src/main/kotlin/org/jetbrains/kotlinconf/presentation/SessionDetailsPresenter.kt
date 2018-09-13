@@ -21,14 +21,9 @@ class SessionDetailsPresenter(
 
     fun onCreate() {
         refreshDataFromRepo()
-//        repository.addUpdateListener(onRefreshListener)
     }
 
-    fun onDestroy() {
-//        repository.removeUpdateListener(onRefreshListener)
-    }
-
-    fun rateSession(newRating: SessionRating) {
+    fun rateSessionClicked(newRating: SessionRating) {
         launch(uiContext) {
             view.setRatingClickable(false)
             if (rating != newRating) {
