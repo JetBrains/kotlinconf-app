@@ -28,6 +28,7 @@ class SessionListPresenter(
             try {
                 view.isUpdating = true
                 repository.update()
+                onSearchQueryChanged(searchQuery)
             } finally {
                 view.isUpdating = false
             }
