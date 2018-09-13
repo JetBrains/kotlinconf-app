@@ -36,7 +36,7 @@ android {
     flavorDimensions "server"
     productFlavors {
         local {
-            buildConfigField("String", "API_URL", "\"10.0.2.2\"")
+            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080\"")
             dimension "server"
         }
         prod {

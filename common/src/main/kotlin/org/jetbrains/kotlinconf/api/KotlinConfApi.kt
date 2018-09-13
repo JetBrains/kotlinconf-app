@@ -13,8 +13,6 @@ import org.jetbrains.kotlinconf.data.*
 
 internal expect val END_POINT: String
 
-private const val PORT = 8080
-
 class KotlinConfApi(private val userId: String) {
     private val client = HttpClient {
         install(JsonFeature) {
@@ -29,10 +27,8 @@ class KotlinConfApi(private val userId: String) {
 
     suspend fun createUser(): Boolean {
         val response = client.call {
-            url.protocol = URLProtocol.HTTP
+            url(urlString = END_POINT)
             method = HttpMethod.Post
-            url.host = END_POINT
-            url.port = PORT
             url.encodedPath = "users"
             body = userId
         }.response
@@ -78,7 +74,6 @@ class KotlinConfApi(private val userId: String) {
         header(HttpHeaders.CacheControl, "no-cache")
         url {
             takeFrom(END_POINT)
-            port = PORT
             encodedPath = path
         }
     }
