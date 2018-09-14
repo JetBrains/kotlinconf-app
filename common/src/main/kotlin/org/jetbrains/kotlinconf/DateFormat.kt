@@ -18,43 +18,40 @@ fun Pair<GMTDate, GMTDate>.toReadableString(): String = buildString {
     if (fromSuffix != toSuffix) {
         append("${from.toReadableTimeString()}$emDash{${to.toReadableTimeString()}}")
     } else {
-        append("${from.readableHours()}:${from.minutes.asMinutesString()}")
+        append("${from.readableHours()}:${from.minutes.toString(2)}")
         append(emDash)
-        append("${to.readableHours()}:${to.minutes.asMinutesString()} $fromSuffix")
+        append("${to.readableHours()}:${to.minutes.toString(2)} $fromSuffix")
     }
 }
 
 fun GMTDate.timeSuffix() = if ((hours + 11) / 12 == 1) "a.m." else "p.m."
 fun GMTDate.readableHours() = (hours + 11) % 12 + 1
 
-fun Int.asMinutesString(): String = if (this < 10) "0$this" else toString()
+fun Int.toString(minSize: Int): String = "$this".padStart(minSize, '0')
 
 private const val emDash = "\u2014"
 
-fun GMTDate.toReadableTimeString(): String = "${readableHours()}:${minutes.asMinutesString()} ${timeSuffix()}"
+fun GMTDate.toReadableTimeString(): String = "$hours:${minutes.toString(2)}"
 fun GMTDate.toReadableDateString(): String = "$year ${month.value} $dayOfMonth"
 fun GMTDate.toReadableDateTimeString() = "${toReadableDateString()} ${toReadableTimeString()}"
 
 /**
- * According to mask:
+ * According to mask: "yyyy-MM-dd'T'HH:mm:ss"
  */
 fun String.parseDate(): GMTDate {
-    val year = substring(0, 4).toInt()
-    val month = substring(5, 7).toInt()
-    val day = substring(8, 10).toInt()
+    fun formatError(): Nothing = throw Error("Format of $this is not correct")
+    val year = substring(0, 4).toIntOrNull() ?: formatError()
+    val month = substring(5, 7).toIntOrNull() ?: formatError()
+    val day = substring(8, 10).toIntOrNull() ?: formatError()
 
-    val hour = substring(11, 13).toInt()
-    val minute = substring(14, 16).toInt()
-    val second = substring(17, 19).toInt()
+    val hour = substring(11, 13).toIntOrNull() ?: formatError()
+    val minute = substring(14, 16).toIntOrNull() ?: formatError()
+    val second = substring(17, 19).toIntOrNull() ?: formatError()
 
     return GMTDate(second, minute, hour, day, Month.from(month - 1), year)
 }
 
 fun GMTDate.parseToString(): String {
     val monthPart = "${month.ordinal + 1}".padStart(2, '0')
-    val dayPart = "$dayOfMonth".padStart(2, '0')
-    val hourPart = "$hours".padStart(2, '0')
-    val minutePart = "$minutes".padStart(2, '0')
-    val secondPart = "$seconds".padStart(2, '0')
-    return "$year-$monthPart-$dayPart'T'$hourPart:$minutePart:$secondPart"
+    return "$year-$monthPart-${dayOfMonth.toString(2)}T${hours.toString(2)}:${minutes.toString(2)}:${seconds.toString(2)}"
 }
