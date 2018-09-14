@@ -18,9 +18,9 @@ class KotlinConfApi {
     private val client = HttpClient {
         install(JsonFeature) {
             serializer = KotlinxSerializer().apply {
-                setMapper(AllData::class, AllData::class.serializer())
-                setMapper(Favorite::class, Favorite::class.serializer())
-                setMapper(Vote::class, Vote::class.serializer())
+                setMapper(AllData::class, AllData.serializer())
+                setMapper(Favorite::class, Favorite.serializer())
+                setMapper(Vote::class, Vote.serializer())
             }
         }
         install(ExpectSuccess)

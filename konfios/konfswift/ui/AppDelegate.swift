@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func onError(error: KTStdlibThrowable) -> KTStdlibUnit {
-        return KTStdlibUnit()
+        return KTUnit
     }
 }
 

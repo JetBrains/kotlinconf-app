@@ -24,9 +24,9 @@ class KotlinConfDataRepository(
     private val settings = settingsFactory?.create("")
     private val api = KotlinConfApi()
 
-    override var sessions: List<SessionModel>? by bindToPreferencesByKey("settingsKey", SessionModel::class.serializer().list)
-    override var favorites: List<SessionModel>? by bindToPreferencesByKey("favoritesKey", SessionModel::class.serializer().list)
-    override var votes: List<Vote>? by bindToPreferencesByKey("votesKey", Vote::class.serializer().list)
+    override var sessions: List<SessionModel>? by bindToPreferencesByKey("settingsKey", SessionModel.serializer().list)
+    override var favorites: List<SessionModel>? by bindToPreferencesByKey("favoritesKey", SessionModel.serializer().list)
+    override var votes: List<Vote>? by bindToPreferencesByKey("votesKey", Vote.serializer().list)
     var userId: String? by bindToPreferencesByKey("userIdKey", String.serializer())
 
     override val loggedIn: Boolean

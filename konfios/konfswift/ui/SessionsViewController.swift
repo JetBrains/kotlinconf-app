@@ -61,10 +61,10 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
     private func updateTableContent() {
         switch self.mode {
         case .all:
-            fillDataWith(sessions: konfService.sessions)
+            fillDataWith(sessions: konfService.sessions ?? [])
             break
         case .favorites:
-            fillDataWith(sessions: konfService.favorites)
+            fillDataWith(sessions: konfService.favorites ?? [])
             break
         }
 
@@ -97,7 +97,7 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let bucket = selectedPath.section
                 let row = selectedPath.row
                 if (sessionsTableData.count <= bucket || sessionsTableData[bucket].count <= row) { return }
-                sessionViewController.session = sessionsTableData[bucket][row]
+//                sessionViewController.session = sessionsTableData[bucket][row]
             default: break
         }
     }
@@ -138,7 +138,7 @@ class SessionsTableViewCell : UITableViewCell {
 
     func setup(for session: KTSessionModel) {
         titleLabel.text = session.title
-        guard let speakers: [KTSpeaker] = session.speakers {
+        guard let speakers: [KTSpeaker] = session.speakers else {
             return
         }
         
