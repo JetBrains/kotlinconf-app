@@ -8,7 +8,9 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.toast
 import org.jetbrains.kotlinconf.model.KotlinConfDataRepository
 import org.jetbrains.kotlinconf.model.KotlinConfDataRepository.Error.*
+import org.jetbrains.kotlinconf.model.KotlinConfDataRepository.Unauthorized
 import org.jetbrains.kotlinconf.presentation.DataRepository
+import java.net.ConnectException
 
 class KotlinConfApplication : Application(), AnkoLogger {
 
@@ -34,11 +36,8 @@ class KotlinConfApplication : Application(), AnkoLogger {
 
     private fun showError(error: Throwable) {
         val message = when (error) {
-            FAILED_TO_DELETE_RATING -> R.string.msg_failed_to_delete_vote
-            FAILED_TO_POST_RATING -> R.string.msg_failed_to_post_vote
-            FAILED_TO_GET_DATA -> R.string.msg_failed_to_get_data
-            EARLY_TO_VOTE -> R.string.msg_early_vote
-            LATE_TO_VOTE -> R.string.msg_late_vote
+            is Unauthorized -> R.string.unauthorized_error
+            is ConnectException -> return // It means that user is offline
             else -> R.string.unknown_error
         }
         toast(message)

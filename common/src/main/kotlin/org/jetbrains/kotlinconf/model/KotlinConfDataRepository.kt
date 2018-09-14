@@ -82,8 +82,7 @@ class KotlinConfDataRepository(
         val favorite = Favorite(sessionId)
         favorites = if (isFavorite) {
             api.postFavorite(favorite, userId)
-            val favoriteSession = sessions?.firstOrNull { it.id == sessionId }
-                    ?: throw Unauthorized()
+            val favoriteSession = sessions?.firstOrNull { it.id == sessionId } ?: throw Unauthorized()
             favorites.orEmpty().plus(favoriteSession)
         } else {
             api.deleteFavorite(favorite, userId)

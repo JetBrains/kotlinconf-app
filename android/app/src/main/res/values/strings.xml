@@ -13,6 +13,7 @@
     <string name="msg_early_vote">Voting is not allowed before the session starts</string>
     <string name="msg_late_vote">Voting is not allowed later than 15 minutes after the session ends</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="unauthorized_error">Unauthorized</string>
     <string name="copyright">Copyright © 2018 JetBrains s. r. o.</string>
     <string name="legal_notice_title">LEGAL NOTICE</string>
     <string name="app_description"><![CDATA[The official KotlinConf 2018 App.<br/><br/>This App was developed amongst other reasons to showcase Kotlin/JVM. Get more information and source code from <a href="https://github.com/jetbrains/kotlinconf-app">github.com/jetbrains/kotlinconf-app</a><br/><br/>Powered by Kotlin/JVM]]></string>

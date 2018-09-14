@@ -28,13 +28,7 @@ class SessionPagerFragment : Fragment(), AnkoComponent<Context> {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        (activity as AppCompatActivity).apply {
-            setSupportActionBar(toolbar)
-            supportActionBar?.setDisplayShowHomeEnabled(true)
-            supportActionBar?.setDisplayShowTitleEnabled(false)
-            supportActionBar?.setLogo(R.drawable.kotlinconf_logo_text)
-        }
+        setUpActionBar()
 
         viewPager.adapter = object : FragmentPagerAdapter(childFragmentManager) {
             val fragments = listOf(AllSessionsFragment(), FavoriteSessionsFragment())
@@ -71,6 +65,15 @@ class SessionPagerFragment : Fragment(), AnkoComponent<Context> {
             }.lparams {
                 behavior = AppBarLayout.ScrollingViewBehavior()
             }
+        }
+    }
+
+    private fun setUpActionBar() {
+        (activity as AppCompatActivity).apply {
+            setSupportActionBar(toolbar)
+            supportActionBar?.setDisplayShowHomeEnabled(true)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+            supportActionBar?.setLogo(R.drawable.kotlinconf_logo_text)
         }
     }
 
