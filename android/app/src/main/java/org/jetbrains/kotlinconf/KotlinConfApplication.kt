@@ -7,7 +7,6 @@ import com.russhwolf.settings.PlatformSettings
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.toast
 import org.jetbrains.kotlinconf.model.KotlinConfDataRepository
-import org.jetbrains.kotlinconf.model.KotlinConfDataRepository.Error.*
 import org.jetbrains.kotlinconf.model.KotlinConfDataRepository.Unauthorized
 import org.jetbrains.kotlinconf.presentation.DataRepository
 import java.net.ConnectException
@@ -37,7 +36,10 @@ class KotlinConfApplication : Application(), AnkoLogger {
     private fun showError(error: Throwable) {
         val message = when (error) {
             is Unauthorized -> R.string.unauthorized_error
-            is ConnectException -> return // It means that user is offline
+            is ConnectException -> { // It means that user is offline
+                dataRepository.onRefreshListeners.forEach { it() } // Some services expect changes after action. This will update them to unchanged state
+                return
+            }
             else -> R.string.unknown_error
         }
         toast(message)

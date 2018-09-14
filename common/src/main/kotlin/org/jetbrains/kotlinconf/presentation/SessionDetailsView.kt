@@ -4,7 +4,7 @@ import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.data.*
 
 interface SessionDetailsView {
-    fun updateView(session: SessionModel)
+    fun updateView(loggedIn: Boolean, session: SessionModel)
     fun setupRatingButtons(rating: SessionRating?)
     fun setIsFavorite(isFavorite: Boolean)
     fun setRatingClickable(clickable: Boolean)

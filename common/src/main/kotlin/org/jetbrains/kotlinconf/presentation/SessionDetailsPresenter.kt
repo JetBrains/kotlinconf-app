@@ -52,7 +52,7 @@ class SessionDetailsPresenter(
 
     private fun refreshDataFromRepo() {
         session = repository.sessions?.firstOrNull { it.id == sessionId } ?: return
-        view.updateView(session)
+        view.updateView(repository.loggedIn, session)
         isFavorite = repository.favorites?.any { it.id == sessionId } ?: false
         rating = repository.getRating(sessionId)
     }

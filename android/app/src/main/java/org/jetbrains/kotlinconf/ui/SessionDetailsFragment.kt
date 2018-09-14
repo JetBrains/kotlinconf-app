@@ -36,6 +36,7 @@ import org.jetbrains.anko.wrapContent
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.R
 import org.jetbrains.kotlinconf.data.*
+import org.jetbrains.kotlinconf.data.SessionRating.*
 import org.jetbrains.kotlinconf.presentation.SessionDetailsPresenter
 import org.jetbrains.kotlinconf.presentation.SessionDetailsView
 
@@ -63,9 +64,9 @@ class SessionDetailsFragment : Fragment(), SessionDetailsView {
         setUpActionBar()
 
         favoriteButton.setOnClickListener { presenter.onFavoriteButtonClicked() }
-        goodButton.setOnClickListener { presenter.rateSessionClicked(SessionRating.GOOD) }
-        okButton.setOnClickListener { presenter.rateSessionClicked(SessionRating.OK) }
-        badButton.setOnClickListener { presenter.rateSessionClicked(SessionRating.BAD) }
+        goodButton.setOnClickListener { presenter.rateSessionClicked(GOOD) }
+        okButton.setOnClickListener { presenter.rateSessionClicked(OK) }
+        badButton.setOnClickListener { presenter.rateSessionClicked(BAD) }
         presenter.onCreate()
     }
 
@@ -90,9 +91,9 @@ class SessionDetailsFragment : Fragment(), SessionDetailsView {
             else -> R.drawable.round_toggle_button_background
         }
 
-        goodButton.backgroundResource = selectButton(SessionRating.GOOD)
-        okButton.backgroundResource = selectButton(SessionRating.OK)
-        badButton.backgroundResource = selectButton(SessionRating.BAD)
+        goodButton.backgroundResource = selectButton(GOOD)
+        okButton.backgroundResource = selectButton(OK)
+        badButton.backgroundResource = selectButton(BAD)
     }
 
     override fun setRatingClickable(clickable: Boolean) {
@@ -101,24 +102,28 @@ class SessionDetailsFragment : Fragment(), SessionDetailsView {
         badButton.isClickable = clickable
     }
 
-    override fun updateView(session: SessionModel) {
-        with(session) {
-            collapsingToolbar.title = session.title
-            speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName }
-            val time = (session.startsAt to session.endsAt).toReadableString()
-            timeTextView.text = time
-            detailsTextView.text = listOfNotNull(roomText, category).joinToString(", ")
-            descriptionTextView.text = session.descriptionText
+    override fun updateView(loggedIn: Boolean, session: SessionModel) {
+        collapsingToolbar.title = session.title
+        speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName }
+        val time = (session.startsAt to session.endsAt).toReadableString()
+        timeTextView.text = time
+        detailsTextView.text = listOfNotNull(session.roomText, session.category).joinToString(", ")
+        descriptionTextView.text = session.descriptionText
 
-            session.speakers
-                    .takeIf { it.size < 3 }
-                    ?.map { it.profilePicture }
-                    ?.apply {
-                        forEachIndexed { index, imageUrl ->
-                            imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
-                        }
-                    }
+        val online = context?.let { it.isConnected?.and(!it.isAirplaneModeOn) } ?: false
+
+        for (button in listOf(goodButton, okButton, badButton, favoriteButton)) {
+            button.visibility = if(loggedIn && online) View.VISIBLE else View.GONE
         }
+
+        session.speakers
+                .takeIf { it.size < 3 }
+                ?.map { it.profilePicture }
+                ?.apply {
+                    forEachIndexed { index, imageUrl ->
+                        imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
+                    }
+                }
     }
 
     private val SessionModel.roomText: String?

@@ -1,13 +1,22 @@
 package org.jetbrains.kotlinconf
 
+import android.annotation.SuppressLint
+import android.app.ActivityManager
+import android.app.AppOpsManager
+import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.res.Resources
+import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Build.VERSION_CODES.N
+import android.provider.Settings
 import android.support.annotation.AttrRes
 import android.support.annotation.ColorInt
+import android.support.annotation.RequiresApi
 import android.text.Html
 import android.text.Spanned
 import android.util.TypedValue
+import android.view.View
 import android.view.ViewManager
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
 import org.jetbrains.anko.AnkoContext
@@ -47,3 +56,17 @@ fun Context.getHtmlText(resId: Int): Spanned {
 
 val AnkoContext<*>.theme: Resources.Theme
     get() = this.ctx.theme
+
+val Context.connectivityManager
+    get() = getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+
+val Context.isConnected: Boolean?
+    get() = connectivityManager?.activeNetworkInfo?.isConnected
+
+val Context.isAirplaneModeOn: Boolean
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    get() = try {
+        Settings.System.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
+    } catch (error: Throwable) {
+        false
+    }
