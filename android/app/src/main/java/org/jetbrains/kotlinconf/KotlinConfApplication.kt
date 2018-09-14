@@ -34,15 +34,15 @@ class KotlinConfApplication : Application(), AnkoLogger {
     }
 
     private fun showError(error: Throwable) {
+        error.printStackTrace()
         val message = when (error) {
             is Unauthorized -> R.string.unauthorized_error
-            is ConnectException -> { // It means that user is offline
+            is ConnectException -> { // It means that user is offline or server is down. It means offline mode
                 dataRepository.onRefreshListeners.forEach { it() } // Some services expect changes after action. This will update them to unchanged state
                 return
             }
             else -> R.string.unknown_error
         }
         toast(message)
-        error.printStackTrace()
     }
 }

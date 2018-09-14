@@ -1,7 +1,5 @@
 package org.jetbrains.kotlinconf.model
 
-import com.russhwolf.settings.PlatformSettings
-import com.russhwolf.settings.set
 import io.ktor.util.date.GMTDate
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialContext
@@ -9,15 +7,18 @@ import kotlinx.serialization.json.JSON
 import kotlinx.serialization.list
 import kotlinx.serialization.serializer
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.api.*
-import org.jetbrains.kotlinconf.data.*
-import org.jetbrains.kotlinconf.presentation.*
+import org.jetbrains.kotlinconf.api.KotlinConfApi
+import org.jetbrains.kotlinconf.data.Favorite
+import org.jetbrains.kotlinconf.data.SessionRating
+import org.jetbrains.kotlinconf.data.Vote
+import org.jetbrains.kotlinconf.presentation.DataRepository
+import org.jetbrains.kotlinconf.storage.SettingsFactory
 import kotlin.properties.Delegates.observable
 import kotlin.properties.ReadWriteProperty
 import kotlin.random.Random
 
 class KotlinConfDataRepository(
-        settingsFactory: PlatformSettings.Factory,
+        settingsFactory: SettingsFactory,
         val onError: (Throwable) -> Unit
 ) : DataRepository {
     private val settings = settingsFactory.create("")
@@ -150,7 +151,7 @@ class KotlinConfDataRepository(
             ?.let { serializer.parse(elementSerializer, it) }
 
     private inline fun <reified T : Any> write(key: String, obj: T, elementSerializer: KSerializer<T>) {
-        settings[key] = serializer.stringify(elementSerializer, obj)
+        settings.putString(key, serializer.stringify(elementSerializer, obj))
     }
 
     private inline fun <reified T : Any> bindToPreferencesByKey(

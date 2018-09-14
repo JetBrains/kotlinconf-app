@@ -9,7 +9,6 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutines_version"
-    implementation "com.russhwolf:multiplatform-settings-common:0.1"
 
     testImplementation "org.jetbrains.kotlin:kotlin-test-common:$kotlin_version"
     testImplementation "org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlin_version"
