@@ -3,10 +3,11 @@ import TagListView_ObjC
 import konfios
 import MBProgressHUD
 
-class SessionViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
+class SessionViewController : UIViewController, UITableViewDataSource, UITableViewDelegate, KTSessionDetailsView {
     private let konfService = AppDelegate.me.konfService
 
-    var session: KTSessionModel!
+    private let presenter = KTSessionDetailsPresenter(
+        uiContext: UI, view: <#T##KTSessionDetailsView#>, sessionId: <#T##String#>, repository: <#T##KTDataRepository#>)
 
     @IBOutlet private weak var scrollView: UIScrollView!
     
@@ -79,12 +80,7 @@ class SessionViewController : UIViewController, UITableViewDataSource, UITableVi
     }
     
     private func setupSpeakers() {
-        
-        let it = session.speakers.iterator()
-        var speakers: [KTSpeaker] = []
-
-        while (it.hasNext()) { speakers.append(it.next()! as! KTSpeaker) }
-        
+        var speakers: [KTSpeaker] = session.speakers
         userNamesLabel.text = speakers.map { (speaker) -> String in
             speaker.fullName
         }.joined(separator: ", ")

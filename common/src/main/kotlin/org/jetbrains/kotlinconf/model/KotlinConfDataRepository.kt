@@ -18,15 +18,11 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.random.Random
 
 class KotlinConfDataRepository(
-        settingsFactory: SettingsFactory,
-        val onError: (Throwable) -> Unit
+        settingsFactory: SettingsFactory? = null,
+        val onError: (Throwable) -> Unit = {}
 ) : DataRepository {
-    private val settings = settingsFactory.create("")
+    private val settings = settingsFactory?.create("")
     private val api = KotlinConfApi()
-
-    private val jsonContext = SerialContext()
-            .apply { registerSerializer(GMTDate::class, GMTDateSerializer) }
-    private val serializer = JSON(context = jsonContext)
 
     override var sessions: List<SessionModel>? by bindToPreferencesByKey("settingsKey", SessionModel::class.serializer().list)
     override var favorites: List<SessionModel>? by bindToPreferencesByKey("favoritesKey", SessionModel::class.serializer().list)
@@ -131,33 +127,25 @@ class KotlinConfDataRepository(
         }
     }
 
-    enum class Error {
-        FAILED_TO_DELETE_RATING,
-        FAILED_TO_POST_RATING,
-        FAILED_TO_GET_DATA,
-        EARLY_TO_VOTE,
-        LATE_TO_VOTE,
-        UNKNOWN,
-    }
-
     class Unauthorized : Throwable()
 
     /*
      * Local storage
      */
 
-    private inline fun <reified T : Any> read(key: String, elementSerializer: KSerializer<T>) = settings.getString(key, "")
-            .takeUnless { it.isBlank() }
-            ?.let { serializer.parse(elementSerializer, it) }
+    private inline fun <reified T : Any> read(key: String, elementSerializer: KSerializer<T>) = settings
+            ?.getString(key, "")
+            ?.takeUnless { it.isBlank() }
+            ?.let { JSON.parse(elementSerializer, it) }
 
     private inline fun <reified T : Any> write(key: String, obj: T, elementSerializer: KSerializer<T>) {
-        settings.putString(key, serializer.stringify(elementSerializer, obj))
+        settings?.putString(key, JSON.stringify(elementSerializer, obj))
     }
 
     private inline fun <reified T : Any> bindToPreferencesByKey(
             key: String,
             elementSerializer: KSerializer<T>
     ): ReadWriteProperty<Any?, T?> = observable(read(key, elementSerializer)) { _, _, new ->
-        if (new != null) write(key, new, elementSerializer) else settings.remove(key)
+        if (new != null) write(key, new, elementSerializer) else settings?.remove(key)
     }
 }

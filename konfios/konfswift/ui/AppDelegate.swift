@@ -8,7 +8,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private static let GENERATE_ID_ONCE_KEY = "generateIdOnce"
     static let UUID_KEY = "vendorId"
 
-    public lazy var konfService = KTKonfAppDataModel(user: self.userUuid)
+    public lazy var konfService = KTKotlinConfDataRepository(
+        settingsFactory: nil,
+        onError: onError
+    )
 
     var window: UIWindow?
 
@@ -43,6 +46,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func saveContext() {
         // todo: save context
+    }
+    
+    func onError(error: KTStdlibThrowable) -> KTStdlibUnit {
+        return KTStdlibUnit()
     }
 }
 

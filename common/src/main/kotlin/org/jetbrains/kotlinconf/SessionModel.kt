@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf
 
 import io.ktor.util.date.*
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.serializer
 import org.jetbrains.kotlinconf.data.*
 
@@ -11,11 +12,19 @@ class SessionModel(
         val title: String,
         val category: String?,
         val descriptionText: String,
-        val startsAt: GMTDate,
-        val endsAt: GMTDate,
+        val startsAtStr: String,
+        val endsAtStr: String,
         val room: String?,
-        val speakers: Array<Speaker>
+        val speakers: List<Speaker>
 ) {
+    @Transient
+    val startsAt: GMTDate
+        get() = startsAtStr.parseDate()
+
+    @Transient
+    val endsAt: GMTDate
+        get() = endsAtStr.parseDate()
+
     companion object {
         fun forSession(all: AllData, sessionId: String): SessionModel {
             val briefSession = all.sessions.first { it.id == sessionId }
@@ -46,9 +55,9 @@ class SessionModel(
                     title = briefSession.title,
                     category = briefSession.categoryItems.map(categoryProvider).firstOrNull()?.name,
                     descriptionText = briefSession.descriptionText ?: "",
-                    startsAt = startsAt.parseDate(),
-                    endsAt = endsAt.parseDate(),
-                    speakers = briefSession.speakers.mapNotNull { speakerProvider(it) }.toTypedArray(),
+                    startsAtStr = startsAt,
+                    endsAtStr = endsAt,
+                    speakers = briefSession.speakers.mapNotNull { speakerProvider(it) },
                     room = briefSession.roomId.let(roomProvider).name
             )
         }

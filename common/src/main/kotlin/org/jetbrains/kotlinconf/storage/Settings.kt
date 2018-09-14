@@ -6,6 +6,6 @@ expect interface Settings {
     fun remove(key: String)
 }
 
-expect class SettingsFactory {
+expect open class SettingsFactory {
     open fun create(name: String? = null): Settings
 }

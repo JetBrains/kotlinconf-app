@@ -138,9 +138,9 @@ class SessionsTableViewCell : UITableViewCell {
 
     func setup(for session: KTSessionModel) {
         titleLabel.text = session.title
-        let it = session.speakers.iterator()
-        var speakers: [KTSpeaker] = []
-        while (it.hasNext()) { speakers.append(it.next()! as! KTSpeaker) }
+        guard let speakers: [KTSpeaker] = session.speakers {
+            return
+        }
         
         let speakersInfo = speakers.map { (speaker) -> String in
             speaker.fullName
