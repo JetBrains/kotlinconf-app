@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2C024B1A1F7494B400A7EAEC /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C024B191F7494B400A7EAEC /* AboutViewController.swift */; };
-		2C4F0184213ED71700FCD207 /* Pods_konfswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F0183213ED71700FCD207 /* Pods_konfswift.framework */; };
-		2C4F0185213ED71700FCD207 /* Pods_konfswift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F0183213ED71700FCD207 /* Pods_konfswift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2C4F018B213ED72800FCD207 /* konfios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F018A213ED72700FCD207 /* konfios.framework */; };
 		2C4F018C213ED72800FCD207 /* konfios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F018A213ED72700FCD207 /* konfios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2C50FD941F729FE000B3F845 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C50FD931F729FE000B3F845 /* AppDelegate.swift */; };
@@ -21,6 +19,7 @@
 		2C6393441F743F2F004953A3 /* SessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6393431F743F2F004953A3 /* SessionViewController.swift */; };
 		2C6393481F743F73004953A3 /* UiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6393471F743F73004953A3 /* UiUtils.swift */; };
 		2C63934D1F745CBE004953A3 /* VoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C63934C1F745CBE004953A3 /* VoteViewController.swift */; };
+		2CA847C1214BA6F8000A094C /* Pods_konfswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F0183213ED71700FCD207 /* Pods_konfswift.framework */; };
 		2CB49F4E213973E50021FB79 /* Pods-konfswiftTests.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3F8F328F75A7A47133925362 /* Pods-konfswiftTests.release.xcconfig */; };
 /* End PBXBuildFile section */
 
@@ -42,7 +41,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				2C4F018C213ED72800FCD207 /* konfios.framework in Embed Frameworks */,
-				2C4F0185213ED71700FCD207 /* Pods_konfswift.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -79,8 +77,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CA847C1214BA6F8000A094C /* Pods_konfswift.framework in Frameworks */,
 				2C4F018B213ED72800FCD207 /* konfios.framework in Frameworks */,
-				2C4F0184213ED71700FCD207 /* Pods_konfswift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
