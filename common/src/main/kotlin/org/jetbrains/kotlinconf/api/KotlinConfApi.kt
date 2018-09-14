@@ -13,19 +13,20 @@ import org.jetbrains.kotlinconf.data.*
 
 internal expect val END_POINT: String
 
-class KotlinConfApi(private val userId: String) {
+class KotlinConfApi {
+
     private val client = HttpClient {
         install(JsonFeature) {
             serializer = KotlinxSerializer().apply {
-                setMapper(AllData::class, AllData.serializer())
-                setMapper(Favorite::class, Favorite.serializer())
-                setMapper(Vote::class, Vote.serializer())
+                setMapper(AllData::class, AllData::class.serializer())
+                setMapper(Favorite::class, Favorite::class.serializer())
+                setMapper(Vote::class, Vote::class.serializer())
             }
         }
         install(ExpectSuccess)
     }
 
-    suspend fun createUser(): Boolean {
+    suspend fun createUser(userId: String): Boolean {
         val response = client.call {
             url(urlString = END_POINT)
             method = HttpMethod.Post
@@ -37,30 +38,30 @@ class KotlinConfApi(private val userId: String) {
         return response.status.isSuccess()
     }
 
-    suspend fun getAll(): AllData = client.get {
-        url("all")
+    suspend fun getAll(userId: String?): AllData = client.get {
+        url("all", userId)
     }
 
-    suspend fun postFavorite(favorite: Favorite): Unit = client.post {
-        url("favorites")
+    suspend fun postFavorite(favorite: Favorite, userId: String): Unit = client.post {
+        url("favorites", userId)
         json()
         body = favorite
     }
 
-    suspend fun deleteFavorite(favorite: Favorite): Unit = client.delete {
-        url("favorites")
+    suspend fun deleteFavorite(favorite: Favorite, userId: String): Unit = client.delete {
+        url("favorites", userId)
         json()
         body = favorite
     }
 
-    suspend fun postVote(vote: Vote): Unit = client.post {
-        url("votes")
+    suspend fun postVote(vote: Vote, userId: String): Unit = client.post {
+        url("votes", userId)
         json()
         body = vote
     }
 
-    suspend fun deleteVote(vote: Vote): Unit = client.delete {
-        url("votes")
+    suspend fun deleteVote(vote: Vote, userId: String): Unit = client.delete {
+        url("votes", userId)
         json()
         body = vote
     }
@@ -69,8 +70,10 @@ class KotlinConfApi(private val userId: String) {
         contentType(ContentType.Application.Json)
     }
 
-    private fun HttpRequestBuilder.url(path: String) {
-        header(HttpHeaders.Authorization, "Bearer $userId")
+    private fun HttpRequestBuilder.url(path: String, userId: String?) {
+        if (userId != null) {
+            header(HttpHeaders.Authorization, "Bearer $userId")
+        }
         header(HttpHeaders.CacheControl, "no-cache")
         url {
             takeFrom(END_POINT)

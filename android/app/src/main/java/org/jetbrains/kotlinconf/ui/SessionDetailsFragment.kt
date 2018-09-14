@@ -69,6 +69,11 @@ class SessionDetailsFragment : Fragment(), SessionDetailsView {
         presenter.onCreate()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroy()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
@@ -131,7 +136,7 @@ class SessionDetailsFragment : Fragment(), SessionDetailsView {
 
     private fun ImageView.showSpeakerImage(imageUrl: String) {
         visibility = View.VISIBLE
-        Glide.with(this@SessionDetailsFragment)
+        Glide.with(context)
                 .load(imageUrl)
                 .centerCrop()
                 .into(this)

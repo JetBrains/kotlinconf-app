@@ -40,9 +40,7 @@ abstract class SessionListFragment : Fragment(), AnkoComponent<Context>, Session
     private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
     private val navigationManager by lazy { activity as NavigationManager }
     private val searchQueryProvider by lazy { activity as SearchQueryProvider }
-    private val presenter by lazy {
-        SessionListPresenter(UI, this, repository, navigationManager, searchQueryProvider)
-    }
+    private val presenter by lazy { SessionListPresenter(UI, this, repository, navigationManager, searchQueryProvider) }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -73,6 +71,11 @@ abstract class SessionListFragment : Fragment(), AnkoComponent<Context>, Session
         }
 
         presenter.onCreate()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

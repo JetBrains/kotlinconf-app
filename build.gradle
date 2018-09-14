@@ -23,6 +23,7 @@ allprojects {
         maven { url "https://dl.bintray.com/kotlin/ktor" }
         maven { url "https://dl.bintray.com/sargunster/maven" }
         maven { url "https://dl.bintray.com/kotlin/squash" }
+        maven { url = 'https://dl.bintray.com/russhwolf/multiplatform-settings' }
         mavenLocal()
 
         google()

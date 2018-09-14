@@ -21,6 +21,11 @@ class SessionDetailsPresenter(
 
     fun onCreate() {
         refreshDataFromRepo()
+        repository.onRefreshListeners += onRefreshListener
+    }
+
+    fun onDestroy() {
+        repository.onRefreshListeners -= onRefreshListener
     }
 
     fun rateSessionClicked(newRating: SessionRating) {
@@ -46,10 +51,9 @@ class SessionDetailsPresenter(
     }
 
     private fun refreshDataFromRepo() {
-        session = repository.getSessionById(sessionId)
+        session = repository.sessions?.firstOrNull { it.id == sessionId } ?: return
         view.updateView(session)
-        isFavorite = repository.isFavorite(sessionId)
+        isFavorite = repository.favorites?.any { it.id == sessionId } ?: false
         rating = repository.getRating(sessionId)
     }
-
 }

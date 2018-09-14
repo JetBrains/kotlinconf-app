@@ -83,8 +83,12 @@ fun Routing.apiUsers(database: Database) {
 }
 
 suspend fun ApplicationCall.validatePrincipal(database: Database): KotlinConfPrincipal {
-    val principal = principal<KotlinConfPrincipal>() ?: throw Unauthorized()
-    if (!database.validateUser(principal.token)) throw Unauthorized()
+    return getPrincipalOrNull(database) ?: throw Unauthorized()
+}
+
+suspend fun ApplicationCall.getPrincipalOrNull(database: Database): KotlinConfPrincipal? {
+    val principal = principal<KotlinConfPrincipal>() ?: return null
+    if (!database.validateUser(principal.token)) return null
     return principal
 }
 

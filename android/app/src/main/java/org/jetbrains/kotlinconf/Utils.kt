@@ -1,16 +1,17 @@
 package org.jetbrains.kotlinconf
 
-import android.arch.lifecycle.*
-import android.content.*
-import android.content.res.*
-import android.os.Build.VERSION_CODES.*
-import android.support.annotation.*
-import android.text.*
-import android.util.*
-import android.view.*
-import net.opacapp.multilinecollapsingtoolbar.*
-import org.jetbrains.anko.*
-import org.jetbrains.anko.custom.*
+import android.content.Context
+import android.content.res.Resources
+import android.os.Build.VERSION_CODES.N
+import android.support.annotation.AttrRes
+import android.support.annotation.ColorInt
+import android.text.Html
+import android.text.Spanned
+import android.util.TypedValue
+import android.view.ViewManager
+import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.custom.ankoView
 
 inline fun ViewManager.multilineCollapsingToolbarLayout(
     theme: Int = 0,
@@ -39,17 +40,10 @@ fun Context.getHtmlText(resId: Int): Spanned {
     return if (android.os.Build.VERSION.SDK_INT >= N) {
         Html.fromHtml(getText(resId).toString(), Html.FROM_HTML_MODE_LEGACY)
     } else {
+        @Suppress("DEPRECATION")
         Html.fromHtml(getText(resId).toString())
     }
 }
 
 val AnkoContext<*>.theme: Resources.Theme
     get() = this.ctx.theme
-
-
-// Needed for better type inference
-inline fun <X, Y> map(source: LiveData<X>, noinline func: (X?) -> Y): LiveData<Y> =
-    Transformations.map(source, func)
-
-inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) =
-    observe(owner, Observer { observer(it) })

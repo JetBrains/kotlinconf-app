@@ -35,12 +35,10 @@ fun GMTDate.toReadableTimeString(): String = "${readableHours()}:${minutes.asMin
 fun GMTDate.toReadableDateString(): String = "$year ${month.value} $dayOfMonth"
 fun GMTDate.toReadableDateTimeString() = "${toReadableDateString()} ${toReadableTimeString()}"
 
-fun GMTDate.Companion.renderDateInterval(from: GMTDate, to: GMTDate) = (from to to).toReadableString()
-
 /**
- * According to mask: "yyyy-MM-dd'T'HH:mm:ss"
+ * According to mask:
  */
-fun parseDate(date: String): GMTDate = date.run {
+fun String.parseDate(): GMTDate {
     val year = substring(0, 4).toInt()
     val month = substring(5, 7).toInt()
     val day = substring(8, 10).toInt()
@@ -49,5 +47,14 @@ fun parseDate(date: String): GMTDate = date.run {
     val minute = substring(14, 16).toInt()
     val second = substring(17, 19).toInt()
 
-    GMTDate(second, minute, hour, day, Month.from(month - 1), year)
+    return GMTDate(second, minute, hour, day, Month.from(month - 1), year)
+}
+
+fun GMTDate.parseToString(): String {
+    val monthPart = "${month.ordinal + 1}".padStart(2, '0')
+    val dayPart = "$dayOfMonth".padStart(2, '0')
+    val hourPart = "$hours".padStart(2, '0')
+    val minutePart = "$minutes".padStart(2, '0')
+    val secondPart = "$seconds".padStart(2, '0')
+    return "$year-$monthPart-$dayPart'T'$hourPart:$minutePart:$secondPart"
 }

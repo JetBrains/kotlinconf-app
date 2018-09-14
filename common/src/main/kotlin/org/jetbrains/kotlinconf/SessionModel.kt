@@ -1,8 +1,11 @@
 package org.jetbrains.kotlinconf
 
 import io.ktor.util.date.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.serializer
 import org.jetbrains.kotlinconf.data.*
 
+@Serializable
 class SessionModel(
         val id: String,
         val title: String,
@@ -43,8 +46,8 @@ class SessionModel(
                     title = briefSession.title,
                     category = briefSession.categoryItems.map(categoryProvider).firstOrNull()?.name,
                     descriptionText = briefSession.descriptionText ?: "",
-                    startsAt = parseDate(startsAt),
-                    endsAt = parseDate(endsAt),
+                    startsAt = startsAt.parseDate(),
+                    endsAt = endsAt.parseDate(),
                     speakers = briefSession.speakers.mapNotNull { speakerProvider(it) }.toTypedArray(),
                     room = briefSession.roomId.let(roomProvider).name
             )
@@ -57,8 +60,6 @@ fun AllData.allSessions(): List<SessionModel> {
             .sortedWith(compareBy({ it.startsAt.timestamp }, { it.title }))
 }
 
-fun AllData.favoriteSessions(): List<SessionModel> =
-        favorites.asSequence()
-                .map { it.sessionId }
-                .map { SessionModel.forSession(this, it) }
-                .toList()
+fun AllData.favoriteSessions(): List<SessionModel> = favorites
+        .map { it.sessionId }
+        .map { SessionModel.forSession(this, it) }

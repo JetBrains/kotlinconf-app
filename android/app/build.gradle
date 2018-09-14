@@ -44,14 +44,16 @@ android {
             dimension "server"
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/common.kotlin_module'
+    }
 }
 
 dependencies {
     expectedBy project(':common')
 
     implementation 'com.android.support:multidex:1.0.3'
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.android.support:appcompat-v7:28.0.0-rc01'
     implementation 'com.android.support:support-v4:28.0.0-rc01'
@@ -62,9 +64,6 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'android.arch.lifecycle:runtime:1.1.1'
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
-
     implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$anko_version"
     implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
     implementation "org.jetbrains.anko:anko-sdk25:$anko_version"
@@ -74,8 +73,9 @@ dependencies {
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
     implementation 'net.opacapp:multiline-collapsingtoolbar:1.5.0'
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:3.8.0'
     implementation 'com.brandongogetap:stickyheaders:0.4.9'
+    implementation "com.russhwolf:multiplatform-settings-android:0.1"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation "io.ktor:ktor-client-android:$ktor_version"
