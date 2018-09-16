@@ -180,7 +180,7 @@ fun Routing.apiVote(database: Database, production: Boolean) {
         delete {
             val principal = call.validatePrincipal(database)
             val vote = call.receive<Vote>()
-            val sessionId = vote.sessionId ?: throw BadRequest()
+            val sessionId = vote.sessionId
             database.deleteVote(principal.token, sessionId)
             call.respond(HttpStatusCode.OK)
             signalSession(sessionId)

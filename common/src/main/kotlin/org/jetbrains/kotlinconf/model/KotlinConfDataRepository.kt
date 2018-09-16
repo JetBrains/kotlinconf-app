@@ -87,7 +87,7 @@ class KotlinConfDataRepository(
     override suspend fun removeRating(sessionId: String) {
         val userId = userId ?: throw Unauthorized()
         try {
-            api.postVote(Vote(sessionId, 0), userId)
+            api.deleteVote(Vote(sessionId, 0), userId)
             votes = votes?.filter { it.sessionId != sessionId }
         } catch (e: Throwable) {
             throw CannotDeleteVote()
