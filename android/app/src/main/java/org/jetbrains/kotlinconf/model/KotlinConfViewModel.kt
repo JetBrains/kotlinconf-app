@@ -1,23 +1,18 @@
 package org.jetbrains.kotlinconf.model
 
 import android.arch.lifecycle.*
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
-import android.widget.Toast
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import io.ktor.client.call.typeInfo
-import kotlinx.coroutines.CommonPool
-import kotlinx.coroutines.android.UI
-import kotlinx.coroutines.launch
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.warn
-import org.jetbrains.kotlinconf.SessionModel
-import org.jetbrains.kotlinconf.api.ApiException
-import org.jetbrains.kotlinconf.data.SessionRating
-import org.jetbrains.kotlinconf.data.VotingCode
-import java.io.File
+import android.content.*
+import android.content.Context.*
+import android.widget.*
+import com.google.gson.*
+import io.ktor.client.call.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.android.*
+import org.jetbrains.anko.*
+import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.api.*
+import org.jetbrains.kotlinconf.data.*
+import java.io.*
 
 class KotlinConfViewModel(
     private val context: Context,
