@@ -1,36 +1,30 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.arch.lifecycle.ViewModelProvider.AndroidViewModelFactory
-import android.arch.lifecycle.ViewModelProviders
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
-import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import android.arch.lifecycle.*
+import android.arch.lifecycle.ViewModelProvider.*
+import android.graphics.*
+import android.graphics.drawable.*
+import android.os.*
+import android.support.design.widget.*
+import android.support.design.widget.AppBarLayout.LayoutParams.*
+import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.*
+import android.support.v4.app.*
+import android.support.v7.app.*
 import android.support.v7.widget.Toolbar
 import android.view.*
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.widget.*
-import com.bumptech.glide.Glide
-import kotlinx.coroutines.android.UI
-import kotlinx.coroutines.launch
+import com.bumptech.glide.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.android.*
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.design.coordinatorLayout
-import org.jetbrains.anko.design.floatingActionButton
-import org.jetbrains.anko.design.themedAppBarLayout
-import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.nestedScrollView
+import org.jetbrains.anko.design.*
+import org.jetbrains.anko.support.v4.*
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.data.SessionRating
+import org.jetbrains.kotlinconf.R
+import org.jetbrains.kotlinconf.data.*
 
 class SessionDetailsFragment : Fragment() {
     private lateinit var toolbar: Toolbar

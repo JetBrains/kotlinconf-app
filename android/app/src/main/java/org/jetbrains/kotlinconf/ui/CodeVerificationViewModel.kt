@@ -1,13 +1,11 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.kotlinconf.KotlinConfApplication
-import org.jetbrains.kotlinconf.data.VotingCode
-import org.jetbrains.kotlinconf.model.KotlinConfViewModel
+import android.app.*
+import android.arch.lifecycle.*
+import org.jetbrains.anko.*
+import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.data.*
+import org.jetbrains.kotlinconf.model.*
 
 class CodeVerificationViewModel(app: Application) : AndroidViewModel(app), AnkoLogger {
     private val viewModel: KotlinConfViewModel = getApplication<KotlinConfApplication>().viewModel
