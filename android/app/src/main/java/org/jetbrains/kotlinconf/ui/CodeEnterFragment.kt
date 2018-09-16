@@ -39,7 +39,6 @@ class CodeEnterFragment : DialogFragment() {
     private lateinit var viewModel: CodeVerificationViewModel
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // TODO: anko alert?
         return AlertDialog.Builder(context!!)
             .setView(createView())
             .setPositiveButton(R.string.submit_button) { _, _ -> }
