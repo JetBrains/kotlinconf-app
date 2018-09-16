@@ -60,8 +60,8 @@ class CodeEnterFragment : DialogFragment() {
             progressBar.visibility = VISIBLE
             dialogContent.visibility = INVISIBLE
             submitButton.visibility = INVISIBLE
-//            viewModel.verifyCode(codeEditText.text.toString())
-//            dismiss()
+            viewModel.verifyCode(codeEditText.text.toString())
+            dismiss()
         }
     }
 
