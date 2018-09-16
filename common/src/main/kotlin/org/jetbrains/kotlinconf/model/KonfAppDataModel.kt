@@ -68,6 +68,11 @@ class KonfAppDataModel(
         _favorites.clear()
         _votes.clear()
     }
+
+    override suspend fun verifyCode(code: VotingCode) {
+        api.verifyCode(code)
+    }
+
     /**
      * Native callback API
      */
@@ -92,6 +97,12 @@ class KonfAppDataModel(
     override fun setFavorite(sessionId: String, isFavorite: Boolean, callback: NativeCallback<Unit>) {
         wrapCallback(callback) {
             setFavorite(sessionId, isFavorite)
+        }
+    }
+
+    override fun verifyCode(code: VotingCode, callback: NativeCallback<Unit>) {
+        wrapCallback(callback) {
+            verifyCode(code)
         }
     }
 }

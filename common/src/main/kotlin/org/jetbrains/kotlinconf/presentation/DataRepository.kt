@@ -25,6 +25,12 @@ interface DataRepository {
     fun isFavorite(sessionId: String): Boolean
     suspend fun setFavorite(sessionId: String, isFavorite: Boolean)
 
+
+    /**
+     * Code verification
+     */
+    suspend fun verifyCode(code: VotingCode)
+
     /**
      * Native callback API
      */
@@ -32,4 +38,5 @@ interface DataRepository {
     fun addRating(sessionId: String, rating: SessionRating, callback: NativeCallback<Unit>)
     fun removeRating(sessionId: String, callback: NativeCallback<Unit>)
     fun setFavorite(sessionId: String, isFavorite: Boolean, callback: NativeCallback<Unit>)
+    fun verifyCode(code: VotingCode, callback: NativeCallback<Unit>)
 }
