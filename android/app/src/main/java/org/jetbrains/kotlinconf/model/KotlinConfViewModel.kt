@@ -1,8 +1,6 @@
 package org.jetbrains.kotlinconf.model
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.*
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
