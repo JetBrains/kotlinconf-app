@@ -323,6 +323,8 @@ class SessionDetailsFragment : Fragment() {
                     }.lparams(width = matchParent, height = wrapContent) {
                         margin = dip(20)
                     }.applyRecursively { view ->
+                        // Making a Button widget selectable causes problems with clicking
+                        // (Button class extends TextView)
                         if (view is Button) return@applyRecursively
                         (view as? TextView)?.setTextIsSelectable(true)
                     }
