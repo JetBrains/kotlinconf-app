@@ -1,43 +1,36 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.arch.lifecycle.*
-import android.arch.lifecycle.ViewModelProvider.*
-import android.graphics.*
-import android.graphics.drawable.*
-import android.os.*
-import android.support.design.widget.*
-import android.support.design.widget.AppBarLayout.LayoutParams.*
-import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.*
-import android.support.v4.app.*
-import android.support.v7.app.*
+import android.arch.lifecycle.ViewModelProvider.AndroidViewModelFactory
+import android.arch.lifecycle.ViewModelProviders
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
+import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
+import android.support.design.widget.FloatingActionButton
+import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.*
-import com.bumptech.glide.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
+import com.bumptech.glide.Glide
+import kotlinx.coroutines.android.UI
+import kotlinx.coroutines.launch
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
+import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.applyRecursively
-import org.jetbrains.anko.backgroundResource
-import org.jetbrains.anko.design.*
-import org.jetbrains.anko.dimen
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.imageButton
-import org.jetbrains.anko.imageResource
-import org.jetbrains.anko.imageView
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.margin
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.support.v4.*
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.view
-import org.jetbrains.anko.wrapContent
+import org.jetbrains.anko.design.coordinatorLayout
+import org.jetbrains.anko.design.floatingActionButton
+import org.jetbrains.anko.design.themedAppBarLayout
+import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.R
-import org.jetbrains.kotlinconf.data.*
+import org.jetbrains.kotlinconf.data.SessionRating
 
 class SessionDetailsFragment : Fragment() {
     private lateinit var toolbar: Toolbar
@@ -48,6 +41,9 @@ class SessionDetailsFragment : Fragment() {
     private val speakerImageViews: MutableList<ImageView> = mutableListOf()
     private lateinit var collapsingToolbar: CollapsingToolbarLayout
     private lateinit var favoriteButton: FloatingActionButton
+    private lateinit var votingButtonsLayout: LinearLayout
+    private lateinit var votingPromptLayout: LinearLayout
+    private lateinit var verifyCodeButton: Button
 
     private lateinit var goodButton: ImageButton
     private lateinit var badButton: ImageButton
@@ -66,15 +62,27 @@ class SessionDetailsFragment : Fragment() {
         }
 
         val sessionId = arguments?.get(KEY_SESSION_ID) as String
-        val viewModel = ViewModelProviders.of(
+        val sessionDetailsViewModel = ViewModelProviders.of(
             this,
             AndroidViewModelFactory.getInstance(activity!!.application)
         )
             .get(SessionDetailsViewModel::class.java)
             .apply { setSession(sessionId) }
 
+        val codeVerificationViewModel = ViewModelProviders.of(
+            this,
+            AndroidViewModelFactory.getInstance(activity!!.application)
+        )
+            .get(CodeVerificationViewModel::class.java)
+
+        codeVerificationViewModel.isCodeVerified.observe(this) {
+            val isCodeVerified = it ?: false
+            votingButtonsLayout.visibility = if (isCodeVerified) VISIBLE else GONE
+            votingPromptLayout.visibility = if (isCodeVerified) GONE else VISIBLE
+        }
+
         favoriteButton.setOnClickListener {
-            launch(UI) { viewModel.toggleFavorite() }
+            launch(UI) { sessionDetailsViewModel.toggleFavorite() }
         }
 
         val clickListener = View.OnClickListener { view: View ->
@@ -87,18 +95,18 @@ class SessionDetailsFragment : Fragment() {
 
             launch(UI) {
                 if (rating != null) {
-                    if (viewModel.rating.value != rating) {
-                        viewModel.setRating(rating)
+                    if (sessionDetailsViewModel.rating.value != rating) {
+                        sessionDetailsViewModel.setRating(rating)
                     } else {
-                        viewModel.removeRating()
+                        sessionDetailsViewModel.removeRating()
                     }
                 }
             }
         }
 
-        viewModel.session.observe(this, this::updateView)
+        sessionDetailsViewModel.session.observe(this, this::updateView)
 
-        viewModel.isFavorite.observe(this) { isFavorite ->
+        sessionDetailsViewModel.isFavorite.observe(this) { isFavorite ->
             if (isFavorite == true) {
                 favoriteButton.setImageResource(R.drawable.ic_favorite_white_24dp)
             } else {
@@ -106,15 +114,19 @@ class SessionDetailsFragment : Fragment() {
             }
         }
 
-        setupRatingButtons(viewModel.rating.value)
+        setupRatingButtons(sessionDetailsViewModel.rating.value)
 
-        viewModel.rating.observe(this) { rating ->
+        sessionDetailsViewModel.rating.observe(this) { rating ->
             setupRatingButtons(rating)
         }
 
         goodButton.setOnClickListener(clickListener)
         okButton.setOnClickListener(clickListener)
         badButton.setOnClickListener(clickListener)
+
+        verifyCodeButton.setOnClickListener {
+            CodeEnterFragment().show(fragmentManager, CodeEnterFragment.TAG)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -265,15 +277,31 @@ class SessionDetailsFragment : Fragment() {
                             topMargin = dip(20)
                         }
 
-                        linearLayout {
+                        votingPromptLayout = verticalLayout {
+                            textView(R.string.voting_text) {
+                                textSize = 18f
+                            }
+                            verifyCodeButton = themedButton(
+                                text = R.string.verify_button_text,
+                                theme = R.style.Widget_AppCompat_Button_Borderless_Colored
+                            ).lparams(width = matchParent, height = wrapContent) {
+                                topMargin = dip(10)
+                            }
+                        }.lparams(width = matchParent, height = wrapContent) {
+                            topMargin = dip(20)
+                            bottomMargin = dip(80)
+                            gravity = Gravity.CENTER_HORIZONTAL
+                        }
+
+                        votingButtonsLayout = linearLayout {
                             goodButton = imageButton {
-                                imageResource = R.drawable.ic_thumb_up_white_24dp
+                                imageResource = R.drawable.ic_happy
                             }
                             okButton = imageButton {
-                                imageResource = R.drawable.ic_sentiment_neutral_white_36dp
+                                imageResource = R.drawable.ic_neutral
                             }
                             badButton = imageButton {
-                                imageResource = R.drawable.ic_thumb_down_white_24dp
+                                imageResource = R.drawable.ic_sad
                             }
                         }.lparams {
                             topMargin = dip(10)
@@ -295,6 +323,7 @@ class SessionDetailsFragment : Fragment() {
                     }.lparams(width = matchParent, height = wrapContent) {
                         margin = dip(20)
                     }.applyRecursively { view ->
+                        if (view is Button) return@applyRecursively
                         (view as? TextView)?.setTextIsSelectable(true)
                     }
 
