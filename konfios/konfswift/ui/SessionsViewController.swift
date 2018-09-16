@@ -2,6 +2,7 @@ import UIKit
 import konfios
 
 class SessionsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, KTSessionListView, KTNavigationManager, KTSearchQueryProvider {
+    
     private var mode = SessionsMode.all
     private var sessionsTableData: [[KTSessionModel]] = []
     

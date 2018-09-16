@@ -35,13 +35,9 @@ class SessionListPresenter(
     }
 
     fun updateData() {
-        launch(uiContext) {
-            try {
-                repository.update()
-                showData()
-            } finally {
-                view.isUpdating = false
-            }
+        launchAndCatch(uiContext, view::showError, onFinally = { view.isUpdating = false }) {
+            repository.update()
+            showData()
         }
     }
 

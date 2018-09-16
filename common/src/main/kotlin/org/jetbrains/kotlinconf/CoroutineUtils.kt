@@ -1,18 +1,21 @@
 package org.jetbrains.kotlinconf
 
+import kotlin.coroutines.*
 import kotlinx.coroutines.*
 
-typealias NativeCallback<T> = (T?, Throwable?) -> Unit
-
-internal fun <T> wrapCallback(callback: NativeCallback<T>, block: suspend () -> T) {
-    launch(Unconfined) {
-        val result = try {
-            block()
-        } catch (cause: Throwable) {
-            callback(null, cause)
-            null
+fun launchAndCatch(
+        context: CoroutineContext,
+        onError: (Throwable) -> Unit,
+        onFinally: () -> Unit = {},
+        function: suspend () -> Unit
+) {
+    launch(context) {
+        try {
+            function()
+        } catch (e: Throwable) {
+            onError(e)
+        } finally {
+            onFinally()
         }
-
-        result?.let { callback(it, null) }
     }
 }

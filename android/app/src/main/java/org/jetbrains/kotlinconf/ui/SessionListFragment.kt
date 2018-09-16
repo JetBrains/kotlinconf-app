@@ -24,7 +24,7 @@ import org.jetbrains.kotlinconf.R
 import org.jetbrains.kotlinconf.presentation.*
 import kotlin.properties.Delegates.observable
 
-abstract class SessionListFragment : Fragment(), AnkoComponent<Context>, SessionListView {
+abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, SessionListView {
 
     private lateinit var sessionsRecyclerView: RecyclerView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout

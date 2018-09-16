@@ -3,7 +3,7 @@ import TagListView_ObjC
 import konfios
 import MBProgressHUD
 
-class SessionViewController : UIViewController, UITableViewDataSource, UITableViewDelegate, KTSessionDetailsView {
+class SessionViewController : UIViewController, KTSessionDetailsView {
 
     private let repository = AppDelegate.me.konfService
     private lazy var presenter: KTSessionDetailsPresenter = {
@@ -16,7 +16,6 @@ class SessionViewController : UIViewController, UITableViewDataSource, UITableVi
     }()
     
     var sessionId = ""
-    private var session: KTSessionModel! // TODO: This should not be held here. Presenter holds state and it should be enough
     
     @IBOutlet private weak var scrollView: UIScrollView!
     
@@ -47,7 +46,6 @@ class SessionViewController : UIViewController, UITableViewDataSource, UITableVi
     }
     
     func updateView(loggedIn: Bool, session: KTSessionModel) {
-        self.session = session
         titleLabel.text = session.title
         timeLabel.text = KTStdlibPair(first: session.startsAt, second: session.endsAt).toReadableString()
         
@@ -89,15 +87,15 @@ class SessionViewController : UIViewController, UITableViewDataSource, UITableVi
     }
     
     @IBAction private func goodPressed(_ sender: Any?) {
-        presenter.rateSessionClicked(newRating: KTSessionRating.good)
+        presenter.rateSessionClicked(newRating: .good)
     }
     
     @IBAction private func sosoPressed(_ sender: Any?) {
-        presenter.rateSessionClicked(newRating: KTSessionRating.ok)
+        presenter.rateSessionClicked(newRating: .ok)
     }
     
     @IBAction private func badPressed(_ sender: Any?) {
-        presenter.rateSessionClicked(newRating: KTSessionRating.bad)
+        presenter.rateSessionClicked(newRating: .bad)
     }
     
     private func setupSpeakers(speakers: [KTSpeaker]) {
@@ -114,41 +112,8 @@ class SessionViewController : UIViewController, UITableViewDataSource, UITableVi
             userIcon1.loadUserIcon(url: speakers[1].profilePicture!)
         } else {
             userIcon1.isHidden = true
-            userIcon2.isHighlighted = true
+            userIcon2.isHidden = true
         }
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
-
-        if segue.identifier == "Vote", let controller = segue.destination as? VoteViewController {
-            controller.session = self.session
-        }
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Int(session.speakers.count)
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "User", for: indexPath) as! SessionUserTableViewCell
-        let speaker = session.speakers[indexPath.row]
-        cell.setup(for: speaker)
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let speaker = session.speakers[indexPath.row]
-        let alert = UIAlertController(title: speaker.fullName, message: speaker.bio, preferredStyle: .actionSheet)
-
-        for link in speaker.links {
-            guard let action = link.getAction() else { continue }
-            alert.addAction(action)
-        }
-
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-
-        self.present(alert, animated: true, completion: nil)
     }
     
     private func showIndeterminateProgress(message: String) -> MBProgressHUD {
@@ -158,49 +123,5 @@ class SessionViewController : UIViewController, UITableViewDataSource, UITableVi
         self.view.addSubview(hud)
         hud.show(animated: true)
         return hud
-    }
-
-}
-
-fileprivate extension KTLink {
-    func getAction() -> UIAlertAction? {
-        guard
-            linkType == "Twitter",
-            let url = URL(string: self.url)
-        else { return nil }
-
-        return (UIAlertAction(title: "\(title): @\(url.lastPathComponent)", style: .default) { _ in
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
-        })
-    }
-}
-
-class SessionUserTableViewCell : UITableViewCell {
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var icon: UIImageView!
-
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        doInit()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        doInit()
-    }
-
-    private func doInit() {
-        let bgColorView = UIView()
-        bgColorView.backgroundColor = UIColor.clear
-        self.selectedBackgroundView = bgColorView
-    }
-
-    func setup(for user: KTSpeaker) {
-        nameLabel.text = user.fullName
-        icon.loadUserIcon(url: user.profilePicture)
     }
 }

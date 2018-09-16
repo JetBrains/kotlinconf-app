@@ -29,11 +29,11 @@ class SessionDetailsPresenter(
     }
 
     fun rateSessionClicked(newRating: SessionRating) {
-        launch(uiContext) {
+        launchAndCatch(uiContext, view::showError) {
             view.setRatingClickable(false)
             if (rating != newRating) {
-                rating = newRating
                 repository.addRating(sessionId, newRating)
+                rating = newRating
             } else {
                 rating = null
                 repository.removeRating(sessionId)
@@ -44,7 +44,7 @@ class SessionDetailsPresenter(
     }
 
     fun onFavoriteButtonClicked() {
-        launch(uiContext) {
+        launchAndCatch(uiContext, view::showError) {
             isFavorite = !isFavorite
             repository.setFavorite(session.id, isFavorite)
         }
@@ -53,6 +53,8 @@ class SessionDetailsPresenter(
     private fun refreshDataFromRepo() {
         session = repository.sessions?.firstOrNull { it.id == sessionId } ?: return
         view.updateView(repository.loggedIn, session)
+        rating = repository.getRating(sessionId)
+        view.setupRatingButtons(rating)
         isFavorite = repository.favorites?.any { it.id == sessionId } ?: false
         rating = repository.getRating(sessionId)
     }

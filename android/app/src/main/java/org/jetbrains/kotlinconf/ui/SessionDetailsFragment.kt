@@ -40,7 +40,7 @@ import org.jetbrains.kotlinconf.data.SessionRating.*
 import org.jetbrains.kotlinconf.presentation.SessionDetailsPresenter
 import org.jetbrains.kotlinconf.presentation.SessionDetailsView
 
-class SessionDetailsFragment : Fragment(), SessionDetailsView {
+class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
 
     private lateinit var toolbar: Toolbar
     private lateinit var speakersTextView: TextView

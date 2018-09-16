@@ -9,18 +9,10 @@ interface DataRepository {
     val votes: List<Vote>?
     var onRefreshListeners: List<()->Unit>
     val loggedIn: Boolean
-    fun getRating(sessionId: String): SessionRating
 
     suspend fun update()
+    fun getRating(sessionId: String): SessionRating?
     suspend fun addRating(sessionId: String, rating: SessionRating)
     suspend fun removeRating(sessionId: String)
     suspend fun setFavorite(sessionId: String, isFavorite: Boolean)
-
-    /**
-     * Native callback API
-     */
-    fun update(callback: NativeCallback<Unit>)
-    fun addRating(sessionId: String, rating: SessionRating, callback: NativeCallback<Unit>)
-    fun removeRating(sessionId: String, callback: NativeCallback<Unit>)
-    fun setFavorite(sessionId: String, isFavorite: Boolean, callback: NativeCallback<Unit>)
 }

@@ -18,22 +18,21 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.random.Random
 
 class KotlinConfDataRepository(
-        private val settings: Settings,
-        val onError: (Throwable) -> Unit
+        private val settings: Settings
 ) : DataRepository {
     private val api = KotlinConfApi()
 
     override var sessions: List<SessionModel>? by bindToPreferencesByKey("settingsKey", SessionModel.serializer().list)
     override var favorites: List<SessionModel>? by bindToPreferencesByKey("favoritesKey", SessionModel.serializer().list)
     override var votes: List<Vote>? by bindToPreferencesByKey("votesKey", Vote.serializer().list)
-    var userId: String? by bindToPreferencesByKey("userIdKey", String.serializer())
+    private var userId: String? by bindToPreferencesByKey("userIdKey", String.serializer())
 
     override val loggedIn: Boolean
         get() = userId != null
 
     override var onRefreshListeners: List<() -> Unit> = emptyList()
 
-    override suspend fun update() = tryOrError {
+    override suspend fun update() {
         if (!loggedIn) {
             val id = (1..10)
                     .map { Random.nextInt(10) }
@@ -55,90 +54,77 @@ class KotlinConfDataRepository(
         }
     }
 
-    override fun getRating(sessionId: String): SessionRating =
-            SessionRating.valueOf(votes?.find { sessionId == it.sessionId }?.rating ?: 0)
+    override fun getRating(sessionId: String): SessionRating? =
+            votes?.find { sessionId == it.sessionId }
+                    ?.rating
+                    ?.let { SessionRating.valueOf(it) }
 
-    override suspend fun addRating(sessionId: String, rating: SessionRating) = tryOrError {
+    override suspend fun addRating(sessionId: String, rating: SessionRating) {
         val userId = userId ?: throw Unauthorized()
         val vote = Vote(sessionId, rating.value)
-        api.postVote(vote, userId)
+        try {
+            api.postVote(vote, userId)
+        } catch (e: Error) {
+            throw CannotVote()
+        }
         votes = votes.orEmpty().plus(vote)
         callRefreshListeners()
     }
 
-    override suspend fun removeRating(sessionId: String) = tryOrError {
+    override suspend fun removeRating(sessionId: String) {
         val userId = userId ?: throw Unauthorized()
-        api.postVote(Vote(sessionId, 0), userId)
+        try {
+            api.postVote(Vote(sessionId, 0), userId)
+        } catch (e: Error) {
+            throw CannotVote()
+        }
         votes = votes?.filter { it.sessionId != sessionId }
         callRefreshListeners()
     }
 
-    override suspend fun setFavorite(sessionId: String, isFavorite: Boolean) = tryOrError {
+    override suspend fun setFavorite(sessionId: String, isFavorite: Boolean) {
         val userId = userId ?: throw Unauthorized()
         val favorite = Favorite(sessionId)
-        favorites = if (isFavorite) {
-            api.postFavorite(favorite, userId)
-            val favoriteSession = sessions?.firstOrNull { it.id == sessionId } ?: throw Unauthorized()
-            favorites.orEmpty().plus(favoriteSession)
-        } else {
-            api.deleteFavorite(favorite, userId)
-            favorites?.filter { it.id != sessionId }
+        try {
+            favorites = if (isFavorite) {
+                api.postFavorite(favorite, userId)
+                val favoriteSession = sessions?.firstOrNull { it.id == sessionId } ?: throw Unauthorized()
+                favorites.orEmpty().plus(favoriteSession)
+            } else {
+                api.deleteFavorite(favorite, userId)
+                favorites?.filter { it.id != sessionId }
+            }
+        } catch (_: Throwable) {
+            throw CannotVote()
+        } finally {
+            callRefreshListeners()
         }
-        callRefreshListeners()
     }
 
     private fun callRefreshListeners() {
         onRefreshListeners.forEach { it() }
     }
 
-    /**
-     * Native callback API
-     */
-    override fun update(callback: NativeCallback<Unit>) {
-        wrapCallback(callback) {
-            update()
-        }
-    }
-
-    override fun addRating(sessionId: String, rating: SessionRating, callback: NativeCallback<Unit>) {
-        wrapCallback(callback) {
-            addRating(sessionId, rating)
-        }
-    }
-
-    override fun removeRating(sessionId: String, callback: NativeCallback<Unit>) {
-        wrapCallback(callback) {
-            removeRating(sessionId)
-        }
-    }
-
-    override fun setFavorite(sessionId: String, isFavorite: Boolean, callback: NativeCallback<Unit>) {
-        wrapCallback(callback) {
-            setFavorite(sessionId, isFavorite)
-        }
-    }
-
-    private suspend fun tryOrError(f: suspend () -> Unit) {
-        try {
-            f()
-        } catch (t: Throwable) {
-            onError(t)
-        }
-    }
-
     class Unauthorized : Throwable()
+    class CannotVote : Throwable()
 
     /*
      * Local storage
      */
 
     private inline fun <reified T : Any> read(key: String, elementSerializer: KSerializer<T>) = settings
-            ?.getString(key, "")
-            ?.takeUnless { it.isBlank() }
-            ?.let { try { JSON.parse(elementSerializer, it) } catch (_: Throwable) { null } }
+            .getString(key, "")
+            .takeUnless { it.isBlank() }
+            ?.let {
+                try {
+                    JSON.parse(elementSerializer, it)
+                } catch (_: Throwable) {
+                    null
+                }
+            }
 
     private inline fun <reified T : Any> write(key: String, obj: T?, elementSerializer: KSerializer<T>) {
-        settings?.putString(key, if(obj == null) "" else JSON.stringify(elementSerializer, obj))
+        settings.putString(key, if (obj == null) "" else JSON.stringify(elementSerializer, obj))
     }
 
     private inline fun <reified T : Any> bindToPreferencesByKey(
