@@ -49,7 +49,6 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewWillDisappear(_ animated: Bool) {
         presenter.onDestroy()
     }
-    
 
     func showSessionList() {
         // no-op, We are on session list

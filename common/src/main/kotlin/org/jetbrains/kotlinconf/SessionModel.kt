@@ -3,7 +3,6 @@ package org.jetbrains.kotlinconf
 import io.ktor.util.date.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.serializer
 import org.jetbrains.kotlinconf.data.*
 
 @Serializable
@@ -54,7 +53,7 @@ class SessionModel(
                     id = briefSession.id,
                     title = briefSession.title,
                     category = briefSession.categoryItems.map(categoryProvider).firstOrNull()?.name,
-                    descriptionText = briefSession.descriptionText ?: "",
+                    descriptionText = briefSession.description ?: "",
                     startsAtStr = startsAt,
                     endsAtStr = endsAt,
                     speakers = briefSession.speakers.mapNotNull { speakerProvider(it) },
