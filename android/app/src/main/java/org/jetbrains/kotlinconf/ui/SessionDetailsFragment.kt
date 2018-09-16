@@ -275,10 +275,10 @@ class SessionDetailsFragment : Fragment() {
                             textView(R.string.voting_text) {
                                 textSize = 18f
                             }
-                            verifyCodeButton = themedButton(
-                                text = R.string.verify_button_text,
-                                theme = R.style.Widget_AppCompat_Button_Borderless_Colored
-                            ).lparams(width = matchParent, height = wrapContent) {
+                            verifyCodeButton = button(R.string.verify_button_text) {
+                                textColor = theme.getColor(R.attr.colorAccent)
+                                backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
+                            }.lparams(width = matchParent, height = wrapContent) {
                                 topMargin = dip(10)
                             }
                         }.lparams(width = matchParent, height = wrapContent) {
