@@ -3,18 +3,18 @@ package org.jetbrains.kotlinconf
 import android.app.Application
 import android.content.Context
 import android.support.multidex.MultiDex
-import com.russhwolf.settings.PlatformSettings
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.toast
 import org.jetbrains.kotlinconf.model.KotlinConfDataRepository
 import org.jetbrains.kotlinconf.model.KotlinConfDataRepository.Unauthorized
 import org.jetbrains.kotlinconf.presentation.DataRepository
+import org.jetbrains.kotlinconf.storage.PlatformSettings
 import java.net.ConnectException
 
 class KotlinConfApplication : Application(), AnkoLogger {
 
     val dataRepository: DataRepository by lazy {
-        val settingsFactory = PlatformSettings.Factory(applicationContext)
+        val settingsFactory = PlatformSettings(applicationContext)
         KotlinConfDataRepository(settingsFactory, ::showError)
     }
 

@@ -17,6 +17,7 @@ class SessionListPresenter(
     fun onCreate() {
         searchQueryProvider.addOnQueryChangedListener(this::onSearchQueryChanged)
         repository.onRefreshListeners -= onRefreshListener
+        view.isUpdating = isFirstDataLoading()
         updateData()
         showData()
     }
@@ -29,10 +30,13 @@ class SessionListPresenter(
         navigationManager.showSessionDetails(session.id)
     }
 
+    fun onPullRefresh() {
+        updateData()
+    }
+
     fun updateData() {
         launch(uiContext) {
             try {
-                view.isUpdating = isFirstDataLoading()
                 repository.update()
                 showData()
             } finally {
@@ -41,16 +45,16 @@ class SessionListPresenter(
         }
     }
 
+    fun showData() {
+        val displayedSessions = repository.sessions?.filter(searchQuery).orEmpty()
+        val displayedFavorites = repository.favorites?.filter(searchQuery).orEmpty()
+        view.onUpdate(displayedSessions, displayedFavorites)
+    }
+
     private fun isFirstDataLoading() = repository.sessions == null
 
     private fun onSearchQueryChanged(query: String) {
         searchQuery = query
         showData()
-    }
-
-    private fun showData() {
-        val displayedSessions = repository.sessions?.filter(searchQuery).orEmpty()
-        val displayedFavorites = repository.favorites?.filter(searchQuery).orEmpty()
-        view.onUpdate(displayedSessions, displayedFavorites)
     }
 }

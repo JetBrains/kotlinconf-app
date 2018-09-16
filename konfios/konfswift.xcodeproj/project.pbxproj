@@ -22,6 +22,7 @@
 		2C6393481F743F73004953A3 /* UiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6393471F743F73004953A3 /* UiUtils.swift */; };
 		2C63934D1F745CBE004953A3 /* VoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C63934C1F745CBE004953A3 /* VoteViewController.swift */; };
 		2CB49F4E213973E50021FB79 /* Pods-konfswiftTests.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3F8F328F75A7A47133925362 /* Pods-konfswiftTests.release.xcconfig */; };
+		D30D00A8214D087900CD1184 /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D00A7214D087900CD1184 /* UI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		3F8F328F75A7A47133925362 /* Pods-konfswiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswiftTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-konfswiftTests/Pods-konfswiftTests.release.xcconfig"; sourceTree = "<group>"; };
 		82B39A882B392FCA825017DE /* Pods-konfswiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswiftTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-konfswiftTests/Pods-konfswiftTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A41FE60CFCB7748B63FEC8FD /* Pods-konfswift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswift.release.xcconfig"; path = "Pods/Target Support Files/Pods-konfswift/Pods-konfswift.release.xcconfig"; sourceTree = "<group>"; };
+		D30D00A7214D087900CD1184 /* UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +149,7 @@
 				2C6393431F743F2F004953A3 /* SessionViewController.swift */,
 				2C63934C1F745CBE004953A3 /* VoteViewController.swift */,
 				2C024B191F7494B400A7EAEC /* AboutViewController.swift */,
+				D30D00A7214D087900CD1184 /* UI.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C6393481F743F73004953A3 /* UiUtils.swift in Sources */,
+				D30D00A8214D087900CD1184 /* UI.swift in Sources */,
 				2C6393421F743F15004953A3 /* SessionsViewController.swift in Sources */,
 				2C024B1A1F7494B400A7EAEC /* AboutViewController.swift in Sources */,
 				2C63934D1F745CBE004953A3 /* VoteViewController.swift in Sources */,

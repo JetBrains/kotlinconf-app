@@ -6,14 +6,8 @@ import MBProgressHUD
 class SessionViewController : UIViewController, UITableViewDataSource, UITableViewDelegate, KTSessionDetailsView {
     private let repository = AppDelegate.me.konfService
     private var presenter: KTSessionDetailsPresenter!
-
-    class UI: KTKotlinx_coroutines_core_nativeCoroutineDispatcher {
-        override func dispatch(context: KTStdlibCoroutineContext, block: KTKotlinx_coroutines_core_nativeRunnable) {
-            DispatchQueue.main.async {
-                block.run()
-            }
-        }
-    }
+    
+    var sessionId = ""
     
     @IBOutlet private weak var scrollView: UIScrollView!
     
@@ -39,7 +33,7 @@ class SessionViewController : UIViewController, UITableViewDataSource, UITableVi
         presenter = KTSessionDetailsPresenter(
             uiContext: UI(),
             view: self,
-            sessionId: "",
+            sessionId: sessionId,
             repository: repository
         )
 //        guard let session = self.session else { return }

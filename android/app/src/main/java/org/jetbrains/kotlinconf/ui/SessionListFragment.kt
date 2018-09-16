@@ -45,7 +45,7 @@ abstract class SessionListFragment : Fragment(), AnkoComponent<Context>, Session
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        swipeRefreshLayout.setOnRefreshListener(presenter::updateData)
+        swipeRefreshLayout.setOnRefreshListener(presenter::onPullRefresh)
         sessionsAdapter = SessionsAdapter(context!!, presenter::showSessionDetails)
 
         sessionsRecyclerView.layoutManager = StickyLayoutManager(context, sessionsAdapter).apply {

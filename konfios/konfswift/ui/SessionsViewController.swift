@@ -1,13 +1,29 @@
 import UIKit
 import konfios
 
-
-class SessionsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    private static let SEND_ID_ONCE_KEY = "send_uuid_once"
-    private lazy var konfService = AppDelegate.me.konfService
+class SessionsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, KTSessionListView, KTNavigationManager, KTSearchQueryProvider {
     private var mode = SessionsMode.all
     private var sessionsTableData: [[KTSessionModel]] = []
-
+    
+    private let repository = AppDelegate.me.konfService
+    lazy var presenter: KTSessionListPresenter = {
+        KTSessionListPresenter(uiContext: UI(), view: self, repository: repository, navigationManager: self, searchQueryProvider: self)
+    }()
+    var searchQuery: String = ""
+    
+    var isUpdating: Bool {
+        get {
+            return self.pullToRefresh.isRefreshing
+        }
+        set {
+            if(newValue) {
+                self.pullToRefresh.beginRefreshing()
+            } else {
+                self.pullToRefresh.endRefreshing()
+            }
+        }
+    }
+    
     lazy var pullToRefresh: UIRefreshControl = {
         let refresher = UIRefreshControl()
         refresher.addTarget(
@@ -21,56 +37,59 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     @IBOutlet var tableView: UITableView!
 
+    override func viewWillAppear(_ animated: Bool) {
+        presenter.onCreate()
+    }
+    
+    override func viewDidLoad() {
+        self.refreshSessions(self)
+        tableView.backgroundView = pullToRefresh
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        presenter.onDestroy()
+    }
+    
+
+    func showSessionList() {
+        // no-op, We are on session list
+    }
+    
+    func showSessionDetails(sessionId: String) {
+        // TODO: Move opening details from here
+    }
+    
+    func addOnQueryChangedListener(listener: @escaping (String) -> KTStdlibUnit) {
+        // no-op, Search is not supported yet
+    }
+    
+    func onUpdate(sessions: [KTSessionModel], favorites: [KTSessionModel]) {
+        switch self.mode {
+        case .all:
+            fillDataWith(sessions: sessions)
+            break
+        case .favorites:
+            fillDataWith(sessions: favorites)
+            break
+        }
+        self.tableView?.reloadData()
+    }
+    
     @IBAction func tabSelected(_ sender: Any) {
         guard let segmentedControl = sender as? UISegmentedControl else { return }
         self.mode = (segmentedControl.selectedSegmentIndex == 0) ? .all : .favorites
-
-        self.updateTableContent()
+        presenter.showData()
 
         if let tableView = self.tableView, sessionsTableData.count > 0 {
             tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
         }
     }
 
-    override func viewDidLoad() {
-        self.refreshSessions(self)
-        tableView.backgroundView = pullToRefresh
+    @IBAction func refreshSessions(_ sender: Any) {
+        presenter.onPullRefresh()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        self.updateTableContent()
-    }
-
-    @IBAction func refreshSessions(_ sender: Any) {        
-        konfService.update { (data, error) -> KTStdlibUnit in
-            self.pullToRefresh.endRefreshing()
-            
-            if (error != nil) {
-                error?.cause?.printStackTrace()
-                self.showPopupText(title: "Failed to refresh")
-            } else {
-                self.updateTableContent()
-            }
-            return KTUnit
-        }
-    }
-    
-    /**
-     * Prepare TableView state
-     */
-    private func updateTableContent() {
-        switch self.mode {
-        case .all:
-            fillDataWith(sessions: konfService.sessions ?? [])
-            break
-        case .favorites:
-            fillDataWith(sessions: konfService.favorites ?? [])
-            break
-        }
-
-        self.tableView?.reloadData()
-    }
-    
+    // Sessions are grouped by time slots
     private func fillDataWith(sessions: [KTSessionModel]) {
         sessionsTableData = []
         sessions.forEach({ (session) in
@@ -97,7 +116,7 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let bucket = selectedPath.section
                 let row = selectedPath.row
                 if (sessionsTableData.count <= bucket || sessionsTableData[bucket].count <= row) { return }
-//                sessionViewController.session = sessionsTableData[bucket][row]
+                sessionViewController.sessionId = sessionsTableData[bucket][row].id
             default: break
         }
     }
@@ -122,7 +141,7 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let session = sessionsTableData[section].first else { return nil }
+        guard sessionsTableData.count > section, let session = sessionsTableData[section].first else { return nil }
         return session.startsAt.toReadableDateTimeString()
     }
 }
@@ -138,10 +157,7 @@ class SessionsTableViewCell : UITableViewCell {
 
     func setup(for session: KTSessionModel) {
         titleLabel.text = session.title
-        guard let speakers: [KTSpeaker] = session.speakers else {
-            return
-        }
-        
+        let speakers: [KTSpeaker] = session.speakers
         let speakersInfo = speakers.map { (speaker) -> String in
             speaker.fullName
         }.joined(separator: ", ")

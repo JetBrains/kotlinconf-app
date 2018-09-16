@@ -9,7 +9,6 @@ dependencies {
 
     implementation "io.ktor:ktor-client-ios:$ktor_version"
     implementation "io.ktor:ktor-client-json-ios:$ktor_version"
-    implementation "com.russhwolf:multiplatform-settings-ios:0.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:$coroutines_version"
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:$serialization_version"

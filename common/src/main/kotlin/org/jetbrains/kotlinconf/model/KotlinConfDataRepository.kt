@@ -12,16 +12,15 @@ import org.jetbrains.kotlinconf.data.Favorite
 import org.jetbrains.kotlinconf.data.SessionRating
 import org.jetbrains.kotlinconf.data.Vote
 import org.jetbrains.kotlinconf.presentation.DataRepository
-import org.jetbrains.kotlinconf.storage.SettingsFactory
+import org.jetbrains.kotlinconf.storage.Settings
 import kotlin.properties.Delegates.observable
 import kotlin.properties.ReadWriteProperty
 import kotlin.random.Random
 
 class KotlinConfDataRepository(
-        settingsFactory: SettingsFactory? = null,
-        val onError: (Throwable) -> Unit = {}
+        private val settings: Settings,
+        val onError: (Throwable) -> Unit
 ) : DataRepository {
-    private val settings = settingsFactory?.create("")
     private val api = KotlinConfApi()
 
     override var sessions: List<SessionModel>? by bindToPreferencesByKey("settingsKey", SessionModel.serializer().list)
@@ -136,16 +135,16 @@ class KotlinConfDataRepository(
     private inline fun <reified T : Any> read(key: String, elementSerializer: KSerializer<T>) = settings
             ?.getString(key, "")
             ?.takeUnless { it.isBlank() }
-            ?.let { JSON.parse(elementSerializer, it) }
+            ?.let { try { JSON.parse(elementSerializer, it) } catch (_: Throwable) { null } }
 
-    private inline fun <reified T : Any> write(key: String, obj: T, elementSerializer: KSerializer<T>) {
-        settings?.putString(key, JSON.stringify(elementSerializer, obj))
+    private inline fun <reified T : Any> write(key: String, obj: T?, elementSerializer: KSerializer<T>) {
+        settings?.putString(key, if(obj == null) "" else JSON.stringify(elementSerializer, obj))
     }
 
     private inline fun <reified T : Any> bindToPreferencesByKey(
             key: String,
             elementSerializer: KSerializer<T>
     ): ReadWriteProperty<Any?, T?> = observable(read(key, elementSerializer)) { _, _, new ->
-        if (new != null) write(key, new, elementSerializer) else settings?.remove(key)
+        write<T>(key, new, elementSerializer)
     }
 }

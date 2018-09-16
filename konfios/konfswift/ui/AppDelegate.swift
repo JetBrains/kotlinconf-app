@@ -9,7 +9,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static let UUID_KEY = "vendorId"
 
     public lazy var konfService = KTKotlinConfDataRepository(
-        settingsFactory: nil,
+        settings: KTPlatformSettings(),
         onError: onError
     )
 
@@ -49,6 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func onError(error: KTStdlibThrowable) -> KTStdlibUnit {
+        print(error.message)
+//        self.showPopupText(title: "Error")
         return KTUnit
     }
 }
