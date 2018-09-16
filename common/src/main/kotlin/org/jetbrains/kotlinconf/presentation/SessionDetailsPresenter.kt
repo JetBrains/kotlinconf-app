@@ -7,10 +7,10 @@ import org.jetbrains.kotlinconf.data.*
 import kotlin.properties.Delegates.observable
 
 class SessionDetailsPresenter(
-    private val uiContext: CoroutineContext,
-    private val view: SessionDetailsView,
-    private val sessionId: String,
-    private val repository: DataRepository
+        private val uiContext: CoroutineContext,
+        private val view: SessionDetailsView,
+        private val sessionId: String,
+        private val repository: DataRepository
 ) {
     private lateinit var session: SessionModel
     private var isFavorite: Boolean by observable(false) { _, _, isFavorite ->
@@ -29,17 +29,16 @@ class SessionDetailsPresenter(
     }
 
     fun rateSessionClicked(newRating: SessionRating) {
-        launchAndCatch(uiContext, view::showError) {
+        launchAndCatch(uiContext, view::showError, onFinally = { view.setRatingClickable(true) }) {
             view.setRatingClickable(false)
             if (rating != newRating) {
-                repository.addRating(sessionId, newRating)
                 rating = newRating
+                repository.addRating(sessionId, newRating)
             } else {
                 rating = null
                 repository.removeRating(sessionId)
             }
             view.setupRatingButtons(rating)
-            view.setRatingClickable(true)
         }
     }
 

@@ -84,9 +84,9 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return createView(AnkoContext.create(activity!!))
     }
@@ -103,8 +103,8 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
     }
 
     class SessionsAdapter(
-        private val context: Context,
-        private val onSessionClick: (SessionModel) -> Unit
+            private val context: Context,
+            private val onSessionClick: (SessionModel) -> Unit
     ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), StickyHeaderHandler {
 
         private var _data: List<*> = emptyList<Any>()
@@ -114,10 +114,9 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
             set(value) {
                 field = value
                 _data = field
-                    .sortedBy { it.room }
-                    .sortedBy { it.startsAt.timestamp }
-                    .groupBy { it.startsAt.toReadableDateString() }
-                    .flatMap { (day, sessions) -> listOf(HeaderItem(day)) + sessions }
+                        .sortedWith(compareBy({ it.startsAt.timestamp }, { it.room }, { it.title }))
+                        .groupBy { it.startsAt.toReadableDateString() }
+                        .flatMap { (day, sessions) -> listOf(HeaderItem(day)) + sessions }
 
                 notifyDataSetChanged()
             }
@@ -129,7 +128,7 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
                     with(holder) {
                         setTitle(session.title)
                         val detailStrings: List<String> =
-                            session.speakers.map { it.fullName } + listOfNotNull(session.roomText)
+                                session.speakers.map { it.fullName } + listOfNotNull(session.roomText)
 
                         setDetails(detailStrings.joinToString(", "))
                         setStartsAt(session.startsAt.toReadableTimeString())
@@ -274,7 +273,7 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
     class SessionDividerItemDecoration(context: Context) : RecyclerView.ItemDecoration() {
         private val divider: Drawable by lazy {
             val styledAttributes =
-                context.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
+                    context.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
             val divider = styledAttributes.getDrawable(0)
             styledAttributes.recycle()
             divider

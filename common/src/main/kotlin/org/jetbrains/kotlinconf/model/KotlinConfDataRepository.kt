@@ -1,12 +1,12 @@
 package org.jetbrains.kotlinconf.model
 
-import io.ktor.util.date.GMTDate
+import io.ktor.client.call.ReceivePipelineFail
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialContext
 import kotlinx.serialization.json.JSON
 import kotlinx.serialization.list
 import kotlinx.serialization.serializer
 import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.api.ApiException
 import org.jetbrains.kotlinconf.api.KotlinConfApi
 import org.jetbrains.kotlinconf.data.Favorite
 import org.jetbrains.kotlinconf.data.SessionRating
@@ -50,7 +50,11 @@ class KotlinConfDataRepository(
             sessions = newSessions
             favorites = newFavorites
             votes = newVotes
-            callRefreshListeners()
+            try {
+                callRefreshListeners()
+            } catch (_: Throwable) {
+                throw UpdateProblem()
+            }
         }
     }
 
@@ -64,22 +68,32 @@ class KotlinConfDataRepository(
         val vote = Vote(sessionId, rating.value)
         try {
             api.postVote(vote, userId)
-        } catch (e: Error) {
-            throw CannotVote()
+            votes = votes.orEmpty().plus(vote)
+        } catch (pipelineError: ReceivePipelineFail) {
+            val apiError = (pipelineError.cause as? ApiException)
+            val code = apiError?.response?.status?.value
+            throw when (code) {
+                477 -> TooEarlyVoteError()
+                478 -> TooLateVoteError()
+                else -> CannotPostVote()
+            }
+        } catch (e: Throwable) {
+            throw CannotPostVote()
+        } finally {
+            callRefreshListeners()
         }
-        votes = votes.orEmpty().plus(vote)
-        callRefreshListeners()
     }
 
     override suspend fun removeRating(sessionId: String) {
         val userId = userId ?: throw Unauthorized()
         try {
             api.postVote(Vote(sessionId, 0), userId)
-        } catch (e: Error) {
-            throw CannotVote()
+            votes = votes?.filter { it.sessionId != sessionId }
+        } catch (e: Throwable) {
+            throw CannotDeleteVote()
+        } finally {
+            callRefreshListeners()
         }
-        votes = votes?.filter { it.sessionId != sessionId }
-        callRefreshListeners()
     }
 
     override suspend fun setFavorite(sessionId: String, isFavorite: Boolean) {
@@ -88,14 +102,15 @@ class KotlinConfDataRepository(
         try {
             favorites = if (isFavorite) {
                 api.postFavorite(favorite, userId)
-                val favoriteSession = sessions?.firstOrNull { it.id == sessionId } ?: throw Unauthorized()
+                val favoriteSession = sessions?.firstOrNull { it.id == sessionId }
+                        ?: throw Unauthorized()
                 favorites.orEmpty().plus(favoriteSession)
             } else {
                 api.deleteFavorite(favorite, userId)
                 favorites?.filter { it.id != sessionId }
             }
         } catch (_: Throwable) {
-            throw CannotVote()
+            throw CannotFavorite()
         } finally {
             callRefreshListeners()
         }
@@ -105,8 +120,13 @@ class KotlinConfDataRepository(
         onRefreshListeners.forEach { it() }
     }
 
+    class UpdateProblem : Throwable()
     class Unauthorized : Throwable()
-    class CannotVote : Throwable()
+    class CannotPostVote : Throwable()
+    class CannotDeleteVote : Throwable()
+    class CannotFavorite : Throwable()
+    class TooEarlyVoteError : Throwable()
+    class TooLateVoteError : Throwable()
 
     /*
      * Local storage
