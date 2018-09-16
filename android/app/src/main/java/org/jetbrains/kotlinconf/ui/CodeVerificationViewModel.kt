@@ -22,7 +22,7 @@ class CodeVerificationViewModel(app: Application) : AndroidViewModel(app), AnkoL
         }
     }
 
-    fun shouldShowPrompt() = !viewModel.promptShown
+    fun shouldShowPrompt(): Boolean = !viewModel.promptShown
     fun setPromptShown() {
         viewModel.promptShown = true
     }
