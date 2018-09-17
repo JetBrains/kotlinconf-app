@@ -12,12 +12,14 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.websocket.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import org.jetbrains.kotlinconf.data.*
 import java.time.*
 import java.time.format.*
 import java.util.*
 import java.util.concurrent.*
+import kotlin.streams.*
 
 fun Routing.api(database: Database, production: Boolean, sessionizeUrl: String) {
     apiKeynote(production)
@@ -59,28 +61,64 @@ GET http://localhost:8080/users/verify/{token}
 
 GET http://localhost:8080/users/count
 1234
+
+GET http://localhost:8080/users/generate/5?secret=TestingSecret
+["bjdaf","ilHLs","6Knmk","LA94g","R6WYs"]
+
+DELETE http://localhost:8080/users/bjdaf?secret=TestingSecret
  */
 fun Routing.apiUsers(database: Database) {
     route("users") {
-        post {
-            val userUUID = call.receive<String>()
-            val ip = call.request.origin.remoteHost
-            val timestamp = LocalDateTime.now(Clock.systemUTC())
-            val created = database.createUser(userUUID, ip, timestamp)
-            if (created)
-                call.respond(HttpStatusCode.Created)
-            else
-                call.respond(HttpStatusCode.Conflict)
-        }
-        get("verify/{token}") {
-            val token = call.parameters["token"] ?: throw BadRequest()
-            val responseCode = if (database.validateUser(token)) HttpStatusCode.OK else HttpStatusCode.NotAcceptable
+        get("verify/{code}") {
+            val code = call.parameters["code"] ?: throw BadRequest()
+            val responseCode = if (database.validateUser(code)) HttpStatusCode.OK else HttpStatusCode.NotAcceptable
             call.respond(responseCode)
         }
         get("count") {
             call.respondText(database.usersCount().toString())
         }
+        get("generate/{number}") {
+            requireSecret()
+            val codeLength = 5L
+            val number = call.parameters["number"]?.toIntOrNull() ?: throw BadRequest()
+            val timestamp = LocalDateTime.now(Clock.systemUTC())
+
+            var createdCodes = listOf<String>()
+            while (createdCodes.size < number) {
+                val missingCodesNum = number - createdCodes.size
+                val codes = generateSequence { randomString(codeLength) }
+                    .distinct()
+                    .take(missingCodesNum)
+                    .toList()
+
+                createdCodes += codes.filter { code -> database.createUser(code, "generate", timestamp) }
+            }
+
+            call.respond(createdCodes)
+        }
+        delete("{code}") {
+            requireSecret()
+            val code = call.parameters["code"] ?: throw BadRequest()
+            database.deleteUser(code)
+            call.respond(HttpStatusCode.OK)
+        }
     }
+}
+
+private fun PipelineContext<*, ApplicationCall>.requireSecret() {
+    val providedSecret = call.parameters["secret"]
+    val realSecret = System.getenv("SERVER_SECRET").takeUnless { it.isNullOrBlank() } ?: "TestingSecret"
+    if (providedSecret != realSecret) throw SecretInvalidError()
+}
+
+private val random = Random()
+
+private fun randomString(length: Long): String {
+    val source = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+    return random.ints(length, 0, source.size)
+        .asSequence()
+        .map(source::get)
+        .joinToString("")
 }
 
 suspend fun ApplicationCall.validatePrincipal(database: Database): KotlinConfPrincipal {
