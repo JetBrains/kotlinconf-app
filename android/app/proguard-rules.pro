@@ -26,6 +26,7 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class io.ktor.** { *; }
+-keep class android.arch.** { *; }
 -keep class kotlin.reflect.** { *; }
 -keep class androidx.media.** { *; }
 -keep class org.jetbrains.anko.** { *; }
