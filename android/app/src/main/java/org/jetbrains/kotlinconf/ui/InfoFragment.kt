@@ -52,6 +52,17 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
             backgroundColor = Color.WHITE
             themedAppBarLayout(R.style.ThemeOverlay_AppCompat_ActionBar) {
                 multilineCollapsingToolbarLayout {
+                    expandedTitleMarginStart = dip(20)
+                    expandedTitleMarginEnd = dip(20)
+                    setExpandedTitleTextAppearance(R.style.SessionTitleExpanded)
+                    addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+                        title = if (totalScrollRange + verticalOffset <= 50) {
+                            getString(R.string.app_name)
+                        } else {
+                            ""
+                        }
+                    })
+
                     relativeLayout {
                         backgroundColor = Color.WHITE
                         contentScrim = ColorDrawable(Color.WHITE)
@@ -99,19 +110,19 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                     relativeLayout {
                         padding = dip(20)
+                        isClickable = true
+                        backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
+                        setOnClickListener {
+                            val gmmIntentUri = Uri.parse("geo:52.3752,4.8960?z=17")
+                            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                            mapIntent.`package` = "com.google.android.apps.maps"
+                            if (mapIntent.resolveActivity(context.packageManager) != null) {
+                                startActivity(mapIntent)
+                            }
+                        }
 
                         imageView(R.drawable.ic_location) {
                             id = R.id.icon_location
-
-                            setOnClickListener {
-                                val gmmIntentUri = Uri.parse("geo:52.3752,4.8960?z=17")
-                                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-                                mapIntent.`package` = "com.google.android.apps.maps"
-                                if (mapIntent.resolveActivity(context.packageManager) != null) {
-                                    startActivity(mapIntent)
-                                }
-                            }
-
                         }.lparams(width = dip(24), height = dip(24)) {
                             centerVertically()
                             leftMargin = dip(10)
@@ -134,6 +145,9 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                     linearLayout {
                         relativeLayout {
+                            backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
+                            padding = dip(30)
+
                             imageView(R.drawable.ic_web) {
                                 id = R.id.icon_website
                             }.lparams(width = dip(24), height = dip(24)) {
@@ -152,7 +166,8 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                             setOnClickListener {
                                 val websiteIntent = Intent(
                                     Intent.ACTION_VIEW,
-                                    Uri.parse("https://kotlinconf.com"))
+                                    Uri.parse("https://kotlinconf.com")
+                                )
                                 startActivity(websiteIntent)
                             }
 
@@ -161,6 +176,9 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         }
 
                         relativeLayout {
+                            backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
+                            padding = dip(30)
+
                             imageView(R.drawable.ic_twitter) {
                                 id = R.id.icon_twitter
                             }.lparams(width = dip(24), height = dip(24)) {
@@ -177,15 +195,18 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                             }
 
                             setOnClickListener {
-                                val twitterIntent = Intent(Intent.ACTION_VIEW,
-                                    Uri.parse("twitter://user?screen_name=kotlinconf"))
+                                val twitterIntent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("twitter://user?screen_name=kotlinconf")
+                                )
                                 twitterIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 if (twitterIntent.resolveActivity(context.packageManager) != null) {
                                     startActivity(twitterIntent)
                                 } else {
                                     val webTwitterIntent = Intent(
                                         Intent.ACTION_VIEW,
-                                        Uri.parse("https://twitter.com/kotlinconf"))
+                                        Uri.parse("https://twitter.com/kotlinconf")
+                                    )
                                     startActivity(webTwitterIntent)
                                 }
                             }
@@ -193,9 +214,7 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         }.lparams(width = 0, height = wrapContent) {
                             weight = 0.5f
                         }
-                    }.lparams(width = matchParent, height = wrapContent) {
-                        margin = dip(30)
-                    }
+                    }.lparams(width = matchParent, height = wrapContent)
 
                     view {
                         backgroundResource = context.getResourceId(android.R.attr.listDivider)
