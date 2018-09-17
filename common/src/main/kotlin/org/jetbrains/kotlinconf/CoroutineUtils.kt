@@ -7,8 +7,8 @@ fun launchAndCatch(
         context: CoroutineContext,
         onError: (Throwable) -> Unit,
         function: suspend () -> Unit
-): Finallizable {
-    val ret = Finallizable()
+): Finalizable {
+    val ret = Finalizable()
     launch(context) {
         try {
             function()
@@ -21,7 +21,7 @@ fun launchAndCatch(
     return ret
 }
 
-class Finallizable {
+class Finalizable {
     var onFinally: (() -> Unit)? = null
 
     infix fun finally(f: () -> Unit) {
