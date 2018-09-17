@@ -49,6 +49,9 @@ fun Application.main() {
         exception<NotFound> { _ ->
             call.respond(HttpStatusCode.NotFound)
         }
+        exception<SecretInvalidError> { _ ->
+            call.respond(HttpStatusCode.Forbidden)
+        }
         exception<Throwable> { cause ->
             environment.log.error(cause)
             call.respond(HttpStatusCode.InternalServerError)

@@ -66,6 +66,14 @@ class Database(application: Application) {
         }
     }
 
+    suspend fun deleteUser(uuid: String) = withContext(dispatcher) {
+        connection.transaction {
+            deleteFrom(Users)
+                .where { Users.uuid eq uuid }
+                .execute()
+        }
+    }
+
     suspend fun usersCount(): Int = withContext(dispatcher) {
         connection.transaction {
             Users.select { Users.id.count() }.execute().single().get<Int>(0)
