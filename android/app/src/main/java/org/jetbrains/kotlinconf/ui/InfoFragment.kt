@@ -100,19 +100,19 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                     relativeLayout {
                         padding = dip(20)
+                        isClickable = true
+                        backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
+                        setOnClickListener {
+                            val gmmIntentUri = Uri.parse("geo:52.3752,4.8960?z=17")
+                            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                            mapIntent.`package` = "com.google.android.apps.maps"
+                            if (mapIntent.resolveActivity(context.packageManager) != null) {
+                                startActivity(mapIntent)
+                            }
+                        }
 
                         imageView(R.drawable.ic_location) {
                             id = R.id.icon_location
-
-                            setOnClickListener {
-                                val gmmIntentUri = Uri.parse("geo:52.3752,4.8960?z=17")
-                                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-                                mapIntent.`package` = "com.google.android.apps.maps"
-                                if (mapIntent.resolveActivity(context.packageManager) != null) {
-                                    startActivity(mapIntent)
-                                }
-                            }
-
                         }.lparams(width = dip(24), height = dip(24)) {
                             centerVertically()
                             leftMargin = dip(10)
