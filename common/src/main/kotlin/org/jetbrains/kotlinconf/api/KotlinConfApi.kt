@@ -11,7 +11,8 @@ import org.jetbrains.kotlinconf.data.*
 
 internal expect val END_POINT: String
 
-class KotlinConfApi(private val userId: String) {
+class KotlinConfApi {
+
     private val client = HttpClient {
         install(JsonFeature) {
             serializer = KotlinxSerializer().apply {
@@ -23,50 +24,55 @@ class KotlinConfApi(private val userId: String) {
         install(ExpectSuccess)
     }
 
-    suspend fun createUser(): Boolean = client.request<HttpResponse> {
-        url("users", auth = false)
+    suspend fun createUser(userId: String): Boolean = client.request<HttpResponse> {
+        apiUrl("users", null)
         method = HttpMethod.Post
         body = userId
     }.use {
         it.status.isSuccess()
     }
 
-    suspend fun getAll(): AllData = client.get {
-        url("all")
+    suspend fun getAll(userId: String?): AllData = client.get {
+        apiUrl("all", userId)
     }
 
-    suspend fun postFavorite(favorite: Favorite): Unit = client.post {
-        url("favorites")
+    suspend fun postFavorite(favorite: Favorite, userId: String): Unit = client.post {
+        apiUrl("favorites", userId)
         json()
         body = favorite
     }
 
-    suspend fun deleteFavorite(favorite: Favorite): Unit = client.delete {
-        url("favorites")
+    suspend fun deleteFavorite(favorite: Favorite, userId: String): Unit = client.delete {
+        apiUrl("favorites", userId)
         json()
         body = favorite
     }
 
-    suspend fun postVote(vote: Vote): Unit = client.post {
-        url("votes")
+    suspend fun postVote(vote: Vote, userId: String): Unit = client.post {
+        apiUrl("votes", userId)
         json()
         body = vote
     }
 
-    suspend fun deleteVote(vote: Vote): Unit = client.delete {
-        url("votes")
+    suspend fun deleteVote(vote: Vote, userId: String): Unit = client.delete {
+        apiUrl("votes", userId)
         json()
         body = vote
+    }
+
+    suspend fun verifyCode(code: VotingCode): Unit = client.get {
+        apiUrl("users/verify/$code", null)
     }
 
     private fun HttpRequestBuilder.json() {
         contentType(ContentType.Application.Json)
     }
 
-    private fun HttpRequestBuilder.url(path: String, auth: Boolean = true) {
-        if (auth) {
+    private fun HttpRequestBuilder.apiUrl(path: String, userId: String?) {
+        if (userId != null) {
             header(HttpHeaders.Authorization, "Bearer $userId")
         }
+        header(HttpHeaders.CacheControl, "no-cache")
         url {
             takeFrom(END_POINT)
             encodedPath = path

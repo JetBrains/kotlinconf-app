@@ -37,6 +37,13 @@ class Database(application: Application) {
         connection.transaction {
             databaseSchema().create(listOf(Users, Favorites, Votes))
         }
+
+
+        // Only for testing purposes
+        launch {
+            val timestamp = LocalDateTime.now(Clock.systemUTC())
+            createUser("TestTest", "Test", timestamp)
+        }
     }
 
     suspend fun validateUser(uuid: String): Boolean = withContext(dispatcher) {

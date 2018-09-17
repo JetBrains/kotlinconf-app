@@ -6,4 +6,3 @@ import kotlinx.serialization.*
 data class Favorite(
     var sessionId: String
 )
-

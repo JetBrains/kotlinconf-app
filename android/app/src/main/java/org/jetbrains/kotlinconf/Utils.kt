@@ -1,9 +1,11 @@
 package org.jetbrains.kotlinconf
 
-import android.arch.lifecycle.*
 import android.content.*
 import android.content.res.*
+import android.net.*
+import android.os.*
 import android.os.Build.VERSION_CODES.*
+import android.provider.*
 import android.support.annotation.*
 import android.text.*
 import android.util.*
@@ -39,6 +41,7 @@ fun Context.getHtmlText(resId: Int): Spanned {
     return if (android.os.Build.VERSION.SDK_INT >= N) {
         Html.fromHtml(getText(resId).toString(), Html.FROM_HTML_MODE_LEGACY)
     } else {
+        @Suppress("DEPRECATION")
         Html.fromHtml(getText(resId).toString())
     }
 }
@@ -46,10 +49,16 @@ fun Context.getHtmlText(resId: Int): Spanned {
 val AnkoContext<*>.theme: Resources.Theme
     get() = this.ctx.theme
 
+val Context.connectivityManager
+    get() = getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
 
-// Needed for better type inference
-inline fun <X, Y> map(source: LiveData<X>, noinline func: (X?) -> Y): LiveData<Y> =
-    Transformations.map(source, func)
+val Context.isConnected: Boolean?
+    get() = connectivityManager?.activeNetworkInfo?.isConnected
 
-inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) =
-    observe(owner, Observer { observer(it) })
+val Context.isAirplaneModeOn: Boolean
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    get() = try {
+        Settings.System.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
+    } catch (error: Throwable) {
+        false
+    }

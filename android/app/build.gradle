@@ -44,6 +44,10 @@ android {
             dimension "server"
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/common.kotlin_module'
+    }
 }
 
 dependencies {
@@ -51,21 +55,13 @@ dependencies {
 
     implementation 'com.android.support:multidex:1.0.3'
 
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    implementation 'com.android.support:appcompat-v7:28.0.0-rc01'
-    implementation 'com.android.support:support-v4:28.0.0-rc01'
-    implementation 'com.android.support:recyclerview-v7:28.0.0-rc01'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-
-    kapt 'android.arch.lifecycle:compiler:1.1.1'
-
-    implementation 'com.android.support:design:28.0.0-rc01'
+    implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
+    implementation 'com.android.support:support-v4:28.0.0-rc02'
+    implementation 'com.android.support:recyclerview-v7:28.0.0-rc02'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:design:28.0.0-rc02'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    implementation 'android.arch.lifecycle:runtime:1.1.1'
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
 
     implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$anko_version"
     implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
@@ -76,9 +72,8 @@ dependencies {
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
     implementation 'net.opacapp:multiline-collapsingtoolbar:1.5.0'
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:3.8.0'
     implementation 'com.brandongogetap:stickyheaders:0.4.9'
-
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation "io.ktor:ktor-client-android:$ktor_version"

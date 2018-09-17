@@ -6,7 +6,7 @@ import kotlin.test.*
 class DateTest {
     @Test
     fun testParse() {
-        val date = parseDate("2017-10-24T13:31:19")
+        val date = "2017-10-24T13:31:19".parseDate()
         assertEquals(2017, date.year)
         assertEquals(Month.OCTOBER, date.month)
         assertEquals(24, date.dayOfMonth)

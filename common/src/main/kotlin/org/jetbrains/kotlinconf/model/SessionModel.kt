@@ -1,18 +1,28 @@
 package org.jetbrains.kotlinconf
 
 import io.ktor.util.date.*
+import kotlinx.serialization.*
 import org.jetbrains.kotlinconf.data.*
 
+@Serializable
 class SessionModel(
     val id: String,
     val title: String,
     val category: String?,
     val descriptionText: String,
-    val startsAt: GMTDate,
-    val endsAt: GMTDate,
+    val startsAtStr: String,
+    val endsAtStr: String,
     val room: String?,
-    val speakers: Array<Speaker>
+    val speakers: List<Speaker>
 ) {
+    @Transient
+    val startsAt: GMTDate
+        get() = startsAtStr.parseDate()
+
+    @Transient
+    val endsAt: GMTDate
+        get() = endsAtStr.parseDate()
+
     companion object {
         fun forSession(all: AllData, sessionId: String): SessionModel {
             val briefSession = all.sessions.first { it.id == sessionId }
@@ -42,10 +52,10 @@ class SessionModel(
                 id = briefSession.id,
                 title = briefSession.title,
                 category = briefSession.categoryItems.map(categoryProvider).firstOrNull()?.name,
-                descriptionText = briefSession.descriptionText ?: "",
-                startsAt = parseDate(startsAt),
-                endsAt = parseDate(endsAt),
-                speakers = briefSession.speakers.mapNotNull { speakerProvider(it) }.toTypedArray(),
+                descriptionText = briefSession.description ?: "",
+                startsAtStr = startsAt,
+                endsAtStr = endsAt,
+                speakers = briefSession.speakers.mapNotNull { speakerProvider(it) },
                 room = briefSession.roomId.let(roomProvider).name
             )
         }
@@ -53,15 +63,10 @@ class SessionModel(
 }
 
 fun AllData.allSessions(): List<SessionModel> {
-    return sessions.map { it.id }.map { SessionModel.forSession(this, it) }
-        .sortedWith(Comparator { first, second ->
-            return@Comparator if (first.startsAt != second.startsAt) {
-                first.startsAt.compareTo(second.startsAt)
-            } else {
-                first.title.compareTo(second.title)
-            }
-        })
+    return sessions.map { SessionModel.forSession(this, it.id) }
+        .sortedWith(compareBy({ it.startsAt.timestamp }, { it.title }))
 }
 
-fun AllData.favoriteSessions(): List<SessionModel> =
-    favorites.map { it.sessionId }.map { SessionModel.forSession(this, it) }
+fun AllData.favoriteSessions(): List<SessionModel> = favorites
+    .map { it.sessionId }
+    .map { SessionModel.forSession(this, it) }

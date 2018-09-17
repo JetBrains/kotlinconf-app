@@ -20,7 +20,6 @@ import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.*
 import org.jetbrains.anko.support.v4.*
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.R
 
 class InfoFragment : Fragment(), AnkoComponent<Context> {
 
@@ -81,7 +80,7 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                     toolbar = toolbar {
                         layoutParams = CollapsingToolbarLayout.LayoutParams(
                             matchParent,
-                            dimen(context.getResourceId(R.attr.actionBarSize))
+                            context.dimen(context.getResourceId(R.attr.actionBarSize))
                         ).apply {
                             collapseMode = COLLAPSE_MODE_PIN
                         }

@@ -50,6 +50,15 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
             searchView.isIconified = false
         }
 
+        searchView.setOnSearchClickListener {
+            supportActionBar?.setLogo(R.drawable.kotlinconf_logo)
+        }
+
+        searchView.setOnCloseListener {
+            supportActionBar?.setLogo(R.drawable.kotlinconf_logo_text)
+            return@setOnCloseListener false
+        }
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean = false
             override fun onQueryTextChange(newText: String): Boolean {
@@ -92,6 +101,10 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
             .beginTransaction()
             .add(R.id.fragment_container, SessionPagerFragment(), SessionListFragment.TAG)
             .commit()
+    }
+
+    override fun showVotingCodePromptDialog() {
+        CodeEnterFragment().show(supportFragmentManager, CodeEnterFragment.TAG)
     }
 
     override fun showSessionDetails(sessionId: String) {
