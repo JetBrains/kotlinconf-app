@@ -1,68 +1,71 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.app.*
-import android.arch.lifecycle.*
-import android.arch.lifecycle.ViewModelProvider.*
-import android.content.*
-import android.graphics.*
-import android.net.*
-import android.os.*
-import android.support.v4.app.DialogFragment
+import android.app.Dialog
+import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
+import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import android.text.*
-import android.view.*
-import android.view.Gravity.*
+import android.text.Editable
+import android.text.InputType
+import android.text.TextWatcher
+import android.view.Gravity
+import android.view.Gravity.CENTER
+import android.view.View
 import android.view.View.*
-import android.view.inputmethod.EditorInfo.*
-import android.widget.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
+import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.ProgressBar
+import kotlinx.coroutines.android.UI
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.*
-import org.jetbrains.kotlinconf.*
+import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.kotlinconf.KotlinConfApplication
 import org.jetbrains.kotlinconf.R
+import org.jetbrains.kotlinconf.getResourceId
+import org.jetbrains.kotlinconf.presentation.CodeVerificationPresenter
+import org.jetbrains.kotlinconf.presentation.CodeVerificationView
 
 
-class CodeEnterFragment : DialogFragment() {
+class CodeEnterFragment : BaseDialogFragment(), CodeVerificationView {
     private lateinit var submitButton: Button
     private lateinit var checkBox: CheckBox
     private lateinit var codeEditText: EditText
     private lateinit var progressBar: ProgressBar
     private lateinit var dialogContent: View
 
-    private lateinit var viewModel: CodeVerificationViewModel
+    private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
+    private val presenter by lazy { CodeVerificationPresenter(UI, this, repository) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(context!!)
-            .setView(createView())
-            .setPositiveButton(R.string.submit_button) { _, _ -> }
-            .setNeutralButton(R.string.skip_button) { dialog, _ -> dialog.dismiss() }
-            .create()
-            .apply {
-                setOnShowListener {
-                    submitButton = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
-                    submitButton.isEnabled = false
-                    // the listener is set here to prevent the dialog from being dismissed on click
-                    submitButton.setOnClickListener { _ -> verifyCode() }
+                .setView(createView())
+                .setPositiveButton(R.string.submit_button) { _, _ -> }
+                .setNeutralButton(R.string.skip_button) { dialog, _ -> dialog.dismiss() }
+                .create()
+                .apply {
+                    setOnShowListener {
+                        submitButton = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        submitButton.isEnabled = false
+                        // the listener is set here to prevent the dialog from being dismissed on click
+                        submitButton.setOnClickListener { _ ->
+                            val code = codeEditText.text.toString()
+                            presenter.verifyCode(code)
+                        }
+                    }
                 }
-            }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        viewModel = ViewModelProviders.of(this, AndroidViewModelFactory.getInstance(activity!!.application))
-            .get(CodeVerificationViewModel::class.java)
+    override fun setProgress(isLoading: Boolean) {
+        progressBar.visibility = if (isLoading) VISIBLE else INVISIBLE
+        dialogContent.visibility = if (isLoading) INVISIBLE else VISIBLE
+        submitButton.visibility = if (isLoading) INVISIBLE else VISIBLE
     }
 
-    private fun verifyCode() {
-        launch(UI) {
-            progressBar.visibility = VISIBLE
-            dialogContent.visibility = INVISIBLE
-            submitButton.visibility = INVISIBLE
-            viewModel.verifyCode(codeEditText.text.toString())
-            dismiss()
-        }
+    override fun dismissView() {
+        dismiss()
     }
 
     private fun toggleSubmitButtonEnable() {
@@ -96,14 +99,15 @@ class CodeEnterFragment : DialogFragment() {
                                 imeOptions = IME_ACTION_DONE
                                 addTextChangedListener(object : TextWatcher {
                                     override fun beforeTextChanged(
-                                        s: CharSequence?,
-                                        start: Int,
-                                        count: Int,
-                                        after: Int
+                                            s: CharSequence?,
+                                            start: Int,
+                                            count: Int,
+                                            after: Int
                                     ) {
                                     }
 
                                     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                                        // TODO: This is logic, should be on the presenter
                                         toggleSubmitButtonEnable()
                                     }
 

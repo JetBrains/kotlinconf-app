@@ -6,16 +6,25 @@ import kotlinx.coroutines.*
 fun launchAndCatch(
         context: CoroutineContext,
         onError: (Throwable) -> Unit,
-        onFinally: () -> Unit = {},
         function: suspend () -> Unit
-) {
+): Finallizable {
+    val ret = Finallizable()
     launch(context) {
         try {
             function()
         } catch (e: Throwable) {
             onError(e)
         } finally {
-            onFinally()
+            ret.onFinally?.invoke()
         }
+    }
+    return ret
+}
+
+class Finallizable {
+    var onFinally: (() -> Unit)? = null
+
+    infix fun finally(f: () -> Unit) {
+        onFinally = f
     }
 }

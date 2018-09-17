@@ -18,8 +18,14 @@ class SessionListPresenter(
         searchQueryProvider.addOnQueryChangedListener(this::onSearchQueryChanged)
         repository.onRefreshListeners -= onRefreshListener
         view.isUpdating = isFirstDataLoading()
-        updateData()
+
         showData()
+        updateData()
+
+        if(!repository.loggedIn && !repository.codePromptShown) {
+            navigationManager.showVotingCodePromptDialog()
+            repository.codePromptShown = true
+        }
     }
 
     fun onDestroy() {
@@ -35,9 +41,11 @@ class SessionListPresenter(
     }
 
     fun updateData() {
-        launchAndCatch(uiContext, view::showError, onFinally = { view.isUpdating = false }) {
+        launchAndCatch(uiContext, view::showError) {
             repository.update()
             showData()
+        } finally {
+            view.isUpdating = false
         }
     }
 

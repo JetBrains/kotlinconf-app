@@ -29,7 +29,7 @@ class SessionDetailsPresenter(
     }
 
     fun rateSessionClicked(newRating: SessionRating) {
-        launchAndCatch(uiContext, view::showError, onFinally = { view.setRatingClickable(true) }) {
+        launchAndCatch(uiContext, view::showError) {
             view.setRatingClickable(false)
             if (rating != newRating) {
                 rating = newRating
@@ -39,6 +39,8 @@ class SessionDetailsPresenter(
                 repository.removeRating(sessionId)
             }
             view.setupRatingButtons(rating)
+        } finally {
+            view.setRatingClickable(true)
         }
     }
 

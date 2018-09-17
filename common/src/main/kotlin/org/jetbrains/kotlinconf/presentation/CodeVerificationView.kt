@@ -1,4 +1,6 @@
 package org.jetbrains.kotlinconf.presentation
 
-class CodeVerificationView {
+interface CodeVerificationView: BaseView {
+    fun setProgress(isLoading: Boolean)
+    fun dismissView()
 }

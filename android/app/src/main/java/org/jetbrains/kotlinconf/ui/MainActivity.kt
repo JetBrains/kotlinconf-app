@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
 
         if (savedInstanceState == null) {
             showSessionList()
-            showVotingCodePromptDialog()
         } else {
             savedInstanceState.getString(SEARCH_QUERY_KEY)?.let { searchQuery = it }
         }
@@ -98,15 +97,7 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
     }
 
     override fun showVotingCodePromptDialog() {
-        val viewModel = ViewModelProviders.of(
-            this,
-            AndroidViewModelFactory.getInstance(application)
-        )
-            .get(CodeVerificationViewModel::class.java)
-        if (viewModel.shouldShowPrompt()) {
-            CodeEnterFragment().show(supportFragmentManager, CodeEnterFragment.TAG)
-            viewModel.setPromptShown()
-        }
+        CodeEnterFragment().show(supportFragmentManager, CodeEnterFragment.TAG)
     }
 
     override fun showSessionDetails(sessionId: String) {

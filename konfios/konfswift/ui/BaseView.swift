@@ -16,19 +16,19 @@ extension UIViewController: KTBaseView {
         var message = ""
         
         switch error {
-        case is KTKotlinConfDataRepositoryUnauthorized:
+        case is KTUnauthorized:
             message = "Unauthorized"
-        case is KTKotlinConfDataRepositoryCannotFavorite:
+        case is KTCannotFavorite:
             message = "Cannot set favorite now"
-        case is KTKotlinConfDataRepositoryCannotPostVote:
+        case is KTCannotPostVote:
             message = "Failed to post vote to server, please check your internet connection"
-        case is KTKotlinConfDataRepositoryCannotDeleteVote:
+        case is KTCannotDeleteVote:
             message = "Failed to delete vote from server, please check your internet connection"
-        case is KTKotlinConfDataRepositoryUpdateProblem:
+        case is KTUpdateProblem:
             message = "Failed to get data from server, please check your internet connection"
-        case is KTKotlinConfDataRepositoryTooEarlyVoteError:
+        case is KTTooEarlyVote:
             message = "Voting is not allowed before the session starts"
-        case is KTKotlinConfDataRepositoryTooLateVoteError:
+        case is KTTooLateVote:
             message = "Voting is not allowed later than 15 minutes after the session ends"
         default:
             message = "Unknown Error"

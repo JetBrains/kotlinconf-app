@@ -103,14 +103,13 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         detailsTextView.text = listOfNotNull(session.roomText, session.category).joinToString(", ")
         descriptionTextView.text = session.descriptionText
 
-        votingButtonsLayout.visibility = if (loggedIn) VISIBLE else GONE
-        votingPromptLayout.visibility = if (loggedIn) GONE else VISIBLE
-
         val online = context?.let { it.isConnected?.and(!it.isAirplaneModeOn) } ?: false
 
-        for (button in listOf(goodButton, okButton, badButton, favoriteButton)) {
+        for (button in listOf(votingButtonsLayout, favoriteButton)) {
             button.visibility = if (loggedIn && online) View.VISIBLE else View.GONE
         }
+        votingPromptLayout.visibility = if (loggedIn) GONE else VISIBLE
+
 
         session.speakers
                 .takeIf { it.size < 3 }

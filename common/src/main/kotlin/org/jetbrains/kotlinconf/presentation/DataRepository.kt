@@ -9,6 +9,7 @@ interface DataRepository {
     val votes: List<Vote>?
     var onRefreshListeners: List<()->Unit>
     val loggedIn: Boolean
+    var codePromptShown: Boolean
 
     suspend fun update()
     fun getRating(sessionId: String): SessionRating?

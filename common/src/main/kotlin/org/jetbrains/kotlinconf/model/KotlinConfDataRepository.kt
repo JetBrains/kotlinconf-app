@@ -6,11 +6,11 @@ import kotlinx.serialization.json.JSON
 import kotlinx.serialization.list
 import kotlinx.serialization.serializer
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.api.ApiException
-import org.jetbrains.kotlinconf.api.KotlinConfApi
+import org.jetbrains.kotlinconf.api.*
 import org.jetbrains.kotlinconf.data.Favorite
 import org.jetbrains.kotlinconf.data.SessionRating
 import org.jetbrains.kotlinconf.data.Vote
+import org.jetbrains.kotlinconf.data.VotingCode
 import org.jetbrains.kotlinconf.presentation.DataRepository
 import org.jetbrains.kotlinconf.storage.Settings
 import kotlin.properties.Delegates.observable
@@ -27,20 +27,16 @@ class KotlinConfDataRepository(
     override var votes: List<Vote>? by bindToPreferencesByKey("votesKey", Vote.serializer().list)
     private var userId: String? by bindToPreferencesByKey("userIdKey", String.serializer())
 
+    override var codePromptShown: Boolean
+        get() = settings.getBoolean("codePromptShownKey", false)
+        set(value) { settings.putBoolean("codePromptShownKey", value) }
+
     override val loggedIn: Boolean
         get() = userId != null
 
     override var onRefreshListeners: List<() -> Unit> = emptyList()
 
     override suspend fun update() {
-        if (!loggedIn) {
-            val id = (1..10)
-                    .map { Random.nextInt(10) }
-                    .fold("") { acc, i -> acc + i }
-            api.createUser(id)
-            userId = id
-        }
-
         val state = api.getAll(userId)
 
         val newSessions = state.allSessions()
@@ -54,6 +50,21 @@ class KotlinConfDataRepository(
                 callRefreshListeners()
             } catch (_: Throwable) {
                 throw UpdateProblem()
+            }
+        }
+    }
+
+    override suspend fun verifyCode(code: VotingCode) {
+        try {
+            api.verifyCode(code)
+            userId = code
+            update()
+        } catch (t: Throwable) {
+            val responseStatus = (t.cause as? ApiException)?.response?.status?.value
+            if(responseStatus == 406) {
+                throw IncorrectCode()
+            } else {
+                throw FailedToVerifyCode()
             }
         }
     }
@@ -73,8 +84,8 @@ class KotlinConfDataRepository(
             val apiError = (pipelineError.cause as? ApiException)
             val code = apiError?.response?.status?.value
             throw when (code) {
-                477 -> TooEarlyVoteError()
-                478 -> TooLateVoteError()
+                477 -> TooEarlyVote()
+                478 -> TooLateVote()
                 else -> CannotPostVote()
             }
         } catch (e: Throwable) {
@@ -120,14 +131,6 @@ class KotlinConfDataRepository(
         onRefreshListeners.forEach { it() }
     }
 
-    class UpdateProblem : Throwable()
-    class Unauthorized : Throwable()
-    class CannotPostVote : Throwable()
-    class CannotDeleteVote : Throwable()
-    class CannotFavorite : Throwable()
-    class TooEarlyVoteError : Throwable()
-    class TooLateVoteError : Throwable()
-
     /*
      * Local storage
      */
@@ -151,6 +154,6 @@ class KotlinConfDataRepository(
             key: String,
             elementSerializer: KSerializer<T>
     ): ReadWriteProperty<Any?, T?> = observable(read(key, elementSerializer)) { _, _, new ->
-        write<T>(key, new, elementSerializer)
+        write(key, new, elementSerializer)
     }
 }

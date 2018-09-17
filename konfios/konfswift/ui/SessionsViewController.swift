@@ -50,6 +50,10 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewWillDisappear(_ animated: Bool) {
         presenter.onDestroy()
     }
+    
+    func showVotingCodePromptDialog() {
+        // no-op, Show code prompt here once it is implmenented
+    }
 
     func showSessionList() {
         // no-op, We are on session list

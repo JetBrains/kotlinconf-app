@@ -1,7 +1,6 @@
 package org.jetbrains.kotlinconf.api
 
 import io.ktor.client.*
-import io.ktor.client.call.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
@@ -26,7 +25,7 @@ class KotlinConfApi {
     }
 
     suspend fun createUser(userId: String): Boolean = client.request<HttpResponse> {
-        url("users", null)
+        apiUrl("users", null)
         method = HttpMethod.Post
         body = userId
     }.use {
@@ -34,42 +33,42 @@ class KotlinConfApi {
     }
 
     suspend fun getAll(userId: String?): AllData = client.get {
-        url("all", userId)
+        apiUrl("all", userId)
     }
 
     suspend fun postFavorite(favorite: Favorite, userId: String): Unit = client.post {
-        url("favorites", userId)
+        apiUrl("favorites", userId)
         json()
         body = favorite
     }
 
     suspend fun deleteFavorite(favorite: Favorite, userId: String): Unit = client.delete {
-        url("favorites", userId)
+        apiUrl("favorites", userId)
         json()
         body = favorite
     }
 
     suspend fun postVote(vote: Vote, userId: String): Unit = client.post {
-        url("votes", userId)
+        apiUrl("votes", userId)
         json()
         body = vote
     }
 
     suspend fun deleteVote(vote: Vote, userId: String): Unit = client.delete {
-        url("votes", userId)
+        apiUrl("votes", userId)
         json()
         body = vote
     }
 
     suspend fun verifyCode(code: VotingCode): Unit = client.get {
-        url("verify/$code")
+        apiUrl("users/verify/$code", null)
     }
 
     private fun HttpRequestBuilder.json() {
         contentType(ContentType.Application.Json)
     }
 
-    private fun HttpRequestBuilder.url(path: String, userId: String?) {
+    private fun HttpRequestBuilder.apiUrl(path: String, userId: String?) {
         if (userId != null) {
             header(HttpHeaders.Authorization, "Bearer $userId")
         }
