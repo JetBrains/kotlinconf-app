@@ -46,7 +46,8 @@ fun Routing.apiKeynote(production: Boolean) {
 
 private fun PipelineContext<Unit, ApplicationCall>.simulatedTime(production: Boolean): ZonedDateTime {
     val now = ZonedDateTime.now(keynoteTimeZone)
-    return if (production) now else call.parameters["datetimeoverride"]?.let { ZonedDateTime.parse(it) } ?: now
+    return if (production) now else call.parameters["datetimeoverride"]?.let { ZonedDateTime.parse(it) }
+            ?: now
 }
 
 /*
@@ -83,8 +84,12 @@ fun Routing.apiUsers(database: Database) {
 }
 
 suspend fun ApplicationCall.validatePrincipal(database: Database): KotlinConfPrincipal {
-    val principal = principal<KotlinConfPrincipal>() ?: throw Unauthorized()
-    if (!database.validateUser(principal.token)) throw Unauthorized()
+    return getPrincipalOrNull(database) ?: throw Unauthorized()
+}
+
+suspend fun ApplicationCall.getPrincipalOrNull(database: Database): KotlinConfPrincipal? {
+    val principal = principal<KotlinConfPrincipal>() ?: return null
+    if (!database.validateUser(principal.token)) return null
     return principal
 }
 
@@ -109,14 +114,14 @@ fun Routing.apiFavorite(database: Database, production: Boolean) {
         post {
             val principal = call.validatePrincipal(database)
             val favorite = call.receive<Favorite>()
-            val sessionId = favorite.sessionId ?: throw BadRequest()
+            val sessionId = favorite.sessionId
             database.createFavorite(principal.token, sessionId)
             call.respond(HttpStatusCode.Created)
         }
         delete {
             val principal = call.validatePrincipal(database)
             val favorite = call.receive<Favorite>()
-            val sessionId = favorite.sessionId ?: throw BadRequest()
+            val sessionId = favorite.sessionId
             database.deleteFavorite(principal.token, sessionId)
             call.respond(HttpStatusCode.OK)
         }
@@ -137,21 +142,14 @@ fun Routing.apiVote(database: Database, production: Boolean) {
             val votes = database.getVotes(principal.token)
             call.respond(votes)
         }
-        if (production) {
-            get("summary/$fakeSessionId") {
-                val votesSummary = database.getVotesSummary(fakeSessionId)
-                call.respond(votesSummary)
-            }
-        } else {
-            get("all") {
-                val votes = database.getAllVotes()
-                call.respond(votes)
-            }
-            get("summary/{sessionId}") {
-                val id = call.parameters["sessionId"] ?: throw BadRequest()
-                val votesSummary = database.getVotesSummary(id)
-                call.respond(votesSummary)
-            }
+        get("all") {
+            val votes = database.getAllVotes()
+            call.respond(votes)
+        }
+        get("summary/{sessionId}") {
+            val id = call.parameters["sessionId"] ?: throw BadRequest()
+            val votesSummary = database.getVotesSummary(id)
+            call.respond(votesSummary)
         }
         post {
             val principal = call.validatePrincipal(database)
@@ -159,16 +157,13 @@ fun Routing.apiVote(database: Database, production: Boolean) {
             val sessionId = vote.sessionId ?: throw BadRequest()
             val rating = vote.rating ?: throw BadRequest()
 
-            val session = getSessionizeData().allData.sessions?.firstOrNull { it.id == sessionId } ?: throw NotFound()
+            val session = getSessionizeData().allData.sessions.firstOrNull { it.id == sessionId }
+                    ?: throw NotFound()
             val nowTime = simulatedTime(production)
             val startVotesAt = LocalDateTime.parse(session.startsAt, dateFormat)
             val endVotesAt = LocalDateTime.parse(session.endsAt, dateFormat).plusMinutes(15)
-            val votingPeriodStarted = if (startVotesAt != null) {
-                ZonedDateTime.of(startVotesAt, keynoteTimeZone).isBefore(nowTime)
-            } else true
-            val votingPeriodEnded = if (endVotesAt != null) {
-                ZonedDateTime.of(endVotesAt, keynoteTimeZone).isBefore(nowTime)
-            } else true
+            val votingPeriodStarted = startVotesAt?.let { ZonedDateTime.of(it, keynoteTimeZone).isBefore(nowTime) } ?: true
+            val votingPeriodEnded = endVotesAt?.let { ZonedDateTime.of(it, keynoteTimeZone).isBefore(nowTime) } ?: true
 
             if (!votingPeriodStarted)
                 return@post call.respond(comeBackLater)
@@ -185,7 +180,7 @@ fun Routing.apiVote(database: Database, production: Boolean) {
         delete {
             val principal = call.validatePrincipal(database)
             val vote = call.receive<Vote>()
-            val sessionId = vote.sessionId ?: throw BadRequest()
+            val sessionId = vote.sessionId
             database.deleteVote(principal.token, sessionId)
             call.respond(HttpStatusCode.OK)
             signalSession(sessionId)

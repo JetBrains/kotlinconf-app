@@ -1,21 +1,17 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.arch.lifecycle.*
-import android.arch.lifecycle.ViewModelProvider.*
 import android.graphics.*
 import android.graphics.drawable.*
 import android.os.*
 import android.support.design.widget.*
 import android.support.design.widget.AppBarLayout.LayoutParams.*
 import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.*
-import android.support.v4.app.*
 import android.support.v7.app.*
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.view.View.*
 import android.widget.*
 import com.bumptech.glide.*
-import kotlinx.coroutines.*
 import kotlinx.coroutines.android.*
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
 import org.jetbrains.anko.*
@@ -23,10 +19,12 @@ import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.*
 import org.jetbrains.anko.support.v4.*
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.R
 import org.jetbrains.kotlinconf.data.*
+import org.jetbrains.kotlinconf.data.SessionRating.*
+import org.jetbrains.kotlinconf.presentation.*
 
-class SessionDetailsFragment : Fragment() {
+class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
+
     private lateinit var toolbar: Toolbar
     private lateinit var speakersTextView: TextView
     private lateinit var timeTextView: TextView
@@ -43,84 +41,27 @@ class SessionDetailsFragment : Fragment() {
     private lateinit var badButton: ImageButton
     private lateinit var okButton: ImageButton
 
+    private val sessionId by lazy { arguments!!.get(KEY_SESSION_ID) as String }
+    private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
+    private val presenter by lazy { SessionDetailsPresenter(UI, this, sessionId, repository) }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        setUpActionBar()
 
-        setHasOptionsMenu(true)
-
-        (activity as AppCompatActivity).apply {
-            setSupportActionBar(toolbar)
-            supportActionBar?.setDisplayShowHomeEnabled(true)
-            supportActionBar?.setDisplayShowTitleEnabled(false)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
-
-        val sessionId = arguments?.get(KEY_SESSION_ID) as String
-        val sessionDetailsViewModel = ViewModelProviders.of(
-            this,
-            AndroidViewModelFactory.getInstance(activity!!.application)
-        )
-            .get(SessionDetailsViewModel::class.java)
-            .apply { setSession(sessionId) }
-
-        val codeVerificationViewModel = ViewModelProviders.of(
-            this,
-            AndroidViewModelFactory.getInstance(activity!!.application)
-        )
-            .get(CodeVerificationViewModel::class.java)
-
-        codeVerificationViewModel.isCodeVerified.observe(this) {
-            val isCodeVerified = it ?: false
-            votingButtonsLayout.visibility = if (isCodeVerified) VISIBLE else GONE
-            votingPromptLayout.visibility = if (isCodeVerified) GONE else VISIBLE
-        }
-
-        favoriteButton.setOnClickListener {
-            launch(UI) { sessionDetailsViewModel.toggleFavorite() }
-        }
-
-        val clickListener = View.OnClickListener { view: View ->
-            val rating = when (view) {
-                goodButton -> SessionRating.GOOD
-                okButton -> SessionRating.OK
-                badButton -> SessionRating.BAD
-                else -> null
-            }
-
-            launch(UI) {
-                if (rating != null) {
-                    if (sessionDetailsViewModel.rating.value != rating) {
-                        sessionDetailsViewModel.setRating(rating)
-                    } else {
-                        sessionDetailsViewModel.removeRating()
-                    }
-                }
-            }
-        }
-
-        sessionDetailsViewModel.session.observe(this, this::updateView)
-
-        sessionDetailsViewModel.isFavorite.observe(this) { isFavorite ->
-            if (isFavorite == true) {
-                favoriteButton.setImageResource(R.drawable.ic_favorite_white_24dp)
-            } else {
-                favoriteButton.setImageResource(R.drawable.ic_favorite_border_white_24dp)
-            }
-        }
-
-        setupRatingButtons(sessionDetailsViewModel.rating.value)
-
-        sessionDetailsViewModel.rating.observe(this) { rating ->
-            setupRatingButtons(rating)
-        }
-
-        goodButton.setOnClickListener(clickListener)
-        okButton.setOnClickListener(clickListener)
-        badButton.setOnClickListener(clickListener)
-
+        favoriteButton.setOnClickListener { presenter.onFavoriteButtonClicked() }
+        goodButton.setOnClickListener { presenter.rateSessionClicked(GOOD) }
+        okButton.setOnClickListener { presenter.rateSessionClicked(OK) }
+        badButton.setOnClickListener { presenter.rateSessionClicked(BAD) }
         verifyCodeButton.setOnClickListener {
             CodeEnterFragment().show(fragmentManager, CodeEnterFragment.TAG)
         }
+        presenter.onCreate()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -128,44 +69,66 @@ class SessionDetailsFragment : Fragment() {
         menu.clear()
     }
 
-    private fun setupRatingButtons(rating: SessionRating?) {
-        fun selectButton(target: SessionRating): Int =
-            if (rating == target)
-                R.drawable.round_toggle_button_background_selected
-            else
-                R.drawable.round_toggle_button_background
-
-        goodButton.backgroundResource = selectButton(SessionRating.GOOD)
-        okButton.backgroundResource = selectButton(SessionRating.OK)
-        badButton.backgroundResource = selectButton(SessionRating.BAD)
+    override fun setIsFavorite(isFavorite: Boolean) {
+        val favoriteIcon = if (isFavorite) R.drawable.ic_favorite_white_24dp else R.drawable.ic_favorite_border_white_24dp
+        favoriteButton.setImageResource(favoriteIcon)
     }
 
-    private fun updateView(session: SessionModel?) {
-        if (session == null) {
-            return
+    override fun setupRatingButtons(rating: SessionRating?) {
+        fun selectButton(target: SessionRating): Int = when (rating) {
+            target -> R.drawable.round_toggle_button_background_selected
+            else -> R.drawable.round_toggle_button_background
         }
 
-        with(session) {
-            collapsingToolbar.title = session.title
-            speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName }
-            val time = (session.startsAt to session.endsAt).toReadableString()
-            timeTextView.text = time
-            detailsTextView.text = listOfNotNull(roomText, category).joinToString(", ")
-            descriptionTextView.text = session.descriptionText
+        goodButton.backgroundResource = selectButton(GOOD)
+        okButton.backgroundResource = selectButton(OK)
+        badButton.backgroundResource = selectButton(BAD)
+    }
 
-            session.speakers
-                .takeIf { it.size < 3 }
-                ?.map { it.profilePicture }
-                ?.apply {
-                    forEachIndexed { index, imageUrl ->
-                        imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
-                    }
+    override fun setRatingClickable(clickable: Boolean) {
+        goodButton.isClickable = clickable
+        okButton.isClickable = clickable
+        badButton.isClickable = clickable
+    }
+
+    override fun updateView(loggedIn: Boolean, session: SessionModel) {
+        collapsingToolbar.title = session.title
+        speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName }
+        val time = (session.startsAt to session.endsAt).toReadableString()
+        timeTextView.text = time
+        detailsTextView.text = listOfNotNull(session.roomText, session.category).joinToString(", ")
+        descriptionTextView.text = session.descriptionText
+
+        val online = context?.let { it.isConnected?.and(!it.isAirplaneModeOn) } ?: false
+
+        for (button in listOf(votingButtonsLayout, favoriteButton)) {
+            button.visibility = if (loggedIn && online) View.VISIBLE else View.GONE
+        }
+        votingPromptLayout.visibility = if (loggedIn) GONE else VISIBLE
+
+
+        session.speakers
+            .takeIf { it.size < 3 }
+            ?.map { it.profilePicture }
+            ?.apply {
+                forEachIndexed { index, imageUrl ->
+                    imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
                 }
-        }
+            }
     }
 
     private val SessionModel.roomText: String?
         get() = room?.let { getString(R.string.room_format_details, it) }
+
+    private fun setUpActionBar() {
+        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).apply {
+            setSupportActionBar(toolbar)
+            supportActionBar?.setDisplayShowHomeEnabled(true)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
+    }
 
     private fun ImageView.showSpeakerImage(imageUrl: String) {
         visibility = View.VISIBLE

@@ -1,14 +1,12 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.arch.lifecycle.*
-import android.arch.lifecycle.ViewModelProvider.*
 import android.content.*
 import android.os.*
 import android.support.v7.app.*
 import android.support.v7.widget.*
 import android.view.*
 import org.jetbrains.anko.*
-import org.jetbrains.kotlinconf.R
+import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.presentation.*
 
 class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationManager, SearchQueryProvider, AnkoLogger {
@@ -27,7 +25,6 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
 
         if (savedInstanceState == null) {
             showSessionList()
-            showVotingCodePromptDialog()
         } else {
             savedInstanceState.getString(SEARCH_QUERY_KEY)?.let { searchQuery = it }
         }
@@ -98,15 +95,7 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
     }
 
     override fun showVotingCodePromptDialog() {
-        val viewModel = ViewModelProviders.of(
-            this,
-            AndroidViewModelFactory.getInstance(application)
-        )
-            .get(CodeVerificationViewModel::class.java)
-        if (viewModel.shouldShowPrompt()) {
-            CodeEnterFragment().show(supportFragmentManager, CodeEnterFragment.TAG)
-            viewModel.setPromptShown()
-        }
+        CodeEnterFragment().show(supportFragmentManager, CodeEnterFragment.TAG)
     }
 
     override fun showSessionDetails(sessionId: String) {

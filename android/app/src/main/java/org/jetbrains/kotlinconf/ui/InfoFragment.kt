@@ -20,7 +20,6 @@ import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.*
 import org.jetbrains.anko.support.v4.*
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.R
 
 class InfoFragment : Fragment(), AnkoComponent<Context> {
 
@@ -69,8 +68,8 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                     toolbar = toolbar {
                         layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                matchParent,
-                                context.dimen(context.getResourceId(R.attr.actionBarSize))
+                            matchParent,
+                            context.dimen(context.getResourceId(R.attr.actionBarSize))
                         ).apply {
                             collapseMode = COLLAPSE_MODE_PIN
                         }
@@ -152,8 +151,8 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                             setOnClickListener {
                                 val websiteIntent = Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse("https://kotlinconf.com"))
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://kotlinconf.com"))
                                 startActivity(websiteIntent)
                             }
 
@@ -179,14 +178,14 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                             setOnClickListener {
                                 val twitterIntent = Intent(Intent.ACTION_VIEW,
-                                        Uri.parse("twitter://user?screen_name=kotlinconf"))
+                                    Uri.parse("twitter://user?screen_name=kotlinconf"))
                                 twitterIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 if (twitterIntent.resolveActivity(context.packageManager) != null) {
                                     startActivity(twitterIntent)
                                 } else {
                                     val webTwitterIntent = Intent(
-                                            Intent.ACTION_VIEW,
-                                            Uri.parse("https://twitter.com/kotlinconf"))
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://twitter.com/kotlinconf"))
                                     startActivity(webTwitterIntent)
                                 }
                             }

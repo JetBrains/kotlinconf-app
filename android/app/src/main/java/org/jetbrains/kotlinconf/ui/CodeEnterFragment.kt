@@ -1,13 +1,10 @@
 package org.jetbrains.kotlinconf.ui
 
 import android.app.*
-import android.arch.lifecycle.*
-import android.arch.lifecycle.ViewModelProvider.*
 import android.content.*
 import android.graphics.*
 import android.net.*
 import android.os.*
-import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.text.*
 import android.view.*
@@ -15,22 +12,22 @@ import android.view.Gravity.*
 import android.view.View.*
 import android.view.inputmethod.EditorInfo.*
 import android.widget.*
-import kotlinx.coroutines.*
 import kotlinx.coroutines.android.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.*
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.R
+import org.jetbrains.kotlinconf.presentation.*
 
 
-class CodeEnterFragment : DialogFragment() {
+class CodeEnterFragment : BaseDialogFragment(), CodeVerificationView {
     private lateinit var submitButton: Button
     private lateinit var checkBox: CheckBox
     private lateinit var codeEditText: EditText
     private lateinit var progressBar: ProgressBar
     private lateinit var dialogContent: View
 
-    private lateinit var viewModel: CodeVerificationViewModel
+    private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
+    private val presenter by lazy { CodeVerificationPresenter(UI, this, repository) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(context!!)
@@ -43,26 +40,22 @@ class CodeEnterFragment : DialogFragment() {
                     submitButton = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
                     submitButton.isEnabled = false
                     // the listener is set here to prevent the dialog from being dismissed on click
-                    submitButton.setOnClickListener { _ -> verifyCode() }
+                    submitButton.setOnClickListener { _ ->
+                        val code = codeEditText.text.toString()
+                        presenter.verifyCode(code)
+                    }
                 }
             }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        viewModel = ViewModelProviders.of(this, AndroidViewModelFactory.getInstance(activity!!.application))
-            .get(CodeVerificationViewModel::class.java)
+    override fun setProgress(isLoading: Boolean) {
+        progressBar.visibility = if (isLoading) VISIBLE else INVISIBLE
+        dialogContent.visibility = if (isLoading) INVISIBLE else VISIBLE
+        submitButton.visibility = if (isLoading) INVISIBLE else VISIBLE
     }
 
-    private fun verifyCode() {
-        launch(UI) {
-            progressBar.visibility = VISIBLE
-            dialogContent.visibility = INVISIBLE
-            submitButton.visibility = INVISIBLE
-            viewModel.verifyCode(codeEditText.text.toString())
-            dismiss()
-        }
+    override fun dismissView() {
+        dismiss()
     }
 
     private fun toggleSubmitButtonEnable() {
@@ -104,6 +97,7 @@ class CodeEnterFragment : DialogFragment() {
                                     }
 
                                     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                                        // TODO: This is logic, should be on the presenter
                                         toggleSubmitButtonEnable()
                                     }
 

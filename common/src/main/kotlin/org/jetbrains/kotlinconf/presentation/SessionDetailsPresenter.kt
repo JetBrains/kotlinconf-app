@@ -1,9 +1,8 @@
 package org.jetbrains.kotlinconf.presentation
 
-import kotlin.coroutines.*
-import kotlinx.coroutines.*
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.data.*
+import kotlin.coroutines.*
 import kotlin.properties.Delegates.observable
 
 class SessionDetailsPresenter(
@@ -21,15 +20,15 @@ class SessionDetailsPresenter(
 
     fun onCreate() {
         refreshDataFromRepo()
-//        repository.addUpdateListener(onRefreshListener)
+        repository.onRefreshListeners += onRefreshListener
     }
 
     fun onDestroy() {
-//        repository.removeUpdateListener(onRefreshListener)
+        repository.onRefreshListeners -= onRefreshListener
     }
 
-    fun rateSession(newRating: SessionRating) {
-        launch(uiContext) {
+    fun rateSessionClicked(newRating: SessionRating) {
+        launchAndCatch(uiContext, view::showError) {
             view.setRatingClickable(false)
             if (rating != newRating) {
                 rating = newRating
@@ -39,22 +38,24 @@ class SessionDetailsPresenter(
                 repository.removeRating(sessionId)
             }
             view.setupRatingButtons(rating)
+        } finally {
             view.setRatingClickable(true)
         }
     }
 
     fun onFavoriteButtonClicked() {
-        launch(uiContext) {
+        launchAndCatch(uiContext, view::showError) {
             isFavorite = !isFavorite
             repository.setFavorite(session.id, isFavorite)
         }
     }
 
     private fun refreshDataFromRepo() {
-        session = repository.getSessionById(sessionId)
-        view.updateView(session)
-        isFavorite = repository.isFavorite(sessionId)
+        session = repository.sessions?.firstOrNull { it.id == sessionId } ?: return
+        view.updateView(repository.loggedIn, session)
+        rating = repository.getRating(sessionId)
+        view.setupRatingButtons(rating)
+        isFavorite = repository.favorites?.any { it.id == sessionId } ?: false
         rating = repository.getRating(sessionId)
     }
-
 }
