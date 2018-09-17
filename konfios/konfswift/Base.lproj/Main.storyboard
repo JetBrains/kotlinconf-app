@@ -466,9 +466,9 @@ asdasd</string>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="wOx-wg-eax"/>
                                                 </constraints>
-                                                <string key="text">Pier 27
-The Embarcadero
-San Francisco, CA 94111</string>
+                                                <string key="text">BEURS VAN BERLAGE
+Amsterdam
+Netherlands</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -605,6 +605,7 @@ San Francisco, CA 94111</string>
                     <navigationItem key="navigationItem" title="About" id="g9G-aD-csg"/>
                     <connections>
                         <outlet property="badge" destination="LNA-Fu-xht" id="xUg-dc-dbi"/>
+                        <outlet property="info" destination="MBy-YN-eCH" id="BYY-gz-Znl"/>
                         <outlet property="map" destination="d2A-bP-WLO" id="Bgt-ub-mAN"/>
                     </connections>
                 </viewController>
@@ -1827,7 +1828,7 @@ END OF TERMS AND CONDITIONS</string>
     <resources>
         <image name="bad" width="40" height="40"/>
         <image name="good" width="40" height="40"/>
-        <image name="info_header" width="438" height="256"/>
+        <image name="info_header" width="360" height="175"/>
         <image name="soso" width="40" height="40"/>
         <image name="star_empty" width="25" height="25"/>
     </resources>
