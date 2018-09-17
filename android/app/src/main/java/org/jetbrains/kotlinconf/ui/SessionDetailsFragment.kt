@@ -10,29 +10,16 @@ import android.support.v4.app.*
 import android.support.v7.app.*
 import android.support.v7.widget.Toolbar
 import android.view.*
+import android.view.View.*
 import android.widget.*
 import com.bumptech.glide.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.android.*
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
+import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.applyRecursively
-import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.design.*
-import org.jetbrains.anko.dimen
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.imageButton
-import org.jetbrains.anko.imageResource
-import org.jetbrains.anko.imageView
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.margin
-import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.support.v4.*
-import org.jetbrains.anko.textColor
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.verticalLayout
-import org.jetbrains.anko.view
-import org.jetbrains.anko.wrapContent
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.R
 import org.jetbrains.kotlinconf.data.*
@@ -50,6 +37,9 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
     private val speakerImageViews: MutableList<ImageView> = mutableListOf()
     private lateinit var collapsingToolbar: CollapsingToolbarLayout
     private lateinit var favoriteButton: FloatingActionButton
+    private lateinit var votingButtonsLayout: LinearLayout
+    private lateinit var votingPromptLayout: LinearLayout
+    private lateinit var verifyCodeButton: Button
 
     private lateinit var goodButton: ImageButton
     private lateinit var badButton: ImageButton
@@ -67,6 +57,9 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         goodButton.setOnClickListener { presenter.rateSessionClicked(GOOD) }
         okButton.setOnClickListener { presenter.rateSessionClicked(OK) }
         badButton.setOnClickListener { presenter.rateSessionClicked(BAD) }
+        verifyCodeButton.setOnClickListener {
+            CodeEnterFragment().show(fragmentManager, CodeEnterFragment.TAG)
+        }
         presenter.onCreate()
     }
 
@@ -110,10 +103,13 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         detailsTextView.text = listOfNotNull(session.roomText, session.category).joinToString(", ")
         descriptionTextView.text = session.descriptionText
 
+        votingButtonsLayout.visibility = if (loggedIn) VISIBLE else GONE
+        votingPromptLayout.visibility = if (loggedIn) GONE else VISIBLE
+
         val online = context?.let { it.isConnected?.and(!it.isAirplaneModeOn) } ?: false
 
         for (button in listOf(goodButton, okButton, badButton, favoriteButton)) {
-            button.visibility = if(loggedIn && online) View.VISIBLE else View.GONE
+            button.visibility = if (loggedIn && online) View.VISIBLE else View.GONE
         }
 
         session.speakers
@@ -141,7 +137,7 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
 
     private fun ImageView.showSpeakerImage(imageUrl: String) {
         visibility = View.VISIBLE
-        Glide.with(context)
+        Glide.with(this@SessionDetailsFragment)
                 .load(imageUrl)
                 .centerCrop()
                 .into(this)
@@ -243,15 +239,31 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
                             topMargin = dip(20)
                         }
 
-                        linearLayout {
+                        votingPromptLayout = verticalLayout {
+                            textView(R.string.voting_text) {
+                                textSize = 18f
+                            }
+                            verifyCodeButton = button(R.string.verify_button_text) {
+                                textColor = theme.getColor(R.attr.colorAccent)
+                                backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
+                            }.lparams(width = matchParent, height = wrapContent) {
+                                topMargin = dip(10)
+                            }
+                        }.lparams(width = matchParent, height = wrapContent) {
+                            topMargin = dip(20)
+                            bottomMargin = dip(80)
+                            gravity = Gravity.CENTER_HORIZONTAL
+                        }
+
+                        votingButtonsLayout = linearLayout {
                             goodButton = imageButton {
-                                imageResource = R.drawable.ic_thumb_up_white_24dp
+                                imageResource = R.drawable.ic_happy
                             }
                             okButton = imageButton {
-                                imageResource = R.drawable.ic_sentiment_neutral_white_36dp
+                                imageResource = R.drawable.ic_neutral
                             }
                             badButton = imageButton {
-                                imageResource = R.drawable.ic_thumb_down_white_24dp
+                                imageResource = R.drawable.ic_sad
                             }
                         }.lparams {
                             topMargin = dip(10)
@@ -273,6 +285,9 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
                     }.lparams(width = matchParent, height = wrapContent) {
                         margin = dip(20)
                     }.applyRecursively { view ->
+                        // Making a Button widget selectable causes problems with clicking
+                        // (Button class extends TextView)
+                        if (view is Button) return@applyRecursively
                         (view as? TextView)?.setTextIsSelectable(true)
                     }
 
