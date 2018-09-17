@@ -17,19 +17,22 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId 'org.jetbrains.kotlinconf'
+        applicationId 'com.jetbrains.kotlinconf'
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 7
-        versionName '1.0.6'
-        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
+        versionCode 8
+        versionName '1.0.7'
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
-
+        debug {
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -53,13 +56,17 @@ android {
 dependencies {
     expectedBy project(':common')
 
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
     implementation 'com.android.support:support-v4:28.0.0-rc02'
     implementation 'com.android.support:recyclerview-v7:28.0.0-rc02'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.android.support:design:28.0.0-rc02'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+
+    kapt 'android.arch.lifecycle:compiler:1.1.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
@@ -78,8 +85,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation "io.ktor:ktor-client-android:$ktor_version"
     implementation "io.ktor:ktor-client-gson:$ktor_version"
-
-    api "io.ktor:ktor-client-json-jvm:$ktor_version"
+    implementation "io.ktor:ktor-client-json-jvm:$ktor_version"
 
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
