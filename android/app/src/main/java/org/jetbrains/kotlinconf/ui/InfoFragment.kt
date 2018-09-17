@@ -53,6 +53,17 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
             backgroundColor = Color.WHITE
             themedAppBarLayout(R.style.ThemeOverlay_AppCompat_ActionBar) {
                 multilineCollapsingToolbarLayout {
+                    expandedTitleMarginStart = dip(20)
+                    expandedTitleMarginEnd = dip(20)
+                    setExpandedTitleTextAppearance(R.style.SessionTitleExpanded)
+                    addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+                        title = if (totalScrollRange + verticalOffset <= 50) {
+                            getString(R.string.app_name)
+                        } else {
+                            ""
+                        }
+                    })
+
                     relativeLayout {
                         backgroundColor = Color.WHITE
                         contentScrim = ColorDrawable(Color.WHITE)
@@ -69,8 +80,8 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                     toolbar = toolbar {
                         layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                matchParent,
-                                context.dimen(context.getResourceId(R.attr.actionBarSize))
+                            matchParent,
+                            dimen(context.getResourceId(R.attr.actionBarSize))
                         ).apply {
                             collapseMode = COLLAPSE_MODE_PIN
                         }
