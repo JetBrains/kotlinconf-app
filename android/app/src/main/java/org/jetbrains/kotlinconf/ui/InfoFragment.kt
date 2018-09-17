@@ -135,6 +135,9 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                     linearLayout {
                         relativeLayout {
+                            backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
+                            padding = dip(30)
+
                             imageView(R.drawable.ic_web) {
                                 id = R.id.icon_website
                             }.lparams(width = dip(24), height = dip(24)) {
@@ -152,8 +155,9 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                             setOnClickListener {
                                 val websiteIntent = Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse("https://kotlinconf.com"))
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://kotlinconf.com")
+                                )
                                 startActivity(websiteIntent)
                             }
 
@@ -162,6 +166,9 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         }
 
                         relativeLayout {
+                            backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
+                            padding = dip(30)
+
                             imageView(R.drawable.ic_twitter) {
                                 id = R.id.icon_twitter
                             }.lparams(width = dip(24), height = dip(24)) {
@@ -178,15 +185,18 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                             }
 
                             setOnClickListener {
-                                val twitterIntent = Intent(Intent.ACTION_VIEW,
-                                        Uri.parse("twitter://user?screen_name=kotlinconf"))
+                                val twitterIntent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("twitter://user?screen_name=kotlinconf")
+                                )
                                 twitterIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 if (twitterIntent.resolveActivity(context.packageManager) != null) {
                                     startActivity(twitterIntent)
                                 } else {
                                     val webTwitterIntent = Intent(
-                                            Intent.ACTION_VIEW,
-                                            Uri.parse("https://twitter.com/kotlinconf"))
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://twitter.com/kotlinconf")
+                                    )
                                     startActivity(webTwitterIntent)
                                 }
                             }
@@ -194,9 +204,7 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         }.lparams(width = 0, height = wrapContent) {
                             weight = 0.5f
                         }
-                    }.lparams(width = matchParent, height = wrapContent) {
-                        margin = dip(30)
-                    }
+                    }.lparams(width = matchParent, height = wrapContent)
 
                     view {
                         backgroundResource = context.getResourceId(android.R.attr.listDivider)
