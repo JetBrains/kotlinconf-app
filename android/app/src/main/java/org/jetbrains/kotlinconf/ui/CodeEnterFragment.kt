@@ -1,31 +1,22 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.app.Dialog
-import android.content.Intent
-import android.graphics.Color
-import android.net.Uri
-import android.os.Bundle
+import android.app.*
+import android.content.*
+import android.graphics.*
+import android.net.*
+import android.os.*
 import android.support.v7.app.AlertDialog
-import android.text.Editable
-import android.text.InputType
-import android.text.TextWatcher
-import android.view.Gravity
-import android.view.Gravity.CENTER
-import android.view.View
+import android.text.*
+import android.view.*
+import android.view.Gravity.*
 import android.view.View.*
-import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.ProgressBar
-import kotlinx.coroutines.android.UI
+import android.view.inputmethod.EditorInfo.*
+import android.widget.*
+import kotlinx.coroutines.android.*
 import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.kotlinconf.KotlinConfApplication
-import org.jetbrains.kotlinconf.R
-import org.jetbrains.kotlinconf.getResourceId
-import org.jetbrains.kotlinconf.presentation.CodeVerificationPresenter
-import org.jetbrains.kotlinconf.presentation.CodeVerificationView
+import org.jetbrains.anko.support.v4.*
+import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.presentation.*
 
 
 class CodeEnterFragment : BaseDialogFragment(), CodeVerificationView {

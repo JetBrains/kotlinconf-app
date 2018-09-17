@@ -1,28 +1,24 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.net.Uri
-import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
-import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import android.content.*
+import android.graphics.*
+import android.graphics.drawable.*
+import android.net.*
+import android.os.*
+import android.support.design.widget.*
+import android.support.design.widget.AppBarLayout.LayoutParams.*
+import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.*
+import android.support.v4.app.*
+import android.support.v7.app.*
 import android.support.v7.widget.Toolbar
-import android.text.util.Linkify
+import android.text.util.*
 import android.view.*
-import android.widget.ImageView
+import android.widget.*
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.design.coordinatorLayout
-import org.jetbrains.anko.design.themedAppBarLayout
-import org.jetbrains.anko.support.v4.nestedScrollView
+import org.jetbrains.anko.design.*
+import org.jetbrains.anko.support.v4.*
 import org.jetbrains.kotlinconf.*
 
 class InfoFragment : Fragment(), AnkoComponent<Context> {

@@ -1,9 +1,7 @@
 package org.jetbrains.kotlinconf.presentation
 
-import org.jetbrains.kotlinconf.SessionModel
-import org.jetbrains.kotlinconf.data.SessionRating
-import org.jetbrains.kotlinconf.data.Vote
-import org.jetbrains.kotlinconf.data.VotingCode
+import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.data.*
 
 interface DataRepository {
     val sessions: List<SessionModel>?

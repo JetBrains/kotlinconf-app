@@ -1,6 +1,6 @@
 package org.jetbrains.kotlinconf.presentation
 
-import org.jetbrains.kotlinconf.SessionModel
+import org.jetbrains.kotlinconf.*
 
 fun List<SessionModel>.filter(searchQuery: String?): List<SessionModel> {
     searchQuery?.takeUnless { it.isEmpty() } ?: return this

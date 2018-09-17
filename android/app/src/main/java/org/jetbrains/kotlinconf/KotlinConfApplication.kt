@@ -1,12 +1,12 @@
 package org.jetbrains.kotlinconf
 
-import android.app.Application
-import android.content.Context
-import android.support.multidex.MultiDex
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.kotlinconf.model.KotlinConfDataRepository
-import org.jetbrains.kotlinconf.presentation.DataRepository
-import org.jetbrains.kotlinconf.storage.PlatformSettings
+import android.app.*
+import android.content.*
+import android.support.multidex.*
+import org.jetbrains.anko.*
+import org.jetbrains.kotlinconf.model.*
+import org.jetbrains.kotlinconf.presentation.*
+import org.jetbrains.kotlinconf.storage.*
 
 class KotlinConfApplication : Application(), AnkoLogger {
 

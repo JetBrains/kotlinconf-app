@@ -1,8 +1,7 @@
 package org.jetbrains.kotlinconf
 
-import io.ktor.util.date.GMTDate
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import io.ktor.util.date.*
+import kotlinx.serialization.*
 import org.jetbrains.kotlinconf.data.*
 
 @Serializable

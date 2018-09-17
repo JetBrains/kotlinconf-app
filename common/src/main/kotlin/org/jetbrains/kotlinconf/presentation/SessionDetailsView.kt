@@ -1,7 +1,7 @@
 package org.jetbrains.kotlinconf.presentation
 
-import org.jetbrains.kotlinconf.SessionModel
-import org.jetbrains.kotlinconf.data.SessionRating
+import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.data.*
 
 interface SessionDetailsView : BaseView {
     fun updateView(loggedIn: Boolean, session: SessionModel)

@@ -1,30 +1,23 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.os.Bundle
-import android.os.Parcelable
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import com.brandongogetap.stickyheaders.StickyLayoutManager
-import com.brandongogetap.stickyheaders.exposed.StickyHeader
-import com.brandongogetap.stickyheaders.exposed.StickyHeaderHandler
-import kotlinx.coroutines.android.UI
+import android.content.*
+import android.graphics.*
+import android.graphics.drawable.*
+import android.os.*
+import android.support.v4.widget.*
+import android.support.v7.widget.*
+import android.support.v7.widget.RecyclerView.*
+import android.view.*
+import android.widget.*
+import com.brandongogetap.stickyheaders.*
+import com.brandongogetap.stickyheaders.exposed.*
+import kotlinx.coroutines.android.*
 import org.jetbrains.anko.*
-import org.jetbrains.anko.recyclerview.v7.recyclerView
-import org.jetbrains.anko.support.v4.swipeRefreshLayout
+import org.jetbrains.anko.recyclerview.v7.*
+import org.jetbrains.anko.support.v4.*
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.presentation.NavigationManager
-import org.jetbrains.kotlinconf.presentation.SearchQueryProvider
-import org.jetbrains.kotlinconf.presentation.SessionListPresenter
-import org.jetbrains.kotlinconf.presentation.SessionListView
+import org.jetbrains.kotlinconf.R
+import org.jetbrains.kotlinconf.presentation.*
 import kotlin.properties.Delegates.observable
 
 abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, SessionListView {

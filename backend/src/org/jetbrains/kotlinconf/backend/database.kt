@@ -3,7 +3,6 @@ package org.jetbrains.kotlinconf.backend
 import com.zaxxer.hikari.*
 import io.ktor.application.*
 import kotlinx.coroutines.*
-import kotlin.coroutines.*
 import org.jetbrains.kotlinconf.data.*
 import org.jetbrains.squash.connection.*
 import org.jetbrains.squash.definition.*

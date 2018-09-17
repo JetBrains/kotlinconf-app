@@ -1,6 +1,6 @@
 package org.jetbrains.kotlinconf.data
 
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 
 @Serializable
 data class CategoryItem(

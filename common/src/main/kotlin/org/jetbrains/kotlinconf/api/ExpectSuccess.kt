@@ -1,11 +1,10 @@
 package org.jetbrains.kotlinconf.api
 
-import io.ktor.client.HttpClient
-import io.ktor.client.features.HttpClientFeature
-import io.ktor.client.response.HttpResponse
-import io.ktor.client.response.HttpResponsePipeline
-import io.ktor.http.isSuccess
-import io.ktor.util.AttributeKey
+import io.ktor.client.*
+import io.ktor.client.features.*
+import io.ktor.client.response.*
+import io.ktor.http.*
+import io.ktor.util.*
 
 object ExpectSuccess : HttpClientFeature<Unit, ExpectSuccess> {
     override val key: AttributeKey<ExpectSuccess> = AttributeKey("ExpectSuccess")

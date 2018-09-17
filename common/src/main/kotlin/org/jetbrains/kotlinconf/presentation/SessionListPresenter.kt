@@ -1,8 +1,7 @@
 package org.jetbrains.kotlinconf.presentation
 
-import org.jetbrains.kotlinconf.SessionModel
-import org.jetbrains.kotlinconf.launchAndCatch
-import kotlin.coroutines.CoroutineContext
+import org.jetbrains.kotlinconf.*
+import kotlin.coroutines.*
 
 class SessionListPresenter(
     private val uiContext: CoroutineContext,

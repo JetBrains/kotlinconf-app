@@ -1,21 +1,18 @@
 package org.jetbrains.kotlinconf
 
-import android.content.Context
-import android.content.res.Resources
-import android.net.ConnectivityManager
-import android.os.Build
-import android.os.Build.VERSION_CODES.N
-import android.provider.Settings
-import android.support.annotation.AttrRes
-import android.support.annotation.ColorInt
-import android.support.annotation.RequiresApi
-import android.text.Html
-import android.text.Spanned
-import android.util.TypedValue
-import android.view.ViewManager
-import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.custom.ankoView
+import android.content.*
+import android.content.res.*
+import android.net.*
+import android.os.*
+import android.os.Build.VERSION_CODES.*
+import android.provider.*
+import android.support.annotation.*
+import android.text.*
+import android.util.*
+import android.view.*
+import net.opacapp.multilinecollapsingtoolbar.*
+import org.jetbrains.anko.*
+import org.jetbrains.anko.custom.*
 
 inline fun ViewManager.multilineCollapsingToolbarLayout(
     theme: Int = 0,

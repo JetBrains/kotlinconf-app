@@ -1,7 +1,7 @@
 package org.jetbrains.kotlinconf.storage
 
-import android.content.Context
-import android.preference.PreferenceManager
+import android.content.*
+import android.preference.*
 
 actual class PlatformSettings constructor(private val context: Context) : Settings {
 

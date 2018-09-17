@@ -1,7 +1,6 @@
 package org.jetbrains.kotlinconf
 
-import io.ktor.util.date.GMTDate
-import io.ktor.util.date.Month
+import io.ktor.util.date.*
 
 fun Pair<GMTDate, GMTDate>.toReadableString(): String = buildString {
     val (from, to) = this@toReadableString

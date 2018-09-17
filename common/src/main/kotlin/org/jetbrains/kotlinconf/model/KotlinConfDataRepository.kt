@@ -1,22 +1,15 @@
 package org.jetbrains.kotlinconf.model
 
-import io.ktor.client.call.ReceivePipelineFail
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.JSON
-import kotlinx.serialization.list
-import kotlinx.serialization.serializer
-import org.jetbrains.kotlinconf.SessionModel
-import org.jetbrains.kotlinconf.allSessions
+import io.ktor.client.call.*
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
+import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.api.*
-import org.jetbrains.kotlinconf.data.Favorite
-import org.jetbrains.kotlinconf.data.SessionRating
-import org.jetbrains.kotlinconf.data.Vote
-import org.jetbrains.kotlinconf.data.VotingCode
-import org.jetbrains.kotlinconf.favoriteSessions
-import org.jetbrains.kotlinconf.presentation.DataRepository
-import org.jetbrains.kotlinconf.storage.Settings
+import org.jetbrains.kotlinconf.data.*
+import org.jetbrains.kotlinconf.presentation.*
+import org.jetbrains.kotlinconf.storage.*
+import kotlin.properties.*
 import kotlin.properties.Delegates.observable
-import kotlin.properties.ReadWriteProperty
 
 class KotlinConfDataRepository(
     private val settings: Settings

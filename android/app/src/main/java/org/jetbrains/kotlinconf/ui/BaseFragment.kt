@@ -1,12 +1,10 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
-import org.jetbrains.anko.toast
-import org.jetbrains.kotlinconf.BuildConfig
-import org.jetbrains.kotlinconf.R
+import android.support.v4.app.*
+import org.jetbrains.anko.*
+import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.api.*
-import org.jetbrains.kotlinconf.presentation.BaseView
+import org.jetbrains.kotlinconf.presentation.*
 
 abstract class BaseFragment : Fragment(), BaseView {
     override fun showError(error: Throwable) {

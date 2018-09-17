@@ -1,9 +1,8 @@
 package org.jetbrains.kotlinconf.presentation
 
-import org.jetbrains.kotlinconf.SessionModel
-import org.jetbrains.kotlinconf.data.SessionRating
-import org.jetbrains.kotlinconf.launchAndCatch
-import kotlin.coroutines.CoroutineContext
+import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.data.*
+import kotlin.coroutines.*
 import kotlin.properties.Delegates.observable
 
 class SessionDetailsPresenter(
