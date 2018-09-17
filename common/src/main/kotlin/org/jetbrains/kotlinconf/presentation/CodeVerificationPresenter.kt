@@ -4,9 +4,9 @@ import org.jetbrains.kotlinconf.launchAndCatch
 import kotlin.coroutines.CoroutineContext
 
 class CodeVerificationPresenter(
-        private val uiContext: CoroutineContext,
-        private val view: CodeVerificationView,
-        private val repository: DataRepository
+    private val uiContext: CoroutineContext,
+    private val view: CodeVerificationView,
+    private val repository: DataRepository
 ) {
     fun verifyCode(code: String) {
         launchAndCatch(uiContext, view::showError) {

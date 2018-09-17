@@ -14,8 +14,6 @@ import java.time.*
 import java.util.*
 import java.util.concurrent.*
 
-val apiDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
-
 @Volatile
 private var sessionizeData: SessionizeData? = null
 val comeBackLater = HttpStatusCode(477, "Come Back Later")

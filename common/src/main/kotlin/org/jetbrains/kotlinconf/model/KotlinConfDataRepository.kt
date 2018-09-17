@@ -5,20 +5,21 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.JSON
 import kotlinx.serialization.list
 import kotlinx.serialization.serializer
-import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.SessionModel
+import org.jetbrains.kotlinconf.allSessions
 import org.jetbrains.kotlinconf.api.*
 import org.jetbrains.kotlinconf.data.Favorite
 import org.jetbrains.kotlinconf.data.SessionRating
 import org.jetbrains.kotlinconf.data.Vote
 import org.jetbrains.kotlinconf.data.VotingCode
+import org.jetbrains.kotlinconf.favoriteSessions
 import org.jetbrains.kotlinconf.presentation.DataRepository
 import org.jetbrains.kotlinconf.storage.Settings
 import kotlin.properties.Delegates.observable
 import kotlin.properties.ReadWriteProperty
-import kotlin.random.Random
 
 class KotlinConfDataRepository(
-        private val settings: Settings
+    private val settings: Settings
 ) : DataRepository {
     private val api = KotlinConfApi()
 
@@ -29,7 +30,9 @@ class KotlinConfDataRepository(
 
     override var codePromptShown: Boolean
         get() = settings.getBoolean("codePromptShownKey", false)
-        set(value) { settings.putBoolean("codePromptShownKey", value) }
+        set(value) {
+            settings.putBoolean("codePromptShownKey", value)
+        }
 
     override val loggedIn: Boolean
         get() = userId != null
@@ -61,7 +64,7 @@ class KotlinConfDataRepository(
             update()
         } catch (t: Throwable) {
             val responseStatus = (t.cause as? ApiException)?.response?.status?.value
-            if(responseStatus == 406) {
+            if (responseStatus == 406) {
                 throw IncorrectCode()
             } else {
                 throw FailedToVerifyCode()
@@ -70,9 +73,9 @@ class KotlinConfDataRepository(
     }
 
     override fun getRating(sessionId: String): SessionRating? =
-            votes?.find { sessionId == it.sessionId }
-                    ?.rating
-                    ?.let { SessionRating.valueOf(it) }
+        votes?.find { sessionId == it.sessionId }
+            ?.rating
+            ?.let { SessionRating.valueOf(it) }
 
     override suspend fun addRating(sessionId: String, rating: SessionRating) {
         val userId = userId ?: throw Unauthorized()
@@ -114,7 +117,7 @@ class KotlinConfDataRepository(
             favorites = if (isFavorite) {
                 api.postFavorite(favorite, userId)
                 val favoriteSession = sessions?.firstOrNull { it.id == sessionId }
-                        ?: throw Unauthorized()
+                    ?: throw Unauthorized()
                 favorites.orEmpty().plus(favoriteSession)
             } else {
                 api.deleteFavorite(favorite, userId)
@@ -136,23 +139,23 @@ class KotlinConfDataRepository(
      */
 
     private inline fun <reified T : Any> read(key: String, elementSerializer: KSerializer<T>) = settings
-            .getString(key, "")
-            .takeUnless { it.isBlank() }
-            ?.let {
-                try {
-                    JSON.parse(elementSerializer, it)
-                } catch (_: Throwable) {
-                    null
-                }
+        .getString(key, "")
+        .takeUnless { it.isBlank() }
+        ?.let {
+            try {
+                JSON.parse(elementSerializer, it)
+            } catch (_: Throwable) {
+                null
             }
+        }
 
     private inline fun <reified T : Any> write(key: String, obj: T?, elementSerializer: KSerializer<T>) {
         settings.putString(key, if (obj == null) "" else JSON.stringify(elementSerializer, obj))
     }
 
     private inline fun <reified T : Any> bindToPreferencesByKey(
-            key: String,
-            elementSerializer: KSerializer<T>
+        key: String,
+        elementSerializer: KSerializer<T>
     ): ReadWriteProperty<Any?, T?> = observable(read(key, elementSerializer)) { _, _, new ->
         write(key, new, elementSerializer)
     }

@@ -1,16 +1,16 @@
 package org.jetbrains.kotlinconf.presentation
 
-import kotlin.coroutines.*
-import kotlinx.coroutines.*
-import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.data.*
+import org.jetbrains.kotlinconf.SessionModel
+import org.jetbrains.kotlinconf.data.SessionRating
+import org.jetbrains.kotlinconf.launchAndCatch
+import kotlin.coroutines.CoroutineContext
 import kotlin.properties.Delegates.observable
 
 class SessionDetailsPresenter(
-        private val uiContext: CoroutineContext,
-        private val view: SessionDetailsView,
-        private val sessionId: String,
-        private val repository: DataRepository
+    private val uiContext: CoroutineContext,
+    private val view: SessionDetailsView,
+    private val sessionId: String,
+    private val repository: DataRepository
 ) {
     private lateinit var session: SessionModel
     private var isFavorite: Boolean by observable(false) { _, _, isFavorite ->
