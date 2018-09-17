@@ -17,12 +17,11 @@
     <string name="app_description"><![CDATA[The official KotlinConf 2018 App.<br/><br/>This App was developed amongst other reasons to showcase Kotlin/JVM. Get more information and source code from <a href="https://github.com/jetbrains/kotlinconf-app">github.com/jetbrains/kotlinconf-app</a><br/><br/>Powered by Kotlin/JVM]]></string>
     <string name="libraries">
         KotlinConf application is built using the following open source libraries:\n
+          &#8226; Ktor\n
           &#8226; Anko\n
-          &#8226; Retrofit\n
           &#8226; Glide\n
           &#8226; opacapp/multiline-collapsingtoolbar\n
           &#8226; bgogetap/StickyHeaders\n
-          &#8226; gildor/kotlin-coroutines-retrofit
     </string>
     <string name="apache2_license"><![CDATA[ <p>Apache License<br></br>Version 2.0, January 2004<br></br>
 <a href="http://www.apache.org/licenses/">http://www.apache.org/licenses/</a> </p>
