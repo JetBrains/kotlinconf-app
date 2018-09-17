@@ -60,7 +60,7 @@ class KotlinConfViewModel(
 
     init {
         loadLocalData()
-        launch {
+        launch(UI) {
             update()
         }
     }
