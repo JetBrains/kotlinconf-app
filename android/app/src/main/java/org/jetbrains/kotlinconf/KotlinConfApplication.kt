@@ -1,8 +1,6 @@
 package org.jetbrains.kotlinconf
 
 import android.app.*
-import android.content.*
-import android.support.multidex.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.android.*
 import org.jetbrains.anko.*
@@ -40,11 +38,6 @@ class KotlinConfApplication : Application(), AnkoLogger {
         launch(UI) {
             viewModel.update()
         }
-    }
-
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        MultiDex.install(this)
     }
 
     private fun getUserId(): String {

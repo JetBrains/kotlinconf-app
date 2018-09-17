@@ -1,14 +1,12 @@
 package org.jetbrains.kotlinconf.backend
 
-import com.github.salomonbrys.kotson.*
 import io.ktor.application.*
 import io.ktor.client.*
-import io.ktor.client.call.*
 import io.ktor.client.features.json.*
+import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import org.jetbrains.kotlinconf.data.*
-import java.net.*
 import java.text.*
 import java.time.*
 import java.util.*
@@ -48,7 +46,11 @@ fun Application.launchSyncJob(sessionizeUrl: String, sessionizeInterval: Long) {
     launch(CommonPool) {
         while (true) {
             log.trace("Synchronizing to Sessionize…")
-            synchronizeWithSessionize(sessionizeUrl)
+            try {
+                synchronizeWithSessionize(sessionizeUrl)
+            } catch (cause: Throwable) {
+                cause.printStackTrace()
+            }
             log.trace("Finished loading data from Sessionize.")
             delay(sessionizeInterval, TimeUnit.MINUTES)
         }
@@ -56,10 +58,7 @@ fun Application.launchSyncJob(sessionizeUrl: String, sessionizeInterval: Long) {
 }
 
 suspend fun synchronizeWithSessionize(url: String) {
-    val client = HttpClient()
-    val response = client.call(URL(url)) {}
-    val text = response.receive<String>()
-    var data = gson.fromJson<AllData>(text)
+    var data = client.get<AllData>(url)
     data = data.copy(sessions = data.sessions?.plus(fakeVotingSession))
     sessionizeData = SessionizeData(data)
 }

@@ -101,11 +101,12 @@ class SessionDetailsFragment : Fragment() {
         sessionDetailsViewModel.session.observe(this, this::updateView)
 
         sessionDetailsViewModel.isFavorite.observe(this) { isFavorite ->
-            if (isFavorite == true) {
-                favoriteButton.setImageResource(R.drawable.ic_favorite_white_24dp)
-            } else {
-                favoriteButton.setImageResource(R.drawable.ic_favorite_border_white_24dp)
-            }
+            val resource = if (isFavorite == true)
+                R.drawable.ic_favorite_border_white_24dp
+            else
+                R.drawable.ic_favorite_border_white_24dp
+
+            favoriteButton.setImageResource(resource)
         }
 
         setupRatingButtons(sessionDetailsViewModel.rating.value)

@@ -56,7 +56,7 @@ class CodeEnterFragment : DialogFragment() {
     }
 
     private fun verifyCode() {
-        launch(UI) {
+        launch {
             progressBar.visibility = VISIBLE
             dialogContent.visibility = INVISIBLE
             submitButton.visibility = INVISIBLE
