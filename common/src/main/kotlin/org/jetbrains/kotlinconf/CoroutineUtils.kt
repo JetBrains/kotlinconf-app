@@ -1,7 +1,7 @@
 package org.jetbrains.kotlinconf
 
-import kotlin.coroutines.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 fun launchAndCatch(
         context: CoroutineContext,

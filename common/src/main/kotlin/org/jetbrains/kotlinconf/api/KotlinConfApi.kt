@@ -1,13 +1,16 @@
 package org.jetbrains.kotlinconf.api
 
-import io.ktor.client.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.HttpClient
+import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.request.*
-import io.ktor.client.response.*
+import io.ktor.client.response.HttpResponse
 import io.ktor.http.*
-import kotlinx.io.core.*
-import org.jetbrains.kotlinconf.data.*
+import kotlinx.io.core.use
+import org.jetbrains.kotlinconf.data.AllData
+import org.jetbrains.kotlinconf.data.Favorite
+import org.jetbrains.kotlinconf.data.Vote
+import org.jetbrains.kotlinconf.data.VotingCode
 
 internal expect val END_POINT: String
 
