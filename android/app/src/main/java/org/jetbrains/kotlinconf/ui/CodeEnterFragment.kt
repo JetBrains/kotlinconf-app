@@ -19,7 +19,6 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ProgressBar
 import kotlinx.coroutines.android.UI
-import kotlinx.coroutines.launch
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.UI
 import org.jetbrains.kotlinconf.KotlinConfApplication
@@ -41,21 +40,21 @@ class CodeEnterFragment : BaseDialogFragment(), CodeVerificationView {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(context!!)
-                .setView(createView())
-                .setPositiveButton(R.string.submit_button) { _, _ -> }
-                .setNeutralButton(R.string.skip_button) { dialog, _ -> dialog.dismiss() }
-                .create()
-                .apply {
-                    setOnShowListener {
-                        submitButton = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
-                        submitButton.isEnabled = false
-                        // the listener is set here to prevent the dialog from being dismissed on click
-                        submitButton.setOnClickListener { _ ->
-                            val code = codeEditText.text.toString()
-                            presenter.verifyCode(code)
-                        }
+            .setView(createView())
+            .setPositiveButton(R.string.submit_button) { _, _ -> }
+            .setNeutralButton(R.string.skip_button) { dialog, _ -> dialog.dismiss() }
+            .create()
+            .apply {
+                setOnShowListener {
+                    submitButton = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                    submitButton.isEnabled = false
+                    // the listener is set here to prevent the dialog from being dismissed on click
+                    submitButton.setOnClickListener { _ ->
+                        val code = codeEditText.text.toString()
+                        presenter.verifyCode(code)
                     }
                 }
+            }
     }
 
     override fun setProgress(isLoading: Boolean) {
@@ -99,10 +98,10 @@ class CodeEnterFragment : BaseDialogFragment(), CodeVerificationView {
                                 imeOptions = IME_ACTION_DONE
                                 addTextChangedListener(object : TextWatcher {
                                     override fun beforeTextChanged(
-                                            s: CharSequence?,
-                                            start: Int,
-                                            count: Int,
-                                            after: Int
+                                        s: CharSequence?,
+                                        start: Int,
+                                        count: Int,
+                                        after: Int
                                     ) {
                                     }
 

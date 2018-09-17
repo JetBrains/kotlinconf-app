@@ -1,28 +1,32 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.graphics.*
-import android.graphics.drawable.*
-import android.os.*
-import android.support.design.widget.*
-import android.support.design.widget.AppBarLayout.LayoutParams.*
-import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.*
-import android.support.v4.app.*
-import android.support.v7.app.*
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
+import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
+import android.support.design.widget.FloatingActionButton
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.*
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.*
-import com.bumptech.glide.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
+import com.bumptech.glide.Glide
+import kotlinx.coroutines.android.UI
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.design.*
-import org.jetbrains.anko.support.v4.*
+import org.jetbrains.anko.design.coordinatorLayout
+import org.jetbrains.anko.design.floatingActionButton
+import org.jetbrains.anko.design.themedAppBarLayout
+import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.R
-import org.jetbrains.kotlinconf.data.*
+import org.jetbrains.kotlinconf.data.SessionRating
 import org.jetbrains.kotlinconf.data.SessionRating.*
 import org.jetbrains.kotlinconf.presentation.SessionDetailsPresenter
 import org.jetbrains.kotlinconf.presentation.SessionDetailsView
@@ -112,13 +116,13 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
 
 
         session.speakers
-                .takeIf { it.size < 3 }
-                ?.map { it.profilePicture }
-                ?.apply {
-                    forEachIndexed { index, imageUrl ->
-                        imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
-                    }
+            .takeIf { it.size < 3 }
+            ?.map { it.profilePicture }
+            ?.apply {
+                forEachIndexed { index, imageUrl ->
+                    imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
                 }
+            }
     }
 
     private val SessionModel.roomText: String?
@@ -137,15 +141,15 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
     private fun ImageView.showSpeakerImage(imageUrl: String) {
         visibility = View.VISIBLE
         Glide.with(this@SessionDetailsFragment)
-                .load(imageUrl)
-                .centerCrop()
-                .into(this)
+            .load(imageUrl)
+            .centerCrop()
+            .into(this)
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return UI {
             coordinatorLayout {
@@ -180,8 +184,8 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
                         view {
                             backgroundResource = R.drawable.appbar_buttons_scrim
                             layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                    matchParent,
-                                    dimen(context.getResourceId(R.attr.actionBarSize))
+                                matchParent,
+                                dimen(context.getResourceId(R.attr.actionBarSize))
                             ).apply {
                                 gravity = Gravity.TOP
                             }
@@ -196,8 +200,8 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
 
                         toolbar = toolbar {
                             layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                    matchParent,
-                                    dimen(context.getResourceId(R.attr.actionBarSize))
+                                matchParent,
+                                dimen(context.getResourceId(R.attr.actionBarSize))
                             ).apply {
                                 collapseMode = COLLAPSE_MODE_PIN
                             }

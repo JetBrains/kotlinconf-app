@@ -1,9 +1,5 @@
 package org.jetbrains.kotlinconf
 
-import android.annotation.SuppressLint
-import android.app.ActivityManager
-import android.app.AppOpsManager
-import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.res.Resources
 import android.net.ConnectivityManager
@@ -16,7 +12,6 @@ import android.support.annotation.RequiresApi
 import android.text.Html
 import android.text.Spanned
 import android.util.TypedValue
-import android.view.View
 import android.view.ViewManager
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
 import org.jetbrains.anko.AnkoContext

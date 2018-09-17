@@ -21,7 +21,7 @@ abstract class BaseDialogFragment : DialogFragment(), BaseView {
 }
 
 private fun Fragment.commonShowError(error: Throwable) {
-    if(BuildConfig.DEBUG) error.printStackTrace()
+    if (BuildConfig.DEBUG) error.printStackTrace()
     val messageId: Int = when (error) {
         is Unauthorized -> R.string.unauthorized_error
         is CannotFavorite -> R.string.cannot_favorite_error

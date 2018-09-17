@@ -39,17 +39,18 @@ fun GMTDate.toReadableDateTimeString() = "${toReadableDateString()} ${toReadable
  * According to mask: "yyyy-MM-dd'T'HH:mm:ss"
  */
 fun String.parseDate(): GMTDate {
-    fun formatError(): Nothing = throw Error("Format of $this is not correct")
-    val year = substring(0, 4).toIntOrNull() ?: formatError()
-    val month = substring(5, 7).toIntOrNull() ?: formatError()
-    val day = substring(8, 10).toIntOrNull() ?: formatError()
+    val year = substring(0, 4).toIntOrFormatError()
+    val month = substring(5, 7).toIntOrFormatError()
+    val day = substring(8, 10).toIntOrFormatError()
 
-    val hour = substring(11, 13).toIntOrNull() ?: formatError()
-    val minute = substring(14, 16).toIntOrNull() ?: formatError()
-    val second = substring(17, 19).toIntOrNull() ?: formatError()
+    val hour = substring(11, 13).toIntOrFormatError()
+    val minute = substring(14, 16).toIntOrFormatError()
+    val second = substring(17, 19).toIntOrFormatError()
 
     return GMTDate(second, minute, hour, day, Month.from(month - 1), year)
 }
+
+fun String.toIntOrFormatError() = toIntOrNull() ?: throw Error("Format of $this is not correct")
 
 fun GMTDate.parseToString(): String {
     val monthPart = "${month.ordinal + 1}".padStart(2, '0')

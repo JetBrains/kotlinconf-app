@@ -1,6 +1,6 @@
 package org.jetbrains.kotlinconf.data
 
-import kotlinx.serialization.*
+import kotlinx.serialization.Serializable
 
 // This format is enforced by Sessionize and it should not be changed unless we extract Sessionize DTO
 @Serializable

@@ -1,27 +1,30 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.arch.lifecycle.*
-import android.arch.lifecycle.ViewModelProvider.*
-import android.content.*
-import android.graphics.*
-import android.graphics.drawable.*
-import android.os.*
-import android.support.v4.app.*
-import android.support.v4.widget.*
-import android.support.v7.widget.*
-import android.support.v7.widget.RecyclerView.*
-import android.view.*
-import android.widget.*
-import com.brandongogetap.stickyheaders.*
-import com.brandongogetap.stickyheaders.exposed.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.android.*
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.os.Bundle
+import android.os.Parcelable
+import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import com.brandongogetap.stickyheaders.StickyLayoutManager
+import com.brandongogetap.stickyheaders.exposed.StickyHeader
+import com.brandongogetap.stickyheaders.exposed.StickyHeaderHandler
+import kotlinx.coroutines.android.UI
 import org.jetbrains.anko.*
-import org.jetbrains.anko.recyclerview.v7.*
-import org.jetbrains.anko.support.v4.*
+import org.jetbrains.anko.recyclerview.v7.recyclerView
+import org.jetbrains.anko.support.v4.swipeRefreshLayout
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.R
-import org.jetbrains.kotlinconf.presentation.*
+import org.jetbrains.kotlinconf.presentation.NavigationManager
+import org.jetbrains.kotlinconf.presentation.SearchQueryProvider
+import org.jetbrains.kotlinconf.presentation.SessionListPresenter
+import org.jetbrains.kotlinconf.presentation.SessionListView
 import kotlin.properties.Delegates.observable
 
 abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, SessionListView {
@@ -84,9 +87,9 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return createView(AnkoContext.create(activity!!))
     }
@@ -103,8 +106,8 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
     }
 
     class SessionsAdapter(
-            private val context: Context,
-            private val onSessionClick: (SessionModel) -> Unit
+        private val context: Context,
+        private val onSessionClick: (SessionModel) -> Unit
     ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), StickyHeaderHandler {
 
         private var _data: List<*> = emptyList<Any>()
@@ -114,9 +117,9 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
             set(value) {
                 field = value
                 _data = field
-                        .sortedWith(compareBy({ it.startsAt.timestamp }, { it.room }, { it.title }))
-                        .groupBy { it.startsAt.toReadableDateString() }
-                        .flatMap { (day, sessions) -> listOf(HeaderItem(day)) + sessions }
+                    .sortedWith(compareBy({ it.startsAt.timestamp }, { it.room }, { it.title }))
+                    .groupBy { it.startsAt.toReadableDateString() }
+                    .flatMap { (day, sessions) -> listOf(HeaderItem(day)) + sessions }
 
                 notifyDataSetChanged()
             }
@@ -128,15 +131,15 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
                     with(holder) {
                         setTitle(session.title)
                         val detailStrings: List<String> =
-                                session.speakers.map { it.fullName } + listOfNotNull(session.roomText)
+                            session.speakers.map { it.fullName } + listOfNotNull(session.roomText)
 
                         setDetails(detailStrings.joinToString(", "))
                         setStartsAt(session.startsAt.toReadableTimeString())
                         itemView.setOnClickListener { onSessionClick(session) }
 
                         isFirstInTimeGroup = position == 0
-                                || _data[position - 1] is HeaderItem
-                                || (_data[position - 1] as SessionModel).startsAt != session.startsAt
+                            || _data[position - 1] is HeaderItem
+                            || (_data[position - 1] as SessionModel).startsAt != session.startsAt
                     }
                 }
                 is HeaderViewHolder -> {
@@ -232,7 +235,7 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
                     relativeLayout {
                         isClickable = true
                         backgroundResource =
-                                context.getResourceId(R.attr.selectableItemBackground)
+                            context.getResourceId(R.attr.selectableItemBackground)
 
                         textView {
                             id = R.id.session_start
@@ -273,7 +276,7 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
     class SessionDividerItemDecoration(context: Context) : RecyclerView.ItemDecoration() {
         private val divider: Drawable by lazy {
             val styledAttributes =
-                    context.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
+                context.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
             val divider = styledAttributes.getDrawable(0)
             styledAttributes.recycle()
             divider

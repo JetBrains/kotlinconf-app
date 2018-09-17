@@ -4,11 +4,9 @@ import android.app.Application
 import android.content.Context
 import android.support.multidex.MultiDex
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.toast
 import org.jetbrains.kotlinconf.model.KotlinConfDataRepository
 import org.jetbrains.kotlinconf.presentation.DataRepository
 import org.jetbrains.kotlinconf.storage.PlatformSettings
-import java.net.ConnectException
 
 class KotlinConfApplication : Application(), AnkoLogger {
 

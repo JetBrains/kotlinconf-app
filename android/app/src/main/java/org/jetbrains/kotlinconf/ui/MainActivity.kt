@@ -1,15 +1,19 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.arch.lifecycle.*
-import android.arch.lifecycle.ViewModelProvider.*
-import android.content.*
-import android.os.*
-import android.support.v7.app.*
-import android.support.v7.widget.*
-import android.view.*
-import org.jetbrains.anko.*
+import android.content.Context
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.frameLayout
 import org.jetbrains.kotlinconf.R
-import org.jetbrains.kotlinconf.presentation.*
+import org.jetbrains.kotlinconf.presentation.NavigationManager
+import org.jetbrains.kotlinconf.presentation.SearchQueryProvider
 
 class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationManager, SearchQueryProvider, AnkoLogger {
     override var searchQuery: String = ""

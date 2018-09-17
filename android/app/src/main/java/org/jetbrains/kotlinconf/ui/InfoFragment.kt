@@ -1,26 +1,29 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.content.*
-import android.graphics.*
-import android.graphics.drawable.*
-import android.net.*
-import android.os.*
-import android.support.design.widget.*
-import android.support.design.widget.AppBarLayout.LayoutParams.*
-import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.*
-import android.support.v4.app.*
-import android.support.v7.app.*
+import android.content.Context
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
+import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
+import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.text.util.*
+import android.text.util.Linkify
 import android.view.*
-import android.widget.*
+import android.widget.ImageView
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.design.*
-import org.jetbrains.anko.support.v4.*
+import org.jetbrains.anko.design.coordinatorLayout
+import org.jetbrains.anko.design.themedAppBarLayout
+import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.R
 
 class InfoFragment : Fragment(), AnkoComponent<Context> {
 
@@ -69,8 +72,8 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                     toolbar = toolbar {
                         layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                matchParent,
-                                context.dimen(context.getResourceId(R.attr.actionBarSize))
+                            matchParent,
+                            context.dimen(context.getResourceId(R.attr.actionBarSize))
                         ).apply {
                             collapseMode = COLLAPSE_MODE_PIN
                         }
@@ -152,8 +155,8 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                             setOnClickListener {
                                 val websiteIntent = Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse("https://kotlinconf.com"))
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://kotlinconf.com"))
                                 startActivity(websiteIntent)
                             }
 
@@ -179,14 +182,14 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                             setOnClickListener {
                                 val twitterIntent = Intent(Intent.ACTION_VIEW,
-                                        Uri.parse("twitter://user?screen_name=kotlinconf"))
+                                    Uri.parse("twitter://user?screen_name=kotlinconf"))
                                 twitterIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 if (twitterIntent.resolveActivity(context.packageManager) != null) {
                                     startActivity(twitterIntent)
                                 } else {
                                     val webTwitterIntent = Intent(
-                                            Intent.ACTION_VIEW,
-                                            Uri.parse("https://twitter.com/kotlinconf"))
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://twitter.com/kotlinconf"))
                                     startActivity(webTwitterIntent)
                                 }
                             }
