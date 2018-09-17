@@ -47,6 +47,8 @@ class SessionDetailsPresenter(
         launchAndCatch(uiContext, view::showError) {
             isFavorite = !isFavorite
             repository.setFavorite(session.id, isFavorite)
+        } finally {
+            refreshDataFromRepo()
         }
     }
 
