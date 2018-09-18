@@ -10,6 +10,10 @@ import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.presentation.*
 
 class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationManager, SearchQueryProvider, AnkoLogger {
+
+    private val repository by lazy { (application as KotlinConfApplication).dataRepository }
+    private val presenter by lazy { MainPresenter( this, repository) }
+
     override var searchQuery: String = ""
         private set
 
@@ -28,6 +32,8 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
         } else {
             savedInstanceState.getString(SEARCH_QUERY_KEY)?.let { searchQuery = it }
         }
+
+        presenter.onCreate()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -103,8 +109,8 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
             .commit()
     }
 
-    override fun showVotingCodePromptDialog() {
-        CodeEnterFragment().show(supportFragmentManager, CodeEnterFragment.TAG)
+    override fun showPrivacyPolicyDialog() {
+        PrivacyPolicyAcceptanceFragment().show(supportFragmentManager, PrivacyPolicyAcceptanceFragment.TAG)
     }
 
     override fun showSessionDetails(sessionId: String) {

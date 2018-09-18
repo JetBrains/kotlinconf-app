@@ -309,6 +309,6 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
     companion object {
         const val TAG = "SessionListFragment"
         const val SESSION_LIST_STATE = "SessionListState"
-        const val SESSION_LIST_HEADER_MARGIN = 100
+        const val SESSION_LIST_HEADER_MARGIN = 70
     }
 }
