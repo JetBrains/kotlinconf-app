@@ -20,11 +20,6 @@ class SessionListPresenter(
 
         showData()
         updateData()
-
-        if (!repository.loggedIn && !repository.codePromptShown) {
-            navigationManager.showVotingCodePromptDialog()
-            repository.codePromptShown = true
-        }
     }
 
     fun onDestroy() {

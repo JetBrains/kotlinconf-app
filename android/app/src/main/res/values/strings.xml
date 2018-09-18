@@ -18,7 +18,7 @@
     <string name="unauthorized_error">Unauthorized</string>
     <string name="copyright">Copyright © 2018 JetBrains s. r. o.</string>
     <string name="legal_notice_title">LEGAL NOTICE</string>
-    <string name="app_description"><![CDATA[The official KotlinConf 2018 App.<br/><br/>This App was developed amongst other reasons to showcase Kotlin/JVM. Get more information and source code from <a href="https://github.com/jetbrains/kotlinconf-app">github.com/jetbrains/kotlinconf-app</a><br/><br/>Powered by Kotlin/JVM]]></string>
+    <string name="github_info"><![CDATA[Get more information and source code from <a href="https://github.com/jetbrains/kotlinconf-app">github.com/jetbrains/kotlinconf-app</a><br/><br/>Powered by Kotlin/JVM]]></string>
     <string name="libraries">
         KotlinConf application is built using the following open source libraries:\n
           &#8226; Ktor\n
@@ -180,12 +180,10 @@ and only if You agree to indemnify, defend, and hold each Contributor
 harmless for any liability incurred by, or claims asserted against, such
 Contributor by reason of your accepting any such warranty or additional
 liability.</p> ]]></string>
-    <string name="code_enter_label">Please enter your voting code</string>
-    <string name="terms_text">By submitting this code you are agreeing with our <u>terms and conditions</u></string>
-    <string name="terms_url">https://www.jetbrains.com/company/useterms.html</string>
-    <string name="terms_agree">I agree</string>
+    <string name="privacy_policy_text"><![CDATA[To proceed please accept the <a href="https://www.jetbrains.com/company/privacy.html">Privacy Policy</a>]]></string>
+    <string name="privacy_policy_accept">I accept the Privacy Policy</string>
+    <string name="voting_code_prompt">If you would like to vote for a session enter your voting code</string>
     <string name="submit_button">Submit</string>
-    <string name="skip_button">Skip</string>
     <string name="code_verification_failed">Failed to verify code</string>
     <string name="code_incorrect">Sorry, the code entered is incorrect</string>
     <string name="voting_text">In order to enable voting, please enter your voting code</string>

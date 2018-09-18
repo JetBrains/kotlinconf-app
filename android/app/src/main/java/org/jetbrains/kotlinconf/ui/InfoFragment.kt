@@ -96,18 +96,6 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         backgroundResource = context.getResourceId(android.R.attr.listDivider)
                     }.lparams(width = matchParent, height = dip(2))
 
-                    textView(context.getHtmlText(R.string.app_description)) {
-                        autoLinkMask = Linkify.WEB_URLS
-                        textSize = 18f
-                        setTextIsSelectable(true)
-                    }.lparams {
-                        margin = dip(20)
-                    }
-
-                    view {
-                        backgroundResource = context.getResourceId(android.R.attr.listDivider)
-                    }.lparams(width = matchParent, height = dip(2))
-
                     relativeLayout {
                         padding = dip(20)
                         isClickable = true
@@ -246,7 +234,20 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         setTextIsSelectable(true)
                     }.lparams {
                         margin = dip(20)
-                        bottomMargin = dip(40)
+                        bottomMargin = dip(0)
+                    }
+
+                    view {
+                        backgroundResource = context.getResourceId(android.R.attr.listDivider)
+                    }.lparams(width = matchParent, height = dip(2))
+
+                    textView(context.getHtmlText(R.string.github_info)) {
+                        autoLinkMask = Linkify.WEB_URLS
+                        textSize = 18f
+                        setTextIsSelectable(true)
+                    }.lparams {
+                        margin = dip(20)
+                        bottomPadding = dip(60)
                     }
                 }.lparams(width = matchParent, height = matchParent)
             }.lparams(width = matchParent, height = matchParent) {

@@ -21,10 +21,10 @@ class KotlinConfDataRepository(
     override var votes: List<Vote>? by bindToPreferencesByKey("votesKey", Vote.serializer().list)
     private var userId: String? by bindToPreferencesByKey("userIdKey", String.serializer())
 
-    override var codePromptShown: Boolean
-        get() = settings.getBoolean("codePromptShownKey", false)
+    override var privacyPolicyAccepted: Boolean
+        get() = settings.getBoolean("privacyPolicyAcceptedKey", false)
         set(value) {
-            settings.putBoolean("codePromptShownKey", value)
+            settings.putBoolean("privacyPolicyAcceptedKey", value)
         }
 
     override val loggedIn: Boolean
