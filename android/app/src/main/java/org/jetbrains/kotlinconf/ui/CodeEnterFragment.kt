@@ -61,13 +61,9 @@ class CodeEnterFragment : BaseDialogFragment(), CodeVerificationView {
 
                     dialog.setCanceledOnTouchOutside(false)
                     dialog.setOnCancelListener { activity?.finishAffinity() }
+                    presenter.onCreate()
                 }
             }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        presenter.onCreate()
     }
 
     override fun setProgress(isLoading: Boolean) {
