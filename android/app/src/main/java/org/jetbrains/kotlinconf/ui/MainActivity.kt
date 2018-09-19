@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
     }
 
     override fun showVotingCodePromptDialog() {
-        CodeEnterFragment().show(supportFragmentManager, CodeEnterFragment.TAG)
+        CodeEnterFragment.show(supportFragmentManager)
     }
 
     override fun showSessionDetails(sessionId: String) {
@@ -121,6 +121,8 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
             .replace(R.id.fragment_container, fragment, SessionDetailsFragment.TAG)
             .commit()
     }
+
+    private fun isVotingCodePromptNotVisible() = fragmentManager.findFragmentByTag(CodeEnterFragment.TAG) == null
 
     companion object {
         private const val SEARCH_QUERY_KEY = "SearchQuery"

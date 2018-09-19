@@ -21,9 +21,8 @@ class SessionListPresenter(
         showData()
         updateData()
 
-        if (!repository.loggedIn && !repository.codePromptShown) {
+        if (!repository.termsAccepted) {
             navigationManager.showVotingCodePromptDialog()
-            repository.codePromptShown = true
         }
     }
 

@@ -18,20 +18,16 @@ extension UIViewController {
         let popup = PopupDialog(viewController: ratingViewController,
                                 buttonAlignment: .horizontal,
                                 transitionStyle: .bounceDown,
-                                tapGestureDismissal: true,
+                                tapGestureDismissal: false,
                                 panGestureDismissal: false)
         
-        let cancelButton = CancelButton(title: "CANCEL", height: 60) {
-            // no-op
+        let cancelButton = CancelButton(title: "CANCEL", height: 60, dismissOnTap: false) {
+            ratingViewController.presenter.onCancel()
         }
         
         let submitButton = DefaultButton(title: "SUBMIT", height: 60, dismissOnTap: false) {
-            if(ratingViewController.checked){
-                let code = ratingViewController.voteText.text!
-                ratingViewController.presenter.verifyCode(code: code)
-            } else {
-                self.showTermsNotAcceptepDialog()
-            }
+            let code = ratingViewController.voteText.text!
+            ratingViewController.presenter.onSubmit(code: code)
         }
         submitButton.isEnabled = false
         ratingViewController.submitButton = submitButton
@@ -40,25 +36,41 @@ extension UIViewController {
         self.present(popup, animated: true, completion: nil)
     }
 
-    func showTermsNotAcceptepDialog() {
-        let alert = UIAlertController(title: nil, message: "Please Accept the terms and conditions to be able to vote", preferredStyle: .alert)
+    func showTermsNotAcceptedDialog() {
+        let alert = UIAlertController(title: nil, message: "To use application, you need to accept the terms and conditions", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in }))
         self.present(alert, animated: true, completion: nil)
     }
 }
 
 class RatingViewController: UIViewController, KTCodeVerificationView {
+    
     @IBOutlet weak var voteText: UITextField!
     @IBOutlet weak var checkBox: UIImageView!
     @IBOutlet weak var privacyLabel: UILabel!
     var submitButton: DefaultButton? = nil
     
+    
     private let repository = AppDelegate.me.konfService
     lazy var presenter: KTCodeVerificationPresenter = {
         KTCodeVerificationPresenter(uiContext: UI(), view: self, repository: repository)
     }()
-    
-    var checked = false
+
+    var _checked = false
+    var termsAccepted: Bool {
+        get {
+            return self._checked
+        }
+        set(checked) {
+            self._checked = checked
+            if(checked){
+                checkBox.image = UIImage(named:"checked")!
+            } else {
+                checkBox.image = UIImage(named:"unchecked")!
+            }
+            submitButton?.isEnabled = checked
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +82,8 @@ class RatingViewController: UIViewController, KTCodeVerificationView {
         checkBox.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(checkBoxClicked)))
         privacyLabel.isUserInteractionEnabled = true
         privacyLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(privacyClicked)))
+        
+        presenter.onCreate()
     }
     
     func setProgress(isLoading: Bool) {
@@ -80,15 +94,13 @@ class RatingViewController: UIViewController, KTCodeVerificationView {
         dismiss(animated: true) { /* no-op */ }
     }
     
+    func showTermsAcceptanceRequired() {
+        showTermsNotAcceptedDialog()
+    }
+    
     @objc func checkBoxClicked() {
-        checked = !checked
-        
-        submitButton?.isEnabled = checked
-        if(checked){
-            checkBox.image = UIImage(named:"checked")!
-        } else {
-            checkBox.image = UIImage(named:"unchecked")!
-        }
+        termsAccepted = !termsAccepted
+        submitButton?.isEnabled = termsAccepted
     }
     
     @objc func privacyClicked() {

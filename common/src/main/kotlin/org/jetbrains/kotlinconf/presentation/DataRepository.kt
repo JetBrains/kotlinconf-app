@@ -9,12 +9,12 @@ interface DataRepository {
     val votes: List<Vote>?
     var onRefreshListeners: List<() -> Unit>
     val loggedIn: Boolean
-    var codePromptShown: Boolean
+    var termsAccepted: Boolean
 
     suspend fun update()
     fun getRating(sessionId: String): SessionRating?
     suspend fun addRating(sessionId: String, rating: SessionRating)
     suspend fun removeRating(sessionId: String)
     suspend fun setFavorite(sessionId: String, isFavorite: Boolean)
-    suspend fun verifyCode(code: VotingCode)
+    suspend fun verifyAndSetCode(code: VotingCode)
 }

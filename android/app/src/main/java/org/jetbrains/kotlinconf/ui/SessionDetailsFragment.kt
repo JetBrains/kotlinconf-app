@@ -54,7 +54,7 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         okButton.setOnClickListener { presenter.rateSessionClicked(OK) }
         badButton.setOnClickListener { presenter.rateSessionClicked(BAD) }
         verifyCodeButton.setOnClickListener {
-            CodeEnterFragment().show(fragmentManager, CodeEnterFragment.TAG)
+            CodeEnterFragment.show(fragmentManager ?: return@setOnClickListener)
         }
         presenter.onCreate()
     }

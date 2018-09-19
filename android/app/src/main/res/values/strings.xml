@@ -190,4 +190,5 @@ liability.</p> ]]></string>
     <string name="code_incorrect">Sorry, the code entered is incorrect</string>
     <string name="voting_text">In order to enable voting, please enter your voting code</string>
     <string name="verify_button_text">Verify voting code</string>
+    <string name="msg_need_to_accept_terms">To use application, you need to accept the terms and conditions</string>
 </resources>

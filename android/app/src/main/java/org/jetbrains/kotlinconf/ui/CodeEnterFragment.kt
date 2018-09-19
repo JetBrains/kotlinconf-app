@@ -5,6 +5,7 @@ import android.content.*
 import android.graphics.*
 import android.net.*
 import android.os.*
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AlertDialog
 import android.text.*
 import android.view.*
@@ -29,11 +30,18 @@ class CodeEnterFragment : BaseDialogFragment(), CodeVerificationView {
     private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
     private val presenter by lazy { CodeVerificationPresenter(UI, this, repository) }
 
+    override var termsAccepted: Boolean
+        get() = checkBox.isChecked
+        set(accepted) {
+            checkBox.isChecked = accepted
+        }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(context!!)
             .setView(createView())
-            .setPositiveButton(R.string.submit_button) { _, _ -> }
-            .setNeutralButton(R.string.skip_button) { dialog, _ -> dialog.dismiss() }
+            .setCancelable(false)
+            .setPositiveButton(R.string.submit_button) { _, _ -> /* no-op */ }
+            .setNeutralButton(R.string.skip_button) { _, _ -> /* no-op */ }
             .create()
             .apply {
                 setOnShowListener {
@@ -42,10 +50,24 @@ class CodeEnterFragment : BaseDialogFragment(), CodeVerificationView {
                     // the listener is set here to prevent the dialog from being dismissed on click
                     submitButton.setOnClickListener { _ ->
                         val code = codeEditText.text.toString()
-                        presenter.verifyCode(code)
+                        presenter.onSubmit(code)
                     }
+
+                    val skipButton = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEUTRAL)
+                    // the listener is set here to prevent the dialog from being dismissed on click
+                    skipButton.setOnClickListener { _ ->
+                        presenter.onCancel()
+                    }
+
+                    dialog.setCanceledOnTouchOutside(false)
+                    dialog.setOnCancelListener { activity?.finishAffinity() }
                 }
             }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.onCreate()
     }
 
     override fun setProgress(isLoading: Boolean) {
@@ -55,7 +77,12 @@ class CodeEnterFragment : BaseDialogFragment(), CodeVerificationView {
     }
 
     override fun dismissView() {
+        isDisplayed = false
         dismiss()
+    }
+
+    override fun showTermsAcceptanceRequired() {
+        toast(R.string.msg_need_to_accept_terms)
     }
 
     private fun toggleSubmitButtonEnable() {
@@ -142,5 +169,13 @@ class CodeEnterFragment : BaseDialogFragment(), CodeVerificationView {
 
     companion object {
         const val TAG = "CodeEnterFragment"
+        var isDisplayed = false
+
+        fun show(fragmentManager: FragmentManager) {
+            if(!isDisplayed) {
+                isDisplayed = true
+                CodeEnterFragment().show(fragmentManager, CodeEnterFragment.TAG)
+            }
+        }
     }
 }
