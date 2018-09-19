@@ -172,7 +172,8 @@ class SessionsTableViewCell : UITableViewCell {
             speaker.fullName
         }.joined(separator: ", ")
         
-        subtitleLabel.text = speakersInfo + " - " + session.room!
+
+        subtitleLabel.text = speakersInfo + " - " + (session.room ?? "")
     }
 }
 

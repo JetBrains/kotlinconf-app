@@ -34,6 +34,9 @@ extension UIViewController: BaseView {
             message = "Unknown Error"
         }
         
+//        error.printStackTrace()
+        error.cause?.printStackTrace()
+        error.cause?.cause?.printStackTrace()
         self.showPopupText(title: message)
     }
 }

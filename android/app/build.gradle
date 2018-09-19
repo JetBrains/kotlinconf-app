@@ -84,7 +84,6 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation "io.ktor:ktor-client-android:$ktor_version"
-    implementation "io.ktor:ktor-client-gson:$ktor_version"
     implementation "io.ktor:ktor-client-json-jvm:$ktor_version"
 
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
