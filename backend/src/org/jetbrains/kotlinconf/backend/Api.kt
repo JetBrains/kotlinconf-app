@@ -96,7 +96,7 @@ fun Routing.apiUsers(database: Database) {
                 createdCodes += codes.filter { code -> database.createUser(code, "generate", timestamp) }
             }
 
-            call.respond(createdCodes)
+            call.respond(UserTokens(createdCodes))
         }
         delete("{code}") {
             requireSecret()
