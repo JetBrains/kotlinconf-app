@@ -20,7 +20,7 @@ class KotlinConfViewModel(
     private val onError: (Error) -> Toast
 ) : AnkoLogger {
     private val gson: Gson by lazy { GsonBuilder().create() } //().setDateFormat(DATE_FORMAT).create() }
-    private val data = KonfAppDataModel(userId)
+    private val data = KonfAppDataModel(END_POINT, userId)
 
     private val favoritePreferences: SharedPreferences by lazy {
         context.getSharedPreferences(FAVORITES_PREFERENCES_NAME, MODE_PRIVATE)

@@ -1,15 +1,5 @@
-buildscript {
-    dependencies {
-        classpath "com.android.tools.build:gradle:$gradle_android_version"
-    }
-    repositories {
-        google()
-    }
-}
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-platform-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlinx-serialization'
 apply plugin: 'kotlin-kapt'
@@ -47,10 +37,12 @@ android {
             dimension "server"
         }
     }
+
+    tasks.lint.enabled = false
 }
 
 dependencies {
-    expectedBy project(':common')
+    implementation project(':common')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -91,5 +83,4 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
 }

@@ -5,15 +5,15 @@ allprojects {
             maven { url "http://kotlin.bintray.com/kotlin-dev" }
             maven { url "https://kotlin.bintray.com/kotlinx" }
             maven { url 'https://dl.bintray.com/jetbrains/kotlin-native-dependencies' }
-            mavenLocal()
+
+            maven { url "https://teamcity.jetbrains.com/guestAuth/repository/download/Kotlin_dev_Compiler/1640748:id/maven" }
 
             google()
             jcenter()
         }
         dependencies {
             classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-            classpath "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:$serialization_plugin"
-            classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:$kotlin_native_version"
+            classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         }
     }
     repositories {
@@ -23,8 +23,9 @@ allprojects {
         maven { url "https://dl.bintray.com/kotlin/ktor" }
         maven { url "https://dl.bintray.com/sargunster/maven" }
         maven { url "https://dl.bintray.com/kotlin/squash" }
-        mavenLocal()
 
+        maven { url "https://teamcity.jetbrains.com/guestAuth/repository/download/Kotlin_dev_Compiler/1640748:id/maven" }
+        
         google()
         jcenter()
     }

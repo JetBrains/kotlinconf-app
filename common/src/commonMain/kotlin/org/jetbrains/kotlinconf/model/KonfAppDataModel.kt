@@ -6,9 +6,10 @@ import org.jetbrains.kotlinconf.data.*
 import org.jetbrains.kotlinconf.presentation.*
 
 class KonfAppDataModel(
-    user: String
+        endPoint: String,
+        user: String
 ) : DataRepository {
-    private val api = KotlinConfApi(user)
+    private val api = KotlinConfApi(endPoint, user)
     private var signed: Boolean = false
     var state = AllData()
 

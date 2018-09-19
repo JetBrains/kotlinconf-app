@@ -9,15 +9,13 @@ import io.ktor.http.*
 import kotlinx.io.core.*
 import org.jetbrains.kotlinconf.data.*
 
-internal expect val END_POINT: String
-
-class KotlinConfApi(private val userId: String) {
+class KotlinConfApi(private val endPoint: String, private val userId: String) {
     private val client = HttpClient {
         install(JsonFeature) {
             serializer = KotlinxSerializer().apply {
-                setMapper(AllData::class, AllData.serializer())
-                setMapper(Favorite::class, Favorite.serializer())
-                setMapper(Vote::class, Vote.serializer())
+                 setMapper(AllData::class, AllData.serializer())
+                 setMapper(Favorite::class, Favorite.serializer())
+                 setMapper(Vote::class, Vote.serializer())
             }
         }
         install(ExpectSuccess)
@@ -72,7 +70,7 @@ class KotlinConfApi(private val userId: String) {
             header(HttpHeaders.Authorization, "Bearer $userId")
         }
         url {
-            takeFrom(END_POINT)
+            takeFrom(endPoint)
             encodedPath = path
         }
     }
