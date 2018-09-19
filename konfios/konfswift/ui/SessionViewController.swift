@@ -2,6 +2,7 @@ import UIKit
 import TagListView_ObjC
 import konfios
 import MBProgressHUD
+import PopupDialog
 
 class SessionViewController : UIViewController, KTSessionDetailsView {
 
@@ -87,15 +88,63 @@ class SessionViewController : UIViewController, KTSessionDetailsView {
     }
     
     @IBAction private func goodPressed(_ sender: Any?) {
-        presenter.rateSessionClicked(newRating: .good)
+        let codePresent = false // Todo: check if we have the code already
+        if(codePresent){
+            presenter.rateSessionClicked(newRating: .good)
+        } else {
+            showVotingCodeDialog()
+        }
     }
     
     @IBAction private func sosoPressed(_ sender: Any?) {
-        presenter.rateSessionClicked(newRating: .ok)
+        let codePresent = false // Todo: check if we have the code already
+        if(codePresent){
+            presenter.rateSessionClicked(newRating: .ok)
+        } else {
+            showVotingCodeDialog()
+        }
+
     }
     
     @IBAction private func badPressed(_ sender: Any?) {
-        presenter.rateSessionClicked(newRating: .bad)
+        let codePresent = false // Todo: check if we have the code already
+        if(codePresent){
+            presenter.rateSessionClicked(newRating: .bad)
+        } else {
+            showVotingCodeDialog()
+        }
+    }
+    
+    private func showVotingCodeDialog() {
+        
+        let ratingViewController = RatingViewController(nibName: "RatingViewController", bundle: nil)
+        
+        // Create the dialog
+        let popup = PopupDialog(viewController: ratingViewController,
+                                buttonAlignment: .horizontal,
+                                transitionStyle: .bounceDown,
+                                tapGestureDismissal: true,
+                                panGestureDismissal: false)
+        
+        // Cancel button
+        let buttonOne = CancelButton(title: "CANCEL", height: 60) {
+            // Do nothing
+        }
+        
+        // Submit button
+        let buttonTwo = DefaultButton(title: "SUBMIT", height: 60) {
+            if(ratingViewController.checked){
+                print("Vote code:" + ratingViewController.voteText.text!)
+            } else {
+                print("Accept the terms!")
+            }
+        }
+        
+        // Add buttons to dialog
+        popup.addButtons([buttonOne, buttonTwo])
+        
+        // Present dialog
+        present(popup, animated: true, completion: nil)
     }
     
     private func setupSpeakers(speakers: [KTSpeaker]) {
