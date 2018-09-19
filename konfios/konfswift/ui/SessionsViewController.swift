@@ -52,7 +52,7 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func showVotingCodePromptDialog() {
-        // no-op, Show code prompt here once it is implmenented
+        showVotingCodeDialog()
     }
 
     func showSessionList() {
@@ -60,7 +60,7 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func showSessionDetails(sessionId: String) {
-        // TODO: Move opening details from here
+        // TODO: Move opening details to here
     }
     
     func addOnQueryChangedListener(listener: @escaping (String) -> KTStdlibUnit) {

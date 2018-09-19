@@ -30,6 +30,10 @@ extension UIViewController: KTBaseView {
             message = "Voting is not allowed before the session starts"
         case is KTTooLateVote:
             message = "Voting is not allowed later than 15 minutes after the session ends"
+        case is KTFailedToVerifyCode:
+            message = "Failed to verify code"
+        case is KTIncorrectCode:
+            message = "Sorry, the code entered is incorrect"
         default:
             message = "Unknown Error"
         }

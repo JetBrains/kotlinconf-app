@@ -19,7 +19,7 @@
 		2C6393441F743F2F004953A3 /* SessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6393431F743F2F004953A3 /* SessionViewController.swift */; };
 		2C6393481F743F73004953A3 /* UiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6393471F743F73004953A3 /* UiUtils.swift */; };
 		2CA847C1214BA6F8000A094C /* Pods_konfswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F0183213ED71700FCD207 /* Pods_konfswift.framework */; };
-		9F8568862151CF8F0074AE71 /* RatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8568852151CF8F0074AE71 /* RatingViewController.swift */; };
+		9F8568862151CF8F0074AE71 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8568852151CF8F0074AE71 /* RatingView.swift */; };
 		9F8568882151D0E60074AE71 /* RatingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F8568872151D0E60074AE71 /* RatingViewController.xib */; };
 		D30D00A8214D087900CD1184 /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D00A7214D087900CD1184 /* UI.swift */; };
 		D3B66AE3214E9CF70078D58D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B66AE2214E9CF70078D58D /* BaseView.swift */; };
@@ -70,7 +70,7 @@
 		3AD1B286AB3044DE546C83D1 /* Pods-konfswift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-konfswift/Pods-konfswift.debug.xcconfig"; sourceTree = "<group>"; };
 		3F8F328F75A7A47133925362 /* Pods-konfswiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswiftTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-konfswiftTests/Pods-konfswiftTests.release.xcconfig"; sourceTree = "<group>"; };
 		82B39A882B392FCA825017DE /* Pods-konfswiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswiftTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-konfswiftTests/Pods-konfswiftTests.debug.xcconfig"; sourceTree = "<group>"; };
-		9F8568852151CF8F0074AE71 /* RatingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingViewController.swift; sourceTree = "<group>"; };
+		9F8568852151CF8F0074AE71 /* RatingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		9F8568872151D0E60074AE71 /* RatingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RatingViewController.xib; sourceTree = "<group>"; };
 		A41FE60CFCB7748B63FEC8FD /* Pods-konfswift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswift.release.xcconfig"; path = "Pods/Target Support Files/Pods-konfswift/Pods-konfswift.release.xcconfig"; sourceTree = "<group>"; };
 		D30D00A7214D087900CD1184 /* UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI.swift; sourceTree = "<group>"; };
@@ -145,7 +145,7 @@
 		2C63933F1F743EDE004953A3 /* ui */ = {
 			isa = PBXGroup;
 			children = (
-				9F8568852151CF8F0074AE71 /* RatingViewController.swift */,
+				9F8568852151CF8F0074AE71 /* RatingView.swift */,
 				2C50FD931F729FE000B3F845 /* AppDelegate.swift */,
 				2C6393411F743F15004953A3 /* SessionsViewController.swift */,
 				2C6393431F743F2F004953A3 /* SessionViewController.swift */,
@@ -380,7 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C6393481F743F73004953A3 /* UiUtils.swift in Sources */,
-				9F8568862151CF8F0074AE71 /* RatingViewController.swift in Sources */,
+				9F8568862151CF8F0074AE71 /* RatingView.swift in Sources */,
 				D30D00A8214D087900CD1184 /* UI.swift in Sources */,
 				D3B66AE3214E9CF70078D58D /* BaseView.swift in Sources */,
 				2C6393421F743F15004953A3 /* SessionsViewController.swift in Sources */,

@@ -17,6 +17,7 @@ class SessionViewController : UIViewController, KTSessionDetailsView {
     }()
     
     var sessionId = ""
+    var loggedIn = false
     
     @IBOutlet private weak var scrollView: UIScrollView!
     
@@ -47,6 +48,7 @@ class SessionViewController : UIViewController, KTSessionDetailsView {
     }
     
     func updateView(loggedIn: Bool, session: KTSessionModel) {
+        self.loggedIn = loggedIn
         titleLabel.text = session.title
         timeLabel.text = KTStdlibPair(first: session.startsAt, second: session.endsAt).toReadableString()
         
@@ -84,12 +86,15 @@ class SessionViewController : UIViewController, KTSessionDetailsView {
     }
 
     @IBAction private func favorited(_ sender: Any) {
-        presenter.onFavoriteButtonClicked()
+        if(loggedIn){
+            presenter.onFavoriteButtonClicked()
+        } else {
+            showVotingCodeDialog()
+        }
     }
     
     @IBAction private func goodPressed(_ sender: Any?) {
-        let codePresent = false // Todo: check if we have the code already
-        if(codePresent){
+        if(loggedIn){
             presenter.rateSessionClicked(newRating: .good)
         } else {
             showVotingCodeDialog()
@@ -97,8 +102,7 @@ class SessionViewController : UIViewController, KTSessionDetailsView {
     }
     
     @IBAction private func sosoPressed(_ sender: Any?) {
-        let codePresent = false // Todo: check if we have the code already
-        if(codePresent){
+        if(loggedIn){
             presenter.rateSessionClicked(newRating: .ok)
         } else {
             showVotingCodeDialog()
@@ -107,50 +111,11 @@ class SessionViewController : UIViewController, KTSessionDetailsView {
     }
     
     @IBAction private func badPressed(_ sender: Any?) {
-        let codePresent = false // Todo: check if we have the code already
-        if(codePresent){
+        if(loggedIn){
             presenter.rateSessionClicked(newRating: .bad)
         } else {
             showVotingCodeDialog()
         }
-    }
-    
-    private func showVotingCodeDialog() {
-        
-        let ratingViewController = RatingViewController(nibName: "RatingViewController", bundle: nil)
-        
-        // Create the dialog
-        let popup = PopupDialog(viewController: ratingViewController,
-                                buttonAlignment: .horizontal,
-                                transitionStyle: .bounceDown,
-                                tapGestureDismissal: true,
-                                panGestureDismissal: false)
-        
-        // Cancel button
-        let buttonOne = CancelButton(title: "CANCEL", height: 60) {
-            // Do nothing
-        }
-        
-        // Submit button
-        let buttonTwo = DefaultButton(title: "SUBMIT", height: 60) {
-            if(ratingViewController.checked){
-                print("Vote code:" + ratingViewController.voteText.text!)
-            } else {
-                self.showTermsNotAcceptepDialog()
-            }
-        }
-        
-        // Add buttons to dialog
-        popup.addButtons([buttonOne, buttonTwo])
-        
-        // Present dialog
-        present(popup, animated: true, completion: nil)
-    }
-    
-    private func showTermsNotAcceptepDialog() {
-        let alert = UIAlertController(title: nil, message: "Please Accept the terms and conditions to be able to vote", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in }))
-        self.present(alert, animated: true, completion: nil)
     }
     
     private func setupSpeakers(speakers: [KTSpeaker]) {
