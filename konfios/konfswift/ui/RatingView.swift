@@ -47,15 +47,19 @@ extension UIViewController {
     }
 }
 
-class RatingViewController: UIViewController, KTCodeVerificationView {
+class RatingViewController: UIViewController, CodeVerificationView {
     @IBOutlet weak var voteText: UITextField!
     @IBOutlet weak var checkBox: UIImageView!
     @IBOutlet weak var privacyLabel: UILabel!
     var submitButton: DefaultButton? = nil
     
     private let repository = AppDelegate.me.konfService
-    lazy var presenter: KTCodeVerificationPresenter = {
-        KTCodeVerificationPresenter(uiContext: UI(), view: self, repository: repository)
+    lazy var presenter: CodeVerificationPresenter = {
+        CodeVerificationPresenter(
+            uiContext: UI() as! KotlinCoroutineContext,
+            view: self,
+            repository: repository
+        )
     }()
     
     var checked = false

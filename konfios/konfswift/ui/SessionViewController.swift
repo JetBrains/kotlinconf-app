@@ -47,9 +47,8 @@ class SessionViewController : UIViewController, SessionDetailsView {
         presenter.onDestroy()
     }
     
-    func updateView(loggedIn: Bool, session: KTSessionModel) {
-        self.loggedIn = loggedIn
     func updateView(loggedIn: Bool, session: SessionModel) {
+        self.loggedIn = loggedIn
         titleLabel.text = session.title
         timeLabel.text = KotlinPair(first: session.startsAt, second: session.endsAt).toReadableString()
         
@@ -76,7 +75,7 @@ class SessionViewController : UIViewController, SessionDetailsView {
                 : UIColor.groupTableViewBackground
         }
     }
-    
+
     func setIsFavorite(isFavorite: Bool) {
         let image = UIImage(named: isFavorite ? "star_full" : "star_empty")!
         favoriteButton.image = image
