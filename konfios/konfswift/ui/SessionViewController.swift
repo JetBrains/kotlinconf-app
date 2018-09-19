@@ -136,7 +136,7 @@ class SessionViewController : UIViewController, KTSessionDetailsView {
             if(ratingViewController.checked){
                 print("Vote code:" + ratingViewController.voteText.text!)
             } else {
-                print("Accept the terms!")
+                self.showTermsNotAcceptepDialog()
             }
         }
         
@@ -145,6 +145,12 @@ class SessionViewController : UIViewController, KTSessionDetailsView {
         
         // Present dialog
         present(popup, animated: true, completion: nil)
+    }
+    
+    private func showTermsNotAcceptepDialog() {
+        let alert = UIAlertController(title: nil, message: "Please Accept the terms and conditions to be able to vote", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     private func setupSpeakers(speakers: [KTSpeaker]) {
