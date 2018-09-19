@@ -47,7 +47,14 @@ class SessionViewController : UIViewController, SessionDetailsView {
     
     func updateView(loggedIn: Bool, session: SessionModel) {
         titleLabel.text = session.title
-        timeLabel.text = KotlinPair(first: session.startsAt, second: session.endsAt).toReadableString()
+        
+        let startsAt = session.startsAt
+        let endsAt = session.endsAt
+        
+        if (startsAt != nil && endsAt != nil) {
+            timeLabel.text = KotlinPair(first: startsAt, second: endsAt).toReadableString()
+        }
+        
         
         let description = session.descriptionText
         descriptionLabel.text = description
