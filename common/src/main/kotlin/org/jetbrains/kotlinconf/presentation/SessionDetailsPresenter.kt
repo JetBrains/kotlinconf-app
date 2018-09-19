@@ -12,8 +12,8 @@ class SessionDetailsPresenter(
     private val repository: DataRepository
 ) {
     private lateinit var session: SessionModel
-    private var isFavorite: Boolean by observable(false) { _, _, isFavorite ->
-        view.setIsFavorite(isFavorite)
+    private var isFavorite: Boolean by observable(false) { _, old, new ->
+        if(new != old) view.setIsFavorite(new)
     }
     private var rating: SessionRating? = null
     private val onRefreshListener: () -> Unit = this::refreshDataFromRepo
