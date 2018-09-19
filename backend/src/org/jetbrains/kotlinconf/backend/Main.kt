@@ -84,7 +84,7 @@ fun Application.main() {
 
 fun Route.authenticate() {
     val bearer = "Bearer "
-    intercept(ApplicationCallPipeline.Infrastructure) {
+    intercept(ApplicationCallPipeline.Features) {
         val authorization = call.request.header(HttpHeaders.Authorization) ?: return@intercept
         if (!authorization.startsWith(bearer)) return@intercept
         val token = authorization.removePrefix(bearer).trim()

@@ -1,13 +1,13 @@
 package org.jetbrains.kotlinconf.backend
 
-import com.github.salomonbrys.kotson.*
 import io.ktor.application.*
 import io.ktor.client.*
-import io.ktor.client.call.*
+import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
+import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import org.jetbrains.kotlinconf.data.*
-import java.net.*
 import java.time.*
 import java.util.concurrent.*
 
@@ -16,7 +16,9 @@ private var sessionizeData: SessionizeData? = null
 val comeBackLater = HttpStatusCode(477, "Come Back Later")
 val tooLate = HttpStatusCode(478, "Too Late")
 val keynoteTimeZone = ZoneId.of("Europe/Paris")!!
-val keynoteEndDateTime = ZonedDateTime.of(2018, 10, 4, 10, 0, 0, 0, keynoteTimeZone)!!
+val keynoteEndDateTime = ZonedDateTime.of(
+    2018, 10, 4, 10, 0, 0, 0, keynoteTimeZone
+)!!
 
 const val fakeSessionId = "007"
 
@@ -32,11 +34,16 @@ fun Application.launchSyncJob(sessionizeUrl: String, sessionizeInterval: Long) {
     }
 }
 
+private val client = HttpClient {
+    install(JsonFeature) {
+        serializer = KotlinxSerializer().apply {
+            setMapper(AllData::class, AllData.serializer())
+        }
+    }
+}
+
 suspend fun synchronizeWithSessionize(sessionizeUrl: String) {
-    val client = HttpClient()
-    val response = client.call(URL(sessionizeUrl)) {}
-    val text = response.receive<String>()
-    val data = gson.fromJson<AllData>(text)
+    val data = client.get<AllData>(sessionizeUrl)
     sessionizeData = SessionizeData(data)
 }
 

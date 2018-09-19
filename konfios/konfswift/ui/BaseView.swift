@@ -10,25 +10,25 @@ import Foundation
 import konfios
 import UIKit
 
-extension UIViewController: KTBaseView {
+extension UIViewController: BaseView {
     
-    public func showError(error: KTStdlibThrowable) {
+    public func showError(error: KotlinThrowable) {
         var message = ""
         
         switch error {
-        case is KTUnauthorized:
+        case is Unauthorized:
             message = "Unauthorized"
-        case is KTCannotFavorite:
+        case is CannotFavorite:
             message = "Cannot set favorite now"
-        case is KTCannotPostVote:
+        case is CannotPostVote:
             message = "Failed to post vote to server, please check your internet connection"
-        case is KTCannotDeleteVote:
+        case is CannotDeleteVote:
             message = "Failed to delete vote from server, please check your internet connection"
-        case is KTUpdateProblem:
+        case is UpdateProblem:
             message = "Failed to get data from server, please check your internet connection"
-        case is KTTooEarlyVote:
+        case is TooEarlyVote:
             message = "Voting is not allowed before the session starts"
-        case is KTTooLateVote:
+        case is TooLateVote:
             message = "Voting is not allowed later than 15 minutes after the session ends"
         default:
             message = "Unknown Error"

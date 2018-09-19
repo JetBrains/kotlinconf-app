@@ -1,14 +1,20 @@
 import UIKit
 import konfios
 
-class SessionsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, KTSessionListView, KTNavigationManager, KTSearchQueryProvider {
+class SessionsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SessionListView, NavigationManager, SearchQueryProvider {
     
     private var mode = SessionsMode.all
-    private var sessionsTableData: [[KTSessionModel]] = []
+    private var sessionsTableData: [[SessionModel]] = []
     
     private let repository = AppDelegate.me.konfService
-    lazy var presenter: KTSessionListPresenter = {
-        KTSessionListPresenter(uiContext: UI(), view: self, repository: repository, navigationManager: self, searchQueryProvider: self)
+    lazy var presenter: SessionListPresenter = {
+        SessionListPresenter(
+            uiContext: UI() as! KotlinCoroutineContext,
+            view: self,
+            repository: repository,
+            navigationManager: self,
+            searchQueryProvider: self
+        )
     }()
     var searchQuery: String = ""
     
@@ -63,11 +69,11 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
         // TODO: Move opening details from here
     }
     
-    func addOnQueryChangedListener(listener: @escaping (String) -> KTStdlibUnit) {
+    func addOnQueryChangedListener(listener: @escaping (String) -> KotlinUnit) {
         // no-op, Search is not supported yet
     }
     
-    func onUpdate(sessions: [KTSessionModel], favorites: [KTSessionModel]) {
+    func onUpdate(sessions: [SessionModel], favorites: [SessionModel]) {
         switch self.mode {
         case .all:
             fillDataWith(sessions: sessions)
@@ -94,7 +100,7 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     // Sessions are grouped by time slots
-    private func fillDataWith(sessions: [KTSessionModel]) {
+    private func fillDataWith(sessions: [SessionModel]) {
         sessionsTableData = []
         sessions.forEach({ (session) in
             if sessionsTableData.count == 0 ||
@@ -146,7 +152,7 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         guard sessionsTableData.count > section, let session = sessionsTableData[section].first else { return nil }
-        return session.startsAt.toReadableDateTimeString()
+        return session.startsAt?.toReadableDateTimeString()
     }
 }
 
@@ -159,9 +165,9 @@ class SessionsTableViewCell : UITableViewCell {
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var subtitleLabel: UILabel!
 
-    func setup(for session: KTSessionModel) {
+    func setup(for session: SessionModel) {
         titleLabel.text = session.title
-        let speakers: [KTSpeaker] = session.speakers
+        let speakers: [Speaker] = session.speakers
         let speakersInfo = speakers.map { (speaker) -> String in
             speaker.fullName
         }.joined(separator: ", ")
@@ -173,7 +179,7 @@ class SessionsTableViewCell : UITableViewCell {
 class BreakTableViewCell : UITableViewCell {
     @IBOutlet private weak var titleLabel: UILabel!
 
-    func setup(for session: KTSessionModel) {
+    func setup(for session: SessionModel) {
         backgroundColor = UIColor(patternImage: UIImage(named: "striped_bg")!)
     }
 }

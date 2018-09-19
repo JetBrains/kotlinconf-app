@@ -1,12 +1,12 @@
 import UIKit
 import konfios
 
-let KTUnit = KTStdlibUnit()
+let KTUnit = KotlinUnit()
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    public lazy var konfService = { KTKotlinConfDataRepository(settings: KTPlatformSettings()) }()
+    public lazy var konfService = { KotlinConfDataRepository(settings: PlatformSettings()) }()
 
     var window: UIWindow?
 

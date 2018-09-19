@@ -12,7 +12,6 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import org.jetbrains.kotlinconf.data.*
 import java.time.*
@@ -48,8 +47,10 @@ fun Routing.apiKeynote(production: Boolean) {
 
 private fun PipelineContext<Unit, ApplicationCall>.simulatedTime(production: Boolean): ZonedDateTime {
     val now = ZonedDateTime.now(keynoteTimeZone)
-    return if (production) now else call.parameters["datetimeoverride"]?.let { ZonedDateTime.parse(it) }
-            ?: now
+    return if (production)
+        now
+    else
+        call.parameters["datetimeoverride"]?.let { ZonedDateTime.parse(it) } ?: now
 }
 
 /*
@@ -195,8 +196,7 @@ fun Routing.apiVote(database: Database, production: Boolean) {
             val sessionId = vote.sessionId ?: throw BadRequest()
             val rating = vote.rating ?: throw BadRequest()
 
-            val session = getSessionizeData().allData.sessions.firstOrNull { it.id == sessionId }
-                    ?: throw NotFound()
+            val session = getSessionizeData().allData.sessions.firstOrNull { it.id == sessionId } ?: throw NotFound()
             val nowTime = simulatedTime(production)
             val startVotesAt = LocalDateTime.parse(session.startsAt, dateFormat)
             val endVotesAt = LocalDateTime.parse(session.endsAt, dateFormat).plusMinutes(15)
@@ -275,10 +275,10 @@ fun Routing.apiSession() {
 val sessionSignals = ConcurrentHashMap<String, ConflatedBroadcastChannel<Unit>>()
 
 fun signalSession(sessionId: String) =
-        sessionSignals[sessionId]?.offer(Unit) // offer to anyone who's interested
+    sessionSignals[sessionId]?.offer(Unit) // offer to anyone who's interested
 
 fun trackSession(sessionId: String): ConflatedBroadcastChannel<Unit> =
-        sessionSignals.computeIfAbsent(sessionId) { ConflatedBroadcastChannel(Unit) }
+    sessionSignals.computeIfAbsent(sessionId) { ConflatedBroadcastChannel(Unit) }
 
 fun Routing.wsVotes(database: Database, production: Boolean) {
     val route = if (production) fakeSessionId else "{sessionId}"
