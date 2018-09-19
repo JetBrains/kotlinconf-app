@@ -94,7 +94,14 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
     override fun updateView(loggedIn: Boolean, session: SessionModel) {
         collapsingToolbar.title = session.title
         speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName }
-        val time = (session.startsAt to session.endsAt).toReadableString()
+
+        val startsAt = session.startsAt
+        val endsAt = session.endsAt
+        val time = if (startsAt != null && endsAt != null)
+            (startsAt to endsAt).toReadableString()
+        else
+            ""
+
         timeTextView.text = time
         detailsTextView.text = listOfNotNull(session.roomText, session.category).joinToString(", ")
         descriptionTextView.text = session.descriptionText

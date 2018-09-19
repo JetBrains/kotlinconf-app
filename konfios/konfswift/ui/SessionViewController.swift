@@ -4,12 +4,12 @@ import konfios
 import MBProgressHUD
 import PopupDialog
 
-class SessionViewController : UIViewController, KTSessionDetailsView {
+class SessionViewController : UIViewController, SessionDetailsView {
 
     private let repository = AppDelegate.me.konfService
-    private lazy var presenter: KTSessionDetailsPresenter = {
-        KTSessionDetailsPresenter(
-            uiContext: UI(),
+    private lazy var presenter: SessionDetailsPresenter = {
+        SessionDetailsPresenter(
+            uiContext: UI() as! KotlinCoroutineContext,
             view: self,
             sessionId: sessionId,
             repository: repository
@@ -18,7 +18,7 @@ class SessionViewController : UIViewController, KTSessionDetailsView {
     
     var sessionId = ""
     var loggedIn = false
-    
+
     @IBOutlet private weak var scrollView: UIScrollView!
     
     @IBOutlet private weak var titleLabel: UILabel!
@@ -49,8 +49,9 @@ class SessionViewController : UIViewController, KTSessionDetailsView {
     
     func updateView(loggedIn: Bool, session: KTSessionModel) {
         self.loggedIn = loggedIn
+    func updateView(loggedIn: Bool, session: SessionModel) {
         titleLabel.text = session.title
-        timeLabel.text = KTStdlibPair(first: session.startsAt, second: session.endsAt).toReadableString()
+        timeLabel.text = KotlinPair(first: session.startsAt, second: session.endsAt).toReadableString()
         
         let description = session.descriptionText
         descriptionLabel.text = description
@@ -62,8 +63,8 @@ class SessionViewController : UIViewController, KTSessionDetailsView {
         setupSpeakers(speakers: session.speakers)
     }
     
-    func setupRatingButtons(rating: KTSessionRating?) {
-        let buttons: [KTSessionRating: UIButton] = [
+    func setupRatingButtons(rating: SessionRating?) {
+        let buttons: [SessionRating: UIButton] = [
             .good: goodButton,
             .ok: sosoButton,
             .bad: badButton
@@ -118,7 +119,7 @@ class SessionViewController : UIViewController, KTSessionDetailsView {
         }
     }
     
-    private func setupSpeakers(speakers: [KTSpeaker]) {
+    private func setupSpeakers(speakers: [Speaker]) {
         userNamesLabel.text = speakers.map { (speaker) -> String in speaker.fullName }.joined(separator: ", ")
         
         if (speakers.count == 1) {

@@ -10,10 +10,11 @@ data class Session(
     val isPlenumSession: Boolean,
     val questionAnswers: List<QuestionAnswer>,
     val speakers: List<String>,
-    val description: String?,
-    val startsAt: String,
+    @SerialName("description")
+    val descriptionText: String?,
+    val startsAt: String?,
     val title: String,
-    val endsAt: String,
+    val endsAt: String?,
     val categoryItems: List<Int>,
-    val roomId: Int
+    val roomId: Int?
 )
