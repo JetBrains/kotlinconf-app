@@ -8,10 +8,10 @@
     <string name="kotlin_conf_description">KotlinConf is a two-day conference taking place in San Francisco, providing deep-dive technical content on Kotlin.</string>
     <string name="kotlin_conf_address">Beurs Van Berlage, Damrak 243, 1012 ZJ Amsterdam, Netherlands</string>
     <string name="msg_failed_to_get_data">Failed to get data from server, please check your internet connection</string>
-    <string name="msg_failed_to_post_rate">Failed to post rating to server, please check your internet connection</string>
-    <string name="msg_failed_to_delete_rate">Failed to delete rating from server, please check your internet connection</string>
-    <string name="msg_early_rate">Rating is not allowed before the session starts</string>
-    <string name="msg_late_rate">Rating is not allowed later than 15 minutes after the session ends</string>
+    <string name="msg_failed_to_post_rate">Failed to rate sessions, please check your connection</string>
+    <string name="msg_failed_to_delete_rate">Failed to update session rating, please check your connection</string>
+    <string name="msg_early_rate">You cannot rate the session before it starts</string>
+    <string name="msg_late_rate">Rating is only permitted up to 15 minutes after the session end</string>
     <string name="unknown_error">Unknown error</string>
     <string name="cannot_rate_error">You cannot rate the session now</string>
     <string name="cannot_favorite_error">You cannot ser favorite now</string>

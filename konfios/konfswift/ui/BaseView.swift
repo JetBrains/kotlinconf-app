@@ -10,34 +10,54 @@ import Foundation
 import konfios
 import UIKit
 
+var firstUpdateError = true
+
 extension UIViewController: BaseView {
     
     public func showError(error: KotlinThrowable) {
-        var message = ""
-        
+        var errorMessage: String? = nil
+        var popupMessage: String? = nil
+
         switch error {
         case is Unauthorized:
-            message = "Unauthorized"
+            errorMessage = "Unauthorized"
         case is CannotFavorite:
-            message = "Cannot set favorite now"
+            errorMessage = "Cannot set favorite now"
         case is CannotPostVote:
-            message = "Failed to post vote to server, please check your internet connection"
+            errorMessage = "Failed to rate sessions, please check your connection"
         case is CannotDeleteVote:
-            message = "Failed to delete vote from server, please check your internet connection"
+            errorMessage = "Failed to update session rating, please check your connection"
         case is UpdateProblem:
-            message = "Failed to get data from server, please check your internet connection"
+            let text = "Failed to get data from server, please check your internet connection"
+            if(firstUpdateError) {
+                errorMessage = text
+                firstUpdateError = false
+            } else {
+                popupMessage = text
+            }
         case is TooEarlyVote:
-            message = "Voting is not allowed before the session starts"
+            errorMessage = "You cannot rate the session before it starts"
         case is TooLateVote:
-            message = "Voting is not allowed later than 15 minutes after the session ends"
+            errorMessage = "Rating is only permitted up to 15 minutes after the session end"
         case is FailedToVerifyCode:
-            message = "Failed to verify code"
+            errorMessage = "Failed to verify code"
         case is IncorrectCode:
-            message = "Sorry, the code entered is incorrect"
+            errorMessage = "Sorry, the code entered is incorrect"
         default:
-            message = "Unknown Error"
+            errorMessage = "Unknown Error"
         }
+        
+        if let message = errorMessage {
+            self.showError(message: message)
+        }
+        if let message = popupMessage {
+            self.showPopupText(title: message)
+        }
+    }
 
-        self.showPopupText(title: message)
+    func showError(message: String) {
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
+        self.present(alertController, animated: true, completion: nil)
     }
 }
