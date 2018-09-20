@@ -111,7 +111,6 @@ class SessionViewController : UIViewController, SessionDetailsView {
         } else {
             showVotingCodeDialog()
         }
-
     }
     
     @IBAction private func badPressed(_ sender: Any?) {
