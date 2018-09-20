@@ -47,7 +47,7 @@ class SessionViewController : UIViewController, SessionDetailsView {
         presenter.onDestroy()
     }
     
-    func updateView(loggedIn: Bool, session: SessionModel) {
+    func updateView(loggedIn: Bool, isFavorite: Bool, session: SessionModel) {
         self.loggedIn = loggedIn
         titleLabel.text = session.title
         
@@ -58,6 +58,8 @@ class SessionViewController : UIViewController, SessionDetailsView {
             timeLabel.text = KotlinPair(first: startsAt, second: endsAt).toReadableString()
         }
         
+        let image = UIImage(named: isFavorite ? "star_full" : "star_empty")!
+        favoriteButton.image = image
         
         let description = session.descriptionText
         descriptionLabel.text = description
@@ -81,11 +83,6 @@ class SessionViewController : UIViewController, SessionDetailsView {
                 ? UIColor.orange
                 : UIColor.groupTableViewBackground
         }
-    }
-
-    func setIsFavorite(isFavorite: Bool) {
-        let image = UIImage(named: isFavorite ? "star_full" : "star_empty")!
-        favoriteButton.image = image
     }
     
     func setRatingClickable(clickable: Bool) {
