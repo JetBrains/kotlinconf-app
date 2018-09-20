@@ -12,9 +12,9 @@ import UIKit
 
 var firstUpdateError = true
 
-extension UIViewController: KTBaseView {
+extension UIViewController: BaseView {
     
-    public func showError(error: KTStdlibThrowable) {
+    public func showError(error: KotlinThrowable) {
         var errorMessage: String? = nil
         var popupMessage: String? = nil
 
@@ -24,9 +24,9 @@ extension UIViewController: KTBaseView {
         case is CannotFavorite:
             errorMessage = "Cannot set favorite now"
         case is CannotPostVote:
-            errorMessage = "Failed to post vote to server, please check your internet connection"
+            errorMessage = "Failed to rate sessions, please check your connection"
         case is CannotDeleteVote:
-            errorMessage = "Failed to delete vote from server, please check your internet connection"
+            errorMessage = "Failed to update session rating, please check your connection"
         case is UpdateProblem:
             let text = "Failed to get data from server, please check your internet connection"
             if(firstUpdateError) {
@@ -36,9 +36,9 @@ extension UIViewController: KTBaseView {
                 popupMessage = text
             }
         case is TooEarlyVote:
-            errorMessage = "Voting is not allowed before the session starts"
+            errorMessage = "You cannot rate the session before it starts"
         case is TooLateVote:
-            errorMessage = "Voting is not allowed later than 15 minutes after the session ends"
+            errorMessage = "Rating is only permitted up to 15 minutes after the session end"
         case is FailedToVerifyCode:
             errorMessage = "Failed to verify code"
         case is IncorrectCode:
