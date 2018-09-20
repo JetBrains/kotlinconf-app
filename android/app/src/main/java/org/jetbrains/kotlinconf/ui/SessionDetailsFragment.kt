@@ -12,6 +12,7 @@ import android.view.*
 import android.view.View.*
 import android.widget.*
 import com.bumptech.glide.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.android.*
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
 import org.jetbrains.anko.*
@@ -19,6 +20,7 @@ import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.*
 import org.jetbrains.anko.support.v4.*
 import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.R
 import org.jetbrains.kotlinconf.data.*
 import org.jetbrains.kotlinconf.data.SessionRating.*
 import org.jetbrains.kotlinconf.presentation.*
@@ -43,7 +45,7 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
 
     private val sessionId by lazy { arguments!!.get(KEY_SESSION_ID) as String }
     private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
-    private val presenter by lazy { SessionDetailsPresenter(UI, this, sessionId, repository) }
+    private val presenter by lazy { SessionDetailsPresenter(Dispatchers.Main, this, sessionId, repository) }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -54,7 +56,7 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         okButton.setOnClickListener { presenter.rateSessionClicked(OK) }
         badButton.setOnClickListener { presenter.rateSessionClicked(BAD) }
         verifyCodeButton.setOnClickListener {
-            CodeEnterFragment().show(fragmentManager, CodeEnterFragment.TAG)
+            RatingCodeEnterFragment().show(fragmentManager, RatingCodeEnterFragment.TAG)
         }
         presenter.onCreate()
     }
@@ -67,11 +69,6 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
-    }
-
-    override fun setIsFavorite(isFavorite: Boolean) {
-        val favoriteIcon = if (isFavorite) R.drawable.ic_favorite_white_24dp else R.drawable.ic_favorite_border_white_24dp
-        favoriteButton.setImageResource(favoriteIcon)
     }
 
     override fun setupRatingButtons(rating: SessionRating?) {
@@ -91,11 +88,11 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         badButton.isClickable = clickable
     }
 
-    override fun updateView(loggedIn: Boolean, session: SessionModel) {
+    override fun updateView(loggedIn: Boolean, isFavorite: Boolean, session: SessionModel) {
         collapsingToolbar.title = session.title
         speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName }
-        val time = (session.startsAt to session.endsAt).toReadableString()
-        timeTextView.text = time
+
+        timeTextView.text = session.timeString
         detailsTextView.text = listOfNotNull(session.roomText, session.category).joinToString(", ")
         descriptionTextView.text = session.descriptionText
 
@@ -106,6 +103,10 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         }
         votingPromptLayout.visibility = if (loggedIn) GONE else VISIBLE
 
+        if(loggedIn) {
+            val favoriteIcon = if (isFavorite) R.drawable.ic_favorite_white_24dp else R.drawable.ic_favorite_border_white_24dp
+            favoriteButton.setImageResource(favoriteIcon)
+        }
 
         session.speakers
             .takeIf { it.size < 3 }
@@ -116,6 +117,13 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
                 }
             }
     }
+
+    private val SessionModel.timeString: String
+        get() {
+            val startsAt = startsAt
+            val endsAt = endsAt
+            return if (startsAt != null && endsAt != null) (startsAt to endsAt).toReadableString() else ""
+        }
 
     private val SessionModel.roomText: String?
         get() = room?.let { getString(R.string.room_format_details, it) }
@@ -235,7 +243,7 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
                         }
 
                         votingPromptLayout = verticalLayout {
-                            textView(R.string.voting_text) {
+                            textView(R.string.rating_text) {
                                 textSize = 18f
                             }
                             verifyCodeButton = button(R.string.verify_button_text) {

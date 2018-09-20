@@ -10,18 +10,18 @@ class SessionModel(
     val title: String,
     val category: String?,
     val descriptionText: String,
-    val startsAtStr: String,
-    val endsAtStr: String,
+    val startsAtStr: String?,
+    val endsAtStr: String?,
     val room: String?,
     val speakers: List<Speaker>
 ) {
     @Transient
-    val startsAt: GMTDate
-        get() = startsAtStr.parseDate()
+    val startsAt: GMTDate?
+        get() = startsAtStr?.parseDate()
 
     @Transient
-    val endsAt: GMTDate
-        get() = endsAtStr.parseDate()
+    val endsAt: GMTDate?
+        get() = endsAtStr?.parseDate()
 
     companion object {
         fun forSession(all: AllData, sessionId: String): SessionModel {
@@ -52,11 +52,11 @@ class SessionModel(
                 id = briefSession.id,
                 title = briefSession.title,
                 category = briefSession.categoryItems.map(categoryProvider).firstOrNull()?.name,
-                descriptionText = briefSession.description ?: "",
+                descriptionText = briefSession.descriptionText ?: "",
                 startsAtStr = startsAt,
                 endsAtStr = endsAt,
                 speakers = briefSession.speakers.mapNotNull { speakerProvider(it) },
-                room = briefSession.roomId.let(roomProvider).name
+                room = briefSession.roomId?.let(roomProvider)?.name
             )
         }
     }
@@ -64,7 +64,7 @@ class SessionModel(
 
 fun AllData.allSessions(): List<SessionModel> {
     return sessions.map { SessionModel.forSession(this, it.id) }
-        .sortedWith(compareBy({ it.startsAt.timestamp }, { it.title }))
+        .sortedWith(compareBy({ it.startsAt?.timestamp }, { it.title }))
 }
 
 fun AllData.favoriteSessions(): List<SessionModel> = favorites

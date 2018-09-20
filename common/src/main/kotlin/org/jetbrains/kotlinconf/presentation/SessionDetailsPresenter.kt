@@ -12,9 +12,6 @@ class SessionDetailsPresenter(
     private val repository: DataRepository
 ) {
     private lateinit var session: SessionModel
-    private var isFavorite: Boolean by observable(false) { _, _, isFavorite ->
-        view.setIsFavorite(isFavorite)
-    }
     private var rating: SessionRating? = null
     private val onRefreshListener: () -> Unit = this::refreshDataFromRepo
 
@@ -45,8 +42,8 @@ class SessionDetailsPresenter(
 
     fun onFavoriteButtonClicked() {
         launchAndCatch(uiContext, view::showError) {
-            isFavorite = !isFavorite
-            repository.setFavorite(session.id, isFavorite)
+            val isFavorite = isFavorite()
+            repository.setFavorite(session.id, !isFavorite)
         } finally {
             refreshDataFromRepo()
         }
@@ -54,10 +51,12 @@ class SessionDetailsPresenter(
 
     private fun refreshDataFromRepo() {
         session = repository.sessions?.firstOrNull { it.id == sessionId } ?: return
-        view.updateView(repository.loggedIn, session)
+        view.updateView(repository.loggedIn, isFavorite(), session)
         rating = repository.getRating(sessionId)
         view.setupRatingButtons(rating)
-        isFavorite = repository.favorites?.any { it.id == sessionId } ?: false
         rating = repository.getRating(sessionId)
     }
+
+    private fun isFavorite() =
+        repository.favorites?.any { it.id == sessionId } ?: false
 }

@@ -110,8 +110,8 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
             set(value) {
                 field = value
                 _data = field
-                    .sortedWith(compareBy({ it.startsAt.timestamp }, { it.room }, { it.title }))
-                    .groupBy { it.startsAt.toReadableDateString() }
+                    .sortedWith(compareBy({ it.startsAt?.timestamp }, { it.room }, { it.title }))
+                    .groupBy { it.startsAt?.toReadableDateString() ?: "" }
                     .flatMap { (day, sessions) -> listOf(HeaderItem(day)) + sessions }
 
                 notifyDataSetChanged()
@@ -127,12 +127,12 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
                             session.speakers.map { it.fullName } + listOfNotNull(session.roomText)
 
                         setDetails(detailStrings.joinToString(", "))
-                        setStartsAt(session.startsAt.toReadableTimeString())
+                        setStartsAt(session.startsAt?.toReadableTimeString() ?: "")
                         itemView.setOnClickListener { onSessionClick(session) }
 
-                        isFirstInTimeGroup = position == 0
-                            || _data[position - 1] is HeaderItem
-                            || (_data[position - 1] as SessionModel).startsAt != session.startsAt
+                        isFirstInTimeGroup = position == 0 ||
+                                _data[position - 1] is HeaderItem ||
+                                (_data[position - 1] as SessionModel).startsAt != session.startsAt
                     }
                 }
                 is HeaderViewHolder -> {
@@ -228,7 +228,7 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
                     relativeLayout {
                         isClickable = true
                         backgroundResource =
-                            context.getResourceId(R.attr.selectableItemBackground)
+                                context.getResourceId(R.attr.selectableItemBackground)
 
                         textView {
                             id = R.id.session_start
@@ -309,6 +309,6 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
     companion object {
         const val TAG = "SessionListFragment"
         const val SESSION_LIST_STATE = "SessionListState"
-        const val SESSION_LIST_HEADER_MARGIN = 100
+        const val SESSION_LIST_HEADER_MARGIN = 70
     }
 }

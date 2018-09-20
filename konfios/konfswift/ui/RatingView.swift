@@ -28,7 +28,7 @@ extension UIViewController {
         let submitButton = DefaultButton(title: "SUBMIT", height: 60, dismissOnTap: false) {
             if(ratingViewController.checked){
                 let code = ratingViewController.voteText.text!
-                ratingViewController.presenter.verifyCode(code: code)
+                ratingViewController.presenter.onSubmitButtonClicked(code: code)
             } else {
                 self.showTermsNotAcceptepDialog()
             }
@@ -47,15 +47,19 @@ extension UIViewController {
     }
 }
 
-class RatingViewController: UIViewController, KTCodeVerificationView {
+class RatingViewController: UIViewController {
     @IBOutlet weak var voteText: UITextField!
     @IBOutlet weak var checkBox: UIImageView!
     @IBOutlet weak var privacyLabel: UILabel!
     var submitButton: DefaultButton? = nil
     
     private let repository = AppDelegate.me.konfService
-    lazy var presenter: KTCodeVerificationPresenter = {
-        KTCodeVerificationPresenter(uiContext: UI(), view: self, repository: repository)
+    lazy var presenter: CodeVerificationPresenter = {
+        CodeVerificationPresenter(
+            uiContext: UI() as! KotlinCoroutineContext,
+            view: self,
+            repository: repository
+        )
     }()
     
     var checked = false

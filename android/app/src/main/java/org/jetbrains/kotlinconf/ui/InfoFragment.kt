@@ -11,6 +11,7 @@ import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.*
 import android.support.v4.app.*
 import android.support.v7.app.*
 import android.support.v7.widget.Toolbar
+import android.text.method.*
 import android.text.util.*
 import android.view.*
 import android.widget.*
@@ -92,18 +93,6 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
             nestedScrollView {
                 verticalLayout {
-                    view {
-                        backgroundResource = context.getResourceId(android.R.attr.listDivider)
-                    }.lparams(width = matchParent, height = dip(2))
-
-                    textView(context.getHtmlText(R.string.app_description)) {
-                        autoLinkMask = Linkify.WEB_URLS
-                        textSize = 18f
-                        setTextIsSelectable(true)
-                    }.lparams {
-                        margin = dip(20)
-                    }
-
                     view {
                         backgroundResource = context.getResourceId(android.R.attr.listDivider)
                     }.lparams(width = matchParent, height = dip(2))
@@ -246,7 +235,33 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         setTextIsSelectable(true)
                     }.lparams {
                         margin = dip(20)
-                        bottomMargin = dip(40)
+                        bottomMargin = dip(0)
+                    }
+
+                    view {
+                        backgroundResource = context.getResourceId(android.R.attr.listDivider)
+                    }.lparams(width = matchParent, height = dip(2))
+
+                    textView(context.getHtmlText(R.string.github_info)) {
+                        autoLinkMask = Linkify.WEB_URLS
+                        textSize = 18f
+                        setTextIsSelectable(true)
+                    }.lparams {
+                        margin = dip(20)
+                        bottomMargin = dip(0)
+                    }
+
+                    view {
+                        backgroundResource = context.getResourceId(android.R.attr.listDivider)
+                    }.lparams(width = matchParent, height = dip(2))
+
+                    textView(context.getHtmlText(R.string.external_contributors)) {
+                        textSize = 18f
+                        setTextIsSelectable(true)
+                        movementMethod = LinkMovementMethod.getInstance()
+                    }.lparams {
+                        margin = dip(20)
+                        bottomPadding = dip(40)
                     }
                 }.lparams(width = matchParent, height = matchParent)
             }.lparams(width = matchParent, height = matchParent) {
