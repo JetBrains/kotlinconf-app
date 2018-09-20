@@ -26,19 +26,18 @@ class RatingCodeEnterFragment : BaseDialogFragment(), CodeVerificationView {
     private val presenter by lazy { CodeVerificationPresenter(Dispatchers.Main, this, repository) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(context!!)
+        val dialog = AlertDialog.Builder(context!!)
             .setView(createView())
             .setPositiveButton(R.string.submit_button) { _, _ ->
                 val code = codeEditText.text.toString()
                 presenter.onSubmitButtonClicked(code)
             }
             .create()
-            .apply {
-                setOnShowListener {
-                    submitButton = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
-                    submitButton.isEnabled = false
-                }
-            }
+        dialog.setOnShowListener {
+            submitButton = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
+            submitButton.isEnabled = false
+        }
+        return dialog
     }
 
     override fun dismissView() {

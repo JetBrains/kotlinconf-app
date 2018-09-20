@@ -29,7 +29,7 @@ class PrivacyPolicyAcceptanceFragment : BaseDialogFragment(), CodeVerificationVi
     private val privacyPolicyPresenter by lazy { PrivacyPolicyPresenter(repository) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(context!!)
+        val dialog = AlertDialog.Builder(context!!)
             .setView(createView())
             .setPositiveButton(R.string.submit_button) { _, _ ->
                 privacyPolicyPresenter.onAcceptPrivacyPolicyClicked()
@@ -37,14 +37,13 @@ class PrivacyPolicyAcceptanceFragment : BaseDialogFragment(), CodeVerificationVi
                 codeVerificationPresenter.onSubmitButtonClicked(code)
             }
             .create()
-            .apply {
-                setOnShowListener {
-                    submitButton = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
-                    submitButton.isEnabled = false
-                }
-                dialog.setCanceledOnTouchOutside(false)
-                dialog.setOnCancelListener { activity?.finishAffinity() }
-            }
+        dialog.setOnShowListener {
+            submitButton = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
+            submitButton.isEnabled = false
+        }
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.setOnCancelListener { activity?.finishAffinity() }
+        return dialog
     }
 
     override fun dismissView() {
