@@ -9,6 +9,7 @@ import android.view.*
 import android.view.Gravity.*
 import android.view.inputmethod.EditorInfo.*
 import android.widget.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.android.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.*
@@ -16,13 +17,13 @@ import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.presentation.*
 
 
-class RatingCodeEnterFragment : BaseDialogFragment() {
+class RatingCodeEnterFragment : BaseDialogFragment(), CodeVerificationView {
     private lateinit var submitButton: Button
     private lateinit var codeEditText: EditText
     private lateinit var ratingPromptText: TextView
 
     private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
-    private val presenter by lazy { CodeVerificationPresenter(UI, this, repository) }
+    private val presenter by lazy { CodeVerificationPresenter(Dispatchers.Main, this, repository) }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(context!!)
@@ -38,6 +39,10 @@ class RatingCodeEnterFragment : BaseDialogFragment() {
                     submitButton.isEnabled = false
                 }
             }
+    }
+
+    override fun dismissView() {
+        dismiss()
     }
 
     private fun createView(): View {

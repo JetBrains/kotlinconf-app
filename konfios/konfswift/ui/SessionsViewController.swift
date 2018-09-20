@@ -16,6 +16,12 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
             searchQueryProvider: self
         )
     }()
+    lazy var mainPresenter: MainPresenter = {
+        MainPresenter(
+            navigationManager: self,
+            repository: repository
+        )
+    }()
     var searchQuery: String = ""
     
     var isUpdating: Bool {
@@ -46,6 +52,7 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     override func viewWillAppear(_ animated: Bool) {
         presenter.onCreate()
+        mainPresenter.onCreate()
     }
     
     override func viewDidLoad() {
@@ -57,10 +64,6 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
         presenter.onDestroy()
     }
     
-    func showVotingCodePromptDialog() {
-        showVotingCodeDialog()
-    }
-
     func showSessionList() {
         // no-op, We are on session list
     }
@@ -74,7 +77,7 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func showPrivacyPolicyDialog() {
-        // TODO
+        showVotingCodeDialog(privacyPolicyAcceptedBefore: false)
     }
     
     func onUpdate(sessions: [SessionModel], favorites: [SessionModel]) {
