@@ -10,6 +10,7 @@ import android.view.*
 import android.view.Gravity.*
 import android.view.inputmethod.EditorInfo.*
 import android.widget.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.android.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.*
@@ -24,19 +25,16 @@ class PrivacyPolicyAcceptanceFragment : BaseDialogFragment() {
     private lateinit var policyPrivacyText: TextView
 
     private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
-    private val codeVerificationPresenter by lazy { CodeVerificationPresenter(UI, this, repository) }
+    private val codeVerificationPresenter by lazy { CodeVerificationPresenter(Dispatchers.Main, this, repository) }
     private val privacyPolicyPresenter by lazy { PrivacyPolicyPresenter(repository) }
-
-    init {
-        isCancelable = false
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(context!!)
             .setView(createView())
             .setPositiveButton(R.string.submit_button) { _, _ ->
                 privacyPolicyPresenter.onAcceptPrivacyPolicyClicked()
-                codeVerificationPresenter.onSubmitButtonClicked(codeEditText.text.toString())
+                val code = codeEditText.text.toString()
+                codeVerificationPresenter.onSubmitButtonClicked(code)
             }
             .create()
             .apply {
@@ -44,13 +42,8 @@ class PrivacyPolicyAcceptanceFragment : BaseDialogFragment() {
                     submitButton = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
                     submitButton.isEnabled = false
                 }
-                setOnKeyListener { _, keyCode, event ->
-                    // Listen for a back button pressed to close the activity
-                    if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-                        activity!!.finish()
-                    }
-                    return@setOnKeyListener true
-                }
+                dialog.setCanceledOnTouchOutside(false)
+                dialog.setOnCancelListener { activity?.finishAffinity() }
             }
     }
 

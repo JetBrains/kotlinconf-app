@@ -5,7 +5,7 @@ import kotlin.coroutines.*
 
 class CodeVerificationPresenter(
     private val uiContext: CoroutineContext,
-    private val view: BaseView,
+    private val view: CodeVerificationView,
     private val repository: DataRepository
 ) {
 
@@ -14,6 +14,7 @@ class CodeVerificationPresenter(
             launchAndCatch(uiContext, view::showError) {
                 repository.verifyAndSetCode(code)
                 repository.update()
+                view.dismissView()
             }
         }
     }

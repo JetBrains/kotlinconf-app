@@ -11,6 +11,7 @@ import android.view.*
 import android.widget.*
 import com.brandongogetap.stickyheaders.*
 import com.brandongogetap.stickyheaders.exposed.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.android.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.*
@@ -36,7 +37,7 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
     private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
     private val navigationManager by lazy { activity as NavigationManager }
     private val searchQueryProvider by lazy { activity as SearchQueryProvider }
-    private val presenter by lazy { SessionListPresenter(UI, this, repository, navigationManager, searchQueryProvider) }
+    private val presenter by lazy { SessionListPresenter(Dispatchers.Main, this, repository, navigationManager, searchQueryProvider) }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

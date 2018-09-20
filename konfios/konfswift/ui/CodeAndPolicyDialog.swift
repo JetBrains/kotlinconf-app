@@ -12,49 +12,62 @@ import konfios
 import PopupDialog
 
 extension UIViewController {
-    func showVotingCodeDialog() {
-        let ratingViewController = RatingViewController(nibName: "RatingViewController", bundle: nil)
+    func showVotingCodeDialog(privacyPolicyAcceptedBefore: Bool = true) {
+        let ratingViewController = CodeAndPolicyDialogController(nibName: "RatingViewController", bundle: nil)
+        ratingViewController.checked = privacyPolicyAcceptedBefore
         
-        let popup = PopupDialog(viewController: ratingViewController,
-                                buttonAlignment: .horizontal,
-                                transitionStyle: .bounceDown,
-                                tapGestureDismissal: true,
-                                panGestureDismissal: false)
+        let popup = PopupDialog(
+            viewController: ratingViewController,
+            buttonAlignment: .horizontal,
+            transitionStyle: .bounceDown,
+            tapGestureDismissal: false,
+            panGestureDismissal: false
+        )
         
-        let cancelButton = CancelButton(title: "CANCEL", height: 60) {
-            // no-op
+        let cancelButton = CancelButton(title: "CANCEL", height: 60, dismissOnTap: false) {
+            if(ratingViewController.checked){
+                ratingViewController.privacyPolicyPresenter.onAcceptPrivacyPolicyClicked()
+                ratingViewController.dismissView()
+            } else {
+                ratingViewController.privacyLabel.shake()
+            }
         }
         
         let submitButton = DefaultButton(title: "SUBMIT", height: 60, dismissOnTap: false) {
             if(ratingViewController.checked){
                 let code = ratingViewController.voteText.text!
-                ratingViewController.presenter.onSubmitButtonClicked(code: code)
+                if(!code.isEmpty) {
+                    ratingViewController.privacyPolicyPresenter.onAcceptPrivacyPolicyClicked()
+                    ratingViewController.codeVerificationPresenter.onSubmitButtonClicked(code: code)
+                } else {
+                    ratingViewController.voteText.shake()
+                }
             } else {
-                self.showTermsNotAcceptepDialog()
+                ratingViewController.privacyLabel.shake()
             }
         }
-        submitButton.isEnabled = false
         ratingViewController.submitButton = submitButton
         
         popup.addButtons([cancelButton, submitButton])
         self.present(popup, animated: true, completion: nil)
     }
-
-    func showTermsNotAcceptepDialog() {
-        let alert = UIAlertController(title: nil, message: "Please Accept the terms and conditions to be able to vote", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in }))
-        self.present(alert, animated: true, completion: nil)
-    }
 }
 
-class RatingViewController: UIViewController {
+class CodeAndPolicyDialogController: UIViewController, CodeVerificationView {
     @IBOutlet weak var voteText: UITextField!
     @IBOutlet weak var checkBox: UIImageView!
     @IBOutlet weak var privacyLabel: UILabel!
     var submitButton: DefaultButton? = nil
     
     private let repository = AppDelegate.me.konfService
-    lazy var presenter: CodeVerificationPresenter = {
+    
+    lazy var privacyPolicyPresenter: PrivacyPolicyPresenter = {
+        PrivacyPolicyPresenter(
+            repository: repository
+        )
+    }()
+    
+    lazy var codeVerificationPresenter: CodeVerificationPresenter = {
         CodeVerificationPresenter(
             uiContext: UI() as! KotlinCoroutineContext,
             view: self,
@@ -74,6 +87,7 @@ class RatingViewController: UIViewController {
         checkBox.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(checkBoxClicked)))
         privacyLabel.isUserInteractionEnabled = true
         privacyLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(privacyClicked)))
+        updateCheckBox()
     }
     
     func setProgress(isLoading: Bool) {
@@ -86,8 +100,10 @@ class RatingViewController: UIViewController {
     
     @objc func checkBoxClicked() {
         checked = !checked
-        
-        submitButton?.isEnabled = checked
+        updateCheckBox()
+    }
+    
+    func updateCheckBox() {
         if(checked){
             checkBox.image = UIImage(named:"checked")!
         } else {
@@ -109,10 +125,24 @@ class RatingViewController: UIViewController {
     }
 }
 
-extension RatingViewController: UITextFieldDelegate {
+extension CodeAndPolicyDialogController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         endEditing()
         return true
     }
+}
+
+extension UIView {
+    
+    func shake() {
+        let animation = CABasicAnimation(keyPath: "position")
+        animation.duration = 0.07
+        animation.repeatCount = 3
+        animation.autoreverses = true
+        animation.fromValue = NSValue(cgPoint: CGPoint(x: self.center.x - 10, y: self.center.y))
+        animation.toValue = NSValue(cgPoint: CGPoint(x: self.center.x + 10, y: self.center.y))
+        self.layer.add(animation, forKey: "position")
+    }
+    
 }
