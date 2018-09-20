@@ -23,11 +23,11 @@ private fun Fragment.commonShowError(error: Throwable) {
     val messageId: Int = when (error) {
         is Unauthorized -> R.string.unauthorized_error
         is CannotFavorite -> R.string.cannot_favorite_error
-        is CannotPostVote -> R.string.msg_failed_to_post_vote
-        is CannotDeleteVote -> R.string.msg_failed_to_delete_vote
+        is CannotPostVote -> R.string.msg_failed_to_post_rate
+        is CannotDeleteVote -> R.string.msg_failed_to_delete_rate
         is UpdateProblem -> R.string.msg_failed_to_get_data
-        is TooEarlyVote -> R.string.msg_early_vote
-        is TooLateVote -> R.string.msg_late_vote
+        is TooEarlyVote -> R.string.msg_early_rate
+        is TooLateVote -> R.string.msg_late_rate
         is FailedToVerifyCode -> R.string.code_verification_failed
         is IncorrectCode -> R.string.code_incorrect
         else -> R.string.unknown_error
