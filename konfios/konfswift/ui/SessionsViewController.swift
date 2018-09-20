@@ -73,6 +73,10 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
         // no-op, Search is not supported yet
     }
     
+    func showPrivacyPolicyDialog() {
+        // TODO
+    }
+    
     func onUpdate(sessions: [SessionModel], favorites: [SessionModel]) {
         switch self.mode {
         case .all:
