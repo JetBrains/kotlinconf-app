@@ -18,7 +18,7 @@ import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.presentation.*
 
 
-class PrivacyPolicyAcceptanceFragment : BaseDialogFragment() {
+class PrivacyPolicyAcceptanceFragment : BaseDialogFragment(), CodeVerificationView {
     private lateinit var submitButton: Button
     private lateinit var checkBox: CheckBox
     private lateinit var codeEditText: EditText
@@ -45,6 +45,10 @@ class PrivacyPolicyAcceptanceFragment : BaseDialogFragment() {
                 dialog.setCanceledOnTouchOutside(false)
                 dialog.setOnCancelListener { activity?.finishAffinity() }
             }
+    }
+
+    override fun dismissView() {
+        dismiss()
     }
 
     private fun createView(): View {
