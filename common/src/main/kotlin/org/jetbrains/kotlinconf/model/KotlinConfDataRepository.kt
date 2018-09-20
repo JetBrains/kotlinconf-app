@@ -50,11 +50,10 @@ class KotlinConfDataRepository(
         }
     }
 
-    override suspend fun verifyCode(code: VotingCode) {
+    override suspend fun verifyAndSetCode(code: VotingCode) {
         try {
             api.verifyCode(code)
             userId = code
-            update()
         } catch (t: Throwable) {
             val responseStatus = (t.cause as? ApiException)?.response?.status?.value
             if (responseStatus == 406) {

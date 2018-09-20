@@ -16,5 +16,5 @@ interface DataRepository {
     suspend fun addRating(sessionId: String, rating: SessionRating)
     suspend fun removeRating(sessionId: String)
     suspend fun setFavorite(sessionId: String, isFavorite: Boolean)
-    suspend fun verifyCode(code: VotingCode)
+    suspend fun verifyAndSetCode(code: VotingCode)
 }

@@ -12,7 +12,8 @@ class CodeVerificationPresenter(
     fun onSubmitButtonClicked(code: String) {
         if (code.isNotBlank()) {
             launchAndCatch(uiContext, view::showError) {
-                repository.verifyCode(code)
+                repository.verifyAndSetCode(code)
+                repository.update()
             }
         }
     }
