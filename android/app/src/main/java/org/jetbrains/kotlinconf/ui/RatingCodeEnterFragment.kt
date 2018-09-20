@@ -16,10 +16,10 @@ import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.presentation.*
 
 
-class VotingCodeEnterFragment : BaseDialogFragment() {
+class RatingCodeEnterFragment : BaseDialogFragment() {
     private lateinit var submitButton: Button
     private lateinit var codeEditText: EditText
-    private lateinit var votingPromptText: TextView
+    private lateinit var ratingPromptText: TextView
 
     private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
     private val presenter by lazy { CodeVerificationPresenter(UI, this, repository) }
@@ -51,7 +51,7 @@ class VotingCodeEnterFragment : BaseDialogFragment() {
                     view {
                         backgroundResource = context.getResourceId(android.R.attr.listDivider)
                     }.lparams(width = matchParent, height = dip(2))
-                    votingPromptText = textView(R.string.voting_code_prompt) {
+                    ratingPromptText = textView(R.string.rating_code_prompt) {
                         textSize = 18f
                     }.lparams {
                         topMargin = dip(20)
@@ -64,7 +64,7 @@ class VotingCodeEnterFragment : BaseDialogFragment() {
                         lines = 1
                         inputType = InputType.TYPE_CLASS_TEXT
                         imeOptions = IME_ACTION_DONE
-                        textColor = votingPromptText.currentTextColor
+                        textColor = ratingPromptText.currentTextColor
                         addTextChangedListener(object : TextWatcher {
                             override fun afterTextChanged(s: Editable?) {
                                 submitButton.isEnabled = !s.isNullOrBlank()
@@ -86,6 +86,6 @@ class VotingCodeEnterFragment : BaseDialogFragment() {
     }
 
     companion object {
-        const val TAG = "VotingCodeEnterFragment"
+        const val TAG = "RatingCodeEnterFragment"
     }
 }

@@ -87,7 +87,7 @@ class PrivacyPolicyAcceptanceFragment : BaseDialogFragment() {
                         backgroundResource = context.getResourceId(android.R.attr.listDivider)
                     }.lparams(width = matchParent, height = dip(2))
 
-                    textView(R.string.voting_code_prompt) {
+                    textView(R.string.rating_code_prompt) {
                         textSize = 18f
                     }.lparams {
                         topMargin = dip(20)
