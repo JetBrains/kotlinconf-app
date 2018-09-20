@@ -33,7 +33,11 @@ class KotlinConfDataRepository(
     override var onRefreshListeners: List<() -> Unit> = emptyList()
 
     override suspend fun update() {
-        val state = api.getAll(userId)
+        val state = try {
+            api.getAll(userId)
+        } catch (_: Throwable) {
+            throw UpdateProblem()
+        }
 
         val newSessions = state.allSessions()
         val newFavorites = state.favoriteSessions()
@@ -42,11 +46,7 @@ class KotlinConfDataRepository(
             sessions = newSessions
             favorites = newFavorites
             votes = newVotes
-            try {
-                callRefreshListeners()
-            } catch (_: Throwable) {
-                throw UpdateProblem()
-            }
+            callRefreshListeners()
         }
     }
 
@@ -84,7 +84,7 @@ class KotlinConfDataRepository(
                 478 -> TooLateVote()
                 else -> CannotPostVote()
             }
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             throw CannotPostVote()
         } finally {
             callRefreshListeners()

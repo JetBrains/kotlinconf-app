@@ -2,6 +2,7 @@ import UIKit
 import TagListView_ObjC
 import konfios
 import MBProgressHUD
+import PopupDialog
 
 class SessionViewController : UIViewController, SessionDetailsView {
 
@@ -16,7 +17,8 @@ class SessionViewController : UIViewController, SessionDetailsView {
     }()
     
     var sessionId = ""
-    
+    var loggedIn = false
+
     @IBOutlet private weak var scrollView: UIScrollView!
     
     @IBOutlet private weak var titleLabel: UILabel!
@@ -46,6 +48,7 @@ class SessionViewController : UIViewController, SessionDetailsView {
     }
     
     func updateView(loggedIn: Bool, session: SessionModel) {
+        self.loggedIn = loggedIn
         titleLabel.text = session.title
         
         let startsAt = session.startsAt
@@ -79,7 +82,7 @@ class SessionViewController : UIViewController, SessionDetailsView {
                 : UIColor.groupTableViewBackground
         }
     }
-    
+
     func setIsFavorite(isFavorite: Bool) {
         let image = UIImage(named: isFavorite ? "star_full" : "star_empty")!
         favoriteButton.image = image
@@ -90,19 +93,36 @@ class SessionViewController : UIViewController, SessionDetailsView {
     }
 
     @IBAction private func favorited(_ sender: Any) {
-        presenter.onFavoriteButtonClicked()
+        if(loggedIn){
+            presenter.onFavoriteButtonClicked()
+        } else {
+            showVotingCodeDialog()
+        }
     }
     
     @IBAction private func goodPressed(_ sender: Any?) {
-        presenter.rateSessionClicked(newRating: .good)
+        if(loggedIn){
+            presenter.rateSessionClicked(newRating: .good)
+        } else {
+            showVotingCodeDialog()
+        }
     }
     
     @IBAction private func sosoPressed(_ sender: Any?) {
-        presenter.rateSessionClicked(newRating: .ok)
+        if(loggedIn){
+            presenter.rateSessionClicked(newRating: .ok)
+        } else {
+            showVotingCodeDialog()
+        }
+
     }
     
     @IBAction private func badPressed(_ sender: Any?) {
-        presenter.rateSessionClicked(newRating: .bad)
+        if(loggedIn){
+            presenter.rateSessionClicked(newRating: .bad)
+        } else {
+            showVotingCodeDialog()
+        }
     }
     
     private func setupSpeakers(speakers: [Speaker]) {
