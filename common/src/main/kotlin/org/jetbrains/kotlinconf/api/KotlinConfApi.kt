@@ -24,14 +24,6 @@ class KotlinConfApi {
         install(ExpectSuccess)
     }
 
-    suspend fun createUser(userId: String): Boolean = client.request<HttpResponse> {
-        apiUrl("users", null)
-        method = HttpMethod.Post
-        body = userId
-    }.use {
-        it.status.isSuccess()
-    }
-
     suspend fun getAll(userId: String?): AllData = client.get {
         apiUrl("all", userId)
     }
