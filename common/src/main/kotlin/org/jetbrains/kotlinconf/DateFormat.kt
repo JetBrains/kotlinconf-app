@@ -31,7 +31,7 @@ fun Int.toString(minSize: Int): String = "$this".padStart(minSize, '0')
 
 private const val emDash = "\u2014"
 
-fun GMTDate.toReadableTimeString(): String = "${readableHours()}:${minutes.toString(2)} ${timeSuffix()}"
+fun GMTDate.toReadableTimeString(): String = "${hours.toString(2)}:${minutes.toString(2)}"
 fun GMTDate.toReadableDateString(): String = "$year ${month.value} $dayOfMonth"
 fun GMTDate.toReadableDateTimeString() = "${toReadableDateString()} ${toReadableTimeString()}"
 
