@@ -410,10 +410,10 @@ asdasd</string>
                                 <rect key="frame" x="0.0" y="88" width="375" height="690"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rKI-ny-aOR">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="635.33333333333337"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="636"/>
                                         <subviews>
                                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" showsCompass="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d2A-bP-WLO">
-                                                <rect key="frame" x="255" y="332.33333333333331" width="100" height="100"/>
+                                                <rect key="frame" x="255" y="272" width="100" height="100"/>
                                                 <gestureRecognizers/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="9IC-iY-NAY"/>
@@ -429,39 +429,22 @@ asdasd</string>
                                                     <constraint firstAttribute="height" constant="200" id="J0X-ja-psK"/>
                                                 </constraints>
                                             </imageView>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DWR-14-xrc">
-                                                <rect key="frame" x="0.0" y="200" width="375" height="0.66666666666665719"/>
-                                                <color key="backgroundColor" red="0.74943912030000004" green="0.74435311559999995" blue="0.76594537500000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="1" id="7nx-wS-rML"/>
-                                                </constraints>
-                                            </view>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MBy-YN-eCH">
-                                                <rect key="frame" x="20" y="220.66666666666671" width="335" height="81.333333333333343"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="10" id="2uo-Ve-Xz4"/>
-                                                </constraints>
-                                                <string key="text">KotlinConf is a two-day conference with talks from industry experts on Kotlin, combined with a wonderful community and lots of fun!</string>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Io-87-EId">
-                                                <rect key="frame" x="20" y="322" width="335" height="0.33333333333331439"/>
+                                                <rect key="frame" x="20" y="261" width="335" height="1"/>
                                                 <color key="backgroundColor" red="0.74943912030000004" green="0.74435311559999995" blue="0.76594537500000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="aPL-kA-X4d"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4AJ-DD-1gJ">
-                                                <rect key="frame" x="20" y="442.33333333333337" width="335" height="0.66666666666668561"/>
+                                                <rect key="frame" x="20" y="382" width="335" height="1"/>
                                                 <color key="backgroundColor" red="0.74943912030000004" green="0.74435311559999995" blue="0.76594537500000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="xBk-RM-uak"/>
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lRO-bp-Fyj">
-                                                <rect key="frame" x="20" y="352" width="225" height="61"/>
+                                                <rect key="frame" x="20" y="292" width="225" height="61"/>
                                                 <gestureRecognizers/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="wOx-wg-eax"/>
@@ -477,7 +460,7 @@ Netherlands</string>
                                                 </connections>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="maz-YQ-hdC">
-                                                <rect key="frame" x="20" y="453" width="335" height="33"/>
+                                                <rect key="frame" x="20" y="393" width="335" height="33"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <state key="normal" title="Visit Web-site">
                                                     <color key="titleColor" red="0.82095575332641602" green="0.43348217010498047" blue="0.23905253410339355" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -487,14 +470,14 @@ Netherlands</string>
                                                 </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bQy-sr-raP">
-                                                <rect key="frame" x="20" y="496" width="335" height="0.33333333333331439"/>
+                                                <rect key="frame" x="20" y="436" width="335" height="1"/>
                                                 <color key="backgroundColor" red="0.74943912030000004" green="0.74435311559999995" blue="0.76594537500000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="878-6d-0Zg"/>
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pog-UZ-vJv">
-                                                <rect key="frame" x="20" y="506.33333333333337" width="335" height="33"/>
+                                                <rect key="frame" x="20" y="447" width="335" height="33"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <state key="normal" title="Our Twitter">
                                                     <color key="titleColor" red="0.82095575330000004" green="0.43348217010000001" blue="0.23905253409999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -504,14 +487,14 @@ Netherlands</string>
                                                 </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hTD-Dq-63A">
-                                                <rect key="frame" x="20" y="549.33333333333337" width="335" height="0.66666666666662877"/>
+                                                <rect key="frame" x="20" y="490" width="335" height="1"/>
                                                 <color key="backgroundColor" red="0.74943912030000004" green="0.74435311559999995" blue="0.76594537500000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="cob-4u-Ngd"/>
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IAz-Uw-IIG">
-                                                <rect key="frame" x="20" y="560" width="335" height="33"/>
+                                                <rect key="frame" x="20" y="501" width="335" height="33"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <state key="normal" title="Legal Notices">
                                                     <color key="titleColor" red="0.82095575330000004" green="0.43348217010000001" blue="0.23905253409999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -521,43 +504,31 @@ Netherlands</string>
                                                 </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ArD-d0-mNY">
-                                                <rect key="frame" x="20" y="603" width="335" height="0.33333333333337123"/>
+                                                <rect key="frame" x="20" y="544" width="335" height="1"/>
                                                 <color key="backgroundColor" red="0.74943912030000004" green="0.74435311559999995" blue="0.76594537500000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="EoL-g6-hy6"/>
                                                 </constraints>
                                             </view>
-                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Powered by Kotlin/Native" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LNA-Fu-xht">
-                                                <rect key="frame" x="127.33333333333331" y="613.33333333333337" width="120.66666666666669" height="12"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                <color key="textColor" red="0.39211529493331909" green="0.39218604564666748" blue="0.39210599660873413" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="maz-YQ-hdC" firstAttribute="top" secondItem="4AJ-DD-1gJ" secondAttribute="bottom" constant="10" id="0z5-6u-YKh"/>
                                             <constraint firstItem="maz-YQ-hdC" firstAttribute="leading" secondItem="rKI-ny-aOR" secondAttribute="leading" constant="20" id="1tH-HY-zmd"/>
-                                            <constraint firstItem="MBy-YN-eCH" firstAttribute="leading" secondItem="rKI-ny-aOR" secondAttribute="leading" constant="20" id="47z-XF-qMk"/>
-                                            <constraint firstItem="LNA-Fu-xht" firstAttribute="centerX" secondItem="rKI-ny-aOR" secondAttribute="centerX" id="7ZS-Zz-mQX"/>
                                             <constraint firstAttribute="trailing" secondItem="IAz-Uw-IIG" secondAttribute="trailing" constant="20" id="7zQ-KY-GCm"/>
-                                            <constraint firstItem="DWR-14-xrc" firstAttribute="top" secondItem="SET-CC-mz2" secondAttribute="bottom" id="89p-96-xeI"/>
-                                            <constraint firstItem="LNA-Fu-xht" firstAttribute="top" secondItem="ArD-d0-mNY" secondAttribute="bottom" constant="10" id="9CA-lK-jAg"/>
+                                            <constraint firstItem="7Io-87-EId" firstAttribute="top" secondItem="SET-CC-mz2" secondAttribute="bottom" constant="61" id="AMs-wW-6zw"/>
                                             <constraint firstAttribute="trailing" secondItem="hTD-Dq-63A" secondAttribute="trailing" constant="20" id="C5V-C0-3J1"/>
                                             <constraint firstAttribute="trailing" secondItem="7Io-87-EId" secondAttribute="trailing" constant="20" id="FGy-Wj-0lS"/>
                                             <constraint firstItem="ArD-d0-mNY" firstAttribute="leading" secondItem="rKI-ny-aOR" secondAttribute="leading" constant="20" id="FnA-gq-AMK"/>
                                             <constraint firstItem="4AJ-DD-1gJ" firstAttribute="top" secondItem="d2A-bP-WLO" secondAttribute="bottom" constant="10" id="ITd-Mj-jq1"/>
                                             <constraint firstAttribute="trailing" secondItem="bQy-sr-raP" secondAttribute="trailing" constant="20" id="LTc-lq-jL7"/>
-                                            <constraint firstItem="MBy-YN-eCH" firstAttribute="top" secondItem="DWR-14-xrc" secondAttribute="bottom" constant="20" id="NSI-93-VUF"/>
                                             <constraint firstItem="SET-CC-mz2" firstAttribute="top" secondItem="rKI-ny-aOR" secondAttribute="top" id="OpO-ql-u9H"/>
                                             <constraint firstItem="hTD-Dq-63A" firstAttribute="top" secondItem="Pog-UZ-vJv" secondAttribute="bottom" constant="10" id="PBo-WP-5Gx"/>
                                             <constraint firstItem="4AJ-DD-1gJ" firstAttribute="leading" secondItem="rKI-ny-aOR" secondAttribute="leading" constant="20" id="TWW-gj-umB"/>
                                             <constraint firstItem="d2A-bP-WLO" firstAttribute="top" secondItem="7Io-87-EId" secondAttribute="bottom" constant="10" id="Ua9-r1-R3F"/>
-                                            <constraint firstItem="7Io-87-EId" firstAttribute="top" secondItem="MBy-YN-eCH" secondAttribute="bottom" constant="20" id="Vpk-zw-QxB"/>
                                             <constraint firstItem="hTD-Dq-63A" firstAttribute="top" secondItem="Pog-UZ-vJv" secondAttribute="bottom" constant="10" id="Yzq-of-s9K"/>
                                             <constraint firstItem="Pog-UZ-vJv" firstAttribute="top" secondItem="bQy-sr-raP" secondAttribute="bottom" constant="10" id="Zj2-Lt-BGe"/>
                                             <constraint firstItem="bQy-sr-raP" firstAttribute="top" secondItem="maz-YQ-hdC" secondAttribute="bottom" constant="10" id="a8K-S2-c1f"/>
-                                            <constraint firstAttribute="bottom" secondItem="LNA-Fu-xht" secondAttribute="bottom" constant="10" id="aHL-Wp-EEA"/>
                                             <constraint firstItem="bQy-sr-raP" firstAttribute="leading" secondItem="rKI-ny-aOR" secondAttribute="leading" constant="20" id="ddW-rd-aJG"/>
                                             <constraint firstItem="7Io-87-EId" firstAttribute="leading" secondItem="rKI-ny-aOR" secondAttribute="leading" constant="20" id="eMd-Sr-O4D"/>
                                             <constraint firstItem="SET-CC-mz2" firstAttribute="leading" secondItem="rKI-ny-aOR" secondAttribute="leading" id="eue-vR-vRV"/>
@@ -570,11 +541,9 @@ Netherlands</string>
                                             <constraint firstItem="lRO-bp-Fyj" firstAttribute="centerY" secondItem="d2A-bP-WLO" secondAttribute="centerY" id="mtl-vq-KVe"/>
                                             <constraint firstItem="hTD-Dq-63A" firstAttribute="leading" secondItem="rKI-ny-aOR" secondAttribute="leading" constant="20" id="pAF-Vn-JWu"/>
                                             <constraint firstItem="lRO-bp-Fyj" firstAttribute="leading" secondItem="rKI-ny-aOR" secondAttribute="leading" constant="20" id="rJ9-Vc-e5F"/>
-                                            <constraint firstAttribute="trailing" secondItem="DWR-14-xrc" secondAttribute="trailing" id="rag-RB-jg9"/>
+                                            <constraint firstAttribute="bottom" secondItem="7Io-87-EId" secondAttribute="bottom" constant="374" id="stk-CC-I8V"/>
                                             <constraint firstAttribute="trailing" secondItem="4AJ-DD-1gJ" secondAttribute="trailing" constant="20" id="unu-gY-jgb"/>
                                             <constraint firstItem="IAz-Uw-IIG" firstAttribute="leading" secondItem="rKI-ny-aOR" secondAttribute="leading" constant="20" id="vGb-pQ-0uF"/>
-                                            <constraint firstAttribute="trailing" secondItem="MBy-YN-eCH" secondAttribute="trailing" constant="20" id="vLX-4E-fQm"/>
-                                            <constraint firstItem="DWR-14-xrc" firstAttribute="leading" secondItem="rKI-ny-aOR" secondAttribute="leading" id="vQ5-vu-pkw"/>
                                             <constraint firstItem="ArD-d0-mNY" firstAttribute="top" secondItem="IAz-Uw-IIG" secondAttribute="bottom" constant="10" id="w58-VW-ETN"/>
                                             <constraint firstAttribute="trailing" secondItem="maz-YQ-hdC" secondAttribute="trailing" constant="20" id="xIT-Mw-rfp"/>
                                             <constraint firstAttribute="trailing" secondItem="SET-CC-mz2" secondAttribute="trailing" id="yOr-YC-5Wh"/>
@@ -604,8 +573,6 @@ Netherlands</string>
                     </view>
                     <navigationItem key="navigationItem" title="About" id="g9G-aD-csg"/>
                     <connections>
-                        <outlet property="badge" destination="LNA-Fu-xht" id="xUg-dc-dbi"/>
-                        <outlet property="info" destination="MBy-YN-eCH" id="BYY-gz-Znl"/>
                         <outlet property="map" destination="d2A-bP-WLO" id="Bgt-ub-mAN"/>
                     </connections>
                 </viewController>

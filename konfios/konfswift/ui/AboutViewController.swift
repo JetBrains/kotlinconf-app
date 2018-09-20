@@ -7,16 +7,10 @@ import konfios
 class AboutViewController : UIViewController, MKMapViewDelegate {
     @IBOutlet private weak var map: MKMapView!
     @IBOutlet private weak var badge: UIView!
-    @IBOutlet private weak var info: UILabel!
 
     override func viewDidLoad() {
         map.delegate = self
 
-        let htmlString = "<html><body><font size=\"4\">The official KotlinConf 2018 App.<br/><br/>This App was developed amongst other reasons to showcase Kotlin/JVM. Get more information and source code from <a href=\"https://github.com/jetbrains/kotlinconf-app\">github.com/jetbrains/kotlinconf-app</a><br/><br/>Powered by Kotlin</font></body></html>"
-        guard let data = htmlString.data(using: String.Encoding.unicode) else { return }
-        
-        try? info.attributedText = NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
-        
         let location = CLLocation(latitude: 52.375175, longitude: 4.8938273)
         map.setRegion(MKCoordinateRegionMakeWithDistance(location.coordinate, 400, 400), animated: false)
 
