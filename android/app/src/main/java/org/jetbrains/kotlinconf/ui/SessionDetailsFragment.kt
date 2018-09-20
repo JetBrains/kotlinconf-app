@@ -54,7 +54,7 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         okButton.setOnClickListener { presenter.rateSessionClicked(OK) }
         badButton.setOnClickListener { presenter.rateSessionClicked(BAD) }
         verifyCodeButton.setOnClickListener {
-            CodeEnterFragment().show(fragmentManager, CodeEnterFragment.TAG)
+            RatingCodeEnterFragment().show(fragmentManager, RatingCodeEnterFragment.TAG)
         }
         presenter.onCreate()
     }
@@ -242,7 +242,7 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
                         }
 
                         votingPromptLayout = verticalLayout {
-                            textView(R.string.voting_text) {
+                            textView(R.string.rating_text) {
                                 textSize = 18f
                             }
                             verifyCodeButton = button(R.string.verify_button_text) {

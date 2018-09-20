@@ -30,13 +30,14 @@ extension UIViewController: BaseView {
             message = "Voting is not allowed before the session starts"
         case is TooLateVote:
             message = "Voting is not allowed later than 15 minutes after the session ends"
+        case is FailedToVerifyCode:
+            message = "Failed to verify code"
+        case is IncorrectCode:
+            message = "Sorry, the code entered is incorrect"
         default:
             message = "Unknown Error"
         }
-        
-//        error.printStackTrace()
-        error.cause?.printStackTrace()
-        error.cause?.cause?.printStackTrace()
+
         self.showPopupText(title: message)
     }
 }
