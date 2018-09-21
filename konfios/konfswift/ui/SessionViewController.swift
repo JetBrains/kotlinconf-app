@@ -127,12 +127,18 @@ class SessionViewController : UIViewController, SessionDetailsView {
         if (speakers.count == 1) {
             userIcon1.isHidden = false
             userIcon2.isHidden = true
-            userIcon1.loadUserIcon(url: speakers[0].profilePicture!)
+            if (speakers[0].profilePicture != nil) {
+                userIcon1.loadUserIcon(url: speakers[0].profilePicture!)
+            }
         } else if (speakers.count == 2) {
             userIcon1.isHidden = false
             userIcon2.isHidden = false
-            userIcon2.loadUserIcon(url: speakers[0].profilePicture!)
-            userIcon1.loadUserIcon(url: speakers[1].profilePicture!)
+            if (speakers[0].profilePicture != nil) {
+                userIcon2.loadUserIcon(url: speakers[0].profilePicture!)
+            }
+            if (speakers[1].profilePicture != nil) {
+                userIcon1.loadUserIcon(url: speakers[1].profilePicture!)
+            }
         } else {
             userIcon1.isHidden = true
             userIcon2.isHidden = true
