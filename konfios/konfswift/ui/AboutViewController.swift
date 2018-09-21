@@ -51,6 +51,18 @@ class AboutViewController : UIViewController, MKMapViewDelegate {
     @IBAction func onWebsiteClick(_: Any?) {
         UIApplication.shared.openURL(URL(string: "https://www.kotlinconf.com/")!)
     }
+    
+    @IBAction func onMapClick(_: Any?) {
+        guard let place = map.annotations.first else { return }
+        guard let title = place.title else { return }
+
+        let mapItem = MKMapItem(
+            placemark: MKPlacemark(coordinate: place.coordinate, addressDictionary: nil)
+        )
+        
+        mapItem.name = title
+        mapItem.openInMaps(launchOptions: nil)
+    }
 }
 
 fileprivate class Place: NSObject, MKAnnotation {
