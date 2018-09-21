@@ -28,8 +28,13 @@ class PrivacyPolicyAcceptanceFragment : BaseDialogFragment(), CodeVerificationVi
     private val codeVerificationPresenter by lazy { CodeVerificationPresenter(Dispatchers.Main, this, repository) }
     private val privacyPolicyPresenter by lazy { PrivacyPolicyPresenter(repository) }
 
+    init {
+        isCancelable = false
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context!!)
+            .setCancelable(false)
             .setView(createView())
             .setPositiveButton(R.string.submit_button) { _, _ ->
                 privacyPolicyPresenter.onAcceptPrivacyPolicyClicked()
@@ -40,6 +45,13 @@ class PrivacyPolicyAcceptanceFragment : BaseDialogFragment(), CodeVerificationVi
         dialog.setOnShowListener {
             submitButton = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
             submitButton.isEnabled = false
+        }
+        dialog.setOnKeyListener { _, keyCode, event ->
+            // Listen for a back button pressed to close the activity
+            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+                activity?.finish()
+            }
+            return@setOnKeyListener true
         }
         dialog.setCanceledOnTouchOutside(false)
         dialog.setOnCancelListener { activity?.finishAffinity() }

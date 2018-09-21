@@ -29,11 +29,10 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
 
         if (savedInstanceState == null) {
             showSessionList()
+            presenter.onCreate()
         } else {
             savedInstanceState.getString(SEARCH_QUERY_KEY)?.let { searchQuery = it }
         }
-
-        presenter.onCreate()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
