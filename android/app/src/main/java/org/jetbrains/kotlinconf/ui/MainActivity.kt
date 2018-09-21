@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
         val searchViewMenuItem = menu.findItem(R.id.search)
         val searchView = searchViewMenuItem.actionView as SearchView
         if (searchQuery.isNotEmpty()) {
+            supportActionBar?.setLogo(R.drawable.kotlinconf_logo)
             searchView.setQuery(searchQuery, false)
             searchView.isIconified = false
         }

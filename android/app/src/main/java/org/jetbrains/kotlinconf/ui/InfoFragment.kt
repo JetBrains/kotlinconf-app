@@ -36,6 +36,7 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
             supportActionBar?.setDisplayShowHomeEnabled(true)
             supportActionBar?.setDisplayShowTitleEnabled(false)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayUseLogoEnabled(false)
         }
     }
 
