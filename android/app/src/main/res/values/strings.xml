@@ -195,5 +195,5 @@ liability.</p> ]]></string>
     <string name="code_verification_failed">Failed to verify the code</string>
     <string name="code_incorrect">Sorry, the code entered is incorrect</string>
     <string name="rating_text">In order to enable rating, please enter your code</string>
-    <string name="verify_button_text">Verify rating code</string>
+    <string name="verify_button_text">Verify code</string>
 </resources>
