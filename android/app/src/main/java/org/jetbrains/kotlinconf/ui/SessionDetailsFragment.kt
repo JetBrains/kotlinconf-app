@@ -97,15 +97,15 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         descriptionTextView.text = session.descriptionText
 
         val online = context?.let { it.isConnected?.and(!it.isAirplaneModeOn) } ?: false
+        votingButtonsLayout.visibility = if (loggedIn && online) VISIBLE else GONE
+        votingPromptLayout.visibility = if (!loggedIn && online) VISIBLE else GONE
 
-        for (button in listOf(votingButtonsLayout, favoriteButton)) {
-            button.visibility = if (loggedIn && online) View.VISIBLE else View.GONE
-        }
-        votingPromptLayout.visibility = if (loggedIn) GONE else VISIBLE
-
-        if(loggedIn) {
+        if(loggedIn && online) {
+            favoriteButton.show()
             val favoriteIcon = if (isFavorite) R.drawable.ic_favorite_white_24dp else R.drawable.ic_favorite_border_white_24dp
             favoriteButton.setImageResource(favoriteIcon)
+        } else {
+            favoriteButton.hide()
         }
 
         session.speakers
