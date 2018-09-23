@@ -111,7 +111,6 @@ abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, Ses
             set(value) {
                 field = value
                 _data = field
-                    .sortedWith(compareBy({ it.startsAt?.timestamp }, { it.room }, { it.title }))
                     .groupBy { it.startsAt?.toReadableDateString() ?: "" }
                     .flatMap { (day, sessions) -> listOf(HeaderItem(day)) + sessions }
 

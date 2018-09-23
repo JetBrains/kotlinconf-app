@@ -34,19 +34,23 @@ class SessionListPresenter(
         updateData()
     }
 
-    fun updateData() {
+    fun showData() {
+        val displayedSessions = repository.sessions.orEmpty()
+                .sortedWith(compareBy({ it.startsAt?.timestamp }, { it.room }, { it.title }))
+                .filter(searchQuery)
+        val displayedFavorites = repository.favorites.orEmpty()
+                .sortedWith(compareBy({ it.startsAt?.timestamp }, { it.room }, { it.title }))
+                .filter(searchQuery)
+        view.onUpdate(displayedSessions, displayedFavorites)
+    }
+
+    private fun updateData() {
         launchAndCatch(uiContext, view::showError) {
             repository.update()
             showData()
         } finally {
             view.isUpdating = false
         }
-    }
-
-    fun showData() {
-        val displayedSessions = repository.sessions?.filter(searchQuery).orEmpty()
-        val displayedFavorites = repository.favorites?.filter(searchQuery).orEmpty()
-        view.onUpdate(displayedSessions, displayedFavorites)
     }
 
     private fun isFirstDataLoading() = repository.sessions == null
