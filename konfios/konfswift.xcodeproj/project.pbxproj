@@ -18,6 +18,7 @@
 		2C6393421F743F15004953A3 /* SessionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6393411F743F15004953A3 /* SessionsViewController.swift */; };
 		2C6393441F743F2F004953A3 /* SessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6393431F743F2F004953A3 /* SessionViewController.swift */; };
 		2C6393481F743F73004953A3 /* UiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6393471F743F73004953A3 /* UiUtils.swift */; };
+		2C76DBDB2158F0BE009A9557 /* TermsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C76DBDA2158F0BE009A9557 /* TermsController.swift */; };
 		2CA847C1214BA6F8000A094C /* Pods_konfswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F0183213ED71700FCD207 /* Pods_konfswift.framework */; };
 		9F8568862151CF8F0074AE71 /* CodeAndPolicyDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8568852151CF8F0074AE71 /* CodeAndPolicyDialog.swift */; };
 		9F8568882151D0E60074AE71 /* RatingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F8568872151D0E60074AE71 /* RatingViewController.xib */; };
@@ -67,6 +68,7 @@
 		2C6393431F743F2F004953A3 /* SessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionViewController.swift; sourceTree = "<group>"; };
 		2C6393471F743F73004953A3 /* UiUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UiUtils.swift; sourceTree = "<group>"; };
 		2C63934B1F744CA4004953A3 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		2C76DBDA2158F0BE009A9557 /* TermsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsController.swift; sourceTree = "<group>"; };
 		3AD1B286AB3044DE546C83D1 /* Pods-konfswift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-konfswift/Pods-konfswift.debug.xcconfig"; sourceTree = "<group>"; };
 		3F8F328F75A7A47133925362 /* Pods-konfswiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswiftTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-konfswiftTests/Pods-konfswiftTests.release.xcconfig"; sourceTree = "<group>"; };
 		82B39A882B392FCA825017DE /* Pods-konfswiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswiftTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-konfswiftTests/Pods-konfswiftTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				2C024B191F7494B400A7EAEC /* AboutViewController.swift */,
 				D30D00A7214D087900CD1184 /* UI.swift */,
 				D3B66AE2214E9CF70078D58D /* BaseView.swift */,
+				2C76DBDA2158F0BE009A9557 /* TermsController.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -387,6 +390,7 @@
 				2C024B1A1F7494B400A7EAEC /* AboutViewController.swift in Sources */,
 				2C6393441F743F2F004953A3 /* SessionViewController.swift in Sources */,
 				2C50FD941F729FE000B3F845 /* AppDelegate.swift in Sources */,
+				2C76DBDB2158F0BE009A9557 /* TermsController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

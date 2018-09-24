@@ -10,6 +10,75 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Terms-->
+        <scene sceneID="2Jo-A7-UDa">
+            <objects>
+                <viewController storyboardIdentifier="Terms" title="Terms" id="xxQ-qM-IrS" customClass="TermsController" customModule="konfswift" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="BTO-en-KiO"/>
+                        <viewControllerLayoutGuide type="bottom" id="QuR-7f-vcL"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Dew-G1-7IO">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GiN-wx-AR0">
+                                <rect key="frame" x="155.66666666666666" y="648" width="65" height="38"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <state key="normal" title="Accept"/>
+                                <connections>
+                                    <action selector="onAcceptClick:" destination="xxQ-qM-IrS" eventType="touchDown" id="vsi-dN-AMl"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info_header" translatesAutoresizingMaskIntoConstraints="NO" id="nKY-Tj-NbW">
+                                <rect key="frame" x="16" y="52" width="343" height="244"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="244" id="OHt-WL-qYB"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="privacyLabel" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dXt-Op-SUm">
+                                <rect key="frame" x="16" y="271" width="343" height="95"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="95" id="VAk-Be-OCO"/>
+                                </constraints>
+                                <attributedString key="attributedText">
+                                    <fragment content="To proceed please accept the ">
+                                        <attributes>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Privacy Policy">
+                                        <attributes>
+                                            <color key="NSColor" red="0.0" green="0.50588235294117645" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="nKY-Tj-NbW" firstAttribute="leading" secondItem="Dew-G1-7IO" secondAttribute="leadingMargin" id="9XJ-C8-mxJ"/>
+                            <constraint firstItem="dXt-Op-SUm" firstAttribute="centerX" secondItem="GiN-wx-AR0" secondAttribute="centerX" id="NoK-yw-dyq"/>
+                            <constraint firstItem="nKY-Tj-NbW" firstAttribute="trailing" secondItem="dXt-Op-SUm" secondAttribute="trailing" id="PAx-Hd-qo5"/>
+                            <constraint firstItem="nKY-Tj-NbW" firstAttribute="top" secondItem="BTO-en-KiO" secondAttribute="bottom" constant="8" symbolic="YES" id="als-IY-xUf"/>
+                            <constraint firstItem="dXt-Op-SUm" firstAttribute="top" secondItem="nKY-Tj-NbW" secondAttribute="bottom" constant="-25" id="h6J-l7-FSi"/>
+                            <constraint firstItem="QuR-7f-vcL" firstAttribute="top" secondItem="GiN-wx-AR0" secondAttribute="bottom" constant="92" id="hSy-Rq-euw"/>
+                            <constraint firstItem="nKY-Tj-NbW" firstAttribute="leading" secondItem="dXt-Op-SUm" secondAttribute="leading" id="nX8-Us-Zkw"/>
+                            <constraint firstItem="nKY-Tj-NbW" firstAttribute="trailing" secondItem="Dew-G1-7IO" secondAttribute="trailingMargin" id="wHf-IW-KLx"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="privacyLabel" destination="dXt-Op-SUm" id="fCW-ML-LVJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZY5-vk-IRz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1261.5999999999999" y="-127.09359605911331"/>
+        </scene>
         <!--Sessions-->
         <scene sceneID="5x6-vS-IzC">
             <objects>
@@ -26,7 +95,7 @@
                                 <rect key="frame" x="0.0" y="88" width="375" height="690"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Session" rowHeight="60" id="OjI-O5-f5d" customClass="SessionsTableViewCell" customModule="konfswift">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Session" rowHeight="60" id="OjI-O5-f5d" customClass="SessionsTableViewCell" customModule="konfswift">
                                         <rect key="frame" x="0.0" y="28" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="OjI-O5-f5d" id="bHo-dl-Oen">
@@ -74,7 +143,7 @@ asdasd</string>
                                             <segue destination="H2Y-xy-WY9" kind="show" identifier="ShowSession" id="tok-fy-hxJ"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Break" rowHeight="74" id="Ami-sJ-v2e" customClass="BreakTableViewCell" customModule="konfswift">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Break" rowHeight="74" id="Ami-sJ-v2e" customClass="BreakTableViewCell" customModule="konfswift">
                                         <rect key="frame" x="0.0" y="88" width="375" height="74"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ami-sJ-v2e" id="m2A-iU-mD2">
@@ -1536,7 +1605,7 @@ Cgo
                                                         </attributes>
                                                     </fragment>
                                                     <fragment>
-                                                        <mutableString key="content">
+                                                        <string key="content">
 
 Apache License
 Version 2.0, January 2004
@@ -1591,7 +1660,7 @@ You may add Your own copyright statement to Your modifications and may provide a
 END OF TERMS AND CONDITIONS
 
 
-</mutableString>
+</string>
                                                         <attributes>
                                                             <font key="NSFont" size="15" name="Helvetica"/>
                                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
@@ -1682,7 +1751,7 @@ END OF TERMS AND CONDITIONS
                                                         </attributes>
                                                     </fragment>
                                                     <fragment>
-                                                        <mutableString key="content">
+                                                        <string key="content">
  
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  
@@ -1694,7 +1763,7 @@ END OF TERMS AND CONDITIONS
 
 External contibutors:
  - Catalina Chioveanu
- - Marcin </mutableString>
+ - Marcin </string>
                                                         <attributes>
                                                             <font key="NSFont" size="15" name="Helvetica"/>
                                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
@@ -1887,7 +1956,7 @@ External contibutors:
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yrQ-A1-8Rb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="505" y="546"/>
+            <point key="canvasLocation" x="134" y="546"/>
         </scene>
     </scenes>
     <resources>
