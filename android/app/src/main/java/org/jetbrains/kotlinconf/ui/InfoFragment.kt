@@ -103,7 +103,7 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         isClickable = true
                         backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
                         setOnClickListener {
-                            val gmmIntentUri = Uri.parse("geo:52.3752,4.8960?z=17")
+                            val gmmIntentUri = Uri.parse("geo:52.3752,4.8960?z=17&q=52.3752,4.8960")
                             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
                             mapIntent.`package` = "com.google.android.apps.maps"
                             if (mapIntent.resolveActivity(context.packageManager) != null) {
@@ -122,7 +122,6 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         textView(R.string.kotlin_conf_address) {
                             textSize = 18f
                             textColor = Color.BLACK
-                            setTextIsSelectable(true)
                         }.lparams {
                             centerVertically()
                             rightOf(R.id.icon_location)
