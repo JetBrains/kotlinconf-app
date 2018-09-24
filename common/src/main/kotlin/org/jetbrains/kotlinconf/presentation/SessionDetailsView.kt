@@ -7,4 +7,5 @@ interface SessionDetailsView : BaseView {
     fun updateView(loggedIn: Boolean, isFavorite: Boolean, session: SessionModel)
     fun setupRatingButtons(rating: SessionRating?)
     fun setRatingClickable(clickable: Boolean)
+    fun showVotingPrompt()
 }
