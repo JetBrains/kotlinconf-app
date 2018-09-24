@@ -20,8 +20,8 @@
 		2C6393481F743F73004953A3 /* UiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6393471F743F73004953A3 /* UiUtils.swift */; };
 		2C76DBDB2158F0BE009A9557 /* TermsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C76DBDA2158F0BE009A9557 /* TermsController.swift */; };
 		2CA847C1214BA6F8000A094C /* Pods_konfswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F0183213ED71700FCD207 /* Pods_konfswift.framework */; };
-		9F8568862151CF8F0074AE71 /* CodeAndPolicyDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8568852151CF8F0074AE71 /* CodeAndPolicyDialog.swift */; };
-		9F8568882151D0E60074AE71 /* RatingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F8568872151D0E60074AE71 /* RatingViewController.xib */; };
+		6F254FB1C8A15F5393A98E9A /* Pods_konfswiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BA84E09CE082A09696F42F6 /* Pods_konfswiftTests.framework */; };
+		78F1837816258F26549E4A30 /* Pods_konfswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 650713D8A409168EDA5FA1DE /* Pods_konfswift.framework */; };
 		D30D00A8214D087900CD1184 /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D00A7214D087900CD1184 /* UI.swift */; };
 		D3B66AE3214E9CF70078D58D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B66AE2214E9CF70078D58D /* BaseView.swift */; };
 /* End PBXBuildFile section */
@@ -71,9 +71,9 @@
 		2C76DBDA2158F0BE009A9557 /* TermsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsController.swift; sourceTree = "<group>"; };
 		3AD1B286AB3044DE546C83D1 /* Pods-konfswift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-konfswift/Pods-konfswift.debug.xcconfig"; sourceTree = "<group>"; };
 		3F8F328F75A7A47133925362 /* Pods-konfswiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswiftTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-konfswiftTests/Pods-konfswiftTests.release.xcconfig"; sourceTree = "<group>"; };
+		650713D8A409168EDA5FA1DE /* Pods_konfswift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_konfswift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6BA84E09CE082A09696F42F6 /* Pods_konfswiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_konfswiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		82B39A882B392FCA825017DE /* Pods-konfswiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswiftTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-konfswiftTests/Pods-konfswiftTests.debug.xcconfig"; sourceTree = "<group>"; };
-		9F8568852151CF8F0074AE71 /* CodeAndPolicyDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodeAndPolicyDialog.swift; sourceTree = "<group>"; };
-		9F8568872151D0E60074AE71 /* RatingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RatingViewController.xib; sourceTree = "<group>"; };
 		A41FE60CFCB7748B63FEC8FD /* Pods-konfswift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswift.release.xcconfig"; path = "Pods/Target Support Files/Pods-konfswift/Pods-konfswift.release.xcconfig"; sourceTree = "<group>"; };
 		D30D00A7214D087900CD1184 /* UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI.swift; sourceTree = "<group>"; };
 		D3B66AE2214E9CF70078D58D /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
@@ -86,6 +86,7 @@
 			files = (
 				2CA847C1214BA6F8000A094C /* Pods_konfswift.framework in Frameworks */,
 				2C4F018B213ED72800FCD207 /* konfios.framework in Frameworks */,
+				78F1837816258F26549E4A30 /* Pods_konfswift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F254FB1C8A15F5393A98E9A /* Pods_konfswiftTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,7 +149,6 @@
 		2C63933F1F743EDE004953A3 /* ui */ = {
 			isa = PBXGroup;
 			children = (
-				9F8568852151CF8F0074AE71 /* CodeAndPolicyDialog.swift */,
 				2C50FD931F729FE000B3F845 /* AppDelegate.swift */,
 				2C6393411F743F15004953A3 /* SessionsViewController.swift */,
 				2C6393431F743F2F004953A3 /* SessionViewController.swift */,
@@ -162,7 +163,6 @@
 		2C6393401F743EE5004953A3 /* resources */ = {
 			isa = PBXGroup;
 			children = (
-				9F8568872151D0E60074AE71 /* RatingViewController.xib */,
 				2C50FD9D1F729FE000B3F845 /* Assets.xcassets */,
 				2C50FD9F1F729FE000B3F845 /* LaunchScreen.storyboard */,
 			);
@@ -191,6 +191,8 @@
 		C4FEB15DDCA083DE8665D19F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				650713D8A409168EDA5FA1DE /* Pods_konfswift.framework */,
+				6BA84E09CE082A09696F42F6 /* Pods_konfswiftTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -287,7 +289,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C50FDA11F729FE000B3F845 /* LaunchScreen.storyboard in Resources */,
-				9F8568882151D0E60074AE71 /* RatingViewController.xib in Resources */,
 				2C50FD9E1F729FE000B3F845 /* Assets.xcassets in Resources */,
 				2C50FD991F729FE000B3F845 /* Main.storyboard in Resources */,
 			);
@@ -310,13 +311,17 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-konfswift/Pods-konfswift-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/DynamicBlurView/DynamicBlurView.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/PopupDialog/PopupDialog.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/TagListView-ObjC/TagListView_ObjC.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DynamicBlurView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PopupDialog.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TagListView_ObjC.framework",
 			);
@@ -383,7 +388,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C6393481F743F73004953A3 /* UiUtils.swift in Sources */,
-				9F8568862151CF8F0074AE71 /* CodeAndPolicyDialog.swift in Sources */,
 				D30D00A8214D087900CD1184 /* UI.swift in Sources */,
 				D3B66AE3214E9CF70078D58D /* BaseView.swift in Sources */,
 				2C6393421F743F15004953A3 /* SessionsViewController.swift in Sources */,
