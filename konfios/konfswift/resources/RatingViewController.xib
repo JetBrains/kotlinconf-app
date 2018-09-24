@@ -84,8 +84,8 @@
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="info_header" translatesAutoresizingMaskIntoConstraints="NO" id="Bw0-1s-76y">
                             <rect key="frame" x="-6" y="0.0" width="300" height="175"/>
                         </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="If you would like to vote for a session enter your voting code" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cPg-uY-2OJ">
-                            <rect key="frame" x="0.0" y="281" width="300" height="33.5"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="If you would like to rate a session enter your code" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cPg-uY-2OJ">
+                            <rect key="frame" x="0.0" y="281" width="292" height="34"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="300" id="BRx-du-bOn"/>
                             </constraints>
