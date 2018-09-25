@@ -186,7 +186,7 @@ Authorization: Bearer 1238476512873162837
 fun Routing.apiAll(database: Database) {
     get("all") {
         val data = getSessionizeData()
-        val principal = call.validatePrincipal(database) ?: throw Unauthorized()
+        val principal = call.validatePrincipal(database)
         val responseData = if (principal != null) {
             val votes = database.getVotes(principal.token)
             val favorites = database.getFavorites(principal.token)

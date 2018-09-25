@@ -38,12 +38,12 @@ class KotlinConfDataRepository(
 
     override suspend fun update() {
         val state = try {
-            if (loggedIn) {
+            if (!loggedIn) {
                 api.createUser(userId!!)
                 loggedIn = true
             }
             api.getAll(userId)
-        } catch (_: Throwable) {
+        } catch (cause: Throwable) {
             throw UpdateProblem()
         }
 

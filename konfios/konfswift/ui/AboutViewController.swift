@@ -6,7 +6,6 @@ import konfios
 
 class AboutViewController : UIViewController, MKMapViewDelegate {
     @IBOutlet private weak var map: MKMapView!
-    @IBOutlet private weak var enterCodeButton: UIButton!
     
     override func viewDidLoad() {
         map.delegate = self
@@ -17,19 +16,6 @@ class AboutViewController : UIViewController, MKMapViewDelegate {
         let confPlace = Place(title: "BEURS VAN BERLAGE", subtitle: "Amsterdam, Netherlands", coordinate: location.coordinate)
                 
         map.addAnnotation(confPlace)
-        
-        updateButton()
-    }
-    
-    @IBAction func enterCodeButtonClicked(_ sender: Any) {
-        showVotingCodeDialog() {
-            self.updateButton()
-        }
-    }
-    
-    private func updateButton() {
-        let enterCodeButtonEnabled = AppDelegate.me.konfService.userId == nil
-        enterCodeButton.isEnabled = enterCodeButtonEnabled
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {

@@ -6,7 +6,10 @@ let KTUnit = KotlinUnit()
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    public lazy var konfService = { KotlinConfDataRepository(settings: PlatformSettings()) }()
+    public lazy var konfService = { KotlinConfDataRepository(
+        uid: generateUuid(),
+        settings: PlatformSettings())
+    }()
 
     var window: UIWindow?
 
@@ -16,5 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     public func applicationWillTerminate(_ application: UIApplication) {
         // TODO: save context
+    }
+    
+    private func generateUuid() -> String {
+        return "ios-" + (UIDevice.current.identifierForVendor ?? UUID()).uuidString
     }
 }
