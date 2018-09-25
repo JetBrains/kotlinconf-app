@@ -97,6 +97,8 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         descriptionTextView.text = session.descriptionText
 
         val online = context?.let { it.isConnected?.and(!it.isAirplaneModeOn) } ?: false
+        votingButtonsLayout.visibility = if (loggedIn && online) VISIBLE else GONE
+        votingPromptLayout.visibility = if (!loggedIn && online) VISIBLE else GONE
 
         for (button in listOf(votingButtonsLayout, favoriteButton)) {
             button.visibility = if (online) View.VISIBLE else View.GONE

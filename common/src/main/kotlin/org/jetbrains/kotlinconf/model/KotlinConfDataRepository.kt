@@ -19,7 +19,7 @@ class KotlinConfDataRepository(
     override var sessions: List<SessionModel>? by bindToPreferencesByKey("settingsKey", SessionModel.serializer().list)
     override var favorites: List<SessionModel>? by bindToPreferencesByKey("favoritesKey", SessionModel.serializer().list)
     override var votes: List<Vote>? by bindToPreferencesByKey("votesKey", Vote.serializer().list)
-    private var userId: String? by bindToPreferencesByKey("userIdKey", String.serializer())
+    override var userId: String? by bindToPreferencesByKey("userIdKey", String.serializer())
 
     override var privacyPolicyAccepted: Boolean
         get() = settings.getBoolean("privacyPolicyAcceptedKey", false)
@@ -48,6 +48,10 @@ class KotlinConfDataRepository(
             votes = newVotes
             callRefreshListeners()
         }
+    }
+
+    override fun acceptPrivacyPolicy() {
+        privacyPolicyAccepted = true
     }
 
     override suspend fun verifyAndSetCode(code: VotingCode) {

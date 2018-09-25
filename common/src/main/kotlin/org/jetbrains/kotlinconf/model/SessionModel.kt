@@ -62,11 +62,14 @@ class SessionModel(
     }
 }
 
-fun AllData.allSessions(): List<SessionModel> {
-    return sessions.map { SessionModel.forSession(this, it.id) }
-        .sortedWith(compareBy({ it.startsAt?.timestamp }, { it.title }))
-}
+fun AllData.allSessions(): List<SessionModel> = sessions
+    .map { SessionModel.forSession(this, it.id) }
+    .sorted()
 
 fun AllData.favoriteSessions(): List<SessionModel> = favorites
     .map { it.sessionId }
     .map { SessionModel.forSession(this, it) }
+    .sorted()
+
+private fun List<SessionModel>.sorted(): List<SessionModel> =
+    sortedWith(compareBy({ it.startsAt?.timestamp }, { it.title }))

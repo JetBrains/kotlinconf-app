@@ -10,11 +10,13 @@ interface DataRepository {
     var onRefreshListeners: List<() -> Unit>
     val loggedIn: Boolean
     var privacyPolicyAccepted: Boolean
+    var userId: String?
 
     suspend fun update()
     fun getRating(sessionId: String): SessionRating?
     suspend fun addRating(sessionId: String, rating: SessionRating)
     suspend fun removeRating(sessionId: String)
     suspend fun setFavorite(sessionId: String, isFavorite: Boolean)
+    fun acceptPrivacyPolicy()
     suspend fun verifyAndSetCode(code: VotingCode)
 }

@@ -77,7 +77,13 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func showPrivacyPolicyDialog() {
-        showVotingCodeDialog(privacyPolicyAcceptedBefore: false)
+//        showVotingCodeDialog(privacyPolicyAcceptedBefore: false)
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyBoard.instantiateViewController(withIdentifier: "Terms") as! TermsController
+        self.present(newViewController, animated: true, completion: nil)
+    }
+    
+    func showTokenDialog() {
     }
     
     func onUpdate(sessions: [SessionModel], favorites: [SessionModel]) {
