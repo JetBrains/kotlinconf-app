@@ -113,10 +113,6 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
         PrivacyPolicyAcceptanceFragment().show(supportFragmentManager, PrivacyPolicyAcceptanceFragment.TAG)
     }
 
-    override fun showTokenDialog() {
-        PrivacyPolicyAcceptanceFragment().show(supportFragmentManager, PrivacyPolicyAcceptanceFragment.TAG)
-    }
-
     override fun showSessionDetails(sessionId: String) {
         val fragment = SessionDetailsFragment.forSession(sessionId)
         supportFragmentManager

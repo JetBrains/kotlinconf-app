@@ -25,10 +25,6 @@ class SessionDetailsPresenter(
     }
 
     fun rateSessionClicked(newRating: SessionRating) {
-        if(!repository.loggedIn){
-            view.showVotingPrompt()
-            return
-        }
         launchAndCatch(uiContext, view::showError) {
             view.setRatingClickable(false)
             if (rating != newRating) {
@@ -55,7 +51,7 @@ class SessionDetailsPresenter(
 
     private fun refreshDataFromRepo() {
         session = repository.sessions?.firstOrNull { it.id == sessionId } ?: return
-        view.updateView(repository.loggedIn, isFavorite(), session)
+        view.updateView(isFavorite(), session)
         rating = repository.getRating(sessionId)
         view.setupRatingButtons(rating)
         rating = repository.getRating(sessionId)

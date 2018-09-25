@@ -8,7 +8,6 @@ interface DataRepository {
     val favorites: List<SessionModel>?
     val votes: List<Vote>?
     var onRefreshListeners: List<() -> Unit>
-    val loggedIn: Boolean
     var privacyPolicyAccepted: Boolean
     var userId: String?
 
@@ -18,5 +17,4 @@ interface DataRepository {
     suspend fun removeRating(sessionId: String)
     suspend fun setFavorite(sessionId: String, isFavorite: Boolean)
     fun acceptPrivacyPolicy()
-    suspend fun verifyAndSetCode(code: VotingCode)
 }

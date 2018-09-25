@@ -7,12 +7,13 @@ import org.jetbrains.anko.*
 import org.jetbrains.kotlinconf.model.*
 import org.jetbrains.kotlinconf.presentation.*
 import org.jetbrains.kotlinconf.storage.*
+import java.util.*
 
 class KotlinConfApplication : Application(), AnkoLogger {
 
     val dataRepository: DataRepository by lazy {
         val settingsFactory = PlatformSettings(applicationContext)
-        KotlinConfDataRepository(settingsFactory)
+        KotlinConfDataRepository(getUserId(), settingsFactory)
     }
 
     override fun onCreate() {
@@ -29,4 +30,6 @@ class KotlinConfApplication : Application(), AnkoLogger {
         super.attachBaseContext(base)
         MultiDex.install(this)
     }
+
+    private fun getUserId(): String = "android-" + UUID.randomUUID().toString()
 }

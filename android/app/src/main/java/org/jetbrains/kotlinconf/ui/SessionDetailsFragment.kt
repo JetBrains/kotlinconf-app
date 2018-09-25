@@ -84,11 +84,7 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         badButton.isClickable = clickable
     }
 
-    override fun showVotingPrompt() {
-        RatingCodeEnterFragment().show(fragmentManager, RatingCodeEnterFragment.TAG)
-    }
-
-    override fun updateView(loggedIn: Boolean, isFavorite: Boolean, session: SessionModel) {
+    override fun updateView(isFavorite: Boolean, session: SessionModel) {
         collapsingToolbar.title = session.title
         speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName }
 
@@ -97,24 +93,22 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         descriptionTextView.text = session.descriptionText
 
         val online = context?.let { it.isConnected?.and(!it.isAirplaneModeOn) } ?: false
-        votingButtonsLayout.visibility = if (loggedIn && online) VISIBLE else GONE
-        votingPromptLayout.visibility = if (!loggedIn && online) VISIBLE else GONE
-
         for (button in listOf(votingButtonsLayout, favoriteButton)) {
             button.visibility = if (online) View.VISIBLE else View.GONE
         }
 
-        val favoriteIcon = if (isFavorite) R.drawable.ic_favorite_white_24dp else R.drawable.ic_favorite_border_white_24dp
+        val favoriteIcon =
+            if (isFavorite) R.drawable.ic_favorite_white_24dp else R.drawable.ic_favorite_border_white_24dp
         favoriteButton.setImageResource(favoriteIcon)
-        
+
         session.speakers
-                .takeIf { it.size < 3 }
-                ?.map { it.profilePicture }
-                ?.apply {
-                    forEachIndexed { index, imageUrl ->
-                        imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
-                    }
+            .takeIf { it.size < 3 }
+            ?.map { it.profilePicture }
+            ?.apply {
+                forEachIndexed { index, imageUrl ->
+                    imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
                 }
+            }
     }
 
     private val SessionModel.timeString: String
@@ -141,15 +135,15 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
     private fun ImageView.showSpeakerImage(imageUrl: String) {
         visibility = View.VISIBLE
         Glide.with(this@SessionDetailsFragment)
-                .load(imageUrl)
-                .centerCrop()
-                .into(this)
+            .load(imageUrl)
+            .centerCrop()
+            .into(this)
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return UI {
             coordinatorLayout {
@@ -184,8 +178,8 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
                         view {
                             backgroundResource = R.drawable.appbar_buttons_scrim
                             layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                    matchParent,
-                                    dimen(context.getResourceId(R.attr.actionBarSize))
+                                matchParent,
+                                dimen(context.getResourceId(R.attr.actionBarSize))
                             ).apply {
                                 gravity = Gravity.TOP
                             }
@@ -200,8 +194,8 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
 
                         toolbar = toolbar {
                             layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                    matchParent,
-                                    dimen(context.getResourceId(R.attr.actionBarSize))
+                                matchParent,
+                                dimen(context.getResourceId(R.attr.actionBarSize))
                             ).apply {
                                 collapseMode = COLLAPSE_MODE_PIN
                             }
