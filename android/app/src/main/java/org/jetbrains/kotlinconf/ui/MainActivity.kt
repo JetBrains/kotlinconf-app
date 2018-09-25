@@ -12,7 +12,7 @@ import org.jetbrains.kotlinconf.presentation.*
 class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationManager, SearchQueryProvider, AnkoLogger {
 
     private val repository by lazy { (application as KotlinConfApplication).dataRepository }
-    private val presenter by lazy { MainPresenter( this, repository) }
+    private val presenter by lazy { MainPresenter(this, repository) }
 
     override var searchQuery: String = ""
         private set
@@ -110,6 +110,10 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
     }
 
     override fun showPrivacyPolicyDialog() {
+        PrivacyPolicyAcceptanceFragment().show(supportFragmentManager, PrivacyPolicyAcceptanceFragment.TAG)
+    }
+
+    override fun showTokenDialog() {
         PrivacyPolicyAcceptanceFragment().show(supportFragmentManager, PrivacyPolicyAcceptanceFragment.TAG)
     }
 
