@@ -21,7 +21,8 @@ sourceSets {
         component {
             targets = ['ios_x64', 'ios_arm64']
             outputKinds = [FRAMEWORK]
-            extraOpts '-Xdisable=devirtualization', pluginArgument
+            extraOpts '-Xdisable=devirtualization',  '-linker-options', '-iphoneos_version_min 9.0.0', pluginArgument
+
         }
     }
 }
