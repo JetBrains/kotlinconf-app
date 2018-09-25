@@ -36,8 +36,6 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
     private lateinit var collapsingToolbar: CollapsingToolbarLayout
     private lateinit var favoriteButton: FloatingActionButton
     private lateinit var votingButtonsLayout: LinearLayout
-    private lateinit var votingPromptLayout: LinearLayout
-    private lateinit var verifyCodeButton: Button
 
     private lateinit var goodButton: ImageButton
     private lateinit var badButton: ImageButton
@@ -55,9 +53,7 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         goodButton.setOnClickListener { presenter.rateSessionClicked(GOOD) }
         okButton.setOnClickListener { presenter.rateSessionClicked(OK) }
         badButton.setOnClickListener { presenter.rateSessionClicked(BAD) }
-        verifyCodeButton.setOnClickListener {
-            RatingCodeEnterFragment().show(fragmentManager, RatingCodeEnterFragment.TAG)
-        }
+
         presenter.onCreate()
     }
 
@@ -88,6 +84,10 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         badButton.isClickable = clickable
     }
 
+    override fun showVotingPrompt() {
+        RatingCodeEnterFragment().show(fragmentManager, RatingCodeEnterFragment.TAG)
+    }
+
     override fun updateView(loggedIn: Boolean, isFavorite: Boolean, session: SessionModel) {
         collapsingToolbar.title = session.title
         speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName }
@@ -100,22 +100,21 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
         votingButtonsLayout.visibility = if (loggedIn && online) VISIBLE else GONE
         votingPromptLayout.visibility = if (!loggedIn && online) VISIBLE else GONE
 
-        if(loggedIn && online) {
-            favoriteButton.show()
-            val favoriteIcon = if (isFavorite) R.drawable.ic_favorite_white_24dp else R.drawable.ic_favorite_border_white_24dp
-            favoriteButton.setImageResource(favoriteIcon)
-        } else {
-            favoriteButton.hide()
+        for (button in listOf(votingButtonsLayout, favoriteButton)) {
+            button.visibility = if (online) View.VISIBLE else View.GONE
         }
 
+        val favoriteIcon = if (isFavorite) R.drawable.ic_favorite_white_24dp else R.drawable.ic_favorite_border_white_24dp
+        favoriteButton.setImageResource(favoriteIcon)
+        
         session.speakers
-            .takeIf { it.size < 3 }
-            ?.map { it.profilePicture }
-            ?.apply {
-                forEachIndexed { index, imageUrl ->
-                    imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
+                .takeIf { it.size < 3 }
+                ?.map { it.profilePicture }
+                ?.apply {
+                    forEachIndexed { index, imageUrl ->
+                        imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
+                    }
                 }
-            }
     }
 
     private val SessionModel.timeString: String
@@ -142,15 +141,15 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
     private fun ImageView.showSpeakerImage(imageUrl: String) {
         visibility = View.VISIBLE
         Glide.with(this@SessionDetailsFragment)
-            .load(imageUrl)
-            .centerCrop()
-            .into(this)
+                .load(imageUrl)
+                .centerCrop()
+                .into(this)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return UI {
             coordinatorLayout {
@@ -185,8 +184,8 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
                         view {
                             backgroundResource = R.drawable.appbar_buttons_scrim
                             layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                matchParent,
-                                dimen(context.getResourceId(R.attr.actionBarSize))
+                                    matchParent,
+                                    dimen(context.getResourceId(R.attr.actionBarSize))
                             ).apply {
                                 gravity = Gravity.TOP
                             }
@@ -201,8 +200,8 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
 
                         toolbar = toolbar {
                             layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                matchParent,
-                                dimen(context.getResourceId(R.attr.actionBarSize))
+                                    matchParent,
+                                    dimen(context.getResourceId(R.attr.actionBarSize))
                             ).apply {
                                 collapseMode = COLLAPSE_MODE_PIN
                             }
@@ -241,22 +240,6 @@ class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
                             textSize = 19f
                         }.lparams {
                             topMargin = dip(20)
-                        }
-
-                        votingPromptLayout = verticalLayout {
-                            textView(R.string.rating_text) {
-                                textSize = 18f
-                            }
-                            verifyCodeButton = button(R.string.verify_button_text) {
-                                textColor = theme.getColor(R.attr.colorAccent)
-                                backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
-                            }.lparams(width = matchParent, height = wrapContent) {
-                                topMargin = dip(10)
-                            }
-                        }.lparams(width = matchParent, height = wrapContent) {
-                            topMargin = dip(20)
-                            bottomMargin = dip(80)
-                            gravity = Gravity.CENTER_HORIZONTAL
                         }
 
                         votingButtonsLayout = linearLayout {

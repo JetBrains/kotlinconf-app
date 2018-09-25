@@ -6,10 +6,10 @@ import kotlin.coroutines.*
 import kotlin.properties.Delegates.observable
 
 class SessionDetailsPresenter(
-    private val uiContext: CoroutineContext,
-    private val view: SessionDetailsView,
-    private val sessionId: String,
-    private val repository: DataRepository
+        private val uiContext: CoroutineContext,
+        private val view: SessionDetailsView,
+        private val sessionId: String,
+        private val repository: DataRepository
 ) {
     private lateinit var session: SessionModel
     private var rating: SessionRating? = null
@@ -25,6 +25,10 @@ class SessionDetailsPresenter(
     }
 
     fun rateSessionClicked(newRating: SessionRating) {
+        if(!repository.loggedIn){
+            view.showVotingPrompt()
+            return
+        }
         launchAndCatch(uiContext, view::showError) {
             view.setRatingClickable(false)
             if (rating != newRating) {
