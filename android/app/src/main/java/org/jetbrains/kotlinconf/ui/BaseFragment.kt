@@ -28,8 +28,6 @@ private fun Fragment.commonShowError(error: Throwable) {
         is UpdateProblem -> R.string.msg_failed_to_get_data
         is TooEarlyVote -> R.string.msg_early_rate
         is TooLateVote -> R.string.msg_late_rate
-        is FailedToVerifyCode -> R.string.code_verification_failed
-        is IncorrectCode -> R.string.code_incorrect
         else -> R.string.unknown_error
     }
     context?.toast(messageId)

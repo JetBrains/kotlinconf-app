@@ -12,6 +12,7 @@ import kotlin.properties.*
 import kotlin.properties.Delegates.observable
 
 class KotlinConfDataRepository(
+    uid: String,
     private val settings: Settings
 ) : DataRepository {
     private val api = KotlinConfApi()
@@ -27,15 +28,22 @@ class KotlinConfDataRepository(
             settings.putBoolean("privacyPolicyAcceptedKey", value)
         }
 
-    override val loggedIn: Boolean
-        get() = userId != null
+    private var loggedIn: Boolean = false
+
+    init {
+        if (userId == null) userId = uid
+    }
 
     override var onRefreshListeners: List<() -> Unit> = emptyList()
 
     override suspend fun update() {
         val state = try {
+            if (!loggedIn) {
+                api.createUser(userId!!)
+                loggedIn = true
+            }
             api.getAll(userId)
-        } catch (_: Throwable) {
+        } catch (cause: Throwable) {
             throw UpdateProblem()
         }
 
@@ -54,20 +62,6 @@ class KotlinConfDataRepository(
         privacyPolicyAccepted = true
     }
 
-    override suspend fun verifyAndSetCode(code: VotingCode) {
-        try {
-            api.verifyCode(code)
-            userId = code
-        } catch (t: Throwable) {
-            val responseStatus = (t.cause as? ApiException)?.response?.status?.value
-            if (responseStatus == 406) {
-                throw IncorrectCode()
-            } else {
-                throw FailedToVerifyCode()
-            }
-        }
-    }
-
     override fun getRating(sessionId: String): SessionRating? =
         votes?.find { sessionId == it.sessionId }
             ?.rating
@@ -78,7 +72,7 @@ class KotlinConfDataRepository(
         val vote = Vote(sessionId, rating.value)
         try {
             api.postVote(vote, userId)
-            votes = votes.orEmpty().plus(vote)
+            votes = votes.orEmpty().filter { it.sessionId != sessionId }.plus(vote)
         } catch (pipelineError: ReceivePipelineFail) {
             val apiError = (pipelineError.cause as? ApiException)
             val code = apiError?.response?.status?.value

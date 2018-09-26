@@ -24,6 +24,14 @@ class KotlinConfApi {
         install(ExpectSuccess)
     }
 
+    suspend fun createUser(userId: String): Boolean = client.request<HttpResponse> {
+        apiUrl("users")
+        method = HttpMethod.Post
+        body = userId
+    }.use {
+        it.status.isSuccess()
+    }
+
     suspend fun getAll(userId: String?): AllData = client.get {
         apiUrl("all", userId)
     }
@@ -52,15 +60,11 @@ class KotlinConfApi {
         body = vote
     }
 
-    suspend fun verifyCode(code: VotingCode): Unit = client.get {
-        apiUrl("users/verify/$code", null)
-    }
-
     private fun HttpRequestBuilder.json() {
         contentType(ContentType.Application.Json)
     }
 
-    private fun HttpRequestBuilder.apiUrl(path: String, userId: String?) {
+    private fun HttpRequestBuilder.apiUrl(path: String, userId: String? = null) {
         if (userId != null) {
             header(HttpHeaders.Authorization, "Bearer $userId")
         }

@@ -15,6 +15,7 @@ var firstUpdateError = true
 extension UIViewController: BaseView {
     
     public func showError(error: KotlinThrowable) {
+        var title: String = "Error"
         var errorMessage: String? = nil
         var popupMessage: String? = nil
 
@@ -24,8 +25,10 @@ extension UIViewController: BaseView {
         case is CannotFavorite:
             errorMessage = "Cannot set favorite now"
         case is CannotPostVote:
+            title = "Not Allowed"
             errorMessage = "Failed to rate sessions, please check your connection"
         case is CannotDeleteVote:
+            title = "Not Allowed"
             errorMessage = "Failed to update session rating, please check your connection"
         case is UpdateProblem:
             let text = "Failed to get data from server, please check your internet connection"
@@ -36,27 +39,25 @@ extension UIViewController: BaseView {
                 popupMessage = text
             }
         case is TooEarlyVote:
+            title = "Not Allowed"
             errorMessage = "You cannot rate the session before it starts"
         case is TooLateVote:
+            title = "Not Allowed"
             errorMessage = "Rating is only permitted up to 15 minutes after the session end"
-        case is FailedToVerifyCode:
-            errorMessage = "Failed to verify code"
-        case is IncorrectCode:
-            errorMessage = "Sorry, the code entered is incorrect"
         default:
             errorMessage = "Unknown Error"
         }
         
         if let message = errorMessage {
-            self.showError(message: message)
+            self.showError(title: title, message: message)
         }
         if let message = popupMessage {
             self.showPopupText(title: message)
         }
     }
 
-    func showError(message: String) {
-        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+    func showError(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
         self.present(alertController, animated: true, completion: nil)
     }

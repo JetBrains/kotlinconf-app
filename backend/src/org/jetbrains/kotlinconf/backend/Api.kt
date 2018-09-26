@@ -19,7 +19,6 @@ import java.time.*
 import java.time.format.*
 import java.util.*
 import java.util.concurrent.*
-import kotlin.streams.*
 
 fun Routing.api(database: Database, production: Boolean, sessionizeUrl: String) {
     apiKeynote(production)
@@ -55,79 +54,28 @@ private fun PipelineContext<Unit, ApplicationCall>.simulatedTime(production: Boo
 }
 
 /*
-POST http://localhost:8080/users
-201 or 409
-
-GET http://localhost:8080/users/verify/{token}
-200 or 406
-
-GET http://localhost:8080/users/count
-1234
-
-GET http://localhost:8080/users/generate/5?secret=TestingSecret
-["bjdaf","ilHLs","6Knmk","LA94g","R6WYs"]
-
-DELETE http://localhost:8080/users/bjdaf?secret=TestingSecret
+POST http://localhost:8080/user
+1238476512873162837
  */
 fun Routing.apiUsers(database: Database) {
     route("users") {
-        get("verify/{code}") {
-            val code = call.parameters["code"] ?: throw BadRequest()
-            val responseCode = if (database.validateUser(code)) HttpStatusCode.OK else HttpStatusCode.NotAcceptable
-            call.respond(responseCode)
+        post {
+            val userUUID = call.receive<String>()
+            val ip = call.request.origin.remoteHost
+            val timestamp = LocalDateTime.now(Clock.systemUTC())
+            val created = database.createUser(userUUID, ip, timestamp)
+            if (created)
+                call.respond(HttpStatusCode.Created)
+            else
+                call.respond(HttpStatusCode.Conflict)
         }
         get("count") {
             call.respondText(database.usersCount().toString())
         }
-        get("generate/{number}") {
-            requireSecret()
-            val codeLength = 5L
-            val number = call.parameters["number"]?.toIntOrNull() ?: throw BadRequest()
-            val timestamp = LocalDateTime.now(Clock.systemUTC())
-
-            var createdCodes = listOf<String>()
-            while (createdCodes.size < number) {
-                val missingCodesNum = number - createdCodes.size
-                val codes = generateSequence { randomString(codeLength) }
-                    .distinct()
-                    .take(missingCodesNum)
-                    .toList()
-
-                createdCodes += codes.filter { code -> database.createUser(code, "generate", timestamp) }
-            }
-
-            call.respond(UserTokens(createdCodes))
-        }
-        delete("{code}") {
-            requireSecret()
-            val code = call.parameters["code"] ?: throw BadRequest()
-            database.deleteUser(code)
-            call.respond(HttpStatusCode.OK)
-        }
     }
 }
 
-private fun PipelineContext<*, ApplicationCall>.requireSecret() {
-    val providedSecret = call.parameters["secret"]
-    val realSecret = System.getenv("SERVER_SECRET").takeUnless { it.isNullOrBlank() } ?: "TestingSecret"
-    if (providedSecret != realSecret) throw SecretInvalidError()
-}
-
-private val random = Random()
-
-private fun randomString(length: Long): String {
-    val source = ('A'..'Z') + ('a'..'z') + ('0'..'9')
-    return random.ints(length, 0, source.size)
-        .asSequence()
-        .map(source::get)
-        .joinToString("")
-}
-
-suspend fun ApplicationCall.validatePrincipal(database: Database): KotlinConfPrincipal {
-    return getPrincipalOrNull(database) ?: throw Unauthorized()
-}
-
-suspend fun ApplicationCall.getPrincipalOrNull(database: Database): KotlinConfPrincipal? {
+suspend fun ApplicationCall.validatePrincipal(database: Database): KotlinConfPrincipal? {
     val principal = principal<KotlinConfPrincipal>() ?: return null
     if (!database.validateUser(principal.token)) return null
     return principal
@@ -141,7 +89,7 @@ Authorization: Bearer 1238476512873162837
 fun Routing.apiFavorite(database: Database, production: Boolean) {
     route("favorites") {
         get {
-            val principal = call.validatePrincipal(database)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val favorites = database.getFavorites(principal.token)
             call.respond(favorites)
         }
@@ -152,14 +100,14 @@ fun Routing.apiFavorite(database: Database, production: Boolean) {
             }
         }
         post {
-            val principal = call.validatePrincipal(database)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val favorite = call.receive<Favorite>()
             val sessionId = favorite.sessionId
             database.createFavorite(principal.token, sessionId)
             call.respond(HttpStatusCode.Created)
         }
         delete {
-            val principal = call.validatePrincipal(database)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val favorite = call.receive<Favorite>()
             val sessionId = favorite.sessionId
             database.deleteFavorite(principal.token, sessionId)
@@ -178,7 +126,7 @@ Authorization: Bearer 1238476512873162837
 fun Routing.apiVote(database: Database, production: Boolean) {
     route("votes") {
         get {
-            val principal = call.validatePrincipal(database)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val votes = database.getVotes(principal.token)
             call.respond(votes)
         }
@@ -192,10 +140,10 @@ fun Routing.apiVote(database: Database, production: Boolean) {
             call.respond(votesSummary)
         }
         post {
-            val principal = call.validatePrincipal(database)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val vote = call.receive<Vote>()
-            val sessionId = vote.sessionId ?: throw BadRequest()
-            val rating = vote.rating ?: throw BadRequest()
+            val sessionId = vote.sessionId
+            val rating = vote.rating
 
             val session = getSessionizeData().allData.sessions.firstOrNull { it.id == sessionId } ?: throw NotFound()
             val nowTime = simulatedTime(production)
@@ -217,7 +165,7 @@ fun Routing.apiVote(database: Database, production: Boolean) {
             signalSession(sessionId)
         }
         delete {
-            val principal = call.validatePrincipal(database)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val vote = call.receive<Vote>()
             val sessionId = vote.sessionId
             database.deleteVote(principal.token, sessionId)
@@ -236,15 +184,13 @@ Authorization: Bearer 1238476512873162837
 fun Routing.apiAll(database: Database) {
     get("all") {
         val data = getSessionizeData()
-        val responseData = try {
-            val principal = call.validatePrincipal(database)
+        val principal = call.validatePrincipal(database)
+        val responseData = if (principal != null) {
             val votes = database.getVotes(principal.token)
             val favorites = database.getFavorites(principal.token)
             val personalizedData = data.allData.copy(votes = votes, favorites = favorites)
             SessionizeData(personalizedData)
-        } catch (e: Unauthorized) {
-            data
-        }
+        } else data
 
         call.withETag(responseData.etag, putHeader = true) {
             call.respond(responseData.allData)

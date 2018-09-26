@@ -39,6 +39,7 @@ android {
     flavorDimensions "server"
     productFlavors {
         local {
+//            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080\"")
             buildConfigField("String", "API_URL", "\"https://api.kotlinconf.com\"")
             dimension "server"
         }
@@ -85,7 +86,7 @@ dependencies {
     implementation 'com.brandongogetap:stickyheaders:0.4.9'
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    implementation "io.ktor:ktor-client-android:$ktor_version"
+    implementation "io.ktor:ktor-client-okhttp:$ktor_version"
     implementation "io.ktor:ktor-client-json-jvm:$ktor_version"
 
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"

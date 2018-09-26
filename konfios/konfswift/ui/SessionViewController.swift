@@ -17,7 +17,6 @@ class SessionViewController : UIViewController, SessionDetailsView {
     }()
     
     var sessionId = ""
-    var loggedIn = false
 
     @IBOutlet private weak var scrollView: UIScrollView!
     
@@ -47,8 +46,7 @@ class SessionViewController : UIViewController, SessionDetailsView {
         presenter.onDestroy()
     }
     
-    func updateView(loggedIn: Bool, isFavorite: Bool, session: SessionModel) {
-        self.loggedIn = loggedIn
+    func updateView(isFavorite: Bool, session: SessionModel) {
         titleLabel.text = session.title
         
         let startsAt = session.startsAt
@@ -90,35 +88,19 @@ class SessionViewController : UIViewController, SessionDetailsView {
     }
 
     @IBAction private func favorited(_ sender: Any) {
-        if(loggedIn){
-            presenter.onFavoriteButtonClicked()
-        } else {
-            showVotingCodeDialog()
-        }
+        presenter.onFavoriteButtonClicked()
     }
     
     @IBAction private func goodPressed(_ sender: Any?) {
-        if(loggedIn){
-            presenter.rateSessionClicked(newRating: .good)
-        } else {
-            showVotingCodeDialog()
-        }
+        presenter.rateSessionClicked(newRating: .good)
     }
     
     @IBAction private func sosoPressed(_ sender: Any?) {
-        if(loggedIn){
-            presenter.rateSessionClicked(newRating: .ok)
-        } else {
-            showVotingCodeDialog()
-        }
+        presenter.rateSessionClicked(newRating: .ok)
     }
     
     @IBAction private func badPressed(_ sender: Any?) {
-        if(loggedIn){
-            presenter.rateSessionClicked(newRating: .bad)
-        } else {
-            showVotingCodeDialog()
-        }
+        presenter.rateSessionClicked(newRating: .bad)
     }
     
     private func setupSpeakers(speakers: [Speaker]) {
