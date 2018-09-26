@@ -60,10 +60,6 @@ class KotlinConfApi {
         body = vote
     }
 
-    suspend fun verifyCode(code: VotingCode): Unit = client.get {
-        apiUrl("users/verify/$code")
-    }
-
     private fun HttpRequestBuilder.json() {
         contentType(ContentType.Application.Json)
     }

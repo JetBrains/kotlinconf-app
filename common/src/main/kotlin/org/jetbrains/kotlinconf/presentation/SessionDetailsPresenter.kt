@@ -3,13 +3,12 @@ package org.jetbrains.kotlinconf.presentation
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.data.*
 import kotlin.coroutines.*
-import kotlin.properties.Delegates.observable
 
 class SessionDetailsPresenter(
-        private val uiContext: CoroutineContext,
-        private val view: SessionDetailsView,
-        private val sessionId: String,
-        private val repository: DataRepository
+    private val uiContext: CoroutineContext,
+    private val view: SessionDetailsView,
+    private val sessionId: String,
+    private val repository: DataRepository
 ) {
     private lateinit var session: SessionModel
     private var rating: SessionRating? = null
