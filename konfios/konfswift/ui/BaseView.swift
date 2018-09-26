@@ -39,10 +39,6 @@ extension UIViewController: BaseView {
             errorMessage = "You cannot rate the session before it starts"
         case is TooLateVote:
             errorMessage = "Rating is only permitted up to 15 minutes after the session end"
-        case is FailedToVerifyCode:
-            errorMessage = "Failed to verify code"
-        case is IncorrectCode:
-            errorMessage = "Sorry, the code entered is incorrect"
         default:
             errorMessage = "Unknown Error"
         }

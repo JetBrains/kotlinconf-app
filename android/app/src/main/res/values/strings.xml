@@ -5,16 +5,15 @@
     <string name="search_title">Search</string>
     <string name="room_format_details">Room \"%s\"</string>
     <string name="room_format_list">room \"%s\"</string>
-    <string name="kotlin_conf_description">KotlinConf is a two-day conference taking place in San Francisco, providing deep-dive technical content on Kotlin.</string>
     <string name="kotlin_conf_address">Beurs Van Berlage, Damrak 243, 1012 ZJ Amsterdam, Netherlands</string>
     <string name="msg_failed_to_get_data">Failed to get data from server, please check your internet connection</string>
-    <string name="msg_failed_to_post_rate">Failed to rate sessions, please check your connection</string>
+    <string name="msg_failed_to_post_rate">Failed to rate session, please check your connection</string>
     <string name="msg_failed_to_delete_rate">Failed to update session rating, please check your connection</string>
     <string name="msg_early_rate">You cannot rate the session before it starts</string>
     <string name="msg_late_rate">Rating is only permitted up to 15 minutes after the session end</string>
     <string name="unknown_error">Unknown error</string>
     <string name="cannot_rate_error">You cannot rate the session now</string>
-    <string name="cannot_favorite_error">You cannot ser favorite now</string>
+    <string name="cannot_favorite_error">You cannot set favorite now</string>
     <string name="unauthorized_error">Unauthorized</string>
     <string name="copyright">Copyright © 2018 JetBrains s. r. o.</string>
     <string name="legal_notice_title">LEGAL NOTICE</string>
@@ -190,10 +189,5 @@ Contributor by reason of your accepting any such warranty or additional
 liability.</p> ]]></string>
     <string name="privacy_policy_text"><![CDATA[To proceed please accept the <a href="https://www.jetbrains.com/company/privacy.html">Privacy Policy</a>]]></string>
     <string name="privacy_policy_accept">I accept the Privacy Policy</string>
-    <string name="rating_code_prompt">If you would like to rate a session enter your code</string>
     <string name="submit_button">Submit</string>
-    <string name="code_verification_failed">Failed to verify the code</string>
-    <string name="code_incorrect">Sorry, the code entered is incorrect</string>
-    <string name="rating_text">In order to enable rating, please enter your code</string>
-    <string name="verify_button_text">Verify code</string>
 </resources>

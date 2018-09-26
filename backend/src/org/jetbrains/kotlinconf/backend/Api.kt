@@ -19,7 +19,6 @@ import java.time.*
 import java.time.format.*
 import java.util.*
 import java.util.concurrent.*
-import kotlin.streams.*
 
 fun Routing.api(database: Database, production: Boolean, sessionizeUrl: String) {
     apiKeynote(production)
@@ -150,8 +149,7 @@ fun Routing.apiVote(database: Database, production: Boolean) {
             val nowTime = simulatedTime(production)
             val startVotesAt = LocalDateTime.parse(session.startsAt, dateFormat)
             val endVotesAt = LocalDateTime.parse(session.endsAt, dateFormat).plusMinutes(15)
-            val votingPeriodStarted =
-                startVotesAt?.let { ZonedDateTime.of(it, keynoteTimeZone).isBefore(nowTime) } ?: true
+            val votingPeriodStarted = startVotesAt?.let { ZonedDateTime.of(it, keynoteTimeZone).isBefore(nowTime) } ?: true
             val votingPeriodEnded = endVotesAt?.let { ZonedDateTime.of(it, keynoteTimeZone).isBefore(nowTime) } ?: true
 
             if (!votingPeriodStarted)

@@ -16,7 +16,7 @@ fun Pair<GMTDate, GMTDate>.toReadableString(): String = buildString {
     val toSuffix = to.timeSuffix()
 
     if (fromSuffix != toSuffix) {
-        append("${from.toReadableTimeString()}$emDash{${to.toReadableTimeString()}}")
+        append("${from.toReadableTimeString()}$emDash${to.toReadableTimeString()}")
     } else {
         append("${from.readableHours()}:${from.minutes.toString(2)}")
         append(emDash)

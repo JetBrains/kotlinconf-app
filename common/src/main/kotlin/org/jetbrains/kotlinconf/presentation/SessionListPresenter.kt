@@ -36,11 +36,9 @@ class SessionListPresenter(
 
     fun showData() {
         val displayedSessions = repository.sessions.orEmpty()
-                .sortedWith(compareBy({ it.startsAt?.timestamp }, { it.room }, { it.title }))
-                .filter(searchQuery)
+            .filter(searchQuery)
         val displayedFavorites = repository.favorites.orEmpty()
-                .sortedWith(compareBy({ it.startsAt?.timestamp }, { it.room }, { it.title }))
-                .filter(searchQuery)
+            .filter(searchQuery)
         view.onUpdate(displayedSessions, displayedFavorites)
     }
 
