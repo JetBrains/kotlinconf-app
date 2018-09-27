@@ -1,17 +1,19 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.arch.lifecycle.*
-import android.arch.lifecycle.ViewModelProvider.*
 import android.content.*
 import android.os.*
 import android.support.v7.app.*
 import android.support.v7.widget.*
 import android.view.*
 import org.jetbrains.anko.*
-import org.jetbrains.kotlinconf.R
+import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.presentation.*
 
 class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationManager, SearchQueryProvider, AnkoLogger {
+
+    private val repository by lazy { (application as KotlinConfApplication).dataRepository }
+    private val presenter by lazy { MainPresenter(this, repository) }
+
     override var searchQuery: String = ""
         private set
 
@@ -27,7 +29,7 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
 
         if (savedInstanceState == null) {
             showSessionList()
-            showVotingCodePromptDialog()
+            presenter.onCreate()
         } else {
             savedInstanceState.getString(SEARCH_QUERY_KEY)?.let { searchQuery = it }
         }
@@ -49,8 +51,18 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
         val searchViewMenuItem = menu.findItem(R.id.search)
         val searchView = searchViewMenuItem.actionView as SearchView
         if (searchQuery.isNotEmpty()) {
+            supportActionBar?.setLogo(R.drawable.kotlinconf_logo)
             searchView.setQuery(searchQuery, false)
             searchView.isIconified = false
+        }
+
+        searchView.setOnSearchClickListener {
+            supportActionBar?.setLogo(R.drawable.kotlinconf_logo)
+        }
+
+        searchView.setOnCloseListener {
+            supportActionBar?.setLogo(R.drawable.kotlinconf_logo_text)
+            return@setOnCloseListener false
         }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -97,16 +109,8 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
             .commit()
     }
 
-    override fun showVotingCodePromptDialog() {
-        val viewModel = ViewModelProviders.of(
-            this,
-            AndroidViewModelFactory.getInstance(application)
-        )
-            .get(CodeVerificationViewModel::class.java)
-        if (viewModel.shouldShowPrompt()) {
-            CodeEnterFragment().show(supportFragmentManager, CodeEnterFragment.TAG)
-            viewModel.setPromptShown()
-        }
+    override fun showPrivacyPolicyDialog() {
+        PrivacyPolicyAcceptanceFragment().show(supportFragmentManager, PrivacyPolicyAcceptanceFragment.TAG)
     }
 
     override fun showSessionDetails(sessionId: String) {

@@ -1,3 +1,12 @@
+buildscript {
+    dependencies {
+        classpath "com.android.tools.build:gradle:$gradle_android_version"
+    }
+    repositories {
+        google()
+    }
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -5,14 +14,14 @@ apply plugin: 'kotlinx-serialization'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 27
     defaultConfig {
         applicationId 'com.jetbrains.kotlinconf'
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 27
         multiDexEnabled true
-        versionCode 8
-        versionName '1.0.7'
+        versionCode 10
+        versionName '1.0.9'
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
@@ -29,7 +38,8 @@ android {
     flavorDimensions "server"
     productFlavors {
         local {
-            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080\"")
+//            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080\"")
+            buildConfigField("String", "API_URL", "\"https://api.kotlinconf.com\"")
             dimension "server"
         }
         prod {
@@ -38,26 +48,30 @@ android {
         }
     }
 
+    packagingOptions {
+        exclude 'META-INF/common.kotlin_module'
+    }
+
     tasks.lint.enabled = false
 }
 
 dependencies {
     implementation project(':common')
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    
+    implementation 'com.android.support:multidex:1.0.3'
 
-    implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
-    implementation 'com.android.support:support-v4:28.0.0-rc02'
-    implementation 'com.android.support:recyclerview-v7:28.0.0-rc02'
-    implementation 'com.android.support:design:28.0.0-rc02'
+    // On 28 up to 28.0.0-rc2 there is a problem with image display on FAB.
+    // Bump versions when it is fixed: https://issuetracker.google.com/issues/111316656
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
     kapt 'android.arch.lifecycle:compiler:1.1.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    implementation 'android.arch.lifecycle:runtime:1.1.1'
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
 
     implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$anko_version"
     implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
@@ -68,12 +82,11 @@ dependencies {
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
     implementation 'net.opacapp:multiline-collapsingtoolbar:1.5.0'
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:3.8.0'
     implementation 'com.brandongogetap:stickyheaders:0.4.9'
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    implementation "io.ktor:ktor-client-android:$ktor_version"
-    implementation "io.ktor:ktor-client-gson:$ktor_version"
+    implementation "io.ktor:ktor-client-okhttp:$ktor_version"
     implementation "io.ktor:ktor-client-json-jvm:$ktor_version"
 
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"

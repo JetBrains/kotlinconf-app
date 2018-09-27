@@ -1,10 +1,8 @@
 package org.jetbrains.kotlinconf.presentation
 
-import kotlin.coroutines.*
-import kotlinx.coroutines.*
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.data.*
-import kotlin.properties.Delegates.observable
+import kotlin.coroutines.*
 
 class SessionDetailsPresenter(
     private val uiContext: CoroutineContext,
@@ -13,23 +11,20 @@ class SessionDetailsPresenter(
     private val repository: DataRepository
 ) {
     private lateinit var session: SessionModel
-    private var isFavorite: Boolean by observable(false) { _, _, isFavorite ->
-        view.setIsFavorite(isFavorite)
-    }
     private var rating: SessionRating? = null
     private val onRefreshListener: () -> Unit = this::refreshDataFromRepo
 
     fun onCreate() {
         refreshDataFromRepo()
-//        repository.addUpdateListener(onRefreshListener)
+        repository.onRefreshListeners += onRefreshListener
     }
 
     fun onDestroy() {
-//        repository.removeUpdateListener(onRefreshListener)
+        repository.onRefreshListeners -= onRefreshListener
     }
 
-    fun rateSession(newRating: SessionRating) {
-        launch(uiContext) {
+    fun rateSessionClicked(newRating: SessionRating) {
+        launchAndCatch(uiContext, view::showError) {
             view.setRatingClickable(false)
             if (rating != newRating) {
                 rating = newRating
@@ -39,22 +34,28 @@ class SessionDetailsPresenter(
                 repository.removeRating(sessionId)
             }
             view.setupRatingButtons(rating)
+        } finally {
             view.setRatingClickable(true)
         }
     }
 
     fun onFavoriteButtonClicked() {
-        launch(uiContext) {
-            isFavorite = !isFavorite
-            repository.setFavorite(session.id, isFavorite)
+        launchAndCatch(uiContext, view::showError) {
+            val isFavorite = isFavorite()
+            repository.setFavorite(session.id, !isFavorite)
+        } finally {
+            refreshDataFromRepo()
         }
     }
 
     private fun refreshDataFromRepo() {
-        session = repository.getSessionById(sessionId)
-        view.updateView(session)
-        isFavorite = repository.isFavorite(sessionId)
+        session = repository.sessions?.firstOrNull { it.id == sessionId } ?: return
+        view.updateView(isFavorite(), session)
+        rating = repository.getRating(sessionId)
+        view.setupRatingButtons(rating)
         rating = repository.getRating(sessionId)
     }
 
+    private fun isFavorite() =
+        repository.favorites?.any { it.id == sessionId } ?: false
 }

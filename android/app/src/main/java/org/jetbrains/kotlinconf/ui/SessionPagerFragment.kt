@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.arch.lifecycle.*
 import android.content.*
 import android.os.*
 import android.support.design.widget.*
@@ -18,7 +17,6 @@ import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.support.v4.*
 import org.jetbrains.anko.wrapContent
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.R
 
 class SessionPagerFragment : Fragment(), AnkoComponent<Context> {
 
@@ -28,13 +26,7 @@ class SessionPagerFragment : Fragment(), AnkoComponent<Context> {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        (activity as AppCompatActivity).apply {
-            setSupportActionBar(toolbar)
-            supportActionBar?.setDisplayShowHomeEnabled(true)
-            supportActionBar?.setDisplayShowTitleEnabled(false)
-            supportActionBar?.setLogo(R.drawable.kotlinconf_logo_text)
-        }
+        setUpActionBar()
 
         viewPager.adapter = object : FragmentPagerAdapter(childFragmentManager) {
             val fragments = listOf(AllSessionsFragment(), FavoriteSessionsFragment())
@@ -74,15 +66,26 @@ class SessionPagerFragment : Fragment(), AnkoComponent<Context> {
         }
     }
 
+    private fun setUpActionBar() {
+        (activity as AppCompatActivity).apply {
+            setSupportActionBar(toolbar)
+            supportActionBar?.setDisplayShowHomeEnabled(true)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+            supportActionBar?.setLogo(R.drawable.kotlinconf_logo_text)
+        }
+    }
+
     class AllSessionsFragment : SessionListFragment() {
         override val title: String = "All"
-
-        override fun getSessions(model: SessionListViewModel): LiveData<List<SessionModel>> = model.sessions
+        override fun onUpdate(sessions: List<SessionModel>, favorites: List<SessionModel>) {
+            sessionsAdapter.sessions = sessions
+        }
     }
 
     class FavoriteSessionsFragment : SessionListFragment() {
         override val title: String = "Favorites"
-
-        override fun getSessions(model: SessionListViewModel): LiveData<List<SessionModel>> = model.favorites
+        override fun onUpdate(sessions: List<SessionModel>, favorites: List<SessionModel>) {
+            sessionsAdapter.sessions = favorites
+        }
     }
 }

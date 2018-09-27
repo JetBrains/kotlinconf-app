@@ -6,18 +6,18 @@ import konfios
 
 class AboutViewController : UIViewController, MKMapViewDelegate {
     @IBOutlet private weak var map: MKMapView!
-    @IBOutlet private weak var badge: UIView!
-
+    
     override func viewDidLoad() {
         map.delegate = self
 
-        let location = CLLocation(latitude: 37.805423, longitude: -122.401123)
+        let location = CLLocation(latitude: 52.375175, longitude: 4.8938273)
         map.setRegion(MKCoordinateRegionMakeWithDistance(location.coordinate, 400, 400), animated: false)
 
-        let confPlace = Place(title: "Pier 27", subtitle: "The Embarcadero, San Francisco", coordinate: location.coordinate)
+        let confPlace = Place(title: "BEURS VAN BERLAGE", subtitle: "Amsterdam, Netherlands", coordinate: location.coordinate)
+                
         map.addAnnotation(confPlace)
     }
-
+    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard annotation is Place else { return nil }
 
@@ -49,6 +49,18 @@ class AboutViewController : UIViewController, MKMapViewDelegate {
     
     @IBAction func onWebsiteClick(_: Any?) {
         UIApplication.shared.openURL(URL(string: "https://www.kotlinconf.com/")!)
+    }
+    
+    @IBAction func onMapClick(_: Any?) {
+        guard let place = map.annotations.first else { return }
+        guard let title = place.title else { return }
+
+        let mapItem = MKMapItem(
+            placemark: MKPlacemark(coordinate: place.coordinate, addressDictionary: nil)
+        )
+        
+        mapItem.name = title
+        mapItem.openInMaps(launchOptions: nil)
     }
 }
 

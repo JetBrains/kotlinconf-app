@@ -1,10 +1,8 @@
 package org.jetbrains.kotlinconf.backend
 
-import com.google.gson.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
-import io.ktor.gson.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.request.*
@@ -12,8 +10,6 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.util.*
 import io.ktor.websocket.*
-
-val gson = GsonBuilder().setPrettyPrinting().serializeNulls().create()!!
 
 fun Application.main() {
     val config = environment.config
@@ -49,6 +45,9 @@ fun Application.main() {
         exception<NotFound> { _ ->
             call.respond(HttpStatusCode.NotFound)
         }
+        exception<SecretInvalidError> { _ ->
+            call.respond(HttpStatusCode.Forbidden)
+        }
         exception<Throwable> { cause ->
             environment.log.error(cause)
             call.respond(HttpStatusCode.InternalServerError)
@@ -56,7 +55,7 @@ fun Application.main() {
     }
 
     install(ContentNegotiation) {
-        register(ContentType.Application.Json, GsonConverter(gson))
+        register(ContentType.Application.Json, KotlinxConverter())
     }
 
     install(CORS) {

@@ -23,6 +23,7 @@ allprojects {
         maven { url "https://dl.bintray.com/kotlin/ktor" }
         maven { url "https://dl.bintray.com/sargunster/maven" }
         maven { url "https://dl.bintray.com/kotlin/squash" }
+        maven { url = 'https://dl.bintray.com/russhwolf/multiplatform-settings' }
 
         maven { url "https://teamcity.jetbrains.com/guestAuth/repository/download/Kotlin_dev_Compiler/1640748:id/maven" }
         
