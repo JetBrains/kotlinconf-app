@@ -4,8 +4,12 @@ apply plugin: 'kotlinx-serialization'
 kotlin {
     targets {
         fromPreset(presets.jvm, 'jvm')
-        fromPreset(presets.iosX64, 'ios_x64')
-        fromPreset(presets.iosArm64, 'ios_arm64')
+        fromPreset(presets.iosX64, 'ios_x64') {
+            compilations.main.outputKinds('FRAMEWORK')
+        }
+        fromPreset(presets.iosArm64, 'ios_arm64') {
+            compilations.main.outputKinds('FRAMEWORK')
+        }
     }
     sourceSets {
         commonMain {

@@ -1,5 +1,5 @@
 import UIKit
-import konfios
+import common
 
 class SessionsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SessionListView, NavigationManager, SearchQueryProvider {
     

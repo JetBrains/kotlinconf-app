@@ -1,5 +1,5 @@
 import UIKit
-import konfios
+import common
 
 let KTUnit = KotlinUnit()
 
@@ -7,6 +7,7 @@ let KTUnit = KotlinUnit()
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     public lazy var konfService = { KotlinConfDataRepository(
+        endPoint: ConstantsKt.end_POINT,
         uid: generateUuid(),
         settings: PlatformSettings())
     }()

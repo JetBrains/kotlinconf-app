@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2C024B1A1F7494B400A7EAEC /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C024B191F7494B400A7EAEC /* AboutViewController.swift */; };
-		2C4F018B213ED72800FCD207 /* konfios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F018A213ED72700FCD207 /* konfios.framework */; };
-		2C4F018C213ED72800FCD207 /* konfios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4F018A213ED72700FCD207 /* konfios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2C50FD941F729FE000B3F845 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C50FD931F729FE000B3F845 /* AppDelegate.swift */; };
 		2C50FD991F729FE000B3F845 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C50FD971F729FE000B3F845 /* Main.storyboard */; };
 		2C50FD9E1F729FE000B3F845 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C50FD9D1F729FE000B3F845 /* Assets.xcassets */; };
@@ -24,6 +22,8 @@
 		78F1837816258F26549E4A30 /* Pods_konfswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 650713D8A409168EDA5FA1DE /* Pods_konfswift.framework */; };
 		D30D00A8214D087900CD1184 /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D00A7214D087900CD1184 /* UI.swift */; };
 		D3B66AE3214E9CF70078D58D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B66AE2214E9CF70078D58D /* BaseView.swift */; };
+		ECEBBE30215D3E02006A5027 /* common.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECEBBE2F215D3E02006A5027 /* common.framework */; };
+		ECEBBE32215D3EAE006A5027 /* common.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ECEBBE31215D3EAE006A5027 /* common.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,7 +43,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2C4F018C213ED72800FCD207 /* konfios.framework in Embed Frameworks */,
+				ECEBBE32215D3EAE006A5027 /* common.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,6 +77,8 @@
 		A41FE60CFCB7748B63FEC8FD /* Pods-konfswift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-konfswift.release.xcconfig"; path = "Pods/Target Support Files/Pods-konfswift/Pods-konfswift.release.xcconfig"; sourceTree = "<group>"; };
 		D30D00A7214D087900CD1184 /* UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI.swift; sourceTree = "<group>"; };
 		D3B66AE2214E9CF70078D58D /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		ECEBBE2F215D3E02006A5027 /* common.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = common.framework; path = build/konan/bin/xcode/common.framework; sourceTree = "<group>"; };
+		ECEBBE31215D3EAE006A5027 /* common.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = common.framework; path = build/konan/bin/xcode/common.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,8 +86,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECEBBE30215D3E02006A5027 /* common.framework in Frameworks */,
 				2CA847C1214BA6F8000A094C /* Pods_konfswift.framework in Frameworks */,
-				2C4F018B213ED72800FCD207 /* konfios.framework in Frameworks */,
 				78F1837816258F26549E4A30 /* Pods_konfswift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -104,6 +106,7 @@
 		2C50FD871F729FE000B3F845 = {
 			isa = PBXGroup;
 			children = (
+				ECEBBE31215D3EAE006A5027 /* common.framework */,
 				2C4F018A213ED72700FCD207 /* konfios.framework */,
 				2C4F0186213ED71700FCD207 /* Pods_konfswiftTests.framework */,
 				2C4F0183213ED71700FCD207 /* Pods_konfswift.framework */,
@@ -191,6 +194,7 @@
 		C4FEB15DDCA083DE8665D19F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				ECEBBE2F215D3E02006A5027 /* common.framework */,
 				650713D8A409168EDA5FA1DE /* Pods_konfswift.framework */,
 				6BA84E09CE082A09696F42F6 /* Pods_konfswiftTests.framework */,
 			);
@@ -378,7 +382,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export JAVA_HOME=`/usr/libexec/java_home -v 1.8`\n\ncase \"$PLATFORM_NAME\" in\niphoneos)\nTARGET=ios_arm64\nTASK=linkDebugFrameworkIos_arm64\n;;\niphonesimulator)\nTARGET=ios_x64\nTASK=linkDebugFrameworkIos_x64\n;;\n*)\necho \"Unknown platform: $PLATFORN_NAME\"\nexit 1\n;;\nesac\n\npwd\necho \"$TARGET\"\n\nmkdir -p \"$SRCROOT/build/konan/bin/\"\nrm -rf \"$SRCROOT/build/konan/bin/xcode\"\ncp -r \"$SRCROOT/build/bin/$TARGET/main/debug/framework\" \"$SRCROOT/build/konan/bin/xcode\"\n\ncd ..\n\"$SRCROOT/../gradlew\" -p \"$SRCROOT/../\" \"$TASK\"\n";
+			shellScript = "export JAVA_HOME=`/usr/libexec/java_home -v 1.8`\n\ncase \"$PLATFORM_NAME\" in\niphoneos)\nTARGET=ios_arm64\nTASK=linkDebugFrameworkIos_arm64\n;;\niphonesimulator)\nTARGET=ios_x64\nTASK=linkDebugFrameworkIos_x64\n;;\n*)\necho \"Unknown platform: $PLATFORN_NAME\"\nexit 1\n;;\nesac\n\npwd\necho \"$TARGET\"\n\nmkdir -p \"$SRCROOT/build/konan/bin/\"\nrm -rf \"$SRCROOT/build/konan/bin/xcode\"\ncp -r \"$SRCROOT/../common/build/bin/$TARGET/main/debug/framework\" \"$SRCROOT/build/konan/bin/xcode\"\n\ncd ..\n\"$SRCROOT/../gradlew\" -p \"$SRCROOT/../\" \"$TASK\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import konfios
+import common
 import UIKit
 
 var firstUpdateError = true

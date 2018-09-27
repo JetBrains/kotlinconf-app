@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import TagListView_ObjC
-import konfios
+import common
 import MBProgressHUD
 
 public class UI: Kotlinx_coroutines_core_nativeCoroutineDispatcher {

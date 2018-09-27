@@ -4,7 +4,6 @@ enableFeaturePreview('GRADLE_METADATA')
 
 include 'backend'
 include 'common'
-include 'konfios'
 
 if (INCLUDE_ANDROID == "true") {
     include 'android', 'android:app'

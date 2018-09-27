@@ -1,6 +1,6 @@
 import Foundation
 import UIKit
-import konfios
+import common
 
 class TermsController : UIViewController {
     @IBOutlet weak var privacyLabel: UILabel!
