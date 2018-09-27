@@ -22,6 +22,12 @@ kotlin {
                 implementation "io.ktor:ktor-client-json:$ktor_version"
             }
         }
+        commonTest {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-test-common"
+                implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
+            }
+        }
         jvmMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -31,6 +37,12 @@ kotlin {
 
                 implementation "io.ktor:ktor-client-core-jvm:$ktor_version"
                 implementation "io.ktor:ktor-client-json-jvm:$ktor_version"
+            }
+        }
+        jvmTest {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-test'
+                implementation 'org.jetbrains.kotlin:kotlin-test-junit'
             }
         }
         iosMain {
