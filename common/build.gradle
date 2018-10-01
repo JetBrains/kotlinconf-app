@@ -4,10 +4,9 @@ apply plugin: 'kotlinx-serialization'
 kotlin {
     targets {
         fromPreset(presets.jvm, 'jvm')
-        fromPreset(presets.iosX64, 'ios_x64') {
-            compilations.main.outputKinds('FRAMEWORK')
-        }
-        fromPreset(presets.iosArm64, 'ios_arm64') {
+
+        // Change to `presets.iosArm64` to deploy the app to iPhone
+        fromPreset(presets.iosX64, 'ios') {
             compilations.main.outputKinds('FRAMEWORK')
         }
     }
@@ -54,9 +53,6 @@ kotlin {
                 implementation "io.ktor:ktor-client-core-ios:$ktor_version"
                 implementation "io.ktor:ktor-client-json-ios:$ktor_version"
             }
-        }
-        configure([ios_x64Main, ios_arm64Main]) {
-            dependsOn(iosMain)
         }
     }
 }
