@@ -6,8 +6,6 @@ allprojects {
             maven { url "https://kotlin.bintray.com/kotlinx" }
             maven { url 'https://dl.bintray.com/jetbrains/kotlin-native-dependencies' }
 
-            maven { url "https://teamcity.jetbrains.com/guestAuth/repository/download/Kotlin_dev_Compiler/1640748:id/maven" }
-
             google()
             jcenter()
         }
@@ -25,8 +23,6 @@ allprojects {
         maven { url "https://dl.bintray.com/kotlin/squash" }
         maven { url = 'https://dl.bintray.com/russhwolf/multiplatform-settings' }
 
-        maven { url "https://teamcity.jetbrains.com/guestAuth/repository/download/Kotlin_dev_Compiler/1640748:id/maven" }
-        
         google()
         jcenter()
     }
