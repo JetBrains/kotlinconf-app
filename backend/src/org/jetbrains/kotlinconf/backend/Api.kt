@@ -1,36 +1,40 @@
+@file:Suppress("NestedLambdaShadowedImplicitParameter")
+
 package org.jetbrains.kotlinconf.backend
 
-import org.jetbrains.kotlinconf.data.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
-import io.ktor.gson.*
 import io.ktor.http.*
+import io.ktor.http.cio.websocket.Frame
 import io.ktor.pipeline.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.experimental.channels.*
+import kotlinx.coroutines.channels.*
+import kotlinx.serialization.json.*
+import org.jetbrains.kotlinconf.data.*
 import java.time.*
 import java.time.format.*
 import java.util.*
 import java.util.concurrent.*
 
-fun Routing.api(database: Database, production: Boolean) {
-    apiKeynote(database, production)
-    apiRegister(database, production)
-    apiAll(database, production)
-    apiSession(database, production)
+fun Routing.api(database: Database, production: Boolean, sessionizeUrl: String) {
+    apiKeynote(production)
+    apiUsers(database)
+    apiAll(database)
+    apiSession()
     apiVote(database, production)
     apiFavorite(database, production)
+    apiSynchronize(sessionizeUrl)
     wsVotes(database, production)
 }
 
 /*
 GET http://localhost:8080/keynote?datetimeoverride=2017-10-24T10:00-07:00
  */
-fun Routing.apiKeynote(database: Database, production: Boolean) {
+fun Routing.apiKeynote(production: Boolean) {
     get("keynote") {
         val nowTime = simulatedTime(production)
         if (nowTime.isAfter(keynoteEndDateTime))
@@ -43,14 +47,17 @@ fun Routing.apiKeynote(database: Database, production: Boolean) {
 
 private fun PipelineContext<Unit, ApplicationCall>.simulatedTime(production: Boolean): ZonedDateTime {
     val now = ZonedDateTime.now(keynoteTimeZone)
-    return if (production) now else call.parameters["datetimeoverride"]?.let { ZonedDateTime.parse(it) } ?: now
+    return if (production)
+        now
+    else
+        call.parameters["datetimeoverride"]?.let { ZonedDateTime.parse(it) } ?: now
 }
 
 /*
 POST http://localhost:8080/user
 1238476512873162837
  */
-fun Routing.apiRegister(database: Database, production: Boolean) {
+fun Routing.apiUsers(database: Database) {
     route("users") {
         post {
             val userUUID = call.receive<String>()
@@ -82,7 +89,7 @@ Authorization: Bearer 1238476512873162837
 fun Routing.apiFavorite(database: Database, production: Boolean) {
     route("favorites") {
         get {
-            val principal = call.validatePrincipal(database) ?: return@get call.respond(HttpStatusCode.Unauthorized)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val favorites = database.getFavorites(principal.token)
             call.respond(favorites)
         }
@@ -93,16 +100,16 @@ fun Routing.apiFavorite(database: Database, production: Boolean) {
             }
         }
         post {
-            val principal = call.validatePrincipal(database) ?: return@post call.respond(HttpStatusCode.Unauthorized)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val favorite = call.receive<Favorite>()
-            val sessionId = favorite.sessionId ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val sessionId = favorite.sessionId
             database.createFavorite(principal.token, sessionId)
             call.respond(HttpStatusCode.Created)
         }
         delete {
-            val principal = call.validatePrincipal(database) ?: return@delete call.respond(HttpStatusCode.Unauthorized)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val favorite = call.receive<Favorite>()
-            val sessionId = favorite.sessionId ?: return@delete call.respond(HttpStatusCode.BadRequest)
+            val sessionId = favorite.sessionId
             database.deleteFavorite(principal.token, sessionId)
             call.respond(HttpStatusCode.OK)
         }
@@ -119,42 +126,31 @@ Authorization: Bearer 1238476512873162837
 fun Routing.apiVote(database: Database, production: Boolean) {
     route("votes") {
         get {
-            val principal = call.validatePrincipal(database) ?: return@get call.respond(HttpStatusCode.Unauthorized)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val votes = database.getVotes(principal.token)
             call.respond(votes)
         }
-        if (production) {
-            get("summary/$fakeSessionId") {
-                val votesSummary = database.getVotesSummary(fakeSessionId)
-                call.respond(votesSummary)
-            }
-        } else {
-            get("all") {
-                val votes = database.getAllVotes()
-                call.respond(votes)
-            }
-            get("summary/{sessionId}") {
-                val id = call.parameters["sessionId"] ?: return@get call.respond(HttpStatusCode.BadRequest)
-                val votesSummary = database.getVotesSummary(id)
-                call.respond(votesSummary)
-            }
+        get("all") {
+            val votes = database.getAllVotes()
+            call.respond(votes)
+        }
+        get("summary/{sessionId}") {
+            val id = call.parameters["sessionId"] ?: throw BadRequest()
+            val votesSummary = database.getVotesSummary(id)
+            call.respond(votesSummary)
         }
         post {
-            val principal = call.validatePrincipal(database) ?: return@post call.respond(HttpStatusCode.Unauthorized)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val vote = call.receive<Vote>()
-            val sessionId = vote.sessionId ?: return@post call.respond(HttpStatusCode.BadRequest)
-            val rating = vote.rating ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val sessionId = vote.sessionId
+            val rating = vote.rating
 
-            val session = sessionizeData?.allData?.sessions?.firstOrNull { it.id == sessionId } ?: return@post call.respond(HttpStatusCode.NotFound)
+            val session = getSessionizeData().allData.sessions.firstOrNull { it.id == sessionId } ?: throw NotFound()
             val nowTime = simulatedTime(production)
             val startVotesAt = LocalDateTime.parse(session.startsAt, dateFormat)
             val endVotesAt = LocalDateTime.parse(session.endsAt, dateFormat).plusMinutes(15)
-            val votingPeriodStarted = if (startVotesAt != null) {
-                ZonedDateTime.of(startVotesAt, keynoteTimeZone).isBefore(nowTime)
-            } else true
-            val votingPeriodEnded = if (endVotesAt != null) {
-                ZonedDateTime.of(endVotesAt, keynoteTimeZone).isBefore(nowTime)
-            } else true
+            val votingPeriodStarted = startVotesAt?.let { ZonedDateTime.of(it, keynoteTimeZone).isBefore(nowTime) } ?: true
+            val votingPeriodEnded = endVotesAt?.let { ZonedDateTime.of(it, keynoteTimeZone).isBefore(nowTime) } ?: true
 
             if (!votingPeriodStarted)
                 return@post call.respond(comeBackLater)
@@ -169,9 +165,9 @@ fun Routing.apiVote(database: Database, production: Boolean) {
             signalSession(sessionId)
         }
         delete {
-            val principal = call.validatePrincipal(database) ?: return@delete call.respond(HttpStatusCode.Unauthorized)
+            val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val vote = call.receive<Vote>()
-            val sessionId = vote.sessionId ?: return@delete call.respond(HttpStatusCode.BadRequest)
+            val sessionId = vote.sessionId
             database.deleteVote(principal.token, sessionId)
             call.respond(HttpStatusCode.OK)
             signalSession(sessionId)
@@ -185,17 +181,16 @@ GET http://localhost:8080/all
 Accept: application/json
 Authorization: Bearer 1238476512873162837
 */
-fun Routing.apiAll(database: Database, production: Boolean) {
+fun Routing.apiAll(database: Database) {
     get("all") {
-        val data = sessionizeData ?: return@get call.respond(HttpStatusCode.ServiceUnavailable)
+        val data = getSessionizeData()
         val principal = call.validatePrincipal(database)
         val responseData = if (principal != null) {
             val votes = database.getVotes(principal.token)
             val favorites = database.getFavorites(principal.token)
             val personalizedData = data.allData.copy(votes = votes, favorites = favorites)
             SessionizeData(personalizedData)
-        } else
-            data
+        } else data
 
         call.withETag(responseData.etag, putHeader = true) {
             call.respond(responseData.allData)
@@ -203,19 +198,19 @@ fun Routing.apiAll(database: Database, production: Boolean) {
     }
 }
 
-fun Routing.apiSession(database: Database, production: Boolean) {
+fun Routing.apiSession() {
     route("sessions") {
         get {
-            val data = sessionizeData ?: return@get call.respond(HttpStatusCode.ServiceUnavailable)
-            val sessions = data.allData.sessions ?: mutableListOf()
+            val data = getSessionizeData()
+            val sessions = data.allData.sessions
             call.withETag(sessions.hashCode().toString(), putHeader = true) {
                 call.respond(sessions)
             }
         }
         get("{sessionId}") {
-            val data = sessionizeData ?: return@get call.respond(HttpStatusCode.ServiceUnavailable)
-            val id = call.parameters["sessionId"] ?: return@get call.respond(HttpStatusCode.BadRequest)
-            val sessions = data.allData.sessions?.singleOrNull { it.id == id } ?: return@get call.respond(HttpStatusCode.NotFound)
+            val data = getSessionizeData()
+            val id = call.parameters["sessionId"] ?: throw BadRequest()
+            val sessions = data.allData.sessions?.singleOrNull { it.id == id } ?: throw NotFound()
             call.withETag(sessions.hashCode().toString(), putHeader = true) {
                 call.respond(sessions)
             }
@@ -227,20 +222,29 @@ fun Routing.apiSession(database: Database, production: Boolean) {
 val sessionSignals = ConcurrentHashMap<String, ConflatedBroadcastChannel<Unit>>()
 
 fun signalSession(sessionId: String) =
-        sessionSignals[sessionId]?.offer(Unit) // offer to anyone who's interested
+    sessionSignals[sessionId]?.offer(Unit) // offer to anyone who's interested
 
 fun trackSession(sessionId: String): ConflatedBroadcastChannel<Unit> =
-        sessionSignals.computeIfAbsent(sessionId) { ConflatedBroadcastChannel(Unit) }
+    sessionSignals.computeIfAbsent(sessionId) { ConflatedBroadcastChannel(Unit) }
 
 fun Routing.wsVotes(database: Database, production: Boolean) {
     val route = if (production) fakeSessionId else "{sessionId}"
     webSocket("sessions/$route/votes") {
         val id = call.parameters["sessionId"] ?: fakeSessionId
-        trackSession(id).openSubscription().use { subscription ->
-            subscription.consumeEach {
-
-                outgoing.send(Frame.Text(gson.toJson(database.getVotesSummary(id))))
+        trackSession(id).openSubscription().consume {
+            consumeEach {
+                outgoing.send(Frame.Text(JSON.stringify(database.getVotesSummary(id))))
             }
         }
+    }
+}
+
+/*
+GET http://localhost:8080/sessionizeSync
+*/
+fun Routing.apiSynchronize(sessionizeUrl: String) {
+    get("sessionizeSync") {
+        synchronizeWithSessionize(sessionizeUrl)
+        call.respond(HttpStatusCode.OK)
     }
 }

@@ -1,37 +1,31 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.arch.lifecycle.ViewModelProviders
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
-import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import android.graphics.*
+import android.graphics.drawable.*
+import android.os.*
+import android.support.design.widget.*
+import android.support.design.widget.AppBarLayout.LayoutParams.*
+import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.*
+import android.support.v7.app.*
 import android.support.v7.widget.Toolbar
 import android.view.*
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import com.bumptech.glide.Glide
-import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.model.SessionRating
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import android.view.View.*
+import android.widget.*
+import com.bumptech.glide.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.android.*
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.design.coordinatorLayout
-import org.jetbrains.anko.design.floatingActionButton
-import org.jetbrains.anko.design.themedAppBarLayout
-import org.jetbrains.anko.support.v4.UI
-import org.jetbrains.anko.support.v4.nestedScrollView
+import org.jetbrains.anko.design.*
+import org.jetbrains.anko.support.v4.*
+import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.R
+import org.jetbrains.kotlinconf.data.*
+import org.jetbrains.kotlinconf.data.SessionRating.*
+import org.jetbrains.kotlinconf.presentation.*
 
-class SessionDetailsFragment : Fragment() {
+class SessionDetailsFragment : BaseFragment(), SessionDetailsView {
 
     private lateinit var toolbar: Toolbar
     private lateinit var speakersTextView: TextView
@@ -41,76 +35,31 @@ class SessionDetailsFragment : Fragment() {
     private val speakerImageViews: MutableList<ImageView> = mutableListOf()
     private lateinit var collapsingToolbar: CollapsingToolbarLayout
     private lateinit var favoriteButton: FloatingActionButton
+    private lateinit var votingButtonsLayout: LinearLayout
 
     private lateinit var goodButton: ImageButton
     private lateinit var badButton: ImageButton
     private lateinit var okButton: ImageButton
 
+    private val sessionId by lazy { arguments!!.get(KEY_SESSION_ID) as String }
+    private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
+    private val presenter by lazy { SessionDetailsPresenter(Dispatchers.Main, this, sessionId, repository) }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        setUpActionBar()
 
-        setHasOptionsMenu(true)
+        favoriteButton.setOnClickListener { presenter.onFavoriteButtonClicked() }
+        goodButton.setOnClickListener { presenter.rateSessionClicked(GOOD) }
+        okButton.setOnClickListener { presenter.rateSessionClicked(OK) }
+        badButton.setOnClickListener { presenter.rateSessionClicked(BAD) }
 
-        (activity as AppCompatActivity).apply {
-            setSupportActionBar(toolbar)
-            supportActionBar?.setDisplayShowHomeEnabled(true)
-            supportActionBar?.setDisplayShowTitleEnabled(false)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        presenter.onCreate()
+    }
 
-        val sessionId = arguments.get(KEY_SESSION_ID) as String
-        val viewModel = ViewModelProviders.of(
-                this,
-                ViewModelProviders.DefaultFactory(activity.application))
-                .get(SessionDetailsViewModel::class.java)
-                .apply { setSession(sessionId) }
-
-        favoriteButton.setOnClickListener {
-            launch(UI) { viewModel.toggleFavorite() }
-        }
-
-        val clickListener = View.OnClickListener { view: View ->
-            val rating = when (view) {
-                goodButton -> SessionRating.GOOD
-                okButton -> SessionRating.OK
-                badButton -> SessionRating.BAD
-                else -> null
-            }
-
-            launch(UI) {
-                if (rating != null) {
-                    if (viewModel.rating.value != rating) {
-                        viewModel.setRating(rating)
-                    }
-                    else {
-                        viewModel.removeRating()
-                    }
-                }
-            }
-        }
-
-        viewModel.session.observe(this, this::updateView)
-
-        viewModel.isFavorite.observe(this) { isFavorite ->
-            if (isFavorite == true) {
-                favoriteButton.setImageResource(R.drawable.ic_favorite_white_24dp)
-            }
-            else {
-                favoriteButton.setImageResource(R.drawable.ic_favorite_border_white_24dp)
-            }
-        }
-
-        viewModel.rating.value.let { rating ->
-            setupRatingButtons(rating)
-        }
-
-        viewModel.rating.observe(this) { rating ->
-            setupRatingButtons(rating)
-        }
-
-        goodButton.setOnClickListener(clickListener)
-        okButton.setOnClickListener(clickListener)
-        badButton.setOnClickListener(clickListener)
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -118,62 +67,83 @@ class SessionDetailsFragment : Fragment() {
         menu.clear()
     }
 
-    private fun setupRatingButtons(rating: SessionRating?) {
-        goodButton.backgroundResource = if (rating == SessionRating.GOOD)
-            R.drawable.round_toggle_button_background_selected
-        else
-            R.drawable.round_toggle_button_background
-
-        okButton.backgroundResource = if (rating == SessionRating.OK)
-            R.drawable.round_toggle_button_background_selected
-        else
-            R.drawable.round_toggle_button_background
-
-        badButton.backgroundResource = if (rating == SessionRating.BAD)
-            R.drawable.round_toggle_button_background_selected
-        else
-            R.drawable.round_toggle_button_background
-    }
-
-    private fun updateView(session: SessionModel?) {
-        if (session == null) {
-            return
+    override fun setupRatingButtons(rating: SessionRating?) {
+        fun selectButton(target: SessionRating): Int = when (rating) {
+            target -> R.drawable.round_toggle_button_background_selected
+            else -> R.drawable.round_toggle_button_background
         }
 
-        with (session) {
-            collapsingToolbar.title = session.title
-            speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName ?: "" }
-            val time = (session.startsAt to session.endsAt).toReadableString()
-            timeTextView.text = time
-            detailsTextView.text = listOfNotNull(roomText, category).joinToString(", ")
-            descriptionTextView.text = session.description
-
-            session.speakers
-                    .takeIf { it.size < 3 }
-                    ?.mapNotNull { it.profilePicture }
-                    ?.apply {
-                        forEachIndexed { index, imageUrl ->
-                            speakerImageViews[index].showSpeakerImage(imageUrl)
-                        }
-                    }
-        }
+        goodButton.backgroundResource = selectButton(GOOD)
+        okButton.backgroundResource = selectButton(OK)
+        badButton.backgroundResource = selectButton(BAD)
     }
+
+    override fun setRatingClickable(clickable: Boolean) {
+        goodButton.isClickable = clickable
+        okButton.isClickable = clickable
+        badButton.isClickable = clickable
+    }
+
+    override fun updateView(isFavorite: Boolean, session: SessionModel) {
+        collapsingToolbar.title = session.title
+        speakersTextView.text = session.speakers.joinToString(separator = ", ") { it.fullName }
+
+        timeTextView.text = session.timeString
+        detailsTextView.text = listOfNotNull(session.roomText, session.category).joinToString(", ")
+        descriptionTextView.text = session.descriptionText
+
+        val online = context?.let { it.isConnected?.and(!it.isAirplaneModeOn) } ?: false
+        for (button in listOf(votingButtonsLayout, favoriteButton)) {
+            button.visibility = if (online) View.VISIBLE else View.GONE
+        }
+
+        val favoriteIcon =
+            if (isFavorite) R.drawable.ic_favorite_white_24dp else R.drawable.ic_favorite_border_white_24dp
+        favoriteButton.setImageResource(favoriteIcon)
+
+        session.speakers
+            .takeIf { it.size < 3 }
+            ?.map { it.profilePicture }
+            ?.apply {
+                forEachIndexed { index, imageUrl ->
+                    imageUrl?.let { speakerImageViews[index].showSpeakerImage(it) }
+                }
+            }
+    }
+
+    private val SessionModel.timeString: String
+        get() {
+            val startsAt = startsAt
+            val endsAt = endsAt
+            return if (startsAt != null && endsAt != null) (startsAt to endsAt).toReadableString() else ""
+        }
 
     private val SessionModel.roomText: String?
         get() = room?.let { getString(R.string.room_format_details, it) }
 
+    private fun setUpActionBar() {
+        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).apply {
+            setSupportActionBar(toolbar)
+            supportActionBar?.setDisplayShowHomeEnabled(true)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayUseLogoEnabled(false)
+        }
+    }
+
     private fun ImageView.showSpeakerImage(imageUrl: String) {
         visibility = View.VISIBLE
         Glide.with(this@SessionDetailsFragment)
-                .load(imageUrl)
-                .centerCrop()
-                .into(this)
+            .load(imageUrl)
+            .centerCrop()
+            .into(this)
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return UI {
             coordinatorLayout {
@@ -208,8 +178,9 @@ class SessionDetailsFragment : Fragment() {
                         view {
                             backgroundResource = R.drawable.appbar_buttons_scrim
                             layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                    matchParent,
-                                    dimen(context.getResourceId(R.attr.actionBarSize))).apply {
+                                matchParent,
+                                dimen(context.getResourceId(R.attr.actionBarSize))
+                            ).apply {
                                 gravity = Gravity.TOP
                             }
                         }
@@ -223,8 +194,8 @@ class SessionDetailsFragment : Fragment() {
 
                         toolbar = toolbar {
                             layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                    matchParent,
-                                    dimen(context.getResourceId(R.attr.actionBarSize))
+                                matchParent,
+                                dimen(context.getResourceId(R.attr.actionBarSize))
                             ).apply {
                                 collapseMode = COLLAPSE_MODE_PIN
                             }
@@ -265,15 +236,15 @@ class SessionDetailsFragment : Fragment() {
                             topMargin = dip(20)
                         }
 
-                        linearLayout {
+                        votingButtonsLayout = linearLayout {
                             goodButton = imageButton {
-                                imageResource = R.drawable.ic_thumb_up_white_24dp
+                                imageResource = R.drawable.ic_happy
                             }
                             okButton = imageButton {
-                                imageResource = R.drawable.ic_sentiment_neutral_white_36dp
+                                imageResource = R.drawable.ic_neutral
                             }
                             badButton = imageButton {
-                                imageResource = R.drawable.ic_thumb_down_white_24dp
+                                imageResource = R.drawable.ic_sad
                             }
                         }.lparams {
                             topMargin = dip(10)
@@ -295,6 +266,9 @@ class SessionDetailsFragment : Fragment() {
                     }.lparams(width = matchParent, height = wrapContent) {
                         margin = dip(20)
                     }.applyRecursively { view ->
+                        // Making a Button widget selectable causes problems with clicking
+                        // (Button class extends TextView)
+                        if (view is Button) return@applyRecursively
                         (view as? TextView)?.setTextIsSelectable(true)
                     }
 

@@ -1,0 +1,34 @@
+PODS:
+  - DynamicBlurView (2.0.2)
+  - MBProgressHUD (1.0.0)
+  - PopupDialog (0.8.1):
+    - DynamicBlurView (~> 2.0)
+  - SDWebImage (4.1.0):
+    - SDWebImage/Core (= 4.1.0)
+  - SDWebImage/Core (4.1.0)
+  - TagListView-ObjC (0.1.1)
+
+DEPENDENCIES:
+  - MBProgressHUD (~> 1.0.0)
+  - PopupDialog (~> 0.8)
+  - SDWebImage (~> 4.1.0)
+  - TagListView-ObjC (~> 0.1.1)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - DynamicBlurView
+    - MBProgressHUD
+    - PopupDialog
+    - SDWebImage
+    - TagListView-ObjC
+
+SPEC CHECKSUMS:
+  DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  PopupDialog: 3d4e8e0795c3a614f407d730986c9b9af9781123
+  SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
+  TagListView-ObjC: 432991e24c5177eb4fa7d721de7084f09f39a0b8
+
+PODFILE CHECKSUM: b38af13c9cdd529c40eb51d4fb36b6666cb19653
+
+COCOAPODS: 1.5.3

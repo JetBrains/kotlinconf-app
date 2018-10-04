@@ -1,29 +1,26 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.net.Uri
-import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
-import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import android.content.*
+import android.graphics.*
+import android.graphics.drawable.*
+import android.net.*
+import android.os.*
+import android.support.design.widget.*
+import android.support.design.widget.AppBarLayout.LayoutParams.*
+import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.*
+import android.support.v4.app.*
+import android.support.v7.app.*
 import android.support.v7.widget.Toolbar
-import android.text.util.Linkify
+import android.text.method.*
+import android.text.util.*
 import android.view.*
-import android.widget.ImageView
-import org.jetbrains.kotlinconf.*
+import android.widget.*
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
-import org.jetbrains.anko.design.coordinatorLayout
-import org.jetbrains.anko.design.themedAppBarLayout
-import org.jetbrains.anko.support.v4.nestedScrollView
+import org.jetbrains.anko.design.*
+import org.jetbrains.anko.support.v4.*
+import org.jetbrains.kotlinconf.*
 
 class InfoFragment : Fragment(), AnkoComponent<Context> {
 
@@ -39,6 +36,7 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
             supportActionBar?.setDisplayShowHomeEnabled(true)
             supportActionBar?.setDisplayShowTitleEnabled(false)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayUseLogoEnabled(false)
         }
     }
 
@@ -47,12 +45,8 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
         menu.clear()
     }
 
-    override fun onCreateView(
-            inflater: LayoutInflater?,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        return createView(AnkoContext.create(context))
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return createView(AnkoContext.create(context!!))
     }
 
     override fun createView(ui: AnkoContext<Context>): View = with(ui) {
@@ -60,6 +54,17 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
             backgroundColor = Color.WHITE
             themedAppBarLayout(R.style.ThemeOverlay_AppCompat_ActionBar) {
                 multilineCollapsingToolbarLayout {
+                    expandedTitleMarginStart = dip(20)
+                    expandedTitleMarginEnd = dip(20)
+                    setExpandedTitleTextAppearance(R.style.SessionTitleExpanded)
+                    addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+                        title = if (totalScrollRange + verticalOffset <= 50) {
+                            getString(R.string.app_name)
+                        } else {
+                            ""
+                        }
+                    })
+
                     relativeLayout {
                         backgroundColor = Color.WHITE
                         contentScrim = ColorDrawable(Color.WHITE)
@@ -68,22 +73,16 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                             collapseMode = COLLAPSE_MODE_PARALLAX
                         }
 
-                        imageView(R.drawable.info_header_background) {
-                            scaleType = ImageView.ScaleType.FIT_START
-                        }.lparams(width = matchParent, height = matchParent) {
-                            leftMargin = dip(4)
-                            topMargin = dip(4)
-                        }
-
-                        imageView(R.drawable.info_header_image).lparams {
+                        imageView(R.drawable.kotlin_conf_app_header).lparams {
                             margin = dip(20)
                         }
+                        imageView(R.drawable.kotlin_conf_app_header).scaleType = ImageView.ScaleType.FIT_CENTER
                     }
 
                     toolbar = toolbar {
                         layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                matchParent,
-                                context.dimen(context.getResourceId(R.attr.actionBarSize))
+                            matchParent,
+                            context.dimen(context.getResourceId(R.attr.actionBarSize))
                         ).apply {
                             collapseMode = COLLAPSE_MODE_PIN
                         }
@@ -99,33 +98,21 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         backgroundResource = context.getResourceId(android.R.attr.listDivider)
                     }.lparams(width = matchParent, height = dip(2))
 
-                    textView(context.getHtmlText(R.string.app_description)) {
-                        autoLinkMask = Linkify.WEB_URLS
-                        textSize = 18f
-                        setTextIsSelectable(true)
-                    }.lparams {
-                        margin = dip(20)
-                    }
-
-                    view {
-                        backgroundResource = context.getResourceId(android.R.attr.listDivider)
-                    }.lparams(width = matchParent, height = dip(2))
-
                     relativeLayout {
                         padding = dip(20)
+                        isClickable = true
+                        backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
+                        setOnClickListener {
+                            val gmmIntentUri = Uri.parse("geo:52.3752,4.8960?z=17&q=52.3752,4.8960")
+                            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                            mapIntent.`package` = "com.google.android.apps.maps"
+                            if (mapIntent.resolveActivity(context.packageManager) != null) {
+                                startActivity(mapIntent)
+                            }
+                        }
 
                         imageView(R.drawable.ic_location) {
                             id = R.id.icon_location
-
-                            setOnClickListener {
-                                val gmmIntentUri = Uri.parse("geo:37.8051965,-122.4011537?z=17")
-                                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-                                mapIntent.`package` = "com.google.android.apps.maps"
-                                if (mapIntent.resolveActivity(context.packageManager) != null) {
-                                    startActivity(mapIntent)
-                                }
-                            }
-
                         }.lparams(width = dip(24), height = dip(24)) {
                             centerVertically()
                             leftMargin = dip(10)
@@ -135,7 +122,6 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         textView(R.string.kotlin_conf_address) {
                             textSize = 18f
                             textColor = Color.BLACK
-                            setTextIsSelectable(true)
                         }.lparams {
                             centerVertically()
                             rightOf(R.id.icon_location)
@@ -148,6 +134,9 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                     linearLayout {
                         relativeLayout {
+                            backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
+                            padding = dip(30)
+
                             imageView(R.drawable.ic_web) {
                                 id = R.id.icon_website
                             }.lparams(width = dip(24), height = dip(24)) {
@@ -165,8 +154,9 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
 
                             setOnClickListener {
                                 val websiteIntent = Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse("https://kotlinconf.com"))
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://kotlinconf.com")
+                                )
                                 startActivity(websiteIntent)
                             }
 
@@ -175,6 +165,9 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         }
 
                         relativeLayout {
+                            backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
+                            padding = dip(30)
+
                             imageView(R.drawable.ic_twitter) {
                                 id = R.id.icon_twitter
                             }.lparams(width = dip(24), height = dip(24)) {
@@ -191,15 +184,18 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                             }
 
                             setOnClickListener {
-                                val twitterIntent = Intent(Intent.ACTION_VIEW,
-                                        Uri.parse("twitter://user?screen_name=kotlinconf"))
+                                val twitterIntent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("twitter://user?screen_name=kotlinconf")
+                                )
                                 twitterIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 if (twitterIntent.resolveActivity(context.packageManager) != null) {
                                     startActivity(twitterIntent)
                                 } else {
                                     val webTwitterIntent = Intent(
-                                            Intent.ACTION_VIEW,
-                                            Uri.parse("https://twitter.com/kotlinconf"))
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://twitter.com/kotlinconf")
+                                    )
                                     startActivity(webTwitterIntent)
                                 }
                             }
@@ -207,9 +203,7 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         }.lparams(width = 0, height = wrapContent) {
                             weight = 0.5f
                         }
-                    }.lparams(width = matchParent, height = wrapContent) {
-                        margin = dip(30)
-                    }
+                    }.lparams(width = matchParent, height = wrapContent)
 
                     view {
                         backgroundResource = context.getResourceId(android.R.attr.listDivider)
@@ -241,7 +235,33 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         setTextIsSelectable(true)
                     }.lparams {
                         margin = dip(20)
-                        bottomMargin = dip(40)
+                        bottomMargin = dip(0)
+                    }
+
+                    view {
+                        backgroundResource = context.getResourceId(android.R.attr.listDivider)
+                    }.lparams(width = matchParent, height = dip(2))
+
+                    textView(context.getHtmlText(R.string.github_info)) {
+                        autoLinkMask = Linkify.WEB_URLS
+                        textSize = 18f
+                        setTextIsSelectable(true)
+                    }.lparams {
+                        margin = dip(20)
+                        bottomMargin = dip(0)
+                    }
+
+                    view {
+                        backgroundResource = context.getResourceId(android.R.attr.listDivider)
+                    }.lparams(width = matchParent, height = dip(2))
+
+                    textView(context.getHtmlText(R.string.external_contributors)) {
+                        textSize = 18f
+                        setTextIsSelectable(true)
+                        movementMethod = LinkMovementMethod.getInstance()
+                    }.lparams {
+                        margin = dip(20)
+                        bottomPadding = dip(40)
                     }
                 }.lparams(width = matchParent, height = matchParent)
             }.lparams(width = matchParent, height = matchParent) {

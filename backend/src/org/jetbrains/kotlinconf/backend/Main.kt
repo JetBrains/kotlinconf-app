@@ -1,24 +1,24 @@
 package org.jetbrains.kotlinconf.backend
 
-import com.google.gson.*
 import io.ktor.application.*
 import io.ktor.auth.*
-import io.ktor.content.*
 import io.ktor.features.*
-import io.ktor.gson.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.util.*
 import io.ktor.websocket.*
 
-val gson = GsonBuilder().setPrettyPrinting().serializeNulls().create()
-
 fun Application.main() {
-    val config = environment.config.config("service")
-    val mode = config.property("environment").getString()
+    val config = environment.config
+    val serviceConfig = config.config("service")
+    val mode = serviceConfig.property("environment").getString()
     log.info("Environment: $mode")
+    val sessionizeConfig = config.config("sessionize")
+    val sessionizeUrl = sessionizeConfig.property("url").getString()
+    val sessionizeInterval = sessionizeConfig.property("interval").getString().toLong()
     val production = mode == "production"
 
     if (!production) {
@@ -28,11 +28,26 @@ fun Application.main() {
     install(DefaultHeaders)
     install(ConditionalHeaders)
     install(Compression)
-    install(PartialContentSupport)
+    install(PartialContent)
     install(AutoHeadResponse)
     install(WebSockets)
     install(XForwardedHeadersSupport)
     install(StatusPages) {
+        exception<ServiceUnavailable> { _ ->
+            call.respond(HttpStatusCode.ServiceUnavailable)
+        }
+        exception<BadRequest> { _ ->
+            call.respond(HttpStatusCode.BadRequest)
+        }
+        exception<Unauthorized> { _ ->
+            call.respond(HttpStatusCode.Unauthorized)
+        }
+        exception<NotFound> { _ ->
+            call.respond(HttpStatusCode.NotFound)
+        }
+        exception<SecretInvalidError> { _ ->
+            call.respond(HttpStatusCode.Forbidden)
+        }
         exception<Throwable> { cause ->
             environment.log.error(cause)
             call.respond(HttpStatusCode.InternalServerError)
@@ -40,7 +55,7 @@ fun Application.main() {
     }
 
     install(ContentNegotiation) {
-        register(ContentType.Application.Json, GsonConverter(gson))
+        register(ContentType.Application.Json, KotlinxConverter())
     }
 
     install(CORS) {
@@ -57,15 +72,15 @@ fun Application.main() {
             default("static/index.html")
             files("static")
         }
-        api(database, production)
+        api(database, production, sessionizeUrl)
     }
 
-    launchSyncJob()
+    launchSyncJob(sessionizeUrl, sessionizeInterval)
 }
 
 fun Route.authenticate() {
     val bearer = "Bearer "
-    intercept(ApplicationCallPipeline.Infrastructure) {
+    intercept(ApplicationCallPipeline.Features) {
         val authorization = call.request.header(HttpHeaders.Authorization) ?: return@intercept
         if (!authorization.startsWith(bearer)) return@intercept
         val token = authorization.removePrefix(bearer).trim()

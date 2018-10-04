@@ -1,30 +1,27 @@
 package org.jetbrains.kotlinconf
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.Transformations
-import android.content.Context
-import android.content.res.Resources
-import android.os.Build.VERSION_CODES.N
-import android.support.annotation.AttrRes
-import android.support.annotation.ColorInt
-import android.text.Html
-import android.text.Spanned
-import android.util.TypedValue
-import android.view.ViewManager
-import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.custom.ankoView
-import ru.gildor.coroutines.retrofit.ErrorResult
-import ru.gildor.coroutines.retrofit.Result
-import ru.gildor.coroutines.retrofit.getOrNull
+import android.content.*
+import android.content.res.*
+import android.net.*
+import android.os.*
+import android.os.Build.VERSION_CODES.*
+import android.provider.*
+import android.support.annotation.*
+import android.text.*
+import android.util.*
+import android.view.*
+import net.opacapp.multilinecollapsingtoolbar.*
+import org.jetbrains.anko.*
+import org.jetbrains.anko.custom.*
 
-inline fun ViewManager.multilineCollapsingToolbarLayout(theme: Int = 0, init: CollapsingToolbarLayout.() -> Unit): CollapsingToolbarLayout {
+inline fun ViewManager.multilineCollapsingToolbarLayout(
+    theme: Int = 0,
+    init: CollapsingToolbarLayout.() -> Unit
+): CollapsingToolbarLayout {
     return ankoView({ CollapsingToolbarLayout(it) }, theme = theme, init = init)
 }
 
-fun Context.getResourceId(@AttrRes attribute: Int) : Int {
+fun Context.getResourceId(@AttrRes attribute: Int): Int {
     val typedValue = TypedValue()
     theme.resolveAttribute(attribute, typedValue, true)
     return typedValue.resourceId
@@ -44,6 +41,7 @@ fun Context.getHtmlText(resId: Int): Spanned {
     return if (android.os.Build.VERSION.SDK_INT >= N) {
         Html.fromHtml(getText(resId).toString(), Html.FROM_HTML_MODE_LEGACY)
     } else {
+        @Suppress("DEPRECATION")
         Html.fromHtml(getText(resId).toString())
     }
 }
@@ -51,31 +49,16 @@ fun Context.getHtmlText(resId: Int): Spanned {
 val AnkoContext<*>.theme: Resources.Theme
     get() = this.ctx.theme
 
+val Context.connectivityManager
+    get() = getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
 
-// Needed for better type inference
-inline fun <X, Y> map(source: LiveData<X>, noinline func: (X?) -> Y): LiveData<Y> =
-        Transformations.map(source, func)
+val Context.isConnected: Boolean?
+    get() = connectivityManager?.activeNetworkInfo?.isConnected
 
-inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) =
-        observe(owner, Observer { observer(it) })
-
-
-inline fun <T : Any> Result<T>.ifFailed(handler: () -> Unit): Result<T> {
-    if (this is ErrorResult) handler()
-    return this
-}
-
-inline fun <T : Any> Result<T>.ifSucceeded(handler: (data: T) -> Unit): Result<T> {
-    (this as? Result.Ok)?.getOrNull()?.let { handler(it) }
-    return this
-}
-
-inline fun <T : Any> Result<T>.ifError(handler: (code: Int) -> Unit): Result<T> {
-    (this as? Result.Error)?.response?.code()?.let { handler(it) }
-    return this
-}
-
-inline fun <T : Any> Result<T>.ifException(handler: (exception: Throwable) -> Unit): Result<T> {
-    (this as? Result.Exception)?.exception?.let { handler(it) }
-    return this
-}
+val Context.isAirplaneModeOn: Boolean
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    get() = try {
+        Settings.System.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 0
+    } catch (error: Throwable) {
+        false
+    }

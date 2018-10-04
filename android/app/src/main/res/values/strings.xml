@@ -5,24 +5,34 @@
     <string name="search_title">Search</string>
     <string name="room_format_details">Room \"%s\"</string>
     <string name="room_format_list">room \"%s\"</string>
-    <string name="kotlin_conf_description">KotlinConf is a two-day conference taking place in San Francisco, providing deep-dive technical content on Kotlin.</string>
-    <string name="kotlin_conf_address">Pier 27, The Embarcadero\nSan Francisco, CA 94111</string>
+    <string name="kotlin_conf_address">Beurs Van Berlage, Damrak 243, 1012 ZJ Amsterdam, Netherlands</string>
     <string name="msg_failed_to_get_data">Failed to get data from server, please check your internet connection</string>
-    <string name="msg_failed_to_post_vote">Failed to post vote to server, please check your internet connection</string>
-    <string name="msg_failed_to_delete_vote">Failed to delete vote from server, please check your internet connection</string>
-    <string name="msg_early_vote">Voting is not allowed before the session starts</string>
-    <string name="msg_late_vote">Voting is not allowed later than 15 minutes after the session ends</string>
-    <string name="copyright">Copyright © 2017 JetBrains s. r. o.</string>
+    <string name="msg_failed_to_post_rate">Failed to rate session, please check your connection</string>
+    <string name="msg_failed_to_delete_rate">Failed to update session rating, please check your connection</string>
+    <string name="msg_early_rate">You cannot rate the session before it starts</string>
+    <string name="msg_late_rate">Rating is only permitted up to 15 minutes after the session end</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="cannot_rate_error">You cannot rate the session now</string>
+    <string name="cannot_favorite_error">You cannot set favorite now</string>
+    <string name="unauthorized_error">Unauthorized</string>
+    <string name="copyright">Copyright © 2018 JetBrains s. r. o.</string>
     <string name="legal_notice_title">LEGAL NOTICE</string>
-    <string name="app_description"><![CDATA[The official KotlinConf 2017 App.<br/><br/>This App was developed amongst other reasons to showcase Kotlin/JVM. Get more information and source code from <a href="https://github.com/jetbrains/kotlinconf-app">github.com/jetbrains/kotlinconf-app</a><br/><br/>Powered by Kotlin/JVM]]></string>
+    <string name="github_info"><![CDATA[Get more information and source code from <a href="https://github.com/jetbrains/kotlinconf-app">github.com/jetbrains/kotlinconf-app</a><br/><br/>Powered by Kotlin/JVM<br/>]]></string>
+    <string name="external_contributors">
+        <![CDATA[External contributors:<br/><br/>
+        &#8226; Catalina Chioveanu <a href="https://twitter.com/hiimcatalina">@hiimcatalina</a><br/><br/>
+        &#8226; Marcin Moskała <a href="https://twitter.com/marcinmoskala">@marcinmoskala</a><br/><br/>
+        &#8226; James Cogan <a href="https://twitter.com/mad_team">@mad_team</a><br/><br/>
+        &#8226; Jarek Ankowski <a href="https://twitter.com/jarekankowski">@jarekankowski</a><br/><br/>
+        ]]>
+    </string>
     <string name="libraries">
         KotlinConf application is built using the following open source libraries:\n
+          &#8226; Ktor\n
           &#8226; Anko\n
-          &#8226; Retrofit\n
           &#8226; Glide\n
           &#8226; opacapp/multiline-collapsingtoolbar\n
           &#8226; bgogetap/StickyHeaders\n
-          &#8226; gildor/kotlin-coroutines-retrofit
     </string>
     <string name="apache2_license"><![CDATA[ <p>Apache License<br></br>Version 2.0, January 2004<br></br>
 <a href="http://www.apache.org/licenses/">http://www.apache.org/licenses/</a> </p>
@@ -177,4 +187,7 @@ and only if You agree to indemnify, defend, and hold each Contributor
 harmless for any liability incurred by, or claims asserted against, such
 Contributor by reason of your accepting any such warranty or additional
 liability.</p> ]]></string>
+    <string name="privacy_policy_text"><![CDATA[To proceed please accept the <a href="https://www.jetbrains.com/company/privacy.html">Privacy Policy</a>]]></string>
+    <string name="privacy_policy_accept">I accept the Privacy Policy</string>
+    <string name="submit_button">Submit</string>
 </resources>
