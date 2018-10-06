@@ -53,7 +53,6 @@ class SessionDetailsPresenter(
         view.updateView(isFavorite(), session)
         rating = repository.getRating(sessionId)
         view.setupRatingButtons(rating)
-        rating = repository.getRating(sessionId)
     }
 
     private fun isFavorite() =
