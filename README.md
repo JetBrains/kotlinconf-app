@@ -1,4 +1,6 @@
-[![JetBrains incubator project](http://jb.gg/badges/official.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub) 
+[![JetBrains incubator project](http://jb.gg/badges/official.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+[![Slack][slack-badge]][slack-url]
+[![JetBrains community Discord](https://goo.gl/xe5fjk)](https://discord.gg/X6xNzjx)
 
 # KotlinConf App
 
@@ -67,3 +69,8 @@ Or deploy to Heroku with this button:
 
  * Make sure the backend is running on localhost:8080
  * Run `npm run serve` in the 'web' directory to run webpack development server
+
+
+[slack-url]: http://slack.kotlinlang.org
+[slack-badge-broken]: http://slack.kotlinlang.org/badge.svg
+[slack-badge]: https://goo.gl/6v9NMJ
