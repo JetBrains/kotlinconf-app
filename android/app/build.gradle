@@ -28,6 +28,10 @@ android {
         debug {}
         release {}
     }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
 
     flavorDimensions "server"
     productFlavors {
