@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.presentation
 
+import kotlinx.coroutines.*
 import org.jetbrains.kotlinconf.*
 import kotlin.coroutines.*
 
@@ -9,7 +10,8 @@ class SessionListPresenter(
     private val repository: DataRepository,
     private val navigationManager: NavigationManager,
     private val searchQueryProvider: SearchQueryProvider
-) {
+) : CoroutinePresenter(uiContext, view) {
+
     private var searchQuery: String = searchQueryProvider.searchQuery
     private val onRefreshListener: () -> Unit = this::showData
 
@@ -22,7 +24,8 @@ class SessionListPresenter(
         updateData()
     }
 
-    fun onDestroy() {
+    override fun onDestroy() {
+        super.onDestroy()
         repository.onRefreshListeners -= onRefreshListener
     }
 
@@ -43,10 +46,10 @@ class SessionListPresenter(
     }
 
     private fun updateData() {
-        launchAndCatch(uiContext, view::showError) {
+        launch {
             repository.update()
             showData()
-        } finally {
+        }.invokeOnCompletion {
             view.isUpdating = false
         }
     }
