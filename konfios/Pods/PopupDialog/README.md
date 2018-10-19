@@ -130,7 +130,7 @@ public convenience init(
 
 The default dialog initializer is a convenient way of creating a popup with image, title and message (see image one and three).
 
-Bascially, all parameters are optional, although this makes no sense at all. You want to at least add a message and a single button, otherwise the dialog can't be dismissed, unless you do it manually.
+Basically, all parameters are optional, although this makes no sense at all. You want to at least add a message and a single button, otherwise the dialog can't be dismissed, unless you do it manually.
 
 If you provide an image it will be pinned to the top/left/right of the dialog. The ratio of the image will be used to set the height of the image view, so no distortion will occur.
 
@@ -244,7 +244,7 @@ dialogAppearance.messageTextAlignment = .center
 
 ## Dialog Container Appearance Settings
 
-The container view contains the PopupDialogDefaultView or your custom view controller. the following appearence settings are available:
+The container view contains the PopupDialogDefaultView or your custom view controller. the following appearance settings are available:
 
 ```swift
 let containerAppearance = PopupDialogContainerView.appearance()
@@ -278,7 +278,7 @@ Setting `liveBlurEnabled` to true, that is enabling realtime updates of the back
 
 ## Button Appearance Settings
 
-The standard button classes available are `DefaultButton`, `CancelButton` and `DestructiveButton`. All buttons feature the same appearance settings and can be styled seperately.
+The standard button classes available are `DefaultButton`, `CancelButton` and `DestructiveButton`. All buttons feature the same appearance settings and can be styled separately.
 
 ```swift
 var buttonAppearance = DefaultButton.appearance()
@@ -448,7 +448,7 @@ Minimum requirement is iOS 9.0. This dialog was written with Swift 4, for suppor
 # Changelog
 * **0.8.1** Added shadow appearance properties
 * **0.8.0** Separated tap and pan gesture dismissal
-* **0.7.1** Fixes Objective-C compatability<br>Improved Carthage handling
+* **0.7.1** Fixes Objective-C compatibility<br>Improved Carthage handling
 * **0.7.0** Removed FXBlurView while switching to DynamicBlurView
 * **0.6.2** Added preferredWidth option for iPads
 * **0.6.1** Added shake animation<br>Introduced hideStatusBar option
