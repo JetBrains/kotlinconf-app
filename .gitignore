@@ -15,3 +15,4 @@ local.properties
 .DS_Store
 .externalNativeBuild
 .database
+android/app/src/main/res/values/developer-config.xml
