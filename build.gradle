@@ -1,19 +1,22 @@
-allprojects {
-    buildscript {
-        repositories {
-            maven { url "http://kotlin.bintray.com/kotlin-eap" }
-            maven { url "http://kotlin.bintray.com/kotlin-dev" }
-            maven { url "https://kotlin.bintray.com/kotlinx" }
-            maven { url 'https://dl.bintray.com/jetbrains/kotlin-native-dependencies' }
+buildscript {
+    repositories {
+        maven { url "http://kotlin.bintray.com/kotlin-eap" }
+        maven { url "http://kotlin.bintray.com/kotlin-dev" }
+        maven { url "https://kotlin.bintray.com/kotlinx" }
+        maven { url 'https://dl.bintray.com/jetbrains/kotlin-native-dependencies' }
 
-            google()
-            jcenter()
-        }
-        dependencies {
-            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-            classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
-        }
+        google()
+        jcenter()
     }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+        classpath "com.android.tools.build:gradle:$gradle_android_version"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
+    }
+}
+
+allprojects {
     repositories {
         maven { url "http://kotlin.bintray.com/kotlin-eap" }
         maven { url "http://kotlin.bintray.com/kotlin-dev" }
