@@ -1,15 +1,17 @@
 package org.jetbrains.kotlinconf.presentation
 
+import kotlinx.coroutines.*
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.data.*
 import kotlin.coroutines.*
 
 class SessionDetailsPresenter(
-    private val uiContext: CoroutineContext,
+    uiContext: CoroutineContext,
     private val view: SessionDetailsView,
     private val sessionId: String,
     private val repository: DataRepository
-) {
+) : CoroutinePresenter(uiContext, view) {
+
     private lateinit var session: SessionModel
     private var rating: SessionRating? = null
     private val onRefreshListener: () -> Unit = this::refreshDataFromRepo
@@ -19,12 +21,13 @@ class SessionDetailsPresenter(
         repository.onRefreshListeners += onRefreshListener
     }
 
-    fun onDestroy() {
+    override fun onDestroy() {
+        super.onDestroy()
         repository.onRefreshListeners -= onRefreshListener
     }
 
     fun rateSessionClicked(newRating: SessionRating) {
-        launchAndCatch(uiContext, view::showError) {
+        launch {
             view.setRatingClickable(false)
             if (rating != newRating) {
                 rating = newRating
@@ -34,16 +37,16 @@ class SessionDetailsPresenter(
                 repository.removeRating(sessionId)
             }
             view.setupRatingButtons(rating)
-        } finally {
+        }.invokeOnCompletion {
             view.setRatingClickable(true)
         }
     }
 
     fun onFavoriteButtonClicked() {
-        launchAndCatch(uiContext, view::showError) {
+        launch {
             val isFavorite = isFavorite()
             repository.setFavorite(session.id, !isFavorite)
-        } finally {
+        }.invokeOnCompletion {
             refreshDataFromRepo()
         }
     }
