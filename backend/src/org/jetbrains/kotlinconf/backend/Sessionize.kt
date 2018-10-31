@@ -24,12 +24,12 @@ const val fakeSessionId = "007"
 
 fun Application.launchSyncJob(sessionizeUrl: String, sessionizeInterval: Long) {
     log.info("Synchronizing each $sessionizeInterval minutes with $sessionizeUrl")
-    launch(CommonPool) {
+    GlobalScope.launch {
         while (true) {
             log.trace("Synchronizing to Sessionize…")
             synchronizeWithSessionize(sessionizeUrl)
             log.trace("Finished loading data from Sessionize.")
-            delay(sessionizeInterval, TimeUnit.MINUTES)
+            delay(TimeUnit.MINUTES.toMillis(sessionizeInterval))
         }
     }
 }

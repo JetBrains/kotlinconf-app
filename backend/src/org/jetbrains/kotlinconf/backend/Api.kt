@@ -13,6 +13,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.*
+import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import org.jetbrains.kotlinconf.data.*
 import java.time.*
@@ -233,6 +234,7 @@ fun Routing.wsVotes(database: Database, production: Boolean) {
         val id = call.parameters["sessionId"] ?: fakeSessionId
         trackSession(id).openSubscription().consume {
             consumeEach {
+                @UseExperimental(ImplicitReflectionSerializer::class)
                 outgoing.send(Frame.Text(JSON.stringify(database.getVotesSummary(id))))
             }
         }
