@@ -17,6 +17,7 @@ class KotlinxConverter() : ContentConverter {
         contentType: ContentType,
         value: Any
     ): Any? {
+        @UseExperimental(ImplicitReflectionSerializer::class)
         val text = JSON.stringify(value::class.serializer() as SerializationStrategy<Any>, value)
         return TextContent(text, contentType.withCharset(context.call.suitableCharset()))
     }
@@ -26,6 +27,7 @@ class KotlinxConverter() : ContentConverter {
         val channel = request.value as? ByteReadChannel ?: return null
         val type = request.type
         val text = channel.readRemaining().readText()
+        @UseExperimental(ImplicitReflectionSerializer::class)
         return JSON.parse(type.serializer(), text)
     }
 }

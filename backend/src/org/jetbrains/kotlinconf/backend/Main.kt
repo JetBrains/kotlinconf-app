@@ -31,7 +31,7 @@ fun Application.main() {
     install(PartialContent)
     install(AutoHeadResponse)
     install(WebSockets)
-    install(XForwardedHeadersSupport)
+    install(XForwardedHeaderSupport)
     install(StatusPages) {
         exception<ServiceUnavailable> { _ ->
             call.respond(HttpStatusCode.ServiceUnavailable)
