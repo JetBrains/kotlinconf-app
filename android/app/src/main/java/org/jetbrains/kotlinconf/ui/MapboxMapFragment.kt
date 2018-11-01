@@ -22,7 +22,7 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener {
     private lateinit var permissionsManager: PermissionsManager
     private lateinit var mapFragment: SupportMapFragment
     private var mapboxMap: MapboxMap? = null
-    private var amsterdamConferenceLocation = LatLng(52.375008, 4.896243)
+    private var amsterdamConferenceLocation = LatLng(52.375023, 4.896279)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +33,7 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener {
             mapboxMap.cameraPosition = CameraPosition.Builder()
                     .target(LatLng(amsterdamConferenceLocation.latitude,
                             amsterdamConferenceLocation.longitude))
-                    .zoom(14.toDouble())
+                    .zoom(17.206325.toDouble())
                     .build()
             enableLocationComponent()
         }
