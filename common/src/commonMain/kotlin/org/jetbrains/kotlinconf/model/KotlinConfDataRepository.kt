@@ -74,7 +74,7 @@ class KotlinConfDataRepository(
         try {
             api.postVote(vote, userId)
             votes = votes.orEmpty().filter { it.sessionId != sessionId }.plus(vote)
-        } catch (pipelineError: ReceivePipelineFail) {
+        } catch (pipelineError: ReceivePipelineException) {
             val apiError = (pipelineError.cause as? ApiException)
             val code = apiError?.response?.status?.value
             throw when (code) {
