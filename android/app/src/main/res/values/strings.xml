@@ -196,4 +196,20 @@ liability.</p> ]]></string>
     <string name="user_location_permission_explanation">Please enable location permissions to view your device\'s location.</string>
     <string name="user_location_permission_not_granted">You didn\'t grant location permissions.</string>
 
+    <!-- Mapbox map access token
+
+    Create a XML file with the following path: android/app/src/main/res/values/developer-config.xml
+
+    Add a string resource in it with the name of "mapbox_access_token"
+
+    During development time you’ll need a Mapbox access token to view the map
+    on your own device. You can get one on the Mapbox account page (https://account.mapbox.com/access-tokens/)
+    No credit card info is required. You need to add it to /res/values/developer-config.xml
+    (which is included in the gitignore file):
+
+    <string name="mapbox_access_token">PASTE_YOUR_TOKEN_HERE</string>
+
+    -->
+    <string name="mapbox_api_access_token">@string/mapbox_access_token</string>
+
 </resources>

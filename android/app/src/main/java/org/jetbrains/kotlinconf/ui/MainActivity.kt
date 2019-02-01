@@ -8,11 +8,6 @@ import android.view.*
 import org.jetbrains.anko.*
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.presentation.*
-import com.mapbox.mapboxsdk.camera.CameraPosition
-import com.mapbox.mapboxsdk.constants.Style
-import com.mapbox.mapboxsdk.geometry.LatLng
-import com.mapbox.mapboxsdk.maps.MapboxMapOptions
-import com.mapbox.mapboxsdk.maps.SupportMapFragment
 
 class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationManager, SearchQueryProvider, AnkoLogger {
 

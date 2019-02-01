@@ -29,7 +29,7 @@ class KotlinConfApplication : Application(), AnkoLogger {
         }
 
         // Initialize Mapbox
-        Mapbox.getInstance(this, getString(R.string.mapbox_access_token))
+        Mapbox.getInstance(this, getString(R.string.mapbox_api_access_token))
     }
 
     override fun attachBaseContext(base: Context?) {
