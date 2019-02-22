@@ -1,5 +1,5 @@
 import UIKit
-import common
+import main
 
 class SessionsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SessionListView, NavigationManager, SearchQueryProvider {
     
@@ -9,7 +9,7 @@ class SessionsViewController: UIViewController, UITableViewDataSource, UITableVi
     private let repository = AppDelegate.me.konfService
     lazy var presenter: SessionListPresenter = {
         SessionListPresenter(
-            uiContext: UI() as! KotlinCoroutineContext,
+            uiContext: UI(),
             view: self,
             repository: repository,
             navigationManager: self,

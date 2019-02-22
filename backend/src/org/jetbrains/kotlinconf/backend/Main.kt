@@ -11,7 +11,7 @@ import io.ktor.routing.*
 import io.ktor.util.*
 import io.ktor.websocket.*
 
-fun Application.main() {
+internal fun Application.main() {
     val config = environment.config
     val serviceConfig = config.config("service")
     val mode = serviceConfig.property("environment").getString()
@@ -78,7 +78,7 @@ fun Application.main() {
     launchSyncJob(sessionizeUrl, sessionizeInterval)
 }
 
-fun Route.authenticate() {
+private fun Route.authenticate() {
     val bearer = "Bearer "
     intercept(ApplicationCallPipeline.Features) {
         val authorization = call.request.header(HttpHeaders.Authorization) ?: return@intercept
@@ -88,4 +88,4 @@ fun Route.authenticate() {
     }
 }
 
-class KotlinConfPrincipal(val token: String) : Principal
+internal class KotlinConfPrincipal(val token: String) : Principal

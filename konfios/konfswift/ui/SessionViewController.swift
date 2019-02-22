@@ -1,8 +1,8 @@
 import UIKit
 import TagListView_ObjC
-import common
 import MBProgressHUD
 import PopupDialog
+import main
 
 class SessionViewController : UIViewController, SessionDetailsView {
 

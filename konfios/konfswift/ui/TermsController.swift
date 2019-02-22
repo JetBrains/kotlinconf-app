@@ -1,6 +1,6 @@
 import Foundation
 import UIKit
-import common
+import main
 
 class TermsController : UIViewController {
     @IBOutlet weak var privacyLabel: UILabel!

@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf.model
 
 import io.ktor.client.call.*
+import io.ktor.client.features.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import org.jetbrains.kotlinconf.*
@@ -75,7 +76,7 @@ class KotlinConfDataRepository(
             api.postVote(vote, userId)
             votes = votes.orEmpty().filter { it.sessionId != sessionId }.plus(vote)
         } catch (pipelineError: ReceivePipelineException) {
-            val apiError = (pipelineError.cause as? ApiException)
+            val apiError = (pipelineError.cause as? BadResponseStatusException)
             val code = apiError?.response?.status?.value
             throw when (code) {
                 477 -> TooEarlyVote()
@@ -134,14 +135,14 @@ class KotlinConfDataRepository(
         .takeUnless { it.isBlank() }
         ?.let {
             try {
-                JSON.parse(elementSerializer, it)
+                Json.parse(elementSerializer, it)
             } catch (_: Throwable) {
                 null
             }
         }
 
     private inline fun <reified T : Any> write(key: String, obj: T?, elementSerializer: KSerializer<T>) {
-        settings.putString(key, if (obj == null) "" else JSON.stringify(elementSerializer, obj))
+        settings.putString(key, if (obj == null) "" else Json.stringify(elementSerializer, obj))
     }
 
     private inline fun <reified T : Any> bindToPreferencesByKey(

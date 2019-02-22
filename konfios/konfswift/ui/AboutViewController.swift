@@ -2,7 +2,6 @@ import UIKit
 import MapKit
 import AddressBook
 import Contacts
-import common
 
 class AboutViewController : UIViewController, MKMapViewDelegate {
     @IBOutlet private weak var map: MKMapView!
