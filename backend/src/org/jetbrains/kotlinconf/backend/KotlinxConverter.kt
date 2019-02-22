@@ -11,14 +11,14 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 
-class KotlinxConverter() : ContentConverter {
+internal class KotlinxConverter() : ContentConverter {
     override suspend fun convertForSend(
         context: PipelineContext<Any, ApplicationCall>,
         contentType: ContentType,
         value: Any
     ): Any? {
         @UseExperimental(ImplicitReflectionSerializer::class)
-        val text = JSON.stringify(value::class.serializer() as SerializationStrategy<Any>, value)
+        val text = Json.stringify(value::class.serializer() as SerializationStrategy<Any>, value)
         return TextContent(text, contentType.withCharset(context.call.suitableCharset()))
     }
 
@@ -28,6 +28,6 @@ class KotlinxConverter() : ContentConverter {
         val type = request.type
         val text = channel.readRemaining().readText()
         @UseExperimental(ImplicitReflectionSerializer::class)
-        return JSON.parse(type.serializer(), text)
+        return Json.parse(type.serializer(), text)
     }
 }

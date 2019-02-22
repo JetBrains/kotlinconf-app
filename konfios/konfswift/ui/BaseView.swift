@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import common
 import UIKit
+import main
 
 var firstUpdateError = true
 

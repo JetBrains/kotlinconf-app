@@ -14,7 +14,7 @@ import org.jetbrains.squash.results.*
 import org.jetbrains.squash.statements.*
 import java.time.*
 
-class Database(application: Application) {
+internal class Database(application: Application) {
     private val dispatcher: CoroutineContext
     private val connectionPool: HikariDataSource
     private val connection: DatabaseConnection
@@ -171,20 +171,20 @@ class Database(application: Application) {
     }
 }
 
-object Users : TableDefinition() {
+internal object Users : TableDefinition() {
     val id = integer("id").autoIncrement().primaryKey()
     val uuid = varchar("uuid", 50).index()
     val remote = varchar("remote", 50)
     val timestamp = varchar("timestamp", 50)
 }
 
-object Favorites : TableDefinition() {
+internal object Favorites : TableDefinition() {
     val id = integer("id").autoIncrement().primaryKey()
     val uuid = varchar("uuid", 50).index()
     val sessionId = varchar("sessionId", 50)
 }
 
-object Votes : TableDefinition() {
+internal object Votes : TableDefinition() {
     val id = integer("id").autoIncrement().primaryKey()
     val timestamp = varchar("timestamp", 50)
     val uuid = varchar("uuid", 50).index()

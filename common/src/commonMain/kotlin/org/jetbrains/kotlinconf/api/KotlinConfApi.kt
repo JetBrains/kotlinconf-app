@@ -18,7 +18,6 @@ class KotlinConfApi(private val endPoint: String, private val userId: String) {
                  setMapper(Vote::class, Vote.serializer())
             }
         }
-        install(ExpectSuccess)
     }
 
     suspend fun createUser(userId: String): Boolean = client.request<HttpResponse> {
