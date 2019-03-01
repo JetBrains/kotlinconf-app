@@ -28,10 +28,12 @@ android {
     productFlavors {
         local {
             buildConfigField("String", "API_URL", "\"https://api.kotlinconf.com\"")
+            buildConfigField("String", "MAPBOX_ACCESS_TOKEN", MAPBOX_ACCESS_TOKEN)
             dimension "server"
         }
         prod {
             buildConfigField("String", "API_URL", "\"https://api.kotlinconf.com\"")
+            buildConfigField("String", "MAPBOX_ACCESS_TOKEN", MAPBOX_ACCESS_TOKEN)
             dimension "server"
         }
     }

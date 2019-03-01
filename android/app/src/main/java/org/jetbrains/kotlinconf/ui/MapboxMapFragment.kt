@@ -1,8 +1,6 @@
 package org.jetbrains.kotlinconf.ui
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.mapboxsdk.camera.CameraPosition
@@ -12,6 +10,7 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.maps.SupportMapFragment
+import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.kotlinconf.R
 
 /**
@@ -30,12 +29,11 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mapFragment = activity?.supportFragmentManager?.findFragmentByTag(
-                TAG) as SupportMapFragment
+        mapFragment = activity?.supportFragmentManager?.findFragmentByTag(TAG) as SupportMapFragment
         mapFragment.getMapAsync { mapboxMap ->
 
-            Log.d("MapboxMapFragment","getMapAsync")
-            // Set the map style.
+            // Set the map style. If you want to set a custom map style, replace
+            // Style.MAPBOX_STREETS with Style.Builder().fromUrl("customStyleUrl")
             mapboxMap.setStyle(Style.MAPBOX_STREETS) {
 
                 // Map is set up and the style has loaded. Now we can add data
@@ -65,11 +63,13 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener {
         if (PermissionsManager.areLocationPermissionsGranted(context)) {
 
             // Activate and set the preferences for the Maps SDK's LocationComponent
-            val locationComponent = mapboxMap?.locationComponent
-            locationComponent?.activateLocationComponent(activity!!.applicationContext, loadedMapStyle)
-            locationComponent?.isLocationComponentEnabled = true
-            locationComponent?.cameraMode = CameraMode.NONE
-            locationComponent?.renderMode = RenderMode.NORMAL
+            mapboxMap?.locationComponent?.apply {
+                activateLocationComponent(activity!!.applicationContext, loadedMapStyle)
+                isLocationComponentEnabled = true
+                cameraMode = CameraMode.NONE
+                renderMode = RenderMode.NORMAL
+            }
+
         } else {
             // Use the Mapbox Core Library to request location permissions
             permissionsManager = PermissionsManager(this)
@@ -89,7 +89,7 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener {
      * location permission
      */
     override fun onExplanationNeeded(permissionsToExplain: List<String>) {
-        Toast.makeText(context, context?.getString(R.string.user_location_permission_not_granted), Toast.LENGTH_LONG).show()
+        toast(R.string.user_location_permission_not_granted)
     }
 
     /**
@@ -99,9 +99,9 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener {
         if (granted) {
             // Now that user has granted location permissions, once again
             // start the process of showing the device location icon
-            enableLocationComponent(mapboxMap?.style!!)
+            enableLocationComponent(mapboxMap!!.style!!)
         } else {
-            Toast.makeText(context, R.string.user_location_permission_not_granted, Toast.LENGTH_LONG).show()
+            toast(R.string.user_location_permission_not_granted)
         }
     }
 

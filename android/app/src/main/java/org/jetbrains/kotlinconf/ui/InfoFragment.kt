@@ -105,15 +105,14 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         isClickable = true
                         backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
                         setOnClickListener {
-                                activity?.supportFragmentManager?.beginTransaction()?.setCustomAnimations(
-                                                R.anim.enter_from_right,
-                                                R.anim.exit_to_left,
-                                                R.anim.enter_from_left,
-                                                R.anim.exit_to_right
-                                        )
-                                        ?.addToBackStack("MapboxMap")
-                                        ?.replace(R.id.fragment_container, MapboxMapFragment(), MapboxMapFragment.TAG)
-                                        ?.commit()
+                            activity?.supportFragmentManager?.beginTransaction()?.setCustomAnimations(
+                                    R.anim.enter_from_right,
+                                    R.anim.exit_to_left,
+                                    R.anim.enter_from_left,
+                                    R.anim.exit_to_right)
+                                    ?.addToBackStack("MapboxMap")
+                                    ?.replace(R.id.fragment_container, MapboxMapFragment(), MapboxMapFragment.TAG)
+                                    ?.commit()
                         }
 
                         imageView(R.drawable.ic_location) {
