@@ -36,10 +36,7 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener {
 
             Log.d("MapboxMapFragment","getMapAsync")
             // Set the map style.
-            mapboxMap.setStyle(Style.Builder().fromUrl(
-                    // Using a custom map style. Also can use a static URL String
-                    // found in the Maps SDK's Style class (e.g. Style.MAPBOX_STREETS )
-                    "mapbox://styles/langsmith/cjnxtuknn0xg12sql21zj3r21")) {
+            mapboxMap.setStyle(Style.MAPBOX_STREETS) {
 
                 // Map is set up and the style has loaded. Now we can add data
                 // and/or make other map adjustments.
