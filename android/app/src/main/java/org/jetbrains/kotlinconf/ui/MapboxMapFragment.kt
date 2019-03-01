@@ -15,7 +15,7 @@ import com.mapbox.mapboxsdk.maps.SupportMapFragment
 import org.jetbrains.kotlinconf.R
 
 /**
- * Fragment class which handles the display of a Mapbox map via the Mapbox Maps SDK for Android.
+ * Fragment class that handles the display of a Mapbox map via the Mapbox Maps SDK for Android.
  * This class extends the Maps SDK's SupportMapFragment and implements the Mapbox Core Library's
  * PermissionsListener interface.
  *

@@ -6,7 +6,7 @@
     <string name="search_title">Search</string>
     <string name="room_format_details">Room \"%s\"</string>
     <string name="room_format_list">room \"%s\"</string>
-    <string name="kotlin_conf_address">Beurs Van Berlage, Damrak 243, 1012 ZJ Amsterdam, Netherlands</string>
+    <string name="kotlin_conf_address">Copenhagen, Denmark</string>
     <string name="msg_failed_to_get_data">Failed to get data from server, please check your internet connection</string>
     <string name="msg_failed_to_post_rate">Failed to rate session, please check your connection</string>
     <string name="msg_failed_to_delete_rate">Failed to update session rating, please check your connection</string>
@@ -198,18 +198,18 @@ liability.</p> ]]></string>
 
     <!-- Mapbox map access token
 
+    During development time you’ll need a Mapbox access token to view the map
+    on your own device. You can get one on the Mapbox account page
+    (https://account.mapbox.com/access-tokens/). No credit card info is required upfront.
+    You need to add it to /res/values/developer-config.xml (which is included in the gitignore file):
+
     Create a XML file with the following path: android/app/src/main/res/values/developer-config.xml
 
     Add a string resource in it with the name of "mapbox_access_token"
 
-    During development time you’ll need a Mapbox access token to view the map
-    on your own device. You can get one on the Mapbox account page (https://account.mapbox.com/access-tokens/)
-    No credit card info is required. You need to add it to /res/values/developer-config.xml
-    (which is included in the gitignore file):
-
     <string name="mapbox_access_token">PASTE_YOUR_TOKEN_HERE</string>
 
-    -->
+   -->
     <string name="mapbox_api_access_token">@string/mapbox_access_token</string>
 
 </resources>
