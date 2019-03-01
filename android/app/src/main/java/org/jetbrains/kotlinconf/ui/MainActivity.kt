@@ -115,8 +115,7 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
     }
 
     private fun showMapboxMap() {
-        if (supportFragmentManager.findFragmentByTag(MapboxMapFragment.TAG) != null)
-            return
+        if (supportFragmentManager.findFragmentByTag(MapboxMapFragment.TAG) != null) return
         supportFragmentManager
                 .beginTransaction()
                 .setCustomAnimations(
