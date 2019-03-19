@@ -21,6 +21,8 @@ import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.*
 import org.jetbrains.anko.support.v4.*
 import org.jetbrains.kotlinconf.*
+import com.mapbox.mapboxsdk.maps.SupportMapFragment
+
 
 class InfoFragment : Fragment(), AnkoComponent<Context> {
 
@@ -103,12 +105,14 @@ class InfoFragment : Fragment(), AnkoComponent<Context> {
                         isClickable = true
                         backgroundResource = context.getResourceId(R.attr.selectableItemBackground)
                         setOnClickListener {
-                            val gmmIntentUri = Uri.parse("geo:52.3752,4.8960?z=17&q=52.3752,4.8960")
-                            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-                            mapIntent.`package` = "com.google.android.apps.maps"
-                            if (mapIntent.resolveActivity(context.packageManager) != null) {
-                                startActivity(mapIntent)
-                            }
+                            activity?.supportFragmentManager?.beginTransaction()?.setCustomAnimations(
+                                    R.anim.enter_from_right,
+                                    R.anim.exit_to_left,
+                                    R.anim.enter_from_left,
+                                    R.anim.exit_to_right)
+                                    ?.addToBackStack("MapboxMap")
+                                    ?.replace(R.id.fragment_container, MapboxMapFragment(), MapboxMapFragment.TAG)
+                                    ?.commit()
                         }
 
                         imageView(R.drawable.ic_location) {

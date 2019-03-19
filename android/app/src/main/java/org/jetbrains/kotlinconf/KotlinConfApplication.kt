@@ -9,6 +9,7 @@ import org.jetbrains.kotlinconf.model.*
 import org.jetbrains.kotlinconf.presentation.*
 import org.jetbrains.kotlinconf.storage.*
 import java.util.*
+import com.mapbox.mapboxsdk.Mapbox
 
 class KotlinConfApplication : Application(), AnkoLogger {
 
@@ -25,6 +26,9 @@ class KotlinConfApplication : Application(), AnkoLogger {
             throwable.printStackTrace()
             throwable?.cause?.printStackTrace()
         }
+
+        // Initialize Mapbox
+        Mapbox.getInstance(this, BuildConfig.MAPBOX_ACCESS_TOKEN)
     }
 
     override fun attachBaseContext(base: Context?) {

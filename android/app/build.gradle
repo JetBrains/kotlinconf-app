@@ -28,10 +28,12 @@ android {
     productFlavors {
         local {
             buildConfigField("String", "API_URL", "\"https://api.kotlinconf.com\"")
+            buildConfigField("String", "MAPBOX_ACCESS_TOKEN", MAPBOX_ACCESS_TOKEN)
             dimension "server"
         }
         prod {
             buildConfigField("String", "API_URL", "\"https://api.kotlinconf.com\"")
+            buildConfigField("String", "MAPBOX_ACCESS_TOKEN", MAPBOX_ACCESS_TOKEN)
             dimension "server"
         }
     }
@@ -42,6 +44,10 @@ android {
     }
 
     tasks.lint.enabled = false
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -66,6 +72,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
     implementation 'net.opacapp:multiline-collapsingtoolbar:1.5.0'
     implementation 'com.github.bumptech.glide:glide:3.8.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.2.0'
     implementation 'com.brandongogetap:stickyheaders:0.5.1'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation "io.ktor:ktor-client-okhttp:$ktor_version"

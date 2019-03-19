@@ -80,6 +80,7 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_info -> showInfo()
+            R.id.action_mapbox_map -> showMapboxMap()
             android.R.id.home -> supportFragmentManager.popBackStack()
         }
         return true
@@ -111,6 +112,21 @@ class MainActivity : AppCompatActivity(), AnkoComponent<Context>, NavigationMana
 
     override fun showPrivacyPolicyDialog() {
         PrivacyPolicyAcceptanceFragment().show(supportFragmentManager, PrivacyPolicyAcceptanceFragment.TAG)
+    }
+
+    private fun showMapboxMap() {
+        if (supportFragmentManager.findFragmentByTag(MapboxMapFragment.TAG) != null) return
+        supportFragmentManager
+                .beginTransaction()
+                .setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.enter_from_left,
+                        R.anim.exit_to_right
+                )
+                .addToBackStack("MapboxMap")
+                .replace(R.id.fragment_container, MapboxMapFragment(), MapboxMapFragment.TAG)
+                .commit()
     }
 
     override fun showSessionDetails(sessionId: String) {

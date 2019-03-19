@@ -2,10 +2,11 @@
     <string name="app_name">KotlinConf</string>
     <string name="kotlin_conf_url">www.kotlinconf.com</string>
     <string name="action_info_title">Information</string>
+    <string name="action_info_mapbox_map">Map</string>
     <string name="search_title">Search</string>
     <string name="room_format_details">Room \"%s\"</string>
     <string name="room_format_list">room \"%s\"</string>
-    <string name="kotlin_conf_address">Beurs Van Berlage, Damrak 243, 1012 ZJ Amsterdam, Netherlands</string>
+    <string name="kotlin_conf_address">Copenhagen, Denmark</string>
     <string name="msg_failed_to_get_data">Failed to get data from server, please check your internet connection</string>
     <string name="msg_failed_to_post_rate">Failed to rate session, please check your connection</string>
     <string name="msg_failed_to_delete_rate">Failed to update session rating, please check your connection</string>
@@ -190,4 +191,8 @@ liability.</p> ]]></string>
     <string name="privacy_policy_text"><![CDATA[To proceed please accept the <a href="https://www.jetbrains.com/company/privacy.html">Privacy Policy</a>]]></string>
     <string name="privacy_policy_accept">I accept the Privacy Policy</string>
     <string name="submit_button">Submit</string>
+
+    <!--Basic user location permission toasts-->
+    <string name="user_location_permission_explanation">Please enable location permissions to view your device\'s location.</string>
+    <string name="user_location_permission_not_granted">You didn\'t grant location permissions.</string>
 </resources>

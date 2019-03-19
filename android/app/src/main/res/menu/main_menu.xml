@@ -13,4 +13,9 @@
         android:title="@string/action_info_title"
         android:icon="@drawable/ic_info_outline_white_24dp"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_mapbox_map"
+        android:title="@string/action_info_mapbox_map"
+        android:icon="@drawable/ic_map"
+        app:showAsAction="always" />
 </menu>
