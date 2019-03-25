@@ -3,6 +3,8 @@ package org.jetbrains.kotlinconf.ui
 import android.os.Bundle
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
+import com.mapbox.geojson.Feature
+import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.location.modes.CameraMode
@@ -10,6 +12,8 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.maps.SupportMapFragment
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.kotlinconf.R
 
@@ -25,7 +29,7 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener {
     private lateinit var permissionsManager: PermissionsManager
     private lateinit var mapFragment: SupportMapFragment
     private var mapboxMap: MapboxMap? = null
-    private val copenhagenConferenceLocation = LatLng(55.682828, 12.584511)
+    private val copenhagenConferenceLocation = LatLng(55.637504,  12.578573)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +50,19 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener {
                                 copenhagenConferenceLocation.longitude))
                         .zoom(11.988715)
                         .build()
+
+                it.addSource(GeoJsonSource("conference-icon-source-id",
+                        Feature.fromGeometry(Point.fromLngLat(
+                                copenhagenConferenceLocation.longitude,
+                                copenhagenConferenceLocation.latitude
+                        ))))
+
+                it.addLayer(SymbolLayer("conference-icon-layer-id",
+                        "conference-icon-source-id")
+                        .withProperties(
+
+                        )
+                )
 
                 // Start the process of showing the device location icon
                 enableLocationComponent(it)
