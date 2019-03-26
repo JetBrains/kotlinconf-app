@@ -1,17 +1,20 @@
 package org.jetbrains.kotlinconf.ui
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.location.modes.CameraMode
 import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.maps.SupportMapFragment
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory.*
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import org.jetbrains.anko.support.v4.toast
@@ -24,7 +27,7 @@ import org.jetbrains.kotlinconf.R
  *
  * More info at https://www.mapbox.com/android-docs/maps/overview and https://docs.mapbox.com/android/core/overview/
  */
-class MapboxMapFragment : SupportMapFragment(), PermissionsListener {
+class MapboxMapFragment : SupportMapFragment(), PermissionsListener, MapboxMap.OnMapClickListener {
 
     private lateinit var permissionsManager: PermissionsManager
     private lateinit var mapFragment: SupportMapFragment
@@ -44,30 +47,64 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener {
                 // and/or make other map adjustments.
                 this.mapboxMap = mapboxMap
 
-                // Move the map camera to the site of the KotlinConf location
+                // Move the map camera to a position where the KotlinConf location icon
+                // and downtown Copenhagen are both visible.
                 mapboxMap.cameraPosition = CameraPosition.Builder()
-                        .target(LatLng(copenhagenConferenceLocation.latitude,
-                                copenhagenConferenceLocation.longitude))
-                        .zoom(11.988715)
+                        .target(LatLng(55.660759,
+                                12.578044))
+                        .zoom(11.813848)
                         .build()
 
+                // Add the conference icon to the map
+                it.addImage("conference-icon-id",
+                        BitmapFactory.decodeResource(resources, R.drawable.kotlin_conf_2019_icon))
+
+                // Add source for the conference icon
                 it.addSource(GeoJsonSource("conference-icon-source-id",
                         Feature.fromGeometry(Point.fromLngLat(
                                 copenhagenConferenceLocation.longitude,
                                 copenhagenConferenceLocation.latitude
                         ))))
 
-                it.addLayer(SymbolLayer("conference-icon-layer-id",
+                // Add SymbolLayer for the conference icon
+                val conferenceIconSymbolLayer = SymbolLayer("conference-icon-layer-id",
                         "conference-icon-source-id")
                         .withProperties(
-
+                                iconImage("conference-icon-id"),
+                                iconSize(.15f),
+                                iconAllowOverlap(true),
+                                iconIgnorePlacement(true)
                         )
-                )
+                conferenceIconSymbolLayer.maxZoom = 14.3f
+                it.addLayer(conferenceIconSymbolLayer)
 
                 // Start the process of showing the device location icon
                 enableLocationComponent(it)
+
+                // Add map click listener interface
+                mapboxMap.addOnMapClickListener(this@MapboxMapFragment)
             }
         }
+    }
+
+    override fun onMapClick(point: LatLng): Boolean {
+
+        // Use the map click point to query whether the conference icon was tapped on
+        val conferenceIconLayerFeatureList = mapboxMap?.queryRenderedFeatures(
+                mapboxMap!!.projection.toScreenLocation(point),
+                "conference-icon-layer-id")
+
+        // Animate the camera to zoom into the conference location if the conference icon is tapped on
+        if (conferenceIconLayerFeatureList != null && conferenceIconLayerFeatureList.size > 0) {
+            mapboxMap?.animateCamera(CameraUpdateFactory.newCameraPosition(
+                            CameraPosition.Builder()
+                                    .target(LatLng(copenhagenConferenceLocation.latitude,
+                                            copenhagenConferenceLocation.longitude))
+                                    .zoom(15.6)
+                                    .build()
+                    ), 2000)
+        }
+        return true
     }
 
     /**
