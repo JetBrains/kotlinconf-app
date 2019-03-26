@@ -34,6 +34,7 @@
           &#8226; Glide\n
           &#8226; opacapp/multiline-collapsingtoolbar\n
           &#8226; bgogetap/StickyHeaders\n
+          &#8226; Mapbox\n
     </string>
     <string name="apache2_license"><![CDATA[ <p>Apache License<br></br>Version 2.0, January 2004<br></br>
 <a href="http://www.apache.org/licenses/">http://www.apache.org/licenses/</a> </p>
