@@ -34,6 +34,10 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener, MapboxMap.O
     private var mapboxMap: MapboxMap? = null
     private val copenhagenConferenceLocation = LatLng(55.637504,  12.578573)
 
+    companion object {
+        const val TAG = "MapboxMap"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mapFragment = activity?.supportFragmentManager?.findFragmentByTag(TAG) as SupportMapFragment
@@ -56,8 +60,7 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener, MapboxMap.O
                         .build()
 
                 // Add the conference icon to the map
-                it.addImage("conference-icon-id",
-                        BitmapFactory.decodeResource(resources, R.drawable.kotlin_conf_2019_icon))
+                it.addImage("conference-icon-id", BitmapFactory.decodeResource(resources, R.drawable.kotlin_conf_2019_icon))
 
                 // Add source for the conference icon
                 it.addSource(GeoJsonSource("conference-icon-source-id",
@@ -71,7 +74,7 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener, MapboxMap.O
                         "conference-icon-source-id")
                         .withProperties(
                                 iconImage("conference-icon-id"),
-                                iconSize(.15f),
+                                iconSize(1f),
                                 iconAllowOverlap(true),
                                 iconIgnorePlacement(true)
                         )
@@ -87,8 +90,10 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener, MapboxMap.O
         }
     }
 
+    /**
+     * Move the camera to the conference site if the conference icon is tapped on
+     */
     override fun onMapClick(point: LatLng): Boolean {
-
         // Use the map click point to query whether the conference icon was tapped on
         val conferenceIconLayerFeatureList = mapboxMap?.queryRenderedFeatures(
                 mapboxMap!!.projection.toScreenLocation(point),
@@ -157,9 +162,5 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener, MapboxMap.O
         } else {
             toast(R.string.user_location_permission_not_granted)
         }
-    }
-
-    companion object {
-        const val TAG = "MapboxMap"
     }
 }
