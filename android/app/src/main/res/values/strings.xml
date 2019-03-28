@@ -6,7 +6,7 @@
     <string name="search_title">Search</string>
     <string name="room_format_details">Room \"%s\"</string>
     <string name="room_format_list">room \"%s\"</string>
-    <string name="kotlin_conf_address">Copenhagen, Denmark</string>
+    <string name="kotlin_conf_address">Bella Center, Center Blvd. 5, 2300 København, Denmark</string>
     <string name="msg_failed_to_get_data">Failed to get data from server, please check your internet connection</string>
     <string name="msg_failed_to_post_rate">Failed to rate session, please check your connection</string>
     <string name="msg_failed_to_delete_rate">Failed to update session rating, please check your connection</string>
