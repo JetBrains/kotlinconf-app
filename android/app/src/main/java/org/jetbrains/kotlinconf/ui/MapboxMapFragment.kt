@@ -32,7 +32,7 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener, MapboxMap.O
     private lateinit var permissionsManager: PermissionsManager
     private lateinit var mapFragment: SupportMapFragment
     private var mapboxMap: MapboxMap? = null
-    private val copenhagenConferenceLocation = LatLng(55.637384,  12.579296)
+    private val copenhagenConferenceLocation = LatLng(55.637626, 12.579898)
 
     companion object {
         const val TAG = "MapboxMap"
@@ -54,9 +54,9 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener, MapboxMap.O
                 // Move the map camera to a position where the KotlinConf location icon
                 // and downtown Copenhagen are both visible.
                 mapboxMap.cameraPosition = CameraPosition.Builder()
-                        .target(LatLng(55.660759,
-                                12.578044))
-                        .zoom(11.813848)
+                        .target(LatLng(copenhagenConferenceLocation.latitude,
+                                copenhagenConferenceLocation.longitude))
+                        .zoom(15.116720)
                         .build()
 
                 // Add the conference icon to the map
