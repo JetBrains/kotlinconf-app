@@ -32,7 +32,7 @@ class MapboxMapFragment : SupportMapFragment(), PermissionsListener, MapboxMap.O
     private lateinit var permissionsManager: PermissionsManager
     private lateinit var mapFragment: SupportMapFragment
     private var mapboxMap: MapboxMap? = null
-    private val copenhagenConferenceLocation = LatLng(55.637504,  12.578573)
+    private val copenhagenConferenceLocation = LatLng(55.637384,  12.579296)
 
     companion object {
         const val TAG = "MapboxMap"
