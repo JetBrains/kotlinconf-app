@@ -18,7 +18,7 @@ internal class KotlinxConverter() : ContentConverter {
         value: Any
     ): Any? {
         @UseExperimental(ImplicitReflectionSerializer::class)
-        val text = Json.stringify(value::class.serializer() as SerializationStrategy<Any>, value)
+        val text = Json.nonstrict.stringify(value::class.serializer() as SerializationStrategy<Any>, value)
         return TextContent(text, contentType.withCharset(context.call.suitableCharset()))
     }
 
@@ -28,6 +28,6 @@ internal class KotlinxConverter() : ContentConverter {
         val type = request.type
         val text = channel.readRemaining().readText()
         @UseExperimental(ImplicitReflectionSerializer::class)
-        return Json.parse(type.serializer(), text)
+        return Json.nonstrict.parse(type.serializer(), text)
     }
 }

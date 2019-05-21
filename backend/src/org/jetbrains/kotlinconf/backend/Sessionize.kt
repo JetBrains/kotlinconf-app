@@ -7,6 +7,7 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
+import kotlinx.serialization.json.*
 import org.jetbrains.kotlinconf.data.*
 import java.time.*
 import java.util.concurrent.*
@@ -36,7 +37,7 @@ fun Application.launchSyncJob(sessionizeUrl: String, sessionizeInterval: Long) {
 
 private val client = HttpClient {
     install(JsonFeature) {
-        serializer = KotlinxSerializer().apply {
+        serializer = KotlinxSerializer(Json.nonstrict).apply {
             setMapper(AllData::class, AllData.serializer())
         }
     }

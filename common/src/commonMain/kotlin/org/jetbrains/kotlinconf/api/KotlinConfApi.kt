@@ -7,12 +7,13 @@ import io.ktor.client.request.*
 import io.ktor.client.response.*
 import io.ktor.http.*
 import kotlinx.io.core.*
+import kotlinx.serialization.json.*
 import org.jetbrains.kotlinconf.data.*
 
 class KotlinConfApi(private val endPoint: String, private val userId: String) {
     private val client = HttpClient {
         install(JsonFeature) {
-            serializer = KotlinxSerializer().apply {
+            serializer = KotlinxSerializer(Json.nonstrict).apply {
                  setMapper(AllData::class, AllData.serializer())
                  setMapper(Favorite::class, Favorite.serializer())
                  setMapper(Vote::class, Vote.serializer())
