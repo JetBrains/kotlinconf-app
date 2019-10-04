@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KotlinConf</string>
+    <string name="action_info_mapbox_map">Bản đồ</string>
+    <string name="action_info_title">Thông tin</string>
+    <string name="cannot_favorite_error">Bạn không thể chọn mục ưu thích</string>
+    <string name="cannot_rate_error">Bạn không thể đánh giá ngay bây giờ</string>
+    <string name="github_info"><![CDATA[Nhận thông tin và mã nguồn từ <a href="https://github.com/jetbrains/kotlinconf-app">github.com/jetbrains/kotlinconf-app</a><br/><br/>Powered by Kotlin/JVM<br/>]]></string>
+    <string name="external_contributors">
+        <![CDATA[Cộng tác viên bên ngoài:<br/><br/>
+        &#8226; Catalina Chioveanu <a href="https://twitter.com/hiimcatalina">@hiimcatalina</a><br/><br/>
+        &#8226; Marcin Moskała <a href="https://twitter.com/marcinmoskala">@marcinmoskala</a><br/><br/>
+        &#8226; James Cogan <a href="https://twitter.com/mad_team">@mad_team</a><br/><br/>
+        &#8226; Jarek Ankowski <a href="https://twitter.com/jarekankowski">@jarekankowski</a><br/><br/>
+        ]]>
+    </string>
+    <string name="libraries">
+        Ứng dụng KotlinConf được xây dựng dựa trên các thư viện mã nguồn mỡ:\n
+          &#8226; Ktor\n
+          &#8226; Anko\n
+          &#8226; Glide\n
+          &#8226; opacapp/multiline-collapsingtoolbar\n
+          &#8226; bgogetap/StickyHeaders\n
+    </string>
+    <string name="legal_notice_title">THÔNG BÁO PHÁP LÝ</string>
+    <string name="submit_button">Đăng ký</string>
+    <string name="search_title">Tìm kiếm</string>
+    <string name="room_format_details">Phòng %s</string>
+    <string name="room_format_list">phòng %s</string>
+    <string name="unauthorized_error">Không được phép</string>
+    <string name="unknown_error">Có lỗi xảy ra</string>
+    <string name="user_location_permission_explanation">Vui lòng kích hoạt quyền truy cập vị trí để lấy vị trí hiện tại của bạn.</string>
+    <string name="user_location_permission_not_granted">Bạn không được cấp quyền truy cập vị trí.</string>
+    <string name="privacy_policy_accept">Tôi chấp nhận chính sách quyền riêng tư</string>
+    <string name="privacy_policy_text"><![CDATA[Để tiếp tục, vui lòng chấp nhận <a href="https://www.jetbrains.com/company/privacy.html">Chính sách quyền riêng t</a>]]></string>
+    <string name="msg_late_rate">Xếp hạng chỉ được sử dụng trong vòng 15 phút sau khi kết thúc hội nghị</string>
+    <string name="msg_failed_to_post_rate">Không thể xếp hạng, vui lòng kiểm tra kết nối của bạn</string>
+    <string name="msg_failed_to_get_data">Không thể lấy dữ liệu từ máy chủ, vui lòng kiểm tra kết nối mạng của bạn</string>
+    <string name="msg_failed_to_delete_rate">Không thể cập nhật xếp hạng, vui lòng kiểm tra kết nối của bạn</string>
+    <string name="msg_early_rate">Bạn không thể đánh giá trước khi nó bắt đầu</string>
+    <string name="kotlin_conf_address">Việt Nam</string>
+    <string name="kotlin_conf_url">www.kotlinconf.com</string>
+    <string name="copyright">Bản quyền © 2018 JetBrains s. r. o.</string>
+</resources>
