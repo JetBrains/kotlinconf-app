@@ -14,8 +14,28 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable,Signature,InnerClasses,Exceptions,Annotation
+
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontpreverify
+-verbose
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class io.ktor.** { *; }
+-keep class android.arch.** { *; }
+-keep class kotlin.reflect.** { *; }
+-keep class androidx.media.** { *; }
+-keep class org.jetbrains.anko.** { *; }
+-keep class android.support.v7.widget.** { *; }
+-keep class kotlinx.coroutines.** { *; }
+
+-dontwarn io.netty.**
+-dontwarn com.typesafe.**
+-dontwarn org.jetbrains.anko.**
+-dontwarn org.slf4j.**
+-dontwarn kotlin.reflect.jvm.**
+-dontwarn androidx.media.**

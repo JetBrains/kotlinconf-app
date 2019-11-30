@@ -1,25 +1,28 @@
-allprojects {
-    buildscript {
-        ext.kotlin_version = '1.2.0-rc-39'
-        ext.serialization_version = '0.2'
-        ext.anko_version = '0.10.1'
-
-        repositories {
-            maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.2' }
-            maven { url "https://kotlin.bintray.com/kotlinx" }
-            maven { url 'https://maven.google.com' }
-            jcenter()
-        }
-        dependencies {
-            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-            classpath "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:$serialization_version"
-        }
-
-    }
+buildscript {
     repositories {
-        maven { url 'http://dl.bintray.com/kotlin/kotlin-eap-1.2' }
         maven { url "https://kotlin.bintray.com/kotlinx" }
-        maven { url 'https://maven.google.com' }
+        maven { url 'https://dl.bintray.com/jetbrains/kotlin-native-dependencies' }
+
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+        classpath "com.android.tools.build:gradle:$gradle_android_version"
+        classpath "com.github.jengelman.gradle.plugins:shadow:$shadow_version"
+    }
+}
+
+allprojects {
+    repositories {
+        maven { url "https://kotlin.bintray.com/kotlinx" }
+        maven { url "https://dl.bintray.com/kotlin/ktor" }
+        maven { url "https://dl.bintray.com/sargunster/maven" }
+        maven { url "https://dl.bintray.com/kotlin/squash" }
+        maven { url "https://dl.bintray.com/russhwolf/multiplatform-settings" }
+
+        google()
         jcenter()
     }
 }

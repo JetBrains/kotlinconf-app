@@ -1,74 +1,60 @@
 package org.jetbrains.kotlinconf.ui
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModelProviders
-import android.arch.lifecycle.ViewModelProviders.DefaultFactory
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.os.Bundle
-import android.os.Parcelable
-import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import com.brandongogetap.stickyheaders.StickyLayoutManager
-import com.brandongogetap.stickyheaders.exposed.StickyHeader
-import com.brandongogetap.stickyheaders.exposed.StickyHeaderHandler
-import org.jetbrains.kotlinconf.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import android.content.*
+import android.graphics.*
+import android.graphics.drawable.*
+import android.os.*
+import android.support.v4.widget.*
+import android.support.v7.widget.*
+import android.support.v7.widget.RecyclerView.*
+import android.view.*
+import android.widget.*
+import com.brandongogetap.stickyheaders.*
+import com.brandongogetap.stickyheaders.exposed.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.android.*
 import org.jetbrains.anko.*
-import org.jetbrains.anko.recyclerview.v7.recyclerView
-import org.jetbrains.anko.support.v4.onRefresh
-import org.jetbrains.anko.support.v4.swipeRefreshLayout
+import org.jetbrains.anko.recyclerview.v7.*
+import org.jetbrains.anko.support.v4.*
+import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.R
+import org.jetbrains.kotlinconf.presentation.*
+import kotlin.properties.Delegates.observable
 
-abstract class SessionListFragment : Fragment(), AnkoComponent<Context> {
+abstract class SessionListFragment : BaseFragment(), AnkoComponent<Context>, SessionListView {
+
     private lateinit var sessionsRecyclerView: RecyclerView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var sessionsAdapter: SessionsAdapter
+    lateinit var sessionsAdapter: SessionsAdapter
     private var sessionsListState: Parcelable? = null
 
-    abstract fun getSessions(model: SessionListViewModel): LiveData<List<SessionModel>>
     abstract val title: String
+
+    override var isUpdating: Boolean by observable(false) { _, _, isUpdating ->
+        swipeRefreshLayout.isRefreshing = isUpdating
+    }
+
+    private val repository by lazy { (activity!!.application as KotlinConfApplication).dataRepository }
+    private val navigationManager by lazy { activity as NavigationManager }
+    private val searchQueryProvider by lazy { activity as SearchQueryProvider }
+    private val presenter by lazy { SessionListPresenter(Dispatchers.Main, this, repository, navigationManager, searchQueryProvider) }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val viewModel = ViewModelProviders.of(this, DefaultFactory(activity.application))
-                .get(SessionListViewModel::class.java)
-                .apply {
-                    setNavigationManager(activity as NavigationManager)
-                    setSearchQueryProvider(activity as SearchQueryProvider)
-                }
 
-        swipeRefreshLayout.onRefresh {
-            launch(UI) { viewModel.updateData() }
-        }
+        swipeRefreshLayout.setOnRefreshListener(presenter::onPullRefresh)
+        sessionsAdapter = SessionsAdapter(context!!, presenter::showSessionDetails)
 
-        sessionsAdapter = SessionsAdapter(context, viewModel::showSessionDetails)
         sessionsRecyclerView.layoutManager = StickyLayoutManager(context, sessionsAdapter).apply {
             elevateHeaders(2)
         }
         sessionsRecyclerView.adapter = sessionsAdapter
 
-        getSessions(viewModel).observe(this) {
-            sessionsAdapter.sessions = it ?: emptyList()
-        }
-
-        viewModel.isUpdating.observe(this) {
-            swipeRefreshLayout.isRefreshing = it ?: false
-        }
-
         sessionsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == SCROLL_STATE_IDLE) {
-                    sessionsListState = recyclerView.layoutManager.onSaveInstanceState()
+                    sessionsListState = recyclerView.layoutManager!!.onSaveInstanceState()
                 }
             }
         })
@@ -78,8 +64,15 @@ abstract class SessionListFragment : Fragment(), AnkoComponent<Context> {
         }
 
         sessionsListState?.let {
-            sessionsRecyclerView.layoutManager.onRestoreInstanceState(it)
+            sessionsRecyclerView.layoutManager!!.onRestoreInstanceState(it)
         }
+
+        presenter.onCreate()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -88,11 +81,11 @@ abstract class SessionListFragment : Fragment(), AnkoComponent<Context> {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        return createView(AnkoContext.create(activity))
+        return createView(AnkoContext.create(activity!!))
     }
 
     override fun createView(ui: AnkoContext<Context>): View = with(ui) {
@@ -107,9 +100,9 @@ abstract class SessionListFragment : Fragment(), AnkoComponent<Context> {
     }
 
     class SessionsAdapter(
-            private val context: Context,
-            private val onSessionClick: (SessionModel) -> Unit)
-        : RecyclerView.Adapter<RecyclerView.ViewHolder>(), StickyHeaderHandler {
+        private val context: Context,
+        private val onSessionClick: (SessionModel) -> Unit
+    ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), StickyHeaderHandler {
 
         private var _data: List<*> = emptyList<Any>()
         override fun getAdapterData(): List<*> = _data
@@ -118,10 +111,8 @@ abstract class SessionListFragment : Fragment(), AnkoComponent<Context> {
             set(value) {
                 field = value
                 _data = field
-                        .sortedBy { it.room }
-                        .sortedBy { it.startsAt.getTime().toLong() }
-                        .groupBy { it.startsAt.toReadableDateString() }
-                        .flatMap { (day, sessions) -> listOf(HeaderItem(day)) + sessions }
+                    .groupBy { it.startsAt?.toReadableDateString() ?: "" }
+                    .flatMap { (day, sessions) -> listOf(HeaderItem(day)) + sessions }
 
                 notifyDataSetChanged()
             }
@@ -133,15 +124,15 @@ abstract class SessionListFragment : Fragment(), AnkoComponent<Context> {
                     with(holder) {
                         setTitle(session.title)
                         val detailStrings: List<String> =
-                                session.speakers.map { it.fullName ?: "" } + listOfNotNull(session.roomText)
+                            session.speakers.map { it.fullName } + listOfNotNull(session.roomText)
 
                         setDetails(detailStrings.joinToString(", "))
-                        setStartsAt(session.startsAt.toReadableTimeString())
+                        setStartsAt(session.startsAt?.toReadableTimeString() ?: "")
                         itemView.setOnClickListener { onSessionClick(session) }
 
-                        isFirstInTimeGroup = position == 0
-                                || _data[position - 1] is HeaderItem
-                                || (_data[position - 1] as SessionModel).startsAt != session.startsAt
+                        isFirstInTimeGroup = position == 0 ||
+                                _data[position - 1] is HeaderItem ||
+                                (_data[position - 1] as SessionModel).startsAt != session.startsAt
                     }
                 }
                 is HeaderViewHolder -> {
@@ -174,7 +165,7 @@ abstract class SessionListFragment : Fragment(), AnkoComponent<Context> {
 
     data class HeaderItem(val title: String) : StickyHeader
 
-    class HeaderViewHolder(view: View) :  RecyclerView.ViewHolder(view) {
+    class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val titleTextView = view.find<TextView>(R.id.session_list_header_title)
         fun setTitle(title: String) {
             titleTextView.text = title
@@ -278,7 +269,7 @@ abstract class SessionListFragment : Fragment(), AnkoComponent<Context> {
     class SessionDividerItemDecoration(context: Context) : RecyclerView.ItemDecoration() {
         private val divider: Drawable by lazy {
             val styledAttributes =
-                    context.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
+                context.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
             val divider = styledAttributes.getDrawable(0)
             styledAttributes.recycle()
             divider
