@@ -20,11 +20,11 @@ It also provides a couple of extra APIs to save your favorites and accumulate vo
 ### Android Application
 
 As you can imagine, the Android version is developed in Kotlin/JVM. What's interesting here is that this time
-application utilizes Multiplatform support, which is an experimental feature in Kotlin 1.2. Data structures for retrieving data from the backend server and some date-time operations are shared across multiple projects.
+application utilizes Multiplatform support, which is an experimental feature in Kotlin 1.3.61. Data structures for retrieving data from the backend server and some date-time operations are shared across multiple projects.
 
 ### iOS Application
 
-iOS version is written in Swift, but it uses presenters and repositories written in Kotlin in the common module. 
+User interface of iOS version is written in Swift, all logic and data written in Kotlin in the common module. 
 This way iOS part itself is responsible only for specifying how the application looks like and how it represents changes requested by logic. Kotlin and Swift are highly interoperable, so from Swift, you can easily use all classes and tools defined in the common module. 
 
 ## How to build and run
@@ -32,7 +32,7 @@ This way iOS part itself is responsible only for specifying how the application 
 ### Building the code
 
  * Make sure you have the Android SDK installed
- * Open the project in IntelliJ IDEA (2017.3 EAP recommended)
+ * Open the project in IntelliJ IDEA (2019.3 recommended)
  * Create a file `local.properties` in the root directory of the project, pointing to your Android SDK installation. On Mac OS, the contents should be `sdk.dir=/Users/<your username>/Library/Android/sdk`. On other OSes, please adjust accordingly.
  * Run `./gradlew build`
 
@@ -50,7 +50,15 @@ This way iOS part itself is responsible only for specifying how the application 
 
 ### Running the iOS
 
- * Open `konfios` in Xcode
- * Run this project
- 
-To just generate Objective-C framework for iOS, use `:common:iosMain:build` task. 
+To run iOS version you need to generate fat framework first:
+ * For simulator `./gradlew debugFatFramework`
+ * For device `./gradlew releaseFatFramework`
+  
+Next you should install all pods with running:
+```
+cd iosApp
+pod install
+```
+
+Next you can open `iosApp/KotlinConf.xcworkspace`, select a device XCode and hit run.
+
