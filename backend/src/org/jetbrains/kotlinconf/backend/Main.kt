@@ -8,8 +8,8 @@ import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.serialization.*
 import io.ktor.util.*
-import io.ktor.websocket.*
 
 internal fun Application.main() {
     val config = environment.config
@@ -18,7 +18,9 @@ internal fun Application.main() {
     log.info("Environment: $mode")
     val sessionizeConfig = config.config("sessionize")
     val sessionizeUrl = sessionizeConfig.property("url").getString()
+    val oldSessionizeUrl = sessionizeConfig.property("oldUrl").getString()
     val sessionizeInterval = sessionizeConfig.property("interval").getString().toLong()
+    val adminSecret = serviceConfig.property("secret").getString()
     val production = mode == "production"
 
     if (!production) {
@@ -30,7 +32,6 @@ internal fun Application.main() {
     install(Compression)
     install(PartialContent)
     install(AutoHeadResponse)
-    install(WebSockets)
     install(XForwardedHeaderSupport)
     install(StatusPages) {
         exception<ServiceUnavailable> { _ ->
@@ -55,7 +56,7 @@ internal fun Application.main() {
     }
 
     install(ContentNegotiation) {
-        register(ContentType.Application.Json, KotlinxConverter())
+        serialization()
     }
 
     install(CORS) {
@@ -72,10 +73,11 @@ internal fun Application.main() {
             default("static/index.html")
             files("static")
         }
-        api(database, production, sessionizeUrl)
+
+        api(database, sessionizeUrl, oldSessionizeUrl, adminSecret)
     }
 
-    launchSyncJob(sessionizeUrl, sessionizeInterval)
+    launchSyncJob(sessionizeUrl, oldSessionizeUrl, sessionizeInterval)
 }
 
 private fun Route.authenticate() {

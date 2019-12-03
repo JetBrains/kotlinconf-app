@@ -3,8 +3,8 @@ package org.jetbrains.kotlinconf.backend
 import com.zaxxer.hikari.*
 import io.ktor.application.*
 import kotlinx.coroutines.*
+import org.jetbrains.kotlinconf.*
 import kotlin.coroutines.*
-import org.jetbrains.kotlinconf.data.*
 import org.jetbrains.squash.connection.*
 import org.jetbrains.squash.definition.*
 import org.jetbrains.squash.dialects.h2.*
@@ -20,18 +20,20 @@ internal class Database(application: Application) {
     private val connection: DatabaseConnection
 
     init {
-        val config = application.environment.config.config("database")
-        val url = config.property("connection").getString()
-        val poolSize = config.property("poolSize").getString().toInt()
+        val appConfig = application.environment.config.config("database")
+        val url = appConfig.property("connection").getString()
+        val poolSize = appConfig.property("poolSize").getString().toInt()
         application.log.info("Connecting to database at '$url'")
 
         dispatcher = newFixedThreadPoolContext(poolSize, "database-pool")
-        val cfg = HikariConfig()
-        cfg.jdbcUrl = url
-        cfg.maximumPoolSize = poolSize
-        cfg.validate()
 
-        connectionPool = HikariDataSource(cfg)
+        val hikariConfig = HikariConfig().apply {
+            jdbcUrl = url
+            maximumPoolSize = poolSize
+            validate()
+        }
+
+        connectionPool = HikariDataSource(hikariConfig)
 
         connection = H2Connection { connectionPool.connection }
         connection.transaction {
@@ -41,23 +43,27 @@ internal class Database(application: Application) {
 
     suspend fun validateUser(uuid: String): Boolean = withContext(dispatcher) {
         connection.transaction {
-            Users.select { Users.id.count() }.where { Users.uuid eq uuid }.execute().single().get<Int>(0) != 0
+            Users.select { Users.id.count() }
+                .where { Users.uuid eq uuid }
+                .execute().single().get<Int>(0) != 0
         }
     }
 
-    suspend fun createUser(uuid: String, remote: String, timestamp: LocalDateTime): Boolean = withContext(dispatcher) {
-        connection.transaction {
-            val count = Users.select { Users.id.count() }.where { Users.uuid eq uuid }.execute().single().get<Int>(0)
-            if (count == 0) {
-                insertInto(Users).values {
-                    it[Users.uuid] = uuid
-                    it[Users.timestamp] = timestamp.toString()
-                    it[Users.remote] = remote
-                }.execute()
+    suspend fun createUser(uuid: String, remote: String, timestamp: LocalDateTime): Boolean =
+        withContext(dispatcher) {
+            connection.transaction {
+                val count = Users.select { Users.id.count() }.where { Users.uuid eq uuid }.execute()
+                    .single().get<Int>(0)
+                if (count == 0) {
+                    insertInto(Users).values {
+                        it[Users.uuid] = uuid
+                        it[Users.timestamp] = timestamp.toString()
+                        it[Users.remote] = remote
+                    }.execute()
+                }
+                count == 0
             }
-            count == 0
         }
-    }
 
     suspend fun usersCount(): Int = withContext(dispatcher) {
         connection.transaction {
@@ -88,34 +94,40 @@ internal class Database(application: Application) {
         }
     }
 
-    suspend fun getFavorites(uuid: String): List<Favorite> = withContext(dispatcher) {
+    suspend fun getFavorites(userId: String): List<String> = withContext(dispatcher) {
         connection.transaction {
             Favorites.select(Favorites.sessionId)
-                .where { Favorites.uuid eq uuid }
-                .execute().map { Favorite(it[0]) }.toList()
+                .where { Favorites.uuid eq userId }
+                .execute().map { it.get<String>(0) }.toList()
         }
     }
 
-    suspend fun getAllFavorites(): List<Favorite> = withContext(dispatcher) {
+    suspend fun getAllFavorites(): List<String> = withContext(dispatcher) {
         connection.transaction {
-            Favorites.select(Favorites.sessionId).execute().map { Favorite(it[0]) }.toList()
+            Favorites.select(Favorites.sessionId).execute().map { it.get<String>(0) }.toList()
         }
     }
 
-    suspend fun getVotes(uuid: String): List<Vote> = withContext(dispatcher) {
+    suspend fun getVotes(uuid: String): List<VoteData> = withContext(dispatcher) {
         connection.transaction {
             Votes.select(Votes.sessionId, Votes.rating).where { Votes.uuid eq uuid }
-                .execute().map { Vote(sessionId = it[0], rating = it[1]) }.toList()
+                .execute().map { VoteData(sessionId = it[0], rating = RatingData(it[1])) }.toList()
         }
     }
 
-    suspend fun getAllVotes(): List<Vote> = withContext(dispatcher) {
+    suspend fun getAllVotes(): List<VoteData> = withContext(dispatcher) {
         connection.transaction {
-            Votes.select(Votes.sessionId, Votes.rating).execute().map { Vote(it[0], it[1]) }.toList()
+            Votes.select(Votes.sessionId, Votes.rating).execute()
+                .map { VoteData(it[0], RatingData(it[1])) }.toList()
         }
     }
 
-    suspend fun changeVote(uuid: String, sessionId: String, rating: Int, timestamp: LocalDateTime): Boolean =
+    suspend fun changeVote(
+        uuid: String,
+        sessionId: String,
+        rating: Int,
+        timestamp: LocalDateTime
+    ): Boolean =
         withContext(dispatcher) {
             connection.transaction {
                 val count = Votes.select { Votes.id.count() }
@@ -130,9 +142,10 @@ internal class Database(application: Application) {
                     }.execute()
                     true
                 } else {
-                    update(Votes).where { (Votes.uuid eq uuid) and (Votes.sessionId eq sessionId) }.set {
-                        it[Votes.rating] = rating
-                    }.execute()
+                    update(Votes).where { (Votes.uuid eq uuid) and (Votes.sessionId eq sessionId) }
+                        .set {
+                            it[Votes.rating] = rating
+                        }.execute()
                     false
                 }
             }
