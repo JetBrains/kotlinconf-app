@@ -10,12 +10,12 @@ Yes, Kotlin is powering all parts of the story. Did I already say that? Okay, le
 ### Server
 
 KotlinConf App is connecting to the server running in the cloud to get information about sessions,
-speakers, favourites and votes. It is developed using [Ktor](https://ktor.io), an asynchronous Kotlin web framework.
+speakers, favorites and votes. It is developed using [Ktor](https://ktor.io), an asynchronous Kotlin web framework.
 
 The server polls [Sessionize](https://sessionize.com) service, which is used for planning the conference. 
 Once in a while, it connects to APIs to get the latest information about sessions, speakers, and timeline. 
 It then augments and republishes this information for clients to consume. 
-It also provides a couple of extra APIs to save your favourites and accumulate votes.
+It also provides a couple of extra APIs to save your favorites and accumulate votes.
 
 ### Android Application
 
