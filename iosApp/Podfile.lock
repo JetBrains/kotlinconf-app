@@ -1,0 +1,29 @@
+PODS:
+  - Mapbox-iOS-SDK (5.2.0)
+  - MarqueeLabel (4.0.0)
+  - Nuke (8.3.1)
+  - youtube-ios-player-helper (0.1.6)
+
+DEPENDENCIES:
+  - Mapbox-iOS-SDK (~> 5.2)
+  - MarqueeLabel
+  - Nuke (~> 8.3.1)
+  - youtube-ios-player-helper (~> 0.1.4)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Mapbox-iOS-SDK
+    - youtube-ios-player-helper
+  trunk:
+    - MarqueeLabel
+    - Nuke
+
+SPEC CHECKSUMS:
+  Mapbox-iOS-SDK: 3e095b305126d52ba166fe215d847b15b6fbee63
+  MarqueeLabel: b55b26e690b6ad41faedd95cbf5eae6f1d1735b4
+  Nuke: 85fb80f8df0cb26c28d2f4e0cb7fb93bcd6548d3
+  youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
+
+PODFILE CHECKSUM: 548cf3d99fb5577718a66192a583cf416b055a16
+
+COCOAPODS: 1.8.4

@@ -1,0 +1,630 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2C1952F7228C14FE00BA0BB9 /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1952F6228C14FE00BA0BB9 /* MainTabController.swift */; };
+		2C1952FA228C1BF300BA0BB9 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1952F9228C1BF300BA0BB9 /* Screen.swift */; };
+		2C1952FC228C2B5F00BA0BB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C1952FB228C2B5F00BA0BB9 /* Assets.xcassets */; };
+		2C195301228C306600BA0BB9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C195300228C306600BA0BB9 /* Main.storyboard */; };
+		2C195303228C32EE00BA0BB9 /* ScheduleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C195302228C32EE00BA0BB9 /* ScheduleController.swift */; };
+		2C38A899228EEBD000BAF882 /* SessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C38A898228EEBD000BAF882 /* SessionController.swift */; };
+		2C416BA0229591C300BBA441 /* VenueController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C416B9F229591C300BBA441 /* VenueController.swift */; };
+		2C46F0FE230AA48800D40386 /* ScheduleHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C46F0FD230AA48800D40386 /* ScheduleHeader.swift */; };
+		2C46F100230ABB4900D40386 /* TopButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C46F0FF230ABB4900D40386 /* TopButton.swift */; };
+		2C5231A32302D91A00A73DEE /* ScheduleTableSmallHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C5231A22302D91A00A73DEE /* ScheduleTableSmallHeader.xib */; };
+		2C5231A72302F5E400A73DEE /* ScheduleHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C5231A62302F5E400A73DEE /* ScheduleHeader.xib */; };
+		2C674AF022FD4DC6001CA3F5 /* SessionCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C674AEF22FD4DC6001CA3F5 /* SessionCardView.xib */; };
+		2C674AF222FD5258001CA3F5 /* SessionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C674AF122FD5258001CA3F5 /* SessionCardView.swift */; };
+		2C7496F7230BE20E001F8562 /* PopupUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7496F6230BE20E001F8562 /* PopupUtils.swift */; };
+		2C7CD27422B7B497000B3BD0 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7CD27322B7B497000B3BD0 /* BaseView.swift */; };
+		2C7CD27A22B8F455000B3BD0 /* KotlinConfAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C7CD27922B8F455000B3BD0 /* KotlinConfAPI.framework */; };
+		2C7CD27B22B8F455000B3BD0 /* KotlinConfAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C7CD27922B8F455000B3BD0 /* KotlinConfAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2C80C1B023191AF200D2CBA6 /* ScheduleTableSmallHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C80C1AF23191AF200D2CBA6 /* ScheduleTableSmallHeader.swift */; };
+		2C840A3B2355EC740084BAEE /* BeforeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C840A3A2355EC740084BAEE /* BeforeController.swift */; };
+		2C840A3D2355FC2E0084BAEE /* AfterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C840A3C2355FC2E0084BAEE /* AfterController.swift */; };
+		2C849F8A233A424F00E9BD5A /* WelcomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C849F89233A424F00E9BD5A /* WelcomeController.swift */; };
+		2CCEC45F2350686700D3A899 /* TweetPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCEC45E2350686700D3A899 /* TweetPost.swift */; };
+		2CCECF4723968F9F007EC7F9 /* BigShouldersDisplay-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2C9553502396898A008E8BCB /* BigShouldersDisplay-ExtraBold.ttf */; };
+		2CF0141B22958ACB00C235D1 /* SpeakerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF0141A22958ACB00C235D1 /* SpeakerController.swift */; };
+		2CFA8EC422DCB398008B32E2 /* LiveVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFA8EC322DCB398008B32E2 /* LiveVideo.swift */; };
+		2CFA8EC822DCB5DF008B32E2 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFA8EC722DCB5DF008B32E2 /* HomeController.swift */; };
+		2CFA8ECC22DF0512008B32E2 /* SpeakersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFA8ECB22DF0512008B32E2 /* SpeakersController.swift */; };
+		8D82EE36F5FB5EC1BC6B26EE /* Pods_KotlinConf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C31466D3383AF769D0B19EA /* Pods_KotlinConf.framework */; };
+		B33E0797228D6EC800F313A1 /* ScheduleTableHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33E0796228D6EC800F313A1 /* ScheduleTableHeader.swift */; };
+		B33E079C228D86DB00F313A1 /* ScheduleTableHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B33E079B228D86DB00F313A1 /* ScheduleTableHeader.xib */; };
+		B38305B62354EEEF00C2E52F /* PartnerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38305B52354EEEF00C2E52F /* PartnerController.swift */; };
+		B3C643F52305896D00C35EEA /* ScheduleTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3C643F42305896D00C35EEA /* ScheduleTableCell.swift */; };
+		F861D7E1207FA40F0085E80D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861D7E0207FA40F0085E80D /* AppDelegate.swift */; };
+		F861D7EB207FA4100085E80D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F861D7E9207FA4100085E80D /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2C7CD27822B8F1A0000B3BD0 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2C7CD27B22B8F455000B3BD0 /* KotlinConfAPI.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1D1A6A2B5FADEB5AF445E5D8 /* Pods-KotlinConf.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KotlinConf.debug.xcconfig"; path = "Target Support Files/Pods-KotlinConf/Pods-KotlinConf.debug.xcconfig"; sourceTree = "<group>"; };
+		2C1952F6228C14FE00BA0BB9 /* MainTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
+		2C1952F9228C1BF300BA0BB9 /* Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
+		2C1952FB228C2B5F00BA0BB9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2C195300228C306600BA0BB9 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		2C195302228C32EE00BA0BB9 /* ScheduleController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleController.swift; sourceTree = "<group>"; };
+		2C38A898228EEBD000BAF882 /* SessionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionController.swift; sourceTree = "<group>"; };
+		2C416B9F229591C300BBA441 /* VenueController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueController.swift; sourceTree = "<group>"; };
+		2C46F0FD230AA48800D40386 /* ScheduleHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleHeader.swift; sourceTree = "<group>"; };
+		2C46F0FF230ABB4900D40386 /* TopButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopButton.swift; sourceTree = "<group>"; };
+		2C5231A22302D91A00A73DEE /* ScheduleTableSmallHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScheduleTableSmallHeader.xib; sourceTree = "<group>"; };
+		2C5231A62302F5E400A73DEE /* ScheduleHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScheduleHeader.xib; sourceTree = "<group>"; };
+		2C674AEF22FD4DC6001CA3F5 /* SessionCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SessionCardView.xib; sourceTree = "<group>"; };
+		2C674AF122FD5258001CA3F5 /* SessionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCardView.swift; sourceTree = "<group>"; };
+		2C7496F6230BE20E001F8562 /* PopupUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupUtils.swift; sourceTree = "<group>"; };
+		2C7CD27322B7B497000B3BD0 /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		2C7CD27922B8F455000B3BD0 /* KotlinConfAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KotlinConfAPI.framework; path = "../common/build/fat-framework/KotlinConfAPI.framework"; sourceTree = "<group>"; };
+		2C80C1AF23191AF200D2CBA6 /* ScheduleTableSmallHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableSmallHeader.swift; sourceTree = "<group>"; };
+		2C840A3A2355EC740084BAEE /* BeforeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforeController.swift; sourceTree = "<group>"; };
+		2C840A3C2355FC2E0084BAEE /* AfterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AfterController.swift; sourceTree = "<group>"; };
+		2C849F89233A424F00E9BD5A /* WelcomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeController.swift; sourceTree = "<group>"; };
+		2C9553502396898A008E8BCB /* BigShouldersDisplay-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BigShouldersDisplay-ExtraBold.ttf"; sourceTree = "<group>"; };
+		2CCEC45E2350686700D3A899 /* TweetPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetPost.swift; sourceTree = "<group>"; };
+		2CF0141A22958ACB00C235D1 /* SpeakerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakerController.swift; sourceTree = "<group>"; };
+		2CFA8EC322DCB398008B32E2 /* LiveVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveVideo.swift; sourceTree = "<group>"; };
+		2CFA8EC722DCB5DF008B32E2 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		2CFA8ECB22DF0512008B32E2 /* SpeakersController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakersController.swift; sourceTree = "<group>"; };
+		6C31466D3383AF769D0B19EA /* Pods_KotlinConf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KotlinConf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BB676F62E76662CB81A11F9 /* Pods-KotlinConf.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KotlinConf.release.xcconfig"; path = "Target Support Files/Pods-KotlinConf/Pods-KotlinConf.release.xcconfig"; sourceTree = "<group>"; };
+		B33E0796228D6EC800F313A1 /* ScheduleTableHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableHeader.swift; sourceTree = "<group>"; };
+		B33E079B228D86DB00F313A1 /* ScheduleTableHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScheduleTableHeader.xib; sourceTree = "<group>"; };
+		B38305B52354EEEF00C2E52F /* PartnerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartnerController.swift; sourceTree = "<group>"; };
+		B39CBAB822BBC3A2005975C1 /* KotlinConf.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KotlinConf.entitlements; sourceTree = "<group>"; };
+		B3C643F42305896D00C35EEA /* ScheduleTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleTableCell.swift; sourceTree = "<group>"; };
+		F861D7DD207FA40F0085E80D /* KotlinConf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KotlinConf.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F861D7E0207FA40F0085E80D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F861D7EA207FA4100085E80D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F861D7EC207FA4100085E80D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F861D7DA207FA40F0085E80D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C7CD27A22B8F455000B3BD0 /* KotlinConfAPI.framework in Frameworks */,
+				8D82EE36F5FB5EC1BC6B26EE /* Pods_KotlinConf.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2C1952E9228BFB5B00BA0BB9 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				B33E079A228D86BA00F313A1 /* Components */,
+				2C1952FD228C2C6C00BA0BB9 /* Fonts */,
+				F861D7E9207FA4100085E80D /* LaunchScreen.storyboard */,
+				2C195300228C306600BA0BB9 /* Main.storyboard */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		2C1952F8228C1BE800BA0BB9 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				2C7CD27322B7B497000B3BD0 /* BaseView.swift */,
+				2C1952F9228C1BF300BA0BB9 /* Screen.swift */,
+				2C7496F6230BE20E001F8562 /* PopupUtils.swift */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		2C1952FD228C2C6C00BA0BB9 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				2C9553502396898A008E8BCB /* BigShouldersDisplay-ExtraBold.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		60D416AF59FECEBEB9EEF511 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6C31466D3383AF769D0B19EA /* Pods_KotlinConf.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AD7ED1C2F349FEB11F1862FB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1D1A6A2B5FADEB5AF445E5D8 /* Pods-KotlinConf.debug.xcconfig */,
+				9BB676F62E76662CB81A11F9 /* Pods-KotlinConf.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		B33E0791228D3C8600F313A1 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				2C1952F6228C14FE00BA0BB9 /* MainTabController.swift */,
+				2C195302228C32EE00BA0BB9 /* ScheduleController.swift */,
+				2C38A898228EEBD000BAF882 /* SessionController.swift */,
+				2CF0141A22958ACB00C235D1 /* SpeakerController.swift */,
+				2C416B9F229591C300BBA441 /* VenueController.swift */,
+				2CFA8ECB22DF0512008B32E2 /* SpeakersController.swift */,
+				2C849F89233A424F00E9BD5A /* WelcomeController.swift */,
+				B38305B52354EEEF00C2E52F /* PartnerController.swift */,
+				2CFA8EC722DCB5DF008B32E2 /* HomeController.swift */,
+				2C840A3A2355EC740084BAEE /* BeforeController.swift */,
+				2C840A3C2355FC2E0084BAEE /* AfterController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		B33E0795228D6EB500F313A1 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B3C643F42305896D00C35EEA /* ScheduleTableCell.swift */,
+				B33E0796228D6EC800F313A1 /* ScheduleTableHeader.swift */,
+				2CFA8EC322DCB398008B32E2 /* LiveVideo.swift */,
+				2C674AF122FD5258001CA3F5 /* SessionCardView.swift */,
+				2C46F0FD230AA48800D40386 /* ScheduleHeader.swift */,
+				2C46F0FF230ABB4900D40386 /* TopButton.swift */,
+				2C80C1AF23191AF200D2CBA6 /* ScheduleTableSmallHeader.swift */,
+				2CCEC45E2350686700D3A899 /* TweetPost.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		B33E079A228D86BA00F313A1 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B33E079B228D86DB00F313A1 /* ScheduleTableHeader.xib */,
+				2C674AEF22FD4DC6001CA3F5 /* SessionCardView.xib */,
+				2C5231A22302D91A00A73DEE /* ScheduleTableSmallHeader.xib */,
+				2C5231A62302F5E400A73DEE /* ScheduleHeader.xib */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		F861D7D4207FA40F0085E80D = {
+			isa = PBXGroup;
+			children = (
+				B39CBAB822BBC3A2005975C1 /* KotlinConf.entitlements */,
+				2C7CD27922B8F455000B3BD0 /* KotlinConfAPI.framework */,
+				F861D7DF207FA40F0085E80D /* iosApp */,
+				F861D7DE207FA40F0085E80D /* Products */,
+				AD7ED1C2F349FEB11F1862FB /* Pods */,
+				60D416AF59FECEBEB9EEF511 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		F861D7DE207FA40F0085E80D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F861D7DD207FA40F0085E80D /* KotlinConf.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F861D7DF207FA40F0085E80D /* iosApp */ = {
+			isa = PBXGroup;
+			children = (
+				F861D7E0207FA40F0085E80D /* AppDelegate.swift */,
+				B33E0795228D6EB500F313A1 /* Components */,
+				B33E0791228D3C8600F313A1 /* Controllers */,
+				2C1952F8228C1BE800BA0BB9 /* utils */,
+				2C1952E9228BFB5B00BA0BB9 /* UI */,
+				F861D7EC207FA4100085E80D /* Info.plist */,
+				2C1952FB228C2B5F00BA0BB9 /* Assets.xcassets */,
+			);
+			path = iosApp;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F861D7DC207FA40F0085E80D /* KotlinConf */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F861D7FA207FA4100085E80D /* Build configuration list for PBXNativeTarget "KotlinConf" */;
+			buildPhases = (
+				7DCD2D965D0C269111D7BDB6 /* [CP] Check Pods Manifest.lock */,
+				F861D7D9207FA40F0085E80D /* Sources */,
+				F861D7DA207FA40F0085E80D /* Frameworks */,
+				F861D7DB207FA40F0085E80D /* Resources */,
+				2C7CD27822B8F1A0000B3BD0 /* Embed Frameworks */,
+				AC942BD71E0059672D99B822 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KotlinConf;
+			productName = iosApp;
+			productReference = F861D7DD207FA40F0085E80D /* KotlinConf.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F861D7D5207FA40F0085E80D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0930;
+				LastUpgradeCheck = 0930;
+				TargetAttributes = {
+					F861D7DC207FA40F0085E80D = {
+						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 1030;
+						SystemCapabilities = {
+							com.apple.AccessWiFi = {
+								enabled = 0;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = F861D7D8207FA40F0085E80D /* Build configuration list for PBXProject "KotlinConf" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F861D7D4207FA40F0085E80D;
+			productRefGroup = F861D7DE207FA40F0085E80D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F861D7DC207FA40F0085E80D /* KotlinConf */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F861D7DB207FA40F0085E80D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2CCECF4723968F9F007EC7F9 /* BigShouldersDisplay-ExtraBold.ttf in Resources */,
+				B33E079C228D86DB00F313A1 /* ScheduleTableHeader.xib in Resources */,
+				F861D7EB207FA4100085E80D /* LaunchScreen.storyboard in Resources */,
+				2C5231A72302F5E400A73DEE /* ScheduleHeader.xib in Resources */,
+				2C674AF022FD4DC6001CA3F5 /* SessionCardView.xib in Resources */,
+				2C1952FC228C2B5F00BA0BB9 /* Assets.xcassets in Resources */,
+				2C195301228C306600BA0BB9 /* Main.storyboard in Resources */,
+				2C5231A32302D91A00A73DEE /* ScheduleTableSmallHeader.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7DCD2D965D0C269111D7BDB6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-KotlinConf-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AC942BD71E0059672D99B822 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KotlinConf/Pods-KotlinConf-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KotlinConf/Pods-KotlinConf-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KotlinConf/Pods-KotlinConf-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F861D7D9207FA40F0085E80D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C38A899228EEBD000BAF882 /* SessionController.swift in Sources */,
+				2C46F0FE230AA48800D40386 /* ScheduleHeader.swift in Sources */,
+				2CFA8EC822DCB5DF008B32E2 /* HomeController.swift in Sources */,
+				2C840A3B2355EC740084BAEE /* BeforeController.swift in Sources */,
+				2CFA8ECC22DF0512008B32E2 /* SpeakersController.swift in Sources */,
+				2C674AF222FD5258001CA3F5 /* SessionCardView.swift in Sources */,
+				2C7496F7230BE20E001F8562 /* PopupUtils.swift in Sources */,
+				2C849F8A233A424F00E9BD5A /* WelcomeController.swift in Sources */,
+				2C195303228C32EE00BA0BB9 /* ScheduleController.swift in Sources */,
+				2C416BA0229591C300BBA441 /* VenueController.swift in Sources */,
+				2CCEC45F2350686700D3A899 /* TweetPost.swift in Sources */,
+				F861D7E1207FA40F0085E80D /* AppDelegate.swift in Sources */,
+				2CFA8EC422DCB398008B32E2 /* LiveVideo.swift in Sources */,
+				2C840A3D2355FC2E0084BAEE /* AfterController.swift in Sources */,
+				2C80C1B023191AF200D2CBA6 /* ScheduleTableSmallHeader.swift in Sources */,
+				2C1952F7228C14FE00BA0BB9 /* MainTabController.swift in Sources */,
+				2C46F100230ABB4900D40386 /* TopButton.swift in Sources */,
+				2C1952FA228C1BF300BA0BB9 /* Screen.swift in Sources */,
+				B38305B62354EEEF00C2E52F /* PartnerController.swift in Sources */,
+				B33E0797228D6EC800F313A1 /* ScheduleTableHeader.swift in Sources */,
+				2CF0141B22958ACB00C235D1 /* SpeakerController.swift in Sources */,
+				2C7CD27422B7B497000B3BD0 /* BaseView.swift in Sources */,
+				B3C643F52305896D00C35EEA /* ScheduleTableCell.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F861D7E9207FA4100085E80D /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F861D7EA207FA4100085E80D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F861D7F8207FA4100085E80D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-v";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = "";
+			};
+			name = Debug;
+		};
+		F861D7F9207FA4100085E80D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-v";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = "";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F861D7FB207FA4100085E80D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1D1A6A2B5FADEB5AF445E5D8 /* Pods-KotlinConf.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 35;
+				DEVELOPMENT_TEAM = 2ZEFAR8TH3;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/youtube-ios-player-helper\"",
+					"\"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic\"",
+					"../common/build/fat-framework",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/youtube-ios-player-helper/youtube_ios_player_helper.framework/Headers\"",
+					"../common/build/fat-framework/kotlinconf.framework/Headers",
+				);
+				INFOPLIST_FILE = iosApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.2;
+				OTHER_LDFLAGS = (
+					"-v",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.kotlinconf.iosapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 armv7";
+			};
+			name = Debug;
+		};
+		F861D7FC207FA4100085E80D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9BB676F62E76662CB81A11F9 /* Pods-KotlinConf.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 35;
+				DEVELOPMENT_TEAM = 2ZEFAR8TH3;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/youtube-ios-player-helper\"",
+					"\"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic\"",
+					"../common/build/fat-framework",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/youtube-ios-player-helper/youtube_ios_player_helper.framework/Headers\"",
+					"../common/build/fat-framework/kotlinconf.framework/Headers",
+				);
+				INFOPLIST_FILE = iosApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.2;
+				OTHER_LDFLAGS = (
+					"-v",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.kotlinconf.iosapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 armv7";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F861D7D8207FA40F0085E80D /* Build configuration list for PBXProject "KotlinConf" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F861D7F8207FA4100085E80D /* Debug */,
+				F861D7F9207FA4100085E80D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F861D7FA207FA4100085E80D /* Build configuration list for PBXNativeTarget "KotlinConf" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F861D7FB207FA4100085E80D /* Debug */,
+				F861D7FC207FA4100085E80D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F861D7D5207FA40F0085E80D /* Project object */;
+}

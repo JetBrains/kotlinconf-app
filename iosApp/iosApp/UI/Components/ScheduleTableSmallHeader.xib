@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15508"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" userLabel="ScheduleTableSmallHeader" customClass="ScheduleTableSmallHeader" customModule="KotlinConf" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="35"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uuh-K2-b18" userLabel="Background">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="35"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="COFFEE BREAK 30 MIN COFFEE BREAK 30 MIN COFFEE BREAK 30 MIN COFFEE BREAK 30 MIN COFFEE BREAK 30 MIN " lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u9x-O7-YwT" userLabel="Title" customClass="MarqueeLabel" customModule="MarqueeLabel">
+                            <rect key="frame" x="0.0" y="12" width="414" height="18"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                            <color key="textColor" red="1" green="0.24705882352941178" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="tapToScroll" value="NO"/>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="holdScrolling" value="NO"/>
+                            </userDefinedRuntimeAttributes>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.95686274509803915" green="0.95686274509803915" blue="0.95686274509803915" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="u9x-O7-YwT" secondAttribute="trailing" id="74p-YI-cs8"/>
+                        <constraint firstItem="u9x-O7-YwT" firstAttribute="leading" secondItem="uuh-K2-b18" secondAttribute="leading" id="aqD-E8-Dk1"/>
+                        <constraint firstAttribute="bottom" secondItem="u9x-O7-YwT" secondAttribute="bottom" constant="5" id="q3f-51-05w"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.95686274509803915" green="0.95686274509803915" blue="0.95686274509803915" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="uuh-K2-b18" secondAttribute="bottom" id="ATg-G2-TOj"/>
+                <constraint firstAttribute="trailing" secondItem="uuh-K2-b18" secondAttribute="trailing" id="Hh2-8n-bip"/>
+                <constraint firstItem="uuh-K2-b18" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="dCD-cQ-NqM"/>
+                <constraint firstItem="uuh-K2-b18" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="uit-QG-qZ6"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="title" destination="u9x-O7-YwT" id="4rM-M1-6Cq"/>
+            </connections>
+            <point key="canvasLocation" x="34.782608695652179" y="-253.45982142857142"/>
+        </view>
+    </objects>
+</document>

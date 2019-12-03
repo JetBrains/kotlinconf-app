@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="BigShouldersDisplay-ExtraBold.ttf">
+            <string>BigShouldersDisplay-ExtraBold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" restorationIdentifier="ScheduleTableHeader" id="udH-FS-bEP" userLabel="ScheduleTableHeader" customClass="ScheduleTableHeader" customModule="KotlinConf" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="145"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dRH-5Q-tff" userLabel="Background">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="145"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="13:00–14:30" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TGu-fg-l5p" userLabel="Time">
+                            <rect key="frame" x="25" y="40" width="350" height="100"/>
+                            <fontDescription key="fontDescription" name="BigShouldersDisplay-ExtraBold" family="Big Shoulders Display" pointSize="40"/>
+                            <color key="textColor" red="0.15294117647058825" green="0.15686274509803921" blue="0.17254901960784313" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="04" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="01x-Ou-YoD" userLabel="Day">
+                            <rect key="frame" x="342" y="48" width="17" height="15"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                            <color key="textColor" red="0.15294117647058825" green="0.15686274509803921" blue="0.17254901960784313" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DEC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MM7-Lv-3IB">
+                            <rect key="frame" x="333.5" y="63" width="25.5" height="15"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                            <color key="textColor" red="0.15294117647058825" green="0.15686274509803921" blue="0.17254901960784313" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.95686274509803915" green="0.95686274509803915" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="TGu-fg-l5p" secondAttribute="trailing" id="DbU-n2-K3h"/>
+                        <constraint firstItem="TGu-fg-l5p" firstAttribute="top" secondItem="dRH-5Q-tff" secondAttribute="top" constant="40" id="Fcy-pU-gWq"/>
+                        <constraint firstAttribute="trailing" secondItem="01x-Ou-YoD" secondAttribute="trailing" constant="16" id="Kp4-9B-0bm"/>
+                        <constraint firstItem="MM7-Lv-3IB" firstAttribute="trailing" secondItem="01x-Ou-YoD" secondAttribute="trailing" id="Xwh-nu-KIn"/>
+                        <constraint firstItem="TGu-fg-l5p" firstAttribute="leading" secondItem="dRH-5Q-tff" secondAttribute="leading" constant="25" id="i9F-SR-c97"/>
+                        <constraint firstItem="MM7-Lv-3IB" firstAttribute="top" secondItem="01x-Ou-YoD" secondAttribute="bottom" id="n7d-ql-IsF"/>
+                        <constraint firstAttribute="bottom" secondItem="TGu-fg-l5p" secondAttribute="bottom" constant="5" id="tu6-72-fZj"/>
+                        <constraint firstItem="01x-Ou-YoD" firstAttribute="top" secondItem="dRH-5Q-tff" secondAttribute="top" constant="48" id="wFs-Kh-SgN"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.95686274509803915" green="0.95686274509803915" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="dRH-5Q-tff" secondAttribute="bottom" id="4fE-th-W0b"/>
+                <constraint firstItem="dRH-5Q-tff" firstAttribute="leading" secondItem="udH-FS-bEP" secondAttribute="leading" id="A93-nX-EJZ"/>
+                <constraint firstAttribute="trailing" secondItem="dRH-5Q-tff" secondAttribute="trailing" id="Al0-ZB-lJm"/>
+                <constraint firstItem="dRH-5Q-tff" firstAttribute="top" secondItem="udH-FS-bEP" secondAttribute="top" id="fgd-6T-roF"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="dayLabel" destination="01x-Ou-YoD" id="p2c-iV-yVv"/>
+                <outlet property="monthLabel" destination="MM7-Lv-3IB" id="jCi-Og-mjK"/>
+                <outlet property="titleLabel" destination="TGu-fg-l5p" id="KLu-FL-wts"/>
+            </connections>
+            <point key="canvasLocation" x="-348" y="-219.94002998500753"/>
+        </view>
+    </objects>
+</document>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SessionCardView" customModule="KotlinConf" customModuleProvider="target">
+            <connections>
+                <outlet property="container" destination="VNB-wF-mU6" id="Es1-Tg-XxW"/>
+                <outlet property="fadeOut" destination="jcN-Xc-2IT" id="Qsv-XP-1y8"/>
+                <outlet property="favoriteButton" destination="13Q-rN-deG" id="JTX-SM-KOM"/>
+                <outlet property="liveIcon" destination="GRu-Nb-6pL" id="3ah-ax-FR2"/>
+                <outlet property="liveLabel" destination="du0-lW-nMf" id="qMP-Oo-Wi3"/>
+                <outlet property="location" destination="jFW-4r-tgY" id="DAG-9x-1PI"/>
+                <outlet property="locationArrow" destination="l7p-F9-rnS" id="ASE-Nq-5Pd"/>
+                <outlet property="locationDistance" destination="51I-sn-QwB" id="Pmq-7y-ygh"/>
+                <outlet property="mainView" destination="iN0-l3-epB" id="Ztq-Ba-aou"/>
+                <outlet property="speakers" destination="K0O-cM-RxV" id="CSd-Kp-4ft"/>
+                <outlet property="title" destination="7wk-nU-di2" id="GU3-QH-oi4"/>
+                <outlet property="touchView" destination="25c-Th-RF0" id="vIU-A4-As8"/>
+                <outlet property="voteBar" destination="286-R4-8c6" id="qD9-Nb-Gyw"/>
+                <outlet property="voteButton" destination="hzf-2L-jzZ" id="qci-l2-yrk"/>
+                <outlet property="voteDown" destination="vcm-6t-WaW" id="jmF-JD-6ge"/>
+                <outlet property="voteOk" destination="7Gs-TQ-dW8" id="mc4-Je-Mhx"/>
+                <outlet property="voteUp" destination="5kI-4O-2qy" id="wib-0v-UUv"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" restorationIdentifier="SessionCardView" id="iN0-l3-epB" userLabel="SessionCardView">
+            <rect key="frame" x="0.0" y="0.0" width="359" height="108"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VNB-wF-mU6" userLabel="Container">
+                    <rect key="frame" x="0.0" y="0.0" width="359" height="108"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Safe(r) Kotlin Code - Static Analysis tools for Kotlin" textAlignment="natural" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7wk-nU-di2" userLabel="Title">
+                            <rect key="frame" x="16" y="12" width="340" height="18"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                            <color key="textColor" red="0.15294117647058825" green="0.15686274509803921" blue="0.17254901960784313" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amanda Hichman Dominiguez" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K0O-cM-RxV" userLabel="Speakers">
+                            <rect key="frame" x="16" y="33" width="206" height="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="0.15294117647058825" green="0.15686274509803921" blue="0.17254901960784313" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="liveIcon" translatesAutoresizingMaskIntoConstraints="NO" id="GRu-Nb-6pL" userLabel="LiveIcon">
+                            <rect key="frame" x="103.5" y="79.5" width="8" height="8"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="8" id="fsY-ts-EX2"/>
+                                <constraint firstAttribute="width" constant="8" id="jnv-cn-0p5"/>
+                            </constraints>
+                        </imageView>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow" translatesAutoresizingMaskIntoConstraints="NO" id="l7p-F9-rnS" userLabel="LocationArrow">
+                            <rect key="frame" x="20" y="79" width="13" height="9"/>
+                            <color key="tintColor" red="0.15294117647058825" green="0.15686274509803921" blue="0.17254901960784313" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="9" id="USu-Ib-D0w"/>
+                                <constraint firstAttribute="width" constant="13" id="XZT-lQ-3Zc"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Breakout" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jFW-4r-tgY" userLabel="LocationName">
+                            <rect key="frame" x="35" y="74.5" width="61.5" height="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="0.15294117647058825" green="0.15686274509803921" blue="0.17254901960784313" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hzf-2L-jzZ" userLabel="Vote">
+                            <rect key="frame" x="267" y="69.5" width="28" height="28"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="28" id="qFH-gn-zTl"/>
+                                <constraint firstAttribute="height" constant="28" id="sba-eN-2AF"/>
+                            </constraints>
+                            <state key="normal" image="voteGood"/>
+                            <connections>
+                                <action selector="voteTouch:" destination="-1" eventType="touchUpInside" id="aaY-zq-w5b"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Live now" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="du0-lW-nMf" userLabel="LiveText">
+                            <rect key="frame" x="119.5" y="74.5" width="60" height="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="0.15294117647058825" green="0.15686274509803921" blue="0.17254901960784313" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="286-R4-8c6" userLabel="VoteBar">
+                            <rect key="frame" x="156" y="59.5" width="154" height="48"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5kI-4O-2qy" userLabel="VoteUp">
+                                    <rect key="frame" x="16" y="11" width="26" height="26"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="26" id="QgA-bk-o21"/>
+                                        <constraint firstAttribute="height" constant="26" id="nBp-c3-gqP"/>
+                                    </constraints>
+                                    <state key="normal" image="voteGood"/>
+                                    <state key="selected" image="voteGoodOrange"/>
+                                    <connections>
+                                        <action selector="vodeGood:" destination="-1" eventType="touchUpInside" id="BBc-lR-MKW"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Gs-TQ-dW8" userLabel="VoteOk">
+                                    <rect key="frame" x="64" y="11" width="26" height="26"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="26" id="U5v-0p-mlZ"/>
+                                        <constraint firstAttribute="width" constant="26" id="sIg-1H-FA7"/>
+                                    </constraints>
+                                    <state key="normal" image="voteOk"/>
+                                    <state key="selected" image="voteOkOrange"/>
+                                    <connections>
+                                        <action selector="voteOk:" destination="-1" eventType="touchUpInside" id="3Tv-fH-LQ7"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vcm-6t-WaW" userLabel="VoteDown">
+                                    <rect key="frame" x="112" y="11" width="26" height="26"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="26" id="eHz-aT-tOD"/>
+                                        <constraint firstAttribute="height" constant="26" id="idg-A8-6yM"/>
+                                    </constraints>
+                                    <state key="normal" image="voteBad"/>
+                                    <state key="selected" image="voteBadOrange"/>
+                                    <connections>
+                                        <action selector="voteBad:" destination="-1" eventType="touchUpInside" id="qJi-WI-u9m"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="7Gs-TQ-dW8" firstAttribute="leading" secondItem="5kI-4O-2qy" secondAttribute="trailing" constant="22" id="5AR-bX-bO8"/>
+                                <constraint firstAttribute="height" constant="48" id="HkW-uj-rzE"/>
+                                <constraint firstItem="vcm-6t-WaW" firstAttribute="centerY" secondItem="7Gs-TQ-dW8" secondAttribute="centerY" id="gc1-Mp-7Xz"/>
+                                <constraint firstItem="7Gs-TQ-dW8" firstAttribute="centerY" secondItem="286-R4-8c6" secondAttribute="centerY" id="gkG-4V-Y1c"/>
+                                <constraint firstItem="vcm-6t-WaW" firstAttribute="leading" secondItem="7Gs-TQ-dW8" secondAttribute="trailing" constant="22" id="ndR-LH-Zke"/>
+                                <constraint firstAttribute="width" constant="154" id="rhh-YP-J8O"/>
+                                <constraint firstItem="5kI-4O-2qy" firstAttribute="centerY" secondItem="7Gs-TQ-dW8" secondAttribute="centerY" id="wnS-wC-brD"/>
+                                <constraint firstItem="7Gs-TQ-dW8" firstAttribute="centerX" secondItem="286-R4-8c6" secondAttribute="centerX" id="x5h-XS-r0d"/>
+                            </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="24"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="13Q-rN-deG" userLabel="Favorite">
+                            <rect key="frame" x="321" y="73.5" width="20" height="20"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="20" id="G3H-cA-btY"/>
+                                <constraint firstAttribute="height" constant="20" id="fP5-5I-up1"/>
+                            </constraints>
+                            <state key="normal" image="favoriteLight"/>
+                            <state key="selected" image="favoriteDark"/>
+                            <connections>
+                                <action selector="favoriteTouch:" destination="-1" eventType="touchUpInside" id="Xc9-0Q-7ka"/>
+                            </connections>
+                        </button>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fadeOut" translatesAutoresizingMaskIntoConstraints="NO" id="jcN-Xc-2IT">
+                            <rect key="frame" x="321" y="12" width="38" height="30"/>
+                        </imageView>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="25c-Th-RF0" userLabel="TouchView">
+                            <rect key="frame" x="0.0" y="0.0" width="359" height="62"/>
+                            <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="du0-lW-nMf" firstAttribute="leading" secondItem="GRu-Nb-6pL" secondAttribute="trailing" constant="8" id="3ju-VS-iha"/>
+                        <constraint firstItem="jFW-4r-tgY" firstAttribute="leading" secondItem="VNB-wF-mU6" secondAttribute="leading" constant="35" id="51I-sn-QwB"/>
+                        <constraint firstItem="25c-Th-RF0" firstAttribute="top" secondItem="VNB-wF-mU6" secondAttribute="top" id="6mp-ap-WQW"/>
+                        <constraint firstItem="13Q-rN-deG" firstAttribute="leading" secondItem="hzf-2L-jzZ" secondAttribute="trailing" constant="26" id="89J-q8-q3Q"/>
+                        <constraint firstItem="GRu-Nb-6pL" firstAttribute="leading" secondItem="jFW-4r-tgY" secondAttribute="trailing" constant="7" id="Agc-fb-hy1"/>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="K0O-cM-RxV" secondAttribute="trailing" constant="3" id="BgO-1J-Wzq"/>
+                        <constraint firstAttribute="height" constant="108" id="EQA-hn-PnP"/>
+                        <constraint firstItem="du0-lW-nMf" firstAttribute="centerY" secondItem="GRu-Nb-6pL" secondAttribute="centerY" id="Edc-OF-rfu"/>
+                        <constraint firstItem="13Q-rN-deG" firstAttribute="centerY" secondItem="l7p-F9-rnS" secondAttribute="centerY" id="FIw-6C-Y4Z"/>
+                        <constraint firstItem="7wk-nU-di2" firstAttribute="leading" secondItem="VNB-wF-mU6" secondAttribute="leading" constant="16" id="FVC-kP-YUU"/>
+                        <constraint firstItem="jFW-4r-tgY" firstAttribute="centerY" secondItem="l7p-F9-rnS" secondAttribute="centerY" id="Fad-TD-j7T"/>
+                        <constraint firstAttribute="width" constant="359" id="GGy-Ol-Rli"/>
+                        <constraint firstItem="hzf-2L-jzZ" firstAttribute="centerY" secondItem="13Q-rN-deG" secondAttribute="centerY" id="Iep-4H-qFH"/>
+                        <constraint firstItem="13Q-rN-deG" firstAttribute="top" secondItem="25c-Th-RF0" secondAttribute="bottom" constant="11.5" id="PHJ-sv-z2c"/>
+                        <constraint firstAttribute="bottom" secondItem="l7p-F9-rnS" secondAttribute="bottom" constant="20" id="Q9n-KB-6wt"/>
+                        <constraint firstAttribute="trailing" secondItem="7wk-nU-di2" secondAttribute="trailing" constant="3" id="SE9-td-Nl0"/>
+                        <constraint firstItem="jcN-Xc-2IT" firstAttribute="top" secondItem="VNB-wF-mU6" secondAttribute="top" constant="12" id="UTn-Oy-wud"/>
+                        <constraint firstItem="7wk-nU-di2" firstAttribute="top" secondItem="VNB-wF-mU6" secondAttribute="top" constant="12" id="W4v-dZ-iYK"/>
+                        <constraint firstItem="K0O-cM-RxV" firstAttribute="top" secondItem="7wk-nU-di2" secondAttribute="bottom" constant="3" id="eDq-5H-c5T"/>
+                        <constraint firstItem="25c-Th-RF0" firstAttribute="leading" secondItem="VNB-wF-mU6" secondAttribute="leading" id="ilS-3L-hIU"/>
+                        <constraint firstItem="GRu-Nb-6pL" firstAttribute="centerY" secondItem="l7p-F9-rnS" secondAttribute="centerY" id="lDI-6L-fAo"/>
+                        <constraint firstAttribute="trailing" secondItem="25c-Th-RF0" secondAttribute="trailing" id="lfn-29-OLT"/>
+                        <constraint firstItem="286-R4-8c6" firstAttribute="centerY" secondItem="hzf-2L-jzZ" secondAttribute="centerY" id="mhy-vr-iwK"/>
+                        <constraint firstItem="l7p-F9-rnS" firstAttribute="leading" secondItem="VNB-wF-mU6" secondAttribute="leading" constant="20" id="n39-QA-c27"/>
+                        <constraint firstAttribute="trailing" secondItem="13Q-rN-deG" secondAttribute="trailing" constant="18" id="pBP-pC-G3s"/>
+                        <constraint firstAttribute="trailing" secondItem="jcN-Xc-2IT" secondAttribute="trailing" id="qLn-BK-kma"/>
+                        <constraint firstItem="K0O-cM-RxV" firstAttribute="leading" secondItem="VNB-wF-mU6" secondAttribute="leading" constant="16" id="xtR-F4-AFc"/>
+                        <constraint firstItem="13Q-rN-deG" firstAttribute="leading" secondItem="286-R4-8c6" secondAttribute="trailing" constant="11" id="y8v-qY-7ZX"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="7"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="VNB-wF-mU6" secondAttribute="bottom" id="1Co-bU-cFp"/>
+                <constraint firstItem="VNB-wF-mU6" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="9iI-5R-HbL"/>
+                <constraint firstAttribute="trailing" secondItem="VNB-wF-mU6" secondAttribute="trailing" id="Sn2-4W-Doi"/>
+                <constraint firstItem="VNB-wF-mU6" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="sen-Lj-zHe"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                    <integer key="value" value="7"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <point key="canvasLocation" x="87.681159420289859" y="-154.01785714285714"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="arrow" width="28" height="19"/>
+        <image name="fadeOut" width="38" height="30"/>
+        <image name="favoriteDark" width="20" height="20"/>
+        <image name="favoriteLight" width="20" height="20"/>
+        <image name="liveIcon" width="12" height="12"/>
+        <image name="voteBad" width="28" height="28"/>
+        <image name="voteBadOrange" width="26" height="26"/>
+        <image name="voteGood" width="28" height="28"/>
+        <image name="voteGoodOrange" width="26" height="26"/>
+        <image name="voteOk" width="28" height="28"/>
+        <image name="voteOkOrange" width="26" height="26"/>
+    </resources>
+</document>
