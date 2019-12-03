@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">KotlinConf 2019</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_speakers">Speakers</string>
+    <string name="title_schedule">Schedule</string>
+    <string name="title_map">Map</string>
+    <string name="live_now">LIVE NOW</string>
+    <string name="don_t_miss">DON\'T MISS</string>
+    <string name="tweet_title">#KOTLINCONF</string>
+    <string name="partners_title">PARTNERS</string>
+    <string name="privacy_description"><![CDATA[
+        To get the full benefit out of this app you need to agree to our <font color="#FF3F00">privacy policy</font>.
+        This states that you are ok with us accessing your device id to track your votes and to store your favorites.
+        Nothing more though.
+        ]]>
+    </string>
+    <string name="after_description"><![CDATA[Go to <font color="#FF3F00">our site</font> for more videos and photos.]]></string>
+    <string name="do_you_want_reminders">DO YOU WANT REMINDERS?</string>
+    <string name="notifications_description_text">Get reminders about the talks that you don’t want to miss. You will
+        get a reminder before it takes place so you have plenty of time to get there.
+    </string>
+    <string name="before_text">You can already check out the schedule and mark your favorite talks.</string>
+    <string name="after_text">IS OVER.\nTHANK YOU ALL.</string>
+</resources>

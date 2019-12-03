@@ -1,0 +1,8 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="header_size">40sp</dimen>
+    <dimen name="big_header_size">60sp</dimen>
+    <dimen name="speaker_name_size">28sp</dimen>
+</resources>

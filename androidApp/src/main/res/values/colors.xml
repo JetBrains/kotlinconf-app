@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="white44">#44FFFFFF</color>
+    <color name="sky_blue">#167dff</color>
+    <color name="selected_white">#d8d8d8</color>
+    <color name="dark_grey_70">#b327282c</color>
+    <color name="dark_grey">#27282c</color>
+    <color name="red_orange">#ff3f00</color>
+    <color name="slate_grey">#67686b</color>
+    <color name="dark_grey_40">#6627282c</color>
+    <color name="dark_grey_20">#f4f4f4</color>
+    <color name="dark_grey_15">#2627282c</color>
+    <color name="dark_grey_5">#0c27282c</color>
+    <color name="dark_grey_card">#323236</color>
+    <color name="dark_grey_card_pressed">#4a4a4a</color>
+    <color name="black">#000</color>
+</resources>
+

@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_grey">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/live_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="21dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginTop="28dp"
+                android:fontFamily="@font/big_shoulders_display_bold"
+                android:text="@string/live_now"
+                android:textColor="@color/red_orange"
+                android:textSize="@dimen/big_header_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/live_cards_container"
+                android:layout_width="match_parent"
+                android:layout_height="278dp"
+                android:layout_marginTop="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/live_title"/>
+
+            <TextView
+                android:id="@+id/dont_miss_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="21dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginTop="47dp"
+                android:fontFamily="@font/big_shoulders_display_bold"
+                android:text="@string/don_t_miss"
+                android:textColor="@color/white"
+                android:textSize="@dimen/big_header_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/live_cards_container"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/dont_miss_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/dont_miss_title"/>
+
+            <TextView
+                android:id="@+id/tweet_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="21dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginTop="105dp"
+                android:fontFamily="@font/big_shoulders_display_bold"
+                android:text="@string/tweet_title"
+                android:textColor="@color/white"
+                android:textSize="75sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dont_miss_block"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tweet_feed_list"
+                android:layout_width="match_parent"
+                android:layout_height="440dp"
+                android:layout_marginTop="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tweet_title"/>
+
+            <TextView
+                android:id="@+id/partners_title"
+                android:layout_width="wrap_content"
+                android:layout_height="90sp"
+                android:layout_marginStart="21dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginTop="70dp"
+                android:fontFamily="@font/big_shoulders_display_bold"
+                android:text="@string/partners_title"
+                android:textColor="@color/white"
+                android:textSize="@dimen/big_header_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tweet_feed_list"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/partner_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/partners_title"
+                android:layout_marginTop="24dp"
+            >
+
+                <LinearLayout
+                    android:id="@+id/row_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1.0"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <ImageButton
+                        android:id="@+id/button_android"
+                        android:layout_width="0dp"
+                        android:layout_height="136dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/dark_grey_card"
+                        android:elevation="1dp"
+                        android:padding="16dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/logo_android"
+                        android:tag="android"/>
+
+                    <ImageButton
+                        android:id="@+id/button_kodein"
+                        android:layout_width="0dp"
+                        android:layout_height="136dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/dark_grey_card"
+                        android:elevation="1dp"
+                        android:padding="16dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/logo_kodein"
+                        android:tag="kodein"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintTop_toBottomOf="@id/row_1">
+
+                    <ImageButton
+                        android:id="@+id/button_47"
+                        android:layout_width="0dp"
+                        android:layout_height="136dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/dark_grey_card"
+                        android:elevation="1dp"
+                        android:padding="16dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/logo_47"
+                        android:tag="47"/>
+
+                    <ImageButton
+                        android:id="@+id/button_freenow"
+                        android:layout_width="0dp"
+                        android:layout_height="136dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/dark_grey_card"
+                        android:elevation="1dp"
+                        android:padding="16dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/logo_freenow"
+                        android:tag="freenow"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:weightSum="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/row_2">
+
+                    <ImageButton
+                        android:id="@+id/button_bitrise"
+                        android:layout_width="0dp"
+                        android:layout_height="136dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/dark_grey_card"
+                        android:elevation="1dp"
+                        android:padding="16dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/logo_bitrise"
+                        android:tag="bitrise"/>
+
+                    <ImageButton
+                        android:id="@+id/button_instill"
+                        android:layout_width="0dp"
+                        android:layout_height="136dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/dark_grey_card"
+                        android:elevation="1dp"
+                        android:padding="16dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/logo_instl"
+                        android:tag="instill"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:weightSum="1.0"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/row_3">
+
+                    <ImageButton
+                        android:id="@+id/button_gradle"
+                        android:layout_width="0dp"
+                        android:layout_height="136dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/dark_grey_card"
+                        android:elevation="1dp"
+                        android:padding="16dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/logo_gradle"
+                        android:tag="gradle"/>
+
+                    <ImageButton
+                        android:id="@+id/button_n26"
+                        android:layout_width="0dp"
+                        android:layout_height="136dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/dark_grey_card"
+                        android:elevation="1dp"
+                        android:padding="16dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/logo_n_26"
+                        android:tag="n26"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/row_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:weightSum="1.0"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/row_4">
+
+                    <ImageButton
+                        android:id="@+id/button_badoo"
+                        android:layout_width="0dp"
+                        android:layout_height="136dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="0.5"
+                        android:background="@color/dark_grey_card"
+                        android:elevation="1dp"
+                        android:padding="16dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/logo_badoo_small"
+                        android:tag="badoo"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="136dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="0.5"
+                        android:elevation="1dp"
+                        android:padding="16dp"
+                        android:tag=""/>
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/locator_photo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:src="@drawable/locator_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/partner_buttons"
+            />
+
+            <TextView
+                android:id="@+id/locator_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="70sp"
+                android:lineSpacingExtra="-6sp"
+                android:text="KOTLIN LOCATOR GAME"
+                android:layout_marginStart="21dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginTop="37dp"
+                android:layout_marginBottom="37dp"
+                android:layout_marginEnd="21dp"
+                android:layout_marginRight="21dp"
+                android:fontFamily="@font/big_shoulders_display_bold"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/locator_photo"/>
+
+            <TextView
+                android:id="@+id/locator_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="#99ffffff"
+                android:lineSpacingExtra="9sp"
+                app:layout_constraintTop_toBottomOf="@id/locator_title"
+                android:layout_marginStart="21dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginEnd="21dp"
+                android:layout_marginRight="21dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Join the quest. Look for clues, solve the puzzles, and win the secret Kotlin prize!"
+            />
+
+            <TextView
+                android:id="@+id/locator_link"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="@color/red_orange"
+                android:lineSpacingExtra="9sp"
+                android:text="Get the app"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="21dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginEnd="21dp"
+                android:layout_marginRight="21dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/locator_text"
+            />
+
+            <TextView
+                android:id="@+id/vote_meter_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="70sp"
+                android:lineSpacingExtra="-6sp"
+                android:text="VOTE-O-METER"
+                android:layout_marginStart="21dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginTop="47dp"
+                android:layout_marginBottom="37dp"
+                android:fontFamily="@font/big_shoulders_display_bold"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/locator_link"/>
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:id="@+id/vote_meter"
+                app:layout_constraintTop_toBottomOf="@id/vote_meter_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="65dp"
+                android:layout_marginBottom="200dp"
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:background="@color/dark_grey_40"
+                android:backgroundTint="@color/red_orange"
+                android:progress="0"
+            />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toRightOf="@id/vote_meter"
+                app:layout_constraintTop_toBottomOf="@id/vote_meter_title"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginRight="22dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/meter_icon"
+            />
+
+            <TextView
+                android:id="@+id/vote_done"
+                app:layout_constraintTop_toBottomOf="@id/vote_meter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="37dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:textSize="15sp"
+                android:textColor="#ffffff"
+                android:lineSpacingExtra="9sp"
+                android:text="Done!"
+                android:textStyle="bold"
+                android:visibility="invisible"
+            />
+
+            <TextView
+                android:id="@+id/vote_done_description"
+                app:layout_constraintTop_toBottomOf="@id/vote_done"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="#99ffffff"
+                android:lineSpacingExtra="9sp"
+                android:text="Go and get you t-shirt on registration desk"
+                android:visibility="invisible"
+
+            />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

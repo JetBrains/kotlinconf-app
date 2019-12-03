@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/session_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/red_orange">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/session_video_box"
+            android:layout_width="match_parent"
+            android:layout_height="206dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginLeft="23dp"
+            android:layout_marginTop="23dp"
+            android:layout_marginEnd="23dp"
+            android:layout_marginRight="23dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <fragment
+                android:id="@+id/session_video_view"
+                class="org.jetbrains.kotlinconf.ui.LiveVideoFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/session_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="23dp"
+            android:layout_marginRight="23dp"
+            android:fontFamily="@font/big_shoulders_display_bold"
+            android:lineSpacingExtra="-6sp"
+            android:text="ATALS AND PEON - DEPENDENCY VISUALIZATION AND MANAGEMENT WITH KOTLIN/JS"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/header_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/session_video_box"
+            tools:visibility="visible"/>
+
+        <ImageButton
+            android:id="@+id/session_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="37dp"
+            android:background="@color/red_orange"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/session_title"
+            app:srcCompat="@drawable/share"/>
+
+        <ImageButton
+            android:id="@+id/session_vote"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:background="@color/red_orange"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toStartOf="@id/session_favorite"
+            app:layout_constraintTop_toBottomOf="@id/session_title"
+            app:srcCompat="@drawable/good_white_empty"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/session_vote_popup"
+            android:layout_width="154dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="54dp"
+            android:layout_marginRight="54dp"
+            android:background="@drawable/popup_background"
+            android:elevation="6dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/session_title">
+
+
+            <ImageButton
+                android:id="@+id/session_vote_good"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/good_empty"/>
+
+            <ImageButton
+                android:id="@+id/session_vote_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="21dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/session_vote_good"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ok_empty"/>
+
+            <ImageButton
+                android:id="@+id/session_vote_bad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="21dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/session_vote_ok"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/bad_empty"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageButton
+            android:id="@+id/session_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:background="@color/red_orange"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/session_title"
+            app:srcCompat="@drawable/favorite_white_empty"/>
+
+        <ImageView
+            android:id="@+id/session_divider_1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="34dp"
+            android:background="@color/white44"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/session_favorite"/>
+
+        <ImageView
+            android:id="@+id/session_human_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="17dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/session_divider_1"
+            app:srcCompat="@drawable/account"/>
+
+        <TextView
+            android:id="@+id/speaker_1_name"
+            app:layout_constraintStart_toEndOf="@+id/session_human_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Speaker 1"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="23dp"
+            android:layout_marginRight="23dp"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/session_divider_1"
+        />
+
+        <ImageView
+            android:id="@+id/session_divider_11"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="17dp"
+            android:background="@color/white44"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/speaker_1_name"/>
+
+        <ImageView
+            android:id="@+id/session_human_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="17dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/session_divider_11"
+            app:srcCompat="@drawable/account"/>
+
+        <TextView
+            android:id="@+id/speaker_2_name"
+            app:layout_constraintStart_toEndOf="@+id/session_human_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Speaker 2"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="23dp"
+            android:layout_marginRight="23dp"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/session_divider_11"
+        />
+
+        <ImageView
+            android:id="@+id/session_divider_2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="17dp"
+            android:background="@color/white44"
+            app:layout_constraintBottom_toTopOf="@+id/session_location_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/speaker_2_name"/>
+
+        <ImageView
+            android:id="@+id/session_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="17dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/session_divider_2"
+            app:srcCompat="@drawable/location_white"/>
+
+        <TextView
+            android:id="@+id/session_location_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="11dp"
+            android:lineSpacingExtra="9sp"
+            android:text="Main Hall"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@id/session_location"
+            app:layout_constraintTop_toBottomOf="@id/session_divider_2"/>
+
+        <ImageView
+            android:id="@+id/session_divider_3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="17dp"
+            android:background="@color/white44"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/session_location"/>
+
+        <ImageView
+            android:id="@+id/session_time_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="17dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/session_divider_3"
+            app:srcCompat="@drawable/bulets"/>
+
+        <TextView
+            android:id="@+id/session_time_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="sans-serif"
+            android:lineSpacingExtra="9sp"
+            android:text="5 Dec    15:30–17:00"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toEndOf="@id/session_time_icon"
+            app:layout_constraintTop_toBottomOf="@id/session_divider_3"/>
+
+        <ImageView
+            android:id="@+id/session_divider_4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="18dp"
+            android:background="@color/white44"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/session_time_icon"/>
+
+        <TextView
+            android:id="@+id/session_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="23dp"
+            android:layout_marginLeft="23dp"
+            android:layout_marginTop="31dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="30dp"
+            android:fontFamily="sans-serif"
+            android:lineSpacingExtra="9sp"
+            android:text="Alicia is the first woman of color mobile developer to create a domestic violence app Purple Evolution, Inc(PEVO) dedicated to helping victims escape abuse. She used her acquired skills as a developer to make a difference. Alicia also dedicated her time to empowering women in tech with Women Who Code, she has received several major acknowledgments from Apple at WWDC15 and WWDC16 being the first black woman to be in an Apple 2016 new beginnings video and GitHub in there I am a developer video."
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/session_divider_4"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
