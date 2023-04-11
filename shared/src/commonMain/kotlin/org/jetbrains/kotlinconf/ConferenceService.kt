@@ -84,6 +84,7 @@ class ConferenceService(
         }.stateIn(this, SharingStarted.Eagerly, emptyList())
             .asStateFlowClass()
     }
+
     val speakers: StateFlowClass<Speakers> by lazy {
         _speakers.asStateFlowClass()
     }
@@ -122,11 +123,11 @@ class ConferenceService(
             }
 
             launch {
-                val favoritesValue = storage.getList("favorites").toSet()
+                val favoritesValue = storage.get<List<String>>("favorites")?.toSet() ?: emptySet()
                 favorites.value = favoritesValue
                 favorites.debounce(1000)
                     .onEach {
-                        storage.putList("favorites", it.toList())
+                        storage.put("favorites", it.toList())
                     }
                     .collect()
             }

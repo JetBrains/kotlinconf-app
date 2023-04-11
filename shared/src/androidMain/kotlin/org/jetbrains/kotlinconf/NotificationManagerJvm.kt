@@ -1,9 +1,6 @@
 package org.jetbrains.kotlinconf
 
-import android.app.*
-import android.app.NotificationManager
 import android.content.*
-import android.os.*
 import androidx.core.app.*
 import androidx.work.*
 import org.jetbrains.kotlinconf.storage.*
@@ -31,14 +28,12 @@ actual class NotificationManager actual constructor(
             .setInputData(data)
             .build()
 
-
-
-        WorkManager.getInstance(context.activity).enqueue(work)
+        WorkManager.getInstance(context.application).enqueue(work)
         return title
     }
 
     actual fun cancel(title: String) {
-        WorkManager.getInstance(context.activity).cancelAllWorkByTag(title)
+        WorkManager.getInstance(context.application).cancelAllWorkByTag(title)
     }
 
 }
