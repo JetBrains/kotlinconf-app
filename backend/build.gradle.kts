@@ -1,77 +1,60 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.*
-import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
-import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
-import org.jetbrains.kotlin.gradle.plugin.KotlinCompilationToRunnableFiles
-
-val kotlin_version: String by project
-val coroutines_version: String by project
-val ktor_version: String by project
-val squash_version: String by project
-val hikari_version: String by project
-val logback_version: String by project
-val junit_version: String by project
-
 plugins {
     kotlin("multiplatform")
-    id("kotlinx-serialization")
+    kotlin("plugin.serialization") version "1.8.0"
 
-    id("com.github.johnrengelman.shadow")
+    id("io.ktor.plugin") version "2.2.2"
 }
 
+application {
+    mainClass.set("org.jetbrains.kotlinconf.backend.MainKt")
+}
+
+val ktor_version = "2.2.2"
+
 kotlin {
-    jvm()
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = "1.8"
+        }
+        withJava()
+    }
 
     sourceSets {
         val jvmMain by getting {
-            kotlin.srcDir("src")
-            resources.srcDir("resources")
-
             dependencies {
-                implementation(project(":common"))
-
+                implementation(project(":shared"))
                 implementation("io.ktor:ktor-server-netty:$ktor_version")
-                implementation("io.ktor:ktor-auth:$ktor_version")
-                implementation("io.ktor:ktor-serialization:$ktor_version")
+                implementation("io.ktor:ktor-server-auth:$ktor_version")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
                 implementation("io.ktor:ktor-client-cio:$ktor_version")
+                implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+                implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+                implementation("io.ktor:ktor-server-default-headers:$ktor_version")
+                implementation("io.ktor:ktor-server-cors:$ktor_version")
+                implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
+                implementation("io.ktor:ktor-server-call-logging:$ktor_version")
+                implementation("io.ktor:ktor-server-conditional-headers:$ktor_version")
+                implementation("io.ktor:ktor-server-compression:$ktor_version")
+                implementation("io.ktor:ktor-server-partial-content:$ktor_version")
+                implementation("io.ktor:ktor-server-auto-head-response:$ktor_version")
+                implementation("io.ktor:ktor-server-forwarded-header:$ktor_version")
+                implementation("io.ktor:ktor-server-config-yaml:$ktor_version")
 
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
-                implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version")
+                implementation("org.jetbrains.exposed:exposed-core:0.41.1")
+                implementation("org.jetbrains.exposed:exposed-dao:0.41.1")
+                implementation("org.jetbrains.exposed:exposed-jdbc:0.41.1")
+                implementation("com.h2database:h2:2.1.214")
+                implementation("org.postgresql:postgresql:42.2.2")
 
-                implementation("org.jetbrains.squash:squash:$squash_version")
-                implementation("org.jetbrains.squash:squash-h2:$squash_version")
-                implementation("com.zaxxer:HikariCP:$hikari_version")
+                implementation("com.zaxxer:HikariCP:5.0.1")
 
-                implementation("ch.qos.logback:logback-classic:$logback_version")
-            }
-        }
-        val jvmTest by getting {
-            dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-                implementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
-                implementation("junit:junit:$junit_version")
+                implementation("ch.qos.logback:logback-classic:1.4.5")
             }
         }
     }
 }
 
-task<JavaExec>("run") {
-    main = "org.jetbrains.kotlinconf.backend.ServerKt"
-    val jvm by kotlin.targets.getting
-    val main: KotlinCompilation<KotlinCommonOptions> by jvm.compilations
-
-    val runtimeDependencies = (main as KotlinCompilationToRunnableFiles<KotlinCommonOptions>).runtimeDependencyFiles
-    classpath = files(main.output.allOutputs, runtimeDependencies)
-}
-
-tasks.withType<ShadowJar> {
-    val jvmJar: Jar by tasks
-    val jvmRuntimeClasspath by project.configurations
-
-    configurations = listOf(jvmRuntimeClasspath)
-
-    from(jvmJar.archiveFile)
-
-    archiveBaseName.value("backend")
-    classifier = null
-    version = null
+tasks.named<JavaExec>("run") {
+    dependsOn(tasks.named<Jar>("jvmJar"))
+    classpath(tasks.named<Jar>("jvmJar"))
 }

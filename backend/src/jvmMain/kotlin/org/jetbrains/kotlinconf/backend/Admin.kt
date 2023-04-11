@@ -8,22 +8,18 @@ private var simulatedTime: GMTDate? = null
 @Volatile
 private var updatedTime: GMTDate = GMTDate()
 
-@Volatile
-internal var votesRequired = 10
-
-
 internal fun updateTime(time: GMTDate?) {
     simulatedTime = time
     updatedTime = GMTDate()
 }
 
-internal fun now(): GMTDate {
+internal fun now(): Long {
     val start = simulatedTime
 
     return if (start == null) {
-        GMTDate()
+        return GMTDate().timestamp + GMT_TIME_OFFSET
     } else {
         val offset = GMTDate().timestamp - updatedTime.timestamp
-        start + offset
+        (start + offset).timestamp
     }
 }
