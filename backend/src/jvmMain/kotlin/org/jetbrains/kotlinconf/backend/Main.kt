@@ -1,24 +1,36 @@
 package org.jetbrains.kotlinconf.backend
 
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.http.content.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.serialization.*
-import io.ktor.util.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
+import io.ktor.server.application.ApplicationCallPipeline.ApplicationPhase.Plugins
+import io.ktor.server.auth.*
+import io.ktor.server.http.content.*
+import io.ktor.server.plugins.autohead.*
+import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.compression.*
+import io.ktor.server.plugins.conditionalheaders.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.plugins.defaultheaders.*
+import io.ktor.server.plugins.forwardedheaders.*
+import io.ktor.server.plugins.partialcontent.*
+import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.util.logging.*
 
-internal fun Application.main() {
+fun main(args: Array<String>): Unit =
+    io.ktor.server.netty.EngineMain.main(args)
+
+fun Application.conferenceBackend() {
     val config = environment.config
     val serviceConfig = config.config("service")
     val mode = serviceConfig.property("environment").getString()
     log.info("Environment: $mode")
     val sessionizeConfig = config.config("sessionize")
     val sessionizeUrl = sessionizeConfig.property("url").getString()
-    val oldSessionizeUrl = sessionizeConfig.property("oldUrl").getString()
     val sessionizeInterval = sessionizeConfig.property("interval").getString().toLong()
     val adminSecret = serviceConfig.property("secret").getString()
     val production = mode == "production"
@@ -30,59 +42,63 @@ internal fun Application.main() {
     install(DefaultHeaders)
     install(ConditionalHeaders)
     install(Compression)
-    install(PartialContent)
     install(AutoHeadResponse)
-    install(XForwardedHeaderSupport)
+    install(XForwardedHeaders)
+
     install(StatusPages) {
-        exception<ServiceUnavailable> { _ ->
+        exception<ServiceUnavailable> { call, _ ->
             call.respond(HttpStatusCode.ServiceUnavailable)
         }
-        exception<BadRequest> { _ ->
+        exception<BadRequest> { call, _ ->
             call.respond(HttpStatusCode.BadRequest)
         }
-        exception<Unauthorized> { _ ->
+        exception<Unauthorized> { call, _ ->
             call.respond(HttpStatusCode.Unauthorized)
         }
-        exception<NotFound> { _ ->
+        exception<NotFound> { call, _ ->
             call.respond(HttpStatusCode.NotFound)
         }
-        exception<SecretInvalidError> { _ ->
+        exception<SecretInvalidError> { call, _ ->
             call.respond(HttpStatusCode.Forbidden)
         }
-        exception<Throwable> { cause ->
-            environment.log.error(cause)
+        exception<Throwable> { call, cause ->
+            this@conferenceBackend.environment.log.error(cause)
             call.respond(HttpStatusCode.InternalServerError)
         }
     }
 
     install(ContentNegotiation) {
-        serialization()
+        json()
     }
 
     install(CORS) {
         anyHost()
-        header(HttpHeaders.Authorization)
+        allowHeader(HttpHeaders.Authorization)
         allowCredentials = true
-        listOf(HttpMethod.Put, HttpMethod.Delete, HttpMethod.Options).forEach { method(it) }
+        listOf(HttpMethod.Put, HttpMethod.Delete, HttpMethod.Options).forEach { allowMethod(it) }
     }
 
-    val database = Database(this)
-    install(Routing) {
+    val database = Store(this)
+    routing {
         authenticate()
         static {
             default("static/index.html")
             files("static")
         }
 
-        api(database, sessionizeUrl, oldSessionizeUrl, adminSecret)
+        api(database, sessionizeUrl, adminSecret)
+
+        get("/healthz") {
+            call.respond(HttpStatusCode.OK)
+        }
     }
 
-    launchSyncJob(sessionizeUrl, oldSessionizeUrl, sessionizeInterval)
+    launchSyncJob(sessionizeUrl, sessionizeInterval)
 }
 
 private fun Route.authenticate() {
     val bearer = "Bearer "
-    intercept(ApplicationCallPipeline.Features) {
+    intercept(Plugins) {
         val authorization = call.request.header(HttpHeaders.Authorization) ?: return@intercept
         if (!authorization.startsWith(bearer)) return@intercept
         val token = authorization.removePrefix(bearer).trim()
