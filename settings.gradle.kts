@@ -1,23 +1,32 @@
-rootProject.name = "kotlinconf-app"
-
-val INCLUDE_ANDROID: String by extra
-val kotlin_version: String by extra
-
 pluginManagement {
-    resolutionStrategy {
-        eachPlugin {
-            val plugin = requested.id.id
-            when (plugin) {
-                "kotlinx-serialization" -> useModule("org.jetbrains.kotlin:kotlin-serialization:$kotlin_version")
+    repositories {
+        google()
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+val MAPBOX_DOWNLOADS_TOKEN: String? by settings
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+
+        maven(url = "https://api.mapbox.com/downloads/v2/releases/maven") {
+            authentication {
+                val basic by creating(BasicAuthentication::class)
+            }
+
+            credentials {
+                username = "mapbox"
+                password = MAPBOX_DOWNLOADS_TOKEN
             }
         }
     }
 }
-enableFeaturePreview("GRADLE_METADATA")
 
-include("backend")
-include("common")
-
-if (INCLUDE_ANDROID == "true") {
-    include("androidApp")
-}
+rootProject.name = "KotlinConf_2023"
+include(":androidApp")
+include(":shared")
+include(":backend")

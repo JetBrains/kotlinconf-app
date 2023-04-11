@@ -22,3 +22,8 @@ Pods/
 .settings
 .classpath
 .gradletasknamecache
+
+*.db
+androidApp/src/main/res/values/strings.xml
+androidApp/release
+
