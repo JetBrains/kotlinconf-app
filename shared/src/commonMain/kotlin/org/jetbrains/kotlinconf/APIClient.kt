@@ -38,10 +38,6 @@ class APIClient(
                     HttpStatusCode.Conflict -> return@validateResponse
                     HttpStatusCode.Unauthorized -> throw Unauthorized()
                 }
-
-                if (!it.status.isSuccess()) {
-                    println("Error: ${it.status}")
-                }
             }
         }
 
@@ -75,7 +71,6 @@ class APIClient(
      * Vote for session.
      */
     suspend fun vote(sessionId: String, score: Score?): Boolean {
-        println("Voting with $userId")
         if (userId == null) return false
 
         client.post {
