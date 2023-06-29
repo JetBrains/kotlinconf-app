@@ -1,12 +1,18 @@
 package org.jetbrains.kotlinconf.android.ui
 
-import androidx.activity.*
-import androidx.compose.runtime.*
-import androidx.navigation.compose.*
+import androidx.activity.OnBackPressedCallback
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.navigation.compose.rememberNavController
 import com.jetbrains.kotlinconf.R
-import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.android.*
-import org.jetbrains.kotlinconf.android.ui.components.*
+import org.jetbrains.kotlinconf.ConferenceService
+import org.jetbrains.kotlinconf.android.ui.components.TabItem
+import org.jetbrains.kotlinconf.android.ui.components.TabsView
+import org.jetbrains.kotlinconf.android.withAppController
 
 @Composable
 fun MainScreen(service: ConferenceService, onBackPressed: (OnBackPressedCallback) -> Unit) {
@@ -60,9 +66,6 @@ fun MainScreen(service: ConferenceService, onBackPressed: (OnBackPressedCallback
                 },
                 TabItem("Bookmarks", R.drawable.mytalks, R.drawable.mytalks_active) {
                     Bookmarks(favoriteSessions, it)
-                },
-                TabItem("Map", R.drawable.location, R.drawable.location_active) {
-                    Map()
                 }
             )
         }

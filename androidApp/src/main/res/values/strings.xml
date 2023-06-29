@@ -23,4 +23,5 @@
     </string>
     <string name="before_text">You can already check out the schedule and mark your favorite talks.</string>
     <string name="after_text">IS OVER.\nTHANK YOU ALL.</string>
+    <string name="appLabel" />
 </resources>

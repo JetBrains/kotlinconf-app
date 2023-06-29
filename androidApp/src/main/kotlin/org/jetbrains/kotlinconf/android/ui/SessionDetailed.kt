@@ -10,7 +10,6 @@ import androidx.compose.ui.res.*
 import androidx.compose.ui.tooling.preview.*
 import androidx.compose.ui.unit.*
 import coil.compose.*
-import com.jetbrains.kotlinconf.R
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.android.*
 import org.jetbrains.kotlinconf.android.theme.*
@@ -121,13 +120,6 @@ private fun SessionContent(
         ) {
             SessionHead(time, title, isFavorite, onFavoriteClick, onSpeakerClick, speakers)
             SessionDetails(description, location, isLightning, isCodeLab, isAWS)
-            MapBoxMap(
-                uri = mapByLocation(location),
-                cameraOptions = roomByLocation(location),
-                modifier = Modifier
-                    .height(400.dp)
-                    .padding(bottom = 16.dp)
-            )
         }
     }
 }
@@ -183,12 +175,12 @@ private fun SessionHead(
 @Composable
 private fun FavoriteButton(isFavorite: Boolean, favoriteClick: () -> Unit) {
     IconButton(onClick = favoriteClick) {
-        val icon = if (isFavorite) R.drawable.bookmark_active else R.drawable.bookmark
-        Icon(
-            painter = painterResource(id = icon),
-            contentDescription = "favorite",
-            tint = if (isFavorite) orange else MaterialTheme.colors.greyGrey5
-        )
+//        val icon = if (isFavorite) R.drawable.bookmark_active else R.drawable.bookmark
+//        Icon(
+//            painter = painterResource(id = icon),
+//            contentDescription = "favorite",
+//            tint = if (isFavorite) orange else MaterialTheme.colors.greyGrey5
+//        )
     }
 }
 

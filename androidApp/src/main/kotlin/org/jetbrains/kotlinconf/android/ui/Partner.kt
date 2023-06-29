@@ -1,16 +1,28 @@
 package org.jetbrains.kotlinconf.android.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.text.font.*
-import androidx.compose.ui.unit.*
-import org.jetbrains.kotlinconf.android.*
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.ui.components.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.android.AppController
+import org.jetbrains.kotlinconf.android.theme.grey5Black
+import org.jetbrains.kotlinconf.android.theme.greyGrey20
+import org.jetbrains.kotlinconf.android.theme.greyGrey5
+import org.jetbrains.kotlinconf.android.theme.t2
+import org.jetbrains.kotlinconf.android.theme.whiteGrey
 
 @Composable
 fun Partner(controller: AppController, name: String, description: String) {
@@ -47,13 +59,6 @@ fun Partner(controller: AppController, name: String, description: String) {
 
                 LocationRow(location = "Exhibition", Modifier.padding(top = 24.dp))
             }
-
-            MapBoxMap(
-                mapByLocation("Exhibition"),
-                roomByLocation("EXHIBITION"),
-                modifier = Modifier.height(300.dp)
-                    .padding(bottom = 24.dp)
-            )
         }
     }
 }
