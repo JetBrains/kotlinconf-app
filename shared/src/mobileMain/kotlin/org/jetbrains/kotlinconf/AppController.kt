@@ -1,13 +1,33 @@
-package org.jetbrains.kotlinconf.android
+package org.jetbrains.kotlinconf.org.jetbrains.kotlinconf
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.android.ui.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import org.jetbrains.kotlinconf.ConferenceService
+import org.jetbrains.kotlinconf.Score
+import org.jetbrains.kotlinconf.SessionCardView
+import org.jetbrains.kotlinconf.android.ui.AboutConf
+import org.jetbrains.kotlinconf.android.ui.CODE_OF_CONDUCT
+import org.jetbrains.kotlinconf.android.ui.MOBILE_APP_DESCRIPTION
+import org.jetbrains.kotlinconf.android.ui.Menu
+import org.jetbrains.kotlinconf.android.ui.NavigationBar
+import org.jetbrains.kotlinconf.android.ui.Partner
+import org.jetbrains.kotlinconf.android.ui.Partners
+import org.jetbrains.kotlinconf.android.ui.PrivacyPolicy
+import org.jetbrains.kotlinconf.android.ui.Search
+import org.jetbrains.kotlinconf.android.ui.SessionDetailed
+import org.jetbrains.kotlinconf.android.ui.SpeakersFlow
+import org.jetbrains.kotlinconf.android.ui.TermsOfUse
+import org.jetbrains.kotlinconf.android.ui.TextScreen
+import org.jetbrains.kotlinconf.android.ui.WelcomeScreen
 
 typealias View = @Composable (AppController) -> Unit
 

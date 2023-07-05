@@ -3,26 +3,24 @@ package org.jetbrains.kotlinconf.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import org.jetbrains.kotlinconf.App
+import com.jetbrains.kotlinconf.R
+import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.App
+import org.jetbrains.kotlinconf.storage.ApplicationContext
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-//        val service = ConferenceService(
-//            ApplicationContext(
-//                application,
-//                R.mipmap.ic_launcher,
-//            ),
-//            "https://kotlin-conf-staging.labs.jb.gg/"
-//        )
+        val context = ApplicationContext(
+            application,
+            R.mipmap.ic_launcher,
+        )
 //        fun addOnBackCallback(block: OnBackPressedCallback) {
 //            onBackPressedDispatcher.addCallback(this, block)
 //        }
 
         setContent {
-            App()
+            App(context)
         }
     }
 }

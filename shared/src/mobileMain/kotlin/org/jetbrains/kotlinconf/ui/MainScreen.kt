@@ -13,6 +13,7 @@ import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.android.ui.components.TabItem
 import org.jetbrains.kotlinconf.android.ui.components.TabsView
 import org.jetbrains.kotlinconf.android.withAppController
+import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.withAppController
 
 @Composable
 fun MainScreen(service: ConferenceService, onBackPressed: (OnBackPressedCallback) -> Unit) {
