@@ -1,14 +1,15 @@
-package org.jetbrains.kotlinconf.android.ui.components
+package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.tooling.preview.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.kotlinconf.android.theme.*
 import org.jetbrains.kotlinconf.android.ui.*
+import org.jetbrains.kotlinconf.ui.HDivider
+import org.jetbrains.kotlinconf.ui.VDivider
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -50,22 +51,5 @@ internal fun AgendaDayHeader(title: String) {
             VDivider(modifier = Modifier.height(24.dp))
         }
         HDivider()
-    }
-}
-
-@Composable
-@Preview(showBackground = true)
-private fun AgendaDayHeaderPreview() {
-    KotlinConfTheme {
-        AgendaDayHeader("APRIL 14")
-    }
-}
-
-
-@Composable
-@Preview(showBackground = true)
-private fun AgendaDayHeaderDarkPreview() {
-    KotlinConfTheme(true) {
-        AgendaDayHeader("APRIL 14")
     }
 }

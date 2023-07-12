@@ -1,15 +1,18 @@
-package org.jetbrains.kotlinconf.android.ui.components
+package org.jetbrains.kotlinconf.ui.components
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.platform.*
-import androidx.compose.ui.text.*
-import androidx.compose.ui.text.font.*
-import androidx.compose.ui.unit.*
-import org.jetbrains.kotlinconf.android.theme.*
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.android.theme.greyGrey20
+import org.jetbrains.kotlinconf.android.theme.greyWhite
 
 @Composable
 fun TextContent(value: AnnotatedString) {

@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -7,15 +7,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.*
-import androidx.compose.ui.res.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
-import coil.compose.*
-import com.jetbrains.kotlinconf.R
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.android.theme.*
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.ui.components.AsyncImage
 
 @Composable
 fun AboutConf(keynoteSpeakers: List<Speaker>, secondDaySpeakers: List<Speaker>, back: () -> Unit) {
@@ -42,10 +43,11 @@ fun AboutConf(keynoteSpeakers: List<Speaker>, secondDaySpeakers: List<Speaker>, 
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun Logo() {
     Image(
-        painter = painterResource(id = R.drawable.about),
+        painter = painterResource("about"),
         contentDescription = null,
         modifier = Modifier
             .fillMaxWidth()
@@ -205,13 +207,14 @@ private fun SecondDayKeynote(secondDaySpeakers: List<Speaker>) {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun Labs() {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
         HDivider(Modifier.padding(top = 48.dp))
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = painterResource(id = R.drawable.light),
+                painter = painterResource("light"),
                 contentDescription = null,
                 tint = orange,
                 modifier = Modifier.padding(end = 8.dp)
@@ -236,7 +239,7 @@ private fun Labs() {
 
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = painterResource(id = R.drawable.aws_labs),
+                painter = painterResource("aws_labs"),
                 contentDescription = null,
                 tint = violet,
                 modifier = Modifier.padding(end = 8.dp)
@@ -279,6 +282,7 @@ private fun Party() {
     HDivider()
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun ClosingPanel() {
     TextTitle("APRIL 14 / 17:15", "Closing Panel")
@@ -295,7 +299,7 @@ private fun ClosingPanel() {
         )
 
         Image(
-            painter = painterResource(id = R.drawable.closing), contentDescription = null,
+            painter = painterResource("closing"), contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth(),
             contentScale = ContentScale.Crop,

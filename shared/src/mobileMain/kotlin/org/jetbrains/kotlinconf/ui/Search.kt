@@ -1,22 +1,53 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
-import androidx.compose.ui.text.*
-import androidx.compose.ui.text.font.*
-import androidx.compose.ui.tooling.preview.*
-import androidx.compose.ui.unit.*
-import coil.compose.*
-import com.jetbrains.kotlinconf.R
-import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.android.*
-import org.jetbrains.kotlinconf.android.theme.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.SessionCardView
+import org.jetbrains.kotlinconf.Speaker
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.android.theme.grey50
+import org.jetbrains.kotlinconf.android.theme.grey5Black
+import org.jetbrains.kotlinconf.android.theme.grey5Grey90
+import org.jetbrains.kotlinconf.android.theme.greyWhite
+import org.jetbrains.kotlinconf.android.theme.violet
+import org.jetbrains.kotlinconf.android.theme.white
+import org.jetbrains.kotlinconf.android.theme.whiteGrey
+import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.ui.components.AsyncImage
 
 data class SessionSearchData(
     val id: String,
@@ -56,7 +87,7 @@ fun Search(
         NavigationBar(
             title = "Search",
             isLeftVisible = false,
-            rightIcon = R.drawable.close,
+            rightIcon = "close",
             onLeftClick = {},
             onRightClick = { controller.back() }
         )
@@ -205,15 +236,6 @@ private fun SearchField(text: String, onTextChange: (String) -> Unit) {
 }
 
 @Composable
-@Preview
-private fun SearchFieldPreview() {
-    var text by remember { mutableStateOf("") }
-    KotlinConfTheme {
-        SearchField(text = text, onTextChange = { text = it })
-    }
-}
-
-@Composable
 private fun Tags(tags: List<TagView>, onClick: (tag: TagView) -> Unit) {
     Row(
         Modifier
@@ -261,20 +283,6 @@ private fun TabSelector(selected: String, values: List<String>, onClick: (String
         }
     }
 }
-
-@Composable
-@Preview
-private fun TabSelectorPreview() {
-    var selected by remember { mutableStateOf("talks") }
-    KotlinConfTheme {
-        TabSelector(
-            selected = selected,
-            values = listOf("talks", "speakers"),
-            onClick = { selected = it }
-        )
-    }
-}
-
 
 @Composable
 private fun SearchResults(
@@ -392,31 +400,5 @@ private fun SpeakerSearchResult(
             }
         }
         HDivider()
-    }
-}
-
-@Composable
-@Preview
-private fun SpeakerSearchResultPreview() {
-    KotlinConfTheme {
-        SpeakerSearchResult(
-            text = buildAnnotatedString {
-                // bold title
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append("Title /")
-                }
-                val text =
-                    "...with any Kotlin gradient-based machine learning algorithm requires the tedious task... "
-                append(text)
-
-                val ko = text.indexOf("Ko")
-                addStyle(style = SpanStyle(color = white, background = violet), ko, ko + 2)
-            }, tags = listOf(
-                TagView("Android", true),
-                TagView("iOS", false),
-            ),
-            photoUrl = "https://avatars.githubusercontent.com/u/153802?v=4",
-            onClick = {}
-        )
     }
 }

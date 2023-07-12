@@ -8,12 +8,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.geometry.*
 import androidx.compose.ui.layout.*
-import androidx.compose.ui.tooling.preview.*
 import androidx.compose.ui.unit.*
-import coil.compose.*
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.android.*
 import org.jetbrains.kotlinconf.android.theme.*
+import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.ui.HDivider
+import org.jetbrains.kotlinconf.ui.NavigationBar
+import org.jetbrains.kotlinconf.ui.components.AsyncImage
 
 @Composable
 fun Speakers(speakers: List<Speaker>, controller: AppController) {
@@ -94,17 +96,5 @@ private fun SpeakerCard(
 
             HDivider()
         }
-    }
-}
-
-@Composable
-@Preview
-private fun SpeakerCardPreview() {
-    KotlinConfTheme {
-        SpeakerCard(
-            name = "Roman Elizarov",
-            position = "JetBrains",
-            photoUrl = "https://sessionize.com/image/5e77-400o400o2-c3-27df-4756-b04a-76b2d6f220c4.8fd59ff1-977b-49ce-af6e-15659c2a9d9b.jpg"
-        )
     }
 }

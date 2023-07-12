@@ -1,22 +1,23 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.tooling.preview.*
 import androidx.compose.ui.unit.*
-import com.jetbrains.kotlinconf.R
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.android.theme.*
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun NavigationBar(
     title: String,
     isLeftVisible: Boolean = true,
     isRightVisible: Boolean = true,
-    rightIcon: Int = R.drawable.menu,
+    rightIcon: String = "menu",
     onLeftClick: () -> Unit = {},
     onRightClick: () -> Unit = {},
 ) {
@@ -33,7 +34,7 @@ fun NavigationBar(
             if (isLeftVisible) {
                 IconButton(onClick = onLeftClick) {
                     Icon(
-                        painter = painterResource(id = R.drawable.back),
+                        painter = painterResource("back"),
                         "Back",
                         tint = MaterialTheme.colors.greyGrey5
                     )
@@ -62,40 +63,14 @@ fun NavigationBar(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
-fun RightButton(rightIcon: Int = R.drawable.menu, onRightClick: () -> Unit) {
+fun RightButton(rightIcon: String = "menu", onRightClick: () -> Unit) {
     IconButton(onClick = onRightClick) {
         Icon(
-            painter = painterResource(id = rightIcon),
+            painter = painterResource(rightIcon),
             "Right",
             tint = MaterialTheme.colors.greyGrey5
-        )
-    }
-}
-
-@Composable
-@Preview
-fun NavigationBarPreview() {
-    KotlinConfTheme {
-        NavigationBar(
-            title = "Speakers",
-            isLeftVisible = true,
-            onLeftClick = {},
-            onRightClick = {}
-        )
-    }
-}
-
-
-@Composable
-@Preview
-fun NavigationBarPreviewWithoutBack() {
-    KotlinConfTheme {
-        NavigationBar(
-            title = "Speakers",
-            isLeftVisible = false,
-            onLeftClick = {},
-            onRightClick = {},
         )
     }
 }

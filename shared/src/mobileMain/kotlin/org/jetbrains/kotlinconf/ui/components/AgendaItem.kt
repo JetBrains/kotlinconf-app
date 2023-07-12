@@ -1,19 +1,22 @@
-package org.jetbrains.kotlinconf.android.ui.components
+package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.tooling.preview.*
 import androidx.compose.ui.unit.*
-import com.jetbrains.kotlinconf.R
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.android.theme.*
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
 import org.jetbrains.kotlinconf.android.ui.*
+import org.jetbrains.kotlinconf.ui.HDivider
+import org.jetbrains.kotlinconf.ui.VoteAndFeedback
 
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun AgendaItem(
     title: String,
@@ -68,9 +71,9 @@ fun AgendaItem(
                 IconButton(onClick = {
                     onFavoriteClick()
                 }) {
-                    val icon = if (isFavorite) R.drawable.bookmark_active else R.drawable.bookmark
+                    val icon = if (isFavorite) "bookmark_active" else "bookmark"
                     Icon(
-                        painter = painterResource(id = icon),
+                        painter = painterResource(icon),
                         contentDescription = "bookmark",
                         tint = if (isFavorite) orange else MaterialTheme.colors.greyWhite
                     )
@@ -114,122 +117,5 @@ fun AgendaItem(
         }
 
         HDivider()
-    }
-}
-
-@Composable
-@Preview
-fun AgendaItemPreview() {
-    KotlinConfTheme {
-        Column(Modifier.verticalScroll(rememberScrollState())) {
-            AgendaItem(
-                title = "Hello world",
-                speakerLine = "Speaker 1, Speaker 2",
-                locationLine = "At my home",
-                timeLine = "",
-                isFavorite = false,
-                isFinished = false,
-                isLightning = false,
-                isCodeLab = false,
-                isAWS = false,
-                vote = null
-            )
-            AgendaItem(
-                title = "Hello world",
-                speakerLine = "Speaker 1, Speaker 2",
-                locationLine = "At my home",
-                timeLine = "",
-                isFavorite = false,
-                isFinished = false,
-                isLightning = true,
-                isCodeLab = false,
-                isAWS = false,
-                vote = null
-            )
-            AgendaItem(
-                title = "Hello world",
-                speakerLine = "Speaker 1, Speaker 2",
-                locationLine = "At my home",
-                timeLine = "",
-                isFavorite = false,
-                isFinished = true,
-                isLightning = true,
-                isCodeLab = false,
-                isAWS = false,
-                vote = null
-            )
-            AgendaItem(
-                title = "Hello world",
-                speakerLine = "Speaker 1, Speaker 2",
-                locationLine = "At my home",
-                timeLine = "",
-                isFavorite = false,
-                isFinished = false,
-                isCodeLab = true,
-                isLightning = false,
-                isAWS = false,
-                vote = null
-            )
-            AgendaItem(
-                title = "Hello world",
-                speakerLine = "Speaker 1, Speaker 2",
-                locationLine = "At my home",
-                timeLine = "",
-                isFavorite = false,
-                isFinished = false,
-                isLightning = true,
-                isCodeLab = false,
-                isAWS = false,
-                vote = null
-            )
-            AgendaItem(
-                title = "Hello world",
-                speakerLine = "Speaker 1, Speaker 2",
-                locationLine = "At my home",
-                timeLine = "",
-                isFavorite = false,
-                isFinished = false,
-                isAWS = true,
-                isLightning = false,
-                isCodeLab = false,
-                vote = null
-            )
-            AgendaItem(
-                title = "Hello world",
-                speakerLine = "Speaker 1, Speaker 2",
-                locationLine = "At my home",
-                timeLine = "",
-                isFavorite = false,
-                isFinished = true,
-                isCodeLab = false,
-                isAWS = false,
-                isLightning = false,
-                vote = null
-            )
-            AgendaItem(
-                title = "Hello world",
-                speakerLine = "Speaker 1, Speaker 2",
-                locationLine = "At my home",
-                timeLine = "",
-                isFavorite = true,
-                isFinished = false,
-                isLightning = false,
-                isCodeLab = false,
-                isAWS = false,
-                vote = null
-            )
-            AgendaItem(
-                title = "Hello world",
-                speakerLine = "Speaker 1, Speaker 2",
-                locationLine = "At my home",
-                timeLine = "",
-                isFavorite = true,
-                isFinished = true,
-                isLightning = false,
-                isCodeLab = false,
-                isAWS = false,
-                vote = null
-            )
-        }
     }
 }

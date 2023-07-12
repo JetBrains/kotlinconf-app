@@ -1,16 +1,24 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.platform.*
-import androidx.compose.ui.text.*
-import androidx.compose.ui.tooling.preview.*
-import androidx.compose.ui.unit.*
-import org.jetbrains.kotlinconf.android.theme.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.android.theme.grey5Black
+import org.jetbrains.kotlinconf.android.theme.greyGrey20
+import org.jetbrains.kotlinconf.android.theme.whiteGrey
 
 
 @Composable
@@ -62,15 +70,5 @@ fun TextScreen(
                 }
             )
         }
-    }
-}
-
-@Composable
-@Preview(showSystemUi = true)
-fun MobileAppDescriptionPreview() {
-    KotlinConfTheme {
-        TextScreen("Title", "FOOOO", buildAnnotatedString {
-            append("Hello world".repeat(1000))
-        })
     }
 }

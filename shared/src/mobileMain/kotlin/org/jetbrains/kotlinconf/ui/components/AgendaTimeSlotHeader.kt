@@ -1,19 +1,33 @@
-package org.jetbrains.kotlinconf.android.ui.components
+package org.jetbrains.kotlinconf.ui.components
 
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
-import androidx.compose.ui.tooling.preview.*
-import androidx.compose.ui.unit.*
-import io.ktor.util.date.*
-import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.ui.*
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.android.theme.agendaHeaderColor
+import org.jetbrains.kotlinconf.android.theme.grey20Grey80
+import org.jetbrains.kotlinconf.android.theme.greyGrey5
+import org.jetbrains.kotlinconf.android.theme.orange
+import org.jetbrains.kotlinconf.ui.HDivider
 
 
 @Composable
@@ -67,17 +81,5 @@ internal fun AgendaTimeSlotHeader(title: String, isLive: Boolean, isFinished: Bo
             }
         }
         HDivider()
-    }
-}
-
-@Composable
-@Preview(showBackground = true)
-private fun AgendaTimeSlotHeaderPreview() {
-    KotlinConfTheme {
-        AgendaTimeSlotHeader(
-            TimeSlot(GMTDate.START, GMTDate.START, true, true, listOf(), false, false, false).title,
-            isLive = false,
-            true
-        )
     }
 }

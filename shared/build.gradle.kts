@@ -6,6 +6,8 @@ plugins {
     id("org.jetbrains.compose")
 }
 
+val precompose_version: String by project
+
 kotlin {
     android()
 
@@ -50,9 +52,12 @@ kotlin {
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
+                api(compose.animation)
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+
+                api("moe.tlaster:precompose:$precompose_version")
             }
         }
 

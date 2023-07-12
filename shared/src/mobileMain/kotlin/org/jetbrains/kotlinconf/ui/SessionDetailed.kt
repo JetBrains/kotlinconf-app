@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -6,14 +6,16 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.tooling.preview.*
 import androidx.compose.ui.unit.*
-import coil.compose.*
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.android.*
 import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.ui.components.*
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.ui.components.AWSLab
+import org.jetbrains.kotlinconf.ui.components.AsyncImage
+import org.jetbrains.kotlinconf.ui.components.CodeLab
+import org.jetbrains.kotlinconf.ui.components.LightningTalk
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

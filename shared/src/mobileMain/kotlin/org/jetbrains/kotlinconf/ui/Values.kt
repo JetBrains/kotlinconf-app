@@ -1,8 +1,11 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
-import androidx.compose.ui.text.*
-import androidx.compose.ui.text.font.*
-import org.jetbrains.kotlinconf.android.theme.*
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import org.jetbrains.kotlinconf.android.theme.violet
 
 val MOBILE_APP_DESCRIPTION = buildAnnotatedString {
     append("The KotlinConf application is developed by the JetBrains team with Kotlin Multiplatform Mobile shared logic, Compose on Android, and Swift UI on iOS. Check out the ")

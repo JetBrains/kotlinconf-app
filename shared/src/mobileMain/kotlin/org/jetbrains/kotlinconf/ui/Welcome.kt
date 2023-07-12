@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -7,12 +7,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.res.*
 import androidx.compose.ui.text.style.*
-import androidx.compose.ui.tooling.preview.*
 import androidx.compose.ui.unit.*
-import com.jetbrains.kotlinconf.R
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.android.theme.*
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
 
 @Composable
 fun WelcomeScreen(
@@ -59,6 +59,7 @@ private fun FullPrivacyPolicy(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun PrivacyPolicy(
     onAcceptPrivacy: () -> Unit,
@@ -73,7 +74,7 @@ private fun PrivacyPolicy(
     }) {
         Column(Modifier.fillMaxWidth()) {
             Image(
-                painter = painterResource(id = R.drawable.privacy),
+                painter = painterResource("privacy"),
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -201,6 +202,7 @@ private fun Buttons(onAccept: () -> Unit, onReject: () -> Unit) {
 }
 
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun Notifications(onAcceptNotifications: () -> Unit, onClose: () -> Unit) {
     FormWithButtons(onAccept = {
@@ -211,7 +213,7 @@ private fun Notifications(onAcceptNotifications: () -> Unit, onClose: () -> Unit
     }) {
         Column(Modifier.fillMaxWidth()) {
             Image(
-                painter = painterResource(id = R.drawable.notifications),
+                painter = painterResource("notifications"),
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -255,22 +257,6 @@ private fun Notifications(onAcceptNotifications: () -> Unit, onClose: () -> Unit
                 )
             }
         }
-    }
-}
-
-@Composable
-@Preview(showBackground = true)
-private fun PrivacyPolicyPreview() {
-    KotlinConfTheme {
-        Notifications({}, {})
-    }
-}
-
-@Composable
-@Preview
-private fun WelcomeScreenPreview() {
-    KotlinConfTheme {
-        WelcomeScreen({}, {}, {}, {})
     }
 }
 

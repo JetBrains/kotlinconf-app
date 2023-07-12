@@ -14,20 +14,20 @@ import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionCardView
-import org.jetbrains.kotlinconf.android.ui.AboutConf
-import org.jetbrains.kotlinconf.android.ui.CODE_OF_CONDUCT
-import org.jetbrains.kotlinconf.android.ui.MOBILE_APP_DESCRIPTION
-import org.jetbrains.kotlinconf.android.ui.Menu
-import org.jetbrains.kotlinconf.android.ui.NavigationBar
-import org.jetbrains.kotlinconf.android.ui.Partner
-import org.jetbrains.kotlinconf.android.ui.Partners
-import org.jetbrains.kotlinconf.android.ui.PrivacyPolicy
-import org.jetbrains.kotlinconf.android.ui.Search
-import org.jetbrains.kotlinconf.android.ui.SessionDetailed
-import org.jetbrains.kotlinconf.android.ui.SpeakersFlow
-import org.jetbrains.kotlinconf.android.ui.TermsOfUse
-import org.jetbrains.kotlinconf.android.ui.TextScreen
-import org.jetbrains.kotlinconf.android.ui.WelcomeScreen
+import org.jetbrains.kotlinconf.ui.AboutConf
+import org.jetbrains.kotlinconf.ui.CODE_OF_CONDUCT
+import org.jetbrains.kotlinconf.ui.MOBILE_APP_DESCRIPTION
+import org.jetbrains.kotlinconf.ui.Menu
+import org.jetbrains.kotlinconf.ui.NavigationBar
+import org.jetbrains.kotlinconf.ui.Partner
+import org.jetbrains.kotlinconf.ui.Partners
+import org.jetbrains.kotlinconf.ui.PrivacyPolicy
+import org.jetbrains.kotlinconf.ui.Search
+import org.jetbrains.kotlinconf.ui.SessionDetailed
+import org.jetbrains.kotlinconf.ui.SpeakersFlow
+import org.jetbrains.kotlinconf.ui.TermsOfUse
+import org.jetbrains.kotlinconf.ui.TextScreen
+import org.jetbrains.kotlinconf.ui.WelcomeScreen
 
 typealias View = @Composable (AppController) -> Unit
 
@@ -195,6 +195,7 @@ class AppController(
     fun showPrivacyPolicy() {
         push {
             Column {
+
                 NavigationBar(
                     title = "Privacy Policy",
                     isRightVisible = false,

@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,15 +14,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.android.AppController
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
 import org.jetbrains.kotlinconf.android.theme.grey5Black
 import org.jetbrains.kotlinconf.android.theme.greyGrey20
 import org.jetbrains.kotlinconf.android.theme.greyGrey5
-import org.jetbrains.kotlinconf.android.theme.t2
 import org.jetbrains.kotlinconf.android.theme.whiteGrey
+import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
 
 @Composable
 fun Partner(controller: AppController, name: String, description: String) {
@@ -63,6 +64,7 @@ fun Partner(controller: AppController, name: String, description: String) {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun Logo(name: String) {
     Box(
@@ -72,7 +74,7 @@ private fun Logo(name: String) {
             .height(176.dp)
     ) {
         Image(
-            painter = painterResource(id = LogoForName(name)),
+            painter = painterResource(LogoForName(name)),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.Center)

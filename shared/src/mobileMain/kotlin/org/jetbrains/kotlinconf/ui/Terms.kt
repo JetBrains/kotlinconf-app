@@ -1,14 +1,20 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.text.*
-import androidx.compose.ui.unit.*
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.ui.components.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.android.theme.grey5Black
+import org.jetbrains.kotlinconf.android.theme.greyGrey20
+import org.jetbrains.kotlinconf.android.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.components.TextContent
 
 
 @Composable

@@ -6,13 +6,18 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.tooling.preview.*
 import androidx.compose.ui.unit.*
-import com.jetbrains.kotlinconf.R
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.android.*
 import org.jetbrains.kotlinconf.android.theme.*
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.ui.HDivider
+import org.jetbrains.kotlinconf.ui.LocationRow
+import org.jetbrains.kotlinconf.ui.TabBar
+import org.jetbrains.kotlinconf.ui.VoteAndFeedback
 
 @Composable
 fun Bookmarks(
@@ -99,6 +104,7 @@ private fun Finished(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun UpcomingCard(
     title: String,
@@ -141,9 +147,8 @@ private fun UpcomingCard(
             IconButton(onClick = {
                 onBookmarkClick()
             }) {
-                val icon = R.drawable.bookmark_active
                 Icon(
-                    painter = painterResource(id = icon),
+                    painter = painterResource("bookmark_active"),
                     contentDescription = "bookmark",
                     tint = orange
                 )
@@ -153,6 +158,7 @@ private fun UpcomingCard(
 }
 
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun FinishedCard(
     title: String,
@@ -212,53 +218,12 @@ private fun FinishedCard(
             IconButton(onClick = {
                 onBookmarkClick()
             }) {
-                val icon = R.drawable.bookmark_active
                 Icon(
-                    painter = painterResource(id = icon),
+                    painter = painterResource("bookmark_active"),
                     contentDescription = "bookmark",
                     tint = orange
                 )
             }
         }
-    }
-}
-
-@Composable
-@Preview
-private fun PastCardPreview() {
-    KotlinConfTheme {
-        FinishedCard(
-            title = "Kotlin for Android",
-            speakerLine = "John Doe",
-            timeLine = "10:00 - 11:00",
-            vote = null
-        )
-    }
-}
-
-@Composable
-@Preview(showBackground = true)
-private fun UpcomingCardSoonPreview() {
-    KotlinConfTheme {
-        UpcomingCard(
-            title = "Kotlin for Android",
-            timeLine = "in 5 minutes",
-            speakerLine = "John Doe",
-            locationLine = "Room 1",
-        )
-    }
-}
-
-
-@Composable
-@Preview(showBackground = true)
-private fun UpcomingCardPreview() {
-    KotlinConfTheme {
-        UpcomingCard(
-            title = "Kotlin for Android",
-            timeLine = "10:00 - 11:00",
-            speakerLine = "John Doe",
-            locationLine = "Room 1",
-        )
     }
 }

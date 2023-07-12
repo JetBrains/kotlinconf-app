@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.android.ui.components
+package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
@@ -6,20 +6,23 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.tooling.preview.*
 import androidx.compose.ui.unit.*
-import com.jetbrains.kotlinconf.R
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.android.theme.*
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
 import org.jetbrains.kotlinconf.android.ui.*
+import org.jetbrains.kotlinconf.ui.HDivider
+import org.jetbrains.kotlinconf.ui.VDivider
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Break(
     duration: String,
     title: String,
     isLive: Boolean,
-    icon: Int = R.drawable.cup,
-    icon_live: Int = R.drawable.cup_active,
+    icon: String = "cup",
+    icon_live: String = "cup_active",
 ) {
     val transition = rememberInfiniteTransition()
     val transparency by transition.animateFloat(
@@ -57,7 +60,7 @@ fun Break(
             )
             Spacer(modifier = Modifier.weight(1f))
             Icon(
-                painter = painterResource(id = if (isLive) icon_live else icon),
+                painter = painterResource(if (isLive) icon_live else icon),
                 contentDescription = "icon",
                 tint = if (isLive) orange.copy(alpha = transparency) else grey50
             )
@@ -72,16 +75,5 @@ fun Break(
             VDivider(modifier = Modifier.height(24.dp))
         }
         HDivider()
-    }
-}
-
-@Composable
-@Preview
-fun BreakPreview() {
-    KotlinConfTheme {
-        Column {
-            Break("30 MIN", "Coffee break", false)
-            Break("30 MIN", "Coffee break", true)
-        }
     }
 }

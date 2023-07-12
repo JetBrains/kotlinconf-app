@@ -22,7 +22,7 @@ fun App(context: ApplicationContext) {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
-            MainScreen(service, {})
+            MainScreen(service)
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -8,13 +8,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.focus.*
 import androidx.compose.ui.input.key.*
-import androidx.compose.ui.res.*
 import androidx.compose.ui.text.input.*
-import androidx.compose.ui.tooling.preview.*
 import androidx.compose.ui.unit.*
-import com.jetbrains.kotlinconf.R
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.android.theme.*
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
 
 @Composable
 fun VoteAndFeedback(
@@ -53,7 +53,7 @@ fun VoteAndFeedback(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalResourceApi::class)
 @Composable
 fun FeedbackForm(onSend: (String) -> Unit, onClose: () -> Unit) {
     var feedback by remember { mutableStateOf("") }
@@ -87,7 +87,8 @@ fun FeedbackForm(onSend: (String) -> Unit, onClose: () -> Unit) {
                     .fillMaxWidth()
                     .height(200.dp)
                     .onKeyEvent {
-                        if (it.nativeKeyEvent.keyCode != android.view.KeyEvent.KEYCODE_ENTER) return@onKeyEvent false
+                        // TODO
+//                        if (it.nativeKeyEvent.key != SkikoKey.KEY_ENTER) return@onKeyEvent false
                         if (feedback.isNotEmpty()) onSend(feedback)
                         true
                     },
@@ -122,7 +123,7 @@ fun FeedbackForm(onSend: (String) -> Unit, onClose: () -> Unit) {
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = { onClose() }, Modifier.padding(4.dp)) {
                 Icon(
-                    painter = painterResource(id = R.drawable.close),
+                    painter = painterResource("close"),
                     contentDescription = "Close",
                     tint = MaterialTheme.colors.greyGrey5
                 )
@@ -138,33 +139,34 @@ fun VoteBlock(vote: Score?, onVote: (Score?) -> Unit) {
         VoteButton(
             vote = Score.GOOD,
             active = vote == Score.GOOD,
-            icon = R.drawable.smilehappy,
-            activeIcon = R.drawable.smilehappy_active,
+            icon = "smilehappy",
+            activeIcon = "smilehappy_active",
             onVote = onVote
         )
         VoteButton(
             vote = Score.OK,
             active = vote == Score.OK,
-            icon = R.drawable.smileneutral,
-            activeIcon = R.drawable.smileneutral_active,
+            icon = "smileneutral",
+            activeIcon = "smileneutral_active",
             onVote = onVote
         )
         VoteButton(
             vote = Score.BAD,
             active = vote == Score.BAD,
-            icon = R.drawable.smilesad,
-            activeIcon = R.drawable.smilesad_active,
+            icon = "smilesad",
+            activeIcon = "smilesad_active",
             onVote = onVote
         )
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun VoteButton(
     vote: Score,
     active: Boolean,
-    icon: Int,
-    activeIcon: Int,
+    icon: String,
+    activeIcon: String,
     onVote: (Score?) -> Unit
 ) {
     IconButton(onClick = { onVote(if (active) null else vote) }) {
@@ -174,10 +176,4 @@ fun VoteButton(
             tint = MaterialTheme.colors.greyWhite
         )
     }
-}
-
-@Composable
-@Preview
-fun FeedbackFormPreview() {
-    FeedbackForm(onSend = {}, onClose = {})
 }

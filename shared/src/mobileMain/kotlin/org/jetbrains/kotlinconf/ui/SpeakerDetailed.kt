@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -7,14 +7,18 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
-import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.*
-import coil.compose.*
-import com.jetbrains.kotlinconf.R
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.android.*
 import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.ui.components.*
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.ui.components.AWSLab
+import org.jetbrains.kotlinconf.ui.components.AsyncImage
+import org.jetbrains.kotlinconf.ui.components.CodeLab
+import org.jetbrains.kotlinconf.ui.components.LightningTalk
 
 @Composable
 fun SpeakersFlow(
@@ -137,6 +141,7 @@ private fun SpeakerDetailed(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun SessionCardCompact(
     title: String,
@@ -204,9 +209,9 @@ private fun SessionCardCompact(
                 IconButton(onClick = {
                     onFavoriteClick()
                 }) {
-                    val icon = if (favorite) R.drawable.bookmark_active else R.drawable.bookmark
+                    val icon = if (favorite) "bookmark_active" else "bookmark"
                     Icon(
-                        painter = painterResource(id = icon),
+                        painter = painterResource(icon),
                         contentDescription = "bookmark",
                         tint = if (favorite) orange else MaterialTheme.colors.greyWhite
                     )

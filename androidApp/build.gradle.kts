@@ -2,6 +2,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("org.jetbrains.compose")
 }
 
 android {
@@ -15,9 +16,6 @@ android {
         versionName = "31.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildFeatures {
@@ -42,10 +40,6 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.2"
     }
 
     packagingOptions {

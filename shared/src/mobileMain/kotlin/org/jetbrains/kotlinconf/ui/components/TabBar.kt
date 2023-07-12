@@ -1,15 +1,23 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.tooling.preview.*
-import androidx.compose.ui.unit.*
-import org.jetbrains.kotlinconf.android.theme.*
-
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.android.theme.grey50
+import org.jetbrains.kotlinconf.android.theme.greyWhite
+import org.jetbrains.kotlinconf.android.theme.whiteGrey
 
 @Composable
 fun TabBar(
@@ -37,20 +45,6 @@ fun TabBar(
         }
 
         HDivider(Modifier.padding(top = 10.dp))
-    }
-}
-
-@Composable
-@Preview
-fun TabBarPreview() {
-    var selected by remember { mutableStateOf("APRIL 14") }
-
-    KotlinConfTheme {
-        TabBar(
-            tabs = listOf("APRIL 13", "APRIL 14"),
-            selected = selected,
-            onSelect = { selected = it }
-        )
     }
 }
 

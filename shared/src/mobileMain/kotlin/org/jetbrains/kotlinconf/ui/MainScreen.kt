@@ -1,26 +1,26 @@
 package org.jetbrains.kotlinconf.android.ui
 
-import androidx.activity.OnBackPressedCallback
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.navigation.compose.rememberNavController
-import com.jetbrains.kotlinconf.R
+import moe.tlaster.precompose.navigation.rememberNavigator
 import org.jetbrains.kotlinconf.ConferenceService
-import org.jetbrains.kotlinconf.android.ui.components.TabItem
-import org.jetbrains.kotlinconf.android.ui.components.TabsView
-import org.jetbrains.kotlinconf.android.withAppController
 import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.withAppController
+import org.jetbrains.kotlinconf.ui.AgendaView
+import org.jetbrains.kotlinconf.ui.Menu
+import org.jetbrains.kotlinconf.ui.WelcomeScreen
+import org.jetbrains.kotlinconf.ui.components.TabItem
+import org.jetbrains.kotlinconf.ui.components.TabsView
 
 @Composable
-fun MainScreen(service: ConferenceService, onBackPressed: (OnBackPressedCallback) -> Unit) {
+fun MainScreen(service: ConferenceService) {
     val agenda by service.agenda.collectAsState()
     val speakers by service.speakers.collectAsState()
     val time by service.time.collectAsState()
-    val controller = rememberNavController()
+    val controller = rememberNavigator()
 
     val favoriteSessions = agenda.days.flatMap { it.timeSlots.flatMap { it.sessions } }
         .filter { it.isFavorite }
@@ -36,12 +36,6 @@ fun MainScreen(service: ConferenceService, onBackPressed: (OnBackPressedCallback
     var showWelcome by remember { mutableStateOf(service.needsOnboarding()) }
 
     withAppController(service) {
-        onBackPressed(object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                it.back()
-            }
-        })
-
         if (showWelcome) {
             WelcomeScreen(
                 onAcceptNotifications = {
@@ -56,16 +50,16 @@ fun MainScreen(service: ConferenceService, onBackPressed: (OnBackPressedCallback
         } else {
             TabsView(
                 controller,
-                TabItem("menu", R.drawable.menu, R.drawable.menu_active) {
+                TabItem("menu", "menu.xml", "menu_active.xml") {
                     Menu(controller = it)
                 },
-                TabItem("agenda", R.drawable.time, R.drawable.time_active) {
+                TabItem("agenda", "time.xml", "time_active.xml") {
                     AgendaView(agenda, it)
                 },
-                TabItem("speakers", R.drawable.speakers, R.drawable.speakers_active) {
+                TabItem("speakers", "speakers.xml", "speakers_active.xml") {
                     Speakers(controller = it, speakers = speakers.all)
                 },
-                TabItem("Bookmarks", R.drawable.mytalks, R.drawable.mytalks_active) {
+                TabItem("Bookmarks", "mytalks.xml", "mytalks_active.xml") {
                     Bookmarks(favoriteSessions, it)
                 }
             )

@@ -1,13 +1,26 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
-import androidx.compose.runtime.*
-import com.jetbrains.kotlinconf.R
-import kotlinx.coroutines.*
-import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.android.*
-import org.jetbrains.kotlinconf.android.ui.components.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
+import org.jetbrains.kotlinconf.Agenda
+import org.jetbrains.kotlinconf.Day
+import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.ui.components.AgendaDayHeader
+import org.jetbrains.kotlinconf.ui.components.AgendaItem
+import org.jetbrains.kotlinconf.ui.components.AgendaTimeSlotHeader
+import org.jetbrains.kotlinconf.ui.components.Break
+import org.jetbrains.kotlinconf.ui.components.Party
 
 @Composable
 fun AgendaView(agenda: Agenda, controller: AppController) {
@@ -57,8 +70,8 @@ private fun LazyListScope.SessionsList(
                         duration = slot.duration,
                         title = slot.title,
                         isLive = slot.isLive,
-                        icon = R.drawable.lunch,
-                        icon_live = R.drawable.lunch_active
+                        icon = "lunch",
+                        icon_live = "lunch_active"
                     )
                 }
             }

@@ -1,13 +1,13 @@
 package org.jetbrains.kotlinconf.android
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import com.jetbrains.kotlinconf.R
+import moe.tlaster.precompose.lifecycle.PreComposeActivity
+import moe.tlaster.precompose.lifecycle.setContent
 import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.App
 import org.jetbrains.kotlinconf.storage.ApplicationContext
 
-class MainActivity : ComponentActivity() {
+class MainActivity : PreComposeActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

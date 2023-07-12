@@ -1,15 +1,23 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
-import androidx.compose.ui.unit.*
-import com.jetbrains.kotlinconf.R
-import org.jetbrains.kotlinconf.android.theme.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.android.theme.divider
+import org.jetbrains.kotlinconf.android.theme.grey50
+import org.jetbrains.kotlinconf.android.theme.greyWhite
 
 @Composable
 fun HDivider(modifier: Modifier = Modifier) {
@@ -49,28 +57,28 @@ fun ColumnScope.SheetBar() {
     ) {}
 }
 
-internal fun LogoForName(name: String): Int = when (name) {
-    "android" -> R.drawable.android_google_big
-    "google" -> R.drawable.android_google_big
-    "xebia" -> R.drawable.xebia_big
-    "kodein" -> R.drawable.kodein_koders_big
-    "lunatech" -> R.drawable.lunatech_big
-    "gradle" -> R.drawable.gradle_big
-    "source" -> R.drawable.source_technology_big
-    "aws" -> R.drawable.aws_big
-    "sentry" -> R.drawable.sentry_big
-    "adyen" -> R.drawable.adyen_big
-    "jetbrains" -> R.drawable.jetbrains_big
-    "grote zaal" -> R.drawable.grote_zaal
-    "beursfoyer" -> R.drawable.beursfoyer
-    "store" -> R.drawable.merchandise_store
-    "graanbeurszaal" -> R.drawable.graanbeurszaal
-    "effectenbeurszaal" -> R.drawable.effectenbeurszaal
-    "loundge" -> R.drawable.lounge_2
-    "administratiezaal" -> R.drawable.administratiezaal
-    "veilingzaal" -> R.drawable.veilingzaal
-    "berlage zaal" -> R.drawable.berlage_zaal
-    "mendes da costa" -> R.drawable.mendes_da_costa
-    "verwey kamer" -> R.drawable.verwey_kamer
-    else -> R.drawable.time
+internal fun LogoForName(name: String): String = when (name) {
+    "android" -> "android_google_big"
+    "google" -> "android_google_big"
+    "xebia" -> "xebia_big"
+    "kodein" -> "kodein_koders_big"
+    "lunatech" -> "lunatech_big"
+    "gradle" -> "gradle_big"
+    "source" -> "source_technology_big"
+    "aws" -> "aws_big"
+    "sentry" -> "sentry_big"
+    "adyen" -> "adyen_big"
+    "jetbrains" -> "jetbrains_big"
+    "grote zaal" -> "grote_zaal"
+    "beursfoyer" -> "beursfoyer"
+    "store" -> "merchandise_store"
+    "graanbeurszaal" -> "graanbeurszaal"
+    "effectenbeurszaal" -> "effectenbeurszaal"
+    "loundge" -> "lounge_2"
+    "administratiezaal" -> "administratiezaal"
+    "veilingzaal" -> "veilingzaal"
+    "berlage zaal" -> "berlage_zaal"
+    "mendes da costa" -> "mendes_da_costa"
+    "verwey kamer" -> "verwey_kamer"
+    else -> "time"
 }

@@ -1,51 +1,43 @@
-package org.jetbrains.kotlinconf.android.ui.components
+package org.jetbrains.kotlinconf.ui.components
 
-import androidx.annotation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.res.*
-import androidx.compose.ui.tooling.preview.*
-import androidx.navigation.*
-import androidx.navigation.compose.*
-import com.jetbrains.kotlinconf.R
+import moe.tlaster.precompose.navigation.NavHost
+import moe.tlaster.precompose.navigation.Navigator
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.android.theme.*
 
 class TabItem(
     val name: String,
-    @DrawableRes val icon: Int,
-    @DrawableRes val selectedIcon: Int,
+    val icon: String,
+    val selectedIcon: String,
     val view: @Composable () -> Unit
 )
 
 @Composable
-fun TabsView(controller: NavHostController, vararg items: TabItem) {
+fun TabsView(navigator: Navigator, vararg items: TabItem) {
     Scaffold(bottomBar = {
         BottomNavigation(
             backgroundColor = MaterialTheme.colors.whiteBlack,
             contentColor = MaterialTheme.colors.blackWhite,
         ) {
-            val route = controller.currentBackStackEntryAsState()
-                .value?.destination?.route
-
             items.forEach {
-                BottomButton(
-                    controller = controller,
-                    tab = it,
-                    isSelected = route == it.name
-                )
+                BottomButton(navigator, tab = it, isSelected = false) // todo
             }
         }
     }) {
         NavHost(
-            navController = controller,
-            startDestination = items[0].name,
+            navigator = navigator,
+            initialRoute = items[0].name,
             modifier = Modifier.padding(it)
         ) {
+
             items.forEach { tab ->
-                composable(tab.name) {
+                scene(tab.name) {
                     tab.view()
                 }
             }
@@ -53,50 +45,32 @@ fun TabsView(controller: NavHostController, vararg items: TabItem) {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun RowScope.BottomButton(
-    controller: NavController,
+    navigator: Navigator,
     tab: TabItem,
     isSelected: Boolean
 ) {
     val background =
-        if (isSelected) MaterialTheme.colors.grey5Grey else MaterialTheme.colors.whiteBlack
+        if (isSelected) {
+            MaterialTheme.colors.grey5Grey
+        } else {
+            MaterialTheme.colors.whiteBlack
+        }
     BottomNavigationItem(
         modifier = Modifier.background(background),
         selected = isSelected,
         onClick = onClick@{
             if (isSelected) return@onClick
-            controller.backQueue.clear()
-            controller.navigate(tab.name)
+            navigator.navigate(tab.name)
         },
         icon = {
             Icon(
-                painterResource(id = if (isSelected) tab.selectedIcon else tab.icon),
+                painterResource(if (isSelected) tab.selectedIcon else tab.icon),
                 tab.name,
                 tint = if (isSelected) MaterialTheme.colors.blackWhite else grey50
             )
         },
     )
-}
-
-@Preview
-@Composable
-internal fun TabsPreview() {
-    KotlinConfTheme {
-        TabsView(
-            rememberNavController(),
-            TabItem("agenda", R.drawable.time, R.drawable.time_active) {
-                Text("Agenda")
-            },
-            TabItem("speakers", R.drawable.speakers, R.drawable.speakers_active) {
-                Text("Speakers")
-            },
-            TabItem("Bookmarks", R.drawable.mytalks, R.drawable.mytalks_active) {
-                Text("Bookmarks")
-            },
-            TabItem("Map", R.drawable.location, R.drawable.location_active) {
-                Text("Map")
-            }
-        )
-    }
 }
