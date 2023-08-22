@@ -9,7 +9,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.android.theme.*
+import org.jetbrains.kotlinconf.theme.*
 
 private val PARTNER_LOGOS = mapOf(
     "android" to "andorid",
@@ -94,7 +94,7 @@ private fun PartnerCard(
                 .height(56.dp)
         ) {
             Image(
-                painter = painterResource(logo),
+                painter = painterResource("$logo.xml"),
                 contentDescription = "image"
             )
             Spacer(modifier = Modifier.weight(1f))

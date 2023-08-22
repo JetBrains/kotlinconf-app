@@ -5,7 +5,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import org.jetbrains.kotlinconf.android.theme.violet
+import org.jetbrains.kotlinconf.theme.violet
 
 val MOBILE_APP_DESCRIPTION = buildAnnotatedString {
     append("The KotlinConf application is developed by the JetBrains team with Kotlin Multiplatform Mobile shared logic, Compose on Android, and Swift UI on iOS. Check out the ")

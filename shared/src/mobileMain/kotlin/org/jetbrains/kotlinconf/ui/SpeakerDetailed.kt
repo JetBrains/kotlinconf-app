@@ -11,10 +11,8 @@ import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.android.*
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
 import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.theme.*
 import org.jetbrains.kotlinconf.ui.components.AWSLab
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 import org.jetbrains.kotlinconf.ui.components.CodeLab
@@ -209,7 +207,7 @@ private fun SessionCardCompact(
                 IconButton(onClick = {
                     onFavoriteClick()
                 }) {
-                    val icon = if (favorite) "bookmark_active" else "bookmark"
+                    val icon = if (favorite) "bookmark_active.xml" else "bookmark.xml"
                     Icon(
                         painter = painterResource(icon),
                         contentDescription = "bookmark",

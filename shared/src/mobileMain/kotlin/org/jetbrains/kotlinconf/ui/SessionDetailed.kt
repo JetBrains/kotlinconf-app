@@ -8,10 +8,8 @@ import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.android.*
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
 import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.theme.*
 import org.jetbrains.kotlinconf.ui.components.AWSLab
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 import org.jetbrains.kotlinconf.ui.components.CodeLab
@@ -34,9 +32,9 @@ fun SessionDetailed(
     isAWS: Boolean,
     controller: AppController
 ) {
-    val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = BottomSheetState(BottomSheetValue.Expanded)
-    )
+//    val scaffoldState = rememberBottomSheetScaffoldState(
+//        bottomSheetState = BottomSheetState(BottomSheetValue.Expanded)
+//    )
     var showFeedbackBlock by remember { mutableStateOf(false) }
 
     val session = @Composable {
@@ -82,7 +80,7 @@ fun SessionDetailed(
             },
             sheetPeekHeight = 100.dp,
             sheetBackgroundColor = MaterialTheme.colors.whiteGrey,
-            scaffoldState = scaffoldState
+//            scaffoldState = scaffoldState
         ) {
             session()
         }
@@ -179,7 +177,7 @@ private fun FavoriteButton(isFavorite: Boolean, favoriteClick: () -> Unit) {
     IconButton(onClick = favoriteClick) {
 //        val icon = if (isFavorite) R.drawable.bookmark_active else R.drawable.bookmark
 //        Icon(
-//            painter = painterResource(id = icon),
+//            painter =painterResource(id = icon),
 //            contentDescription = "favorite",
 //            tint = if (isFavorite) orange else MaterialTheme.colors.greyGrey5
 //        )

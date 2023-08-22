@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -10,15 +10,14 @@ import androidx.compose.ui.geometry.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.android.*
-import org.jetbrains.kotlinconf.android.theme.*
 import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.ui.HDivider
-import org.jetbrains.kotlinconf.ui.NavigationBar
+import org.jetbrains.kotlinconf.theme.subtitle
+import org.jetbrains.kotlinconf.theme.title
+import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 
 @Composable
-fun Speakers(speakers: List<Speaker>, controller: AppController) {
+fun SpeakersView(speakers: List<Speaker>, controller: AppController) {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
         NavigationBar(
             title = "Speakers",

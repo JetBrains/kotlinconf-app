@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.android.theme
+package org.jetbrains.kotlinconf.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

@@ -14,10 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
-import org.jetbrains.kotlinconf.android.theme.divider
-import org.jetbrains.kotlinconf.android.theme.grey50
-import org.jetbrains.kotlinconf.android.theme.greyWhite
+import org.jetbrains.kotlinconf.theme.divider
+import org.jetbrains.kotlinconf.theme.grey50
+import org.jetbrains.kotlinconf.theme.greyWhite
+import org.jetbrains.kotlinconf.theme.t2
 
 @Composable
 fun HDivider(modifier: Modifier = Modifier) {
@@ -81,4 +81,4 @@ internal fun LogoForName(name: String): String = when (name) {
     "mendes da costa" -> "mendes_da_costa"
     "verwey kamer" -> "verwey_kamer"
     else -> "time"
-}
+} + ".xml"

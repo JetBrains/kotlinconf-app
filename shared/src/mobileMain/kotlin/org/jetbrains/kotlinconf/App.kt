@@ -1,14 +1,13 @@
-package org.jetbrains.kotlinconf.org.jetbrains.kotlinconf
+package org.jetbrains.kotlinconf
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import org.jetbrains.kotlinconf.ConferenceService
-import org.jetbrains.kotlinconf.android.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.android.ui.MainScreen
 import org.jetbrains.kotlinconf.storage.ApplicationContext
+import org.jetbrains.kotlinconf.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.ui.MainScreen
 
 @Composable
 fun App(context: ApplicationContext) {

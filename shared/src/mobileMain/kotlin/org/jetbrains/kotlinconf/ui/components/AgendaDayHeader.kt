@@ -6,8 +6,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.ui.*
+import org.jetbrains.kotlinconf.theme.*
+import org.jetbrains.kotlinconf.ui.*
 import org.jetbrains.kotlinconf.ui.HDivider
 import org.jetbrains.kotlinconf.ui.VDivider
 

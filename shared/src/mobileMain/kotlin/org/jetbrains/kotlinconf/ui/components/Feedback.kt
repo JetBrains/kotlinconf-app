@@ -13,8 +13,7 @@ import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.theme.*
 
 @Composable
 fun VoteAndFeedback(
@@ -123,7 +122,7 @@ fun FeedbackForm(onSend: (String) -> Unit, onClose: () -> Unit) {
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = { onClose() }, Modifier.padding(4.dp)) {
                 Icon(
-                    painter = painterResource("close"),
+                    painter = painterResource("close.xml"),
                     contentDescription = "Close",
                     tint = MaterialTheme.colors.greyGrey5
                 )
@@ -170,8 +169,9 @@ fun VoteButton(
     onVote: (Score?) -> Unit
 ) {
     IconButton(onClick = { onVote(if (active) null else vote) }) {
+        val iconName = if (active) activeIcon else icon
         Icon(
-            painter = painterResource(if (active) activeIcon else icon),
+            painter = painterResource("$iconName.xml"),
             contentDescription = vote.toString(),
             tint = MaterialTheme.colors.greyWhite
         )

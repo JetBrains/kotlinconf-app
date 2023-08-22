@@ -11,8 +11,7 @@ import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.theme.*
 
 @Composable
 fun WelcomeScreen(
@@ -74,7 +73,7 @@ private fun PrivacyPolicy(
     }) {
         Column(Modifier.fillMaxWidth()) {
             Image(
-                painter = painterResource("privacy"),
+                painter = painterResource("privacy.xml"),
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -213,7 +212,7 @@ private fun Notifications(onAcceptNotifications: () -> Unit, onClose: () -> Unit
     }) {
         Column(Modifier.fillMaxWidth()) {
             Image(
-                painter = painterResource("notifications"),
+                painter = painterResource("notifications.xml"),
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)

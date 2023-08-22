@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.android.theme
+package org.jetbrains.kotlinconf.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Colors
@@ -110,7 +110,7 @@ fun KotlinConfTheme(
 
     MaterialTheme(
         colors = colors,
-        typography = Fonts.Typography,
+        typography = Typography,
         shapes = Shapes,
         content = content
     )

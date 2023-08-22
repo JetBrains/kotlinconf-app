@@ -18,11 +18,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
-import org.jetbrains.kotlinconf.android.theme.grey5Black
-import org.jetbrains.kotlinconf.android.theme.greyGrey20
-import org.jetbrains.kotlinconf.android.theme.greyGrey5
-import org.jetbrains.kotlinconf.android.theme.whiteGrey
+import org.jetbrains.kotlinconf.theme.t2
+import org.jetbrains.kotlinconf.theme.grey5Black
+import org.jetbrains.kotlinconf.theme.greyGrey20
+import org.jetbrains.kotlinconf.theme.greyGrey5
+import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
 
 @Composable

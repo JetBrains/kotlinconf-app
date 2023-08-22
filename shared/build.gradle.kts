@@ -26,17 +26,17 @@ kotlin {
             isStatic = true
         }
         extraSpecAttributes["resources"] =
-            "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
+            "['src/commonMain/resources/**', 'src/iosMain/resources/**', 'src/mobileMain/resources/**']"
     }
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api("io.ktor:ktor-client-logging:2.3.1")
-                api("io.ktor:ktor-serialization-kotlinx-json:2.3.1")
-                api("io.ktor:ktor-client-content-negotiation:2.3.1")
-                api("io.ktor:ktor-client-cio:2.3.1")
-                api("io.ktor:ktor-utils:2.3.1")
+                api("io.ktor:ktor-client-logging:2.3.3")
+                api("io.ktor:ktor-serialization-kotlinx-json:2.3.3")
+                api("io.ktor:ktor-client-content-negotiation:2.3.3")
+                api("io.ktor:ktor-client-cio:2.3.3")
+                api("io.ktor:ktor-utils:2.3.3")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
             }
         }
@@ -78,6 +78,8 @@ kotlin {
                 implementation("androidx.preference:preference:1.2.0")
                 implementation("androidx.work:work-runtime-ktx:2.7.1")
             }
+
+            resources.srcDirs("src/commonMain/resources", "src/mobileMain/resources")
         }
 
         val iosX64Main by getting
@@ -102,8 +104,16 @@ android {
     compileSdk = (findProperty("android.compileSdk") as String).toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].res.srcDirs("src/androidMain/res")
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+    sourceSets["main"].resources.srcDirs(
+        "src/commonMain/resources",
+        "src/mobileMain/resources"
+    )
+    sourceSets["main"].res.srcDirs(
+        "src/androidMain/res",
+        "src/commonMain/resources",
+        "src/mobileMain/resources"
+    )
+
 
     defaultConfig {
         minSdk = (findProperty("android.minSdk") as String).toInt()

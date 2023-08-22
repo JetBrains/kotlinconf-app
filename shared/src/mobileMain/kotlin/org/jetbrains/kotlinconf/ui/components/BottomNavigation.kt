@@ -9,7 +9,7 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.android.theme.*
+import org.jetbrains.kotlinconf.theme.*
 
 class TabItem(
     val name: String,

@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -9,9 +9,6 @@ import androidx.compose.runtime.setValue
 import moe.tlaster.precompose.navigation.rememberNavigator
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.withAppController
-import org.jetbrains.kotlinconf.ui.AgendaView
-import org.jetbrains.kotlinconf.ui.Menu
-import org.jetbrains.kotlinconf.ui.WelcomeScreen
 import org.jetbrains.kotlinconf.ui.components.TabItem
 import org.jetbrains.kotlinconf.ui.components.TabsView
 
@@ -57,7 +54,7 @@ fun MainScreen(service: ConferenceService) {
                     AgendaView(agenda, it)
                 },
                 TabItem("speakers", "speakers.xml", "speakers_active.xml") {
-                    Speakers(controller = it, speakers = speakers.all)
+                    SpeakersView(controller = it, speakers = speakers.all)
                 },
                 TabItem("Bookmarks", "mytalks.xml", "mytalks_active.xml") {
                     Bookmarks(favoriteSessions, it)

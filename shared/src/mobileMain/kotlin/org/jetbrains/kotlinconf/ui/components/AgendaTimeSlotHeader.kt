@@ -22,11 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
-import org.jetbrains.kotlinconf.android.theme.agendaHeaderColor
-import org.jetbrains.kotlinconf.android.theme.grey20Grey80
-import org.jetbrains.kotlinconf.android.theme.greyGrey5
-import org.jetbrains.kotlinconf.android.theme.orange
+import org.jetbrains.kotlinconf.theme.t2
+import org.jetbrains.kotlinconf.theme.agendaHeaderColor
+import org.jetbrains.kotlinconf.theme.grey20Grey80
+import org.jetbrains.kotlinconf.theme.greyGrey5
+import org.jetbrains.kotlinconf.theme.orange
 import org.jetbrains.kotlinconf.ui.HDivider
 
 

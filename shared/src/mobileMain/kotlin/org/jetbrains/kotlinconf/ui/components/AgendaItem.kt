@@ -9,11 +9,8 @@ import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
-import org.jetbrains.kotlinconf.android.ui.*
-import org.jetbrains.kotlinconf.ui.HDivider
-import org.jetbrains.kotlinconf.ui.VoteAndFeedback
+import org.jetbrains.kotlinconf.theme.*
+import org.jetbrains.kotlinconf.ui.*
 
 
 @OptIn(ExperimentalResourceApi::class)
@@ -71,7 +68,7 @@ fun AgendaItem(
                 IconButton(onClick = {
                     onFavoriteClick()
                 }) {
-                    val icon = if (isFavorite) "bookmark_active" else "bookmark"
+                    val icon = if (isFavorite) "bookmark_active.xml" else "bookmark.xml"
                     Icon(
                         painter = painterResource(icon),
                         contentDescription = "bookmark",

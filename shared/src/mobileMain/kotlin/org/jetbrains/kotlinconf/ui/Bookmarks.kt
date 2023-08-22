@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.android.ui
+package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -9,15 +9,10 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.android.*
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.Score
+import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.ui.HDivider
-import org.jetbrains.kotlinconf.ui.LocationRow
-import org.jetbrains.kotlinconf.ui.TabBar
-import org.jetbrains.kotlinconf.ui.VoteAndFeedback
+import org.jetbrains.kotlinconf.theme.*
 
 @Composable
 fun Bookmarks(
@@ -148,7 +143,7 @@ private fun UpcomingCard(
                 onBookmarkClick()
             }) {
                 Icon(
-                    painter = painterResource("bookmark_active"),
+                    painter = painterResource("bookmark_active.xml"),
                     contentDescription = "bookmark",
                     tint = orange
                 )
@@ -219,7 +214,7 @@ private fun FinishedCard(
                 onBookmarkClick()
             }) {
                 Icon(
-                    painter = painterResource("bookmark_active"),
+                    painter = painterResource("bookmark_active.xml"),
                     contentDescription = "bookmark",
                     tint = orange
                 )

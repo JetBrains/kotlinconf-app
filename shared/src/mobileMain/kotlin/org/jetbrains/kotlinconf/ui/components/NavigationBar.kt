@@ -8,8 +8,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.theme.*
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -34,7 +33,7 @@ fun NavigationBar(
             if (isLeftVisible) {
                 IconButton(onClick = onLeftClick) {
                     Icon(
-                        painter = painterResource("back"),
+                        painter = painterResource("back.xml"),
                         "Back",
                         tint = MaterialTheme.colors.greyGrey5
                     )
@@ -68,7 +67,7 @@ fun NavigationBar(
 fun RightButton(rightIcon: String = "menu", onRightClick: () -> Unit) {
     IconButton(onClick = onRightClick) {
         Icon(
-            painter = painterResource(rightIcon),
+            painter = painterResource("$rightIcon.xml"),
             "Right",
             tint = MaterialTheme.colors.greyGrey5
         )

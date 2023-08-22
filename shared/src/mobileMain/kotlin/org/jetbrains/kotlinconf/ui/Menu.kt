@@ -10,10 +10,9 @@ import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.android.*
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.theme.*
 
 @Composable
 fun Menu(controller: AppController) {
@@ -90,7 +89,7 @@ private fun MenuLogo() {
             .background(MaterialTheme.colors.grey5Black)
     ) {
         Image(
-            painter = painterResource("menu_logo"),
+            painter = painterResource("menu_logo.xml"),
             contentDescription = "logo",
             modifier = Modifier.padding(16.dp)
         )
@@ -105,6 +104,7 @@ private fun BigItem(
     icon: String,
     onClick: () -> Unit = {}
 ) {
+    val iconName = "$icon.xml"
     Column(
         Modifier
             .background(MaterialTheme.colors.whiteGrey)
@@ -124,7 +124,7 @@ private fun BigItem(
         Row(Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.weight(1f))
             Icon(
-                painter = painterResource(icon),
+                painter = painterResource(iconName),
                 contentDescription = title,
                 tint = grey50,
                 modifier = Modifier
@@ -155,7 +155,7 @@ private fun MenuItem(text: String, icon: String, onClick: () -> Unit = {}) {
 
         Spacer(modifier = Modifier.weight(1f))
         Icon(
-            painter = painterResource(icon),
+            painter = painterResource("$icon.xml"),
             contentDescription = "icon",
             tint = MaterialTheme.colors.greyGrey5,
             modifier = Modifier.padding(16.dp)

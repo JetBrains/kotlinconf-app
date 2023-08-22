@@ -38,15 +38,15 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.Speaker
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
-import org.jetbrains.kotlinconf.android.theme.grey50
-import org.jetbrains.kotlinconf.android.theme.grey5Black
-import org.jetbrains.kotlinconf.android.theme.grey5Grey90
-import org.jetbrains.kotlinconf.android.theme.greyWhite
-import org.jetbrains.kotlinconf.android.theme.violet
-import org.jetbrains.kotlinconf.android.theme.white
-import org.jetbrains.kotlinconf.android.theme.whiteGrey
 import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.theme.grey50
+import org.jetbrains.kotlinconf.theme.grey5Black
+import org.jetbrains.kotlinconf.theme.grey5Grey90
+import org.jetbrains.kotlinconf.theme.greyWhite
+import org.jetbrains.kotlinconf.theme.t2
+import org.jetbrains.kotlinconf.theme.violet
+import org.jetbrains.kotlinconf.theme.white
+import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 
 data class SessionSearchData(

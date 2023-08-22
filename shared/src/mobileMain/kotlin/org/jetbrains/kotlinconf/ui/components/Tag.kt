@@ -11,8 +11,7 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.theme.*
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -22,6 +21,7 @@ fun Tag(
     dimmed: Boolean = false,
     iconColor: Color = orange,
 ) {
+    val iconName = "$icon.xml"
     Row(
         modifier = Modifier
             .background(
@@ -31,7 +31,7 @@ fun Tag(
             .alpha(if (dimmed) 0.5f else 1f),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(painter = painterResource(icon), contentDescription = null, tint = iconColor,
+        Icon(painter = painterResource(iconName), contentDescription = null, tint = iconColor,
             modifier = Modifier
                 .padding(start = 4.dp)
                 .size(16.dp)

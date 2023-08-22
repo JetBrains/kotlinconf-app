@@ -14,8 +14,14 @@ import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
+import org.jetbrains.kotlinconf.theme.grey50
+import org.jetbrains.kotlinconf.theme.grey5Black
+import org.jetbrains.kotlinconf.theme.greyGrey20
+import org.jetbrains.kotlinconf.theme.greyWhite
+import org.jetbrains.kotlinconf.theme.orange
+import org.jetbrains.kotlinconf.theme.t2
+import org.jetbrains.kotlinconf.theme.violet
+import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 
 @Composable
@@ -47,7 +53,7 @@ fun AboutConf(keynoteSpeakers: List<Speaker>, secondDaySpeakers: List<Speaker>, 
 @Composable
 private fun Logo() {
     Image(
-        painter = painterResource("about"),
+        painter = painterResource("about.xml"),
         contentDescription = null,
         modifier = Modifier
             .fillMaxWidth()
@@ -214,7 +220,7 @@ private fun Labs() {
         HDivider(Modifier.padding(top = 48.dp))
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = painterResource("light"),
+                painter = painterResource("light.xml"),
                 contentDescription = null,
                 tint = orange,
                 modifier = Modifier.padding(end = 8.dp)
@@ -239,7 +245,7 @@ private fun Labs() {
 
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = painterResource("aws_labs"),
+                painter = painterResource("aws_labs.xml"),
                 contentDescription = null,
                 tint = violet,
                 modifier = Modifier.padding(end = 8.dp)
@@ -299,7 +305,7 @@ private fun ClosingPanel() {
         )
 
         Image(
-            painter = painterResource("closing"), contentDescription = null,
+            painter = painterResource("closing.xml"), contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth(),
             contentScale = ContentScale.Crop,

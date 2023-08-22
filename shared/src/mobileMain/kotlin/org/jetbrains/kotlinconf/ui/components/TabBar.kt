@@ -14,10 +14,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
-import org.jetbrains.kotlinconf.android.theme.grey50
-import org.jetbrains.kotlinconf.android.theme.greyWhite
-import org.jetbrains.kotlinconf.android.theme.whiteGrey
+import org.jetbrains.kotlinconf.theme.t2
+import org.jetbrains.kotlinconf.theme.grey50
+import org.jetbrains.kotlinconf.theme.greyWhite
+import org.jetbrains.kotlinconf.theme.whiteGrey
 
 @Composable
 fun TabBar(

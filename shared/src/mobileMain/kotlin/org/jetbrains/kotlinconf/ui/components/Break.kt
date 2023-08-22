@@ -9,11 +9,8 @@ import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.android.theme.*
-import org.jetbrains.kotlinconf.android.theme.Fonts.t2
-import org.jetbrains.kotlinconf.android.ui.*
-import org.jetbrains.kotlinconf.ui.HDivider
-import org.jetbrains.kotlinconf.ui.VDivider
+import org.jetbrains.kotlinconf.theme.*
+import org.jetbrains.kotlinconf.ui.*
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -59,8 +56,9 @@ fun Break(
                 color = MaterialTheme.colors.greyWhite
             )
             Spacer(modifier = Modifier.weight(1f))
+            val iconName = if (isLive) icon_live else icon
             Icon(
-                painter = painterResource(if (isLive) icon_live else icon),
+                painter = painterResource("$iconName.xml"),
                 contentDescription = "icon",
                 tint = if (isLive) orange.copy(alpha = transparency) else grey50
             )
