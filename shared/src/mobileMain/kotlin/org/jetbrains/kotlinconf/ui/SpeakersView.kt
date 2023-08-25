@@ -71,7 +71,7 @@ private fun SpeakerCard(
                     modifier = Modifier
                         .size(85.dp)
                         .padding(0.dp),
-                    model = photoUrl,
+                    imageUrl = photoUrl,
                     contentDescription = name,
                     contentScale = ContentScale.Crop,
                 )

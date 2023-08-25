@@ -193,7 +193,7 @@ private fun SpeakerPhotos(speakers: List<Speaker>, speakerClick: (String) -> Uni
                     .size(if (speakers.size < 3) 120.dp else 78.dp)
                     .padding(end = 8.dp)
                     .clickable { speakerClick(speaker.id) },
-                model = speaker.photoUrl,
+                imageUrl = speaker.photoUrl,
                 contentDescription = speaker.name,
                 contentScale = ContentScale.Crop,
             )

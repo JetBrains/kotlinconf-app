@@ -130,7 +130,7 @@ private fun SpeakerCard(name: String, photoUrl: String, position: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 0.dp, end = 0.dp),
-            model = photoUrl,
+            imageUrl = photoUrl,
             contentDescription = "Speaker photo",
             contentScale = ContentScale.FillWidth,
         )
@@ -186,7 +186,7 @@ private fun SecondDayKeynote(secondDaySpeakers: List<Speaker>) {
             modifier = Modifier
                 .fillMaxWidth(0.5f)
                 .padding(start = 0.dp, end = 0.dp),
-            model = speaker.photoUrl,
+            imageUrl = speaker.photoUrl,
             contentDescription = "Speaker photo",
             contentScale = ContentScale.FillWidth
         )

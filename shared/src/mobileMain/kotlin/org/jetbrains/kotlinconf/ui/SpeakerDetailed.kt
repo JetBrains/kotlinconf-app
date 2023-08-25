@@ -95,7 +95,7 @@ private fun SpeakerDetailed(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 0.dp, end = 0.dp),
-            model = photoUrl,
+            imageUrl = photoUrl,
             contentDescription = "Speaker photo",
             contentScale = ContentScale.FillWidth,
         )

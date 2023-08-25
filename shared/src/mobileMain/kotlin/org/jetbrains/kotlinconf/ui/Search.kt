@@ -384,7 +384,7 @@ private fun SpeakerSearchResult(
             .clickable { onClick() }) {
         Row {
             AsyncImage(
-                model = photoUrl,
+                imageUrl = photoUrl,
                 contentDescription = "avatar",
                 modifier = Modifier.size(60.dp)
             )
