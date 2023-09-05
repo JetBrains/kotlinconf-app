@@ -4,11 +4,11 @@ import kotlinx.coroutines.*
 import platform.darwin.*
 import kotlin.coroutines.CoroutineContext
 
-actual val Dispatchers.IO: CoroutineDispatcher
-    get() = IODispatcher
+actual val Dispatchers.App: CoroutineDispatcher
+    get() = AppDispatcher
 
 @OptIn(InternalCoroutinesApi::class)
-private object IODispatcher : CoroutineDispatcher(), Delay {
+private object AppDispatcher : CoroutineDispatcher(), Delay {
     override fun dispatch(context: CoroutineContext, block: Runnable) {
         val queue = dispatch_get_main_queue()
         dispatch_async(queue) {
