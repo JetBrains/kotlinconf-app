@@ -26,7 +26,7 @@ fun TabsView(navigator: Navigator, vararg items: TabItem) {
             contentColor = MaterialTheme.colors.blackWhite,
         ) {
             items.forEach {
-                BottomButton(navigator, tab = it, isSelected = false) // todo
+                BottomButton(navigator, tab = it, isSelected = false)
             }
         }
     }) {

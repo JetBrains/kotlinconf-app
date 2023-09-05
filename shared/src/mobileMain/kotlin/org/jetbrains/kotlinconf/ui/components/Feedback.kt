@@ -86,8 +86,7 @@ fun FeedbackForm(onSend: (String) -> Unit, onClose: () -> Unit) {
                     .fillMaxWidth()
                     .height(200.dp)
                     .onKeyEvent {
-                        // TODO
-//                        if (it.nativeKeyEvent.key != SkikoKey.KEY_ENTER) return@onKeyEvent false
+                        if (it.key != Key.Enter) return@onKeyEvent false
                         if (feedback.isNotEmpty()) onSend(feedback)
                         true
                     },

@@ -32,9 +32,6 @@ fun SessionDetailed(
     isAWS: Boolean,
     controller: AppController
 ) {
-//    val scaffoldState = rememberBottomSheetScaffoldState(
-//        bottomSheetState = BottomSheetState(BottomSheetValue.Expanded)
-//    )
     var showFeedbackBlock by remember { mutableStateOf(false) }
 
     val session = @Composable {

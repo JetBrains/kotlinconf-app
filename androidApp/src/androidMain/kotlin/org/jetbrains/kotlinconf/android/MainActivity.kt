@@ -15,9 +15,6 @@ class MainActivity : PreComposeActivity() {
             application,
             R.mipmap.ic_launcher,
         )
-//        fun addOnBackCallback(block: OnBackPressedCallback) {
-//            onBackPressedDispatcher.addCallback(this, block)
-//        }
 
         setContent {
             App(context)
