@@ -1,7 +1,8 @@
 package org.jetbrains.kotlinconf
 
-import io.ktor.util.date.*
-import org.jetbrains.kotlinconf.utils.*
+import io.ktor.util.date.GMTDate
+import org.jetbrains.kotlinconf.utils.dayAndMonth
+import org.jetbrains.kotlinconf.utils.time
 
 data class Agenda(
     val days: List<Day> = emptyList()

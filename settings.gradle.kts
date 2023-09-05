@@ -3,6 +3,7 @@ rootProject.name = "KotlinConf Mobile App"
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         google()
     }
@@ -26,12 +27,12 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        google()
         mavenCentral()
+        google()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 
 include(":androidApp")
 include(":shared")
-//include(":backend")
+include(":backend")

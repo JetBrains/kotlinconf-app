@@ -1,9 +1,12 @@
 package org.jetbrains.kotlinconf.storage
 
-import android.content.*
-import androidx.preference.*
+import android.content.Context
+import androidx.preference.PreferenceManager
+import org.jetbrains.kotlinconf.ApplicationContext
 
-actual fun ApplicationStorage(context: ApplicationContext): ApplicationStorage = AndroidStorage(context.application)
+actual fun ApplicationStorage(context: ApplicationContext): ApplicationStorage {
+    return AndroidStorage(context.application)
+}
 
 internal class AndroidStorage(
     context: Context

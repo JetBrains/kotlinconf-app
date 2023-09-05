@@ -1,6 +1,6 @@
-package org.jetbrains.kotlinconf.storage
+package org.jetbrains.kotlinconf
 
-import android.app.*
+import android.app.Application
 
 actual class ApplicationContext(
     val application: Application,

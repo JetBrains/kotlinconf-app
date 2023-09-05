@@ -5,7 +5,7 @@ import com.jetbrains.kotlinconf.R
 import moe.tlaster.precompose.lifecycle.PreComposeActivity
 import moe.tlaster.precompose.lifecycle.setContent
 import org.jetbrains.kotlinconf.App
-import org.jetbrains.kotlinconf.storage.ApplicationContext
+import org.jetbrains.kotlinconf.ApplicationContext
 
 class MainActivity : PreComposeActivity() {
 

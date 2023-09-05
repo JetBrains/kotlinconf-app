@@ -1,11 +1,11 @@
 package org.jetbrains.kotlinconf.storage
 
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
-import kotlin.properties.*
-import kotlin.reflect.*
-
-expect class ApplicationContext
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.jetbrains.kotlinconf.ApplicationContext
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 expect fun ApplicationStorage(context: ApplicationContext): ApplicationStorage
 

@@ -1,7 +1,6 @@
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    kotlin("native.cocoapods")
     id("com.android.library")
     id("org.jetbrains.compose")
 }
@@ -9,34 +8,29 @@ plugins {
 val precompose_version: String by project
 
 kotlin {
-    android()
+    androidTarget()
+    jvm()
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
-    cocoapods {
-        version = "1.0.0"
-        summary = "KotlinConf application shared module"
-        homepage = "https://kotlinconf.com/"
-        ios.deploymentTarget = "14.1"
-        podfile = project.file("../iosApp/Podfile")
-        framework {
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
             baseName = "shared"
             isStatic = true
         }
-        extraSpecAttributes["resources"] =
-            "['src/commonMain/resources/**', 'src/iosMain/resources/**', 'src/mobileMain/resources/**']"
     }
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api("io.ktor:ktor-client-logging:2.3.3")
-                api("io.ktor:ktor-serialization-kotlinx-json:2.3.3")
-                api("io.ktor:ktor-client-content-negotiation:2.3.3")
-                api("io.ktor:ktor-client-cio:2.3.3")
-                api("io.ktor:ktor-utils:2.3.3")
+                compileOnly(compose.runtime)
+                api("io.ktor:ktor-client-logging:2.3.4")
+                api("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
+                api("io.ktor:ktor-client-content-negotiation:2.3.4")
+                api("io.ktor:ktor-client-cio:2.3.4")
+                api("io.ktor:ktor-utils:2.3.4")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
             }
         }
@@ -70,13 +64,13 @@ kotlin {
             dependsOn(mobileMain)
 
             dependencies {
-                api("androidx.activity:activity-compose:1.6.1")
+                api("androidx.activity:activity-compose:1.7.2")
                 api("androidx.appcompat:appcompat:1.6.1")
-                api("androidx.core:core-ktx:1.9.0")
+                api("androidx.core:core-ktx:1.10.1")
 
                 implementation("androidx.core:core:1.10.1")
-                implementation("androidx.preference:preference:1.2.0")
-                implementation("androidx.work:work-runtime-ktx:2.7.1")
+                implementation("androidx.preference:preference:1.2.1")
+                implementation("androidx.work:work-runtime-ktx:2.8.1")
             }
 
             resources.srcDirs("src/commonMain/resources", "src/mobileMain/resources")
@@ -87,11 +81,12 @@ kotlin {
         val iosSimulatorArm64Main by getting
 
         val iosMain by creating {
+            dependsOn(mobileMain)
+
             dependencies {
-                implementation("io.ktor:ktor-client-ios:2.1.3")
+                implementation("io.ktor:ktor-client-ios:2.3.4")
             }
 
-            dependsOn(mobileMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
@@ -104,15 +99,8 @@ android {
     compileSdk = (findProperty("android.compileSdk") as String).toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].resources.srcDirs(
-        "src/commonMain/resources",
-        "src/mobileMain/resources"
-    )
-    sourceSets["main"].res.srcDirs(
-        "src/androidMain/res",
-        "src/commonMain/resources",
-        "src/mobileMain/resources"
-    )
+    sourceSets["main"].resources.srcDirs("src/mobileMain/resources")
+    sourceSets["main"].res.srcDirs("src/mobileMain/resources")
 
 
     defaultConfig {

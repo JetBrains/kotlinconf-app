@@ -1,8 +1,7 @@
 package org.jetbrains.kotlinconf.storage
 
-import platform.Foundation.*
-
-actual class ApplicationContext
+import org.jetbrains.kotlinconf.ApplicationContext
+import platform.Foundation.NSUserDefaults
 
 actual fun ApplicationStorage(context: ApplicationContext): ApplicationStorage = IosStorage()
 
