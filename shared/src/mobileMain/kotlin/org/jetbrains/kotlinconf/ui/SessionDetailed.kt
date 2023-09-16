@@ -8,6 +8,8 @@ import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.icons.Bookmark
+import org.jetbrains.kotlinconf.icons.Bookmarked
 import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.theme.*
 import org.jetbrains.kotlinconf.ui.components.AWSLab
@@ -172,12 +174,14 @@ private fun SessionHead(
 @Composable
 private fun FavoriteButton(isFavorite: Boolean, favoriteClick: () -> Unit) {
     IconButton(onClick = favoriteClick) {
-//        val icon = if (isFavorite) R.drawable.bookmark_active else R.drawable.bookmark
-//        Icon(
-//            painter =painterResource(id = icon),
-//            contentDescription = "favorite",
-//            tint = if (isFavorite) orange else MaterialTheme.colors.greyGrey5
-//        )
+        val icon = if (isFavorite) Bookmarked else Bookmark
+        Icon(
+            imageVector = icon,
+            contentDescription = "Bookmark",
+            tint = if (isFavorite) orange else MaterialTheme.colors.greyGrey5,
+            modifier = Modifier.size(24.dp)
+        )
+
     }
 }
 
