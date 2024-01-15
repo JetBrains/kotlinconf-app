@@ -1,11 +1,11 @@
-plugins {
-    kotlin("multiplatform")
-    kotlin("plugin.serialization")
-    id("com.android.library")
-    id("org.jetbrains.compose")
-}
+import org.jetbrains.compose.ExperimentalComposeLibrary
 
-val precompose_version: String by project
+plugins {
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinSerialization)
+}
 
 kotlin {
     androidTarget()
@@ -44,14 +44,14 @@ kotlin {
         val mobileMain by creating {
             dependsOn(commonMain)
             dependencies {
-                implementation(compose.runtime)
-                implementation(compose.foundation)
+                api(compose.runtime)
+                api(compose.foundation)
                 api(compose.animation)
-                implementation(compose.material)
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
+                api(compose.material)
+                @OptIn(ExperimentalComposeLibrary::class)
+                api(compose.components.resources)
 
-                api("moe.tlaster:precompose:$precompose_version")
+                api(libs.precompose)
             }
         }
 
@@ -64,13 +64,16 @@ kotlin {
             dependsOn(mobileMain)
 
             dependencies {
-                api("androidx.activity:activity-compose:1.7.2")
-                api("androidx.appcompat:appcompat:1.6.1")
-                api("androidx.core:core-ktx:1.10.1")
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material)
+                implementation(compose.ui)
+                @OptIn(ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
 
-                implementation("androidx.core:core:1.10.1")
-                implementation("androidx.preference:preference:1.2.1")
-                implementation("androidx.work:work-runtime-ktx:2.8.1")
+                implementation(libs.androidx.core.ktx)
+                implementation(libs.androidx.work.runtime)
+                implementation(libs.androidx.preference)
             }
 
             resources.srcDirs("src/commonMain/resources", "src/mobileMain/resources")
@@ -96,15 +99,15 @@ kotlin {
 
 android {
     namespace = "org.jetbrains.kotlinconf"
-    compileSdk = (findProperty("android.compileSdk") as String).toInt()
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].resources.srcDirs("src/mobileMain/resources")
     sourceSets["main"].res.srcDirs("src/mobileMain/resources")
 
-
     defaultConfig {
-        minSdk = (findProperty("android.minSdk") as String).toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
