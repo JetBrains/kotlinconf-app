@@ -1,10 +1,9 @@
 
 plugins {
-    kotlin("multiplatform").apply(false)
-    kotlin("jvm").apply(false)
-    kotlin("plugin.serialization").apply(false)
-
-    id("com.android.application").apply(false)
-    id("com.android.library").apply(false)
-    id("org.jetbrains.compose").apply(false)
+    alias(libs.plugins.androidApplication) apply false
+    alias(libs.plugins.androidLibrary) apply false
+    alias(libs.plugins.jetbrainsCompose) apply false
+    alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.kotlinSerialization) apply false
+    alias(libs.plugins.kotlinJvm) apply false
 }

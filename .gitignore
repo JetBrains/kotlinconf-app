@@ -27,4 +27,14 @@ Pods/
 *.db
 androidApp/src/main/res/values/strings.xml
 androidApp/release
-
+**/build/
+xcuserdata
+!src/**/build/
+captures
+.cxx
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+**/xcshareddata/WorkspaceSettings.xcsettings
