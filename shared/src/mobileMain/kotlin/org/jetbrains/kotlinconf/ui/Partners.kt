@@ -6,24 +6,29 @@ import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.theme.*
 
-private val PARTNER_LOGOS = mapOf(
-    "android" to "andorid",
-    "google" to "google",
-    "xebia" to "xebia",
-    "adyen" to "adyen",
-    "kodein" to "kodein_koders",
-    "lunatech" to "lunatech",
-    "gradle" to "gradle",
-    "source" to "source_technology",
-    "sentry" to "sentry",
-    "aws" to "aws",
-    "jetbrains" to "jetbrains"
-)
+private val PARTNER_LOGOS: Map<String, Painter> get() {
+    val mapping = mapOf(
+        "android" to "andorid",
+        "google" to "google",
+        "xebia" to "xebia",
+        "adyen" to "adyen",
+        "kodein" to "kodein_koders",
+        "lunatech" to "lunatech",
+        "gradle" to "gradle",
+        "source" to "source_technology",
+        "sentry" to "sentry",
+        "aws" to "aws",
+        "jetbrains" to "jetbrains"
+    )
+
+    TODO()
+}
 
 @Composable
 fun Partners(showPartner: (String) -> Unit, back: () -> Unit) {
@@ -74,13 +79,12 @@ fun TextTitle(value: String) {
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun PartnerCard(
     name: String,
     onClick: () -> Unit = {}
 ) {
-    val logo = PARTNER_LOGOS[name] ?: "time"
+    val logo = PARTNER_LOGOS[name] ?: Drawables.TIME_ICON
     Box(
         Modifier
             .background(MaterialTheme.colors.whiteGrey)
@@ -94,7 +98,7 @@ private fun PartnerCard(
                 .height(56.dp)
         ) {
             Image(
-                painter = painterResource("$logo.xml"),
+                painter = logo,
                 contentDescription = "image"
             )
             Spacer(modifier = Modifier.weight(1f))

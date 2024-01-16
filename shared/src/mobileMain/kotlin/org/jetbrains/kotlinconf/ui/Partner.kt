@@ -16,14 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.theme.t2
+import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey20
 import org.jetbrains.kotlinconf.theme.greyGrey5
+import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.whiteGrey
-import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
 
 @Composable
 fun Partner(controller: AppController, name: String, description: String) {
@@ -64,7 +62,6 @@ fun Partner(controller: AppController, name: String, description: String) {
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun Logo(name: String) {
     Box(
@@ -74,7 +71,7 @@ private fun Logo(name: String) {
             .height(176.dp)
     ) {
         Image(
-            painter = painterResource(LogoForName(name)),
+            painter = LogoForName(name),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.Center)

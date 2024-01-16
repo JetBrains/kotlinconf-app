@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.ui
+package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -6,14 +6,14 @@ import androidx.compose.foundation.text.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.focus.*
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.theme.*
+import org.jetbrains.kotlinconf.ui.HDivider
 
 @Composable
 fun VoteAndFeedback(
@@ -121,7 +121,7 @@ fun FeedbackForm(onSend: (String) -> Unit, onClose: () -> Unit) {
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = { onClose() }, Modifier.padding(4.dp)) {
                 Icon(
-                    painter = painterResource("close.xml"),
+                    painter = Drawables.CLOSE_ICON,
                     contentDescription = "Close",
                     tint = MaterialTheme.colors.greyGrey5
                 )
@@ -137,40 +137,38 @@ fun VoteBlock(vote: Score?, onVote: (Score?) -> Unit) {
         VoteButton(
             vote = Score.GOOD,
             active = vote == Score.GOOD,
-            icon = "smilehappy",
-            activeIcon = "smilehappy_active",
+            icon = Drawables.SMILE_HAPPY,
+            activeIcon = Drawables.SMILE_HAPPY_ACTIVE,
             onVote = onVote
         )
         VoteButton(
             vote = Score.OK,
             active = vote == Score.OK,
-            icon = "smileneutral",
-            activeIcon = "smileneutral_active",
+            icon = Drawables.SMILE_NEUTRAL,
+            activeIcon = Drawables.SMILE_NEUTRAL_ACTIVE,
             onVote = onVote
         )
         VoteButton(
             vote = Score.BAD,
             active = vote == Score.BAD,
-            icon = "smilesad",
-            activeIcon = "smilesad_active",
+            icon = Drawables.SMILE_SAD,
+            activeIcon = Drawables.SMILE_SAD_ACTIVE,
             onVote = onVote
         )
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun VoteButton(
     vote: Score,
     active: Boolean,
-    icon: String,
-    activeIcon: String,
+    icon: Painter,
+    activeIcon: Painter,
     onVote: (Score?) -> Unit
 ) {
     IconButton(onClick = { onVote(if (active) null else vote) }) {
-        val iconName = if (active) activeIcon else icon
         Icon(
-            painter = painterResource("$iconName.xml"),
+            painter = if (active) activeIcon else icon,
             contentDescription = vote.toString(),
             tint = MaterialTheme.colors.greyWhite
         )

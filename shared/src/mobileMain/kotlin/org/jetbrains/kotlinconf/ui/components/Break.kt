@@ -6,20 +6,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.theme.*
 import org.jetbrains.kotlinconf.ui.*
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Break(
     duration: String,
     title: String,
     isLive: Boolean,
-    icon: String = "cup",
-    icon_live: String = "cup_active",
+    icon: Painter = Drawables.CUP_ICON,
+    liveIcon: Painter = Drawables.CUP_ACTIVE_ICON
 ) {
     val transition = rememberInfiniteTransition()
     val transparency by transition.animateFloat(
@@ -56,9 +55,8 @@ fun Break(
                 color = MaterialTheme.colors.greyWhite
             )
             Spacer(modifier = Modifier.weight(1f))
-            val iconName = if (isLive) icon_live else icon
             Icon(
-                painter = painterResource("$iconName.xml"),
+                painter = if (isLive) liveIcon else icon,
                 contentDescription = "icon",
                 tint = if (isLive) orange.copy(alpha = transparency) else grey50
             )

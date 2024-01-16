@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.Agenda
 import org.jetbrains.kotlinconf.Day
 import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.theme.Drawables
 import org.jetbrains.kotlinconf.ui.components.AgendaDayHeader
 import org.jetbrains.kotlinconf.ui.components.AgendaItem
 import org.jetbrains.kotlinconf.ui.components.AgendaTimeSlotHeader
@@ -70,8 +71,8 @@ private fun LazyListScope.SessionsList(
                         duration = slot.duration,
                         title = slot.title,
                         isLive = slot.isLive,
-                        icon = "lunch",
-                        icon_live = "lunch_active"
+                        icon = Drawables.LUNCH_ICON,
+                        liveIcon = Drawables.LUNCH_ACTIVE_ICON
                     )
                 }
             }

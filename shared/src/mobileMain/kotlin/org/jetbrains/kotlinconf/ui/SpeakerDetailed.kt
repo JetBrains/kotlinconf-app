@@ -207,9 +207,9 @@ private fun SessionCardCompact(
                 IconButton(onClick = {
                     onFavoriteClick()
                 }) {
-                    val icon = if (favorite) "bookmark_active.xml" else "bookmark.xml"
+                    val icon = if (favorite) Drawables.BOOKMARK_ACTIVE_ICON else Drawables.BOOKMARK_ICON
                     Icon(
-                        painter = painterResource(icon),
+                        painter = icon,
                         contentDescription = "bookmark",
                         tint = if (favorite) orange else MaterialTheme.colors.greyWhite
                     )

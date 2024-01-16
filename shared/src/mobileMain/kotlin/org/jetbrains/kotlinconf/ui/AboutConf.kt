@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
+import org.jetbrains.kotlinconf.theme.Drawables
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey20
@@ -53,7 +54,7 @@ fun AboutConf(keynoteSpeakers: List<Speaker>, secondDaySpeakers: List<Speaker>, 
 @Composable
 private fun Logo() {
     Image(
-        painter = painterResource("about.xml"),
+        painter = Drawables.ABOUT,
         contentDescription = null,
         modifier = Modifier
             .fillMaxWidth()
@@ -220,7 +221,7 @@ private fun Labs() {
         HDivider(Modifier.padding(top = 48.dp))
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = painterResource("light.xml"),
+                painter = Drawables.LIGHT_ICON,
                 contentDescription = null,
                 tint = orange,
                 modifier = Modifier.padding(end = 8.dp)
@@ -245,7 +246,7 @@ private fun Labs() {
 
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = painterResource("aws_labs.xml"),
+                painter = Drawables.AWS_LAB_ICON,
                 contentDescription = null,
                 tint = violet,
                 modifier = Modifier.padding(end = 8.dp)
@@ -305,7 +306,7 @@ private fun ClosingPanel() {
         )
 
         Image(
-            painter = painterResource("closing.xml"), contentDescription = null,
+            painter = Drawables.CLOSING_PANEL, contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth(),
             contentScale = ContentScale.Crop,

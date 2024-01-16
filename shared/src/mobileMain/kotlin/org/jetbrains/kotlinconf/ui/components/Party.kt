@@ -16,7 +16,7 @@ import org.jetbrains.kotlinconf.ui.*
 fun Party(isFinished: Boolean) {
     Column {
         Image(
-            painter = painterResource("party.xml"),
+            painter = Drawables.PARTY,
             contentDescription = "party",
             modifier = Modifier
                 .alpha(if (isFinished) 0.5f else 1f)

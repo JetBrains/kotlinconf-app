@@ -6,11 +6,11 @@ import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.theme.*
 
@@ -36,43 +36,43 @@ fun Menu(controller: AppController) {
                 Column {
                     MenuLogo()
                     HDivider()
-                    MenuItem(text = "Search", icon = "search") {
+                    MenuItem(text = "Search", icon = Drawables.SEARCH_ICON) {
                         controller.showSearch()
                     }
                     HDivider()
-                    MenuItem(text = "KotlinConf`23", icon = "arrow_right") {
+                    MenuItem(text = "KotlinConf`23", icon = Drawables.ARROW_RIGHT_ICON) {
                         controller.showAboutTheConf()
                     }
                     HDivider()
-                    MenuItem(text = "the app", icon = "arrow_right") {
+                    MenuItem(text = "the app", icon = Drawables.ARROW_RIGHT_ICON) {
                         controller.showAppInfo()
                     }
                     HDivider()
-                    MenuItem(text = "EXHIBITION", icon = "arrow_right") {
+                    MenuItem(text = "EXHIBITION", icon = Drawables.ARROW_RIGHT_ICON) {
                         controller.showPartners()
                     }
                     HDivider()
-                    MenuItem(text = "code of conduct", icon = "arrow_right") {
+                    MenuItem(text = "code of conduct", icon = Drawables.ARROW_RIGHT_ICON) {
                         controller.showCodeOfConduct()
                     }
                     HDivider()
-                    MenuItem(text = "Privacy policy", icon = "arrow_right") {
+                    MenuItem(text = "Privacy policy", icon = Drawables.ARROW_RIGHT_ICON) {
                         controller.showPrivacyPolicy()
                     }
                     HDivider()
-                    MenuItem(text = "TERMS OF USE", icon = "arrow_right") {
+                    MenuItem(text = "TERMS OF USE", icon = Drawables.ARROW_RIGHT_ICON) {
                         controller.showTerms()
                     }
                 }
             }
 
             item {
-                BigItem("Twitter", "#KOTLINCONF23", "twitter") {
+                BigItem("Twitter", "#KOTLINCONF23", Drawables.TWITTER) {
                     uriHandler.openUri("https://twitter.com/kotlinconf")
                 }
             }
             item {
-                BigItem("Slack Channel", "", "slack") {
+                BigItem("Slack Channel", "", Drawables.SLACK) {
                     uriHandler.openUri("https://kotlinlang.slack.com/messages/kotlinconf/")
                 }
             }
@@ -89,7 +89,7 @@ private fun MenuLogo() {
             .background(MaterialTheme.colors.grey5Black)
     ) {
         Image(
-            painter = painterResource("menu_logo.xml"),
+            painter = Drawables.MENU_LOGO,
             contentDescription = "logo",
             modifier = Modifier.padding(16.dp)
         )
@@ -101,10 +101,9 @@ private fun MenuLogo() {
 private fun BigItem(
     title: String,
     subtitle: String,
-    icon: String,
+    icon: Painter,
     onClick: () -> Unit = {}
 ) {
-    val iconName = "$icon.xml"
     Column(
         Modifier
             .background(MaterialTheme.colors.whiteGrey)
@@ -124,7 +123,7 @@ private fun BigItem(
         Row(Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.weight(1f))
             Icon(
-                painter = painterResource(iconName),
+                painter = icon,
                 contentDescription = title,
                 tint = grey50,
                 modifier = Modifier
@@ -137,7 +136,7 @@ private fun BigItem(
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-private fun MenuItem(text: String, icon: String, onClick: () -> Unit = {}) {
+private fun MenuItem(text: String, icon: Painter, onClick: () -> Unit = {}) {
     Row(
         Modifier
             .height(56.dp)
@@ -155,7 +154,7 @@ private fun MenuItem(text: String, icon: String, onClick: () -> Unit = {}) {
 
         Spacer(modifier = Modifier.weight(1f))
         Icon(
-            painter = painterResource("$icon.xml"),
+            painter = icon,
             contentDescription = "icon",
             tint = MaterialTheme.colors.greyGrey5,
             modifier = Modifier.padding(16.dp)
