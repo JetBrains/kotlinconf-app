@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.theme.divider
+import org.jetbrains.kotlinconf.theme.drawableResource
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.greyWhite
 import org.jetbrains.kotlinconf.theme.t2
@@ -86,5 +87,5 @@ internal fun LogoForName(name: String): Painter {
         else -> "time"
     } + ".xml"
 
-    TODO()
+    return drawableResource(iconName)
 }

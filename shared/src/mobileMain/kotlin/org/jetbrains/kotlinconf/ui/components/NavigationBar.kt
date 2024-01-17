@@ -11,13 +11,12 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.theme.*
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun NavigationBar(
     title: String,
     isLeftVisible: Boolean = true,
     isRightVisible: Boolean = true,
-    rightIcon: Painter = Drawables.MENU_ICON,
+    rightIcon: Painter = Icons.MENU,
     onLeftClick: () -> Unit = {},
     onRightClick: () -> Unit = {},
 ) {
@@ -34,7 +33,7 @@ fun NavigationBar(
             if (isLeftVisible) {
                 IconButton(onClick = onLeftClick) {
                     Icon(
-                        painter = Drawables.BACK_ICON,
+                        painter = Icons.BACK,
                         "Back",
                         tint = MaterialTheme.colors.greyGrey5
                     )
@@ -64,7 +63,7 @@ fun NavigationBar(
 }
 
 @Composable
-fun RightButton(rightIcon: Painter = Drawables.MENU_ICON, onRightClick: () -> Unit) {
+fun RightButton(rightIcon: Painter = Icons.MENU, onRightClick: () -> Unit) {
     IconButton(onClick = onRightClick) {
         Icon(
             painter = rightIcon,

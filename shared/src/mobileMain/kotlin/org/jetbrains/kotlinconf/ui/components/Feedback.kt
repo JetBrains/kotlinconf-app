@@ -1,18 +1,46 @@
 package org.jetbrains.kotlinconf.ui.components
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.input.key.*
-import androidx.compose.ui.text.input.*
-import androidx.compose.ui.unit.*
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.theme.*
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.Score
+import org.jetbrains.kotlinconf.theme.Icons
+import org.jetbrains.kotlinconf.theme.grey50
+import org.jetbrains.kotlinconf.theme.grey5Black
+import org.jetbrains.kotlinconf.theme.greyGrey5
+import org.jetbrains.kotlinconf.theme.greyGrey50
+import org.jetbrains.kotlinconf.theme.greyGrey80
+import org.jetbrains.kotlinconf.theme.greyWhite
+import org.jetbrains.kotlinconf.theme.t2
+import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.HDivider
 
 @Composable
@@ -52,7 +80,6 @@ fun VoteAndFeedback(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalResourceApi::class)
 @Composable
 fun FeedbackForm(onSend: (String) -> Unit, onClose: () -> Unit) {
     var feedback by remember { mutableStateOf("") }
@@ -121,7 +148,7 @@ fun FeedbackForm(onSend: (String) -> Unit, onClose: () -> Unit) {
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = { onClose() }, Modifier.padding(4.dp)) {
                 Icon(
-                    painter = Drawables.CLOSE_ICON,
+                    painter = Icons.CLOSE,
                     contentDescription = "Close",
                     tint = MaterialTheme.colors.greyGrey5
                 )
@@ -130,29 +157,28 @@ fun FeedbackForm(onSend: (String) -> Unit, onClose: () -> Unit) {
     }
 }
 
-
 @Composable
 fun VoteBlock(vote: Score?, onVote: (Score?) -> Unit) {
     Row {
         VoteButton(
             vote = Score.GOOD,
             active = vote == Score.GOOD,
-            icon = Drawables.SMILE_HAPPY,
-            activeIcon = Drawables.SMILE_HAPPY_ACTIVE,
+            icon = Icons.SMILE_HAPPY,
+            activeIcon = Icons.SMILE_HAPPY_ACTIVE,
             onVote = onVote
         )
         VoteButton(
             vote = Score.OK,
             active = vote == Score.OK,
-            icon = Drawables.SMILE_NEUTRAL,
-            activeIcon = Drawables.SMILE_NEUTRAL_ACTIVE,
+            icon = Icons.SMILE_NEUTRAL,
+            activeIcon = Icons.SMILE_NEUTRAL_ACTIVE,
             onVote = onVote
         )
         VoteButton(
             vote = Score.BAD,
             active = vote == Score.BAD,
-            icon = Drawables.SMILE_SAD,
-            activeIcon = Drawables.SMILE_SAD_ACTIVE,
+            icon = Icons.SMILE_SAD,
+            activeIcon = Icons.SMILE_SAD_ACTIVE,
             onVote = onVote
         )
     }

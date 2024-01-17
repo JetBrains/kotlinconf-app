@@ -1,24 +1,42 @@
 package org.jetbrains.kotlinconf.ui.components
 
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.unit.*
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.kotlinconf.theme.*
-import org.jetbrains.kotlinconf.ui.*
+import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.theme.Icons
+import org.jetbrains.kotlinconf.theme.grey50
+import org.jetbrains.kotlinconf.theme.greyWhite
+import org.jetbrains.kotlinconf.theme.orange
+import org.jetbrains.kotlinconf.theme.t2
+import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.HDivider
+import org.jetbrains.kotlinconf.ui.VDivider
 
 @Composable
 fun Break(
     duration: String,
     title: String,
     isLive: Boolean,
-    icon: Painter = Drawables.CUP_ICON,
-    liveIcon: Painter = Drawables.CUP_ACTIVE_ICON
+    icon: Painter = Icons.CUP,
+    liveIcon: Painter = Icons.CUP_ACTIVE
 ) {
     val transition = rememberInfiniteTransition()
     val transparency by transition.animateFloat(

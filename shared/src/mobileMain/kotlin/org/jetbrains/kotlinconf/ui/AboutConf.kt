@@ -15,6 +15,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.theme.Drawables
+import org.jetbrains.kotlinconf.theme.Icons
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey20
@@ -221,7 +222,7 @@ private fun Labs() {
         HDivider(Modifier.padding(top = 48.dp))
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = Drawables.LIGHT_ICON,
+                painter = Icons.LIGHT,
                 contentDescription = null,
                 tint = orange,
                 modifier = Modifier.padding(end = 8.dp)
@@ -246,7 +247,7 @@ private fun Labs() {
 
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = Drawables.AWS_LAB_ICON,
+                painter = Icons.AWS_LAB,
                 contentDescription = null,
                 tint = violet,
                 modifier = Modifier.padding(end = 8.dp)

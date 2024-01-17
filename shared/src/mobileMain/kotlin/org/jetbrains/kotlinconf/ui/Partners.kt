@@ -1,33 +1,50 @@
 package org.jetbrains.kotlinconf.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.unit.*
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.theme.*
+import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.theme.drawableResource
+import org.jetbrains.kotlinconf.theme.grey20Grey80
+import org.jetbrains.kotlinconf.theme.grey5Black
+import org.jetbrains.kotlinconf.theme.greyGrey5
+import org.jetbrains.kotlinconf.theme.whiteGrey
 
-private val PARTNER_LOGOS: Map<String, Painter> get() {
-    val mapping = mapOf(
-        "android" to "andorid",
-        "google" to "google",
-        "xebia" to "xebia",
-        "adyen" to "adyen",
-        "kodein" to "kodein_koders",
-        "lunatech" to "lunatech",
-        "gradle" to "gradle",
-        "source" to "source_technology",
-        "sentry" to "sentry",
-        "aws" to "aws",
-        "jetbrains" to "jetbrains"
-    )
+private val PARTNER_LOGOS: Map<String, String> = mapOf(
+    "android" to "andorid",
+    "google" to "google",
+    "xebia" to "xebia",
+    "adyen" to "adyen",
+    "kodein" to "kodein_koders",
+    "lunatech" to "lunatech",
+    "gradle" to "gradle",
+    "source" to "source_technology",
+    "sentry" to "sentry",
+    "aws" to "aws",
+    "jetbrains" to "jetbrains"
+)
 
-    TODO()
+@Composable
+fun partnerLogo(name: String): Painter {
+    val resourceName = PARTNER_LOGOS[name] ?: "jetbrains"
+    return drawableResource("$resourceName.xml")
 }
 
 @Composable
@@ -84,7 +101,8 @@ private fun PartnerCard(
     name: String,
     onClick: () -> Unit = {}
 ) {
-    val logo = PARTNER_LOGOS[name] ?: Drawables.TIME_ICON
+    val logo = partnerLogo(name)
+
     Box(
         Modifier
             .background(MaterialTheme.colors.whiteGrey)

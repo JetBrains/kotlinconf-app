@@ -23,8 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionCardView
-import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.theme.Drawables
+import org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.theme.Icons
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey5
@@ -161,7 +161,7 @@ private fun UpcomingCard(
                 onBookmarkClick()
             }) {
                 Icon(
-                    painter = Drawables.BOOKMARK_ACTIVE_ICON,
+                    painter = Icons.BOOKMARK_ACTIVE,
                     contentDescription = "bookmark",
                     tint = orange
                 )
@@ -231,7 +231,7 @@ private fun FinishedCard(
                 onBookmarkClick()
             }) {
                 Icon(
-                    painter = Drawables.BOOKMARK_ICON,
+                    painter = Icons.BOOKMARK,
                     contentDescription = "bookmark",
                     tint = orange
                 )

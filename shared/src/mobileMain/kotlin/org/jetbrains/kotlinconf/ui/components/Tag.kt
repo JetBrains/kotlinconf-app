@@ -48,15 +48,15 @@ fun Tag(
 
 @Composable
 fun LightningTalk(title: String, dimmed: Boolean = false) {
-    Tag(Drawables.LIGHT_ICON, title, dimmed)
+    Tag(Icons.LIGHT, title, dimmed)
 }
 
 @Composable
 fun CodeLab(dimmed: Boolean = false) {
-    Tag(Drawables.AWS_LAB_ICON, "Big Nerd Ranch lab", dimmed, violet)
+    Tag(Icons.AWS_LAB, "Big Nerd Ranch lab", dimmed, violet)
 }
 
 @Composable
 fun AWSLab(dimmed: Boolean = false) {
-    Tag(Drawables.AWS_LAB_ICON, "AWS lab", dimmed, violet)
+    Tag(Icons.AWS_LAB, "AWS lab", dimmed, violet)
 }

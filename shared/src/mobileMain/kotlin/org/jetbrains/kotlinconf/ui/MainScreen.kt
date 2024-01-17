@@ -8,8 +8,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import moe.tlaster.precompose.navigation.rememberNavigator
 import org.jetbrains.kotlinconf.ConferenceService
-import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.withAppController
-import org.jetbrains.kotlinconf.theme.Drawables
+import org.jetbrains.kotlinconf.withAppController
+import org.jetbrains.kotlinconf.theme.Icons
 import org.jetbrains.kotlinconf.ui.components.TabItem
 import org.jetbrains.kotlinconf.ui.components.TabsView
 
@@ -48,16 +48,16 @@ fun MainScreen(service: ConferenceService) {
         } else {
             TabsView(
                 controller,
-                TabItem("menu", Drawables.MENU_ICON, Drawables.MENU_ACTIVE_ICON) {
+                TabItem("menu", Icons.MENU, Icons.MENU_ACTIVE) {
                     Menu(controller = it)
                 },
-                TabItem("agenda", Drawables.TIME_ICON, Drawables.TIME_ACTIVE_ICON) {
+                TabItem("agenda", Icons.TIME, Icons.TIME_ACTIVE) {
                     AgendaView(agenda, it)
                 },
-                TabItem("speakers", Drawables.SPEAKERS_ICON, Drawables.SPEAKERS_ACTIVE_ICON) {
+                TabItem("speakers", Icons.SPEAKERS, Icons.SPEAKERS_ACTIVE) {
                     SpeakersView(controller = it, speakers = speakers.all)
                 },
-                TabItem("Bookmarks", Drawables.MY_TALKS_ICON, Drawables.MY_TALKS_ACTIVE_ICON) {
+                TabItem("Bookmarks", Icons.MY_TALKS, Icons.MY_TALKS_ACTIVE) {
                     Bookmarks(favoriteSessions, it)
                 }
             )

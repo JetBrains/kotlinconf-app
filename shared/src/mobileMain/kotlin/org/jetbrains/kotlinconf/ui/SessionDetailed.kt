@@ -8,7 +8,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.theme.*
 import org.jetbrains.kotlinconf.ui.components.AWSLab
 import org.jetbrains.kotlinconf.ui.components.AsyncImage

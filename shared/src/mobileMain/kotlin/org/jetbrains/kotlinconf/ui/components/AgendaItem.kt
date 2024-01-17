@@ -67,7 +67,7 @@ fun AgendaItem(
                 IconButton(onClick = {
                     onFavoriteClick()
                 }) {
-                    val icon = if (isFavorite) Drawables.BOOKMARK_ACTIVE_ICON else Drawables.BOOKMARK_ICON
+                    val icon = if (isFavorite) Icons.BOOKMARK_ACTIVE else Icons.BOOKMARK
                     Icon(
                         painter = icon,
                         contentDescription = "bookmark",

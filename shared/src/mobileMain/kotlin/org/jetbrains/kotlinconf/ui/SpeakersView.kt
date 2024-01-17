@@ -6,11 +6,10 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.geometry.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.theme.subtitle
 import org.jetbrains.kotlinconf.theme.title
 import org.jetbrains.kotlinconf.theme.whiteGrey
