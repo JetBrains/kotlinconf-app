@@ -38,7 +38,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.Speaker
-import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.theme.Icons
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.grey5Grey90
@@ -87,7 +88,7 @@ fun Search(
         NavigationBar(
             title = "Search",
             isLeftVisible = false,
-            rightIcon = "close",
+            rightIcon = Icons.CLOSE,
             onLeftClick = {},
             onRightClick = { controller.back() }
         )

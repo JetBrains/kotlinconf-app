@@ -13,8 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.theme.divider
+import org.jetbrains.kotlinconf.theme.drawableResource
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.greyWhite
 import org.jetbrains.kotlinconf.theme.t2
@@ -57,28 +59,33 @@ fun ColumnScope.SheetBar() {
     ) {}
 }
 
-internal fun LogoForName(name: String): String = when (name) {
-    "android" -> "android_google_big"
-    "google" -> "android_google_big"
-    "xebia" -> "xebia_big"
-    "kodein" -> "kodein_koders_big"
-    "lunatech" -> "lunatech_big"
-    "gradle" -> "gradle_big"
-    "source" -> "source_technology_big"
-    "aws" -> "aws_big"
-    "sentry" -> "sentry_big"
-    "adyen" -> "adyen_big"
-    "jetbrains" -> "jetbrains_big"
-    "grote zaal" -> "grote_zaal"
-    "beursfoyer" -> "beursfoyer"
-    "store" -> "merchandise_store"
-    "graanbeurszaal" -> "graanbeurszaal"
-    "effectenbeurszaal" -> "effectenbeurszaal"
-    "loundge" -> "lounge_2"
-    "administratiezaal" -> "administratiezaal"
-    "veilingzaal" -> "veilingzaal"
-    "berlage zaal" -> "berlage_zaal"
-    "mendes da costa" -> "mendes_da_costa"
-    "verwey kamer" -> "verwey_kamer"
-    else -> "time"
-} + ".xml"
+@Composable
+internal fun LogoForName(name: String): Painter {
+    val iconName = when (name) {
+        "android" -> "android_google_big"
+        "google" -> "android_google_big"
+        "xebia" -> "xebia_big"
+        "kodein" -> "kodein_koders_big"
+        "lunatech" -> "lunatech_big"
+        "gradle" -> "gradle_big"
+        "source" -> "source_technology_big"
+        "aws" -> "aws_big"
+        "sentry" -> "sentry_big"
+        "adyen" -> "adyen_big"
+        "jetbrains" -> "jetbrains_big"
+        "grote zaal" -> "grote_zaal"
+        "beursfoyer" -> "beursfoyer"
+        "store" -> "merchandise_store"
+        "graanbeurszaal" -> "graanbeurszaal"
+        "effectenbeurszaal" -> "effectenbeurszaal"
+        "loundge" -> "lounge_2"
+        "administratiezaal" -> "administratiezaal"
+        "veilingzaal" -> "veilingzaal"
+        "berlage zaal" -> "berlage_zaal"
+        "mendes da costa" -> "mendes_da_costa"
+        "verwey kamer" -> "verwey_kamer"
+        else -> "time"
+    } + ".xml"
+
+    return drawableResource(iconName)
+}

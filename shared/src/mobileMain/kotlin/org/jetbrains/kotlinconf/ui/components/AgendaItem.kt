@@ -7,7 +7,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.theme.*
 import org.jetbrains.kotlinconf.ui.*
@@ -68,9 +67,9 @@ fun AgendaItem(
                 IconButton(onClick = {
                     onFavoriteClick()
                 }) {
-                    val icon = if (isFavorite) "bookmark_active.xml" else "bookmark.xml"
+                    val icon = if (isFavorite) Icons.BOOKMARK_ACTIVE else Icons.BOOKMARK
                     Icon(
-                        painter = painterResource(icon),
+                        painter = icon,
                         contentDescription = "bookmark",
                         tint = if (isFavorite) orange else MaterialTheme.colors.greyWhite
                     )

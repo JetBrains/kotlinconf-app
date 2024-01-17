@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.graphics.painter.Painter
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -13,8 +14,8 @@ import org.jetbrains.kotlinconf.theme.*
 
 class TabItem(
     val name: String,
-    val icon: String,
-    val selectedIcon: String,
+    val icon: Painter,
+    val selectedIcon: Painter,
     val view: @Composable () -> Unit
 )
 
@@ -67,7 +68,7 @@ internal fun RowScope.BottomButton(
         },
         icon = {
             Icon(
-                painterResource(if (isSelected) tab.selectedIcon else tab.icon),
+                if (isSelected) tab.selectedIcon else tab.icon,
                 tab.name,
                 tint = if (isSelected) MaterialTheme.colors.blackWhite else grey50
             )

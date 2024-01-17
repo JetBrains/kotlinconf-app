@@ -73,7 +73,7 @@ private fun PrivacyPolicy(
     }) {
         Column(Modifier.fillMaxWidth()) {
             Image(
-                painter = painterResource("privacy.xml"),
+                painter = Drawables.PRIVACY,
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -212,7 +212,7 @@ private fun Notifications(onAcceptNotifications: () -> Unit, onClose: () -> Unit
     }) {
         Column(Modifier.fillMaxWidth()) {
             Image(
-                painter = painterResource("notifications.xml"),
+                painter = Drawables.NOTIFICATIONS,
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)

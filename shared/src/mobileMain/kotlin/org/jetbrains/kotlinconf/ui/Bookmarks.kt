@@ -1,18 +1,37 @@
 package org.jetbrains.kotlinconf.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.unit.*
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionCardView
-import org.jetbrains.kotlinconf.org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.theme.*
+import org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.theme.Icons
+import org.jetbrains.kotlinconf.theme.grey50
+import org.jetbrains.kotlinconf.theme.grey5Black
+import org.jetbrains.kotlinconf.theme.greyGrey5
+import org.jetbrains.kotlinconf.theme.orange
+import org.jetbrains.kotlinconf.theme.t2
+import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.components.VoteAndFeedback
 
 @Composable
 fun Bookmarks(
@@ -99,7 +118,6 @@ private fun Finished(
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun UpcomingCard(
     title: String,
@@ -143,7 +161,7 @@ private fun UpcomingCard(
                 onBookmarkClick()
             }) {
                 Icon(
-                    painter = painterResource("bookmark_active.xml"),
+                    painter = Icons.BOOKMARK_ACTIVE,
                     contentDescription = "bookmark",
                     tint = orange
                 )
@@ -153,7 +171,6 @@ private fun UpcomingCard(
 }
 
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun FinishedCard(
     title: String,
@@ -214,7 +231,7 @@ private fun FinishedCard(
                 onBookmarkClick()
             }) {
                 Icon(
-                    painter = painterResource("bookmark_active.xml"),
+                    painter = Icons.BOOKMARK,
                     contentDescription = "bookmark",
                     tint = orange
                 )
