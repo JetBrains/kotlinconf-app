@@ -22,6 +22,7 @@ import org.jetbrains.kotlinconf.ui.components.AgendaItem
 import org.jetbrains.kotlinconf.ui.components.AgendaTimeSlotHeader
 import org.jetbrains.kotlinconf.ui.components.Break
 import org.jetbrains.kotlinconf.ui.components.Party
+import org.jetbrains.kotlinconf.ui.components.TabBar
 
 @Composable
 fun AgendaView(agenda: Agenda, controller: AppController) {

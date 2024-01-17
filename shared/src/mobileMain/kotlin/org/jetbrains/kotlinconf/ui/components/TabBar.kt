@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.ui
+package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +18,7 @@ import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.greyWhite
 import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.HDivider
 
 @Composable
 fun TabBar(

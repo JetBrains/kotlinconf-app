@@ -1,5 +1,8 @@
 package org.jetbrains.kotlinconf.ui.components
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -8,6 +11,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.painter.Painter
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
+import moe.tlaster.precompose.navigation.transition.NavTransition
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.theme.*
@@ -34,7 +38,8 @@ fun TabsView(navigator: Navigator, vararg items: TabItem) {
         NavHost(
             navigator = navigator,
             initialRoute = items[0].name,
-            modifier = Modifier.padding(it)
+            modifier = Modifier.padding(it),
+            navTransition = DEFAULT_TRANSITION
         ) {
 
             items.forEach { tab ->
@@ -46,7 +51,6 @@ fun TabsView(navigator: Navigator, vararg items: TabItem) {
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun RowScope.BottomButton(
     navigator: Navigator,

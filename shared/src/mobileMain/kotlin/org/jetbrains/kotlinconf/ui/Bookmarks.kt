@@ -31,6 +31,7 @@ import org.jetbrains.kotlinconf.theme.greyGrey5
 import org.jetbrains.kotlinconf.theme.orange
 import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.components.TabBar
 import org.jetbrains.kotlinconf.ui.components.VoteAndFeedback
 
 @Composable
