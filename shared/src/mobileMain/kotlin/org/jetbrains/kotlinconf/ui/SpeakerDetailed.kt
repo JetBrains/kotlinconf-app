@@ -16,6 +16,7 @@ import org.jetbrains.kotlinconf.ui.components.AWSLab
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 import org.jetbrains.kotlinconf.ui.components.CodeLab
 import org.jetbrains.kotlinconf.ui.components.LightningTalk
+import org.jetbrains.kotlinconf.SessionCardView
 
 @Composable
 fun SpeakersFlow(
