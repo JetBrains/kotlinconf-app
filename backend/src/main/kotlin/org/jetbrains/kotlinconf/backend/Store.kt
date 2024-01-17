@@ -1,17 +1,28 @@
 package org.jetbrains.kotlinconf.backend
 
-import com.zaxxer.hikari.*
-import io.ktor.server.application.*
-import io.ktor.server.config.*
-import kotlinx.coroutines.*
-import org.jetbrains.exposed.sql.*
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
+import io.ktor.server.application.Application
+import io.ktor.server.application.log
+import io.ktor.server.config.ApplicationConfig
+import kotlinx.coroutines.Dispatchers
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.count
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.backend.Votes.rating
+import org.jetbrains.exposed.sql.update
+import org.jetbrains.kotlinconf.FeedbackInfo
+import org.jetbrains.kotlinconf.Score
+import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.backend.Votes.sessionId
-import java.time.*
+import java.time.LocalDateTime
 
 
 internal class Store(application: Application) {

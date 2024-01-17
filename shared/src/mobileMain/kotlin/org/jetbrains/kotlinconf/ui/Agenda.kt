@@ -22,6 +22,7 @@ import org.jetbrains.kotlinconf.ui.components.AgendaItem
 import org.jetbrains.kotlinconf.ui.components.AgendaTimeSlotHeader
 import org.jetbrains.kotlinconf.ui.components.Break
 import org.jetbrains.kotlinconf.ui.components.Party
+import org.jetbrains.kotlinconf.ui.components.TabBar
 
 @Composable
 fun AgendaView(agenda: Agenda, controller: AppController) {
@@ -29,7 +30,8 @@ fun AgendaView(agenda: Agenda, controller: AppController) {
     val coroutineScope = rememberCoroutineScope()
     var selected: String? by remember { mutableStateOf(agenda.days.firstOrNull()?.title) }
 
-    val daysIndex = listOf(0, if (agenda.days.isNotEmpty()) agenda.days.first().itemsCount() else 0)
+    val daysSize = agenda.days.map { it.itemsCount() }
+    val daysIndex: List<Int> = daysSize.scan(0) { acc, i -> acc + i }
 
     Column {
         TabBar(

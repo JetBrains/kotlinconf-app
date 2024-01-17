@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.*
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
@@ -78,7 +79,6 @@ fun SessionDetailed(
             },
             sheetPeekHeight = 100.dp,
             sheetBackgroundColor = MaterialTheme.colors.whiteGrey,
-//            scaffoldState = scaffoldState
         ) {
             session()
         }
@@ -173,12 +173,12 @@ private fun SessionHead(
 @Composable
 private fun FavoriteButton(isFavorite: Boolean, favoriteClick: () -> Unit) {
     IconButton(onClick = favoriteClick) {
-//        val icon = if (isFavorite) R.drawable.bookmark_active else R.drawable.bookmark
-//        Icon(
-//            painter =painterResource(id = icon),
-//            contentDescription = "favorite",
-//            tint = if (isFavorite) orange else MaterialTheme.colors.greyGrey5
-//        )
+        val icon = if (isFavorite) Icons.BOOKMARK_ACTIVE else Icons.BOOKMARK
+        Icon(
+            painter = icon,
+            contentDescription = "favorite",
+            tint = if (isFavorite) orange else MaterialTheme.colors.greyGrey5
+        )
     }
 }
 
@@ -211,7 +211,8 @@ private fun SessionDetails(
         Row(
             Modifier
                 .padding(16.dp)
-                .fillMaxWidth()) {
+                .fillMaxWidth()
+        ) {
             if (isLightning) {
                 LightningTalk("Lightning Talk")
             } else if (isCodeLab) {

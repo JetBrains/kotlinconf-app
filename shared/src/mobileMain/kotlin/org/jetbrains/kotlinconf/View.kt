@@ -59,7 +59,6 @@ fun Conference.buildAgenda(
             )
         }
         .sortedBy { it.day }
-        .filter { it.day >= 13 }
 
     return Agenda(days)
 }
