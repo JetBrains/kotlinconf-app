@@ -29,7 +29,8 @@ fun AgendaView(agenda: Agenda, controller: AppController) {
     val coroutineScope = rememberCoroutineScope()
     var selected: String? by remember { mutableStateOf(agenda.days.firstOrNull()?.title) }
 
-    val daysIndex = listOf(0, if (agenda.days.isNotEmpty()) agenda.days.first().itemsCount() else 0)
+    val daysSize = agenda.days.map { it.itemsCount() }
+    val daysIndex: List<Int> = daysSize.scan(0) { acc, i -> acc + i }
 
     Column {
         TabBar(
