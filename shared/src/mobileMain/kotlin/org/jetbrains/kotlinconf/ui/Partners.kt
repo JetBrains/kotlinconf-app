@@ -21,7 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.theme.drawableResource
+import org.jetbrains.kotlinconf.theme.drawablePartners
 import org.jetbrains.kotlinconf.theme.grey20Grey80
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey5
@@ -44,7 +44,7 @@ private val PARTNER_LOGOS: Map<String, String> = mapOf(
 @Composable
 fun partnerLogo(name: String): Painter {
     val resourceName = PARTNER_LOGOS[name] ?: "jetbrains"
-    return drawableResource("$resourceName.xml")
+    return drawablePartners("$resourceName.xml")
 }
 
 @Composable

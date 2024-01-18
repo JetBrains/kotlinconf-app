@@ -12,10 +12,10 @@ import androidx.compose.ui.text.font.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.theme.Drawables
+import org.jetbrains.kotlinconf.theme.Vector
 import org.jetbrains.kotlinconf.theme.Icons
+import org.jetbrains.kotlinconf.theme.bannerText
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey20
@@ -37,7 +37,7 @@ fun AboutConf(keynoteSpeakers: List<Speaker>, secondDaySpeakers: List<Speaker>, 
         NavigationBar(
             title = "ABOUT", isLeftVisible = true, onLeftClick = back, isRightVisible = false
         )
-        Logo()
+        AboutConfTopBanner()
         HDivider()
         Description()
         HDivider()
@@ -51,15 +51,14 @@ fun AboutConf(keynoteSpeakers: List<Speaker>, secondDaySpeakers: List<Speaker>, 
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
-private fun Logo() {
+private fun AboutConfTopBanner() {
     Image(
-        painter = Drawables.ABOUT,
+        painter = Vector.ABOUT_TOP_BANNER,
         contentDescription = null,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 48.dp, bottom = 24.dp),
+            .padding(top = 40.dp, bottom = 30.dp, start = 30.dp, end = 30.dp),
         contentScale = ContentScale.FillWidth
     )
 }
@@ -215,7 +214,6 @@ private fun SecondDayKeynote(secondDaySpeakers: List<Speaker>) {
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun Labs() {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
@@ -290,7 +288,6 @@ private fun Party() {
     HDivider()
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun ClosingPanel() {
     TextTitle("APRIL 14 / 17:15", "Closing Panel")
@@ -306,15 +303,34 @@ private fun ClosingPanel() {
             modifier = Modifier.padding(16.dp)
         )
 
-        Image(
-            painter = Drawables.CLOSING_PANEL, contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth(),
-            contentScale = ContentScale.Crop,
-        )
+        BottomBanner()
     }
 
     HDivider()
+}
+
+@Composable
+private fun BottomBanner() {
+    Box(Modifier.fillMaxWidth()) {
+        Image(
+            painter = Vector.ABOUT_BOTTOM_BANNER,
+            contentDescription = null,
+            contentScale = ContentScale.None,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(start = 42.dp, end = 25.dp, bottom = 53.dp)
+                .height(112.dp),
+        )
+        Text(
+            "by \n" + "JetBrains",
+            style = MaterialTheme.typography.bannerText.copy(color = MaterialTheme.colors.greyWhite),
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(
+                    start = 24.dp, top = 70.dp
+                )
+        )
+    }
 }
 
 @Composable

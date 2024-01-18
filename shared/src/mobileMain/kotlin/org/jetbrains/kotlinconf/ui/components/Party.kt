@@ -1,28 +1,60 @@
 package org.jetbrains.kotlinconf.ui.components
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
-import androidx.compose.ui.layout.*
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.theme.*
-import org.jetbrains.kotlinconf.ui.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.theme.Vector
+import org.jetbrains.kotlinconf.theme.bannerText
+import org.jetbrains.kotlinconf.theme.grey20Grey80
+import org.jetbrains.kotlinconf.theme.greyGrey5
+import org.jetbrains.kotlinconf.ui.HDivider
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
-fun Party(isFinished: Boolean) {
-    Column {
-        Image(
-            painter = Drawables.PARTY,
-            contentDescription = "party",
+fun Party(time: String, isFinished: Boolean) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .alpha(if (isFinished) 0.5f else 1.0f)
+    ) {
+        Text(
+            text = time,
+            maxLines = 1,
             modifier = Modifier
-                .alpha(if (isFinished) 0.5f else 1f)
-                .fillMaxWidth(),
-            contentScale = ContentScale.Crop,
+                .padding(16.dp),
+            style = MaterialTheme.typography.h2.copy(
+                color = if (isFinished) MaterialTheme.colors.grey20Grey80 else MaterialTheme.colors.greyGrey5
+            )
         )
-        HDivider()
+        Row(
+            modifier = Modifier
+                .padding(start = 16.dp, top = 12.dp, bottom = 24.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = Vector.PARTY_SECTION_BIRD,
+                contentDescription = "party",
+                modifier = Modifier
+                    .size(26.dp, 26.dp),
+                contentScale = ContentScale.Crop,
+            )
+            Text(
+                "Party!",
+                style = MaterialTheme.typography.bannerText.copy(
+                    color = if (isFinished) MaterialTheme.colors.grey20Grey80 else MaterialTheme.colors.greyGrey5,
+                ),
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
     }
 }

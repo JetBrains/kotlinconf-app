@@ -62,3 +62,25 @@ val JetBrainsMono: FontFamily
             ),
         )
     }
+
+val Typography.bannerText: TextStyle
+    @Composable
+    get() = TextStyle(
+        fontFamily = JetBrainsSans,
+        fontWeight = FontWeight.Bold,
+        fontSize = 28.sp,
+        lineHeight = 29.sp
+    )
+
+val JetBrainsSans: FontFamily
+    @Composable
+    get() {
+        return FontFamily(
+            font(
+                name = "JetBrains Sans",
+                res = "jetbrainssans_bold",
+                weight = FontWeight.Bold,
+                style = FontStyle.Normal
+            ),
+        )
+    }

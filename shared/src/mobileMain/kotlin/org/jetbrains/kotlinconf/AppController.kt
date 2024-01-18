@@ -140,7 +140,7 @@ class AppController(
 
     fun showAppInfo() {
         push {
-            TextScreen("’23 mobile app", null, MOBILE_APP_DESCRIPTION) { it.back() }
+            TextScreen("’24 mobile app", null, MOBILE_APP_DESCRIPTION) { it.back() }
         }
     }
 

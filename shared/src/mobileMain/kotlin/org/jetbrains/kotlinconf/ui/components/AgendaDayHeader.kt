@@ -1,55 +1,42 @@
 package org.jetbrains.kotlinconf.ui.components
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.unit.*
-import org.jetbrains.kotlinconf.theme.*
-import org.jetbrains.kotlinconf.ui.*
-import org.jetbrains.kotlinconf.ui.HDivider
-import org.jetbrains.kotlinconf.ui.VDivider
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.theme.Vector
+import org.jetbrains.kotlinconf.theme.agendaHeaderColor
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun AgendaDayHeader(title: String) {
-    val text = title.uppercase() + "  "
+    val image = when (title) {
+        "APRIL 12" -> Vector.SCHEDULE_BANNERS[0]
+        "APRIL 13" -> Vector.SCHEDULE_BANNERS[1]
+        else -> Vector.SCHEDULE_BANNERS[2]
+    }
+
     Column(
-        Modifier.background(MaterialTheme.colors.whiteGrey)
+        modifier = Modifier
+            .background(MaterialTheme.colors.agendaHeaderColor)
+            .fillMaxWidth()
+            .padding(top = 4.dp)
     ) {
-        Row(
-            Modifier
+        Image(
+            image,
+            contentDescription = null,
+            modifier = Modifier
+                .height(56.dp)
+//                .offset(-24.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            VDivider(modifier = Modifier.height(24.dp))
-        }
-        HDivider()
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.blackWhite)
-        ) {
-            Text(
-                modifier = Modifier
-                    .basicMarquee(),
-                text = text.repeat(100),
-                maxLines = 1,
-                style = MaterialTheme.typography.body2.copy(
-                    color = MaterialTheme.colors.whiteBlack
-                )
-            )
-        }
-        HDivider()
-        Row(
-            Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            VDivider(modifier = Modifier.height(24.dp))
-        }
-        HDivider()
+            contentScale = ContentScale.None
+        )
     }
 }
