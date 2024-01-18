@@ -39,7 +39,7 @@ fun Partner(controller: AppController, name: String, description: String) {
                 .verticalScroll(rememberScrollState())
                 .fillMaxWidth()
         ) {
-            Logo(name)
+            AboutConfTopBanner(name)
 
             Column(Modifier.padding(16.dp)) {
                 Text(
@@ -63,7 +63,7 @@ fun Partner(controller: AppController, name: String, description: String) {
 }
 
 @Composable
-private fun Logo(name: String) {
+private fun AboutConfTopBanner(name: String) {
     Box(
         modifier = Modifier
             .background(MaterialTheme.colors.grey5Black)

@@ -88,7 +88,7 @@ private fun LazyListScope.SessionsList(
                 item("party-${slot.id}") {
                     Column {
                         AgendaTimeSlotHeader(slot.title, slot.isLive, slot.isFinished)
-                        Party(slot.isFinished)
+                        Party(slot.title, slot.isFinished)
                     }
                 }
             }

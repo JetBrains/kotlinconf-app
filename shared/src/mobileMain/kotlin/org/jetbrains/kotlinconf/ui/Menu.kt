@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.theme.Drawables
+import org.jetbrains.kotlinconf.theme.Vector
 import org.jetbrains.kotlinconf.theme.Icons
 import org.jetbrains.kotlinconf.theme.grey20Grey80
 import org.jetbrains.kotlinconf.theme.grey50
@@ -60,7 +60,7 @@ fun Menu(controller: AppController) {
                         controller.showSearch()
                     }
                     HDivider()
-                    MenuItem(text = "KotlinConf`23", icon = Icons.ARROW_RIGHT) {
+                    MenuItem(text = "KotlinConf`24", icon = Icons.ARROW_RIGHT) {
                         controller.showAboutTheConf()
                     }
                     HDivider()
@@ -68,7 +68,7 @@ fun Menu(controller: AppController) {
                         controller.showAppInfo()
                     }
                     HDivider()
-                    MenuItem(text = "EXHIBITION", icon = Icons.ARROW_RIGHT) {
+                    MenuItem(text = "Partners", icon = Icons.ARROW_RIGHT) {
                         controller.showPartners()
                     }
                     HDivider()
@@ -87,7 +87,7 @@ fun Menu(controller: AppController) {
             }
 
             item {
-                BigItem("Twitter", "#KOTLINCONF23", Icons.TWITTER) {
+                BigItem("Twitter", "#KOTLINCONF24", Icons.TWITTER) {
                     uriHandler.openUri("https://twitter.com/kotlinconf")
                 }
             }
@@ -108,7 +108,7 @@ private fun MenuLogo() {
             .background(MaterialTheme.colors.grey5Black)
     ) {
         Image(
-            painter = Drawables.MENU_LOGO,
+            painter = Vector.MENU_BANNER,
             contentDescription = "logo",
             modifier = Modifier.padding(16.dp)
         )

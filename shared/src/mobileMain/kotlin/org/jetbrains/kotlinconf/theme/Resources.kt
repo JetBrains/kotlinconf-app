@@ -14,12 +14,18 @@ internal fun iconResource(name: String): Painter {
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-internal fun drawableResource(name: String): Painter {
+internal fun drawablePartners(name: String): Painter {
     val folder = if (isSystemInDarkTheme()) {
-        "drawable-night"
+        "partners-night"
     } else {
-        "drawable"
+        "parnters"
     }
 
     return painterResource("$folder/$name")
+}
+
+@OptIn(ExperimentalResourceApi::class)
+@Composable
+internal fun drawableVector(name: String): Painter {
+    return painterResource("vector/$name")
 }

@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.theme.*
 
 @Composable
@@ -73,12 +72,13 @@ private fun PrivacyPolicy(
     }) {
         Column(Modifier.fillMaxWidth()) {
             Image(
-                painter = Drawables.PRIVACY,
+                painter = Vector.PRIVACY_POLICY_BIRD,
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(top = 16.dp, bottom = 16.dp)
-                    .height(136.dp)
+                    .padding(top = 42.dp, bottom = 50.dp)
+                    .width(70.dp)
+                    .height(64.dp)
                     .fillMaxWidth()
             )
 
@@ -212,12 +212,13 @@ private fun Notifications(onAcceptNotifications: () -> Unit, onClose: () -> Unit
     }) {
         Column(Modifier.fillMaxWidth()) {
             Image(
-                painter = Drawables.NOTIFICATIONS,
+                painter = Vector.NOTIFICATIONS_BIRD,
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(top = 16.dp, bottom = 16.dp)
-                    .height(136.dp)
+                    .padding(top = 45.dp, bottom = 50.dp)
+                    .width(72.dp)
+                    .height(60.dp)
                     .fillMaxWidth()
             )
 
