@@ -14,10 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.Resource
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import org.jetbrains.kotlinconf.HTTP_CLIENT
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun AsyncImage(
     modifier: Modifier,
@@ -25,11 +25,11 @@ fun AsyncImage(
     contentDescription: String,
     contentScale: ContentScale = ContentScale.Crop,
 ) {
+    remember {  }
     var image by remember { mutableStateOf<ImageBitmap?>(null) }
 
     LaunchedEffect(imageUrl) {
-        image = CachedNetworkResource(imageUrl)
-            .asBitmap()
+        image = loadImage(imageUrl)
     }
 
     val currentImage = image
@@ -55,5 +55,9 @@ fun ImagePlaceholder(modifier: Modifier) {
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
-internal expect suspend fun Resource.asBitmap(): ImageBitmap
+suspend fun loadImage(imageUrl: String): ImageBitmap = HTTP_CLIENT
+    .get(imageUrl)
+    .body<ByteArray>()
+    .asBitmap()
+
+internal expect fun ByteArray.asBitmap(): ImageBitmap

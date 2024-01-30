@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalResourceApi::class)
+
 package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.*
@@ -11,10 +13,10 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
+import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.theme.Vector
-import org.jetbrains.kotlinconf.theme.Icons
 import org.jetbrains.kotlinconf.theme.bannerText
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
@@ -54,7 +56,7 @@ fun AboutConf(keynoteSpeakers: List<Speaker>, secondDaySpeakers: List<Speaker>, 
 @Composable
 private fun AboutConfTopBanner() {
     Image(
-        painter = Vector.ABOUT_TOP_BANNER,
+        painter = painterResource(Res.drawable.about_conf_top_banner),
         contentDescription = null,
         modifier = Modifier
             .fillMaxWidth()
@@ -220,7 +222,7 @@ private fun Labs() {
         HDivider(Modifier.padding(top = 48.dp))
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = Icons.LIGHT,
+                painter = painterResource(Res.drawable.light),
                 contentDescription = null,
                 tint = orange,
                 modifier = Modifier.padding(end = 8.dp)
@@ -245,7 +247,7 @@ private fun Labs() {
 
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = Icons.AWS_LAB,
+                painter = painterResource(Res.drawable.aws_lab),
                 contentDescription = null,
                 tint = violet,
                 modifier = Modifier.padding(end = 8.dp)
@@ -313,7 +315,7 @@ private fun ClosingPanel() {
 private fun BottomBanner() {
     Box(Modifier.fillMaxWidth()) {
         Image(
-            painter = Vector.ABOUT_BOTTOM_BANNER,
+            painter = painterResource(Res.drawable.about_conf_bottom_banner),
             contentDescription = null,
             contentScale = ContentScale.None,
             modifier = Modifier

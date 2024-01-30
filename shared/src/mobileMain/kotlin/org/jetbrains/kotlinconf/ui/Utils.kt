@@ -15,8 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
+import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.theme.divider
-import org.jetbrains.kotlinconf.theme.drawablePartners
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.greyWhite
 import org.jetbrains.kotlinconf.theme.t2
@@ -59,33 +60,23 @@ fun ColumnScope.SheetBar() {
     ) {}
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun LogoForName(name: String): Painter {
-    val iconName = when (name) {
-        "android" -> "android_google_big"
-        "google" -> "android_google_big"
-        "xebia" -> "xebia_big"
-        "kodein" -> "kodein_koders_big"
-        "lunatech" -> "lunatech_big"
-        "gradle" -> "gradle_big"
-        "source" -> "source_technology_big"
-        "aws" -> "aws_big"
-        "sentry" -> "sentry_big"
-        "adyen" -> "adyen_big"
-        "jetbrains" -> "jetbrains_big"
-        "grote zaal" -> "grote_zaal"
-        "beursfoyer" -> "beursfoyer"
-        "store" -> "merchandise_store"
-        "graanbeurszaal" -> "graanbeurszaal"
-        "effectenbeurszaal" -> "effectenbeurszaal"
-        "loundge" -> "lounge_2"
-        "administratiezaal" -> "administratiezaal"
-        "veilingzaal" -> "veilingzaal"
-        "berlage zaal" -> "berlage_zaal"
-        "mendes da costa" -> "mendes_da_costa"
-        "verwey kamer" -> "verwey_kamer"
-        else -> "time"
-    } + ".xml"
+    val icon = when (name) {
+        "android" -> Res.drawable.android_google_big
+        "google" -> Res.drawable.android_google_big
+        "xebia" -> Res.drawable.xebia_big
+        "kodein" -> Res.drawable.kodein_koders_big
+        "lunatech" -> Res.drawable.lunatech_big
+        "gradle" -> Res.drawable.gradle_big
+        "source" -> Res.drawable.source_technology_big
+        "aws" -> Res.drawable.aws_big
+        "sentry" -> Res.drawable.sentry_big
+        "adyen" -> Res.drawable.adyen_big
+        "jetbrains" -> Res.drawable.jetbrains_big
+        else -> Res.drawable.jetbrains_big
+    }
 
-    return drawablePartners(iconName)
+    return icon.painter()
 }

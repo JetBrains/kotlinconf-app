@@ -6,8 +6,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.*
+import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.theme.*
@@ -170,12 +171,13 @@ private fun SessionHead(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun FavoriteButton(isFavorite: Boolean, favoriteClick: () -> Unit) {
     IconButton(onClick = favoriteClick) {
-        val icon = if (isFavorite) Icons.BOOKMARK_ACTIVE else Icons.BOOKMARK
+        val icon = if (isFavorite) Res.drawable.bookmark_active else Res.drawable.bookmark
         Icon(
-            painter = icon,
+            painter = icon.painter(),
             contentDescription = "favorite",
             tint = if (isFavorite) orange else MaterialTheme.colors.greyGrey5
         )

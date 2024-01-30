@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalResourceApi::class)
+
 package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.layout.Column
@@ -12,11 +14,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import kotlinconfapp.shared.generated.resources.Res
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.Agenda
 import org.jetbrains.kotlinconf.Day
 import org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.theme.Icons
 import org.jetbrains.kotlinconf.ui.components.AgendaDayHeader
 import org.jetbrains.kotlinconf.ui.components.AgendaItem
 import org.jetbrains.kotlinconf.ui.components.AgendaTimeSlotHeader
@@ -73,17 +77,19 @@ private fun LazyListScope.SessionsList(
                         duration = slot.duration,
                         title = slot.title,
                         isLive = slot.isLive,
-                        icon = Icons.LUNCH,
-                        liveIcon = Icons.LUNCH_ACTIVE
+                        icon = painterResource(Res.drawable.lunch),
+                        liveIcon = painterResource(Res.drawable.lunch_active)
                     )
                 }
             }
+
             slot.isBreak -> {
                 if (slot.isFinished) return@forEach
                 item("break-${slot.id}") {
                     Break(duration = slot.duration, title = slot.title, isLive = slot.isLive)
                 }
             }
+
             slot.isParty -> {
                 item("party-${slot.id}") {
                     Column {
@@ -92,6 +98,7 @@ private fun LazyListScope.SessionsList(
                     }
                 }
             }
+
             else -> {
                 item("time-header-${slot.id}") {
                     AgendaTimeSlotHeader(

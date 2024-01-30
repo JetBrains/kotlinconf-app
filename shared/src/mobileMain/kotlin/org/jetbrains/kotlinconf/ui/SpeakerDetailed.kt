@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
+import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
@@ -207,9 +208,9 @@ private fun SessionCardCompact(
                 IconButton(onClick = {
                     onFavoriteClick()
                 }) {
-                    val icon = if (favorite) Icons.BOOKMARK_ACTIVE else Icons.BOOKMARK
+                    val icon = if (favorite) Res.drawable.bookmark_active else Res.drawable.bookmark
                     Icon(
-                        painter = icon,
+                        painter = icon.painter(),
                         contentDescription = "bookmark",
                         tint = if (favorite) orange else MaterialTheme.colors.greyWhite
                     )

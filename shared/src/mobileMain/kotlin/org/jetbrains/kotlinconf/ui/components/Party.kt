@@ -14,12 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.theme.Vector
+import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.theme.bannerText
 import org.jetbrains.kotlinconf.theme.grey20Grey80
 import org.jetbrains.kotlinconf.theme.greyGrey5
 import org.jetbrains.kotlinconf.ui.HDivider
+import org.jetbrains.kotlinconf.ui.painter
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Party(time: String, isFinished: Boolean) {
     Column(
@@ -42,7 +45,7 @@ fun Party(time: String, isFinished: Boolean) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = Vector.PARTY_SECTION_BIRD,
+                painter = Res.drawable.schedule_party_section_bird.painter(),
                 contentDescription = "party",
                 modifier = Modifier
                     .size(26.dp, 26.dp),

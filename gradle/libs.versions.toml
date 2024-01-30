@@ -4,41 +4,31 @@ android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
 androidx-activityCompose = "1.8.2"
-androidx-appcompat = "1.6.1"
-androidx-constraintlayout = "2.1.4"
 androidx-core-ktx = "1.12.0"
 androidx-espresso-core = "3.5.1"
-androidx-material = "1.11.0"
 androidx-test-junit = "1.1.5"
 androidx-work-runtime = "2.9.0"
 androidx-preference = "1.2.1"
-compose = "1.5.4"
-compose-compiler = "1.5.6"
-compose-plugin = "1.5.11"
-precompose-version = "1.5.10"
+compose = "1.6.0-beta01"
+compose-plugin = "1.6.0-beta01"
 junit = "4.13.2"
 kotlin = "1.9.21"
 ktor = "2.3.7"
+android-svg="1.4"
+precompose = "1.5.10"
 
 [libraries]
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
-kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
 androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-espresso-core" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
-androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-work-runtime = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidx-work-runtime" }
 androidx-preference = { group = "androidx.preference", name = "preference-ktx", version.ref = "androidx-preference" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
-compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
-precompose = { module = "moe.tlaster:precompose", version.ref = "compose" }
+precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
+android-svg = { module = "com.caverock:androidsvg-aar", version.ref = "android-svg" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

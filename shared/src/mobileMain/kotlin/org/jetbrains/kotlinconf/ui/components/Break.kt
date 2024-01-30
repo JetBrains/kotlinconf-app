@@ -21,7 +21,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.theme.Icons
+import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.greyWhite
 import org.jetbrains.kotlinconf.theme.orange
@@ -29,14 +30,16 @@ import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.HDivider
 import org.jetbrains.kotlinconf.ui.VDivider
+import org.jetbrains.kotlinconf.ui.painter
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Break(
     duration: String,
     title: String,
     isLive: Boolean,
-    icon: Painter = Icons.CUP,
-    liveIcon: Painter = Icons.CUP_ACTIVE
+    icon: Painter = Res.drawable.cup.painter(),
+    liveIcon: Painter = Res.drawable.cup_active.painter()
 ) {
     val transition = rememberInfiniteTransition()
     val transparency by transition.animateFloat(

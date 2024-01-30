@@ -36,10 +36,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.theme.Icons
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.grey5Grey90
@@ -70,6 +71,7 @@ data class TagView(
     val isActive: Boolean
 )
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Search(
     controller: AppController,
@@ -89,7 +91,7 @@ fun Search(
         NavigationBar(
             title = "Search",
             isLeftVisible = false,
-            rightIcon = Icons.CLOSE,
+            rightIcon = Res.drawable.close.painter(),
             onLeftClick = {},
             onRightClick = { controller.back() }
         )

@@ -21,30 +21,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.theme.drawablePartners
+import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.theme.grey20Grey80
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey5
 import org.jetbrains.kotlinconf.theme.whiteGrey
 
-private val PARTNER_LOGOS: Map<String, String> = mapOf(
-    "android" to "andorid",
-    "google" to "google",
-    "xebia" to "xebia",
-    "adyen" to "adyen",
-    "kodein" to "kodein_koders",
-    "lunatech" to "lunatech",
-    "gradle" to "gradle",
-    "source" to "source_technology",
-    "sentry" to "sentry",
-    "aws" to "aws",
-    "jetbrains" to "jetbrains"
+@OptIn(ExperimentalResourceApi::class)
+private val PARTNER_LOGOS: Map<String, DrawableResource> = mapOf(
+    "android" to Res.drawable.andorid,
+    "google" to Res.drawable.google,
+    "xebia" to Res.drawable.xebia,
+    "adyen" to Res.drawable.adyen,
+    "kodein" to Res.drawable.kodein_koders,
+    "lunatech" to Res.drawable.lunatech,
+    "gradle" to Res.drawable.gradle,
+    "source" to Res.drawable.source_technology,
+    "sentry" to Res.drawable.sentry,
+    "aws" to Res.drawable.aws,
+    "jetbrains" to Res.drawable.jetbrains
 )
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun partnerLogo(name: String): Painter {
-    val resourceName = PARTNER_LOGOS[name] ?: "jetbrains"
-    return drawablePartners("$resourceName.xml")
+    val resourceName = PARTNER_LOGOS[name] ?: Res.drawable.jetbrains
+    return resourceName.painter()
 }
 
 @Composable
