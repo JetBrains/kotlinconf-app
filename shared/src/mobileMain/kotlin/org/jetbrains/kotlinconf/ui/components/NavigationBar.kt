@@ -8,6 +8,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.*
 import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.theme.*
@@ -18,7 +19,7 @@ fun NavigationBar(
     title: String,
     isLeftVisible: Boolean = true,
     isRightVisible: Boolean = true,
-    rightIcon: Painter = Res.drawable.menu.painter(),
+    rightIcon: DrawableResource = Res.drawable.menu,
     onLeftClick: () -> Unit = {},
     onRightClick: () -> Unit = {},
 ) {
@@ -66,10 +67,10 @@ fun NavigationBar(
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun RightButton(rightIcon: Painter = Res.drawable.menu.painter(), onRightClick: () -> Unit) {
+fun RightButton(rightIcon: DrawableResource = Res.drawable.menu, onRightClick: () -> Unit) {
     IconButton(onClick = onRightClick) {
         Icon(
-            painter = rightIcon,
+            painter = rightIcon.painter(),
             "Right",
             tint = MaterialTheme.colors.greyGrey5
         )

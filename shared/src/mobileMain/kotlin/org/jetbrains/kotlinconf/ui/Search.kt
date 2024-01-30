@@ -91,7 +91,7 @@ fun Search(
         NavigationBar(
             title = "Search",
             isLeftVisible = false,
-            rightIcon = Res.drawable.close.painter(),
+            rightIcon = Res.drawable.close,
             onLeftClick = {},
             onRightClick = { controller.back() }
         )

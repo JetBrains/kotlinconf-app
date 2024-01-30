@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.AboutConf
 import org.jetbrains.kotlinconf.ui.CODE_OF_CONDUCT
 import org.jetbrains.kotlinconf.ui.MOBILE_APP_DESCRIPTION
@@ -189,10 +190,10 @@ class AppController(
         }
     }
 
+    @OptIn(ExperimentalResourceApi::class)
     fun showPrivacyPolicy() {
         push {
             Column {
-
                 NavigationBar(
                     title = "Privacy Policy",
                     isRightVisible = false,
@@ -205,6 +206,7 @@ class AppController(
         }
     }
 
+    @OptIn(ExperimentalResourceApi::class)
     fun showTerms() {
         push {
             Column {

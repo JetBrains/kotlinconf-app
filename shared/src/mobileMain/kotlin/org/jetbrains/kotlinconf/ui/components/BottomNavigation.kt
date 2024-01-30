@@ -1,25 +1,30 @@
 package org.jetbrains.kotlinconf.ui.components
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.scaleIn
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
-import moe.tlaster.precompose.navigation.transition.NavTransition
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.theme.*
+import org.jetbrains.kotlinconf.theme.DEFAULT_TRANSITION
+import org.jetbrains.kotlinconf.theme.blackWhite
+import org.jetbrains.kotlinconf.theme.grey50
+import org.jetbrains.kotlinconf.theme.grey5Grey
+import org.jetbrains.kotlinconf.theme.whiteBlack
+import org.jetbrains.kotlinconf.ui.painter
 
-class TabItem(
+class TabItem @OptIn(ExperimentalResourceApi::class) constructor(
     val name: String,
-    val icon: Painter,
-    val selectedIcon: Painter,
+    val icon: DrawableResource,
+    val selectedIcon: DrawableResource,
     val view: @Composable () -> Unit
 )
 
@@ -51,6 +56,7 @@ fun TabsView(navigator: Navigator, vararg items: TabItem) {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun RowScope.BottomButton(
     navigator: Navigator,
@@ -71,8 +77,9 @@ internal fun RowScope.BottomButton(
             navigator.navigate(tab.name)
         },
         icon = {
+            val drawableResource = if (isSelected) tab.selectedIcon else tab.icon
             Icon(
-                if (isSelected) tab.selectedIcon else tab.icon,
+                drawableResource.painter(),
                 tab.name,
                 tint = if (isSelected) MaterialTheme.colors.blackWhite else grey50
             )

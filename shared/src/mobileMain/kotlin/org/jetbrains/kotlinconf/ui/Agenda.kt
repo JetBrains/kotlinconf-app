@@ -17,10 +17,9 @@ import androidx.compose.runtime.setValue
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.Agenda
-import org.jetbrains.kotlinconf.Day
 import org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.Day
 import org.jetbrains.kotlinconf.ui.components.AgendaDayHeader
 import org.jetbrains.kotlinconf.ui.components.AgendaItem
 import org.jetbrains.kotlinconf.ui.components.AgendaTimeSlotHeader
@@ -60,6 +59,7 @@ fun AgendaView(agenda: Agenda, controller: AppController) {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 private fun LazyListScope.SessionsList(
     day: Day,
     controller: AppController,
@@ -77,8 +77,8 @@ private fun LazyListScope.SessionsList(
                         duration = slot.duration,
                         title = slot.title,
                         isLive = slot.isLive,
-                        icon = painterResource(Res.drawable.lunch),
-                        liveIcon = painterResource(Res.drawable.lunch_active)
+                        icon = Res.drawable.lunch,
+                        liveIcon = Res.drawable.lunch_active
                     )
                 }
             }

@@ -19,6 +19,7 @@ import org.jetbrains.kotlinconf.ui.components.CodeLab
 import org.jetbrains.kotlinconf.ui.components.LightningTalk
 import org.jetbrains.kotlinconf.SessionCardView
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SpeakersFlow(
     controller: AppController,

@@ -32,6 +32,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.theme.grey50
@@ -167,38 +168,39 @@ fun VoteBlock(vote: Score?, onVote: (Score?) -> Unit) {
         VoteButton(
             vote = Score.GOOD,
             active = vote == Score.GOOD,
-            icon = Res.drawable.smilehappy.painter(),
-            activeIcon = Res.drawable.smilehappy_active.painter(),
+            icon = Res.drawable.smilehappy,
+            activeIcon = Res.drawable.smilehappy_active,
             onVote = onVote
         )
         VoteButton(
             vote = Score.OK,
             active = vote == Score.OK,
-            icon = Res.drawable.smileneutral.painter(),
-            activeIcon = Res.drawable.smileneutral_active.painter(),
+            icon = Res.drawable.smileneutral,
+            activeIcon = Res.drawable.smileneutral_active,
             onVote = onVote
         )
         VoteButton(
             vote = Score.BAD,
             active = vote == Score.BAD,
-            icon = Res.drawable.smilesad.painter(),
-            activeIcon = Res.drawable.smilesad_active.painter(),
+            icon = Res.drawable.smilesad,
+            activeIcon = Res.drawable.smilesad_active,
             onVote = onVote
         )
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun VoteButton(
     vote: Score,
     active: Boolean,
-    icon: Painter,
-    activeIcon: Painter,
+    icon: DrawableResource,
+    activeIcon: DrawableResource,
     onVote: (Score?) -> Unit
 ) {
     IconButton(onClick = { onVote(if (active) null else vote) }) {
         Icon(
-            painter = if (active) activeIcon else icon,
+            painter = (if (active) activeIcon else icon).painter(),
             contentDescription = vote.toString(),
             tint = MaterialTheme.colors.greyWhite
         )

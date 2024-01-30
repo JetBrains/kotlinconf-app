@@ -50,23 +50,23 @@ fun MainScreen(service: ConferenceService) {
         } else {
             TabsView(
                 controller,
-                TabItem("menu", Res.drawable.menu.painter(), Res.drawable.menu_active.painter()) {
+                TabItem("menu", Res.drawable.menu, Res.drawable.menu_active) {
                     Menu(controller = it)
                 },
-                TabItem("agenda", Res.drawable.time.painter(), Res.drawable.time_active.painter()) {
+                TabItem("agenda", Res.drawable.time, Res.drawable.time_active) {
                     AgendaView(agenda, it)
                 },
                 TabItem(
                     "speakers",
-                    Res.drawable.speakers.painter(),
-                    Res.drawable.speakers_active.painter()
+                    Res.drawable.speakers,
+                    Res.drawable.speakers_active
                 ) {
                     SpeakersView(controller = it, speakers = speakers.all)
                 },
                 TabItem(
                     "Bookmarks",
-                    Res.drawable.mytalks.painter(),
-                    Res.drawable.mytalks_active.painter()
+                    Res.drawable.mytalks,
+                    Res.drawable.mytalks_active
                 ) {
                     Bookmarks(favoriteSessions, it)
                 },

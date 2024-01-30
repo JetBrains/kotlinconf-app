@@ -56,7 +56,7 @@ fun AboutConf(keynoteSpeakers: List<Speaker>, secondDaySpeakers: List<Speaker>, 
 @Composable
 private fun AboutConfTopBanner() {
     Image(
-        painter = painterResource(Res.drawable.about_conf_top_banner),
+        painter = Res.drawable.about_conf_top_banner.painter(),
         contentDescription = null,
         modifier = Modifier
             .fillMaxWidth()
@@ -222,7 +222,7 @@ private fun Labs() {
         HDivider(Modifier.padding(top = 48.dp))
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = painterResource(Res.drawable.light),
+                painter = Res.drawable.light.painter(),
                 contentDescription = null,
                 tint = orange,
                 modifier = Modifier.padding(end = 8.dp)
@@ -247,7 +247,7 @@ private fun Labs() {
 
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = painterResource(Res.drawable.aws_lab),
+                painter = Res.drawable.aws_lab.painter(),
                 contentDescription = null,
                 tint = violet,
                 modifier = Modifier.padding(end = 8.dp)
@@ -315,7 +315,7 @@ private fun ClosingPanel() {
 private fun BottomBanner() {
     Box(Modifier.fillMaxWidth()) {
         Image(
-            painter = painterResource(Res.drawable.about_conf_bottom_banner),
+            painter = Res.drawable.about_conf_bottom_banner.painter(),
             contentDescription = null,
             contentScale = ContentScale.None,
             modifier = Modifier

@@ -25,7 +25,6 @@ fun AsyncImage(
     contentDescription: String,
     contentScale: ContentScale = ContentScale.Crop,
 ) {
-    remember {  }
     var image by remember { mutableStateOf<ImageBitmap?>(null) }
 
     LaunchedEffect(imageUrl) {

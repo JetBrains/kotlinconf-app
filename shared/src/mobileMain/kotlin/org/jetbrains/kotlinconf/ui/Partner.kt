@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey20
@@ -23,6 +24,7 @@ import org.jetbrains.kotlinconf.theme.greyGrey5
 import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.whiteGrey
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Partner(controller: AppController, name: String, description: String) {
     Column {
@@ -62,6 +64,7 @@ fun Partner(controller: AppController, name: String, description: String) {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun AboutConfTopBanner(name: String) {
     Box(
@@ -71,7 +74,7 @@ private fun AboutConfTopBanner(name: String) {
             .height(176.dp)
     ) {
         Image(
-            painter = LogoForName(name),
+            painter = LogoForName(name).painter(),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.Center)

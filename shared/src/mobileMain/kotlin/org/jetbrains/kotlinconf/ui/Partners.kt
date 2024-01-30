@@ -19,7 +19,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.DrawableResource
@@ -46,11 +45,9 @@ private val PARTNER_LOGOS: Map<String, DrawableResource> = mapOf(
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun partnerLogo(name: String): Painter {
-    val resourceName = PARTNER_LOGOS[name] ?: Res.drawable.jetbrains
-    return resourceName.painter()
-}
+fun partnerLogo(name: String): DrawableResource = PARTNER_LOGOS[name] ?: Res.drawable.jetbrains
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Partners(showPartner: (String) -> Unit, back: () -> Unit) {
     fun LazyGridScope.Block(name: String) {
@@ -100,6 +97,7 @@ fun TextTitle(value: String) {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun PartnerCard(
     name: String,
@@ -120,7 +118,7 @@ private fun PartnerCard(
                 .height(56.dp)
         ) {
             Image(
-                painter = logo,
+                painter = logo.painter(),
                 contentDescription = "image"
             )
             Spacer(modifier = Modifier.weight(1f))

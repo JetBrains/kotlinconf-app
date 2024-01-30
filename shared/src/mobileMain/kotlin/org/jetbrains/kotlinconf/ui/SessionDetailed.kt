@@ -88,6 +88,7 @@ fun SessionDetailed(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun SessionContent(
     time: String,

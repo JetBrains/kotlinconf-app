@@ -13,9 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.theme.divider
 import org.jetbrains.kotlinconf.theme.grey50
@@ -62,21 +62,17 @@ fun ColumnScope.SheetBar() {
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-internal fun LogoForName(name: String): Painter {
-    val icon = when (name) {
-        "android" -> Res.drawable.android_google_big
-        "google" -> Res.drawable.android_google_big
-        "xebia" -> Res.drawable.xebia_big
-        "kodein" -> Res.drawable.kodein_koders_big
-        "lunatech" -> Res.drawable.lunatech_big
-        "gradle" -> Res.drawable.gradle_big
-        "source" -> Res.drawable.source_technology_big
-        "aws" -> Res.drawable.aws_big
-        "sentry" -> Res.drawable.sentry_big
-        "adyen" -> Res.drawable.adyen_big
-        "jetbrains" -> Res.drawable.jetbrains_big
-        else -> Res.drawable.jetbrains_big
-    }
-
-    return icon.painter()
+internal fun LogoForName(name: String): DrawableResource = when (name) {
+    "android" -> Res.drawable.android_google_big
+    "google" -> Res.drawable.android_google_big
+    "xebia" -> Res.drawable.xebia_big
+    "kodein" -> Res.drawable.kodein_koders_big
+    "lunatech" -> Res.drawable.lunatech_big
+    "gradle" -> Res.drawable.gradle_big
+    "source" -> Res.drawable.source_technology_big
+    "aws" -> Res.drawable.aws_big
+    "sentry" -> Res.drawable.sentry_big
+    "adyen" -> Res.drawable.adyen_big
+    "jetbrains" -> Res.drawable.jetbrains_big
+    else -> Res.drawable.jetbrains_big
 }
