@@ -13,6 +13,8 @@ import io.ktor.util.date.*
 import io.ktor.utils.io.core.*
 import kotlin.native.concurrent.*
 
+val HTTP_CLIENT = HttpClient()
+
 /**
  * Adapter to handle backend API and manage auth information.
  */
@@ -21,7 +23,7 @@ class APIClient(
 ) : Closeable {
     var userId: String? = null
 
-    private val client = HttpClient {
+    private val client = HTTP_CLIENT.config {
         install(ContentNegotiation) {
             json()
         }

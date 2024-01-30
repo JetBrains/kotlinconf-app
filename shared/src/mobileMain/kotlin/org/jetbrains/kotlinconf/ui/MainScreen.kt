@@ -6,13 +6,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import kotlinconfapp.shared.generated.resources.Res
 import moe.tlaster.precompose.navigation.rememberNavigator
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.withAppController
-import org.jetbrains.kotlinconf.theme.Icons
 import org.jetbrains.kotlinconf.ui.components.TabItem
 import org.jetbrains.kotlinconf.ui.components.TabsView
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun MainScreen(service: ConferenceService) {
     val agenda by service.agenda.collectAsState()
@@ -48,18 +50,26 @@ fun MainScreen(service: ConferenceService) {
         } else {
             TabsView(
                 controller,
-                TabItem("menu", Icons.MENU, Icons.MENU_ACTIVE) {
+                TabItem("menu", Res.drawable.menu, Res.drawable.menu_active) {
                     Menu(controller = it)
                 },
-                TabItem("agenda", Icons.TIME, Icons.TIME_ACTIVE) {
+                TabItem("agenda", Res.drawable.time, Res.drawable.time_active) {
                     AgendaView(agenda, it)
                 },
-                TabItem("speakers", Icons.SPEAKERS, Icons.SPEAKERS_ACTIVE) {
+                TabItem(
+                    "speakers",
+                    Res.drawable.speakers,
+                    Res.drawable.speakers_active
+                ) {
                     SpeakersView(controller = it, speakers = speakers.all)
                 },
-                TabItem("Bookmarks", Icons.MY_TALKS, Icons.MY_TALKS_ACTIVE) {
+                TabItem(
+                    "Bookmarks",
+                    Res.drawable.mytalks,
+                    Res.drawable.mytalks_active
+                ) {
                     Bookmarks(favoriteSessions, it)
-                }
+                },
             )
         }
     }

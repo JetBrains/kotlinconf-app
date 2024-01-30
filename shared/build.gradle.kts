@@ -26,6 +26,9 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 compileOnly(compose.runtime)
+
+                api(compose.components.resources)
+
                 api("io.ktor:ktor-client-logging:2.3.4")
                 api("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
                 api("io.ktor:ktor-client-content-negotiation:2.3.4")
@@ -71,6 +74,7 @@ kotlin {
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
+                implementation(libs.android.svg)
                 implementation(libs.androidx.core.ktx)
                 implementation(libs.androidx.work.runtime)
                 implementation(libs.androidx.preference)
@@ -102,8 +106,8 @@ android {
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].resources.srcDirs("src/mobileMain/resources")
     sourceSets["main"].res.srcDirs("src/mobileMain/resources")
+    sourceSets["main"].resources.srcDirs("src/mobileMain/resources")
 
     defaultConfig {
         targetSdk = libs.versions.android.targetSdk.get().toInt()

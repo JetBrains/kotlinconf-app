@@ -1,22 +1,33 @@
 package org.jetbrains.kotlinconf.ui.components
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.draw.*
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.unit.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.theme.*
+import org.jetbrains.kotlinconf.theme.grey5Black
+import org.jetbrains.kotlinconf.theme.greyWhite
+import org.jetbrains.kotlinconf.theme.orange
+import org.jetbrains.kotlinconf.theme.t2
+import org.jetbrains.kotlinconf.theme.violet
+import org.jetbrains.kotlinconf.ui.painter
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Tag(
-    icon: Painter,
+    icon: DrawableResource,
     text: String,
     dimmed: Boolean = false,
     iconColor: Color = orange,
@@ -31,7 +42,7 @@ fun Tag(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            painter = icon, contentDescription = null, tint = iconColor,
+            painter = icon.painter(), contentDescription = null, tint = iconColor,
             modifier = Modifier
                 .padding(start = 4.dp)
                 .size(16.dp)
@@ -46,17 +57,20 @@ fun Tag(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun LightningTalk(title: String, dimmed: Boolean = false) {
-    Tag(Icons.LIGHT, title, dimmed)
+    Tag(Res.drawable.light, title, dimmed)
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun CodeLab(dimmed: Boolean = false) {
-    Tag(Icons.AWS_LAB, "Big Nerd Ranch lab", dimmed, violet)
+    Tag(Res.drawable.aws_lab, "Big Nerd Ranch lab", dimmed, violet)
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun AWSLab(dimmed: Boolean = false) {
-    Tag(Icons.AWS_LAB, "AWS lab", dimmed, violet)
+    Tag(Res.drawable.aws_lab, "AWS lab", dimmed, violet)
 }

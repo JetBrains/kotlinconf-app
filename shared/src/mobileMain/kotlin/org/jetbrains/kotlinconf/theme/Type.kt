@@ -7,7 +7,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import org.jetbrains.kotlinconf.utils.font
+import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.Font
 
 val Typography: Typography
     @Composable
@@ -44,19 +46,18 @@ val Typography.t2: TextStyle
         lineHeight = 24.sp
     )
 
+@OptIn(ExperimentalResourceApi::class)
 val JetBrainsMono: FontFamily
     @Composable
     get() {
         return FontFamily(
-            font(
-                name = "JetBrains Mono",
-                res = "jetbrainsmono_regular",
-                weight = FontWeight.Normal,
-                style = FontStyle.Normal
+            Font(
+                Res.font.jetbrainsmono_regular,
+                FontWeight.Normal,
+                FontStyle.Normal
             ),
-            font(
-                "JetBrains Mono",
-                "jetbrainsmono_extrabold",
+            Font(
+                Res.font.jetbrainsmono_extrabold,
                 FontWeight.ExtraBold,
                 FontStyle.Normal
             ),
@@ -66,21 +67,15 @@ val JetBrainsMono: FontFamily
 val Typography.bannerText: TextStyle
     @Composable
     get() = TextStyle(
-        fontFamily = JetBrainsSans,
+        fontFamily = JetBrainsSansBold,
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp,
         lineHeight = 29.sp
     )
 
-val JetBrainsSans: FontFamily
+@OptIn(ExperimentalResourceApi::class)
+val JetBrainsSansBold: FontFamily
     @Composable
-    get() {
-        return FontFamily(
-            font(
-                name = "JetBrains Sans",
-                res = "jetbrainssans_bold",
-                weight = FontWeight.Bold,
-                style = FontStyle.Normal
-            ),
-        )
-    }
+    get() = FontFamily(
+        Font(Res.font.jetbrainssans_bold, FontWeight.Bold, FontStyle.Normal),
+    )

@@ -19,9 +19,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.theme.Icons
+import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.greyWhite
 import org.jetbrains.kotlinconf.theme.orange
@@ -29,14 +30,16 @@ import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.HDivider
 import org.jetbrains.kotlinconf.ui.VDivider
+import org.jetbrains.kotlinconf.ui.painter
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Break(
     duration: String,
     title: String,
     isLive: Boolean,
-    icon: Painter = Icons.CUP,
-    liveIcon: Painter = Icons.CUP_ACTIVE
+    icon: DrawableResource = Res.drawable.cup,
+    liveIcon: DrawableResource = Res.drawable.cup_active
 ) {
     val transition = rememberInfiniteTransition()
     val transparency by transition.animateFloat(
@@ -73,8 +76,9 @@ fun Break(
                 color = MaterialTheme.colors.greyWhite
             )
             Spacer(modifier = Modifier.weight(1f))
+            val iconResource = if (isLive) liveIcon else icon
             Icon(
-                painter = if (isLive) liveIcon else icon,
+                painter = iconResource.painter(),
                 contentDescription = "icon",
                 tint = if (isLive) orange.copy(alpha = transparency) else grey50
             )

@@ -1,20 +1,35 @@
+@file:OptIn(ExperimentalResourceApi::class)
+
 package org.jetbrains.kotlinconf.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.layout.*
-import androidx.compose.ui.platform.*
-import androidx.compose.ui.text.*
-import androidx.compose.ui.text.font.*
-import androidx.compose.ui.text.style.*
-import androidx.compose.ui.unit.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
+import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.theme.Vector
-import org.jetbrains.kotlinconf.theme.Icons
+import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.theme.bannerText
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
@@ -54,7 +69,7 @@ fun AboutConf(keynoteSpeakers: List<Speaker>, secondDaySpeakers: List<Speaker>, 
 @Composable
 private fun AboutConfTopBanner() {
     Image(
-        painter = Vector.ABOUT_TOP_BANNER,
+        painter = Res.drawable.about_conf_top_banner.painter(),
         contentDescription = null,
         modifier = Modifier
             .fillMaxWidth()
@@ -214,13 +229,14 @@ private fun SecondDayKeynote(secondDaySpeakers: List<Speaker>) {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun Labs() {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
         HDivider(Modifier.padding(top = 48.dp))
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = Icons.LIGHT,
+                painter = Res.drawable.light.painter(),
                 contentDescription = null,
                 tint = orange,
                 modifier = Modifier.padding(end = 8.dp)
@@ -245,7 +261,7 @@ private fun Labs() {
 
         Row(Modifier.padding(16.dp)) {
             Icon(
-                painter = Icons.AWS_LAB,
+                painter = Res.drawable.aws_lab.painter(),
                 contentDescription = null,
                 tint = violet,
                 modifier = Modifier.padding(end = 8.dp)
@@ -309,11 +325,12 @@ private fun ClosingPanel() {
     HDivider()
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun BottomBanner() {
     Box(Modifier.fillMaxWidth()) {
         Image(
-            painter = Vector.ABOUT_BOTTOM_BANNER,
+            painter = Res.drawable.about_conf_bottom_banner.painter(),
             contentDescription = null,
             contentScale = ContentScale.None,
             modifier = Modifier

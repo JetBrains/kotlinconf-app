@@ -9,6 +9,7 @@ import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
+import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.theme.*
 
@@ -72,7 +73,7 @@ private fun PrivacyPolicy(
     }) {
         Column(Modifier.fillMaxWidth()) {
             Image(
-                painter = Vector.PRIVACY_POLICY_BIRD,
+                painter = Res.drawable.privacy_policy_bird.painter(),
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -212,7 +213,7 @@ private fun Notifications(onAcceptNotifications: () -> Unit, onClose: () -> Unit
     }) {
         Column(Modifier.fillMaxWidth()) {
             Image(
-                painter = Vector.NOTIFICATIONS_BIRD,
+                painter = Res.drawable.notifications_bird.painter(),
                 contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)

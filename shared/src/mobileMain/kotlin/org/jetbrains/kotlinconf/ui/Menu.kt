@@ -20,12 +20,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
+import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.theme.Vector
-import org.jetbrains.kotlinconf.theme.Icons
 import org.jetbrains.kotlinconf.theme.grey20Grey80
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
@@ -34,6 +34,7 @@ import org.jetbrains.kotlinconf.theme.greyWhite
 import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.whiteGrey
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Menu(controller: AppController) {
     val uriHandler = LocalUriHandler.current
@@ -56,43 +57,43 @@ fun Menu(controller: AppController) {
                 Column {
                     MenuLogo()
                     HDivider()
-                    MenuItem(text = "Search", icon = Icons.SEARCH) {
+                    MenuItem(text = "Search", icon = Res.drawable.search) {
                         controller.showSearch()
                     }
                     HDivider()
-                    MenuItem(text = "KotlinConf`24", icon = Icons.ARROW_RIGHT) {
+                    MenuItem(text = "KotlinConf`24", icon = Res.drawable.arrow_right) {
                         controller.showAboutTheConf()
                     }
                     HDivider()
-                    MenuItem(text = "the app", icon = Icons.ARROW_RIGHT) {
+                    MenuItem(text = "the app", icon = Res.drawable.arrow_right) {
                         controller.showAppInfo()
                     }
                     HDivider()
-                    MenuItem(text = "Partners", icon = Icons.ARROW_RIGHT) {
+                    MenuItem(text = "Partners", icon = Res.drawable.arrow_right) {
                         controller.showPartners()
                     }
                     HDivider()
-                    MenuItem(text = "code of conduct", icon = Icons.ARROW_RIGHT) {
+                    MenuItem(text = "code of conduct", icon = Res.drawable.arrow_right) {
                         controller.showCodeOfConduct()
                     }
                     HDivider()
-                    MenuItem(text = "Privacy policy", icon = Icons.ARROW_RIGHT) {
+                    MenuItem(text = "Privacy policy", icon = Res.drawable.arrow_right) {
                         controller.showPrivacyPolicy()
                     }
                     HDivider()
-                    MenuItem(text = "TERMS OF USE", icon = Icons.ARROW_RIGHT) {
+                    MenuItem(text = "TERMS OF USE", icon = Res.drawable.arrow_right) {
                         controller.showTerms()
                     }
                 }
             }
 
             item {
-                BigItem("Twitter", "#KOTLINCONF24", Icons.TWITTER) {
+                BigItem("Twitter", "#KOTLINCONF24", Res.drawable.twitter) {
                     uriHandler.openUri("https://twitter.com/kotlinconf")
                 }
             }
             item {
-                BigItem("Slack Channel", "", Icons.SLACK) {
+                BigItem("Slack Channel", "", Res.drawable.slack) {
                     uriHandler.openUri("https://kotlinlang.slack.com/messages/kotlinconf/")
                 }
             }
@@ -100,6 +101,7 @@ fun Menu(controller: AppController) {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun MenuLogo() {
     Column(
@@ -108,18 +110,19 @@ private fun MenuLogo() {
             .background(MaterialTheme.colors.grey5Black)
     ) {
         Image(
-            painter = Vector.MENU_BANNER,
+            painter = Res.drawable.menu_banner.painter(),
             contentDescription = "logo",
             modifier = Modifier.padding(16.dp)
         )
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun BigItem(
     title: String,
     subtitle: String,
-    icon: Painter,
+    icon: DrawableResource,
     onClick: () -> Unit = {}
 ) {
     Column(
@@ -141,7 +144,7 @@ private fun BigItem(
         Row(Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.weight(1f))
             Icon(
-                painter = icon,
+                painter = icon.painter(),
                 contentDescription = title,
                 tint = grey50,
                 modifier = Modifier
@@ -152,8 +155,9 @@ private fun BigItem(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
-private fun MenuItem(text: String, icon: Painter, onClick: () -> Unit = {}) {
+private fun MenuItem(text: String, icon: DrawableResource, onClick: () -> Unit = {}) {
     Row(
         Modifier
             .height(56.dp)
@@ -171,7 +175,7 @@ private fun MenuItem(text: String, icon: Painter, onClick: () -> Unit = {}) {
 
         Spacer(modifier = Modifier.weight(1f))
         Icon(
-            painter = icon,
+            painter = icon.painter(),
             contentDescription = "icon",
             tint = MaterialTheme.colors.greyGrey5,
             modifier = Modifier.padding(16.dp)

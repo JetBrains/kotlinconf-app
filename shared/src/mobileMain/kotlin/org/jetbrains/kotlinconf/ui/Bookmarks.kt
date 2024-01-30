@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalResourceApi::class)
+
 package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.background
@@ -21,10 +23,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionCardView
-import org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.theme.Icons
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey5
@@ -119,6 +122,7 @@ private fun Finished(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun UpcomingCard(
     title: String,
@@ -162,7 +166,7 @@ private fun UpcomingCard(
                 onBookmarkClick()
             }) {
                 Icon(
-                    painter = Icons.BOOKMARK_ACTIVE,
+                    painter = Res.drawable.bookmark_active.painter(),
                     contentDescription = "bookmark",
                     tint = orange
                 )
@@ -172,6 +176,7 @@ private fun UpcomingCard(
 }
 
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun FinishedCard(
     title: String,
@@ -232,7 +237,7 @@ private fun FinishedCard(
                 onBookmarkClick()
             }) {
                 Icon(
-                    painter = Icons.BOOKMARK,
+                    painter = Res.drawable.bookmark.painter(),
                     contentDescription = "bookmark",
                     tint = orange
                 )

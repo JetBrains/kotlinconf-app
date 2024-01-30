@@ -11,16 +11,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.theme.Vector
+import kotlinconfapp.shared.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.theme.agendaHeaderColor
+import org.jetbrains.kotlinconf.ui.painter
 
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun AgendaDayHeader(title: String) {
     val image = when (title) {
-        "APRIL 12" -> Vector.SCHEDULE_BANNERS[0]
-        "APRIL 13" -> Vector.SCHEDULE_BANNERS[1]
-        else -> Vector.SCHEDULE_BANNERS[2]
+        "APRIL 12" -> Res.drawable.schedule_day_1_banner
+        "APRIL 13" -> Res.drawable.schedule_day_2_banner
+        else -> Res.drawable.schedule_day_3_banner
     }
 
     Column(
@@ -30,11 +33,10 @@ internal fun AgendaDayHeader(title: String) {
             .padding(top = 4.dp)
     ) {
         Image(
-            image,
+            image.painter(),
             contentDescription = null,
             modifier = Modifier
                 .height(56.dp)
-//                .offset(-24.dp)
                 .fillMaxWidth(),
             contentScale = ContentScale.None
         )

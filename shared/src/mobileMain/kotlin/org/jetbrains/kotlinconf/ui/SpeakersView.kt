@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.theme.subtitle
@@ -15,6 +16,7 @@ import org.jetbrains.kotlinconf.theme.title
 import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SpeakersView(speakers: List<Speaker>, controller: AppController) {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {

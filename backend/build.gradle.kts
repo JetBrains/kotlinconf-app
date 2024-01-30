@@ -41,8 +41,3 @@ dependencies {
 
     implementation("ch.qos.logback:logback-classic:1.4.8")
 }
-
-tasks.named<JavaExec>("run") {
-    dependsOn(tasks.named<Jar>("jvmJar"))
-    classpath(tasks.named<Jar>("jvmJar"))
-}
