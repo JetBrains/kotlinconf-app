@@ -26,7 +26,6 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.greyWhite
 import org.jetbrains.kotlinconf.theme.orange
-import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.HDivider
 import org.jetbrains.kotlinconf.ui.VDivider
@@ -72,7 +71,7 @@ fun Break(
                 color = MaterialTheme.colors.greyWhite
             )
             Text(
-                " / $title", style = MaterialTheme.typography.t2,
+                " / $title", style = MaterialTheme.typography.body2,
                 color = MaterialTheme.colors.greyWhite
             )
             Spacer(modifier = Modifier.weight(1f))

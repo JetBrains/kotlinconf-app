@@ -32,7 +32,6 @@ import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey5
 import org.jetbrains.kotlinconf.theme.orange
-import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.components.TabBar
 import org.jetbrains.kotlinconf.ui.components.VoteAndFeedback
@@ -142,7 +141,7 @@ private fun UpcomingCard(
             Text(
                 text = timeLine.uppercase(),
                 color = grey50,
-                style = MaterialTheme.typography.t2,
+                style = MaterialTheme.typography.body2,
                 modifier = Modifier.padding(16.dp)
             )
             Text(
@@ -152,7 +151,7 @@ private fun UpcomingCard(
             )
             Text(
                 text = speakerLine,
-                style = MaterialTheme.typography.t2.copy(
+                style = MaterialTheme.typography.body2.copy(
                     color = MaterialTheme.colors.greyGrey5
                 ),
                 modifier = Modifier.padding(top = 4.dp, start = 16.dp, end = 16.dp)
@@ -199,7 +198,7 @@ private fun FinishedCard(
             Text(
                 text = timeLine.uppercase(),
                 color = grey50,
-                style = MaterialTheme.typography.t2,
+                style = MaterialTheme.typography.body2,
                 modifier = Modifier.padding(16.dp)
             )
             Text(
@@ -209,7 +208,7 @@ private fun FinishedCard(
             )
             Text(
                 text = speakerLine,
-                style = MaterialTheme.typography.t2.copy(
+                style = MaterialTheme.typography.body2.copy(
                     color = MaterialTheme.colors.greyGrey5
                 ),
                 modifier = Modifier.padding(top = 4.dp, start = 16.dp, end = 16.dp)

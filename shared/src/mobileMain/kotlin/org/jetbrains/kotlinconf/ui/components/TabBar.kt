@@ -14,7 +14,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.greyWhite
 import org.jetbrains.kotlinconf.theme.whiteGrey
@@ -75,7 +74,7 @@ fun TabButton(tab: String, isSelected: Boolean, onSelect: () -> Unit) {
             text = tab.uppercase(),
             modifier = Modifier
                 .padding(start = 7.dp, end = 8.dp, top = 2.dp, bottom = 2.dp),
-            style = MaterialTheme.typography.t2,
+            style = MaterialTheme.typography.body2,
             color = textColor
         )
     }

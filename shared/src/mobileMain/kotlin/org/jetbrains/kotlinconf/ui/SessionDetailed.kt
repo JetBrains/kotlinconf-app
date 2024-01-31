@@ -143,7 +143,7 @@ private fun SessionHead(
                 Text(
                     modifier = Modifier.padding(top = 12.dp),
                     text = time.uppercase(),
-                    style = MaterialTheme.typography.t2.copy(
+                    style = MaterialTheme.typography.body2.copy(
                         color = MaterialTheme.colors.grey50Grey20
                     ),
                 )
@@ -161,7 +161,7 @@ private fun SessionHead(
             speakers.forEach {
                 Text(
                     it.name,
-                    style = MaterialTheme.typography.t2.copy(
+                    style = MaterialTheme.typography.body2.copy(
                         color = MaterialTheme.colors.greyGrey20
                     )
                 )
@@ -228,7 +228,7 @@ private fun SessionDetails(
         Column(Modifier.padding(16.dp)) {
             Text(
                 description,
-                style = MaterialTheme.typography.t2.copy(
+                style = MaterialTheme.typography.body2.copy(
                     color = MaterialTheme.colors.greyGrey20
                 )
             )

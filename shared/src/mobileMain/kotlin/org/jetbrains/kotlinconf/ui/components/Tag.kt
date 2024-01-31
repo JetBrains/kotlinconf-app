@@ -20,7 +20,6 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyWhite
 import org.jetbrains.kotlinconf.theme.orange
-import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.violet
 import org.jetbrains.kotlinconf.ui.painter
 
@@ -51,7 +50,7 @@ fun Tag(
             text = text,
             modifier = Modifier
                 .padding(start = 4.dp, end = 4.dp, top = 2.dp, bottom = 2.dp),
-            style = MaterialTheme.typography.t2,
+            style = MaterialTheme.typography.body2,
             color = MaterialTheme.colors.greyWhite
         )
     }

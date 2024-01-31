@@ -20,7 +20,6 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.theme.divider
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.greyWhite
-import org.jetbrains.kotlinconf.theme.t2
 
 @Composable
 fun HDivider(modifier: Modifier = Modifier) {
@@ -41,7 +40,7 @@ fun LocationRow(location: String, modifier: Modifier = Modifier) {
     Row(modifier) {
         Text(
             location.uppercase(),
-            style = MaterialTheme.typography.t2.copy(
+            style = MaterialTheme.typography.body2.copy(
                 color = grey50
             ),
         )

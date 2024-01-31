@@ -10,7 +10,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.greyGrey20
 import org.jetbrains.kotlinconf.theme.greyWhite
 
@@ -20,7 +19,7 @@ fun TextContent(value: AnnotatedString) {
 
     ClickableText(
         value,
-        style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyGrey20),
+        style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
         modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
         onClick = {
             value.getStringAnnotations("link", it, it).firstOrNull()?.let {
@@ -35,7 +34,7 @@ fun TextContent(value: AnnotatedString) {
 fun TextTitle(value: String) {
     Text(
         value,
-        style = MaterialTheme.typography.t2.copy(
+        style = MaterialTheme.typography.body2.copy(
             color = MaterialTheme.colors.greyWhite,
             fontWeight = FontWeight.Bold
         ),
@@ -49,7 +48,7 @@ fun TextTitle(value: String) {
 fun TextContent(value: String) {
     Text(
         value,
-        style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyGrey20),
+        style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
         modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
     )
 }

@@ -16,19 +16,25 @@ val Typography: Typography
     get() {
         return Typography(
             h2 = TextStyle(
-                fontFamily = JetBrainsMono,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 32.sp,
-                lineHeight = 36.sp
+                fontFamily = JetBrainsSans,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 35.sp,
+                lineHeight = 42.sp
             ),
             h4 = TextStyle(
-                fontFamily = JetBrainsMono,
-                fontWeight = FontWeight.ExtraBold,
+                fontFamily = JetBrainsSans,
+                fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp,
                 lineHeight = 24.sp
             ),
+            body1 = TextStyle(
+                fontFamily = JetBrainsSans,
+                fontWeight = FontWeight.Normal,
+                fontSize = 20.sp,
+                lineHeight = 28.sp
+            ),
             body2 = TextStyle(
-                fontFamily = JetBrainsMono,
+                fontFamily = JetBrainsSans,
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp,
                 lineHeight = 24.sp
@@ -36,46 +42,20 @@ val Typography: Typography
         )
     }
 
-
-val Typography.t2: TextStyle
-    @Composable
-    get() = TextStyle(
-        fontFamily = JetBrainsMono,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp
-    )
-
-@OptIn(ExperimentalResourceApi::class)
-val JetBrainsMono: FontFamily
-    @Composable
-    get() {
-        return FontFamily(
-            Font(
-                Res.font.jetbrainsmono_regular,
-                FontWeight.Normal,
-                FontStyle.Normal
-            ),
-            Font(
-                Res.font.jetbrainsmono_extrabold,
-                FontWeight.ExtraBold,
-                FontStyle.Normal
-            ),
-        )
-    }
-
 val Typography.bannerText: TextStyle
     @Composable
     get() = TextStyle(
-        fontFamily = JetBrainsSansBold,
+        fontFamily = JetBrainsSans,
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp,
         lineHeight = 29.sp
     )
 
 @OptIn(ExperimentalResourceApi::class)
-val JetBrainsSansBold: FontFamily
+val JetBrainsSans: FontFamily
     @Composable
     get() = FontFamily(
-        Font(Res.font.jetbrainssans_bold, FontWeight.Bold, FontStyle.Normal),
+        Font(Res.font.jetbrains_sans_bold, FontWeight.Bold, FontStyle.Normal),
+        Font(Res.font.jetbrains_sans_semibold, FontWeight.SemiBold, FontStyle.Normal),
+        Font(Res.font.jetbrains_sans_regular, FontWeight.Normal, FontStyle.Normal),
     )

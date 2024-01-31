@@ -31,7 +31,6 @@ import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey5
 import org.jetbrains.kotlinconf.theme.greyWhite
-import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.whiteGrey
 
 @OptIn(ExperimentalResourceApi::class)
@@ -132,13 +131,13 @@ private fun BigItem(
             .height(140.dp)
     ) {
         Text(
-            title.uppercase(), style = MaterialTheme.typography.t2.copy(
+            title.uppercase(), style = MaterialTheme.typography.body2.copy(
                 color = MaterialTheme.colors.greyWhite
             ),
             modifier = Modifier.padding(top = 16.dp, start = 16.dp)
         )
         Text(
-            subtitle.uppercase(), style = MaterialTheme.typography.t2.copy(color = grey50),
+            subtitle.uppercase(), style = MaterialTheme.typography.body2.copy(color = grey50),
             modifier = Modifier.padding(start = 16.dp)
         )
         Row(Modifier.fillMaxWidth()) {
@@ -168,7 +167,7 @@ private fun MenuItem(text: String, icon: DrawableResource, onClick: () -> Unit =
         Text(
             text.uppercase(), modifier = Modifier
                 .padding(16.dp),
-            style = MaterialTheme.typography.t2.copy(
+            style = MaterialTheme.typography.body2.copy(
                 color = MaterialTheme.colors.greyWhite
             )
         )

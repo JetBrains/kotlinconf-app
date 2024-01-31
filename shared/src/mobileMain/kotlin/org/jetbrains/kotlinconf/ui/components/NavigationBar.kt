@@ -49,7 +49,7 @@ fun NavigationBar(
 
             Text(
                 text = title.uppercase(),
-                style = MaterialTheme.typography.t2,
+                style = MaterialTheme.typography.body2,
                 color = grey50
             )
 
