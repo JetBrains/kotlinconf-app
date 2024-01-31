@@ -72,7 +72,7 @@ data class TagView(
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun Search(
+fun SearchScreen(
     controller: AppController,
     sessions: List<SessionCardView>,
     speakers: List<Speaker>

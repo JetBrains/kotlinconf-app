@@ -23,6 +23,8 @@ fun WelcomeScreen(
             onRejectPrivacy()
             showFullPrivacyPolicy = false
             step += 1
+        }, onDismiss = {
+            showFullPrivacyPolicy = false
         })
     } else if (step == 0) {
         WelcomePrivacyPolicyScreen(onAcceptPrivacy, showDetails = {

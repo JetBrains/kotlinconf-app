@@ -34,8 +34,8 @@ fun MainScreen(service: ConferenceService) {
             }
         }
 
-    var showWelcome = true
-//    var showWelcome by remember { mutableStateOf(service.needsOnboarding()) }
+//    var showWelcome = true
+    var showWelcome by remember { mutableStateOf(true) } //service.needsOnboarding()) }
 
     withAppController(service) {
         if (showWelcome) {

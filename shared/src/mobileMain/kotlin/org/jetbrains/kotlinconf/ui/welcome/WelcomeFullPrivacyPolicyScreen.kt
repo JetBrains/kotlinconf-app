@@ -7,7 +7,8 @@ import org.jetbrains.kotlinconf.ui.PrivacyPolicyScreen
 @Composable
 fun WelcomeFullPrivacyPolicyScreen(
     onAccept: () -> Unit,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    onDismiss: () -> Unit
 ) {
     FormWithButtons(
         onAccept = {
@@ -15,6 +16,6 @@ fun WelcomeFullPrivacyPolicyScreen(
             onClose()
         }, onReject = onClose
     ) {
-        PrivacyPolicyScreen()
+        PrivacyPolicyScreen(onDismiss)
     }
 }
