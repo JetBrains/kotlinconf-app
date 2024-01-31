@@ -74,8 +74,8 @@ fun MainScreen(service: ConferenceService) {
                 },
                 TabItem(
                     "Location",
-                    Res.drawable.location.painter(),
-                    Res.drawable.location_active.painter()
+                    Res.drawable.location,
+                    Res.drawable.location_active
                 ) {
                     LocationScreen()
                 },

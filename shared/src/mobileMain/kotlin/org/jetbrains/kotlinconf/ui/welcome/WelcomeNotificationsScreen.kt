@@ -51,7 +51,7 @@ fun WelcomeNotificationsScreen(onAcceptNotifications: () -> Unit, onClose: () ->
             )
 
             Text(
-                "Do you want reminders?".uppercase(),
+                "Do you want reminders?",
                 style = MaterialTheme.typography.h2.copy(color = MaterialTheme.colors.greyWhite),
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
             )
@@ -88,5 +88,8 @@ fun WelcomeNotificationsScreen(onAcceptNotifications: () -> Unit, onClose: () ->
     }
 }
 
-internal const val REMINDERS_TEXT =
-    "Get reminders about talks that you don’t want to miss. You will receive a message 5 minutes before the session begins so you have time to get ready."
+internal const val REMINDERS_TEXT = """
+Get reminders about talks that you don’t want to miss. 
+
+You will receive a message 5 minutes before the session begins so you have time to get ready.
+"""
