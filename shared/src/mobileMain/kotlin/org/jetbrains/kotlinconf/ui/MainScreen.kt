@@ -70,6 +70,13 @@ fun MainScreen(service: ConferenceService) {
                 ) {
                     Bookmarks(favoriteSessions, it)
                 },
+                TabItem(
+                    "Location",
+                    Res.drawable.location.painter(),
+                    Res.drawable.location_active.painter()
+                ) {
+                    LocationScreen()
+                },
             )
         }
     }
