@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalResourceApi::class)
-
 package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.Image
@@ -7,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,19 +31,26 @@ import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.theme.bannerText
+import org.jetbrains.kotlinconf.theme.blackGrey5
+import org.jetbrains.kotlinconf.theme.blackWhite
 import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey20
 import org.jetbrains.kotlinconf.theme.greyWhite
 import org.jetbrains.kotlinconf.theme.orange
-import org.jetbrains.kotlinconf.theme.violet
 import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.components.AboutConfSubtitle
+import org.jetbrains.kotlinconf.ui.components.AboutConfTopBanner
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun AboutConf(keynoteSpeakers: List<Speaker>, secondDaySpeakers: List<Speaker>, back: () -> Unit) {
+fun AboutConfScreen(
+    keynoteSpeakers: List<Speaker>,
+    secondDaySpeakers: List<Speaker>,
+    back: () -> Unit
+) {
     Column(
         Modifier
             .verticalScroll(rememberScrollState())
@@ -51,16 +58,20 @@ fun AboutConf(keynoteSpeakers: List<Speaker>, secondDaySpeakers: List<Speaker>, 
             .fillMaxWidth()
     ) {
         NavigationBar(
-            title = "ABOUT", isLeftVisible = true, onLeftClick = back, isRightVisible = false
+            title = "About conference",
+            isLeftVisible = true,
+            onLeftClick = back,
+            isRightVisible = false
         )
         AboutConfTopBanner()
+        AboutConfSchedule()
         HDivider()
-        Description()
+        AboutConfDescription()
         HDivider()
-        Keynote(keynoteSpeakers)
-        SecondDayKeynote(secondDaySpeakers)
+        AboutConfKeynoteSection(keynoteSpeakers)
+        AboutConfSecondKeynote(secondDaySpeakers)
         HDivider()
-        Labs()
+        LightningTalks()
         Party()
         ClosingPanel()
         FindMore()
@@ -68,47 +79,53 @@ fun AboutConf(keynoteSpeakers: List<Speaker>, secondDaySpeakers: List<Speaker>, 
 }
 
 @Composable
-private fun AboutConfTopBanner() {
-    Image(
-        painter = Res.drawable.about_conf_top_banner.painter(),
-        contentDescription = null,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 40.dp, bottom = 30.dp, start = 30.dp, end = 30.dp),
-        contentScale = ContentScale.FillWidth
+fun AboutConfSchedule() {
+    val text = """
+        May 22 — Workshops
+        May 23–24 — Conference
+        Bella Center Copenhagen, Denmark
+    """.trimIndent()
+    Text(
+        text,
+        style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.blackGrey5),
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 24.dp)
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun Description() {
+private fun AboutConfDescription() {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
+        val text =
+            """KotlinConfKotlinConf is the official annual conference devoted to the Kotlin programming language. Organized by JetBrains, it is a place for the community to gather and discuss all things Kotlin."""
         Text(
-            "KotlinConf is the official annual conference devoted to the Kotlin programming language. Organized by JetBrains, it is a place for the community to gather and discuss all things Kotlin.",
+            text,
             style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
             modifier = Modifier.padding(16.dp, top = 24.dp)
         )
 
-        Text(
-            "Social media hashtag:",
-            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
-            modifier = Modifier.padding(16.dp, top = 24.dp)
-        )
+        FlowRow(
+            modifier = Modifier
+                .padding(top = 10.dp, start = 16.dp, end = 16.dp, bottom = 24.dp)
+        ) {
+            Text(
+                "Social media hashtag: ",
+                style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
+            )
 
-        Text(
-            "#KOTLINCONF",
-            style = MaterialTheme.typography.body2.copy(
-                color = MaterialTheme.colors.greyGrey20,
-                fontWeight = FontWeight.Bold
-            ),
-            modifier = Modifier.padding(start = 16.dp, bottom = 48.dp)
-        )
+            Text(
+                "#KotlinConf",
+                style = MaterialTheme.typography.body2.copy(
+                    color = MaterialTheme.colors.blackWhite,
+                ),
+            )
+        }
     }
-
 }
 
 @Composable
-private fun Keynote(keynoteSpeakers: List<Speaker>) {
-    TextTitle("APRIL 13 / 09:00", "Opening Keynote")
+private fun AboutConfKeynoteSection(keynoteSpeakers: List<Speaker>) {
+    AboutConfSubtitle("May 23, 9:00", "Opening Keynote")
     HDivider()
 
     if (keynoteSpeakers.size < 4) return
@@ -116,30 +133,30 @@ private fun Keynote(keynoteSpeakers: List<Speaker>) {
     Row(Modifier.background(MaterialTheme.colors.whiteGrey)) {
         Column(Modifier.fillMaxWidth(0.5f)) {
             val speaker = keynoteSpeakers[2]
-            SpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
+            KeynoteSectionSpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
         }
         Column(Modifier.fillMaxWidth()) {
             val speaker = keynoteSpeakers[3]
-            SpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
+            KeynoteSectionSpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
         }
     }
     HDivider()
     Row(Modifier.background(MaterialTheme.colors.whiteGrey)) {
         Column(Modifier.fillMaxWidth(0.5f)) {
             val speaker = keynoteSpeakers[0]
-            SpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
+            KeynoteSectionSpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
         }
         VDivider()
         Column(Modifier.fillMaxWidth()) {
             val speaker = keynoteSpeakers[1]
-            SpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
+            KeynoteSectionSpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
         }
     }
     HDivider()
 }
 
 @Composable
-private fun SpeakerCard(name: String, photoUrl: String, position: String) {
+private fun KeynoteSectionSpeakerCard(name: String, photoUrl: String, position: String) {
     Column(
         Modifier.background(MaterialTheme.colors.whiteGrey)
     ) {
@@ -170,28 +187,8 @@ private fun SpeakerCard(name: String, photoUrl: String, position: String) {
 }
 
 @Composable
-private fun TextTitle(tile: String, title: String) {
-    Column(Modifier.background(MaterialTheme.colors.grey5Black)) {
-        Text(
-            tile.uppercase(),
-            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
-            modifier = Modifier.padding(16.dp, top = 24.dp)
-        )
-
-        Text(
-            title.uppercase(),
-            style = MaterialTheme.typography.h2.copy(
-                color = MaterialTheme.colors.greyWhite,
-                fontWeight = FontWeight.Bold
-            ),
-            modifier = Modifier.padding(start = 16.dp, bottom = 24.dp)
-        )
-    }
-}
-
-@Composable
-private fun SecondDayKeynote(secondDaySpeakers: List<Speaker>) {
-    TextTitle("APRIL 14 / 09:00", "Second day Keynote")
+private fun AboutConfSecondKeynote(secondDaySpeakers: List<Speaker>) {
+    AboutConfSubtitle("May 24, 9:00", "Second day Keynote")
     HDivider()
 
     if (secondDaySpeakers.isEmpty()) return
@@ -232,7 +229,7 @@ private fun SecondDayKeynote(secondDaySpeakers: List<Speaker>) {
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-private fun Labs() {
+private fun LightningTalks() {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
         HDivider(Modifier.padding(top = 48.dp))
         Row(Modifier.padding(16.dp)) {
@@ -259,37 +256,12 @@ private fun Labs() {
         )
 
         HDivider(Modifier.padding(top = 24.dp))
-
-        Row(Modifier.padding(16.dp)) {
-            Icon(
-                painter = Res.drawable.aws_lab.painter(),
-                contentDescription = null,
-                tint = violet,
-                modifier = Modifier.padding(end = 8.dp)
-            )
-
-            Text(
-                "AWS labs / Bir Nerd Ranch labs".uppercase(),
-                style = MaterialTheme.typography.body2.copy(
-                    color = MaterialTheme.colors.greyWhite,
-                    fontWeight = FontWeight.Bold
-                )
-            )
-        }
-
-        Text(
-            "Sink your teeth into Kotlin with Code Labs by Big Nerd Ranch for general topics and AWS Labs for AWS/Kotlin tech!",
-            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
-            modifier = Modifier.padding(start = 16.dp, end = 8.dp)
-        )
-
-        HDivider(Modifier.padding(top = 24.dp))
     }
 }
 
 @Composable
 private fun Party() {
-    TextTitle("APRIL 13 / 18:00", "KotlinConf’23 Party ")
+    AboutConfSubtitle("May 23, 9:00", "Party")
     HDivider()
     Column(
         Modifier
@@ -307,7 +279,7 @@ private fun Party() {
 
 @Composable
 private fun ClosingPanel() {
-    TextTitle("APRIL 14 / 17:15", "Closing Panel")
+    AboutConfSubtitle("May 24, 17:15", "Closing Panel")
     HDivider()
     Column(
         Modifier
@@ -315,7 +287,7 @@ private fun ClosingPanel() {
             .background(MaterialTheme.colors.whiteGrey)
     ) {
         Text(
-            "Come to Effectenbeurszaal and seize the opportunity to ask the KotlinConf speakers your questions in person.",
+            "Come to Hall 1 and seize the opportunity to ask the KotlinConf speakers your questions in person.",
             style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
             modifier = Modifier.padding(16.dp)
         )
@@ -351,6 +323,7 @@ private fun BottomBanner() {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun FindMore() {
     val uriHandler = LocalUriHandler.current
@@ -359,40 +332,48 @@ private fun FindMore() {
             .fillMaxWidth()
             .background(MaterialTheme.colors.whiteGrey)
     ) {
-        Text(
-            buildAnnotatedString {
-                append("You can find more information about the conference on the official website:")
-            },
+        FlowRow(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 24.dp)) {
+            Text(
+                buildAnnotatedString {
+                    append("You can find more information about the conference on the official website:")
+                },
+                style = MaterialTheme.typography.body2.copy(color = grey50),
+                modifier = Modifier
+                    .clickable {
+                        uriHandler.openUri("https://kotlinconf.com")
+                    }
+            )
+
+            Text(
+                buildAnnotatedString {
+                    withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
+                        append("kotlinconf.com")
+                    }
+                },
+                style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
+                modifier = Modifier
+                    .clickable {
+                        uriHandler.openUri("https://kotlinconf.com")
+                    }
+            )
+        }
+
+        HDivider()
+
+        Text("For visitors:",
             style = MaterialTheme.typography.body2.copy(color = grey50),
             modifier = Modifier
-                .padding(start = 16.dp, top = 16.dp)
-                .clickable {
-                    uriHandler.openUri("https://kotlinconf.com")
-                }
-        )
-
-        Text(
-            buildAnnotatedString {
-                withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
-                    append("kotlinconf.com")
-                }
-            },
-            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .clickable {
-                    uriHandler.openUri("https://kotlinconf.com")
-                }
+                .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 16.dp)
         )
         Text(
             buildAnnotatedString {
                 withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
-                    append("Privacy Policy for Visitors")
+                    append("Privacy Policy")
                 }
             },
             style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
             modifier = Modifier
-                .padding(start = 16.dp, top = 24.dp)
+                .padding(start = 16.dp, end = 16.dp)
                 .clickable {
                     uriHandler.openUri("https://kotlinconf.com/kotlinconf-2023-privacy-policy-for-visitors.pdf")
                 }
@@ -400,12 +381,12 @@ private fun FindMore() {
         Text(
             buildAnnotatedString {
                 withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
-                    append("General Terms and Conditions for Visitors")
+                    append("General Terms and Conditions")
                 }
             },
             style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
             modifier = Modifier
-                .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 24.dp)
+                .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 40.dp)
                 .clickable {
                     uriHandler.openUri("https://kotlinconf.com/kotlinconf-2023-general-terms-and-conditions-for-visitors.pdf")
                 }
