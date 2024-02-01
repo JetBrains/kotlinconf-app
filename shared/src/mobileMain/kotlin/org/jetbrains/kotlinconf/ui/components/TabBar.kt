@@ -48,34 +48,3 @@ fun TabBar(
     }
 }
 
-@Composable
-fun TabButton(tab: String, isSelected: Boolean, onSelect: () -> Unit) {
-    val background = if (isSelected)
-        MaterialTheme.colors.greyWhite
-    else
-        MaterialTheme.colors.whiteGrey
-
-    val textColor = if (isSelected) {
-        MaterialTheme.colors.whiteGrey
-    } else {
-        grey50
-    }
-
-    Box(
-        modifier = Modifier
-            .padding(top = 16.dp, bottom = 16.dp)
-            .background(
-                background,
-                shape = RoundedCornerShape(5.dp),
-            )
-            .clickable { onSelect() }
-    ) {
-        Text(
-            text = tab.uppercase(),
-            modifier = Modifier
-                .padding(start = 7.dp, end = 8.dp, top = 2.dp, bottom = 2.dp),
-            style = MaterialTheme.typography.body2,
-            color = textColor
-        )
-    }
-}

@@ -19,6 +19,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey20
 import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.components.NavigationBar
 
 
 @OptIn(ExperimentalResourceApi::class)

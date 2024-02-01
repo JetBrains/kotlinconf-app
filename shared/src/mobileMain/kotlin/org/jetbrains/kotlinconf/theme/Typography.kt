@@ -42,6 +42,15 @@ val Typography: Typography
         )
     }
 
+val text2: TextStyle
+    @Composable
+    get() = TextStyle(
+        fontFamily = JetBrainsSans,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    )
+
 val Typography.bannerText: TextStyle
     @Composable
     get() = TextStyle(

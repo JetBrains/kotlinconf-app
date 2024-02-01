@@ -18,6 +18,7 @@ import org.jetbrains.kotlinconf.ui.components.AsyncImage
 import org.jetbrains.kotlinconf.ui.components.CodeLab
 import org.jetbrains.kotlinconf.ui.components.LightningTalk
 import org.jetbrains.kotlinconf.SessionCardView
+import org.jetbrains.kotlinconf.ui.components.NavigationBar
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

@@ -39,6 +39,7 @@ import org.jetbrains.kotlinconf.theme.orange
 import org.jetbrains.kotlinconf.theme.violet
 import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
+import org.jetbrains.kotlinconf.ui.components.NavigationBar
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

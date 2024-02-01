@@ -27,6 +27,7 @@ import org.jetbrains.kotlinconf.theme.grey20Grey80
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey5
 import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.components.NavigationBar
 
 @OptIn(ExperimentalResourceApi::class)
 private val PARTNER_LOGOS: Map<String, DrawableResource> = mapOf(

@@ -10,7 +10,6 @@ androidx-test-junit = "1.1.5"
 androidx-work-runtime = "2.9.0"
 androidx-preference = "1.2.1"
 compose = "1.6.0-beta01"
-compose-plugin = "1.6.0-beta01"
 junit = "4.13.2"
 kotlin = "1.9.21"
 ktor = "2.3.7"
@@ -18,6 +17,7 @@ android-svg="1.4"
 precompose = "1.5.10"
 
 [libraries]
+components-ui-tooling-preview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "compose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
 androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
@@ -33,7 +33,7 @@ android-svg = { module = "com.caverock:androidsvg-aar", version.ref = "android-s
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
-jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
