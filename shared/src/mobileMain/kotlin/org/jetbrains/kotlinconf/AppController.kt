@@ -19,13 +19,13 @@ import org.jetbrains.kotlinconf.ui.Menu
 import org.jetbrains.kotlinconf.ui.NavigationBar
 import org.jetbrains.kotlinconf.ui.Partner
 import org.jetbrains.kotlinconf.ui.Partners
-import org.jetbrains.kotlinconf.ui.PrivacyPolicy
-import org.jetbrains.kotlinconf.ui.Search
+import org.jetbrains.kotlinconf.ui.PrivacyPolicyScreen
+import org.jetbrains.kotlinconf.ui.SearchScreen
 import org.jetbrains.kotlinconf.ui.SessionDetailed
 import org.jetbrains.kotlinconf.ui.SpeakersFlow
 import org.jetbrains.kotlinconf.ui.TermsOfUse
 import org.jetbrains.kotlinconf.ui.TextScreen
-import org.jetbrains.kotlinconf.ui.WelcomeScreen
+import org.jetbrains.kotlinconf.ui.welcome.WelcomeScreen
 
 typealias View = @Composable (AppController) -> Unit
 
@@ -135,7 +135,7 @@ class AppController(
             val agenda by service.agenda.collectAsState()
             val sessions = agenda.days.flatMap { it.timeSlots.flatMap { it.sessions } }
             val speakers by service.speakers.collectAsState()
-            Search(it, sessions, speakers.all)
+            SearchScreen(it, sessions, speakers.all)
         }
     }
 
@@ -200,7 +200,9 @@ class AppController(
                     onLeftClick = { back() },
                 )
                 Column(Modifier.verticalScroll(rememberScrollState())) {
-                    PrivacyPolicy()
+                    PrivacyPolicyScreen {
+                        back()
+                    }
                 }
             }
         }

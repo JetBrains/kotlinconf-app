@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.agendaHeaderColor
 import org.jetbrains.kotlinconf.theme.grey20Grey80
 import org.jetbrains.kotlinconf.theme.greyGrey5
@@ -73,7 +72,7 @@ internal fun AgendaTimeSlotHeader(title: String, isLive: Boolean, isFinished: Bo
                     "NOW", modifier = Modifier
                         .padding(start = 6.dp)
                         .padding(end = 16.dp),
-                    style = MaterialTheme.typography.t2.copy(
+                    style = MaterialTheme.typography.body2.copy(
                         color = orange.copy(alpha = transparency)
                     )
                 )

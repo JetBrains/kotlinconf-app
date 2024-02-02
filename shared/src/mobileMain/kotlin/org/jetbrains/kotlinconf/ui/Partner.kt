@@ -21,7 +21,6 @@ import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey20
 import org.jetbrains.kotlinconf.theme.greyGrey5
-import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.whiteGrey
 
 @OptIn(ExperimentalResourceApi::class)
@@ -45,14 +44,14 @@ fun Partner(controller: AppController, name: String, description: String) {
 
             Column(Modifier.padding(16.dp)) {
                 Text(
-                    name.uppercase(), style = MaterialTheme.typography.t2.copy(
+                    name.uppercase(), style = MaterialTheme.typography.body2.copy(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.greyGrey5
                     )
                 )
                 Text(
                     description,
-                    style = MaterialTheme.typography.t2.copy(
+                    style = MaterialTheme.typography.body2.copy(
                         color = MaterialTheme.colors.greyGrey20
                     ),
                     modifier = Modifier.padding(top = 24.dp)

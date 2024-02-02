@@ -13,6 +13,7 @@ import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.withAppController
 import org.jetbrains.kotlinconf.ui.components.TabItem
 import org.jetbrains.kotlinconf.ui.components.TabsView
+import org.jetbrains.kotlinconf.ui.welcome.WelcomeScreen
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -33,7 +34,8 @@ fun MainScreen(service: ConferenceService) {
             }
         }
 
-    var showWelcome by remember { mutableStateOf(service.needsOnboarding()) }
+//    var showWelcome = true
+    var showWelcome by remember { mutableStateOf(true) } //service.needsOnboarding()) }
 
     withAppController(service) {
         if (showWelcome) {

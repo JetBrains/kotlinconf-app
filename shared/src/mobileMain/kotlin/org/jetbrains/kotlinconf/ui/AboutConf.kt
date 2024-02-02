@@ -36,11 +36,11 @@ import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey20
 import org.jetbrains.kotlinconf.theme.greyWhite
 import org.jetbrains.kotlinconf.theme.orange
-import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.violet
 import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun AboutConf(keynoteSpeakers: List<Speaker>, secondDaySpeakers: List<Speaker>, back: () -> Unit) {
     Column(
@@ -83,19 +83,19 @@ private fun Description() {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
         Text(
             "KotlinConf is the official annual conference devoted to the Kotlin programming language. Organized by JetBrains, it is a place for the community to gather and discuss all things Kotlin.",
-            style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyGrey20),
+            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
             modifier = Modifier.padding(16.dp, top = 24.dp)
         )
 
         Text(
             "Social media hashtag:",
-            style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyGrey20),
+            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
             modifier = Modifier.padding(16.dp, top = 24.dp)
         )
 
         Text(
             "#KOTLINCONF",
-            style = MaterialTheme.typography.t2.copy(
+            style = MaterialTheme.typography.body2.copy(
                 color = MaterialTheme.colors.greyGrey20,
                 fontWeight = FontWeight.Bold
             ),
@@ -162,7 +162,7 @@ private fun SpeakerCard(name: String, photoUrl: String, position: String) {
 
         Text(
             position,
-            style = MaterialTheme.typography.t2.copy(color = grey50),
+            style = MaterialTheme.typography.body2.copy(color = grey50),
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 24.dp)
         )
     }
@@ -173,7 +173,7 @@ private fun TextTitle(tile: String, title: String) {
     Column(Modifier.background(MaterialTheme.colors.grey5Black)) {
         Text(
             tile.uppercase(),
-            style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyGrey20),
+            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
             modifier = Modifier.padding(16.dp, top = 24.dp)
         )
 
@@ -222,7 +222,7 @@ private fun SecondDayKeynote(secondDaySpeakers: List<Speaker>) {
 
             Text(
                 speaker.position,
-                style = MaterialTheme.typography.t2.copy(color = grey50),
+                style = MaterialTheme.typography.body2.copy(color = grey50),
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 24.dp)
             )
         }
@@ -244,7 +244,7 @@ private fun Labs() {
 
             Text(
                 "28 Lightning talks!".uppercase(),
-                style = MaterialTheme.typography.t2.copy(
+                style = MaterialTheme.typography.body2.copy(
                     color = MaterialTheme.colors.greyWhite,
                     fontWeight = FontWeight.Bold
                 )
@@ -253,7 +253,7 @@ private fun Labs() {
 
         Text(
             "Don't miss our new Lightning Talk track! Enjoy double the inspiration with two 15-minute talks in each time slot.",
-            style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyGrey20),
+            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
             modifier = Modifier.padding(start = 16.dp, end = 8.dp)
         )
 
@@ -269,7 +269,7 @@ private fun Labs() {
 
             Text(
                 "AWS labs / Bir Nerd Ranch labs".uppercase(),
-                style = MaterialTheme.typography.t2.copy(
+                style = MaterialTheme.typography.body2.copy(
                     color = MaterialTheme.colors.greyWhite,
                     fontWeight = FontWeight.Bold
                 )
@@ -278,7 +278,7 @@ private fun Labs() {
 
         Text(
             "Sink your teeth into Kotlin with Code Labs by Big Nerd Ranch for general topics and AWS Labs for AWS/Kotlin tech!",
-            style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyGrey20),
+            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
             modifier = Modifier.padding(start = 16.dp, end = 8.dp)
         )
 
@@ -297,7 +297,7 @@ private fun Party() {
     ) {
         Text(
             "Have fun and mingle with the community at the biggest Kotlin party of the year!",
-            style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyGrey20),
+            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
             modifier = Modifier.padding(16.dp)
         )
     }
@@ -315,7 +315,7 @@ private fun ClosingPanel() {
     ) {
         Text(
             "Come to Effectenbeurszaal and seize the opportunity to ask the KotlinConf speakers your questions in person.",
-            style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyGrey20),
+            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
             modifier = Modifier.padding(16.dp)
         )
 
@@ -362,7 +362,7 @@ private fun FindMore() {
             buildAnnotatedString {
                 append("You can find more information about the conference on the official website:")
             },
-            style = MaterialTheme.typography.t2.copy(color = grey50),
+            style = MaterialTheme.typography.body2.copy(color = grey50),
             modifier = Modifier
                 .padding(start = 16.dp, top = 16.dp)
                 .clickable {
@@ -376,7 +376,7 @@ private fun FindMore() {
                     append("kotlinconf.com")
                 }
             },
-            style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyWhite),
+            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
             modifier = Modifier
                 .padding(start = 16.dp)
                 .clickable {
@@ -389,7 +389,7 @@ private fun FindMore() {
                     append("Privacy Policy for Visitors")
                 }
             },
-            style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyWhite),
+            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
             modifier = Modifier
                 .padding(start = 16.dp, top = 24.dp)
                 .clickable {
@@ -402,7 +402,7 @@ private fun FindMore() {
                     append("General Terms and Conditions for Visitors")
                 }
             },
-            style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyWhite),
+            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
             modifier = Modifier
                 .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 24.dp)
                 .clickable {

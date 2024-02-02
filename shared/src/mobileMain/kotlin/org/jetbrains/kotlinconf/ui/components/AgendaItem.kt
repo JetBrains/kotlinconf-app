@@ -59,7 +59,7 @@ fun AgendaItem(
                 Text(
                     speakerLine,
                     Modifier.padding(top = 4.dp),
-                    style = MaterialTheme.typography.t2.copy(
+                    style = MaterialTheme.typography.body2.copy(
                         color = if (isFinished) grey50 else MaterialTheme.colors.greyGrey5
                     )
                 )
@@ -85,7 +85,7 @@ fun AgendaItem(
         ) {
             if (!isFinished) {
                 Text(
-                    locationLine.uppercase(), style = MaterialTheme.typography.t2.copy(
+                    locationLine.uppercase(), style = MaterialTheme.typography.body2.copy(
                         color = grey50
                     ),
                     maxLines = 1

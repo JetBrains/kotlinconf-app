@@ -41,7 +41,6 @@ import org.jetbrains.kotlinconf.theme.greyGrey5
 import org.jetbrains.kotlinconf.theme.greyGrey50
 import org.jetbrains.kotlinconf.theme.greyGrey80
 import org.jetbrains.kotlinconf.theme.greyWhite
-import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.HDivider
 import org.jetbrains.kotlinconf.ui.painter
@@ -61,7 +60,7 @@ fun VoteAndFeedback(
     ) {
         Row(Modifier.padding(16.dp)) {
             Text(
-                "How was the talk?", style = MaterialTheme.typography.t2.copy(
+                "How was the talk?", style = MaterialTheme.typography.body2.copy(
                     color = MaterialTheme.colors.greyGrey50
                 ),
                 modifier = Modifier.padding(top = 12.dp)
@@ -102,7 +101,7 @@ fun FeedbackForm(onSend: (String) -> Unit, onClose: () -> Unit) {
                 placeholder = {
                     Text(
                         "Would you like to share a comment?",
-                        style = MaterialTheme.typography.t2.copy(
+                        style = MaterialTheme.typography.body2.copy(
                             color = MaterialTheme.colors.greyGrey80
                         )
                     )
@@ -142,7 +141,7 @@ fun FeedbackForm(onSend: (String) -> Unit, onClose: () -> Unit) {
             ) {
                 Text(
                     "SEND MY COMMENT",
-                    style = MaterialTheme.typography.t2.copy(
+                    style = MaterialTheme.typography.body2.copy(
                         color = if (feedback.isEmpty()) grey50 else MaterialTheme.colors.greyGrey5
                     )
                 )

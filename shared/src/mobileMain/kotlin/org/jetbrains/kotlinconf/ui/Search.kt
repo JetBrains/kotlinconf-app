@@ -45,7 +45,6 @@ import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.grey5Grey90
 import org.jetbrains.kotlinconf.theme.greyWhite
-import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.violet
 import org.jetbrains.kotlinconf.theme.white
 import org.jetbrains.kotlinconf.theme.whiteGrey
@@ -73,7 +72,7 @@ data class TagView(
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun Search(
+fun SearchScreen(
     controller: AppController,
     sessions: List<SessionCardView>,
     speakers: List<Speaker>
@@ -206,7 +205,7 @@ private fun SearchField(text: String, onTextChange: (String) -> Unit) {
                 value = text,
                 onValueChange = onTextChange,
                 modifier = Modifier.fillMaxWidth(),
-                textStyle = MaterialTheme.typography.t2.copy(
+                textStyle = MaterialTheme.typography.body2.copy(
                     color = MaterialTheme.colors.greyWhite
                 ),
                 maxLines = 1,
@@ -230,7 +229,7 @@ private fun SearchField(text: String, onTextChange: (String) -> Unit) {
                 ) {
                     Text(
                         "CLEAR",
-                        style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyWhite),
+                        style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }
@@ -266,7 +265,7 @@ private fun Tag(name: String, isActive: Boolean, onClick: () -> Unit) {
             contentColor = if (isActive) violet else grey50
         ),
     ) {
-        Text(name, style = MaterialTheme.typography.t2)
+        Text(name, style = MaterialTheme.typography.body2)
     }
 }
 
@@ -336,13 +335,13 @@ private fun TalkSearchResult(
                     .fillMaxWidth()
             ) {
                 Text(
-                    timeLine, style = MaterialTheme.typography.t2.copy(
+                    timeLine, style = MaterialTheme.typography.body2.copy(
                         color = grey50
                     ),
                     maxLines = 1
                 )
             }
-            Text(text = text, style = MaterialTheme.typography.t2)
+            Text(text = text, style = MaterialTheme.typography.body2)
             Spacer(Modifier.height(8.dp))
             Row {
                 tags.forEach { tag ->
@@ -364,7 +363,7 @@ private fun SearchResultTag(tag: TagView) {
     ) {
         Text(
             tag.name,
-            style = MaterialTheme.typography.t2.copy(color = if (tag.isActive) violet else grey50),
+            style = MaterialTheme.typography.body2.copy(color = if (tag.isActive) violet else grey50),
             modifier = Modifier.padding(
                 start = 4.dp,
                 end = 4.dp,
@@ -393,7 +392,7 @@ private fun SpeakerSearchResult(
                 modifier = Modifier.size(60.dp)
             )
             Column(Modifier.padding(16.dp)) {
-                Text(text = text, style = MaterialTheme.typography.t2)
+                Text(text = text, style = MaterialTheme.typography.body2)
                 Spacer(Modifier.height(8.dp))
                 Row {
                     tags.forEach { tag ->

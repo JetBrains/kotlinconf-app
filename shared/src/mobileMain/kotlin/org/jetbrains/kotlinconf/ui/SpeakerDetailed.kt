@@ -87,7 +87,7 @@ private fun SpeakerDetailed(
             Text(
                 modifier = Modifier.padding(top = 16.dp),
                 text = position,
-                style = MaterialTheme.typography.t2.copy(
+                style = MaterialTheme.typography.body2.copy(
                     color = MaterialTheme.colors.greyGrey20
                 )
             )
@@ -110,14 +110,14 @@ private fun SpeakerDetailed(
                 Text(
                     modifier = Modifier.padding(top = 8.dp),
                     text = description,
-                    style = MaterialTheme.typography.t2.copy(
+                    style = MaterialTheme.typography.body2.copy(
                         color = MaterialTheme.colors.greyGrey20
                     )
                 )
 
                 if (sessions.isNotEmpty()) {
                     Text(
-                        "TALKS: ", style = MaterialTheme.typography.t2.copy(
+                        "TALKS: ", style = MaterialTheme.typography.body2.copy(
                             color = grey50
                         ), modifier = Modifier.padding(top = 24.dp)
                     )
@@ -178,7 +178,7 @@ private fun SessionCardCompact(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        timeLine, style = MaterialTheme.typography.t2.copy(
+                        timeLine, style = MaterialTheme.typography.body2.copy(
                             color = grey50
                         ),
                         maxLines = 1

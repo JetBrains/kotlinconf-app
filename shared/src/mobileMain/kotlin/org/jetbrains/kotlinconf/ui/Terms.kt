@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.theme.t2
 import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey20
 import org.jetbrains.kotlinconf.theme.whiteGrey
@@ -32,7 +31,7 @@ fun TermsOfUse() {
 
             Text(
                 "Version 1.0, effective as of March 21, 2023".uppercase(),
-                style = MaterialTheme.typography.t2.copy(color = MaterialTheme.colors.greyGrey20),
+                style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
                 modifier = Modifier.padding(all = 16.dp)
             )
         }
