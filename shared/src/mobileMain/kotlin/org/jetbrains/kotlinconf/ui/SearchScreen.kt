@@ -5,12 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -39,6 +37,11 @@ data class SpeakerSearchData(
     val tags: List<TagView>
 )
 
+enum class SearchTab(val value: String) {
+    TALKS("Talks"),
+    SPEAKERS("Speakers")
+}
+
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SearchScreen(
@@ -47,7 +50,7 @@ fun SearchScreen(
     speakers: List<Speaker>
 ) {
     var query by remember { mutableStateOf("") }
-    var selectedTab by remember { mutableStateOf("Talks") }
+    var selectedTab by remember { mutableStateOf(SearchTab.TALKS) }
     val speakerResults = speakers.searchSpeakers(query)
     val sessionResults = sessions.searchSessions(query)
 
@@ -68,7 +71,6 @@ fun SearchScreen(
         HDivider()
         SearchTagSelector(
             selected = selectedTab,
-            values = listOf("Talks", "Speakers"),
             onClick = { selectedTab = it }
         )
         HDivider()
@@ -172,18 +174,18 @@ private fun AnnotatedString.Builder.appendPartWithQuery(value: String, query: St
 
 
 @Composable
-fun SearchTagSelector(selected: String, values: List<String>, onClick: (String) -> Unit) {
+fun SearchTagSelector(selected: SearchTab, onClick: (SearchTab) -> Unit) {
     Row(
         Modifier
             .background(MaterialTheme.colors.whiteGrey)
             .fillMaxWidth()
-            .padding(start=12.dp, top = 16.dp, bottom = 16.dp)
+            .padding(start = 12.dp, top = 16.dp, bottom = 16.dp)
     ) {
-        values.forEach { value ->
+        SearchTab.entries.forEach { entry ->
             TabButton(
-                tab = value,
-                isSelected = value == selected,
-                onSelect = { onClick(value) }
+                tab = entry.value,
+                isSelected = entry == selected,
+                onSelect = { onClick(entry) }
             )
         }
     }
@@ -191,14 +193,14 @@ fun SearchTagSelector(selected: String, values: List<String>, onClick: (String) 
 
 @Composable
 private fun SearchResults(
-    selected: String,
+    selected: SearchTab,
     talks: List<SessionSearchData>,
     speakers: List<SpeakerSearchData>,
     controller: AppController
 ) {
     LazyColumn(Modifier.fillMaxWidth()) {
-        if (selected == "Speakers") {
-            items(speakers) { speaker ->
+        when (selected) {
+            SearchTab.SPEAKERS -> items(speakers) { speaker ->
                 SpeakerSearchResult(
                     speaker.photoUrl,
                     speaker.description,
@@ -206,8 +208,7 @@ private fun SearchResults(
                     onClick = { controller.showSpeaker(speaker.id) }
                 )
             }
-        } else {
-            items(talks) { session ->
+            SearchTab.TALKS -> items(talks) { session ->
                 TalkSearchResult(
                     session.description,
                     tags = session.tags
