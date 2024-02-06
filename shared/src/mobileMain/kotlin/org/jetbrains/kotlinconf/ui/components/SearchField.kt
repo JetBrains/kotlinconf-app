@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,31 +21,24 @@ import org.jetbrains.kotlinconf.theme.orange
 
 @Composable
 fun SearchField(text: String, onTextChange: (String) -> Unit) {
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .padding(0.dp)
-    ) {
-        Row(Modifier.fillMaxWidth()) {
-            TextField(
-                value = text,
-                onValueChange = onTextChange,
-                modifier = Modifier.fillMaxWidth(),
-                textStyle = MaterialTheme.typography.body2.copy(
-                    color = MaterialTheme.colors.greyWhite
-                ),
-                maxLines = 1,
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    backgroundColor = MaterialTheme.colors.grey5Black,
-                    cursorColor = orange,
-                    textColor = MaterialTheme.colors.greyWhite,
-                    focusedBorderColor = MaterialTheme.colors.grey5Black
-                ),
-            )
-        }
-        Row(Modifier.fillMaxWidth()) {
-            Spacer(Modifier.weight(1f))
-            if (text.isNotEmpty()) {
+    Box(Modifier.fillMaxWidth()) {
+        TextField(
+            value = text,
+            onValueChange = onTextChange,
+            modifier = Modifier.fillMaxWidth(),
+            textStyle = MaterialTheme.typography.body2.copy(
+                color = MaterialTheme.colors.greyWhite
+            ),
+            maxLines = 1,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = MaterialTheme.colors.grey5Black,
+                cursorColor = orange,
+                textColor = MaterialTheme.colors.greyWhite,
+                focusedBorderColor = MaterialTheme.colors.grey5Black
+            ),
+        )
+        if (text.isNotEmpty()) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Button(
                     onClick = { onTextChange("") },
                     colors = ButtonDefaults.buttonColors(

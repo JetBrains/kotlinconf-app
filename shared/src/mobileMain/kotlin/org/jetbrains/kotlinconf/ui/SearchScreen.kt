@@ -67,6 +67,7 @@ fun SearchScreen(
             onRightClick = { controller.back() }
         )
         SearchField(query, onTextChange = { query = it })
+        HDivider()
         SearchSessionTags(MOCK_TAGS, onClick = {})
         HDivider()
         SearchTagSelector(
