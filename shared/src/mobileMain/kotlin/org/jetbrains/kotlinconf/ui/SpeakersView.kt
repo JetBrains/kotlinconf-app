@@ -15,6 +15,7 @@ import org.jetbrains.kotlinconf.theme.subtitle
 import org.jetbrains.kotlinconf.theme.title
 import org.jetbrains.kotlinconf.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
+import org.jetbrains.kotlinconf.ui.components.NavigationBar
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

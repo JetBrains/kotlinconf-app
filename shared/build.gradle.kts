@@ -27,6 +27,7 @@ kotlin {
             dependencies {
                 compileOnly(compose.runtime)
 
+                api(libs.components.ui.tooling.preview)
                 api(compose.components.resources)
 
                 api("io.ktor:ktor-client-logging:2.3.4")
@@ -56,6 +57,10 @@ kotlin {
 
                 api(libs.precompose)
             }
+        }
+
+        val jvmMain by getting {
+            dependsOn(mobileMain)
         }
 
         val mobileTest by creating {

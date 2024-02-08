@@ -1,17 +1,16 @@
-package org.jetbrains.kotlinconf.ui
+package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.*
 import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.theme.*
+import org.jetbrains.kotlinconf.ui.painter
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -48,8 +47,8 @@ fun NavigationBar(
             Spacer(Modifier.weight(1f))
 
             Text(
-                text = title.uppercase(),
-                style = MaterialTheme.typography.body2,
+                text = title,
+                style = MaterialTheme.typography.h4,
                 color = grey50
             )
 

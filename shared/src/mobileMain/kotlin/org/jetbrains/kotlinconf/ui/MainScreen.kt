@@ -34,8 +34,7 @@ fun MainScreen(service: ConferenceService) {
             }
         }
 
-//    var showWelcome = true
-    var showWelcome by remember { mutableStateOf(true) } //service.needsOnboarding()) }
+    var showWelcome by remember { mutableStateOf(service.needsOnboarding()) }
 
     withAppController(service) {
         if (showWelcome) {
@@ -53,7 +52,7 @@ fun MainScreen(service: ConferenceService) {
             TabsView(
                 controller,
                 TabItem("menu", Res.drawable.menu, Res.drawable.menu_active) {
-                    Menu(controller = it)
+                    MenuScreen(controller = it)
                 },
                 TabItem("agenda", Res.drawable.time, Res.drawable.time_active) {
                     AgendaView(agenda, it)

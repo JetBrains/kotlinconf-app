@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "type": "android-app",
+            "name": "Android-app configuration",
+            "module": "KotlinConfApp.androidApp.main",
+        },
+        {
+            "type": "xcode-app",
+            "name": "Xcode-app configuration",
+            "buildTarget": {
+                "project": "KotlinConf",
+                "target": "iosApp",
+            },
+            "configuration": "Debug",
+        },
+        
+    ]
+}

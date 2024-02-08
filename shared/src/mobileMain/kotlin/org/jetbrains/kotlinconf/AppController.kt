@@ -15,15 +15,15 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.AboutConf
 import org.jetbrains.kotlinconf.ui.CODE_OF_CONDUCT
 import org.jetbrains.kotlinconf.ui.MOBILE_APP_DESCRIPTION
-import org.jetbrains.kotlinconf.ui.Menu
-import org.jetbrains.kotlinconf.ui.NavigationBar
+import org.jetbrains.kotlinconf.ui.MenuScreen
+import org.jetbrains.kotlinconf.ui.components.NavigationBar
 import org.jetbrains.kotlinconf.ui.Partner
 import org.jetbrains.kotlinconf.ui.Partners
 import org.jetbrains.kotlinconf.ui.PrivacyPolicyScreen
 import org.jetbrains.kotlinconf.ui.SearchScreen
 import org.jetbrains.kotlinconf.ui.SessionDetailed
 import org.jetbrains.kotlinconf.ui.SpeakersFlow
-import org.jetbrains.kotlinconf.ui.TermsOfUse
+import org.jetbrains.kotlinconf.ui.TermsOfUseScreen
 import org.jetbrains.kotlinconf.ui.TextScreen
 import org.jetbrains.kotlinconf.ui.welcome.WelcomeScreen
 
@@ -53,7 +53,7 @@ class AppController(
 
     fun showMenu() {
         push {
-            Menu(it)
+            MenuScreen(it)
         }
     }
 
@@ -218,7 +218,7 @@ class AppController(
                     onLeftClick = { back() },
                 )
                 Column(Modifier.verticalScroll(rememberScrollState())) {
-                    TermsOfUse()
+                    TermsOfUseScreen()
                 }
             }
         }

@@ -65,6 +65,10 @@ val Colors.grey20Grey80: Color
     get() =  if (isLight) grey20 else grey80
 
 @get:Composable
+val Colors.grey80Grey20: Color
+    get() =  if (isLight) grey80 else grey20
+
+@get:Composable
 val Colors.greyGrey20: Color
     get() =  if (isLight) grey else grey20
 
