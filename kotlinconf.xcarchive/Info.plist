@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ApplicationProperties</key>
+	<dict>
+		<key>ApplicationPath</key>
+		<string>Applications/KotlinConf.app</string>
+		<key>Architectures</key>
+		<array>
+			<string>arm64</string>
+		</array>
+		<key>CFBundleIdentifier</key>
+		<string>com.kotlinconf.iosapp</string>
+		<key>CFBundleShortVersionString</key>
+		<string>3.1</string>
+		<key>CFBundleVersion</key>
+		<string>47</string>
+		<key>SigningIdentity</key>
+		<string></string>
+		<key>Team</key>
+		<string></string>
+	</dict>
+	<key>ArchiveVersion</key>
+	<integer>2</integer>
+	<key>CreationDate</key>
+	<date>2024-02-09T13:34:56Z</date>
+	<key>Name</key>
+	<string>iosApp</string>
+	<key>SchemeName</key>
+	<string>iosApp</string>
+</dict>
+</plist>
