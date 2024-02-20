@@ -34,7 +34,7 @@ fun SpeakersView(speakers: List<Speaker>, controller: AppController) {
                         .fillMaxWidth()
                         .background(MaterialTheme.colors.whiteGrey)
                 ) {
-                    SpeakerCard(
+                    KeynoteSectionSpeakerCard(
                         name = speaker.name,
                         position = speaker.position,
                         photoUrl = speaker.photoUrl,
@@ -50,7 +50,7 @@ fun SpeakersView(speakers: List<Speaker>, controller: AppController) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun SpeakerCard(
+private fun KeynoteSectionSpeakerCard(
     name: String,
     position: String,
     photoUrl: String,

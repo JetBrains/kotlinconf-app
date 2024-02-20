@@ -48,7 +48,7 @@ fun TextScreen(
                     .background(MaterialTheme.colors.grey5Black)
             ) {
                 Text(
-                    titleBar.uppercase(),
+                    titleBar,
                     style = MaterialTheme.typography.h2,
                     modifier = Modifier.padding(16.dp)
                 )

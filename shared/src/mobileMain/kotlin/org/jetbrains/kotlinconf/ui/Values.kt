@@ -1,22 +1,32 @@
 package org.jetbrains.kotlinconf.ui
 
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
+import org.jetbrains.kotlinconf.theme.blackWhite
 import org.jetbrains.kotlinconf.theme.violet
 
-val MOBILE_APP_DESCRIPTION = buildAnnotatedString {
-    append("The KotlinConf application is developed by the JetBrains team with Kotlin Multiplatform Mobile shared logic, Compose on Android, and Swift UI on iOS. Check out the ")
-    appendLink("GitHub repository", "https://github.com/JetBrains/kotlinconf-app")
-    append("for the source code and more technical details about the application.")
-    append("Enjoy the app, and please share your feedback to help us make it even better!")
-}
+val MOBILE_APP_DESCRIPTION: AnnotatedString
+    @Composable get() = buildAnnotatedString {
+        append("The KotlinConf application is developed by the JetBrains team with Kotlin Multiplatform shared logic. Compose Multiplatform is used for both apps on Android and iOS. \n\nCheck out the ")
+        appendLink("GitHub repository", "https://github.com/JetBrains/kotlinconf-app")
+        append(" for the source code and more technical details about the application.\n\n")
+        append("Enjoy the app, and please share your feedback to help us make it even better!")
+    }
 
+@Composable
 internal fun AnnotatedString.Builder.appendLink(text: String, link: String = text) {
     pushStringAnnotation("link", link)
-    withStyle(SpanStyle(color = violet)) {
+    val style = SpanStyle(
+        color = MaterialTheme.colors.blackWhite,
+        textDecoration = TextDecoration.Underline
+    )
+    withStyle(style) {
         append(text)
     }
     pop()
@@ -29,7 +39,8 @@ internal fun AnnotatedString.Builder.appendBold(text: String) {
 }
 
 val CODE_OF_CONDUCT = buildAnnotatedString {
-    append("""
+    append(
+        """
         This event is dedicated to providing a harassment-free experience for everyone, regardless of gender, sexual orientation, ability, physical appearance, body size, race, or religion. 
 
         We do not tolerate harassment of event participants in any form. Sexual language and imagery is not appropriate for any event venue, including talks. Event participants violating these rules may be sanctioned or expelled from the event without a refund at the discretion of the event organizers.
@@ -41,5 +52,6 @@ val CODE_OF_CONDUCT = buildAnnotatedString {
         We expect participants to follow these rules at all event venues and event-related social gatherings. Please inform an event staff member (identified by their official t-shirts and/or special badges) if you feel a violation has taken place. Participants asked to stop any harassing behavior are expected to comply immediately. Event staff will be happy to help participants contact hotel/venue security or local law enforcement, provide escorts, or otherwise ensure those experiencing harassment feel safe for the duration of the event.
 
         We value your attendance.
-    """.trimIndent())
+    """.trimIndent()
+    )
 }

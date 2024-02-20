@@ -12,7 +12,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.kotlinconf.ui.AboutConf
+import org.jetbrains.kotlinconf.ui.AboutConfScreen
 import org.jetbrains.kotlinconf.ui.CODE_OF_CONDUCT
 import org.jetbrains.kotlinconf.ui.MOBILE_APP_DESCRIPTION
 import org.jetbrains.kotlinconf.ui.MenuScreen
@@ -184,7 +184,7 @@ class AppController(
             val secondDaySpeaker = service.speakers.value.all.filter {
                 it.name == "Kevlin Henney"
             }
-            AboutConf(keynoteSpeakers = keynoteSpeakers, secondDaySpeakers = secondDaySpeaker) {
+            AboutConfScreen(keynoteSpeakers = keynoteSpeakers, secondDaySpeakers = secondDaySpeaker) {
                 it.back()
             }
         }
