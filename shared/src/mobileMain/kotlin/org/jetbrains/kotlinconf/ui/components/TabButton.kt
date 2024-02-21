@@ -18,9 +18,10 @@ import org.jetbrains.kotlinconf.theme.grey50
 import org.jetbrains.kotlinconf.theme.greyWhite
 import org.jetbrains.kotlinconf.theme.text2
 import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.Floor
 
 @Composable
-fun TabButton(tab: String, isSelected: Boolean, onSelect: () -> Unit) {
+fun TabButton(tab: Tab, isSelected: Boolean, onSelect: () -> Unit) {
     val background = if (isSelected)
         MaterialTheme.colors.greyWhite
     else
@@ -42,7 +43,7 @@ fun TabButton(tab: String, isSelected: Boolean, onSelect: () -> Unit) {
             .clickable { onSelect() }
     ) {
         Text(
-            text = tab,
+            text = tab.title,
             modifier = Modifier
                 .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp),
             style = text2,
@@ -55,7 +56,7 @@ fun TabButton(tab: String, isSelected: Boolean, onSelect: () -> Unit) {
 @Composable
 fun TabButtonPreview() {
     Column {
-        TabButton("Talks", isSelected = true) {}
-        TabButton("Speakers", isSelected = false) {}
+        TabButton(Floor.FIRST, isSelected = true) {}
+        TabButton(Floor.SECOND, isSelected = false) {}
     }
 }

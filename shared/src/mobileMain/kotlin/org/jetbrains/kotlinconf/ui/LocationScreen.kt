@@ -8,18 +8,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import org.jetbrains.kotlinconf.ui.components.Tab
 import org.jetbrains.kotlinconf.ui.components.TabBar
 
-const val MAP_PATH: String = "files/map.svg"
+
+enum class Floor(override val title: String, val resource: String) : Tab {
+    FIRST("1st floor", "files/map-first.svg"),
+    SECOND("2nd floor", "files/map-second.svg")
+}
 
 @Composable
 fun LocationScreen() {
-    var floor by remember { mutableStateOf("FLOOR 0") }
+    var floor: Floor by remember { mutableStateOf(Floor.FIRST) }
 
     Box {
-        SvgMapView(MAP_PATH, Modifier.fillMaxSize())
+        SvgMapView(floor.resource, Modifier.fillMaxSize())
         TabBar(
-            tabs = listOf("FLOOR -1", "FLOOR 0", "FLOOR 1"),
+            Floor.entries,
             selected = floor,
             onSelect = { floor = it },
         )

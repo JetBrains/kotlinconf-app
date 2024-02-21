@@ -33,30 +33,35 @@ import org.jetbrains.kotlinconf.theme.grey5Black
 import org.jetbrains.kotlinconf.theme.greyGrey5
 import org.jetbrains.kotlinconf.theme.orange
 import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.components.Tab
 import org.jetbrains.kotlinconf.ui.components.TabBar
 import org.jetbrains.kotlinconf.ui.components.VoteAndFeedback
+
+enum class Bookmark(override val title: String) : Tab {
+    PAST("past"), UPCOMING("upcoming")
+}
 
 @Composable
 fun Bookmarks(
     favoriteSessions: List<SessionCardView>,
     controller: AppController
 ) {
-    var selectedTab by remember { mutableStateOf("upcoming") }
+    var selectedTab by remember { mutableStateOf(Bookmark.UPCOMING) }
 
     Column(Modifier.background(MaterialTheme.colors.grey5Black)) {
-        TabBar(tabs = listOf("past", "upcoming"), selectedTab, onSelect = {
+        TabBar(Bookmark.entries, selectedTab, onSelect = {
             selectedTab = it
         })
 
         Text(
-            selectedTab.uppercase(),
+            selectedTab.title.uppercase(),
             style = MaterialTheme.typography.h2.copy(color = MaterialTheme.colors.greyGrey5),
             modifier = Modifier.padding(16.dp)
         )
 
         HDivider()
 
-        if (selectedTab == "upcoming") {
+        if (selectedTab == Bookmark.UPCOMING) {
             val upcoming = favoriteSessions.filter { !it.isFinished }
             Upcoming(
                 upcoming,

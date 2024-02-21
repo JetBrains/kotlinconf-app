@@ -26,12 +26,12 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 @Composable
 actual fun SvgMapView(filePath: String, modifier: Modifier) {
     var svgString by remember { mutableStateOf("") }
-    LaunchedEffect(Unit) {
+    LaunchedEffect(filePath) {
         svgString = Res.readBytes(filePath)
             .decodeToString()
     }
 
-    var scale by remember { mutableFloatStateOf(0f) }
+    var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset(0f, 0f)) }
     val state = rememberTransformableState { zoomChange, offsetChange, _ ->
         scale *= zoomChange
