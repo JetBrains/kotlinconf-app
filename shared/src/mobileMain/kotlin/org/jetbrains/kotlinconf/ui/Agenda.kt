@@ -31,22 +31,25 @@ import org.jetbrains.kotlinconf.ui.components.TabBar
 fun AgendaView(agenda: Agenda, controller: AppController) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    var selected: String? by remember { mutableStateOf(agenda.days.firstOrNull()?.title) }
+    var selected: Day? by remember { mutableStateOf(agenda.days.firstOrNull()) }
 
     val daysSize = agenda.days.map { it.itemsCount() }
     val daysIndex: List<Int> = daysSize.scan(0) { acc, i -> acc + i }
 
+    val currentTab = selected
     Column {
-        TabBar(
-            agenda.days.map { it.title },
-            selected, onSelect = { title ->
-                selected = title
-                val index = daysIndex[agenda.days.indexOfFirst { it.title == title }]
-                if (index >= 0) {
-                    coroutineScope.launch { listState.scrollToItem(index, 0) }
+        if (currentTab != null) {
+            TabBar(
+                agenda.days,
+                currentTab, onSelect = { day ->
+                    selected = day
+                    val index = daysIndex[agenda.days.indexOfFirst { it.title == day.title }]
+                    if (index >= 0) {
+                        coroutineScope.launch { listState.scrollToItem(index, 0) }
+                    }
                 }
-            }
-        )
+            )
+        }
         LazyColumn(state = listState) {
             agenda.days.forEach {
                 SessionsList(day = it, controller = controller)

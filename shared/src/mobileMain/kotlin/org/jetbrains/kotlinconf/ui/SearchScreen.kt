@@ -37,7 +37,7 @@ data class SpeakerSearchData(
     val tags: List<TagView>
 )
 
-enum class SearchTab(val value: String) {
+enum class SearchTab(override val title: String): Tab {
     TALKS("Talks"),
     SPEAKERS("Speakers")
 }
@@ -184,7 +184,7 @@ fun SearchTagSelector(selected: SearchTab, onClick: (SearchTab) -> Unit) {
     ) {
         SearchTab.entries.forEach { entry ->
             TabButton(
-                tab = entry.value,
+                tab = entry,
                 isSelected = entry == selected,
                 onSelect = { onClick(entry) }
             )

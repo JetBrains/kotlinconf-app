@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf
 
 import io.ktor.util.date.GMTDate
+import org.jetbrains.kotlinconf.ui.components.Tab
 import org.jetbrains.kotlinconf.utils.dayAndMonth
 import org.jetbrains.kotlinconf.utils.time
 
@@ -17,9 +18,9 @@ data class Speakers(
 
 data class Day(
     val day: Int,
-    val title: String,
+    override val title: String,
     val timeSlots: List<TimeSlot>
-)
+) : Tab
 
 data class TimeSlot(
     val startsAt: GMTDate,

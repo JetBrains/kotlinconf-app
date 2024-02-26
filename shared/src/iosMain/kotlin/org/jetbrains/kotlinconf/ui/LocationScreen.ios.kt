@@ -25,7 +25,7 @@ import org.jetbrains.skia.svg.SVGDOM
 @Composable
 actual fun SvgMapView(filePath: String, modifier: Modifier) {
     var svgBytes: ByteArray? by remember { mutableStateOf(null) }
-    LaunchedEffect(Unit) {
+    LaunchedEffect(filePath) {
         svgBytes = Res.readBytes(filePath)
     }
 
