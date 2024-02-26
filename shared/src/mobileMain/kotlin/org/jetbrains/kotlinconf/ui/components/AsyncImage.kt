@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.http.isSuccess
 import org.jetbrains.kotlinconf.HTTP_CLIENT
 
 @Composable
@@ -54,9 +55,10 @@ fun ImagePlaceholder(modifier: Modifier) {
     }
 }
 
-suspend fun loadImage(imageUrl: String): ImageBitmap = HTTP_CLIENT
+suspend fun loadImage(imageUrl: String): ImageBitmap? = HTTP_CLIENT
     .get(imageUrl)
-    .body<ByteArray>()
-    .asBitmap()
+    .takeIf { it.status.isSuccess() }
+    ?.body<ByteArray>()
+    ?.asBitmap()
 
 internal expect fun ByteArray.asBitmap(): ImageBitmap
