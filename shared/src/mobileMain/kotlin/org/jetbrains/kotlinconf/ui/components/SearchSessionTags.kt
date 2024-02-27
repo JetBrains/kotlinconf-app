@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.kotlinconf.theme.grey5Black
+import org.jetbrains.kotlinconf.ui.theme.grey5Black
 
 
 @OptIn(ExperimentalLayoutApi::class)

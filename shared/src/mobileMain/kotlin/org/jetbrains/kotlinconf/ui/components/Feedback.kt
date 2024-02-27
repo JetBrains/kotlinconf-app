@@ -35,13 +35,13 @@ import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.Score
-import org.jetbrains.kotlinconf.theme.grey50
-import org.jetbrains.kotlinconf.theme.grey5Black
-import org.jetbrains.kotlinconf.theme.greyGrey5
-import org.jetbrains.kotlinconf.theme.greyGrey50
-import org.jetbrains.kotlinconf.theme.greyGrey80
-import org.jetbrains.kotlinconf.theme.greyWhite
-import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.theme.grey50
+import org.jetbrains.kotlinconf.ui.theme.grey5Black
+import org.jetbrains.kotlinconf.ui.theme.greyGrey5
+import org.jetbrains.kotlinconf.ui.theme.greyGrey50
+import org.jetbrains.kotlinconf.ui.theme.greyGrey80
+import org.jetbrains.kotlinconf.ui.theme.greyWhite
+import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.HDivider
 import org.jetbrains.kotlinconf.ui.painter
 

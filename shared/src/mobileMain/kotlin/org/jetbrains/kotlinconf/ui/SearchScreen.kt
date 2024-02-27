@@ -20,8 +20,14 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.Speaker
-import org.jetbrains.kotlinconf.theme.*
 import org.jetbrains.kotlinconf.ui.components.*
+import org.jetbrains.kotlinconf.ui.theme.blackWhite
+import org.jetbrains.kotlinconf.ui.theme.grey50
+import org.jetbrains.kotlinconf.ui.theme.grey5Black
+import org.jetbrains.kotlinconf.ui.theme.grey80Grey20
+import org.jetbrains.kotlinconf.ui.theme.orange
+import org.jetbrains.kotlinconf.ui.theme.white
+import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 
 data class SessionSearchData(
     val id: String,

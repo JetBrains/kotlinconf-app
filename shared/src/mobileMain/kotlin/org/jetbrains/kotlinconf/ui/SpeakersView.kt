@@ -11,9 +11,9 @@ import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.theme.subtitle
-import org.jetbrains.kotlinconf.theme.title
-import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.theme.subtitle
+import org.jetbrains.kotlinconf.ui.theme.title
+import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
 

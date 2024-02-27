@@ -11,13 +11,19 @@ import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.theme.*
 import org.jetbrains.kotlinconf.ui.components.AWSLab
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 import org.jetbrains.kotlinconf.ui.components.CodeLab
 import org.jetbrains.kotlinconf.ui.components.LightningTalk
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
 import org.jetbrains.kotlinconf.ui.components.VoteAndFeedback
+import org.jetbrains.kotlinconf.ui.theme.grey50Grey20
+import org.jetbrains.kotlinconf.ui.theme.grey5Black
+import org.jetbrains.kotlinconf.ui.theme.greyGrey20
+import org.jetbrains.kotlinconf.ui.theme.greyGrey5
+import org.jetbrains.kotlinconf.ui.theme.greyWhite
+import org.jetbrains.kotlinconf.ui.theme.orange
+import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

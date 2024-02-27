@@ -18,10 +18,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.theme.grey5Black
-import org.jetbrains.kotlinconf.theme.greyGrey20
-import org.jetbrains.kotlinconf.theme.greyGrey5
-import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.theme.grey5Black
+import org.jetbrains.kotlinconf.ui.theme.greyGrey20
+import org.jetbrains.kotlinconf.ui.theme.greyGrey5
+import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
 
 @OptIn(ExperimentalResourceApi::class)

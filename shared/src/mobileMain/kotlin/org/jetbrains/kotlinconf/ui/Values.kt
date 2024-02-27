@@ -8,8 +8,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import org.jetbrains.kotlinconf.theme.blackWhite
-import org.jetbrains.kotlinconf.theme.violet
+import org.jetbrains.kotlinconf.ui.theme.blackWhite
+import org.jetbrains.kotlinconf.ui.theme.violet
 
 val MOBILE_APP_DESCRIPTION: AnnotatedString
     @Composable get() = buildAnnotatedString {

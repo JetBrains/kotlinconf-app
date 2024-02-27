@@ -28,11 +28,11 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionCardView
-import org.jetbrains.kotlinconf.theme.grey50
-import org.jetbrains.kotlinconf.theme.grey5Black
-import org.jetbrains.kotlinconf.theme.greyGrey5
-import org.jetbrains.kotlinconf.theme.orange
-import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.theme.grey50
+import org.jetbrains.kotlinconf.ui.theme.grey5Black
+import org.jetbrains.kotlinconf.ui.theme.greyGrey5
+import org.jetbrains.kotlinconf.ui.theme.orange
+import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.components.Tab
 import org.jetbrains.kotlinconf.ui.components.TabBar
 import org.jetbrains.kotlinconf.ui.components.VoteAndFeedback

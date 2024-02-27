@@ -14,11 +14,11 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.kotlinconf.theme.DEFAULT_TRANSITION
-import org.jetbrains.kotlinconf.theme.blackWhite
-import org.jetbrains.kotlinconf.theme.grey50
-import org.jetbrains.kotlinconf.theme.grey5Grey
-import org.jetbrains.kotlinconf.theme.whiteBlack
+import org.jetbrains.kotlinconf.ui.theme.DEFAULT_TRANSITION
+import org.jetbrains.kotlinconf.ui.theme.blackWhite
+import org.jetbrains.kotlinconf.ui.theme.grey50
+import org.jetbrains.kotlinconf.ui.theme.grey5Grey
+import org.jetbrains.kotlinconf.ui.theme.whiteBlack
 import org.jetbrains.kotlinconf.ui.painter
 
 class TabItem @OptIn(ExperimentalResourceApi::class) constructor(

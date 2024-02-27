@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.theme
+package org.jetbrains.kotlinconf.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Colors

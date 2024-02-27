@@ -23,10 +23,10 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.kotlinconf.theme.grey20Grey80
-import org.jetbrains.kotlinconf.theme.greyGrey20
-import org.jetbrains.kotlinconf.theme.greyWhite
-import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.theme.grey20Grey80
+import org.jetbrains.kotlinconf.ui.theme.greyGrey20
+import org.jetbrains.kotlinconf.ui.theme.greyWhite
+import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.painter
 
 @OptIn(ExperimentalResourceApi::class)

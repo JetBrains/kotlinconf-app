@@ -13,7 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.kotlinconf.theme.agendaHeaderColor
+import org.jetbrains.kotlinconf.ui.theme.agendaHeaderColor
 import org.jetbrains.kotlinconf.ui.painter
 
 

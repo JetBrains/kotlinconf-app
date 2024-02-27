@@ -22,12 +22,12 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
-import org.jetbrains.kotlinconf.theme.blackWhite
-import org.jetbrains.kotlinconf.theme.grey5Grey
-import org.jetbrains.kotlinconf.theme.greyGrey5
-import org.jetbrains.kotlinconf.theme.greyWhite
-import org.jetbrains.kotlinconf.theme.violet
-import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.kotlinconf.ui.theme.blackWhite
+import org.jetbrains.kotlinconf.ui.theme.grey5Grey
+import org.jetbrains.kotlinconf.ui.theme.greyGrey5
+import org.jetbrains.kotlinconf.ui.theme.greyWhite
+import org.jetbrains.kotlinconf.ui.theme.violet
+import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.HDivider
 
 @Composable
