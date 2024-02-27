@@ -15,6 +15,7 @@ kotlin = "1.9.21"
 ktor = "2.3.7"
 android-svg="1.4"
 precompose = "1.5.10"
+jetbrains-markdown="0.6.1"
 
 [libraries]
 components-ui-tooling-preview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "compose" }
@@ -29,6 +30,7 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = 
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
 android-svg = { module = "com.caverock:androidsvg-aar", version.ref = "android-svg" }
+jetbrains-markdown = { module = "org.jetbrains:markdown", version.ref = "jetbrains-markdown" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

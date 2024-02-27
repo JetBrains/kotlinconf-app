@@ -56,11 +56,8 @@ kotlin {
                 api(compose.components.resources)
 
                 api(libs.precompose)
+                api(libs.jetbrains.markdown)
             }
-        }
-
-        val jvmMain by getting {
-            dependsOn(mobileMain)
         }
 
         val mobileTest by creating {
@@ -126,4 +123,3 @@ android {
         jvmToolchain(11)
     }
 }
-

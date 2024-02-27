@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.kotlinconf.theme.divider
-import org.jetbrains.kotlinconf.theme.grey50
-import org.jetbrains.kotlinconf.theme.greyWhite
+import org.jetbrains.kotlinconf.ui.theme.divider
+import org.jetbrains.kotlinconf.ui.theme.grey50
+import org.jetbrains.kotlinconf.ui.theme.greyWhite
 
 @Composable
 fun HDivider(modifier: Modifier = Modifier) {

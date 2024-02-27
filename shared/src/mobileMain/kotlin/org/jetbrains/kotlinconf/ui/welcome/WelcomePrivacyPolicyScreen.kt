@@ -28,10 +28,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.kotlinconf.theme.grey20Grey80
-import org.jetbrains.kotlinconf.theme.greyGrey20
-import org.jetbrains.kotlinconf.theme.greyWhite
-import org.jetbrains.kotlinconf.theme.whiteGrey
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.ui.theme.grey20Grey80
+import org.jetbrains.kotlinconf.ui.theme.greyGrey20
+import org.jetbrains.kotlinconf.ui.theme.greyWhite
+import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.painter
 
 @OptIn(ExperimentalResourceApi::class)
@@ -60,19 +61,19 @@ fun WelcomePrivacyPolicyScreen(
             )
 
             Text(
-                "Privacy policy",
+                stringResource(Res.string.privacy_policy_title),
                 style = MaterialTheme.typography.h2.copy(color = MaterialTheme.colors.greyWhite),
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
             )
 
             Text(
-                PRIVACY_NOTE,
+                stringResource(Res.string.privacy_note),
                 style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
             )
 
             Text(
-                "Read the app privacy policy",
+                stringResource(Res.string.read_privacy),
                 style = MaterialTheme.typography.body2.copy(
                     color = MaterialTheme.colors.greyWhite,
                     textDecoration = TextDecoration.Underline
@@ -109,9 +110,3 @@ fun WelcomePrivacyPolicyScreen(
         }
     }
 }
-
-internal const val PRIVACY_NOTE = """
-For you to maximize the benefits of this app, we need your consent to access and use your device ID so you can provide and we can collect and track your feedback about talks. 
-
-We will process your data in accordance with the App Privacy Policy. You can adjust or withdraw your consent at any time by sending a request to privacy@jetbrains.com, but doing so may affect how this app functions.
-"""

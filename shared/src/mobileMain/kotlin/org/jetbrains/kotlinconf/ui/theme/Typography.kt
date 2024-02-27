@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.theme
+package org.jetbrains.kotlinconf.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable

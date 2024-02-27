@@ -11,7 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.kotlinconf.theme.*
+import org.jetbrains.kotlinconf.ui.theme.grey5Grey90
+import org.jetbrains.kotlinconf.ui.theme.orange
+import org.jetbrains.kotlinconf.ui.theme.tagColor
 
 
 @Composable

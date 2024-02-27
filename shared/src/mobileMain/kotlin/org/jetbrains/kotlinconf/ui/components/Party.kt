@@ -16,9 +16,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.kotlinconf.theme.bannerText
-import org.jetbrains.kotlinconf.theme.grey20Grey80
-import org.jetbrains.kotlinconf.theme.greyGrey5
+import org.jetbrains.kotlinconf.ui.theme.bannerText
+import org.jetbrains.kotlinconf.ui.theme.grey20Grey80
+import org.jetbrains.kotlinconf.ui.theme.greyGrey5
 import org.jetbrains.kotlinconf.ui.HDivider
 import org.jetbrains.kotlinconf.ui.painter
 
