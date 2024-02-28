@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ui.theme.grey20Grey80
 import org.jetbrains.kotlinconf.ui.theme.greyGrey20
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
@@ -51,13 +52,13 @@ fun WelcomeNotificationsScreen(onAcceptNotifications: () -> Unit, onClose: () ->
             )
 
             Text(
-                "Do you want reminders?",
+                stringResource(Res.string.notifications_title),
                 style = MaterialTheme.typography.h2.copy(color = MaterialTheme.colors.greyWhite),
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
             )
 
             Text(
-                REMINDERS_TEXT,
+                stringResource(Res.string.notifications_body),
                 style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
             )
@@ -87,9 +88,3 @@ fun WelcomeNotificationsScreen(onAcceptNotifications: () -> Unit, onClose: () ->
         }
     }
 }
-
-internal const val REMINDERS_TEXT = """
-Get reminders about talks that you don’t want to miss. 
-
-You will receive a message 5 minutes before the session begins so you have time to get ready.
-"""
