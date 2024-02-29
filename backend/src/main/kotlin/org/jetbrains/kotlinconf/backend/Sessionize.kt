@@ -16,9 +16,7 @@ import java.util.concurrent.TimeUnit
 
 @Volatile
 private var conference: Conference? = null
-
 val comeBackLater = HttpStatusCode(477, "Come Back Later")
-
 val GMT_TIME_OFFSET = 2 * 60 * 60 * 1000
 
 @OptIn(DelicateCoroutinesApi::class)
@@ -48,7 +46,10 @@ suspend fun synchronizeWithSessionize(
 fun getSessionizeData(): Conference = conference ?: throw ServiceUnavailable()
 
 fun SessionizeData.toConference(): Conference {
+    val tags = categories.flatMap { it.items }.groupBy { it.id }
+
     fun findRoom(id: Int) = rooms.find { it.id == id }?.name ?: "unknown"
+
     val sessions = sessions.mapNotNull { it ->
         val startsAt = it.startsAt ?: return@mapNotNull null
         val endsAt = it.endsAt ?: return@mapNotNull null
@@ -59,7 +60,8 @@ fun SessionizeData.toConference(): Conference {
             it.speakers,
             it.roomId?.let { findRoom(it) } ?: "unknown",
             startsAt,
-            endsAt
+            endsAt,
+            tags[it.categoryItems.firstOrNull()]?.map { it.name } ?: emptyList()
         )
     }
 
