@@ -1,23 +1,22 @@
 package org.jetbrains.kotlinconf.backend
 
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.util.date.*
-import kotlinx.coroutines.*
-import org.jetbrains.kotlinconf.*
-import java.time.*
-import java.util.*
-import java.util.concurrent.*
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.Application
+import io.ktor.server.application.log
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.jetbrains.kotlinconf.Conference
+import org.jetbrains.kotlinconf.Session
+import org.jetbrains.kotlinconf.Speaker
+import java.util.concurrent.TimeUnit
 
 @Volatile
 private var conference: Conference? = null
-
 val comeBackLater = HttpStatusCode(477, "Come Back Later")
-val tooLate = HttpStatusCode(478, "Too Late")
-val zoneId: ZoneId = ZoneId.of("Europe/Amsterdam")
-
 val GMT_TIME_OFFSET = 2 * 60 * 60 * 1000
 
 @OptIn(DelicateCoroutinesApi::class)
@@ -47,7 +46,10 @@ suspend fun synchronizeWithSessionize(
 fun getSessionizeData(): Conference = conference ?: throw ServiceUnavailable()
 
 fun SessionizeData.toConference(): Conference {
-    fun findRoom(id: Int) =  rooms.find { it.id == id }?.name ?: "unknown"
+    val tags = categories.flatMap { it.items }.groupBy { it.id }
+
+    fun findRoom(id: Int) = rooms.find { it.id == id }?.name ?: "unknown"
+
     val sessions = sessions.mapNotNull { it ->
         val startsAt = it.startsAt ?: return@mapNotNull null
         val endsAt = it.endsAt ?: return@mapNotNull null
@@ -58,7 +60,8 @@ fun SessionizeData.toConference(): Conference {
             it.speakers,
             it.roomId?.let { findRoom(it) } ?: "unknown",
             startsAt,
-            endsAt
+            endsAt,
+            tags[it.categoryItems.firstOrNull()]?.map { it.name } ?: emptyList()
         )
     }
 

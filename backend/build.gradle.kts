@@ -31,13 +31,13 @@ dependencies {
     implementation("io.ktor:ktor-server-forwarded-header")
     implementation("io.ktor:ktor-server-config-yaml")
 
-    implementation("org.jetbrains.exposed:exposed-core:0.42.0")
-    implementation("org.jetbrains.exposed:exposed-dao:0.41.1")
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.42.0")
-    implementation("com.h2database:h2:2.2.220")
-    implementation("org.postgresql:postgresql:42.6.0")
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.h2)
+    implementation(libs.postgresql)
 
-    implementation("com.zaxxer:HikariCP:5.0.1")
+    implementation(libs.hikaricp)
 
-    implementation("ch.qos.logback:logback-classic:1.4.8")
+    implementation(libs.logback.classic)
 }

@@ -34,7 +34,8 @@ class Session(
     val speakerIds: List<String>,
     val location: String,
     val startsAt: GMTDateSerializable,
-    val endsAt: GMTDateSerializable
+    val endsAt: GMTDateSerializable,
+    val tags: List<String>
 ) {
     val timeLine get() = startsAt.time() + " - " + endsAt.time()
 }

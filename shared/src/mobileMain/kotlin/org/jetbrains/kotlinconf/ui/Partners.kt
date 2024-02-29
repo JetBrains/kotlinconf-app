@@ -21,6 +21,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.adyen
+import kotlinconfapp.shared.generated.resources.andorid
+import kotlinconfapp.shared.generated.resources.aws
+import kotlinconfapp.shared.generated.resources.google
+import kotlinconfapp.shared.generated.resources.gradle
+import kotlinconfapp.shared.generated.resources.jetbrains
+import kotlinconfapp.shared.generated.resources.kodein_koders
+import kotlinconfapp.shared.generated.resources.lunatech
+import kotlinconfapp.shared.generated.resources.sentry
+import kotlinconfapp.shared.generated.resources.source_technology
+import kotlinconfapp.shared.generated.resources.xebia
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.theme.grey20Grey80

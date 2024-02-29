@@ -7,6 +7,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.location
+import kotlinconfapp.shared.generated.resources.location_active
+import kotlinconfapp.shared.generated.resources.menu
+import kotlinconfapp.shared.generated.resources.menu_active
+import kotlinconfapp.shared.generated.resources.mytalks
+import kotlinconfapp.shared.generated.resources.mytalks_active
+import kotlinconfapp.shared.generated.resources.speakers
+import kotlinconfapp.shared.generated.resources.speakers_active
+import kotlinconfapp.shared.generated.resources.time
+import kotlinconfapp.shared.generated.resources.time_active
 import moe.tlaster.precompose.navigation.rememberNavigator
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ConferenceService

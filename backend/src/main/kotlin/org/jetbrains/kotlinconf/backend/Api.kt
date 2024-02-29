@@ -17,15 +17,14 @@ internal fun Routing.api(
     adminSecret: String
 ) {
     apiUsers(store)
-    apiAll()
+    sessions()
     apiVote(store, adminSecret)
     apiSynchronize(sessionizeUrl, adminSecret)
-    apiTwitter()
     apiTime(adminSecret)
 }
 
 /*
-POST http://localhost:8080/user
+POST http://localhost:8080/sign
 1238476512873162837
  */
 private fun Routing.apiUsers(database: Store) {
@@ -39,7 +38,7 @@ private fun Routing.apiUsers(database: Store) {
 }
 
 /*
-GET http://localhost:8080/votes
+GET http://localhost:8080/vote
 Accept: application/json
 Authorization: Bearer 1238476512873162837
 */
@@ -115,23 +114,22 @@ private fun Routing.apiVote(
 }
 
 /*
-GET http://localhost:8080/all
-GET http://localhost:8080/all2019
+GET http://localhost:8080/conference
 Accept: application/json
 Authorization: Bearer 1238476512873162837
 */
-private fun Routing.apiAll() {
+private fun Routing.sessions() {
     get("conference") {
         call.respond(getSessionizeData())
     }
 }
 
-private fun Routing.apiTwitter() {
-    get("feed") {
-        call.respond(getFeedData())
-    }
-}
-
+/**
+ * Admin endpoints
+ * GET http://localhost:8080/time
+ *
+ * POST http://localhost:8080/time/1589568000000
+ */
 private fun Routing.apiTime(adminSecret: String) {
     get("time") {
         call.respond(now())
@@ -152,7 +150,7 @@ private fun Routing.apiTime(adminSecret: String) {
 }
 
 /*
-GET http://localhost:8080/sessionizeSync
+POST http://localhost:8080/sessionizeSync
 */
 private fun Routing.apiSynchronize(
     sessionizeUrl: String,

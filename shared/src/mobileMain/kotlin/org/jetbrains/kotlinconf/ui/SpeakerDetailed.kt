@@ -9,6 +9,8 @@ import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.bookmark
+import kotlinconfapp.shared.generated.resources.bookmark_active
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController

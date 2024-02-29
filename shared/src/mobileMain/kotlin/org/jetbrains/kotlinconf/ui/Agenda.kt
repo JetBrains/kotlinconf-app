@@ -15,6 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.lunch
+import kotlinconfapp.shared.generated.resources.lunch_active
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.Agenda
