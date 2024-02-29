@@ -9,6 +9,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
@@ -30,13 +32,16 @@ class TabItem @OptIn(ExperimentalResourceApi::class) constructor(
 
 @Composable
 fun TabsView(navigator: Navigator, vararg items: TabItem) {
+    val current by navigator.currentEntry.collectAsState(null)
+    val route = current?.route?.route
+
     Scaffold(bottomBar = {
         BottomNavigation(
             backgroundColor = MaterialTheme.colors.whiteBlack,
             contentColor = MaterialTheme.colors.blackWhite,
         ) {
             items.forEach {
-                BottomButton(navigator, tab = it, isSelected = false)
+                BottomButton(navigator, tab = it, isSelected = it.name == route)
             }
         }
     }) {
@@ -46,7 +51,6 @@ fun TabsView(navigator: Navigator, vararg items: TabItem) {
             modifier = Modifier.padding(it),
             navTransition = DEFAULT_TRANSITION
         ) {
-
             items.forEach { tab ->
                 scene(tab.name) {
                     tab.view()

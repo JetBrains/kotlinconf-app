@@ -51,12 +51,6 @@ class AppController(
         last.value = item
     }
 
-    fun showMenu() {
-        push {
-            MenuScreen(it)
-        }
-    }
-
     fun showSession(sessionId: String) {
         push {
             val session: SessionCardView? = service.sessionsCards.collectAsState()

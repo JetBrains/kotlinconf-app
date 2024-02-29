@@ -13,7 +13,8 @@ fun App(context: ApplicationContext) {
     KotlinConfTheme {
         val service = ConferenceService(
             context,
-            "https://kotlin-conf-staging.labs.jb.gg/"
+            "http://10.0.2.2:8080/"
+//            "https://kotlin-conf-staging.labs.jb.gg/"
         )
 
         Surface(
