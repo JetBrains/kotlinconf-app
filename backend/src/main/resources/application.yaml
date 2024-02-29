@@ -8,7 +8,7 @@ ktor:
 
 
 sessionize:
-    url: "https://sessionize.com/api/v2/4g5rwn8o/view/All"
+    url: "https://sessionize.com/api/v2/cdftbl11/view/All"
     interval: 60
 
 database:
