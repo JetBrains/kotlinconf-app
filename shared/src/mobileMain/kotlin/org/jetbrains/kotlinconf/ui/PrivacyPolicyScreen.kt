@@ -18,7 +18,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
@@ -28,14 +27,13 @@ import kotlinconfapp.shared.generated.resources.detailed_privacy_version
 import kotlinconfapp.shared.generated.resources.full_privacy_policy
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.ui.components.TextContent
 import org.jetbrains.kotlinconf.ui.theme.blackWhite
 import org.jetbrains.kotlinconf.ui.theme.grey5Black
 import org.jetbrains.kotlinconf.ui.theme.greyGrey20
 import org.jetbrains.kotlinconf.ui.theme.greyGrey5
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
-import org.jetbrains.kotlinconf.ui.components.TextContent
-import org.jetbrains.kotlinconf.ui.components.TextTitle
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

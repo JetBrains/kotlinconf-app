@@ -31,20 +31,6 @@ fun TextContent(value: AnnotatedString) {
 
 
 @Composable
-fun TextTitle(value: String) {
-    Text(
-        value,
-        style = MaterialTheme.typography.body2.copy(
-            color = MaterialTheme.colors.greyWhite,
-            fontWeight = FontWeight.Bold
-        ),
-        modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp)
-    )
-}
-
-
-
-@Composable
 fun TextContent(value: String) {
     Text(
         value,

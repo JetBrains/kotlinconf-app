@@ -56,7 +56,7 @@ fun Bookmarks(
         })
 
         Text(
-            selectedTab.title.uppercase(),
+            selectedTab.title,
             style = MaterialTheme.typography.h2.copy(color = MaterialTheme.colors.greyGrey5),
             modifier = Modifier.padding(16.dp)
         )
