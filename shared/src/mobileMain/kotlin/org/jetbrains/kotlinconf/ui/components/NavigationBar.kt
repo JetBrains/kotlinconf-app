@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.back
+import kotlinconfapp.shared.generated.resources.menu
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.painter

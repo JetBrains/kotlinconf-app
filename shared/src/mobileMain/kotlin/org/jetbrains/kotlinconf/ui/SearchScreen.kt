@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.close
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.SessionCardView

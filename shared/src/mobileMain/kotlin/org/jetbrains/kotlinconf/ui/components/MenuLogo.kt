@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.menu_banner
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.theme.grey5Black
 import org.jetbrains.kotlinconf.ui.painter

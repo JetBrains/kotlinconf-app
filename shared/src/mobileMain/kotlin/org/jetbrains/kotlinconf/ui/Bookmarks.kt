@@ -24,6 +24,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.bookmark
+import kotlinconfapp.shared.generated.resources.bookmark_active
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.Score

@@ -12,6 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.schedule_day_1_banner
+import kotlinconfapp.shared.generated.resources.schedule_day_2_banner
+import kotlinconfapp.shared.generated.resources.schedule_day_3_banner
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.theme.agendaHeaderColor
 import org.jetbrains.kotlinconf.ui.painter

@@ -28,6 +28,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.about_conf_bottom_banner
+import kotlinconfapp.shared.generated.resources.light
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.ui.theme.bannerText

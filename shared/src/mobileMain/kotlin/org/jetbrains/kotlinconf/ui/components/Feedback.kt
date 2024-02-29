@@ -32,6 +32,13 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.close
+import kotlinconfapp.shared.generated.resources.smilehappy
+import kotlinconfapp.shared.generated.resources.smilehappy_active
+import kotlinconfapp.shared.generated.resources.smileneutral
+import kotlinconfapp.shared.generated.resources.smileneutral_active
+import kotlinconfapp.shared.generated.resources.smilesad
+import kotlinconfapp.shared.generated.resources.smilesad_active
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.Score

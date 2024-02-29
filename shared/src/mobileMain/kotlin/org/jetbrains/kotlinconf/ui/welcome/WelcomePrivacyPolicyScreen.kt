@@ -22,18 +22,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.privacy_note
+import kotlinconfapp.shared.generated.resources.privacy_policy_bird
+import kotlinconfapp.shared.generated.resources.privacy_policy_title
+import kotlinconfapp.shared.generated.resources.read_privacy
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.ui.painter
 import org.jetbrains.kotlinconf.ui.theme.grey20Grey80
 import org.jetbrains.kotlinconf.ui.theme.greyGrey20
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
-import org.jetbrains.kotlinconf.ui.painter
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

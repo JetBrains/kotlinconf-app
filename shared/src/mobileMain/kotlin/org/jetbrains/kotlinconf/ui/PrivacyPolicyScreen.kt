@@ -22,6 +22,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.close
+import kotlinconfapp.shared.generated.resources.detailed_privacy_policy_title
+import kotlinconfapp.shared.generated.resources.detailed_privacy_version
+import kotlinconfapp.shared.generated.resources.full_privacy_policy
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ui.theme.blackWhite

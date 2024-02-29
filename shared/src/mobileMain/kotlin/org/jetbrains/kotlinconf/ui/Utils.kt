@@ -15,6 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.adyen_big
+import kotlinconfapp.shared.generated.resources.android_google_big
+import kotlinconfapp.shared.generated.resources.aws_big
+import kotlinconfapp.shared.generated.resources.gradle_big
+import kotlinconfapp.shared.generated.resources.jetbrains_big
+import kotlinconfapp.shared.generated.resources.kodein_koders_big
+import kotlinconfapp.shared.generated.resources.lunatech_big
+import kotlinconfapp.shared.generated.resources.sentry_big
+import kotlinconfapp.shared.generated.resources.source_technology_big
+import kotlinconfapp.shared.generated.resources.xebia_big
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.theme.divider
