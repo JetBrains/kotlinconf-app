@@ -28,13 +28,14 @@ import org.jetbrains.kotlinconf.ui.painter
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun Tag(
-    icon: DrawableResource,
+    icon: DrawableResource?,
     text: String,
     dimmed: Boolean = false,
     iconColor: Color = orange,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .background(
                 MaterialTheme.colors.grey5Black,
                 shape = RoundedCornerShape(4.dp),
@@ -42,12 +43,14 @@ fun Tag(
             .alpha(if (dimmed) 0.5f else 1f),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(
-            painter = icon.painter(), contentDescription = null, tint = iconColor,
-            modifier = Modifier
-                .padding(start = 4.dp)
-                .size(16.dp)
-        )
+        if (icon != null) {
+            Icon(
+                painter = icon.painter(), contentDescription = null, tint = iconColor,
+                modifier = Modifier
+                    .padding(start = 4.dp)
+                    .size(16.dp)
+            )
+        }
         Text(
             text = text,
             modifier = Modifier

@@ -46,13 +46,16 @@ suspend fun synchronizeWithSessionize(
 fun getSessionizeData(): Conference = conference ?: throw ServiceUnavailable()
 
 fun SessionizeData.toConference(): Conference {
-    val tags = categories.flatMap { it.items }.groupBy { it.id }
+    val tags: Map<Int, CategoryItemData> = categories
+        .flatMap { it.items }
+        .associateBy { it.id }
 
     fun findRoom(id: Int) = rooms.find { it.id == id }?.name ?: "unknown"
 
     val sessions = sessions.mapNotNull { it ->
         val startsAt = it.startsAt ?: return@mapNotNull null
         val endsAt = it.endsAt ?: return@mapNotNull null
+        val tags = it.categoryItems.mapNotNull { tags[it]?.name }
         Session(
             it.id,
             it.displayTitle,
@@ -61,7 +64,7 @@ fun SessionizeData.toConference(): Conference {
             it.roomId?.let { findRoom(it) } ?: "unknown",
             startsAt,
             endsAt,
-            tags[it.categoryItems.firstOrNull()]?.map { it.name } ?: emptyList()
+            tags
         )
     }
 

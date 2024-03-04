@@ -22,6 +22,7 @@ data class SessionCardView(
     val isFavorite: Boolean,
     val isFinished: Boolean,
     val description: String,
+    val tags: List<String>,
     val badgeTimeLine: String = buildString {
         append(startsAt.time())
         append("-")

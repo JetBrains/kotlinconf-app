@@ -16,11 +16,27 @@ data class Speakers(
     operator fun get(id: String): Speaker? = dictById[id]
 }
 
+enum class EventDay(val title: String) {
+    May22("May 22"),
+    May23("May 23"),
+    May24("May 24");
+
+    companion object {
+        fun from(value: Int) = when (value) {
+            22 -> May22
+            23 -> May23
+            else -> May24
+        }
+    }
+}
+
 data class Day(
-    val day: Int,
-    override val title: String,
+    val day: EventDay,
     val timeSlots: List<TimeSlot>
-) : Tab
+) : Tab {
+    override val title: String
+        get() = day.title
+}
 
 data class TimeSlot(
     val startsAt: GMTDate,
@@ -54,8 +70,7 @@ fun Conference.buildAgenda(
         .map { (day, sessions) ->
             val title = sessions.first().startsAt.dayAndMonth()
             Day(
-                day,
-                title,
+                EventDay.from(day),
                 sessions.groupByTime(conference = this, now, favorites, votes)
             )
         }
@@ -110,7 +125,8 @@ fun Session.asSessionCard(
         speakerIds = speakerIds,
         isFinished = isFinished,
         vote = vote,
-        description = description
+        description = description,
+        tags = tags ?: emptyList()
     )
 }
 

@@ -70,6 +70,7 @@ class AppController(
                     isLightning = session.isLightning,
                     isCodeLab = session.isCodeLab,
                     isAWS = session.isAWSLab,
+                    tags = session.tags,
                     controller = this
                 )
             }

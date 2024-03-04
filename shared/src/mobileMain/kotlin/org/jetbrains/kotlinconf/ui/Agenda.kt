@@ -70,7 +70,7 @@ private fun LazyListScope.SessionsList(
     controller: AppController,
 ) {
     item {
-        AgendaDayHeader(day.title)
+        AgendaDayHeader(day.day)
     }
 
     day.timeSlots.forEach { slot ->

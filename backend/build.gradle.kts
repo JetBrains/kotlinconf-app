@@ -30,6 +30,7 @@ dependencies {
     implementation("io.ktor:ktor-server-auto-head-response")
     implementation("io.ktor:ktor-server-forwarded-header")
     implementation("io.ktor:ktor-server-config-yaml")
+    implementation("io.ktor:ktor-server-swagger")
 
     implementation(libs.exposed.core)
     implementation(libs.exposed.dao)
