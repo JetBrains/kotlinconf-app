@@ -1,5 +1,5 @@
 [versions]
-agp = "8.2.0"
+agp = "8.3.0"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
@@ -20,9 +20,9 @@ kotlin = "1.9.22"
 ktor = "2.3.8"
 android-svg="1.4"
 logbackClassic = "1.4.14"
+markdown = "0.13.0"
 postgresql = "42.6.0"
 precompose = "1.5.10"
-jetbrains-markdown="0.6.1"
 compose-plugin = "1.6.0"
 
 [libraries]
@@ -42,10 +42,10 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = 
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 components-ui-tooling-preview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "compose-plugin" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logbackClassic" }
+multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "markdown" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
 android-svg = { module = "com.caverock:androidsvg-aar", version.ref = "android-svg" }
-jetbrains-markdown = { module = "org.jetbrains:markdown", version.ref = "jetbrains-markdown" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

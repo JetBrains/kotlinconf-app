@@ -56,7 +56,7 @@ kotlin {
                 api(compose.components.resources)
 
                 api(libs.precompose)
-                api(libs.jetbrains.markdown)
+                implementation(libs.multiplatform.markdown.renderer.m3)
             }
         }
 
@@ -80,6 +80,7 @@ kotlin {
                 implementation(libs.androidx.core.ktx)
                 implementation(libs.androidx.work.runtime)
                 implementation(libs.androidx.preference)
+                implementation(libs.compose.ui.tooling.preview)
             }
 
             resources.srcDirs("src/commonMain/resources", "src/mobileMain/resources")
@@ -121,5 +122,11 @@ android {
     }
     kotlin {
         jvmToolchain(11)
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.10"
+    }
+    buildFeatures {
+        compose = true
     }
 }

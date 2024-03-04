@@ -81,10 +81,6 @@ fun MenuScreen(controller: AppController) {
                     MenuItem(text = "Code of conduct", icon = Res.drawable.arrow_right) {
                         controller.showCodeOfConduct()
                     }
-                    HDivider()
-                    MenuItem(text = "Privacy policy", icon = Res.drawable.arrow_right) {
-                        controller.showPrivacyPolicy()
-                    }
                 }
             }
 
@@ -97,6 +93,9 @@ fun MenuScreen(controller: AppController) {
                 BigMenuItem("Slack channel", "", Res.drawable.slack) {
                     uriHandler.openUri("https://kotlinlang.slack.com/messages/kotlinconf/")
                 }
+            }
+            item(span = { GridItemSpan(2) }) {
+                // last divider
             }
         }
     }

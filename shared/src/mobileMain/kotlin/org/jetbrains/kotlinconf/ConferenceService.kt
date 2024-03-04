@@ -76,7 +76,7 @@ class ConferenceService(
             .asStateFlowClass()
     }
 
-    val sessionsCards: StateFlowClass<List<SessionCardView>> by lazy {
+    val sessionCards: StateFlowClass<List<SessionCardView>> by lazy {
         agenda.map {
             it.days
                 .flatMap { it.timeSlots }
@@ -195,10 +195,10 @@ class ConferenceService(
     fun speakerById(id: String): Speaker = speakers.value[id] ?: UNKNOWN_SPEAKER
 
     fun sessionById(id: String): SessionCardView =
-        sessionsCards.value.find { it.id == id } ?: UNKNOWN_SESSION_CARD
+        sessionCards.value.find { it.id == id } ?: UNKNOWN_SESSION_CARD
 
     fun sessionsForSpeaker(id: String): List<SessionCardView> =
-        sessionsCards.value.filter { it.speakerIds.contains(id) }
+        sessionCards.value.filter { it.speakerIds.contains(id) }
 
     /**
      * Mark session as favorite.
