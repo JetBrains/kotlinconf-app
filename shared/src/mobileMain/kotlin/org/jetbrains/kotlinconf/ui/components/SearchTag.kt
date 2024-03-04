@@ -15,11 +15,6 @@ import org.jetbrains.kotlinconf.ui.theme.grey20Grey80
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.orange
 
-data class TagView(
-    val name: String,
-    val isActive: Boolean
-)
-
 @Composable
 fun SearchTag(name: String, isActive: Boolean, onClick: () -> Unit) {
     Button(
@@ -38,10 +33,4 @@ fun SearchTag(name: String, isActive: Boolean, onClick: () -> Unit) {
             style = MaterialTheme.typography.body2
         )
     }
-}
-
-@Preview
-@Composable
-fun SearchTagPreview() {
-    SearchTag("Android", false) {}
 }

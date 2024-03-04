@@ -32,12 +32,13 @@ fun Tag(
     text: String,
     dimmed: Boolean = false,
     iconColor: Color = orange,
+    isActive: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .background(
-                MaterialTheme.colors.grey5Black,
+                if (isActive) orange else MaterialTheme.colors.grey5Black,
                 shape = RoundedCornerShape(4.dp),
             )
             .alpha(if (dimmed) 0.5f else 1f),
