@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -33,7 +34,7 @@ import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 data class SessionSearchData(
     val id: String,
     val description: AnnotatedString,
-    val tags: List<TagView>,
+    val tags: List<String>,
     val timeLine: String
 )
 
@@ -41,10 +42,9 @@ data class SpeakerSearchData(
     val id: String,
     val description: AnnotatedString,
     val photoUrl: String,
-    val tags: List<TagView>
 )
 
-enum class SearchTab(override val title: String): Tab {
+enum class SearchTab(override val title: String) : Tab {
     TALKS("Talks"),
     SPEAKERS("Speakers")
 }
@@ -59,7 +59,9 @@ fun SearchScreen(
     var query by remember { mutableStateOf("") }
     var selectedTab by remember { mutableStateOf(SearchTab.TALKS) }
     val speakerResults = speakers.searchSpeakers(query)
-    val sessionResults = sessions.searchSessions(query)
+    val tags = sessions.flatMap { it.tags }.distinct()
+    val activeTags = remember { mutableStateListOf<String>() }
+    val sessionResults = sessions.searchSessions(query, activeTags)
 
     Column(
         Modifier
@@ -75,25 +77,45 @@ fun SearchScreen(
         )
         SearchField(query, onTextChange = { query = it })
         HDivider()
-        SearchSessionTags(MOCK_TAGS, onClick = {})
+        SearchSessionTags(tags, activeTags, onClick = {
+            if (it in activeTags) {
+                activeTags.remove(it)
+            } else {
+                activeTags.add(it)
+            }
+        })
         HDivider()
         SearchTagSelector(
             selected = selectedTab,
             onClick = { selectedTab = it }
         )
         HDivider()
-        SearchResults(selected = selectedTab, sessionResults, speakerResults, controller)
+        SearchResults(
+            selected = selectedTab,
+            sessionResults,
+            speakerResults,
+            activeTags,
+            controller
+        )
     }
 }
 
 @Composable
-private fun List<SessionCardView>.searchSessions(query: String): List<SessionSearchData> =
-    filterNot { it.isBreak || it.isParty || it.isLunch }
+private fun List<SessionCardView>.searchSessions(
+    query: String,
+    activeTags: SnapshotStateList<String>
+): List<SessionSearchData> {
+    var result = this
+    if (activeTags.isNotEmpty()) {
+        result = result.filter { session -> session.tags.any { it in activeTags } }
+    }
+    return result.filterNot { it.isBreak || it.isParty || it.isLunch }
         .filter { session ->
             session.title.contains(query, ignoreCase = true) ||
                     session.description.contains(query, ignoreCase = true) ||
                     session.speakerLine.contains(query, ignoreCase = true)
         }.map { it.toSearchData(query) }
+}
 
 private fun List<Speaker>.searchSpeakers(query: String): List<SpeakerSearchData> =
     filter { speaker ->
@@ -116,7 +138,6 @@ private fun Speaker.toSearchData(query: String): SpeakerSearchData = SpeakerSear
         }
     },
     photoUrl = photoUrl,
-    tags = emptyList()
 )
 
 @Composable
@@ -137,7 +158,7 @@ private fun SessionCardView.toSearchData(query: String): SessionSearchData = Ses
             }
         }
     },
-    tags = emptyList(),
+    tags = tags,
     timeLine = timeLine
 )
 
@@ -204,6 +225,7 @@ private fun SearchResults(
     selected: SearchTab,
     talks: List<SessionSearchData>,
     speakers: List<SpeakerSearchData>,
+    activeTags: List<String>,
     controller: AppController
 ) {
     LazyColumn(Modifier.fillMaxWidth()) {
@@ -212,24 +234,27 @@ private fun SearchResults(
                 SpeakerSearchResult(
                     speaker.photoUrl,
                     speaker.description,
-                    tags = speaker.tags,
                     onClick = { controller.showSpeaker(speaker.id) }
                 )
             }
+
             SearchTab.TALKS -> items(talks) { session ->
                 TalkSearchResult(
                     session.description,
-                    tags = session.tags
+                    tags = session.tags,
+                    activeTags = activeTags,
                 ) { controller.showSession(session.id) }
             }
         }
     }
 }
 
+@OptIn(ExperimentalResourceApi::class, ExperimentalLayoutApi::class)
 @Composable
 private fun TalkSearchResult(
     text: AnnotatedString,
-    tags: List<TagView>,
+    tags: List<String>,
+    activeTags: List<String>,
     onClick: () -> Unit
 ) {
     Column(
@@ -241,10 +266,23 @@ private fun TalkSearchResult(
         Column(Modifier.padding(16.dp)) {
             Text(text = text, style = MaterialTheme.typography.body2)
             Spacer(Modifier.height(8.dp))
-            Row {
+            FlowRow {
+                activeTags.forEach { tag ->
+                    Tag(
+                        icon = null,
+                        tag,
+                        modifier = Modifier.padding(end = 4.dp),
+                        isActive = true
+                    )
+                }
                 tags.forEach { tag ->
-                    SearchResultTag(tag)
-                    Spacer(Modifier.width(8.dp))
+                    if (tag in activeTags) return@forEach
+                    Tag(
+                        icon = null,
+                        tag,
+                        modifier = Modifier.padding(end = 4.dp),
+                        isActive = false
+                    )
                 }
             }
         }
@@ -256,7 +294,6 @@ private fun TalkSearchResult(
 private fun SpeakerSearchResult(
     photoUrl: String,
     text: AnnotatedString,
-    tags: List<TagView>,
     onClick: () -> Unit
 ) {
     Column(
@@ -272,12 +309,6 @@ private fun SpeakerSearchResult(
             Column(Modifier.padding(16.dp)) {
                 Text(text = text, style = MaterialTheme.typography.body2)
                 Spacer(Modifier.height(8.dp))
-                Row {
-                    tags.forEach { tag ->
-                        SearchResultTag(tag)
-                        Spacer(Modifier.width(8.dp))
-                    }
-                }
             }
         }
         HDivider()

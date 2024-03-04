@@ -12,7 +12,7 @@ import org.jetbrains.kotlinconf.ui.theme.grey5Black
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun SearchSessionTags(tags: List<TagView>, onClick: (tag: TagView) -> Unit) {
+fun SearchSessionTags(tags: List<String>, active: List<String>, onClick: (tag: String) -> Unit) {
     FlowRow(
         Modifier
             .fillMaxWidth()
@@ -20,20 +20,7 @@ fun SearchSessionTags(tags: List<TagView>, onClick: (tag: TagView) -> Unit) {
             .padding(12.dp)
     ) {
         tags.forEach { tag ->
-            SearchTag(name = tag.name, isActive = tag.isActive, onClick = { onClick(tag) })
+            SearchTag(name = tag, isActive = tag in active, onClick = { onClick(tag) })
         }
     }
-}
-
-val MOCK_TAGS: List<TagView> = listOf(
-    TagView("Kotlin", true),
-    TagView("Coroutines", false),
-    TagView("Multiplatform", true),
-    TagView("Android", false),
-)
-
-@Preview
-@Composable
-fun SearchSessionTagsPreview() {
-    SearchSessionTags(MOCK_TAGS) {}
 }
