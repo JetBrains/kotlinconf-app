@@ -16,6 +16,7 @@ import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.forwardedheaders.*
 import io.ktor.server.plugins.partialcontent.*
 import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.plugins.swagger.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -80,6 +81,8 @@ fun Application.conferenceBackend() {
 
     val database = Store(this)
     routing {
+        swaggerUI("api")
+
         authenticate()
         static {
             default("static/index.html")

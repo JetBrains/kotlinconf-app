@@ -16,16 +16,17 @@ import kotlinconfapp.shared.generated.resources.schedule_day_1_banner
 import kotlinconfapp.shared.generated.resources.schedule_day_2_banner
 import kotlinconfapp.shared.generated.resources.schedule_day_3_banner
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.kotlinconf.EventDay
 import org.jetbrains.kotlinconf.ui.theme.agendaHeaderColor
 import org.jetbrains.kotlinconf.ui.painter
 
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-internal fun AgendaDayHeader(title: String) {
-    val image = when (title) {
-        "APRIL 12" -> Res.drawable.schedule_day_1_banner
-        "APRIL 13" -> Res.drawable.schedule_day_2_banner
+internal fun AgendaDayHeader(day: EventDay) {
+    val image = when (day) {
+        EventDay.May22 -> Res.drawable.schedule_day_1_banner
+        EventDay.May23 -> Res.drawable.schedule_day_2_banner
         else -> Res.drawable.schedule_day_3_banner
     }
 

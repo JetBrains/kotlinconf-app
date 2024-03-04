@@ -18,6 +18,7 @@ import org.jetbrains.kotlinconf.ui.components.AsyncImage
 import org.jetbrains.kotlinconf.ui.components.CodeLab
 import org.jetbrains.kotlinconf.ui.components.LightningTalk
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
+import org.jetbrains.kotlinconf.ui.components.Tag
 import org.jetbrains.kotlinconf.ui.components.VoteAndFeedback
 import org.jetbrains.kotlinconf.ui.theme.grey50Grey20
 import org.jetbrains.kotlinconf.ui.theme.grey5Black
@@ -42,6 +43,7 @@ fun SessionDetailed(
     isLightning: Boolean,
     isCodeLab: Boolean,
     isAWS: Boolean,
+    tags: List<String>,
     controller: AppController
 ) {
     var showFeedbackBlock by remember { mutableStateOf(false) }
@@ -58,6 +60,7 @@ fun SessionDetailed(
             isLightning = isLightning,
             isCodeLab = isCodeLab,
             isAWS = isAWS,
+            tags = tags,
             onBackClick = { controller.back() },
             onSpeakerClick = { speakerId -> controller.showSpeaker(speakerId) }
         )
@@ -109,6 +112,7 @@ private fun SessionContent(
     isLightning: Boolean,
     isCodeLab: Boolean,
     isAWS: Boolean,
+    tags: List<String>,
     onFavoriteClick: () -> Unit,
     onSpeakerClick: (String) -> Unit,
     onBackClick: () -> Unit
@@ -128,7 +132,7 @@ private fun SessionContent(
                 .background(MaterialTheme.colors.whiteGrey)
         ) {
             SessionHead(time, title, isFavorite, onFavoriteClick, onSpeakerClick, speakers)
-            SessionDetails(description, location, isLightning, isCodeLab, isAWS)
+            SessionDetails(description, location, isLightning, isCodeLab, isAWS, tags)
         }
     }
 }
@@ -211,6 +215,7 @@ private fun SpeakerPhotos(speakers: List<Speaker>, speakerClick: (String) -> Uni
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class, ExperimentalResourceApi::class)
 @Composable
 private fun SessionDetails(
     description: String,
@@ -218,9 +223,10 @@ private fun SessionDetails(
     isLightning: Boolean,
     isCodeLab: Boolean,
     isAWS: Boolean,
+    tags: List<String>
 ) {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
-        Row(
+        FlowRow(
             Modifier
                 .padding(16.dp)
                 .fillMaxWidth()
@@ -232,6 +238,10 @@ private fun SessionDetails(
             } else if (isAWS) {
                 AWSLab()
             }
+
+            tags.forEach {
+                Tag(null, it, modifier = Modifier.padding(end = 4.dp))
+            }
         }
 
         Column(Modifier.padding(16.dp)) {
@@ -241,7 +251,7 @@ private fun SessionDetails(
                     color = MaterialTheme.colors.greyGrey20
                 )
             )
-            LocationRow(location, Modifier.padding(top = 24.dp))
+            LocationRow(location, Modifier.padding(top = 24.dp, bottom = 48.dp))
         }
     }
 }
