@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
@@ -42,6 +41,8 @@ import kotlinconfapp.shared.generated.resources.smilesad_active
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.Score
+import org.jetbrains.kotlinconf.ui.HDivider
+import org.jetbrains.kotlinconf.ui.painter
 import org.jetbrains.kotlinconf.ui.theme.grey50
 import org.jetbrains.kotlinconf.ui.theme.grey5Black
 import org.jetbrains.kotlinconf.ui.theme.greyGrey5
@@ -49,8 +50,6 @@ import org.jetbrains.kotlinconf.ui.theme.greyGrey50
 import org.jetbrains.kotlinconf.ui.theme.greyGrey80
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
-import org.jetbrains.kotlinconf.ui.HDivider
-import org.jetbrains.kotlinconf.ui.painter
 
 @Composable
 fun VoteAndFeedback(

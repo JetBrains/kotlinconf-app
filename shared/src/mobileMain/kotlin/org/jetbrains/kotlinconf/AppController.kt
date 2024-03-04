@@ -12,19 +12,19 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.kotlinconf.ui.AboutAppScreen
 import org.jetbrains.kotlinconf.ui.AboutConfScreen
-import org.jetbrains.kotlinconf.ui.CODE_OF_CONDUCT
-import org.jetbrains.kotlinconf.ui.MOBILE_APP_DESCRIPTION
-import org.jetbrains.kotlinconf.ui.MenuScreen
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
 import org.jetbrains.kotlinconf.ui.Partner
 import org.jetbrains.kotlinconf.ui.Partners
-import org.jetbrains.kotlinconf.ui.PrivacyPolicyScreen
+import org.jetbrains.kotlinconf.ui.AppPrivacyPolicyScreen
 import org.jetbrains.kotlinconf.ui.SearchScreen
 import org.jetbrains.kotlinconf.ui.SessionDetailed
 import org.jetbrains.kotlinconf.ui.SpeakersFlow
-import org.jetbrains.kotlinconf.ui.TermsOfUseScreen
-import org.jetbrains.kotlinconf.ui.TextScreen
+import org.jetbrains.kotlinconf.ui.AppTermsOfUseScreen
+import org.jetbrains.kotlinconf.ui.CodeOfConductScreen
+import org.jetbrains.kotlinconf.ui.VisitorsPrivacyPolicyScreen
+import org.jetbrains.kotlinconf.ui.VisitorsTermsScreen
 import org.jetbrains.kotlinconf.ui.welcome.WelcomeScreen
 
 typealias View = @Composable (AppController) -> Unit
@@ -53,7 +53,7 @@ class AppController(
 
     fun showSession(sessionId: String) {
         push {
-            val session: SessionCardView? = service.sessionsCards.collectAsState()
+            val session: SessionCardView? = service.sessionCards.collectAsState()
                 .value.firstOrNull { it.id == sessionId }
             val speakers = session?.speakerIds?.map { service.speakerById(it) }
             if (session != null && speakers != null) {
@@ -135,7 +135,10 @@ class AppController(
 
     fun showAppInfo() {
         push {
-            TextScreen("’24 mobile app", null, MOBILE_APP_DESCRIPTION) { it.back() }
+            AboutAppScreen(
+                showAppPrivacyPolicy = { showAppPrivacyPolicy() },
+                showAppTerms = { showAppTerms() },
+                back = { back() })
         }
     }
 
@@ -151,11 +154,7 @@ class AppController(
 
     fun showCodeOfConduct() {
         push {
-            TextScreen(
-                "Code of Conduct",
-                "KotlinConf code of conduct",
-                CODE_OF_CONDUCT
-            ) { it.back() }
+            CodeOfConductScreen { it.back() }
         }
     }
 
@@ -171,49 +170,54 @@ class AppController(
 
     fun showAboutTheConf() {
         push {
-            val keynoteSpeakers = service.speakers.value.all.filter {
-                it.name == "Roman Elizarov" || it.name == "Svetlana Isakova" || it.name == "Grace Kloba" || it.name == "Egor Tolstoy"
-            }
+            AboutConfScreen(
+                service,
+                showVisitorsPrivacyPolicy = { showVisitorsPrivacy() },
+                showVisitorsTerms = { showVisitorsTerms() },
+                back = { it.back() }
+            )
+        }
+    }
 
-            val secondDaySpeaker = service.speakers.value.all.filter {
-                it.name == "Kevlin Henney"
-            }
-            AboutConfScreen(keynoteSpeakers = keynoteSpeakers, secondDaySpeakers = secondDaySpeaker) {
-                it.back()
+    fun showAppPrivacyPolicy() {
+        push("Privacy policy") {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                AppPrivacyPolicyScreen(false) {}
             }
         }
     }
 
     @OptIn(ExperimentalResourceApi::class)
-    fun showPrivacyPolicy() {
-        push {
-            Column {
-                NavigationBar(
-                    title = "Privacy Policy",
-                    isRightVisible = false,
-                    onLeftClick = { back() },
-                )
-                Column(Modifier.verticalScroll(rememberScrollState())) {
-                    PrivacyPolicyScreen {
-                        back()
-                    }
-                }
+    fun showAppTerms() {
+        push("Terms of use") {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                AppTermsOfUseScreen()
             }
         }
     }
 
+    fun showVisitorsPrivacy() {
+        push("Privacy policy") {
+            VisitorsPrivacyPolicyScreen()
+        }
+    }
+
+    fun showVisitorsTerms() {
+        push("Terms and Conditions") {
+            VisitorsTermsScreen()
+        }
+    }
+
     @OptIn(ExperimentalResourceApi::class)
-    fun showTerms() {
+    private fun push(title: String, block: @Composable () -> Unit) {
         push {
             Column {
                 NavigationBar(
-                    title = "Terms of Use",
+                    title = title,
                     isRightVisible = false,
                     onLeftClick = { back() },
                 )
-                Column(Modifier.verticalScroll(rememberScrollState())) {
-                    TermsOfUseScreen()
-                }
+                block()
             }
         }
     }

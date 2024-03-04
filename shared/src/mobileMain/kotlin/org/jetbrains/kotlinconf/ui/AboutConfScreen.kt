@@ -17,6 +17,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -31,6 +33,7 @@ import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.about_conf_bottom_banner
 import kotlinconfapp.shared.generated.resources.light
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.ui.theme.bannerText
 import org.jetbrains.kotlinconf.ui.theme.blackGrey5
@@ -49,10 +52,22 @@ import org.jetbrains.kotlinconf.ui.components.NavigationBar
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun AboutConfScreen(
-    keynoteSpeakers: List<Speaker>,
-    secondDaySpeakers: List<Speaker>,
+    service: ConferenceService,
+    showVisitorsPrivacyPolicy: () -> Unit,
+    showVisitorsTerms: () -> Unit,
     back: () -> Unit
 ) {
+    val sessionCards by service.sessionCards.collectAsState()
+    val speakers by service.speakers.collectAsState()
+    val keynoteSpeakers = sessionCards
+        .firstOrNull { it.title == "Opening Keynote" }
+        ?.speakerIds
+        ?.map { service.speakerById(it) }
+        ?: emptyList()
+
+    val secondDaySpeaker = speakers.all.filter {
+        it.name == "Daniel Terhorst-North"
+    }
     Column(
         Modifier
             .verticalScroll(rememberScrollState())
@@ -71,12 +86,12 @@ fun AboutConfScreen(
         AboutConfDescription()
         HDivider()
         AboutConfKeynoteSection(keynoteSpeakers)
-        AboutConfSecondKeynote(secondDaySpeakers)
+        AboutConfSecondKeynote(secondDaySpeaker)
         HDivider()
         LightningTalks()
         Party()
         ClosingPanel()
-        FindMore()
+        AboutConferenceFooter(showVisitorsPrivacyPolicy, showVisitorsTerms)
     }
 }
 
@@ -327,14 +342,24 @@ private fun BottomBanner() {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun FindMore() {
+private fun AboutConferenceFooter(
+    showVisitorsPrivacyPolicy: () -> Unit,
+    showVisitorsTerms: () -> Unit
+) {
     val uriHandler = LocalUriHandler.current
     Column(
         Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colors.whiteGrey)
     ) {
-        FlowRow(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 24.dp)) {
+        FlowRow(
+            modifier = Modifier.padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 24.dp,
+                bottom = 24.dp
+            )
+        ) {
             Text(
                 buildAnnotatedString {
                     append("You can find more information about the conference on the official website:")
@@ -362,7 +387,8 @@ private fun FindMore() {
 
         HDivider()
 
-        Text("For visitors:",
+        Text(
+            "For visitors:",
             style = MaterialTheme.typography.body2.copy(color = grey50),
             modifier = Modifier
                 .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 16.dp)
@@ -377,7 +403,7 @@ private fun FindMore() {
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp)
                 .clickable {
-                    uriHandler.openUri("https://kotlinconf.com/kotlinconf-2023-privacy-policy-for-visitors.pdf")
+                    showVisitorsPrivacyPolicy()
                 }
         )
         Text(
@@ -390,7 +416,7 @@ private fun FindMore() {
             modifier = Modifier
                 .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 40.dp)
                 .clickable {
-                    uriHandler.openUri("https://kotlinconf.com/kotlinconf-2023-general-terms-and-conditions-for-visitors.pdf")
+                    showVisitorsTerms()
                 }
         )
     }

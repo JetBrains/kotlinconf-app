@@ -70,6 +70,9 @@ android {
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.10"
+    }
     buildFeatures {
         compose = true
     }

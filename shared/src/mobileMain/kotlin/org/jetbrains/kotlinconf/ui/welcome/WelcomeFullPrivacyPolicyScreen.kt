@@ -1,8 +1,7 @@
 package org.jetbrains.kotlinconf.ui.welcome
 
 import androidx.compose.runtime.Composable
-import org.jetbrains.kotlinconf.ui.PrivacyPolicyScreen
-
+import org.jetbrains.kotlinconf.ui.AppPrivacyPolicyScreen
 
 @Composable
 fun WelcomeFullPrivacyPolicyScreen(
@@ -16,6 +15,6 @@ fun WelcomeFullPrivacyPolicyScreen(
             onClose()
         }, onReject = onClose
     ) {
-        PrivacyPolicyScreen(onDismiss)
+        AppPrivacyPolicyScreen(showCloseButton = true, onDismiss)
     }
 }
