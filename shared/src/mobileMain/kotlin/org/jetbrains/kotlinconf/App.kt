@@ -17,8 +17,7 @@ fun App(context: ApplicationContext) {
     KotlinConfTheme {
         val service = ConferenceService(
             context,
-            "http://10.0.2.2:8080/"
-//            "https://kotlin-conf-staging.labs.jb.gg/"
+            "https://kotlinconf-app-prod.labs.jb.gg/"
         )
 
         CompositionLocalProvider(
