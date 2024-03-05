@@ -30,12 +30,12 @@ kotlin {
                 api(libs.components.ui.tooling.preview)
                 api(compose.components.resources)
 
-                api("io.ktor:ktor-client-logging:2.3.4")
-                api("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
-                api("io.ktor:ktor-client-content-negotiation:2.3.4")
-                api("io.ktor:ktor-client-cio:2.3.4")
-                api("io.ktor:ktor-utils:2.3.4")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+                api(libs.ktor.client.logging)
+                api(libs.ktor.serialization.kotlinx.json)
+                api(libs.ktor.client.content.negotiation)
+                api(libs.ktor.client.cio)
+                api(libs.ktor.utils)
+                api(libs.kotlinx.serialization.json)
             }
         }
 
@@ -57,6 +57,8 @@ kotlin {
 
                 api(libs.precompose)
                 implementation(libs.multiplatform.markdown.renderer.m3)
+                api(libs.image.loader)
+
             }
         }
 
