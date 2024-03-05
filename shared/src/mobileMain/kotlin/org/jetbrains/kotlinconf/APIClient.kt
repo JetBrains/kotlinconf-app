@@ -43,6 +43,12 @@ class APIClient(
             }
         }
 
+        install(HttpRequestRetry) {
+            maxRetries = Int.MAX_VALUE
+            constantDelay(10 * 1000L)
+            retryOnException(retryOnTimeout = true)
+        }
+
         install(DefaultRequest) {
             url.takeFrom(apiUrl)
         }
