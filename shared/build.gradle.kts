@@ -36,6 +36,9 @@ kotlin {
                 api(libs.ktor.client.cio)
                 api(libs.ktor.utils)
                 api(libs.kotlinx.serialization.json)
+
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.material3)
             }
         }
 
