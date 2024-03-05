@@ -19,6 +19,7 @@ image-loader = "1.7.8"
 junit = "4.13.2"
 kotlin = "1.9.22"
 kotlinx-serialization-json = "1.6.2"
+kotlinx-datetime = "0.6.0-RC.2"
 ktor = "2.3.8"
 android-svg="1.4"
 ktor-client-logging = "2.3.8"
@@ -28,6 +29,7 @@ ktor-client-cio = "2.3.8"
 ktor-utils = "2.3.8"
 logbackClassic = "1.4.14"
 markdown = "0.13.0"
+material3 = "1.6.0"
 postgresql = "42.6.0"
 precompose = "1.5.10"
 compose-plugin = "1.6.0"
@@ -49,6 +51,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 components-ui-tooling-preview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "compose-plugin" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor-client-logging" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor-serialization-kotlinx-json" }
@@ -56,6 +59,7 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor-client-cio" }
 ktor-utils = { module = "io.ktor:ktor-utils", version.ref = "ktor-utils" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logbackClassic" }
+material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
 multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "markdown" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
