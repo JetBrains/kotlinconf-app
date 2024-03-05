@@ -77,7 +77,6 @@ internal fun RowScope.BottomButton(
         modifier = Modifier.background(background),
         selected = isSelected,
         onClick = onClick@{
-            if (isSelected) return@onClick
             navigator.navigate(tab.name)
         },
         icon = {
