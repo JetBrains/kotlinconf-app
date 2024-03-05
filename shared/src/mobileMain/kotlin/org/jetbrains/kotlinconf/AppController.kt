@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import moe.tlaster.precompose.navigation.Navigator
+import moe.tlaster.precompose.navigation.rememberNavigator
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.AboutAppScreen
 import org.jetbrains.kotlinconf.ui.AboutConfScreen
@@ -41,7 +43,7 @@ fun withAppController(
 
 class AppController(
     private val service: ConferenceService,
-    val default: @Composable (AppController) -> Unit = {}
+    val default: @Composable (AppController) -> Unit = {},
 ) {
     private val stack = mutableListOf<View>()
     val last: MutableStateFlow<View> = MutableStateFlow(default)
