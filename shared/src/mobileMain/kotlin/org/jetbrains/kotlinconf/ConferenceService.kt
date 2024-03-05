@@ -39,17 +39,8 @@ class ConferenceService(
         APIClient(endpoint)
     }
 
-    private val exceptionHandler: CoroutineExceptionHandler = object : CoroutineExceptionHandler {
-        override val key: CoroutineContext.Key<*> = CoroutineExceptionHandler
-
-        override fun handleException(context: CoroutineContext, exception: Throwable) {
-            println("Failed with exception: ${exception.message}")
-            exception.printStackTrace()
-        }
-    }
-
     override val coroutineContext: CoroutineContext =
-        SupervisorJob() + exceptionHandler + Dispatchers.IO
+        SupervisorJob() + Dispatchers.IO
 
     private var serverTime = GMTDate()
     private var requestTime = GMTDate()
@@ -59,7 +50,6 @@ class ConferenceService(
     private val conference = MutableStateFlow(Conference())
 
     private val votes = MutableStateFlow(emptyList<VoteInfo>())
-    private val _speakers = MutableStateFlow(Speakers())
 
     private val _time = MutableStateFlow(GMTDate())
     val time: StateFlowClass<GMTDate> = _time
@@ -86,56 +76,70 @@ class ConferenceService(
             .asStateFlowClass()
     }
 
-    val speakers: StateFlowClass<Speakers> by lazy {
-        _speakers.asStateFlowClass()
+    val speakers: StateFlowClass<Speakers> = conference
+        .map { it.speakers }
+        .map { it.filter { speaker -> speaker.photoUrl.isNotBlank() } }
+        .map { Speakers(it) }
+        .stateIn(this, SharingStarted.Eagerly, Speakers(emptyList()))
+        .asStateFlowClass()
+
+    fun sign() {
+        client.userId = userId2023
+
+        launch {
+            if (userId2023 != null) {
+                client.sign()
+            }
+        }
+    }
+
+    fun syncTime() {
+        launch {
+            synchronizeTime()
+            _time.value = now()
+
+            while (true) {
+                delay(1000)
+                _time.value = now()
+            }
+        }
+    }
+
+    fun updateConferenceData() {
+        storage.get<Conference>("conferenceCache")?.let {
+            conference.value = it
+        }
+
+        launch {
+            conference.value = client.downloadConferenceData()
+            storage.put("conferenceCache", conference.value)
+        }
+    }
+
+    fun syncVotes() {
+        launch {
+            votes.value = client.myVotes()
+        }
+    }
+
+    fun syncFavorites() {
+        launch {
+            val favoritesValue = storage.get<List<String>>("favorites")?.toSet() ?: emptySet()
+            favorites.value = favoritesValue
+            favorites.debounce(1000)
+                .onEach {
+                    storage.put("favorites", it.toList())
+                }
+                .collect()
+        }
     }
 
     init {
-        try {
-            launch {
-                client.userId = userId2023
-
-                if (userId2023 != null) {
-                    runCatching {
-                        client.sign()
-                    }
-                }
-
-                synchronizeTime()
-                _time.value = now()
-
-                storage.get<Conference>("conferenceCache")?.let {
-                    conference.value = it
-                }
-
-                conference.value = client.downloadConferenceData()
-                storage.put("conferenceCache", conference.value)
-
-                val speakers = conference.value.speakers
-                    .filter { it.photoUrl.isNotBlank() }
-                _speakers.value = Speakers(speakers)
-
-                votes.value = client.myVotes()
-
-                while (true) {
-                    delay(60 * 1000)
-                    _time.value = now()
-                }
-            }
-
-            launch {
-                val favoritesValue = storage.get<List<String>>("favorites")?.toSet() ?: emptySet()
-                favorites.value = favoritesValue
-                favorites.debounce(1000)
-                    .onEach {
-                        storage.put("favorites", it.toList())
-                    }
-                    .collect()
-            }
-        } catch (cause: Throwable) {
-            println("Cause ${cause.message}")
-            cause.printStackTrace()
-        }
+        sign()
+        syncTime()
+        updateConferenceData()
+        syncVotes()
+        syncFavorites()
     }
 
     /**
