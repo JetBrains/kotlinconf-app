@@ -14,3 +14,6 @@ val grey50 = Color(0xFF8C8C8E)
 val grey20 = Color(0xFFD1D1D2)
 val grey5 = Color(0xFFF4F4F4)
 val white = Color(0xFFFFFFFF)
+
+val tagGrey = Color(0x33A4A4A4)
+val tagDarkGrey = Color(0x303033)

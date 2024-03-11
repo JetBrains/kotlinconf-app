@@ -30,7 +30,7 @@ import org.jetbrains.kotlinconf.ui.components.Party
 import org.jetbrains.kotlinconf.ui.components.TabBar
 
 @Composable
-fun AgendaView(agenda: Agenda, controller: AppController) {
+fun AgendaScreen(agenda: Agenda, controller: AppController) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     var selected: Day? by remember { mutableStateOf(agenda.days.firstOrNull()) }

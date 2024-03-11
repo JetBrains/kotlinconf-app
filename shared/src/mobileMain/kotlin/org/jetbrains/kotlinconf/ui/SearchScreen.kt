@@ -5,6 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -18,6 +22,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.close
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.SessionCardView
@@ -27,6 +32,7 @@ import org.jetbrains.kotlinconf.ui.theme.blackWhite
 import org.jetbrains.kotlinconf.ui.theme.grey50
 import org.jetbrains.kotlinconf.ui.theme.grey5Black
 import org.jetbrains.kotlinconf.ui.theme.grey80Grey20
+import org.jetbrains.kotlinconf.ui.theme.greyGrey5
 import org.jetbrains.kotlinconf.ui.theme.orange
 import org.jetbrains.kotlinconf.ui.theme.white
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
@@ -68,28 +74,36 @@ fun SearchScreen(
             .background(MaterialTheme.colors.grey5Black)
             .fillMaxHeight()
     ) {
-        NavigationBar(
-            title = "Search",
-            isLeftVisible = false,
-            rightIcon = Res.drawable.close,
-            onLeftClick = {},
-            onRightClick = { controller.back() }
-        )
+        Box {
+            TabBar(
+                SearchTab.entries,
+                selectedTab, onSelect = {
+                    selectedTab = it
+                }
+            )
+            Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+                IconButton(onClick = { controller.back() }) {
+                    Icon(
+                        painter = Res.drawable.close.painter(),
+                        "Close",
+                        tint = MaterialTheme.colors.greyGrey5
+                    )
+                }
+            }
+        }
         SearchField(query, onTextChange = { query = it })
         HDivider()
-        SearchSessionTags(tags, activeTags, onClick = {
-            if (it in activeTags) {
-                activeTags.remove(it)
-            } else {
-                activeTags.add(it)
-            }
-        })
-        HDivider()
-        SearchTagSelector(
-            selected = selectedTab,
-            onClick = { selectedTab = it }
-        )
-        HDivider()
+        if (selectedTab == SearchTab.TALKS) {
+            SearchSessionTags(tags, activeTags, onClick = {
+                if (it in activeTags) {
+                    activeTags.remove(it)
+                } else {
+                    activeTags.add(it)
+                }
+            })
+            HDivider()
+        }
+
         SearchResults(
             selected = selectedTab,
             sessionResults,
@@ -268,6 +282,7 @@ private fun TalkSearchResult(
             Spacer(Modifier.height(8.dp))
             FlowRow {
                 activeTags.forEach { tag ->
+                    if (tag !in tags) return@forEach
                     Tag(
                         icon = null,
                         tag,

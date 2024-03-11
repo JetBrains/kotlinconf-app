@@ -30,7 +30,7 @@ import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SessionDetailed(
+fun SessionScreen(
     id: String,
     time: String,
     title: String,

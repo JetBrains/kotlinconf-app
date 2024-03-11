@@ -44,7 +44,7 @@ enum class Bookmark(override val title: String) : Tab {
 }
 
 @Composable
-fun Bookmarks(
+fun BookmarksScreen(
     favoriteSessions: List<SessionCardView>,
     controller: AppController
 ) {

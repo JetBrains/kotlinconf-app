@@ -11,8 +11,6 @@ import androidx.compose.ui.Modifier
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import moe.tlaster.precompose.navigation.Navigator
-import moe.tlaster.precompose.navigation.rememberNavigator
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.AboutAppScreen
 import org.jetbrains.kotlinconf.ui.AboutConfScreen
@@ -21,7 +19,7 @@ import org.jetbrains.kotlinconf.ui.Partner
 import org.jetbrains.kotlinconf.ui.Partners
 import org.jetbrains.kotlinconf.ui.AppPrivacyPolicyScreen
 import org.jetbrains.kotlinconf.ui.SearchScreen
-import org.jetbrains.kotlinconf.ui.SessionDetailed
+import org.jetbrains.kotlinconf.ui.SessionScreen
 import org.jetbrains.kotlinconf.ui.SpeakersFlow
 import org.jetbrains.kotlinconf.ui.AppTermsOfUseScreen
 import org.jetbrains.kotlinconf.ui.CodeOfConductScreen
@@ -59,7 +57,7 @@ class AppController(
                 .value.firstOrNull { it.id == sessionId }
             val speakers = session?.speakerIds?.map { service.speakerById(it) }
             if (session != null && speakers != null) {
-                SessionDetailed(
+                SessionScreen(
                     time = session.timeLine,
                     title = session.title,
                     description = session.description,
