@@ -24,6 +24,7 @@ import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.orange
 import org.jetbrains.kotlinconf.ui.theme.violet
 import org.jetbrains.kotlinconf.ui.painter
+import org.jetbrains.kotlinconf.ui.theme.tagColor
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -38,7 +39,7 @@ fun Tag(
     Row(
         modifier = modifier
             .background(
-                if (isActive) orange else MaterialTheme.colors.grey5Black,
+                if (isActive) orange else MaterialTheme.colors.tagColor,
                 shape = RoundedCornerShape(4.dp),
             )
             .alpha(if (dimmed) 0.5f else 1f),

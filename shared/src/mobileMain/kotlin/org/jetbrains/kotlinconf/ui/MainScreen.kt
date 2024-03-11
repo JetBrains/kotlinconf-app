@@ -65,7 +65,7 @@ fun MainScreen(service: ConferenceService) {
                     MenuScreen(controller = it)
                 },
                 TabItem("agenda", Res.drawable.time, Res.drawable.time_active) {
-                    AgendaView(agenda, it)
+                    AgendaScreen(agenda, it)
                 },
                 TabItem(
                     "speakers",
@@ -79,7 +79,7 @@ fun MainScreen(service: ConferenceService) {
                     Res.drawable.mytalks,
                     Res.drawable.mytalks_active
                 ) {
-                    Bookmarks(favoriteSessions, it)
+                    BookmarksScreen(favoriteSessions, it)
                 },
                 TabItem(
                     "Location",

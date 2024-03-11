@@ -22,7 +22,9 @@ inline fun <reified T> ApplicationStorage.put(key: String, value: T) {
 
 inline fun <reified T> ApplicationStorage.get(key: String): T? {
     val value = getString(key) ?: return null
-    return Json.decodeFromString(value)
+    return runCatching {
+        Json.decodeFromString<T>(value)
+    }.getOrNull()
 }
 
 inline fun <reified T> ApplicationStorage.bind(
@@ -41,12 +43,10 @@ inline fun <reified T> ApplicationStorage.bind(
         currentValue?.let { return it }
 
         val key = property.name
-
-        val result = try {
-            getString(key)?.let { Json.decodeFromString(serializer, it) }
-        } catch (cause: Throwable) {
-            null
-        } ?: block()
+        val value = getString(key)
+        val result = runCatching {
+            value?.let { Json.decodeFromString(serializer, it) }
+        }.getOrNull() ?: block()
 
         setValue(thisRef, property, result)
         return result

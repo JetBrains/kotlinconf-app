@@ -13,6 +13,7 @@ import org.jetbrains.kotlinconf.ui.theme.black
 import org.jetbrains.kotlinconf.ui.theme.grey20Grey80
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.orange
+import org.jetbrains.kotlinconf.ui.theme.tagColor
 
 @Composable
 fun SearchTag(name: String, isActive: Boolean, onClick: () -> Unit) {
@@ -20,7 +21,7 @@ fun SearchTag(name: String, isActive: Boolean, onClick: () -> Unit) {
         onClick = onClick,
         elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp, 0.dp),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = if (isActive) orange else MaterialTheme.colors.grey20Grey80,
+            backgroundColor = if (isActive) orange else MaterialTheme.colors.tagColor,
             contentColor = if (isActive) black else MaterialTheme.colors.greyWhite
         ),
         shape = MaterialTheme.shapes.medium,
