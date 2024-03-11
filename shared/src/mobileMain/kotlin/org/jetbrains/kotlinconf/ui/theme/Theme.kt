@@ -92,6 +92,11 @@ val Colors.blackGrey5: Color
 val Colors.blackWhite: Color
     get() =  if (isLight) black else white
 
+
+@get:Composable
+val Colors.tagColor: Color
+    get() =  if (isLight) tagGrey else tagDarkGrey
+
 private val LightColorPalette = lightColors(
     primary = grey,
     primaryVariant = grey,
