@@ -9,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.black
 import org.jetbrains.kotlinconf.ui.theme.grey20Grey80
 import org.jetbrains.kotlinconf.ui.theme.greyWhite

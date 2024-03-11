@@ -7,13 +7,14 @@ import io.ktor.server.application.log
 import io.ktor.server.config.ApplicationConfig
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -59,13 +60,13 @@ internal class Store(application: Application) {
     }
 
     suspend fun validateUser(uuid: String): Boolean = newSuspendedTransaction(Dispatchers.IO) {
-        Users.select { Users.userId eq uuid }.count() != 0L
+        Users.selectAll().where { Users.userId eq uuid }.count() != 0L
     }
 
     suspend fun createUser(
         uuidValue: String, timestampValue: LocalDateTime
     ): Boolean = newSuspendedTransaction(Dispatchers.IO) {
-        val count = Users.select { Users.userId eq uuidValue }.count()
+        val count = Users.selectAll().where { Users.userId eq uuidValue }.count()
         if (count != 0L) return@newSuspendedTransaction false
 
         Users.insert {
@@ -81,14 +82,14 @@ internal class Store(application: Application) {
     }
 
     suspend fun getVotes(uuid: String): List<VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
-        Votes.select { Votes.userId eq uuid }
-            .map { VoteInfo(it[Votes.sessionId], Score.fromValue(it[Votes.rating])) }
+        Votes.selectAll().where { Votes.userId eq uuid }
+            .map { VoteInfo(it[sessionId], Score.fromValue(it[Votes.rating])) }
 
     }
 
     suspend fun getAllVotes(): List<VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
         Votes.selectAll()
-            .map { VoteInfo(it[Votes.sessionId], Score.fromValue(it[Votes.rating])) }
+            .map { VoteInfo(it[sessionId], Score.fromValue(it[Votes.rating])) }
     }
 
     suspend fun changeVote(
@@ -103,9 +104,8 @@ internal class Store(application: Application) {
         }
 
         newSuspendedTransaction(Dispatchers.IO) {
-            val count = Votes.select {
-                (Votes.userId eq userIdValue) and (Votes.sessionId eq sessionIdValue)
-            }.count()
+            val count = Votes.selectAll()
+                .where { (Votes.userId eq userIdValue) and (sessionId eq sessionIdValue) }.count()
 
             if (count == 0L) {
                 Votes.insert {
@@ -117,7 +117,7 @@ internal class Store(application: Application) {
                 return@newSuspendedTransaction
             }
 
-            Votes.update({ (Votes.userId eq userIdValue) and (Votes.sessionId eq sessionIdValue) }) {
+            Votes.update({ (Votes.userId eq userIdValue) and (sessionId eq sessionIdValue) }) {
                 it[rating] = scoreValue.value
             }
         }
@@ -145,8 +145,8 @@ internal class Store(application: Application) {
     }
 
     suspend fun getVotesSummary(): Map<String, VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
-        val result: List<String> = Votes.slice(Votes.sessionId, Votes.rating, Votes.rating.count()).selectAll()
-            .groupBy(Votes.sessionId, Votes.rating)
+        val result: List<String> = Votes.select(sessionId, Votes.rating, Votes.rating.count()).selectAll()
+            .groupBy(sessionId, Votes.rating)
             .map {
                 it[sessionId]
             }

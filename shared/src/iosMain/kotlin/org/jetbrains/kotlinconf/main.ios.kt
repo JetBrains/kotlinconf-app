@@ -1,8 +1,11 @@
 package org.jetbrains.kotlinconf
 
-import moe.tlaster.precompose.PreComposeApplication
 import platform.UIKit.UIViewController
 
-fun MainViewController(): UIViewController = PreComposeApplication {
+fun MainViewController(): UIViewController {
+    {}
+    {
     App(ApplicationContext())
+}
+    return ComposeUIViewController
 }
