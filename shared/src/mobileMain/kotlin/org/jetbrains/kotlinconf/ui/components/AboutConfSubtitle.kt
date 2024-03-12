@@ -28,7 +28,7 @@ fun AboutConfSubtitle(tile: String, title: String) {
                 color = MaterialTheme.colors.greyWhite,
                 fontWeight = FontWeight.Bold
             ),
-            modifier = Modifier.padding(start = 16.dp, bottom = 24.dp)
+            modifier = Modifier.padding(top = 8.dp, start = 16.dp, bottom = 24.dp)
         )
     }
 }

@@ -40,7 +40,7 @@ import org.jetbrains.kotlinconf.ui.components.TabBar
 import org.jetbrains.kotlinconf.ui.components.VoteAndFeedback
 
 enum class Bookmark(override val title: String) : Tab {
-    PAST("past"), UPCOMING("upcoming")
+    PAST("Past"), UPCOMING("Upcoming")
 }
 
 @Composable

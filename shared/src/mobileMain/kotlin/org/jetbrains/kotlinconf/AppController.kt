@@ -1,13 +1,10 @@
 package org.jetbrains.kotlinconf
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -20,7 +17,7 @@ import org.jetbrains.kotlinconf.ui.Partners
 import org.jetbrains.kotlinconf.ui.AppPrivacyPolicyScreen
 import org.jetbrains.kotlinconf.ui.SearchScreen
 import org.jetbrains.kotlinconf.ui.SessionScreen
-import org.jetbrains.kotlinconf.ui.SpeakersFlow
+import org.jetbrains.kotlinconf.ui.SpeakersDetailsScreen
 import org.jetbrains.kotlinconf.ui.AppTermsOfUseScreen
 import org.jetbrains.kotlinconf.ui.CodeOfConductScreen
 import org.jetbrains.kotlinconf.ui.VisitorsPrivacyPolicyScreen
@@ -81,7 +78,7 @@ class AppController(
         push {
             val speakers by service.speakers.collectAsState()
 
-            SpeakersFlow(
+            SpeakersDetailsScreen(
                 controller = this,
                 speakers = speakers.all,
                 focusedSpeakerId = speakerId
@@ -182,18 +179,13 @@ class AppController(
 
     fun showAppPrivacyPolicy() {
         push("Privacy policy") {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
-                AppPrivacyPolicyScreen(false) {}
-            }
+            AppPrivacyPolicyScreen(false) {}
         }
     }
 
-    @OptIn(ExperimentalResourceApi::class)
     fun showAppTerms() {
         push("Terms of use") {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
-                AppTermsOfUseScreen()
-            }
+            AppTermsOfUseScreen()
         }
     }
 

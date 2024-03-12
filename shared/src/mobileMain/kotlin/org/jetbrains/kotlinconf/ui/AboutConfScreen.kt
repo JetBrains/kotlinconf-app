@@ -114,11 +114,11 @@ fun AboutConfSchedule() {
 private fun AboutConfDescription() {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
         val text =
-            """KotlinConfKotlinConf is the official annual conference devoted to the Kotlin programming language. Organized by JetBrains, it is a place for the community to gather and discuss all things Kotlin."""
+            """KotlinConf is the official annual conference devoted to the Kotlin programming language. Organized by JetBrains, it is a place for the community to gather and discuss all things Kotlin."""
         Text(
             text,
             style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
-            modifier = Modifier.padding(16.dp, top = 24.dp)
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp)
         )
 
         FlowRow(
@@ -144,32 +144,21 @@ private fun AboutConfDescription() {
 private fun AboutConfKeynoteSection(keynoteSpeakers: List<Speaker>) {
     AboutConfSubtitle("May 23, 9:00", "Opening Keynote")
     HDivider()
+    val rows = keynoteSpeakers.size / 2
 
-    if (keynoteSpeakers.size < 4) return
-
-    Row(Modifier.background(MaterialTheme.colors.whiteGrey)) {
-        Column(Modifier.fillMaxWidth(0.5f)) {
-            val speaker = keynoteSpeakers[2]
-            KeynoteSectionSpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
+    repeat(rows) {
+        Row(Modifier.background(MaterialTheme.colors.whiteGrey)) {
+            Column(Modifier.fillMaxWidth(0.5f)) {
+                val speaker = keynoteSpeakers[it * 2]
+                KeynoteSectionSpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
+            }
+            Column(Modifier.fillMaxWidth()) {
+                val speaker = keynoteSpeakers[it * 2 + 1]
+                KeynoteSectionSpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
+            }
         }
-        Column(Modifier.fillMaxWidth()) {
-            val speaker = keynoteSpeakers[3]
-            KeynoteSectionSpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
-        }
+        HDivider()
     }
-    HDivider()
-    Row(Modifier.background(MaterialTheme.colors.whiteGrey)) {
-        Column(Modifier.fillMaxWidth(0.5f)) {
-            val speaker = keynoteSpeakers[0]
-            KeynoteSectionSpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
-        }
-        VDivider()
-        Column(Modifier.fillMaxWidth()) {
-            val speaker = keynoteSpeakers[1]
-            KeynoteSectionSpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
-        }
-    }
-    HDivider()
 }
 
 @Composable
@@ -228,7 +217,7 @@ private fun AboutConfSecondKeynote(secondDaySpeakers: List<Speaker>) {
         ) {
             Text(
                 speaker.name,
-                style = MaterialTheme.typography.h2.copy(
+                style = MaterialTheme.typography.h4.copy(
                     color = MaterialTheme.colors.greyWhite,
                     fontWeight = FontWeight.Bold
                 ),
@@ -237,7 +226,7 @@ private fun AboutConfSecondKeynote(secondDaySpeakers: List<Speaker>) {
 
             Text(
                 speaker.position,
-                style = MaterialTheme.typography.body2.copy(color = grey50),
+                style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 24.dp)
             )
         }
@@ -258,7 +247,7 @@ private fun LightningTalks() {
             )
 
             Text(
-                "28 Lightning talks!".uppercase(),
+                "28 Lightning talks!",
                 style = MaterialTheme.typography.body2.copy(
                     color = MaterialTheme.colors.greyWhite,
                     fontWeight = FontWeight.Bold
@@ -278,7 +267,7 @@ private fun LightningTalks() {
 
 @Composable
 private fun Party() {
-    AboutConfSubtitle("May 23, 9:00", "Party")
+    AboutConfSubtitle("May 23, 9:00", "KotlinConf’24 party ")
     HDivider()
     Column(
         Modifier
@@ -362,17 +351,7 @@ private fun AboutConferenceFooter(
         ) {
             Text(
                 buildAnnotatedString {
-                    append("You can find more information about the conference on the official website:")
-                },
-                style = MaterialTheme.typography.body2.copy(color = grey50),
-                modifier = Modifier
-                    .clickable {
-                        uriHandler.openUri("https://kotlinconf.com")
-                    }
-            )
-
-            Text(
-                buildAnnotatedString {
+                    append("You can find more information about the conference on the official website:\n")
                     withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
                         append("kotlinconf.com")
                     }

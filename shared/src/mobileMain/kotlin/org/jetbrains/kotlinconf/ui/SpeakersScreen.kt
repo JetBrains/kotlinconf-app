@@ -19,7 +19,7 @@ import org.jetbrains.kotlinconf.ui.components.NavigationBar
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun SpeakersView(speakers: List<Speaker>, controller: AppController) {
+fun SpeakersScreen(speakers: List<Speaker>, controller: AppController) {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
         NavigationBar(
             title = "Speakers",

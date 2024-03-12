@@ -72,7 +72,7 @@ fun MainScreen(service: ConferenceService) {
                     Res.drawable.speakers,
                     Res.drawable.speakers_active
                 ) {
-                    SpeakersView(controller = it, speakers = speakers.all)
+                    SpeakersScreen(controller = it, speakers = speakers.all)
                 },
                 TabItem(
                     "Bookmarks",
