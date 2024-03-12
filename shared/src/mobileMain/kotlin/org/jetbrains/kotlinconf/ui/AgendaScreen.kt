@@ -2,11 +2,13 @@
 
 package org.jetbrains.kotlinconf.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -14,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.lunch
 import kotlinconfapp.shared.generated.resources.lunch_active
@@ -28,6 +31,7 @@ import org.jetbrains.kotlinconf.ui.components.AgendaTimeSlotHeader
 import org.jetbrains.kotlinconf.ui.components.Break
 import org.jetbrains.kotlinconf.ui.components.Party
 import org.jetbrains.kotlinconf.ui.components.TabBar
+import org.jetbrains.kotlinconf.ui.theme.agendaHeaderColor
 
 @Composable
 fun AgendaScreen(agenda: Agenda, controller: AppController) {
@@ -39,7 +43,9 @@ fun AgendaScreen(agenda: Agenda, controller: AppController) {
     val daysIndex: List<Int> = daysSize.scan(0) { acc, i -> acc + i }
 
     val currentTab = selected
-    Column {
+    Column(
+        Modifier.background(MaterialTheme.colors.agendaHeaderColor)
+    ) {
         if (currentTab != null) {
             TabBar(
                 agenda.days,

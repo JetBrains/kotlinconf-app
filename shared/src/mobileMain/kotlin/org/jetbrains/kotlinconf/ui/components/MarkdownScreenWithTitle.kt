@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -44,8 +46,10 @@ fun MarkdownScreenWithTitle(
             Modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colors.whiteGrey)
+                .verticalScroll(rememberScrollState())
         ) {
-            Column(Modifier.background(color = MaterialTheme.colors.grey5Black)) {
+            HDivider()
+            Column(Modifier.background(color = MaterialTheme.colors.grey5Black).fillMaxWidth()) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.h2.copy(color = MaterialTheme.colors.greyWhite),

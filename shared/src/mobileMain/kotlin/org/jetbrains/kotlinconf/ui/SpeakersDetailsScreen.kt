@@ -30,7 +30,7 @@ import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun SpeakersFlow(
+fun SpeakersDetailsScreen(
     controller: AppController,
     speakers: List<Speaker>,
     focusedSpeakerId: String
@@ -46,7 +46,7 @@ fun SpeakersFlow(
     }
 
     Column(Modifier.fillMaxWidth()) {
-        NavigationBar(title = "SPEAKERS", isLeftVisible = true, onLeftClick = {
+        NavigationBar(title = "Speakers", isLeftVisible = true, onLeftClick = {
             controller.back()
         }, isRightVisible = false)
         LazyColumn(state = state) {
@@ -94,7 +94,7 @@ private fun SpeakerDetailed(
             )
 
             Text(
-                modifier = Modifier.padding(top = 16.dp),
+                modifier = Modifier.padding(top = 8.dp),
                 text = position,
                 style = MaterialTheme.typography.body2.copy(
                     color = MaterialTheme.colors.greyGrey20
@@ -105,7 +105,7 @@ private fun SpeakerDetailed(
         AsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 0.dp, end = 0.dp),
+                .padding(start = 16.dp, end = 16.dp),
             imageUrl = photoUrl,
             contentDescription = "Speaker photo",
             contentScale = ContentScale.FillWidth,
@@ -113,7 +113,6 @@ private fun SpeakerDetailed(
         Column(
             Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colors.whiteGrey)
         ) {
             Column(Modifier.padding(16.dp)) {
                 Text(
@@ -126,8 +125,8 @@ private fun SpeakerDetailed(
 
                 if (sessions.isNotEmpty()) {
                     Text(
-                        "TALKS: ", style = MaterialTheme.typography.body2.copy(
-                            color = grey50
+                        "Talks: ", style = MaterialTheme.typography.h4.copy(
+                            color = MaterialTheme.colors.greyGrey20
                         ), modifier = Modifier.padding(top = 24.dp)
                     )
                 }

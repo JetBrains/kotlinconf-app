@@ -29,6 +29,7 @@ import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.violet
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.HDivider
+import org.jetbrains.kotlinconf.ui.theme.white
 
 @Composable
 fun FormWithButtons(
@@ -86,7 +87,7 @@ private fun Buttons(onAccept: () -> Unit, onReject: () -> Unit) {
             ) {
                 Text(
                     "Accept",
-                    style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.blackWhite)
+                    style = MaterialTheme.typography.body2.copy(color = white)
                 )
             }
         }
