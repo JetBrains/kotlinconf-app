@@ -15,10 +15,9 @@ import org.jetbrains.kotlinconf.ui.MainScreen
 @Composable
 fun App(context: ApplicationContext) {
     KotlinConfTheme {
-        val service = ConferenceService(
-            context,
-            "https://kotlinconf-app-prod.labs.jb.gg/"
-        )
+        val service = remember {
+            ConferenceService(context, "https://kotlinconf-app-prod.labs.jb.gg/")
+        }
 
         CompositionLocalProvider(
             LocalImageLoader provides remember { createImageLoader(context) },

@@ -11,17 +11,17 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.AboutAppScreen
 import org.jetbrains.kotlinconf.ui.AboutConfScreen
-import org.jetbrains.kotlinconf.ui.components.NavigationBar
+import org.jetbrains.kotlinconf.ui.AppPrivacyPolicyScreen
+import org.jetbrains.kotlinconf.ui.AppTermsOfUseScreen
+import org.jetbrains.kotlinconf.ui.CodeOfConductScreen
 import org.jetbrains.kotlinconf.ui.Partner
 import org.jetbrains.kotlinconf.ui.Partners
-import org.jetbrains.kotlinconf.ui.AppPrivacyPolicyScreen
 import org.jetbrains.kotlinconf.ui.SearchScreen
 import org.jetbrains.kotlinconf.ui.SessionScreen
 import org.jetbrains.kotlinconf.ui.SpeakersDetailsScreen
-import org.jetbrains.kotlinconf.ui.AppTermsOfUseScreen
-import org.jetbrains.kotlinconf.ui.CodeOfConductScreen
 import org.jetbrains.kotlinconf.ui.VisitorsPrivacyPolicyScreen
 import org.jetbrains.kotlinconf.ui.VisitorsTermsScreen
+import org.jetbrains.kotlinconf.ui.components.NavigationBar
 import org.jetbrains.kotlinconf.ui.welcome.WelcomeScreen
 
 typealias View = @Composable (AppController) -> Unit

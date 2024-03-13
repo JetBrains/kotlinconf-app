@@ -10,7 +10,7 @@ data class ZoomSpec(
    * For example, a value of `3.0` indicates that the content can be zoomed in up to 300%
    * of its original size. Setting this value to `1.0` or less will disable zooming.
    */
-  val maxZoomFactor: Float = 2f,
+  val maxZoomFactor: Float = 5f,
 
   /**
    * Whether to apply rubber banding to zoom gestures when content is over or under zoomed

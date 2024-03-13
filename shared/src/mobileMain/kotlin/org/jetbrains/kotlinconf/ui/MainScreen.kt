@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.ui
 
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -59,20 +60,23 @@ fun MainScreen(service: ConferenceService) {
                 }, onRejectPrivacy = {}
             )
         } else {
+            val agendaScrollState = rememberLazyListState()
+            val speakersScrollState = rememberLazyListState()
+
             TabsView(
                 controller,
                 TabItem("menu", Res.drawable.menu, Res.drawable.menu_active) {
                     MenuScreen(controller = it)
                 },
                 TabItem("agenda", Res.drawable.time, Res.drawable.time_active) {
-                    AgendaScreen(agenda, it)
+                    AgendaScreen(agenda, agendaScrollState, it)
                 },
                 TabItem(
                     "speakers",
                     Res.drawable.speakers,
                     Res.drawable.speakers_active
                 ) {
-                    SpeakersScreen(controller = it, speakers = speakers.all)
+                    SpeakersScreen(controller = it, scrollState = speakersScrollState, speakers = speakers.all)
                 },
                 TabItem(
                     "Bookmarks",

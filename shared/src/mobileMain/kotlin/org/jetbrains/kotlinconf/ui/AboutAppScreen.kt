@@ -50,7 +50,6 @@ fun AboutAppScreen(
         )
         Column(
             Modifier
-                .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             MarkdownFileView("files/mobile-app-description.md")
@@ -61,7 +60,6 @@ fun AboutAppScreen(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun AboutAppFooter(
     showAppPrivacyPolicy: () -> Unit,
