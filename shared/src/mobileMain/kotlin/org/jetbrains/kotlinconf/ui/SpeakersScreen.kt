@@ -19,7 +19,7 @@ import org.jetbrains.kotlinconf.ui.components.NavigationBar
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun SpeakersScreen(speakers: List<Speaker>, controller: AppController) {
+fun SpeakersScreen(speakers: List<Speaker>, scrollState: LazyListState, controller: AppController) {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
         NavigationBar(
             title = "Speakers",
@@ -27,7 +27,7 @@ fun SpeakersScreen(speakers: List<Speaker>, controller: AppController) {
             isRightVisible = false
         )
 
-        LazyColumn(Modifier.background(MaterialTheme.colors.whiteGrey)) {
+        LazyColumn(Modifier.background(MaterialTheme.colors.whiteGrey), state = scrollState) {
             items(speakers) { speaker ->
                 Column(
                     Modifier

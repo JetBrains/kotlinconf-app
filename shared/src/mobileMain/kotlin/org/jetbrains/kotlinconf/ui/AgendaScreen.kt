@@ -6,8 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import kotlinconfapp.shared.generated.resources.Res
@@ -34,10 +35,10 @@ import org.jetbrains.kotlinconf.ui.components.TabBar
 import org.jetbrains.kotlinconf.ui.theme.agendaHeaderColor
 
 @Composable
-fun AgendaScreen(agenda: Agenda, controller: AppController) {
-    val listState = rememberLazyListState()
+fun AgendaScreen(agenda: Agenda, scrollState: LazyListState, controller: AppController) {
     val coroutineScope = rememberCoroutineScope()
     var selected: Day? by remember { mutableStateOf(agenda.days.firstOrNull()) }
+    var recomposeIndex by rememberSaveable { mutableStateOf(0) }
 
     val daysSize = agenda.days.map { it.itemsCount() }
     val daysIndex: List<Int> = daysSize.scan(0) { acc, i -> acc + i }
@@ -53,12 +54,12 @@ fun AgendaScreen(agenda: Agenda, controller: AppController) {
                     selected = day
                     val index = daysIndex[agenda.days.indexOfFirst { it.title == day.title }]
                     if (index >= 0) {
-                        coroutineScope.launch { listState.scrollToItem(index, 0) }
+                        coroutineScope.launch { scrollState.scrollToItem(index, 0) }
                     }
                 }
             )
         }
-        LazyColumn(state = listState) {
+        LazyColumn(state = scrollState) {
             agenda.days.forEach {
                 SessionsList(day = it, controller = controller)
             }
@@ -66,7 +67,7 @@ fun AgendaScreen(agenda: Agenda, controller: AppController) {
     }
 
     LaunchedEffect("scrollToLive") {
-        listState.scrollToItem(agenda.firstLiveIndex(), 0)
+//        listState.scrollToItem(agenda.firstLiveIndex(), 0)
     }
 }
 
@@ -75,7 +76,7 @@ private fun LazyListScope.SessionsList(
     day: Day,
     controller: AppController,
 ) {
-    item {
+    item(day.title) {
         AgendaDayHeader(day.day)
     }
 

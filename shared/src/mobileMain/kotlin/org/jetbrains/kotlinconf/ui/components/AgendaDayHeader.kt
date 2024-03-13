@@ -38,7 +38,7 @@ internal fun AgendaDayHeader(day: EventDay) {
     ) {
         Image(
             image.painter(),
-            contentDescription = null,
+            contentDescription = day.title,
             modifier = Modifier
                 .height(56.dp)
                 .fillMaxWidth(),
