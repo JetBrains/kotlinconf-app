@@ -14,10 +14,7 @@ import kotlinconfapp.shared.generated.resources.bookmark_active
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.ui.components.AWSLab
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
-import org.jetbrains.kotlinconf.ui.components.CodeLab
-import org.jetbrains.kotlinconf.ui.components.LightningTalk
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
 import org.jetbrains.kotlinconf.ui.theme.grey50
@@ -88,7 +85,7 @@ private fun SpeakerDetailed(
         HDivider()
         Column(Modifier.padding(16.dp)) {
             Text(
-                name.uppercase(), style = MaterialTheme.typography.h2.copy(
+                name, style = MaterialTheme.typography.h2.copy(
                     color = MaterialTheme.colors.greyGrey5
                 )
             )
@@ -137,13 +134,9 @@ private fun SpeakerDetailed(
                     it.title,
                     it.locationLine,
                     it.timeLine,
-                    it.isCodeLab,
-                    it.isLightning,
-                    it.isAWSLab,
                     it.isFavorite,
-                    onFavoriteClick = { onFavoriteClick(it) },
                     onSessionClick = { showSession(it.id) }
-                )
+                ) { onFavoriteClick(it) }
             }
         }
     }
@@ -155,9 +148,6 @@ private fun SessionCardCompact(
     title: String,
     locationLine: String,
     timeLine: String,
-    isCodeLab: Boolean,
-    isLightning: Boolean,
-    isAWSLab: Boolean,
     favorite: Boolean,
     onSessionClick: () -> Unit,
     onFavoriteClick: () -> Unit,
@@ -181,17 +171,6 @@ private fun SessionCardCompact(
                     )
                     .fillMaxWidth()
             ) {
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        timeLine, style = MaterialTheme.typography.body2.copy(
-                            color = grey50
-                        ),
-                        maxLines = 1
-                    )
-                }
                 Text(
                     title,
                     style = MaterialTheme.typography.h4.copy(
@@ -199,18 +178,12 @@ private fun SessionCardCompact(
                     )
                 )
                 LocationRow(location = locationLine, modifier = Modifier.padding(top = 16.dp))
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                ) {
-                    if (isLightning) {
-                        LightningTalk("Lightning Talk", dimmed = false)
-                    } else if (isCodeLab) {
-                        CodeLab(dimmed = false)
-                    } else if (isAWSLab) {
-                        AWSLab(dimmed = false)
-                    }
-                }
+                Text(
+                    timeLine, style = MaterialTheme.typography.body2.copy(
+                        color = grey50
+                    ),
+                    maxLines = 1
+                )
             }
             Row {
                 Spacer(modifier = Modifier.weight(1.0f))

@@ -55,18 +55,15 @@ class AppController(
             val speakers = session?.speakerIds?.map { service.speakerById(it) }
             if (session != null && speakers != null) {
                 SessionScreen(
+                    id = session.id,
                     time = session.timeLine,
                     title = session.title,
                     description = session.description,
                     location = session.locationLine,
-                    speakers = speakers,
                     isFavorite = session.isFavorite,
-                    isFinished = session.isFinished,
                     vote = session.vote,
-                    id = session.id,
-                    isLightning = session.isLightning,
-                    isCodeLab = session.isCodeLab,
-                    isAWS = session.isAWSLab,
+                    isFinished = session.isFinished,
+                    speakers = speakers,
                     tags = session.tags,
                     controller = this
                 )
