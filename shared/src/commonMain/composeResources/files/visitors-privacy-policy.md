@@ -126,6 +126,5 @@ For more details and further information on your rights, please visit
 the pertinent segment in our Privacy Policy accessible at
 [<u>https://www.jetbrains.com/legal/docs/privacy/privacy/</u>](https://www.jetbrains.com/legal/docs/privacy/privacy/).
 
-## You may lodge a complaint related to the processing of your personal data with the competent data protection supervisory authority, i.e. in the Netherlands the Authority Personal Data (*Autoriteit Persoonsgegevens*), with its visiting address at Hoge Nieuwstraat 8, 2514 EL Den Haag. For more information, please visit [<u>https://autoriteitpersoonsgegevens.nl</u>](https://autoriteitpersoonsgegevens.nl).
+You may lodge a complaint related to the processing of your personal data with the competent data protection supervisory authority, i.e. in the Netherlands the Authority Personal Data (*Autoriteit Persoonsgegevens*), with its visiting address at Hoge Nieuwstraat 8, 2514 EL Den Haag. For more information, please visit [<u>https://autoriteitpersoonsgegevens.nl</u>](https://autoriteitpersoonsgegevens.nl).
 
-## 
