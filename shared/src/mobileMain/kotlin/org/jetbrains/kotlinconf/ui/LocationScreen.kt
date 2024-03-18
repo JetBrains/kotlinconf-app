@@ -30,13 +30,13 @@ enum class Floor(
     FIRST(
         "1st floor",
         "files/map-first.svg",
-        initialOffset = Offset(-100f, 100f),
-        initialScale = 0.7f,
+        initialOffset = Offset(50f, 500f),
+        initialScale = 1f
     ),
     SECOND(
         "2nd floor", "files/map-second.svg",
-        initialOffset = Offset(-100f, 100f),
-        initialScale = 0.55f,
+        initialOffset = Offset(-25f, 700f),
+        initialScale = 0.9f,
     );
 
 }
@@ -61,8 +61,8 @@ fun LocationScreen() {
                 .fillMaxSize()
                 .zoomable(state)
         ) {
-            translate(floor.initialOffset.x, floor.initialOffset.y) {
-                scale(floor.initialScale) {
+            scale(floor.initialScale) {
+                translate(floor.initialOffset.x, floor.initialOffset.y) {
                     svgString?.renderTo(this)
                 }
             }
