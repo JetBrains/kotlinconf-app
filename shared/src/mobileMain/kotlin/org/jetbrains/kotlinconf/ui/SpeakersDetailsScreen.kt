@@ -11,7 +11,9 @@ import androidx.compose.ui.unit.*
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.bookmark
 import kotlinconfapp.shared.generated.resources.bookmark_active
+import kotlinconfapp.shared.generated.resources.speakers
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
@@ -43,7 +45,7 @@ fun SpeakersDetailsScreen(
     }
 
     Column(Modifier.fillMaxWidth()) {
-        NavigationBar(title = "Speakers", isLeftVisible = true, onLeftClick = {
+        NavigationBar(title = stringResource(Res.string.speakers), isLeftVisible = true, onLeftClick = {
             controller.back()
         }, isRightVisible = false)
         LazyColumn(state = state) {

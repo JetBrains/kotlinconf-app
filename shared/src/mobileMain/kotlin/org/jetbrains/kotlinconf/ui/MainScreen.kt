@@ -79,14 +79,14 @@ fun MainScreen(service: ConferenceService) {
                     SpeakersScreen(controller = it, scrollState = speakersScrollState, speakers = speakers.all)
                 },
                 TabItem(
-                    "Bookmarks",
+                    "bookmarks",
                     Res.drawable.mytalks,
                     Res.drawable.mytalks_active
                 ) {
                     BookmarksScreen(favoriteSessions, it)
                 },
                 TabItem(
-                    "Location",
+                    "location",
                     Res.drawable.location,
                     Res.drawable.location_active
                 ) {

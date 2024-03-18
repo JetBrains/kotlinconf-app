@@ -66,7 +66,7 @@ fun AgendaScreen(agenda: Agenda, scrollState: LazyListState, controller: AppCont
         }
     }
 
-    LaunchedEffect("scrollToLive") {
+    LaunchedEffect(Unit) {
 //        listState.scrollToItem(agenda.firstLiveIndex(), 0)
     }
 }
