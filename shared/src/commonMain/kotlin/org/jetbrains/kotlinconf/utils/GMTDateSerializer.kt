@@ -43,6 +43,6 @@ object GMTDateSerializer : KSerializer<GMTDate> {
 
 internal fun GMTDate.time(): String = "${hours.toString(2)}:${minutes.toString(2)}"
 
-internal fun GMTDate.dayAndMonth(): String = "${month.name} $dayOfMonth"
+internal fun GMTDate.dayAndMonth(): String = "${month.value} $dayOfMonth"
 
 private fun Int.toString(minSize: Int): String = "$this".padStart(minSize, '0')

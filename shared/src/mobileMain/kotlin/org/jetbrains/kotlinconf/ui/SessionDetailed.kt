@@ -13,10 +13,7 @@ import kotlinconfapp.shared.generated.resources.bookmark_active
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.ui.components.AWSLab
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
-import org.jetbrains.kotlinconf.ui.components.CodeLab
-import org.jetbrains.kotlinconf.ui.components.LightningTalk
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
 import org.jetbrains.kotlinconf.ui.components.Tag
 import org.jetbrains.kotlinconf.ui.components.VoteAndFeedback
@@ -40,9 +37,6 @@ fun SessionScreen(
     vote: Score?,
     isFinished: Boolean,
     speakers: List<Speaker>,
-    isLightning: Boolean,
-    isCodeLab: Boolean,
-    isAWS: Boolean,
     tags: List<String>,
     controller: AppController
 ) {
@@ -55,15 +49,11 @@ fun SessionScreen(
             description = description,
             location = location,
             isFavorite = isFavorite,
-            onFavoriteClick = { controller.toggleFavorite(id) },
             speakers = speakers,
-            isLightning = isLightning,
-            isCodeLab = isCodeLab,
-            isAWS = isAWS,
             tags = tags,
-            onBackClick = { controller.back() },
+            onFavoriteClick = { controller.toggleFavorite(id) },
             onSpeakerClick = { speakerId -> controller.showSpeaker(speakerId) }
-        )
+        ) { controller.back() }
     }
 
     if (isFinished) {
@@ -109,9 +99,6 @@ private fun SessionContent(
     location: String,
     isFavorite: Boolean,
     speakers: List<Speaker>,
-    isLightning: Boolean,
-    isCodeLab: Boolean,
-    isAWS: Boolean,
     tags: List<String>,
     onFavoriteClick: () -> Unit,
     onSpeakerClick: (String) -> Unit,
@@ -119,7 +106,7 @@ private fun SessionContent(
 ) {
     Column(Modifier.fillMaxWidth()) {
         NavigationBar(
-            title = "SESSION",
+            title = "",
             isLeftVisible = true,
             onLeftClick = onBackClick,
             isRightVisible = false,
@@ -132,7 +119,7 @@ private fun SessionContent(
                 .background(MaterialTheme.colors.whiteGrey)
         ) {
             SessionHead(time, title, isFavorite, onFavoriteClick, onSpeakerClick, speakers)
-            SessionDetails(description, location, isLightning, isCodeLab, isAWS, tags)
+            SessionDetails(description, location, tags)
         }
     }
 }
@@ -155,7 +142,7 @@ private fun SessionHead(
             Row {
                 Text(
                     modifier = Modifier.padding(top = 12.dp),
-                    text = time.uppercase(),
+                    text = time,
                     style = MaterialTheme.typography.body2.copy(
                         color = MaterialTheme.colors.grey50Grey20
                     ),
@@ -165,7 +152,7 @@ private fun SessionHead(
                 FavoriteButton(isFavorite, favoriteClick)
             }
             Text(
-                title.uppercase(),
+                title,
                 style = MaterialTheme.typography.h2.copy(
                     color = MaterialTheme.colors.greyWhite
                 )
@@ -220,9 +207,6 @@ private fun SpeakerPhotos(speakers: List<Speaker>, speakerClick: (String) -> Uni
 private fun SessionDetails(
     description: String,
     location: String,
-    isLightning: Boolean,
-    isCodeLab: Boolean,
-    isAWS: Boolean,
     tags: List<String>
 ) {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {

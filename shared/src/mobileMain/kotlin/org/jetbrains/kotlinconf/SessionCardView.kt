@@ -14,7 +14,7 @@ data class SessionCardView(
     val vote: Score?,
     val timeLine: String = buildString {
         append(startsAt.dayAndMonth())
-        append(" | ")
+        append(", ")
         append(startsAt.time())
         append("-")
         append(endsAt.time())
