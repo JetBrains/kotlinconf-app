@@ -231,14 +231,6 @@ private fun SessionDetails(
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            if (isLightning) {
-                LightningTalk("Lightning Talk")
-            } else if (isCodeLab) {
-                CodeLab()
-            } else if (isAWS) {
-                AWSLab()
-            }
-
             tags.forEach {
                 Tag(null, it, modifier = Modifier.padding(end = 4.dp))
             }

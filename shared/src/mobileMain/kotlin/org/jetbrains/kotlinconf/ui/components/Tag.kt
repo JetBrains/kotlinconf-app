@@ -66,7 +66,7 @@ fun Tag(
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun LightningTalk(title: String, dimmed: Boolean = false) {
-    Tag(Res.drawable.light, title, dimmed)
+    Tag(null, title, dimmed)
 }
 
 @OptIn(ExperimentalResourceApi::class)

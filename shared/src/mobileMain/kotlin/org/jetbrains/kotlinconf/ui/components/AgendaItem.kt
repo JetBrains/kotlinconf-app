@@ -52,26 +52,19 @@ fun AgendaItem(
 ) {
     var showFeedback by remember { mutableStateOf(false) }
 
-    Column(
-        Modifier
-            .background(MaterialTheme.colors.whiteGrey)
-            .clickable {
-                onSessionClick()
-            }
-    ) {
+    Column(Modifier.background(MaterialTheme.colors.whiteGrey).clickable {
+        onSessionClick()
+    }) {
         Row(Modifier.fillMaxWidth()) {
             Column(
-                modifier = Modifier
-                    .padding(
-                        start = 16.dp,
-                        end = 48.dp,
-                        top = 16.dp,
-                    )
-                    .weight(1.0f, true)
+                modifier = Modifier.padding(
+                    start = 16.dp,
+                    end = 48.dp,
+                    top = 16.dp,
+                ).weight(1.0f, true)
             ) {
                 Text(
-                    title,
-                    style = MaterialTheme.typography.h4.copy(
+                    title, style = MaterialTheme.typography.h4.copy(
                         color = if (isFinished) grey50 else MaterialTheme.colors.greyWhite
                     )
                 )
@@ -87,7 +80,8 @@ fun AgendaItem(
                 IconButton(onClick = {
                     onFavoriteClick()
                 }) {
-                    val icon = if (isFavorite) Res.drawable.bookmark_active else Res.drawable.bookmark
+                    val icon =
+                        if (isFavorite) Res.drawable.bookmark_active else Res.drawable.bookmark
                     Icon(
                         painter = icon.painter(),
                         contentDescription = "bookmark",
@@ -97,20 +91,19 @@ fun AgendaItem(
             }
         }
 
-        Row(
-            Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
+        Column(
+            Modifier.padding(16.dp).fillMaxWidth()
         ) {
             if (!isFinished) {
                 Text(
-                    locationLine.uppercase(), style = MaterialTheme.typography.body2.copy(
+                    locationLine.uppercase(),
+                    style = MaterialTheme.typography.body2.copy(
                         color = grey50
                     ),
-                    maxLines = 1
+                    maxLines = 1,
+                    modifier = Modifier.padding(bottom = 4.dp)
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
             if (isLightning) {
                 LightningTalk(timeLine, dimmed = isFinished)
             } else if (isCodeLab) {
