@@ -11,7 +11,7 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.util.date.*
 import io.ktor.utils.io.core.*
-import org.jetbrains.kotlinconf.utils.MobileLogger
+import org.jetbrains.kotlinconf.utils.mobileLogger
 import kotlin.native.concurrent.*
 
 val HTTP_CLIENT = HttpClient()
@@ -31,7 +31,7 @@ class APIClient(
 
         install(Logging) {
             level = LogLevel.HEADERS
-            logger = MobileLogger
+            logger = mobileLogger()
         }
 
         HttpResponseValidator {

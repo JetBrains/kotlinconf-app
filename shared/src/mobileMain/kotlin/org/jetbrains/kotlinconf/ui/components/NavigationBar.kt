@@ -21,6 +21,7 @@ import kotlinconfapp.shared.generated.resources.back
 import kotlinconfapp.shared.generated.resources.menu
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.kotlinconf.ui.painter
 import org.jetbrains.kotlinconf.ui.theme.divider
 import org.jetbrains.kotlinconf.ui.theme.grey50
