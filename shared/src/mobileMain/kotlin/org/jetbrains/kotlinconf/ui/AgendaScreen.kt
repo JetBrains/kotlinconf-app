@@ -11,11 +11,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import kotlinconfapp.shared.generated.resources.Res
@@ -26,6 +26,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.Agenda
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.Day
+import org.jetbrains.kotlinconf.EventDay
 import org.jetbrains.kotlinconf.ui.components.AgendaDayHeader
 import org.jetbrains.kotlinconf.ui.components.AgendaItem
 import org.jetbrains.kotlinconf.ui.components.AgendaTimeSlotHeader
@@ -37,22 +38,33 @@ import org.jetbrains.kotlinconf.ui.theme.agendaHeaderColor
 @Composable
 fun AgendaScreen(agenda: Agenda, scrollState: LazyListState, controller: AppController) {
     val coroutineScope = rememberCoroutineScope()
-    var selected: Day? by remember { mutableStateOf(agenda.days.firstOrNull()) }
-    var recomposeIndex by rememberSaveable { mutableStateOf(0) }
-
     val daysSize = agenda.days.map { it.itemsCount() }
     val daysIndex: List<Int> = daysSize.scan(0) { acc, i -> acc + i }
 
-    val currentTab = selected
+    val displayedDay: EventDay? by remember {
+        derivedStateOf {
+            val days: Set<Int> = scrollState.layoutInfo.visibleItemsInfo.mapNotNull {
+                val key = it.key as String
+                val lastIndexOf = key.lastIndexOf('-').takeIf { it >= 0 } ?: return@mapNotNull null
+                val day = key.substring(lastIndexOf + 1).toIntOrNull()
+                day
+            }.toSet()
+
+            if (days.isEmpty()) return@derivedStateOf null
+            EventDay.from(days.min())
+        }
+    }
+
     Column(
         Modifier.background(MaterialTheme.colors.agendaHeaderColor)
     ) {
-        if (currentTab != null) {
+        val day = displayedDay
+        if (day != null) {
             TabBar(
-                agenda.days,
-                currentTab, onSelect = { day ->
-                    selected = day
-                    val index = daysIndex[agenda.days.indexOfFirst { it.title == day.title }]
+                EventDay.entries,
+                day, onSelect = { day ->
+                    var index = daysIndex[agenda.days.indexOfFirst { it.title == day.title }]
+                    index -= day.ordinal
                     if (index >= 0) {
                         coroutineScope.launch { scrollState.scrollToItem(index, 0) }
                     }
@@ -84,7 +96,7 @@ private fun LazyListScope.SessionsList(
         when {
             slot.isLunch -> {
                 if (slot.isFinished) return@forEach
-                item("break-${slot.id}") {
+                item(slot.key) {
                     Break(
                         duration = slot.duration,
                         title = slot.title,
@@ -97,13 +109,13 @@ private fun LazyListScope.SessionsList(
 
             slot.isBreak -> {
                 if (slot.isFinished) return@forEach
-                item("break-${slot.id}") {
+                item(slot.key) {
                     Break(duration = slot.duration, title = slot.title, isLive = slot.isLive)
                 }
             }
 
             slot.isParty -> {
-                item("party-${slot.id}") {
+                item(slot.key) {
                     Column {
                         AgendaTimeSlotHeader(slot.title, slot.isLive, slot.isFinished)
                         Party(slot.title, slot.isFinished)
@@ -112,7 +124,7 @@ private fun LazyListScope.SessionsList(
             }
 
             else -> {
-                item("time-header-${slot.id}") {
+                item(slot.key) {
                     AgendaTimeSlotHeader(
                         slot.title,
                         slot.isLive,
@@ -124,7 +136,7 @@ private fun LazyListScope.SessionsList(
 
         if (slot.isLunch || slot.isBreak || slot.isParty) return@forEach
 
-        items(slot.sessions, key = { it.id }) { session ->
+        items(slot.sessions, key = { it.key }) { session ->
             AgendaItem(
                 session.title,
                 session.speakerLine,

@@ -16,7 +16,7 @@ data class Speakers(
     operator fun get(id: String): Speaker? = dictById[id]
 }
 
-enum class EventDay(val title: String) {
+enum class EventDay(override val title: String) : Tab {
     May22("May 22"),
     May23("May 23"),
     May24("May 24");
@@ -54,7 +54,8 @@ data class TimeSlot(
         "${startsAt.time()}-${endsAt.time()}"
     }
 
-    val id: String = "${startsAt.timestamp}-${endsAt.timestamp}-$title"
+    val key: String =
+        "${startsAt.timestamp}-${endsAt.timestamp}-$title-$isBreak-$isParty-$isLunch-${startsAt.dayOfMonth}"
 
     val duration: String = "${(endsAt.timestamp - startsAt.timestamp) / 1000 / 60} MIN"
 }
