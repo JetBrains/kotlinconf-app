@@ -40,6 +40,9 @@ data class SessionCardView(
     val isCodeLab: Boolean = description.contains("Code Lab", ignoreCase = true)
 
     val isAWSLab: Boolean = locationLine.contains("mendes da costa", ignoreCase = true)
+
+    val key: String =
+        "${startsAt.timestamp}-${endsAt.timestamp}-$title-$isBreak-$isParty-$isLunch-${startsAt.dayOfMonth}"
 }
 
 val Session.isLightning: Boolean get() = endsAt.timestamp - startsAt.timestamp <= 15 * 60 * 1000
