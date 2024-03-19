@@ -15,6 +15,8 @@ import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
+import org.jetbrains.kotlinconf.ui.components.Room
+import org.jetbrains.kotlinconf.ui.components.RoomMap
 import org.jetbrains.kotlinconf.ui.components.Tag
 import org.jetbrains.kotlinconf.ui.components.VoteAndFeedback
 import org.jetbrains.kotlinconf.ui.theme.grey50Grey20
@@ -228,6 +230,11 @@ private fun SessionDetails(
                 )
             )
             LocationRow(location, Modifier.padding(top = 24.dp, bottom = 48.dp))
+            val room = Room.forName(location)
+            if (room != null) {
+                RoomMap(room)
+            }
         }
     }
 }
+
