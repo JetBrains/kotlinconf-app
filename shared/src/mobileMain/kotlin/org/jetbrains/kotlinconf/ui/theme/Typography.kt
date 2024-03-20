@@ -24,6 +24,12 @@ val Typography: Typography
                 fontSize = 35.sp,
                 lineHeight = 42.sp
             ),
+            h3 = TextStyle(
+                fontFamily = JetBrainsSans,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 20.sp,
+                lineHeight =28.sp
+            ),
             h4 = TextStyle(
                 fontFamily = JetBrainsSans,
                 fontWeight = FontWeight.SemiBold,

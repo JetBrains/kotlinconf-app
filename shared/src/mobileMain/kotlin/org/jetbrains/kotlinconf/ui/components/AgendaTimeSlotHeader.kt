@@ -22,24 +22,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import org.jetbrains.kotlinconf.ui.HDivider
 import org.jetbrains.kotlinconf.ui.theme.agendaHeaderColor
 import org.jetbrains.kotlinconf.ui.theme.grey20Grey80
 import org.jetbrains.kotlinconf.ui.theme.greyGrey5
 import org.jetbrains.kotlinconf.ui.theme.orange
-import org.jetbrains.kotlinconf.ui.HDivider
 
 
 @Composable
 internal fun AgendaTimeSlotHeader(title: String, isLive: Boolean, isFinished: Boolean) {
-    val transition = rememberInfiniteTransition()
-    val transparency by transition.animateFloat(
-        initialValue = 0.0f,
-        targetValue = 1.0f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
+
     Column(
         modifier = Modifier
             .background(MaterialTheme.colors.agendaHeaderColor)
@@ -62,23 +54,38 @@ internal fun AgendaTimeSlotHeader(title: String, isLive: Boolean, isFinished: Bo
             )
             Spacer(modifier = Modifier.weight(1f))
             if (isLive) {
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(12.dp)
-                        .background(orange.copy(alpha = transparency))
-                )
-                Text(
-                    "NOW", modifier = Modifier
-                        .padding(start = 6.dp)
-                        .padding(end = 16.dp),
-                    style = MaterialTheme.typography.body2.copy(
-                        color = orange.copy(alpha = transparency)
-                    )
-                )
-
+                LiveIndicator()
             }
         }
         HDivider()
+    }
+}
+
+@Composable
+fun LiveIndicator() {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        val transition = rememberInfiniteTransition()
+        val transparency by transition.animateFloat(
+            initialValue = 0.0f,
+            targetValue = 1.0f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(1000),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
+        Box(
+            modifier = Modifier
+                .clip(CircleShape)
+                .size(12.dp)
+                .background(orange.copy(alpha = transparency))
+        )
+        Text(
+            "Now", modifier = Modifier
+                .padding(start = 6.dp)
+                .padding(end = 16.dp),
+            style = MaterialTheme.typography.body2.copy(
+                color = orange.copy(alpha = transparency)
+            )
+        )
     }
 }

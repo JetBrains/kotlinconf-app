@@ -92,6 +92,10 @@ fun AboutConfScreen(
     val secondDaySpeaker = speakers.all.filter {
         it.name == stringResource(Res.string.second_day_keynote_speaker)
     }
+
+    val time by service.time.collectAsState()
+    val timeString =
+        "${time.month.name} ${time.dayOfMonth} ${time.hours}:${time.minutes}:${time.seconds}"
     Column(
         Modifier
             .background(MaterialTheme.colors.grey5Black)
@@ -118,7 +122,7 @@ fun AboutConfScreen(
             LightningTalks()
             Party()
             ClosingPanel()
-            AboutConferenceFooter(showVisitorsPrivacyPolicy, showVisitorsTerms)
+            AboutConferenceFooter(timeString, showVisitorsPrivacyPolicy, showVisitorsTerms)
         }
     }
 }
@@ -370,6 +374,7 @@ private fun BottomBanner() {
 @OptIn(ExperimentalLayoutApi::class, ExperimentalResourceApi::class)
 @Composable
 private fun AboutConferenceFooter(
+    time: String,
     showVisitorsPrivacyPolicy: () -> Unit,
     showVisitorsTerms: () -> Unit
 ) {
@@ -435,6 +440,11 @@ private fun AboutConferenceFooter(
                 .clickable {
                     showVisitorsTerms()
                 }
+        )
+        Text(
+            "Server time: $time",
+            style = MaterialTheme.typography.body2.copy(color = grey50),
+            modifier = Modifier.padding(16.dp)
         )
     }
 }
