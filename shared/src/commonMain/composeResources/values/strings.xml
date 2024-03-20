@@ -49,5 +49,12 @@ Bella Center Copenhagen, Denmark</string>
     <string name="X">X</string>
     <string name="slack">Slack channel</string>
     <string name="speakers">Speakers</string>
-
+    <string name="past">Past</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="day_1">May 22</string>
+    <string name="day_2">May 23</string>
+    <string name="day_3">May 24</string>
+    <string name="floor_1">1st floor</string>
+    <string name="floor_2">2nd floor</string>
+    <string name="talks">Talks</string>
 </resources>

@@ -13,11 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ui.theme.grey50
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.text2
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun TabButton(tab: Tab, isSelected: Boolean, onSelect: () -> Unit) {
     val background = if (isSelected)
@@ -42,7 +45,7 @@ fun TabButton(tab: Tab, isSelected: Boolean, onSelect: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = tab.title,
+            text = stringResource(tab.title),
             modifier = Modifier
                 .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp),
             style = text2,

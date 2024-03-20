@@ -23,6 +23,7 @@ import kotlinconfapp.shared.generated.resources.lunch
 import kotlinconfapp.shared.generated.resources.lunch_active
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.Agenda
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.Day
@@ -88,7 +89,7 @@ private fun LazyListScope.SessionsList(
     day: Day,
     controller: AppController,
 ) {
-    item(day.title) {
+    item(day.title.toString()) {
         AgendaDayHeader(day.day)
     }
 

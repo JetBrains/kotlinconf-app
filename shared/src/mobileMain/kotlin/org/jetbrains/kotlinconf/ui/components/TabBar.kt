@@ -11,11 +11,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.HDivider
 
 interface Tab {
-    val title: String
+    @OptIn(ExperimentalResourceApi::class)
+    val title: StringResource
 }
 
 @Composable

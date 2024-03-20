@@ -26,7 +26,11 @@ import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.bookmark
 import kotlinconfapp.shared.generated.resources.bookmark_active
+import kotlinconfapp.shared.generated.resources.past
+import kotlinconfapp.shared.generated.resources.upcoming
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionCardView
@@ -39,8 +43,8 @@ import org.jetbrains.kotlinconf.ui.components.Tab
 import org.jetbrains.kotlinconf.ui.components.TabBar
 import org.jetbrains.kotlinconf.ui.components.VoteAndFeedback
 
-enum class Bookmark(override val title: String) : Tab {
-    PAST("Past"), UPCOMING("Upcoming")
+enum class Bookmark(override val title: StringResource) : Tab {
+    PAST(Res.string.past), UPCOMING(Res.string.upcoming)
 }
 
 @Composable
@@ -56,7 +60,7 @@ fun BookmarksScreen(
         })
 
         Text(
-            selectedTab.title,
+            stringResource(selectedTab.title),
             style = MaterialTheme.typography.h2.copy(color = MaterialTheme.colors.greyGrey5),
             modifier = Modifier.padding(16.dp)
         )
