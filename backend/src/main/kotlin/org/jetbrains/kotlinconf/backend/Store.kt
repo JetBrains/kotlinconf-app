@@ -145,7 +145,7 @@ internal class Store(application: Application) {
     }
 
     suspend fun getVotesSummary(): Map<String, VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
-        val result: List<String> = Votes.select(sessionId, Votes.rating, Votes.rating.count()).selectAll()
+        val result: List<String> = Votes.select(sessionId, Votes.rating, Votes.rating.count())
             .groupBy(sessionId, Votes.rating)
             .map {
                 it[sessionId]
