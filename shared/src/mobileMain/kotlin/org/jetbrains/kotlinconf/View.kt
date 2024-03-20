@@ -1,6 +1,12 @@
 package org.jetbrains.kotlinconf
 
 import io.ktor.util.date.GMTDate
+import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.day_1
+import kotlinconfapp.shared.generated.resources.day_2
+import kotlinconfapp.shared.generated.resources.day_3
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.kotlinconf.ui.components.Tab
 import org.jetbrains.kotlinconf.utils.dayAndMonth
 import org.jetbrains.kotlinconf.utils.time
@@ -16,10 +22,11 @@ data class Speakers(
     operator fun get(id: String): Speaker? = dictById[id]
 }
 
-enum class EventDay(override val title: String) : Tab {
-    May22("May 22"),
-    May23("May 23"),
-    May24("May 24");
+@OptIn(ExperimentalResourceApi::class)
+enum class EventDay(override val title: StringResource) : Tab {
+    May22(Res.string.day_1),
+    May23(Res.string.day_2),
+    May24(Res.string.day_3);
 
     companion object {
         fun from(value: Int) = when (value) {
@@ -34,7 +41,8 @@ data class Day(
     val day: EventDay,
     val timeSlots: List<TimeSlot>
 ) : Tab {
-    override val title: String
+    @OptIn(ExperimentalResourceApi::class)
+    override val title: StringResource
         get() = day.title
 }
 
@@ -69,7 +77,6 @@ fun Conference.buildAgenda(
         .groupBy { it.startsAt.dayOfMonth }
         .toList()
         .map { (day, sessions) ->
-            val title = sessions.first().startsAt.dayAndMonth()
             Day(
                 EventDay.from(day),
                 sessions.groupByTime(conference = this, now, favorites, votes)

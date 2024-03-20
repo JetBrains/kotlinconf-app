@@ -16,6 +16,7 @@ import kotlinconfapp.shared.generated.resources.schedule_day_1_banner
 import kotlinconfapp.shared.generated.resources.schedule_day_2_banner
 import kotlinconfapp.shared.generated.resources.schedule_day_3_banner
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.EventDay
 import org.jetbrains.kotlinconf.ui.theme.agendaHeaderColor
 import org.jetbrains.kotlinconf.ui.painter
@@ -38,7 +39,7 @@ internal fun AgendaDayHeader(day: EventDay) {
     ) {
         Image(
             image.painter(),
-            contentDescription = day.title,
+            contentDescription = stringResource(day.title),
             modifier = Modifier
                 .height(56.dp)
                 .fillMaxWidth(),

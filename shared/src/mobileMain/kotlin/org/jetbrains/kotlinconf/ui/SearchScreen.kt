@@ -5,8 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -22,8 +20,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.close
-import kotlinx.coroutines.launch
+import kotlinconfapp.shared.generated.resources.speakers
+import kotlinconfapp.shared.generated.resources.talks
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.Speaker
@@ -50,9 +50,10 @@ data class SpeakerSearchData(
     val photoUrl: String,
 )
 
-enum class SearchTab(override val title: String) : Tab {
-    TALKS("Talks"),
-    SPEAKERS("Speakers")
+@OptIn(ExperimentalResourceApi::class)
+enum class SearchTab(override val title: StringResource) : Tab {
+    TALKS(Res.string.talks),
+    SPEAKERS(Res.string.speakers)
 }
 
 @OptIn(ExperimentalResourceApi::class)

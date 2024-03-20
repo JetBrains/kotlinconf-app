@@ -15,26 +15,30 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.floor_1
+import kotlinconfapp.shared.generated.resources.floor_2
 import org.jetbrains.kotlinconf.ui.components.zoomable.rememberZoomableState
 import org.jetbrains.kotlinconf.ui.components.zoomable.zoomable
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.kotlinconf.ui.components.Tab
 import org.jetbrains.kotlinconf.ui.components.TabBar
 
+@OptIn(ExperimentalResourceApi::class)
 enum class Floor(
-    override val title: String,
+    override val title: StringResource,
     val resource: String,
     val initialOffset: Offset,
     val initialScale: Float,
 ) : Tab {
     FIRST(
-        "1st floor",
+        Res.string.floor_1,
         "files/map-first.svg",
         initialOffset = Offset(50f, 500f),
         initialScale = 1f
     ),
     SECOND(
-        "2nd floor", "files/map-second.svg",
+        Res.string.floor_2, "files/map-second.svg",
         initialOffset = Offset(-25f, 700f),
         initialScale = 0.9f,
     );
