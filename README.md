@@ -60,5 +60,5 @@ cd iosApp
 pod install
 ```
 
-Next you can open `iosApp/KotlinConf.xcworkspace`, select a device XCode and hit run.
+Next you can open `iosApp/KotlinConf.xcworkspace`, select a device Xcode and hit run.
 
