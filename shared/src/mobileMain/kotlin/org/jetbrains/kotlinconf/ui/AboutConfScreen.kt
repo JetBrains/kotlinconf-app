@@ -94,7 +94,6 @@ fun AboutConfScreen(
     }
     Column(
         Modifier
-            .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colors.grey5Black)
             .fillMaxWidth()
     ) {
@@ -104,18 +103,23 @@ fun AboutConfScreen(
             onLeftClick = back,
             isRightVisible = false
         )
-        AboutConfTopBanner()
-        AboutConfSchedule()
-        HDivider()
-        AboutConfDescription()
-        HDivider()
-        AboutConfKeynoteSection(keynoteSpeakers)
-        AboutConfSecondKeynote(secondDaySpeaker)
-        HDivider()
-        LightningTalks()
-        Party()
-        ClosingPanel()
-        AboutConferenceFooter(showVisitorsPrivacyPolicy, showVisitorsTerms)
+        Column(
+            Modifier.fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+        ) {
+            AboutConfTopBanner()
+            AboutConfSchedule()
+            HDivider()
+            AboutConfDescription()
+            HDivider()
+            AboutConfKeynoteSection(keynoteSpeakers)
+            AboutConfSecondKeynote(secondDaySpeaker)
+            HDivider()
+            LightningTalks()
+            Party()
+            ClosingPanel()
+            AboutConferenceFooter(showVisitorsPrivacyPolicy, showVisitorsTerms)
+        }
     }
 }
 
