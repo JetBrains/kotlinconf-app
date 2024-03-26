@@ -16,88 +16,66 @@ private val DarkColorPalette = darkColors(
     background = black,
 )
 
-@get:Composable
 val Colors.agendaHeaderColor: Color
     get() = if (isLight) grey5 else black
 
-@get:Composable
 val Colors.title: Color
     get() = if (isLight) grey else grey5
 
-@get:Composable
 val Colors.subtitle: Color
     get() = if (isLight) grey else grey20
 
-@get:Composable
 val Colors.divider: Color
     get() = if (isLight) grey20 else grey80
 
-@get:Composable
 val Colors.whiteGrey: Color
     get() = if (isLight) white else grey
 
-@get:Composable
 val Colors.whiteBlack: Color
     get() = if (isLight) white else black
 
-@get:Composable
 val Colors.greyWhite: Color
     get() = if (isLight) grey else white
 
-@get:Composable
 val Colors.grey5Black: Color
     get() = if (isLight) grey5 else black
 
-@get:Composable
 val Colors.grey5Grey: Color
     get() = if (isLight) grey5 else grey
 
-@get:Composable
 val Colors.menuSelected: Color
     get() = if (isLight) grey15 else greySelected
 
-@get:Composable
 val Colors.grey5Grey90: Color
     get() = if (isLight) grey5 else grey90
 
-@get:Composable
 val Colors.grey50Grey20: Color
     get() = if (isLight) grey50 else grey20
 
-@get:Composable
 val Colors.grey20Grey80: Color
     get() = if (isLight) grey20 else grey80
 
-@get:Composable
 val Colors.grey80Grey20: Color
     get() = if (isLight) grey80 else grey20
 
-@get:Composable
 val Colors.greyGrey20: Color
     get() = if (isLight) grey else grey20
 
-@get:Composable
 val Colors.greyGrey5: Color
     get() = if (isLight) grey else grey5
 
-@get:Composable
 val Colors.greyGrey50: Color
     get() = if (isLight) grey else grey50
 
-@get:Composable
 val Colors.greyGrey80: Color
     get() = if (isLight) grey else grey80
 
-@get:Composable
 val Colors.blackGrey5: Color
     get() = if (isLight) black else grey5
 
-@get:Composable
 val Colors.blackWhite: Color
     get() = if (isLight) black else white
 
-
-@get:Composable
 val Colors.tagColor: Color
     get() = if (isLight) tagGrey else tagDarkGrey
 
