@@ -1,7 +1,9 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -16,12 +18,15 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.kotlinconf.ui.HDivider
 import org.jetbrains.kotlinconf.ui.theme.DEFAULT_TRANSITION
 import org.jetbrains.kotlinconf.ui.theme.blackWhite
 import org.jetbrains.kotlinconf.ui.theme.grey50
 import org.jetbrains.kotlinconf.ui.theme.grey5Grey
 import org.jetbrains.kotlinconf.ui.theme.whiteBlack
 import org.jetbrains.kotlinconf.ui.painter
+import org.jetbrains.kotlinconf.ui.theme.grey5Black
+import org.jetbrains.kotlinconf.ui.theme.menuSelected
 
 class TabItem @OptIn(ExperimentalResourceApi::class) constructor(
     val name: String,
@@ -36,12 +41,15 @@ fun TabsView(navigator: Navigator, vararg items: TabItem) {
     val route = current?.route?.route
 
     Scaffold(bottomBar = {
-        BottomNavigation(
-            backgroundColor = MaterialTheme.colors.whiteBlack,
-            contentColor = MaterialTheme.colors.blackWhite,
-        ) {
-            items.forEach {
-                BottomButton(navigator, tab = it, isSelected = it.name == route)
+        Column(Modifier.fillMaxWidth()) {
+            HDivider()
+            BottomNavigation(
+                backgroundColor = MaterialTheme.colors.grey5Black,
+                contentColor = MaterialTheme.colors.blackWhite,
+            ) {
+                items.forEach {
+                    BottomButton(navigator, tab = it, isSelected = it.name == route)
+                }
             }
         }
     }) {
@@ -69,9 +77,9 @@ internal fun RowScope.BottomButton(
 ) {
     val background =
         if (isSelected) {
-            MaterialTheme.colors.grey5Grey
+            MaterialTheme.colors.menuSelected
         } else {
-            MaterialTheme.colors.whiteBlack
+            MaterialTheme.colors.grey5Black
         }
     BottomNavigationItem(
         modifier = Modifier.background(background),
