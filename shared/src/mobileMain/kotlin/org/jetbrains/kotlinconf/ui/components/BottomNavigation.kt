@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.DrawableResource
@@ -82,7 +83,7 @@ internal fun RowScope.BottomButton(
             MaterialTheme.colors.grey5Black
         }
     BottomNavigationItem(
-        modifier = Modifier.background(background),
+        modifier = Modifier.background(background).padding(bottom = 18.dp),
         selected = isSelected,
         onClick = onClick@{
             navigator.navigate(tab.name)

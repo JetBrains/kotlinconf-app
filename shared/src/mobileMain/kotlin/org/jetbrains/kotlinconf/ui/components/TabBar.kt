@@ -2,7 +2,6 @@ package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.HDivider
+import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 
 interface Tab {
     @OptIn(ExperimentalResourceApi::class)
@@ -22,7 +21,7 @@ interface Tab {
 }
 
 @Composable
-fun <T: Tab> TabBar(
+fun <T : Tab> TabBar(
     tabs: List<T>,
     selected: T,
     onSelect: (item: T) -> Unit = {},
@@ -32,17 +31,15 @@ fun <T: Tab> TabBar(
             .fillMaxWidth()
             .background(MaterialTheme.colors.whiteGrey)
     ) {
-        Box {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                tabs.forEach { tab ->
-                    val isActive = selected == tab
-                    TabButton(tab, isSelected = isActive) { onSelect(tab) }
-                }
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            tabs.forEach { tab ->
+                val isActive = selected == tab
+                TabButton(tab, isSelected = isActive) { onSelect(tab) }
             }
         }
 
