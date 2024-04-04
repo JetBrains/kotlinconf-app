@@ -13,16 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.scale
-import androidx.compose.ui.graphics.drawscope.translate
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.floor_1
 import kotlinconfapp.shared.generated.resources.floor_2
-import org.jetbrains.kotlinconf.ui.components.zoomable.rememberZoomableState
-import org.jetbrains.kotlinconf.ui.components.zoomable.zoomable
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.kotlinconf.ui.components.Tab
 import org.jetbrains.kotlinconf.ui.components.TabBar
+import org.jetbrains.kotlinconf.ui.components.zoomable.rememberZoomableState
+import org.jetbrains.kotlinconf.ui.components.zoomable.zoomable
 
 @OptIn(ExperimentalResourceApi::class)
 enum class Floor(
@@ -49,10 +48,10 @@ enum class Floor(
 @Composable
 fun LocationScreen() {
     var floor: Floor by remember { mutableStateOf(Floor.FIRST) }
-    var svgString: Svg? by remember { mutableStateOf(null) }
+    var svg: Svg? by remember { mutableStateOf(null) }
 
     LaunchedEffect(floor) {
-        svgString = Svg(Res.readBytes(floor.resource))
+        svg = Svg(Res.readBytes(floor.resource))
     }
 
     val state = rememberZoomableState()
@@ -65,10 +64,14 @@ fun LocationScreen() {
                 .fillMaxSize()
                 .zoomable(state)
         ) {
-            scale(floor.initialScale) {
-                translate(floor.initialOffset.x, floor.initialOffset.y) {
-                    svgString?.renderTo(this)
-                }
+            val currentSvg = svg ?: return@Canvas
+            val initialScale = minOf(
+                size.width / (currentSvg.width + 400),
+                size.height / (currentSvg.height + 400)
+            )
+
+            scale(initialScale) {
+                currentSvg.renderTo(this)
             }
         }
         TabBar(
@@ -80,5 +83,8 @@ fun LocationScreen() {
 }
 
 expect class Svg(svgBytes: ByteArray) {
+    val width: Float
+    val height: Float
+
     fun renderTo(scope: DrawScope)
 }

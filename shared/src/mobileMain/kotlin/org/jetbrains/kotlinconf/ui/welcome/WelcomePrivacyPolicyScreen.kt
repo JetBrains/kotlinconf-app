@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -51,7 +53,7 @@ fun WelcomePrivacyPolicyScreen(
     }, onReject = {
         onClose()
     }) {
-        Column(Modifier.fillMaxHeight()) {
+        Column(Modifier.fillMaxHeight().verticalScroll(rememberScrollState())) {
             Image(
                 painter = Res.drawable.privacy_policy_bird.painter(),
                 contentDescription = null,
@@ -110,6 +112,7 @@ fun WelcomePrivacyPolicyScreen(
                         .background(MaterialTheme.colors.whiteGrey)
                 )
             }
+            Spacer(Modifier.height(80.dp))
         }
     }
 }

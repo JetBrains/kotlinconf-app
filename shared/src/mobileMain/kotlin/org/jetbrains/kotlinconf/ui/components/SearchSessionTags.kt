@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -19,11 +20,11 @@ fun SearchSessionTags(tags: List<String>, active: List<String>, onClick: (tag: S
     Row(
         Modifier
             .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
+            .horizontalScroll(rememberScrollState())
             .background(MaterialTheme.colors.grey5Black)
             .padding(12.dp)
     ) {
-        tags.forEach { tag ->
+        tags.sorted().forEach { tag ->
             SearchTag(name = tag, isActive = tag in active, onClick = { onClick(tag) })
         }
     }

@@ -13,4 +13,9 @@ actual class Svg actual constructor(svgBytes: ByteArray) {
             svg.renderToCanvas(canvas.nativeCanvas)
         }
     }
+
+    actual val width: Float
+        get() = svg.documentWidth
+    actual val height: Float
+        get() = svg.documentHeight
 }
