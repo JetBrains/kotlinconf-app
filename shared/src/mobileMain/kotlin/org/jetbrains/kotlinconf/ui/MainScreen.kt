@@ -33,18 +33,6 @@ fun MainScreen(service: ConferenceService) {
     val speakers by service.speakers.collectAsState()
     val time by service.time.collectAsState()
     val controller = rememberNavigator()
-
-    val favoriteSessions = agenda.days.flatMap { it.timeSlots.flatMap { it.sessions } }
-        .filter { it.isFavorite }
-        .map {
-            val startsIn = ((it.startsAt.timestamp - time.timestamp) / 1000 / 60).toInt()
-            when {
-                startsIn in 1..15 -> it.copy(timeLine = "IN $startsIn MIN!")
-                startsIn <= 0 && !it.isFinished -> it.copy(timeLine = "NOW")
-                else -> it
-            }
-        }
-
     var showWelcome by remember { mutableStateOf(service.needsOnboarding()) }
 
     withAppController(service) {
@@ -83,6 +71,17 @@ fun MainScreen(service: ConferenceService) {
                     Res.drawable.mytalks,
                     Res.drawable.mytalks_active
                 ) {
+                    val favoriteSessions = agenda.days.flatMap { it.timeSlots.flatMap { it.sessions } }
+                        .filter { it.isFavorite }
+                        .map {
+                            val startsIn = ((it.startsAt.timestamp - time.timestamp) / 1000 / 60).toInt()
+                            when {
+                                startsIn in 1..15 -> it.copy(timeLine = "IN $startsIn MIN!")
+                                startsIn <= 0 && !it.isFinished -> it.copy(timeLine = "NOW")
+                                else -> it
+                            }
+                        }
+
                     BookmarksScreen(favoriteSessions, it)
                 },
                 TabItem(
