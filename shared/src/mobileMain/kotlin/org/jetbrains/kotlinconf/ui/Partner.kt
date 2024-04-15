@@ -45,7 +45,7 @@ fun Partner(controller: AppController, name: String, description: String) {
 
             Column(Modifier.padding(16.dp)) {
                 Text(
-                    name.uppercase(), style = MaterialTheme.typography.body2.copy(
+                    name, style = MaterialTheme.typography.body2.copy(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.greyGrey5
                     )

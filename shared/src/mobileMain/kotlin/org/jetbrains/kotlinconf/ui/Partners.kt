@@ -92,23 +92,6 @@ fun Partners(showPartner: (String) -> Unit, back: () -> Unit) {
     }
 }
 
-@Composable
-fun TextTitle(value: String) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.grey5Black)
-    ) {
-        Text(
-            value.uppercase(),
-            style = MaterialTheme.typography.h2.copy(
-                color = MaterialTheme.colors.greyGrey5
-            ),
-            modifier = Modifier.padding(16.dp)
-        )
-    }
-}
-
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun PartnerCard(

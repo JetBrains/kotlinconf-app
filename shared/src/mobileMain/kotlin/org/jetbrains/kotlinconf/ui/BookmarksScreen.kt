@@ -150,7 +150,7 @@ private fun UpcomingCard(
                 .clickable { onClick() }
         ) {
             Text(
-                text = timeLine.uppercase(),
+                text = timeLine,
                 color = grey50,
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier.padding(16.dp)
@@ -207,7 +207,7 @@ private fun FinishedCard(
                 .clickable { onClick() }
         ) {
             Text(
-                text = timeLine.uppercase(),
+                text = timeLine,
                 color = grey50,
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier.padding(16.dp)

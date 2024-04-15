@@ -49,7 +49,7 @@ fun VDivider(modifier: Modifier = Modifier) {
 fun LocationRow(location: String, modifier: Modifier = Modifier) {
     Row(modifier) {
         Text(
-            location.uppercase(),
+            location,
             style = MaterialTheme.typography.body2.copy(
                 color = grey50
             ),
