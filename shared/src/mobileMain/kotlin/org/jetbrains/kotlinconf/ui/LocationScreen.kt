@@ -1,8 +1,11 @@
 package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -13,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.layout.FixedScale
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.floor_1
 import kotlinconfapp.shared.generated.resources.floor_2
@@ -22,42 +27,46 @@ import org.jetbrains.kotlinconf.ui.components.Tab
 import org.jetbrains.kotlinconf.ui.components.TabBar
 import org.jetbrains.kotlinconf.ui.components.zoomable.rememberZoomableState
 import org.jetbrains.kotlinconf.ui.components.zoomable.zoomable
+import org.jetbrains.kotlinconf.ui.theme.mapColor
 
 @OptIn(ExperimentalResourceApi::class)
 enum class Floor(
     override val title: StringResource,
-    val resource: String,
-    val initialOffset: Offset,
-    val initialScale: Float,
+    val resourceLight: String,
+    val resourceDark: String,
 ) : Tab {
     FIRST(
         Res.string.floor_1,
-        "files/map-first.svg",
-        initialOffset = Offset(50f, 500f),
-        initialScale = 1f
+        "files/ground-floor.svg",
+        "files/ground-floor-dark.svg"
     ),
     SECOND(
-        Res.string.floor_2, "files/map-second.svg",
-        initialOffset = Offset(-25f, 700f),
-        initialScale = 0.9f,
+        Res.string.floor_2,
+        "files/first-floor.svg",
+        "files/first-floor-dark.svg",
     );
-
 }
+
+val Floor.resource: String
+    @Composable get() = if (isSystemInDarkTheme()) resourceDark else resourceLight
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun LocationScreen() {
     var floor: Floor by remember { mutableStateOf(Floor.FIRST) }
     var svg: Svg? by remember { mutableStateOf(null) }
+    val path = floor.resource
+    val state = rememberZoomableState()
 
-    LaunchedEffect(floor) {
-        svg = Svg(Res.readBytes(floor.resource))
+    LaunchedEffect(path) {
+        svg = Svg(Res.readBytes(path))
+        state.contentScale = FixedScale(2.7f)
     }
 
-    val state = rememberZoomableState()
     Box(
         Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colors.mapColor)
     ) {
         Canvas(
             Modifier
@@ -65,13 +74,14 @@ fun LocationScreen() {
                 .zoomable(state)
         ) {
             val currentSvg = svg ?: return@Canvas
-            val initialScale = minOf(
-                size.width / (currentSvg.width + 400),
-                size.height / (currentSvg.height + 400)
-            )
+            val scale = size.width / currentSvg.width
+            val imageHeight = currentSvg.height * scale
+            val offsetY = (size.height - imageHeight) / 2
 
-            scale(initialScale) {
-                currentSvg.renderTo(this)
+            translate(0f, offsetY) {
+                scale(scale, pivot = Offset.Zero) {
+                    currentSvg.renderTo(this)
+                }
             }
         }
         TabBar(

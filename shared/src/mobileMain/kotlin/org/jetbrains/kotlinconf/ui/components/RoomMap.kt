@@ -19,6 +19,7 @@ import kotlinconfapp.shared.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.Floor
 import org.jetbrains.kotlinconf.ui.Svg
+import org.jetbrains.kotlinconf.ui.resource
 
 enum class Room(val title: String, val floor: Floor, val offset: Offset, val scale: Float) {
     ROOM173("ROOM 173", Floor.FIRST, Offset(0f, 0f), 1f), ROOM176(
@@ -53,15 +54,12 @@ enum class Room(val title: String, val floor: Floor, val offset: Offset, val sca
 fun RoomMap(room: Room) {
     var svg: Svg? by remember { mutableStateOf(null) }
 
-    LaunchedEffect(room.floor.resource) {
-        svg = Svg(Res.readBytes(room.floor.resource))
+    val path = room.floor.resource
+    LaunchedEffect(path) {
+        svg = Svg(Res.readBytes(path))
     }
 
     Canvas(Modifier.padding(8.dp).fillMaxWidth().height(288.dp)) {
-        scale(room.scale) {
-            translate(room.offset.x, room.offset.y) {
-                svg?.renderTo(this)
-            }
-        }
+        svg?.renderTo(this)
     }
 }
