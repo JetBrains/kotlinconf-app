@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
@@ -43,7 +42,6 @@ fun AgendaItem(
     isFinished: Boolean,
     isLightning: Boolean,
     isCodeLab: Boolean,
-    isAWS: Boolean,
     vote: Score?,
     onSessionClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
@@ -96,7 +94,7 @@ fun AgendaItem(
         ) {
             if (!isFinished) {
                 Text(
-                    locationLine.uppercase(),
+                    locationLine,
                     style = MaterialTheme.typography.body2.copy(
                         color = grey50
                     ),
@@ -108,8 +106,6 @@ fun AgendaItem(
                 LightningTalk(timeLine, dimmed = isFinished)
             } else if (isCodeLab) {
                 CodeLab(dimmed = isFinished)
-            } else if (isAWS) {
-                AWSLab(dimmed = isFinished)
             }
         }
 

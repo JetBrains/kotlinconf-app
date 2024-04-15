@@ -171,7 +171,6 @@ private fun LazyListScope.SessionsList(
                 session.isFinished,
                 session.isLightning,
                 session.isCodeLab,
-                session.isAWSLab,
                 session.vote,
                 onSessionClick = {
                     controller.showSession(session.id)
@@ -181,10 +180,10 @@ private fun LazyListScope.SessionsList(
                 },
                 onVote = {
                     controller.vote(session.id, it)
-                },
-                onFeedback = {
-                    controller.sendFeedback(session.id, it)
-                })
+                }
+            ) {
+                controller.sendFeedback(session.id, it)
+            }
         }
     }
 }
