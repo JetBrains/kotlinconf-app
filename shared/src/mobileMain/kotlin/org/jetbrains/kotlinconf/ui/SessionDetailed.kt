@@ -1,18 +1,44 @@
 package org.jetbrains.kotlinconf.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.layout.*
-import androidx.compose.ui.unit.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.rememberBottomSheetScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.bookmark
 import kotlinconfapp.shared.generated.resources.bookmark_active
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
+import org.jetbrains.kotlinconf.Score
+import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
 import org.jetbrains.kotlinconf.ui.components.Room
@@ -42,42 +68,43 @@ fun SessionScreen(
     tags: List<String>,
     controller: AppController
 ) {
-    var showFeedbackBlock by remember { mutableStateOf(false) }
+    var showBottomSheet by remember { mutableStateOf(true) }
 
     val session = @Composable {
-        SessionContent(
-            time = time,
+        SessionContent(time = time,
             title = title,
             description = description,
             location = location,
             isFavorite = isFavorite,
             speakers = speakers,
             tags = tags,
+            isFinished = isFinished,
             onFavoriteClick = { controller.toggleFavorite(id) },
-            onSpeakerClick = { speakerId -> controller.showSpeaker(speakerId) }
-        ) { controller.back() }
+            onSpeakerClick = { speakerId -> controller.showSpeaker(speakerId) }) { controller.back() }
     }
 
-    if (isFinished) {
+    if (isFinished && showBottomSheet) {
+        val scaffoldState = rememberBottomSheetScaffoldState()
+        val context = rememberCoroutineScope()
+
         BottomSheetScaffold(
+            scaffoldState = scaffoldState,
             sheetContent = {
                 Column {
                     Spacer(Modifier.height(4.dp))
                     SheetBar()
-                    VoteAndFeedback(
-                        vote = vote,
-                        showFeedbackBlock = showFeedbackBlock,
-                        onVote = {
-                            controller.vote(id, it)
-                            showFeedbackBlock = true
-                        },
-                        onSubmitFeedback = {
-                            controller.sendFeedback(id, it)
-                            showFeedbackBlock = false
-                        }, onCloseFeedback = {
-                            showFeedbackBlock = false
+                    VoteAndFeedback(vote = vote, showFeedbackBlock = true, onVote = {
+                        controller.vote(id, it)
+
+                        context.launch {
+                            scaffoldState.bottomSheetState.expand()
                         }
-                    )
+                    }, onSubmitFeedback = {
+                        controller.sendFeedback(id, it)
+                        showBottomSheet = false
+                    }, onCloseFeedback = {
+                        showBottomSheet = false
+                    })
 
                     Spacer(Modifier.height(4.dp))
                 }
@@ -102,6 +129,7 @@ private fun SessionContent(
     isFavorite: Boolean,
     speakers: List<Speaker>,
     tags: List<String>,
+    isFinished: Boolean,
     onFavoriteClick: () -> Unit,
     onSpeakerClick: (String) -> Unit,
     onBackClick: () -> Unit
@@ -114,14 +142,11 @@ private fun SessionContent(
             isRightVisible = false,
         )
         Column(
-            Modifier
-                .verticalScroll(rememberScrollState())
-                .fillMaxWidth()
-                .fillMaxHeight()
+            Modifier.verticalScroll(rememberScrollState()).fillMaxWidth().fillMaxHeight()
                 .background(MaterialTheme.colors.whiteGrey)
         ) {
             SessionHead(time, title, isFavorite, onFavoriteClick, onSpeakerClick, speakers)
-            SessionDetails(description, location, tags)
+            SessionDetails(description, location, tags, isFinished)
         }
     }
 }
@@ -136,9 +161,7 @@ private fun SessionHead(
     speakers: List<Speaker>
 ) {
     Column(
-        Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.grey5Black)
+        Modifier.fillMaxWidth().background(MaterialTheme.colors.grey5Black)
     ) {
         Column(Modifier.padding(start = 16.dp, end = 16.dp)) {
             Row {
@@ -154,16 +177,14 @@ private fun SessionHead(
                 FavoriteButton(isFavorite, favoriteClick)
             }
             Text(
-                title,
-                style = MaterialTheme.typography.h2.copy(
+                title, style = MaterialTheme.typography.h2.copy(
                     color = MaterialTheme.colors.greyWhite
                 )
             )
 
             speakers.forEach {
                 Text(
-                    it.name,
-                    style = MaterialTheme.typography.body2.copy(
+                    it.name, style = MaterialTheme.typography.body2.copy(
                         color = MaterialTheme.colors.greyGrey20
                     )
                 )
@@ -189,13 +210,14 @@ private fun FavoriteButton(isFavorite: Boolean, favoriteClick: () -> Unit) {
 
 @Composable
 private fun SpeakerPhotos(speakers: List<Speaker>, speakerClick: (String) -> Unit) {
-    Row(Modifier.padding(top = 24.dp, bottom = 0.dp, start = 16.dp, end = 16.dp)) {
+    Row(
+        Modifier.padding(top = 24.dp, bottom = 0.dp, start = 16.dp, end = 16.dp)
+            .horizontalScroll(rememberScrollState())
+    ) {
         speakers.forEach { speaker ->
             AsyncImage(
-                modifier = Modifier
-                    .size(if (speakers.size < 3) 120.dp else 78.dp)
-                    .padding(end = 8.dp)
-                    .clickable { speakerClick(speaker.id) },
+                modifier = Modifier.size(if (speakers.size < 3) 120.dp else 78.dp)
+                    .padding(end = 8.dp).clickable { speakerClick(speaker.id) },
                 imageUrl = speaker.photoUrl,
                 contentDescription = speaker.name,
                 contentScale = ContentScale.Crop,
@@ -207,15 +229,11 @@ private fun SpeakerPhotos(speakers: List<Speaker>, speakerClick: (String) -> Uni
 @OptIn(ExperimentalLayoutApi::class, ExperimentalResourceApi::class)
 @Composable
 private fun SessionDetails(
-    description: String,
-    location: String,
-    tags: List<String>
+    description: String, location: String, tags: List<String>, isFinished: Boolean
 ) {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
         FlowRow(
-            Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
+            Modifier.padding(16.dp).fillMaxWidth()
         ) {
             tags.forEach {
                 Tag(null, it, modifier = Modifier.padding(end = 4.dp))
@@ -224,8 +242,7 @@ private fun SessionDetails(
 
         Column(Modifier.padding(16.dp)) {
             Text(
-                description,
-                style = MaterialTheme.typography.body2.copy(
+                description, style = MaterialTheme.typography.body2.copy(
                     color = MaterialTheme.colors.greyGrey20
                 )
             )
@@ -233,6 +250,9 @@ private fun SessionDetails(
             val room = Room.forName(location)
             if (room != null) {
                 RoomMap(room)
+            }
+            if (isFinished) {
+                Spacer(Modifier.height(100.dp))
             }
         }
     }

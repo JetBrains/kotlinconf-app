@@ -35,12 +35,12 @@ enum class Floor(
     val resourceLight: String,
     val resourceDark: String,
 ) : Tab {
-    FIRST(
+    GROUND(
         Res.string.floor_1,
         "files/ground-floor.svg",
         "files/ground-floor-dark.svg"
     ),
-    SECOND(
+    FIRST(
         Res.string.floor_2,
         "files/first-floor.svg",
         "files/first-floor-dark.svg",
@@ -53,7 +53,7 @@ val Floor.resource: String
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun LocationScreen() {
-    var floor: Floor by remember { mutableStateOf(Floor.FIRST) }
+    var floor: Floor by remember { mutableStateOf(Floor.GROUND) }
     var svg: Svg? by remember { mutableStateOf(null) }
     val path = floor.resource
     val state = rememberZoomableState()
