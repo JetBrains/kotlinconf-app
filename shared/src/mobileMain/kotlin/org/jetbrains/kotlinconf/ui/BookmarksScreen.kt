@@ -246,7 +246,7 @@ private fun FinishedCard(
                 onBookmarkClick()
             }) {
                 Icon(
-                    painter = Res.drawable.bookmark.painter(),
+                    painter = Res.drawable.bookmark_active.painter(),
                     contentDescription = "bookmark",
                     tint = orange
                 )
