@@ -79,6 +79,9 @@ val Colors.blackWhite: Color
 val Colors.tagColor: Color
     get() = if (isLight) tagGrey else tagDarkGrey
 
+val Colors.mapColor: Color
+    get() = if (isLight) grey5 else black
+
 private val LightColorPalette = lightColors(
     primary = grey,
     primaryVariant = grey,
