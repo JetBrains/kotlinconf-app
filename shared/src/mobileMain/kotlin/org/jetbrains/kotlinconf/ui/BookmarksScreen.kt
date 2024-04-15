@@ -234,7 +234,6 @@ private fun FinishedCard(
                 },
                 showFeedbackBlock = isFeedbackOpen,
                 onSubmitFeedback = {
-                    isFeedbackOpen = false
                     onFeedback(it)
                 },
                 onCloseFeedback = {
