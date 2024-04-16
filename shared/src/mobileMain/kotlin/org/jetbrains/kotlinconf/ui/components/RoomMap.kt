@@ -33,7 +33,8 @@ enum class Room(val title: String, val floor: Floor, val x: Float, val y: Float)
     AUDITORIUM15("AUDITORIUM 15", Floor.FIRST, 550f, 750f),
     AUDITORIUM12("AUDITORIUM 12", Floor.FIRST, 550f, 750f),
     AUDITORIUM11("AUDITORIUM 11", Floor.FIRST, 550f, 750f),
-    AUDITORIUM10("AUDITORIUM 10 (LIGHTNING TALKS)", Floor.FIRST, 550f, 550f);
+    AUDITORIUM10("AUDITORIUM 10 (LIGHTNING TALKS)", Floor.FIRST, 550f, 550f),
+    EXHIBITION("EXHIBITION", Floor.GROUND, 1050f, 750f);
 
     companion object {
         fun forName(location: String): Room? {

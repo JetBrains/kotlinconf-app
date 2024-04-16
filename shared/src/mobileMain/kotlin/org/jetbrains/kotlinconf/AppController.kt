@@ -153,9 +153,9 @@ class AppController(
         }
     }
 
-    fun showPartner(name: String) {
+    fun showPartner(partner: Partner) {
         push {
-            Partner(it, name, service.partnerDescription(name))
+            Partner(it, partner)
         }
     }
 

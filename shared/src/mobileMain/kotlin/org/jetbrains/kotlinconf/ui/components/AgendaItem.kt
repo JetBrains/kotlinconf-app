@@ -41,7 +41,6 @@ fun AgendaItem(
     isFavorite: Boolean,
     isFinished: Boolean,
     isLightning: Boolean,
-    isCodeLab: Boolean,
     vote: Score?,
     onSessionClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
@@ -104,8 +103,6 @@ fun AgendaItem(
             }
             if (isLightning) {
                 LightningTalk(timeLine, dimmed = isFinished)
-            } else if (isCodeLab) {
-                CodeLab(dimmed = isFinished)
             }
         }
 

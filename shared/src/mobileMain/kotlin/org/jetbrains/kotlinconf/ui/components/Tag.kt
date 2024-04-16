@@ -14,16 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.aws_lab
-import kotlinconfapp.shared.generated.resources.light
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.kotlinconf.ui.theme.grey5Black
+import org.jetbrains.kotlinconf.ui.painter
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.orange
-import org.jetbrains.kotlinconf.ui.theme.violet
-import org.jetbrains.kotlinconf.ui.painter
 import org.jetbrains.kotlinconf.ui.theme.tagColor
 
 @OptIn(ExperimentalResourceApi::class)
@@ -69,14 +64,3 @@ fun LightningTalk(title: String, dimmed: Boolean = false) {
     Tag(null, title, dimmed)
 }
 
-@OptIn(ExperimentalResourceApi::class)
-@Composable
-fun CodeLab(dimmed: Boolean = false) {
-    Tag(Res.drawable.aws_lab, "Big Nerd Ranch lab", dimmed, violet)
-}
-
-@OptIn(ExperimentalResourceApi::class)
-@Composable
-fun AWSLab(dimmed: Boolean = false) {
-    Tag(Res.drawable.aws_lab, "AWS lab", dimmed, violet)
-}
