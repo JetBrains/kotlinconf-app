@@ -77,10 +77,6 @@ internal class Store(application: Application) {
         return@newSuspendedTransaction true
     }
 
-    suspend fun usersCount(): Long = newSuspendedTransaction(Dispatchers.IO) {
-        Users.selectAll().count()
-    }
-
     suspend fun getVotes(uuid: String): List<VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
         Votes.selectAll().where { Votes.userId eq uuid }
             .map { VoteInfo(it[sessionId], Score.fromValue(it[Votes.rating])) }
@@ -142,16 +138,6 @@ internal class Store(application: Application) {
         newSuspendedTransaction(Dispatchers.IO) {
             Votes.deleteWhere { (userId eq uuid) and (Votes.sessionId eq sessionId) }
         }
-    }
-
-    suspend fun getVotesSummary(): Map<String, VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
-        val result: List<String> = Votes.select(sessionId, Votes.rating, Votes.rating.count())
-            .groupBy(sessionId, Votes.rating)
-            .map {
-                it[sessionId]
-            }
-
-        TODO()
     }
 
     suspend fun getFeedbackSummary(): List<FeedbackInfo> = newSuspendedTransaction {

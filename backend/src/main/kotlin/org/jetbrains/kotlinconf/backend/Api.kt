@@ -83,11 +83,6 @@ private fun Routing.apiVote(
             val votes = database.getAllVotes()
             call.respond(votes)
         }
-        get("summary") {
-            call.validateSecret(adminSecret)
-            val votesSummary = database.getVotesSummary()
-            call.respond(votesSummary)
-        }
     }
     route("feedback") {
         post {
