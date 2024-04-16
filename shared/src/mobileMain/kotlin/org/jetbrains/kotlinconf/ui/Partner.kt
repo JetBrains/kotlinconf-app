@@ -17,16 +17,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.ui.theme.grey5Black
 import org.jetbrains.kotlinconf.ui.theme.greyGrey20
 import org.jetbrains.kotlinconf.ui.theme.greyGrey5
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
+import org.jetbrains.kotlinconf.ui.components.Room
+import org.jetbrains.kotlinconf.ui.components.RoomMap
+import org.jetbrains.kotlinconf.ui.theme.greyWhite
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun Partner(controller: AppController, name: String, description: String) {
+fun Partner(controller: AppController, partner: Partner) {
     Column {
         NavigationBar(
             title = "",
@@ -41,24 +46,25 @@ fun Partner(controller: AppController, name: String, description: String) {
                 .verticalScroll(rememberScrollState())
                 .fillMaxWidth()
         ) {
-            AboutConfTopBanner(name)
+            AboutConfTopBanner(partner)
+            HDivider()
 
             Column(Modifier.padding(16.dp)) {
                 Text(
-                    name, style = MaterialTheme.typography.body2.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colors.greyGrey5
+                    stringResource(partner.title), style = MaterialTheme.typography.h2.copy(
+                        color = MaterialTheme.colors.greyWhite
                     )
                 )
                 Text(
-                    description,
+                    stringResource(partner.description),
                     style = MaterialTheme.typography.body2.copy(
                         color = MaterialTheme.colors.greyGrey20
                     ),
                     modifier = Modifier.padding(top = 24.dp)
                 )
 
-                LocationRow(location = "Exhibition", Modifier.padding(top = 24.dp))
+                LocationRow(location = "Exhibition", Modifier.padding(top = 24.dp, bottom = 8.dp))
+                RoomMap(Room.EXHIBITION)
             }
         }
     }
@@ -66,7 +72,7 @@ fun Partner(controller: AppController, name: String, description: String) {
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-private fun AboutConfTopBanner(name: String) {
+private fun AboutConfTopBanner(partner: Partner) {
     Box(
         modifier = Modifier
             .background(MaterialTheme.colors.grey5Black)
@@ -74,7 +80,7 @@ private fun AboutConfTopBanner(name: String) {
             .height(176.dp)
     ) {
         Image(
-            painter = LogoForName(name).painter(),
+            painter = partner.logo.painter(),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.Center)

@@ -170,7 +170,6 @@ private fun LazyListScope.SessionsList(
                 session.isFavorite,
                 session.isFinished,
                 session.isLightning,
-                session.isCodeLab,
                 session.vote,
                 onSessionClick = {
                     controller.showSession(session.id)

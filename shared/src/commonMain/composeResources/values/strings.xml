@@ -57,4 +57,42 @@ Bella Center Copenhagen, Denmark</string>
     <string name="floor_1">1st floor</string>
     <string name="floor_2">2nd floor</string>
     <string name="talks">Talks</string>
+    <string name="partner_google">Google</string>
+    <string name="partner_google_description"></string>
+    <string name="partner_monta">Monta</string>
+    <string name="partner_monta_description">At Monta, we engineer the future of EV charging and tackle industry complexities with a reliable product suite. We connect the EV ecosystem with seamless experiences for a cleaner, healthier planet.</string>
+    <string name="partner_gradle">Gradle</string>
+    <string name="partner_gradle_description">Develocity is the leading software solution for improving developer productivity and the developer experience. It does this by leveraging advanced build and test performance acceleration technologies.</string>
+    <string name="partner_sentry">Sentry</string>
+    <string name="partner_sentry_description">From Error tracking to Performance monitoring, Sentry enables developers to see clearer, solve quicker, and learn continuously about their applications — from frontend to backend.</string>
+    <string name="partner_touchlab">Touchlab</string>
+    <string name="partner_touchlab_description">From startups to multinationals with tens of millions of MAU, Touchlab’s services accelerate and de-risk implementing KMP in production. They also build crucial open-source tools that are widely used.</string>
+    <string name="partner_cloud_inject">Cloud-Inject</string>
+    <string name="partner_cloud_inject_description">Cloud-Inject, a new platform developed by the creators of Koin, offers Android Application Architecture Observability for Koin users to manage technical debt, resolve complexity and keep apps scalable.</string>
+    <string name="partner_uber">Uber</string>
+    <string name="partner_uber_description"></string>
+    <string name="partner_kodein">KodeinKoders</string>
+    <string name="partner_kodein_description">Empowering Innovation with Kotlin everywhere: Kodein Koders delivers expert training and guidance,
+unlocking the full potential of Kotlin Multiplatform for Android, iOS, Desktop, and Web.</string>
+    <string name="partner_mercari">Mercari</string>
+    <string name="partner_mercari_description">Mercari is a C2C marketplace with more than 20 million users buying and selling items on a monthly basis.
+Mercari also offers mobile payment services via Merpay, and cryptoasset services via Mercoin.</string>
+    <string name="partner_worldline">Worldline</string>
+    <string name="partner_worldline_description">Company description: Worldline is a global payments technology company, with a tech community of over 7000 engineers. Our technology powers the growth of millions of businesses around the world; from your local coffee shop, to global e-commerce players and international banks.</string>
+    <string name="partner_express">American Express</string>
+    <string name="partner_express_description">American Express creates digital products and services that enhance the lives of our customers. Technology drives everything we do, and our diverse global work force is critical to our success.</string>
+    <string name="partner_android">Android</string>
+    <string name="partner_android_description"></string>
+    <string name="partner_pretix">Pretix</string>
+    <string name="partner_pretix_description">Our all-in-one ticketing software manages your entire ticket sales process. With a wide range of multilingual features and strong data security, Pretix is ideal for different types of events.</string>
+    <string name="partner_sticker_mule">Sticker Mule</string>
+    <string name="partner_sticker_mule_description">Sticker Mule is the easiest way to buy custom products online. Order in 60 seconds and we'll turn your designs into custom stickers, magnets, buttons, and much more. Free worldwide shipping!</string>
+    <string name="partner_kt_weekly">Kotlin Weekly</string>
+    <string name="partner_kt_weekly_description"></string>
+    <string name="partner_academy">Kt Academy</string>
+    <string name="partner_academy_description">Kt. Academy led by Marcin Moskala, books author, speaker, and official JetBrains training partner; offers the highest quality Kotlin education at various advancement levels.</string>
+    <string name="partner_shape">Shape</string>
+    <string name="partner_shape_description">Shape is Denmark’s leading mobile app agency, specialising in native mobile apps with an emphasis on product experience and technical proficiency, delivering impactful solutions for ambitious brands.</string>
+    <string name="partner_foundation">Kotlin Foundation</string>
+    <string name="partner_foundation_description">The Kotlin Foundation is a non-profit company whose mission is to promote and advance the Kotlin ecosystem.</string>
 </resources>
