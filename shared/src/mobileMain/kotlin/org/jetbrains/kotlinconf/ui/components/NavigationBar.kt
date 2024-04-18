@@ -1,12 +1,10 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -21,11 +19,10 @@ import kotlinconfapp.shared.generated.resources.back
 import kotlinconfapp.shared.generated.resources.menu
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.kotlinconf.ui.painter
 import org.jetbrains.kotlinconf.ui.theme.divider
-import org.jetbrains.kotlinconf.ui.theme.grey50
 import org.jetbrains.kotlinconf.ui.theme.greyGrey5
+import org.jetbrains.kotlinconf.ui.theme.text3
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 
 @OptIn(ExperimentalResourceApi::class)
@@ -41,39 +38,35 @@ fun NavigationBar(
     Column(
         Modifier.fillMaxWidth()
     ) {
-        Row(
-            Modifier
-                .height(48.dp)
-                .background(MaterialTheme.colors.whiteGrey)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+        Box(
+            Modifier.height(48.dp).background(MaterialTheme.colors.whiteGrey).fillMaxWidth(),
         ) {
             if (isLeftVisible) {
-                IconButton(onClick = onLeftClick) {
-                    Icon(
-                        painter = Res.drawable.back.painter(),
-                        "Back",
-                        tint = MaterialTheme.colors.greyGrey5
-                    )
+                Box(contentAlignment = Alignment.CenterStart, modifier = Modifier.fillMaxWidth()) {
+                    IconButton(onClick = onLeftClick) {
+                        Icon(
+                            painter = Res.drawable.back.painter(),
+                            "Back",
+                            tint = MaterialTheme.colors.greyGrey5
+                        )
+                    }
                 }
-            } else {
-                Spacer(Modifier.width(36.dp))
             }
 
-            Spacer(Modifier.weight(1f))
-
-            Text(
-                text = title,
-                style = MaterialTheme.typography.h4,
-                color = grey50
-            )
-
-            Spacer(Modifier.weight(1f))
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth().height(48.dp)) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.h4,
+                    color = MaterialTheme.colors.text3
+                )
+            }
 
             if (isRightVisible) {
-                RightButton(rightIcon, onRightClick = onRightClick)
-            } else {
-                Spacer(Modifier.width(36.dp))
+                Box(
+                    contentAlignment = Alignment.CenterEnd, modifier = Modifier.fillMaxWidth()
+                ) {
+                    RightButton(rightIcon, onRightClick = onRightClick)
+                }
             }
         }
         Divider(color = MaterialTheme.colors.divider)
@@ -85,9 +78,7 @@ fun NavigationBar(
 fun RightButton(rightIcon: DrawableResource = Res.drawable.menu, onRightClick: () -> Unit) {
     IconButton(onClick = onRightClick) {
         Icon(
-            painter = rightIcon.painter(),
-            "Right",
-            tint = MaterialTheme.colors.greyGrey5
+            painter = rightIcon.painter(), "Right", tint = MaterialTheme.colors.greyGrey5
         )
     }
 }

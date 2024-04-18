@@ -17,5 +17,8 @@ val white = Color(0xFFFFFFFF)
 val grey15 = Color(0xFFDCDCDC)
 val greySelected = Color(0xFF333333)
 
+val text3Light = Color(0xFF4D4D4D)
+val text3Dark = Color(0xFF8C8C8E)
+
 val tagGrey = Color(0x33A4A4A4)
 val tagDarkGrey = Color(0x303033)

@@ -20,12 +20,10 @@ import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.HDivider
+import org.jetbrains.kotlinconf.ui.painter
 import org.jetbrains.kotlinconf.ui.theme.DEFAULT_TRANSITION
 import org.jetbrains.kotlinconf.ui.theme.blackWhite
 import org.jetbrains.kotlinconf.ui.theme.grey50
-import org.jetbrains.kotlinconf.ui.theme.grey5Grey
-import org.jetbrains.kotlinconf.ui.theme.whiteBlack
-import org.jetbrains.kotlinconf.ui.painter
 import org.jetbrains.kotlinconf.ui.theme.grey5Black
 import org.jetbrains.kotlinconf.ui.theme.menuSelected
 
@@ -76,12 +74,12 @@ internal fun RowScope.BottomButton(
     tab: TabItem,
     isSelected: Boolean
 ) {
-    val background =
-        if (isSelected) {
-            MaterialTheme.colors.menuSelected
-        } else {
-            MaterialTheme.colors.grey5Black
-        }
+    val background = if (isSelected) {
+        MaterialTheme.colors.menuSelected
+    } else {
+        MaterialTheme.colors.grey5Black
+    }
+
     BottomNavigationItem(
         modifier = Modifier.background(background).padding(bottom = 18.dp),
         selected = isSelected,

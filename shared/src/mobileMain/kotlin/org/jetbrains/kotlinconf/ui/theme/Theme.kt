@@ -31,23 +31,14 @@ val Colors.divider: Color
 val Colors.whiteGrey: Color
     get() = if (isLight) white else grey
 
-val Colors.whiteBlack: Color
-    get() = if (isLight) white else black
-
 val Colors.greyWhite: Color
     get() = if (isLight) grey else white
 
 val Colors.grey5Black: Color
     get() = if (isLight) grey5 else black
 
-val Colors.grey5Grey: Color
-    get() = if (isLight) grey5 else grey
-
 val Colors.menuSelected: Color
     get() = if (isLight) grey15 else greySelected
-
-val Colors.grey5Grey90: Color
-    get() = if (isLight) grey5 else grey90
 
 val Colors.grey50Grey20: Color
     get() = if (isLight) grey50 else grey20
@@ -81,6 +72,9 @@ val Colors.tagColor: Color
 
 val Colors.mapColor: Color
     get() = if (isLight) grey5 else black
+
+val Colors.text3: Color
+    get() = if (isLight) text3Light else text3Dark
 
 private val LightColorPalette = lightColors(
     primary = grey,
