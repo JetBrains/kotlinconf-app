@@ -76,7 +76,7 @@ fun MainScreen(service: ConferenceService) {
                         .map {
                             val startsIn = ((it.startsAt.timestamp - time.timestamp) / 1000 / 60).toInt()
                             when {
-                                startsIn in 1..15 -> it.copy(timeLine = "IN $startsIn MIN!")
+                                startsIn in 1..15 -> it.copy(timeLine = "In $startsIn min!")
                                 startsIn <= 0 && !it.isFinished -> it.copy(timeLine = "NOW")
                                 else -> it
                             }
