@@ -3,8 +3,6 @@ package org.jetbrains.kotlinconf.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,8 +37,8 @@ fun LocationRow(location: String, modifier: Modifier = Modifier) {
     Row(modifier) {
         Text(
             location,
-            style = MaterialTheme.typography.h4.copy(
-                color = MaterialTheme.colors.greyWhite
+            style = MaterialTheme.typography.body2.copy(
+                color = grey50
             ),
         )
     }

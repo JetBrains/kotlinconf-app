@@ -2,7 +2,6 @@ package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -11,9 +10,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -23,30 +22,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.about_conf_bottom_banner
 import kotlinconfapp.shared.generated.resources.about_conf_description
-import kotlinconfapp.shared.generated.resources.about_conf_footer
 import kotlinconfapp.shared.generated.resources.about_conf_schedule
 import kotlinconfapp.shared.generated.resources.about_conference
+import kotlinconfapp.shared.generated.resources.arrow_right
 import kotlinconfapp.shared.generated.resources.by_jetbrains
 import kotlinconfapp.shared.generated.resources.closing_description
 import kotlinconfapp.shared.generated.resources.closing_time
 import kotlinconfapp.shared.generated.resources.closing_title
-import kotlinconfapp.shared.generated.resources.for_visitors
-import kotlinconfapp.shared.generated.resources.general_terms
+import kotlinconfapp.shared.generated.resources.code_labs_description
+import kotlinconfapp.shared.generated.resources.code_labs_time
+import kotlinconfapp.shared.generated.resources.code_labs_title
 import kotlinconfapp.shared.generated.resources.hashtag
 import kotlinconfapp.shared.generated.resources.keynote_start_time
 import kotlinconfapp.shared.generated.resources.keynote_title
-import kotlinconfapp.shared.generated.resources.light
-import kotlinconfapp.shared.generated.resources.lightning_talks_description
-import kotlinconfapp.shared.generated.resources.lightning_talks_title
 import kotlinconfapp.shared.generated.resources.party_description
 import kotlinconfapp.shared.generated.resources.party_time
 import kotlinconfapp.shared.generated.resources.party_title
@@ -62,9 +55,9 @@ import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.ui.components.AboutConfSubtitle
 import org.jetbrains.kotlinconf.ui.components.AboutConfTopBanner
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
+import org.jetbrains.kotlinconf.ui.components.MenuItem
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
 import org.jetbrains.kotlinconf.ui.theme.bannerText
-import org.jetbrains.kotlinconf.ui.theme.blackGrey5
 import org.jetbrains.kotlinconf.ui.theme.blackWhite
 import org.jetbrains.kotlinconf.ui.theme.grey50
 import org.jetbrains.kotlinconf.ui.theme.grey5Black
@@ -83,11 +76,10 @@ fun AboutConfScreen(
 ) {
     val sessionCards by service.sessionCards.collectAsState()
     val speakers by service.speakers.collectAsState()
-    val keynoteSpeakers = sessionCards
-        .firstOrNull { it.title == stringResource(Res.string.keynote_title) }
-        ?.speakerIds
-        ?.map { service.speakerById(it) }
-        ?: emptyList()
+    val keynoteSpeakers =
+        sessionCards.firstOrNull { it.title == stringResource(Res.string.keynote_title) }?.speakerIds?.map {
+            service.speakerById(it)
+        } ?: emptyList()
 
     val secondDaySpeaker = speakers.all.filter {
         it.name == stringResource(Res.string.second_day_keynote_speaker)
@@ -97,9 +89,7 @@ fun AboutConfScreen(
     val timeString =
         "${time.month.name} ${time.dayOfMonth} ${time.hours}:${time.minutes}:${time.seconds}"
     Column(
-        Modifier
-            .background(MaterialTheme.colors.grey5Black)
-            .fillMaxWidth()
+        Modifier.background(MaterialTheme.colors.grey5Black).fillMaxWidth()
     ) {
         NavigationBar(
             title = stringResource(Res.string.about_conference),
@@ -108,18 +98,15 @@ fun AboutConfScreen(
             isRightVisible = false
         )
         Column(
-            Modifier.fillMaxWidth()
-                .verticalScroll(rememberScrollState())
+            Modifier.fillMaxWidth().verticalScroll(rememberScrollState())
         ) {
             AboutConfTopBanner()
             AboutConfSchedule()
-            HDivider()
             AboutConfDescription()
-            HDivider()
             AboutConfKeynoteSection(keynoteSpeakers)
             AboutConfSecondKeynote(secondDaySpeaker)
             HDivider()
-            LightningTalks()
+            CodeLabs()
             Party()
             ClosingPanel()
             AboutConferenceFooter(timeString, showVisitorsPrivacyPolicy, showVisitorsTerms)
@@ -132,7 +119,7 @@ fun AboutConfScreen(
 fun AboutConfSchedule() {
     Text(
         stringResource(Res.string.about_conf_schedule),
-        style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.blackGrey5),
+        style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 24.dp)
     )
 }
@@ -140,7 +127,7 @@ fun AboutConfSchedule() {
 @OptIn(ExperimentalLayoutApi::class, ExperimentalResourceApi::class)
 @Composable
 private fun AboutConfDescription() {
-    Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
+    Column {
         Text(
             stringResource(Res.string.about_conf_description),
             style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
@@ -148,8 +135,7 @@ private fun AboutConfDescription() {
         )
 
         FlowRow(
-            modifier = Modifier
-                .padding(top = 10.dp, start = 16.dp, end = 16.dp, bottom = 24.dp)
+            modifier = Modifier.padding(top = 10.dp, start = 16.dp, end = 16.dp, bottom = 24.dp)
         ) {
             Text(
                 stringResource(Res.string.social_media_hashtag_text),
@@ -170,55 +156,40 @@ private fun AboutConfDescription() {
 @Composable
 private fun AboutConfKeynoteSection(keynoteSpeakers: List<Speaker>) {
     AboutConfSubtitle(
-        stringResource(Res.string.keynote_start_time),
-        stringResource(Res.string.keynote_title)
+        stringResource(Res.string.keynote_start_time), stringResource(Res.string.keynote_title)
     )
     HDivider()
-    val rows = keynoteSpeakers.size / 2
-
-    repeat(rows) {
-        Row(Modifier.background(MaterialTheme.colors.whiteGrey)) {
-            Column(Modifier.fillMaxWidth(0.5f)) {
-                val speaker = keynoteSpeakers[it * 2]
-                KeynoteSectionSpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
-            }
-            Column(Modifier.fillMaxWidth()) {
-                val speaker = keynoteSpeakers[it * 2 + 1]
-                KeynoteSectionSpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
-            }
-        }
+    for (speaker in keynoteSpeakers) {
+        KeynoteSectionSpeakerCard(speaker.name, speaker.photoUrl, speaker.position)
         HDivider()
     }
 }
 
 @Composable
 private fun KeynoteSectionSpeakerCard(name: String, photoUrl: String, position: String) {
-    Column(
-        Modifier.background(MaterialTheme.colors.whiteGrey)
+    Row(
+        Modifier.background(MaterialTheme.colors.whiteGrey).fillMaxWidth()
     ) {
         AsyncImage(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 0.dp, end = 0.dp),
+            modifier = Modifier.size(84.dp).padding(start = 0.dp, end = 0.dp),
             imageUrl = photoUrl,
             contentDescription = "",
             contentScale = ContentScale.FillWidth,
         )
 
-        Text(
-            name,
-            style = MaterialTheme.typography.h4.copy(
-                color = MaterialTheme.colors.greyWhite,
-                fontWeight = FontWeight.Bold
-            ),
-            modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 8.dp)
-        )
+        Column {
+            Text(
+                name, style = MaterialTheme.typography.h4.copy(
+                    color = MaterialTheme.colors.greyWhite, fontWeight = FontWeight.Bold
+                ), modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 8.dp)
+            )
 
-        Text(
-            position,
-            style = MaterialTheme.typography.body2.copy(color = grey50),
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 24.dp)
-        )
+            Text(
+                position,
+                style = MaterialTheme.typography.body2.copy(color = grey50),
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 24.dp)
+            )
+        }
     }
 }
 
@@ -233,84 +204,58 @@ private fun AboutConfSecondKeynote(secondDaySpeakers: List<Speaker>) {
 
     if (secondDaySpeakers.isEmpty()) return
     val speaker = secondDaySpeakers.first()
-    Row(
-        Modifier.background(MaterialTheme.colors.whiteGrey)
+    Column(
+        Modifier.background(MaterialTheme.colors.whiteGrey).fillMaxWidth()
     ) {
         AsyncImage(
-            modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .padding(start = 0.dp, end = 0.dp),
+            modifier = Modifier.size(160.dp).padding(16.dp),
             imageUrl = speaker.photoUrl,
             contentDescription = "",
             contentScale = ContentScale.FillWidth
         )
 
+        Text(
+            speaker.name, style = MaterialTheme.typography.h4.copy(
+                color = MaterialTheme.colors.greyWhite, fontWeight = FontWeight.Bold
+            ), modifier = Modifier.padding(horizontal = 16.dp)
+        )
 
-        Column(
-            Modifier.fillMaxWidth()
-        ) {
-            Text(
-                speaker.name,
-                style = MaterialTheme.typography.h4.copy(
-                    color = MaterialTheme.colors.greyWhite,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 8.dp)
-            )
-
-            Text(
-                speaker.position,
-                style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 24.dp)
-            )
-        }
+        Text(
+            speaker.position,
+            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
     }
 }
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-private fun LightningTalks() {
-    Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
-        HDivider(Modifier.padding(top = 48.dp))
-        Row(Modifier.padding(16.dp)) {
-            Icon(
-                painter = Res.drawable.light.painter(),
-                contentDescription = null,
-                tint = orange,
-                modifier = Modifier.padding(end = 8.dp)
-            )
-
-            Text(
-                stringResource(Res.string.lightning_talks_title),
-                style = MaterialTheme.typography.body2.copy(
-                    color = MaterialTheme.colors.greyWhite,
-                    fontWeight = FontWeight.Bold
-                )
-            )
-        }
-
+private fun CodeLabs() {
+     AboutConfSubtitle(
+        stringResource(Res.string.code_labs_time), stringResource(Res.string.code_labs_title)
+    )
+    HDivider()
+    Column(
+        Modifier.fillMaxWidth().background(MaterialTheme.colors.whiteGrey)
+    ) {
         Text(
-            stringResource(Res.string.lightning_talks_description),
+            stringResource(Res.string.code_labs_description),
             style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
-            modifier = Modifier.padding(start = 16.dp, end = 8.dp)
+            modifier = Modifier.padding(16.dp)
         )
-
-        HDivider(Modifier.padding(top = 24.dp))
     }
+    HDivider()
 }
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun Party() {
     AboutConfSubtitle(
-        stringResource(Res.string.party_time),
-        stringResource(Res.string.party_title)
+        stringResource(Res.string.party_time), stringResource(Res.string.party_title)
     )
     HDivider()
     Column(
-        Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.whiteGrey)
+        Modifier.fillMaxWidth().background(MaterialTheme.colors.whiteGrey)
     ) {
         Text(
             stringResource(Res.string.party_description),
@@ -325,14 +270,11 @@ private fun Party() {
 @Composable
 private fun ClosingPanel() {
     AboutConfSubtitle(
-        stringResource(Res.string.closing_time),
-        stringResource(Res.string.closing_title)
+        stringResource(Res.string.closing_time), stringResource(Res.string.closing_title)
     )
     HDivider()
     Column(
-        Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.whiteGrey)
+        Modifier.fillMaxWidth().background(MaterialTheme.colors.whiteGrey)
     ) {
         Text(
             stringResource(Res.string.closing_description),
@@ -354,24 +296,20 @@ private fun BottomBanner() {
             painter = Res.drawable.about_conf_bottom_banner.painter(),
             contentDescription = null,
             contentScale = ContentScale.None,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(start = 42.dp, end = 25.dp, bottom = 53.dp)
-                .height(112.dp),
+            modifier = Modifier.align(Alignment.TopEnd)
+                .padding(start = 42.dp, end = 25.dp, bottom = 53.dp).height(112.dp),
         )
         Text(
             stringResource(Res.string.by_jetbrains),
             style = MaterialTheme.typography.bannerText.copy(color = MaterialTheme.colors.greyWhite),
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(
-                    start = 24.dp, top = 70.dp
-                )
+            modifier = Modifier.align(Alignment.TopStart).padding(
+                start = 24.dp, top = 70.dp
+            )
         )
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalResourceApi::class)
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun AboutConferenceFooter(
     time: String,
@@ -380,67 +318,20 @@ private fun AboutConferenceFooter(
 ) {
     val uriHandler = LocalUriHandler.current
     Column(
-        Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.whiteGrey)
+        Modifier.fillMaxWidth().background(MaterialTheme.colors.grey5Black)
     ) {
-        FlowRow(
-            modifier = Modifier.padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = 24.dp,
-                bottom = 24.dp
-            )
-        ) {
-            Text(
-                buildAnnotatedString {
-                    append(stringResource(Res.string.about_conf_footer))
-                    withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
-                        append("kotlinconf.com")
-                    }
-                },
-                style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
-                modifier = Modifier
-                    .clickable {
-                        uriHandler.openUri("https://kotlinconf.com")
-                    }
-            )
+        MenuItem("kotlinconf.com", Res.drawable.arrow_right, dimmed = true) {
+            uriHandler.openUri("https://kotlinconf.com")
         }
-
         HDivider()
-
-        Text(
-            stringResource(Res.string.for_visitors),
-            style = MaterialTheme.typography.body2.copy(color = grey50),
-            modifier = Modifier
-                .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 16.dp)
-        )
-        Text(
-            buildAnnotatedString {
-                withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
-                    append(stringResource(Res.string.privacy_policy))
-                }
-            },
-            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
-            modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp)
-                .clickable {
-                    showVisitorsPrivacyPolicy()
-                }
-        )
-        Text(
-            buildAnnotatedString {
-                withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
-                    append(stringResource(Res.string.general_terms))
-                }
-            },
-            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
-            modifier = Modifier
-                .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 40.dp)
-                .clickable {
-                    showVisitorsTerms()
-                }
-        )
+        MenuItem("Privacy policy for visitors", Res.drawable.arrow_right, dimmed = true) {
+            showVisitorsPrivacyPolicy()
+        }
+        HDivider()
+        MenuItem("General terms and conditions", Res.drawable.arrow_right, dimmed = true) {
+            showVisitorsTerms()
+        }
+        HDivider()
         Text(
             "Server time: $time",
             style = MaterialTheme.typography.body2.copy(color = grey50),

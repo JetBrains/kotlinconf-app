@@ -21,11 +21,14 @@ import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.app_privacy_policy
 import kotlinconfapp.shared.generated.resources.app_terms
+import kotlinconfapp.shared.generated.resources.app_terms_of_use
+import kotlinconfapp.shared.generated.resources.arrow_right
 import kotlinconfapp.shared.generated.resources.mobile_app
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.components.MarkdownFileView
+import org.jetbrains.kotlinconf.ui.components.MenuItem
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
@@ -57,8 +60,6 @@ fun AboutAppScreen(
             MarkdownFileView("files/mobile-app-description.md")
             AboutAppFooter(showAppPrivacyPolicy, showAppTerms)
         }
-
-
     }
 }
 
@@ -74,31 +75,20 @@ private fun AboutAppFooter(
             .fillMaxWidth()
             .background(MaterialTheme.colors.whiteGrey)
     ) {
-        Text(
-            buildAnnotatedString {
-                withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
-                    append(stringResource(Res.string.app_privacy_policy))
-                }
-            },
-            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
-            modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp)
-                .clickable {
-                    showAppPrivacyPolicy()
-                }
+        HDivider()
+        MenuItem(
+            text = stringResource(Res.string.app_privacy_policy),
+            icon = Res.drawable.arrow_right,
+            dimmed = true,
+            onClick = showAppPrivacyPolicy
         )
-        Text(
-            buildAnnotatedString {
-                withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
-                    append(stringResource(Res.string.app_terms))
-                }
-            },
-            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyWhite),
-            modifier = Modifier
-                .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 40.dp)
-                .clickable {
-                    showAppTerms()
-                }
+        HDivider()
+        MenuItem(
+            text = stringResource(Res.string.app_terms_of_use),
+            icon = Res.drawable.arrow_right,
+            dimmed = true,
+            onClick = showAppTerms
         )
+        HDivider()
     }
 }

@@ -31,7 +31,7 @@ class ConferenceService(
     val endpoint: String,
 ) : CoroutineScope, Closeable {
     private val storage: ApplicationStorage = ApplicationStorage(context)
-    private var userId2023: String? by storage.bind(String.serializer().nullable) { null }
+    private var userId2024: String? by storage.bind(String.serializer().nullable) { null }
     private var needsOnboarding: Boolean by storage.bind(Boolean.serializer()) { true }
     private var notificationsAllowed: Boolean by storage.bind(Boolean.serializer()) { false }
 
@@ -84,10 +84,10 @@ class ConferenceService(
         .asStateFlowClass()
 
     fun sign() {
-        client.userId = userId2023
+        client.userId = userId2024
 
         launch {
-            if (userId2023 != null) {
+            if (userId2024 != null) {
                 client.sign()
             }
         }
@@ -163,9 +163,9 @@ class ConferenceService(
      * Accept privacy policy clicked.
      */
     fun acceptPrivacyPolicy() {
-        if (userId2023 != null) return
-        userId2023 = generateUserId()
-        client.userId = userId2023
+        if (userId2024 != null) return
+        userId2024 = generateUserId()
+        client.userId = userId2024
         launch {
             client.sign()
         }
