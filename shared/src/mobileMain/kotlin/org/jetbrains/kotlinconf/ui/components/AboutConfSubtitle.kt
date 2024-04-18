@@ -12,13 +12,14 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.grey5Black
 import org.jetbrains.kotlinconf.ui.theme.greyGrey20
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
+import org.jetbrains.kotlinconf.ui.theme.text3
 
 @Composable
 fun AboutConfSubtitle(tile: String, title: String) {
     Column(Modifier.background(MaterialTheme.colors.grey5Black)) {
         Text(
             tile,
-            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.greyGrey20),
+            style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.text3),
             modifier = Modifier.padding(16.dp, top = 24.dp)
         )
 

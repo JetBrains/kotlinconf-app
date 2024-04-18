@@ -5,9 +5,9 @@
 We will process your data in accordance with the App Privacy Policy. You can adjust or withdraw your consent at any time by sending a request to privacy@jetbrains.com, but doing so may affect how this app functions.</string>
     <string name="read_privacy">Read the app privacy policy</string>
     <string name="privacy_policy_for_visitors_title">KotlinConf 2024 Privacy Policy for Visitors</string>
-    <string name="privacy_policy_for_visitors_version">Version 1.0 of February 5, 2024</string>
+    <string name="privacy_policy_for_visitors_version">Version 1.0 of May 1, 2024</string>
     <string name="privacy_policy_for_app_title">KotlinConf app privacy policy</string>
-    <string name="privacy_policy_for_app_version">Version 1.1, effective from February 28, 2024</string>
+    <string name="privacy_policy_for_app_version">Version 1.1, effective from May 1, 2024</string>
     <string name="notifications_title">Do you want reminders?</string>
     <string name="notifications_body">Get reminders about talks that you don’t want to miss.
 
@@ -16,7 +16,10 @@ You will receive a message 5 minutes before the session begins so you have time 
     <string name="keynote_start_time">May 23, 9:00</string>
     <string name="keynote_title">Opening Keynote</string>
     <string name="second_day_keynote_time">May 24, 9:00</string>
-    <string name="second_day_keynote_title">Second day Keynote</string>
+    <string name="second_day_keynote_title">Second day keynote</string>
+    <string name="code_labs_title">Code Labs</string>
+    <string name="code_labs_description">Explore Kotlin Multiplatform with Touchlab’s CodeLabs! Learn how to streamline your development process with KMP and build real-world multiplatform apps efficiently. Gain insights from experts who have years of experience guiding teams to successful KMP adoption.</string>
+    <string name="code_labs_time">May 23-24</string>
     <string name="about_conf_footer">You can find more information about the conference on the official website:\n</string>
     <string name="about_conf_schedule">May 22 — Workshops
 May 23–24 — Conference
@@ -29,8 +32,8 @@ Bella Center Copenhagen, Denmark</string>
     <string name="closing_time">May 24, 17:15</string>
     <string name="closing_title">Closing Panel</string>
     <string name="closing_description">Come to Hall 1 and seize the opportunity to ask the KotlinConf speakers your questions in person.</string>
-    <string name="party_time">May 23, 9:00</string>
-    <string name="party_title">KotlinConf’24 party</string>
+    <string name="party_time">May 23, 18:00</string>
+    <string name="party_title">Party</string>
     <string name="party_description">Have fun and mingle with the community at the biggest Kotlin party of the year!</string>
     <string name="by_jetbrains">by\nJetBrains</string>
     <string name="for_visitors">For visitors:</string>
@@ -39,14 +42,14 @@ Bella Center Copenhagen, Denmark</string>
     <string name="visitors_terms">KotlinConf 2024 General Terms and Conditions for Visitors</string>
     <string name="visitors_terms_version">Version 1.0 of May 1, 2024</string>
     <string name="mobile_app">’24 mobile app</string>
-    <string name="app_privacy_policy">Application Privacy Policy</string>
+    <string name="app_privacy_policy">KotlinConf app privacy policy</string>
     <string name="app_terms">Application terms and conditions</string>
-    <string name="app_terms_of_use">KotlinConf App Terms of Use</string>
-    <string name="app_terms_of_use_version">Version 1.1, effective as of February 28, 2024</string>
+    <string name="app_terms_of_use">KotlinConf app terms of use</string>
+    <string name="app_terms_of_use_version">Version 1.1, effective as of May 1, 2024</string>
     <string name="code_of_conduct">Code of conduct</string>
     <string name="menu">Menu</string>
     <string name="search">Search</string>
-    <string name="about_conference">About conference</string>
+    <string name="about_conference">About the conference</string>
     <string name="partners">Our partners</string>
     <string name="X">X</string>
     <string name="slack">Slack channel</string>

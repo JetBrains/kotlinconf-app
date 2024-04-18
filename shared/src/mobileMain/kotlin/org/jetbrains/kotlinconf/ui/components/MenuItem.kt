@@ -19,16 +19,17 @@ import org.jetbrains.kotlinconf.ui.theme.blackGrey5
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.painter
+import org.jetbrains.kotlinconf.ui.theme.grey5Black
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun MenuItem(text: String, icon: DrawableResource, onClick: () -> Unit = {}) {
+fun MenuItem(text: String, icon: DrawableResource, dimmed: Boolean = false, onClick: () -> Unit) {
     Row(
         Modifier
             .height(56.dp)
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .background(MaterialTheme.colors.whiteGrey)
+            .background(if (!dimmed) MaterialTheme.colors.whiteGrey else MaterialTheme.colors.grey5Black)
     ) {
         Text(
             text, modifier = Modifier
