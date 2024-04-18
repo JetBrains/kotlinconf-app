@@ -1,8 +1,10 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
@@ -19,6 +21,7 @@ import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.ui.HDivider
 import org.jetbrains.kotlinconf.ui.painter
 import org.jetbrains.kotlinconf.ui.theme.DEFAULT_TRANSITION
@@ -35,7 +38,7 @@ class TabItem @OptIn(ExperimentalResourceApi::class) constructor(
 )
 
 @Composable
-fun TabsView(navigator: Navigator, vararg items: TabItem) {
+fun TabsView(controller: AppController, navigator: Navigator, vararg items: TabItem) {
     val current by navigator.currentEntry.collectAsState(null)
     val route = current?.route?.route
 
@@ -60,7 +63,9 @@ fun TabsView(navigator: Navigator, vararg items: TabItem) {
         ) {
             items.forEach { tab ->
                 scene(tab.name) {
-                    tab.view()
+                    controller.routeTo(tab.name)
+                    val last: (@Composable (AppController) -> Unit)? by controller.last.collectAsState()
+                    last?.let { it(controller) } ?: tab.view()
                 }
             }
         }
