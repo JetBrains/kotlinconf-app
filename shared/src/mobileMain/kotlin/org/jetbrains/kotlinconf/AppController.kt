@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -26,22 +25,18 @@ import org.jetbrains.kotlinconf.ui.welcome.WelcomeScreen
 
 typealias View = @Composable (AppController) -> Unit
 
-@Composable
-fun withAppController(
-    service: ConferenceService,
-    default: @Composable (AppController) -> Unit
-) {
-    val controller = remember { AppController(service, default) }
-    val last by controller.last.collectAsState()
-    last(controller)
-}
-
-class AppController(
-    private val service: ConferenceService,
-    val default: @Composable (AppController) -> Unit = {},
-) {
+class AppController(private val service: ConferenceService) {
     private val stack = mutableListOf<View>()
-    val last: MutableStateFlow<View> = MutableStateFlow(default)
+    val last: MutableStateFlow<View?> = MutableStateFlow(null)
+    private val currentRoute = MutableStateFlow<String>("")
+
+    fun routeTo(value: String) {
+        if (value == currentRoute.value) return
+
+        stack.clear()
+        last.value = null
+        currentRoute.value = value
+    }
 
     fun push(item: @Composable (AppController) -> Unit) {
         stack.add(item)
@@ -50,8 +45,8 @@ class AppController(
 
     fun showSession(sessionId: String) {
         push {
-            val session: SessionCardView? = service.sessionCards.collectAsState()
-                .value.firstOrNull { it.id == sessionId }
+            val session: SessionCardView? =
+                service.sessionCards.collectAsState().value.firstOrNull { it.id == sessionId }
             val speakers = session?.speakerIds?.map { service.speakerById(it) }
             if (session != null && speakers != null) {
                 SessionScreen(
@@ -76,9 +71,7 @@ class AppController(
             val speakers by service.speakers.collectAsState()
 
             SpeakersDetailsScreen(
-                controller = this,
-                speakers = speakers.all,
-                focusedSpeakerId = speakerId
+                controller = this, speakers = speakers.all, focusedSpeakerId = speakerId
             )
         }
     }
@@ -87,7 +80,7 @@ class AppController(
         if (stack.isEmpty()) return
 
         stack.removeLast()
-        last.value = stack.lastOrNull() ?: default
+        last.value = stack.lastOrNull()
     }
 
     fun toggleFavorite(sessionId: String) {
@@ -113,9 +106,7 @@ class AppController(
                 it.back()
             }, onRejectPrivacy = {
                 it.back()
-            }, onClose = {
-            }, onAcceptNotifications = {
-            })
+            }, onClose = {}, onAcceptNotifications = {})
         }
     }
 
@@ -130,8 +121,7 @@ class AppController(
 
     fun showAppInfo() {
         push {
-            AboutAppScreen(
-                showAppPrivacyPolicy = { showAppPrivacyPolicy() },
+            AboutAppScreen(showAppPrivacyPolicy = { showAppPrivacyPolicy() },
                 showAppTerms = { showAppTerms() },
                 back = { back() })
         }
@@ -165,12 +155,10 @@ class AppController(
 
     fun showAboutTheConf() {
         push {
-            AboutConfScreen(
-                service,
+            AboutConfScreen(service,
                 showVisitorsPrivacyPolicy = { showVisitorsPrivacy() },
                 showVisitorsTerms = { showVisitorsTerms() },
-                back = { it.back() }
-            )
+                back = { it.back() })
         }
     }
 
