@@ -9,6 +9,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.ui.theme.subtitle
@@ -34,7 +35,7 @@ fun SpeakersScreen(speakers: List<Speaker>, scrollState: LazyListState, controll
                         .fillMaxWidth()
                         .background(MaterialTheme.colors.whiteGrey)
                 ) {
-                    KeynoteSectionSpeakerCard(
+                    SpeakerCard(
                         name = speaker.name,
                         position = speaker.position,
                         photoUrl = speaker.photoUrl,
@@ -50,7 +51,7 @@ fun SpeakersScreen(speakers: List<Speaker>, scrollState: LazyListState, controll
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun KeynoteSectionSpeakerCard(
+private fun SpeakerCard(
     name: String,
     position: String,
     photoUrl: String,
@@ -90,7 +91,7 @@ private fun KeynoteSectionSpeakerCard(
                     Text(
                         text = position,
                         style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.subtitle),
-                        maxLines = 1
+                        maxLines = 2
                     )
                 }
             }

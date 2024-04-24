@@ -94,10 +94,10 @@ fun MenuScreen(controller: AppController) {
             item {
                 BigMenuItem(
                     stringResource(Res.string.X),
-                    stringResource(Res.string.hashtag).uppercase(),
+                    stringResource(Res.string.hashtag),
                     Res.drawable.x
                 ) {
-                    uriHandler.openUri("https://twitter.com/kotlinconf")
+                    uriHandler.openUri("https://twitter.com/hashtag/KotlinConf")
                 }
             }
             item {

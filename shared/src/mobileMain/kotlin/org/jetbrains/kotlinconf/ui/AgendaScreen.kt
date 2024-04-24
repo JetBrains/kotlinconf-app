@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -67,18 +68,26 @@ fun AgendaScreen(agenda: Agenda, scrollState: LazyListState, controller: AppCont
 
     val liveSlot = agenda.days.flatMap { it.timeSlots }.firstOrNull { it.isLive }
 
+    fun scrollToDay(day: EventDay) {
+        var index = daysIndex[agenda.days.indexOfFirst { it.title == day.title }]
+        index -= day.ordinal
+        if (index >= 0) {
+            coroutineScope.launch { scrollState.scrollToItem(index, 0) }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        if (scrollState.firstVisibleItemIndex == 0 && scrollState.firstVisibleItemScrollOffset == 0) {
+            scrollToDay(EventDay.May23)
+        }
+    }
+
     Column(
         Modifier.background(MaterialTheme.colors.agendaHeaderColor)
     ) {
         val day = displayedDay
         if (day != null) {
-            TabBar(EventDay.entries, day, onSelect = { day ->
-                var index = daysIndex[agenda.days.indexOfFirst { it.title == day.title }]
-                index -= day.ordinal
-                if (index >= 0) {
-                    coroutineScope.launch { scrollState.scrollToItem(index, 0) }
-                }
-            })
+            TabBar(EventDay.entries, day, onSelect = ::scrollToDay)
         }
         if (liveSlot != null) {
             LiveHeader(liveSlot) {

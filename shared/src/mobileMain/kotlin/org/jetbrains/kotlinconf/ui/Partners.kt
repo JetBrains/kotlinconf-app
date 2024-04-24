@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.academy
 import kotlinconfapp.shared.generated.resources.android
+import kotlinconfapp.shared.generated.resources.btsystems
 import kotlinconfapp.shared.generated.resources.cloud_inject
 import kotlinconfapp.shared.generated.resources.express
 import kotlinconfapp.shared.generated.resources.foundation
@@ -34,6 +35,8 @@ import kotlinconfapp.shared.generated.resources.partner_academy
 import kotlinconfapp.shared.generated.resources.partner_academy_description
 import kotlinconfapp.shared.generated.resources.partner_android
 import kotlinconfapp.shared.generated.resources.partner_android_description
+import kotlinconfapp.shared.generated.resources.partner_btsystems
+import kotlinconfapp.shared.generated.resources.partner_btsystems_description
 import kotlinconfapp.shared.generated.resources.partner_cloud_inject
 import kotlinconfapp.shared.generated.resources.partner_cloud_inject_description
 import kotlinconfapp.shared.generated.resources.partner_express
@@ -154,6 +157,12 @@ enum class Partner(
         logo = Res.drawable.worldline,
         type = Type.Bronze
     ),
+    BTSystems(
+        title = Res.string.partner_btsystems,
+        description = Res.string.partner_btsystems_description,
+        logo = Res.drawable.btsystems,
+        type = Type.Bronze
+    ),
 
     // Audio / Visual
     AmericanExpress(
@@ -243,6 +252,7 @@ fun Partners(showPartner: (Partner) -> Unit, back: () -> Unit) {
             Partner.Kodein,
             Partner.Mercari,
             Partner.WorldLine,
+            Partner.BTSystems
         )
         SectionTitle("Audio/visual")
         PartnerGrid(showPartner, Partner.AmericanExpress, Partner.Android)

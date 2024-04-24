@@ -46,7 +46,7 @@ class ConferenceService(
     private var requestTime = GMTDate()
     private val notificationManager = NotificationManager(context)
 
-    private val favorites = MutableStateFlow(emptySet<String>())
+    val favorites = MutableStateFlow(emptySet<String>())
     private val conference = MutableStateFlow(Conference())
 
     private val votes = MutableStateFlow(emptyList<VoteInfo>())
