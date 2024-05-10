@@ -2,7 +2,6 @@
 
 package org.jetbrains.kotlinconf.ui.components.zoomable
 
-import androidx.annotation.FloatRange
 import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.AnimationVector
 import androidx.compose.animation.core.Spring.StiffnessMediumLow
@@ -103,7 +102,6 @@ internal class RealZoomableState internal constructor(
 
     override var contentAlignment: Alignment by mutableStateOf(Alignment.Center)
 
-    @get:FloatRange(from = 0.0, to = 1.0)
     override val zoomFraction: Float? by derivedStateOf {
         val gestureState = gestureState
         val baseZoomFactor = baseZoomFactor
