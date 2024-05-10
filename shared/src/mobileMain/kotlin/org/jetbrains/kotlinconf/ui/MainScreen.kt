@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.navigation.compose.rememberNavController
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.location
 import kotlinconfapp.shared.generated.resources.location_active
@@ -18,7 +19,6 @@ import kotlinconfapp.shared.generated.resources.speakers
 import kotlinconfapp.shared.generated.resources.speakers_active
 import kotlinconfapp.shared.generated.resources.time
 import kotlinconfapp.shared.generated.resources.time_active
-import moe.tlaster.precompose.navigation.rememberNavigator
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.ConferenceService
@@ -32,7 +32,7 @@ fun MainScreen(service: ConferenceService) {
     val agenda by service.agenda.collectAsState()
     val speakers by service.speakers.collectAsState()
     val time by service.time.collectAsState()
-    val navigator = rememberNavigator()
+    val navigator = rememberNavController()
     val controller = remember { AppController(service) }
     var showWelcome by remember { mutableStateOf(service.needsOnboarding()) }
 

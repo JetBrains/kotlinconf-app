@@ -58,7 +58,7 @@ kotlin {
                 api(compose.material)
                 api(compose.components.resources)
 
-                api(libs.precompose)
+                implementation(libs.androidx.navigation.compose)
                 implementation(libs.multiplatform.markdown.renderer.m3)
                 api(libs.image.loader)
             }

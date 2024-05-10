@@ -1,10 +1,10 @@
 package org.jetbrains.kotlinconf.ui.components
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
@@ -17,14 +17,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import moe.tlaster.precompose.navigation.NavHost
-import moe.tlaster.precompose.navigation.Navigator
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.ui.HDivider
 import org.jetbrains.kotlinconf.ui.painter
-import org.jetbrains.kotlinconf.ui.theme.DEFAULT_TRANSITION
 import org.jetbrains.kotlinconf.ui.theme.blackWhite
 import org.jetbrains.kotlinconf.ui.theme.grey50
 import org.jetbrains.kotlinconf.ui.theme.grey5Black
@@ -38,9 +39,9 @@ class TabItem @OptIn(ExperimentalResourceApi::class) constructor(
 )
 
 @Composable
-fun TabsView(controller: AppController, navigator: Navigator, vararg items: TabItem) {
-    val current by navigator.currentEntry.collectAsState(null)
-    val route = current?.route?.route
+fun TabsView(controller: AppController, navigator: NavHostController, vararg items: TabItem) {
+    val current by navigator.currentBackStackEntryAsState()
+    val route = current?.destination?.route
 
     Scaffold(bottomBar = {
         Column(Modifier.fillMaxWidth()) {
@@ -56,13 +57,16 @@ fun TabsView(controller: AppController, navigator: Navigator, vararg items: TabI
         }
     }) {
         NavHost(
-            navigator = navigator,
-            initialRoute = items[0].name,
+            navController = navigator,
+            startDestination = items[0].name,
             modifier = Modifier.padding(it),
-            navTransition = DEFAULT_TRANSITION
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None },
         ) {
             items.forEach { tab ->
-                scene(tab.name) {
+                composable(tab.name) {
                     controller.routeTo(tab.name)
                     val last: (@Composable (AppController) -> Unit)? by controller.last.collectAsState()
                     last?.let { it(controller) } ?: tab.view()
@@ -75,7 +79,7 @@ fun TabsView(controller: AppController, navigator: Navigator, vararg items: TabI
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun RowScope.BottomButton(
-    navigator: Navigator,
+    navigator: NavHostController,
     tab: TabItem,
     isSelected: Boolean
 ) {
