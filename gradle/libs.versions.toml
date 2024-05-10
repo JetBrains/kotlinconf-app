@@ -28,7 +28,7 @@ logbackClassic = "1.4.14"
 markdown = "0.13.0"
 material3 = "1.6.0"
 postgresql = "42.6.0"
-precompose = "1.6.0"
+androidx-navigation = "2.7.0-alpha04"
 
 [libraries]
 
@@ -49,6 +49,7 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-work-runtime = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidx-work-runtime" }
 androidx-preference = { group = "androidx.preference", name = "preference-ktx", version.ref = "androidx-preference" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 
 # compose
 components-ui-tooling-preview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "compose-multiplatform" }
@@ -57,7 +58,6 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = 
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-android" }
 material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
 multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "markdown" }
-precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
 
 # ktor
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.jetbrains.kotlinconf.R
-import moe.tlaster.precompose.PreComposeApp
 import org.jetbrains.kotlinconf.App
 import org.jetbrains.kotlinconf.ApplicationContext
 
@@ -18,9 +17,7 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            PreComposeApp {
-                App(context)
-            }
+            App(context)
         }
     }
 }
