@@ -57,7 +57,7 @@ fun AboutAppScreen(
             Modifier
                 .verticalScroll(rememberScrollState())
         ) {
-            MarkdownFileView("files/mobile-app-description.md")
+            MarkdownFileView("files/app-description.md")
             AboutAppFooter(showAppPrivacyPolicy, showAppTerms)
         }
     }
