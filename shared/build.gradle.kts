@@ -168,3 +168,7 @@ android {
         compose = true
     }
 }
+
+compose.experimental {
+    web.application {}
+}
