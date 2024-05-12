@@ -10,6 +10,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
+import org.jetbrains.kotlinconf.androidx.annotation.FloatRange
 
 /**
  * Create a [ZoomableState] that can be used with [Modifier.zoomable].
