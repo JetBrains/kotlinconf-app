@@ -2,7 +2,6 @@
 
 package org.jetbrains.kotlinconf.ui.components.zoomable
 
-import androidx.annotation.FloatRange
 import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.AnimationVector
 import androidx.compose.animation.core.Spring.StiffnessMediumLow
@@ -34,6 +33,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.toOffset
 import androidx.compose.ui.util.lerp
+import org.jetbrains.kotlinconf.androidx.annotation.FloatRange
 import org.jetbrains.kotlinconf.ui.components.zoomable.ContentZoomFactor.Companion.ZoomDeltaEpsilon
 import org.jetbrains.kotlinconf.ui.components.zoomable.ZoomableContentLocation.SameAsLayoutBounds
 import org.jetbrains.kotlinconf.ui.components.zoomable.internal.MutatePriorities
