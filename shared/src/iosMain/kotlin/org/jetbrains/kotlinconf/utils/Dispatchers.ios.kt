@@ -5,9 +5,6 @@ import kotlinx.coroutines.IO as kxIO
 import platform.darwin.*
 import kotlin.coroutines.CoroutineContext
 
-actual val Dispatchers.App: CoroutineDispatcher
-    get() = AppDispatcher
-
 actual val Dispatchers.IO: CoroutineDispatcher
     get() = kxIO
 
