@@ -1,4 +1,8 @@
+@file:OptIn(ExperimentalWasmDsl::class)
+
 import org.jetbrains.compose.ExperimentalComposeLibrary
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackOutput
 
 plugins {
     alias(libs.plugins.androidLibrary)
@@ -11,6 +15,19 @@ plugins {
 kotlin {
     androidTarget()
     jvm()
+    
+    wasmJs {
+        binaries.executable()
+        browser {
+        }
+    }
+
+    js {
+        binaries.executable()
+        browser { 
+        }
+        
+    }
 
     listOf(
         iosX64(),
@@ -105,6 +122,22 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+        }
+
+        val webMain by creating {
+            dependsOn(mobileMain)
+
+            dependencies {
+                implementation(libs.ktor.client.js)
+            }
+        }
+
+        val wasmJsMain by getting {
+            dependsOn(webMain)
+        }
+
+        val jsMain by getting {
+            dependsOn(webMain)
         }
     }
 }
