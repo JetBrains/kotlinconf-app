@@ -179,3 +179,7 @@ compose.desktop {
         mainClass = "org.jetbrains.kotlinconf.MainKt"
     }
 }
+
+compose.experimental {
+    web.application {}
+}
