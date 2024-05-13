@@ -5,7 +5,7 @@ import kotlinx.coroutines.IO as kxIO
 import platform.darwin.*
 import kotlin.coroutines.CoroutineContext
 
-actual val Dispatchers.IO: CoroutineDispatcher
+actual val Dispatchers.IO_MP: CoroutineDispatcher
     get() = kxIO
 
 @OptIn(InternalCoroutinesApi::class)
