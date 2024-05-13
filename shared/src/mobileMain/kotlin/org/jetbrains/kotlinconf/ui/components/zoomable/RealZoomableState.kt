@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.toOffset
 import androidx.compose.ui.util.lerp
-import org.jetbrains.kotlinconf.androidx.annotation.FloatRange
 import org.jetbrains.kotlinconf.ui.components.zoomable.ContentZoomFactor.Companion.ZoomDeltaEpsilon
 import org.jetbrains.kotlinconf.ui.components.zoomable.ZoomableContentLocation.SameAsLayoutBounds
 import org.jetbrains.kotlinconf.ui.components.zoomable.internal.MutatePriorities
@@ -102,23 +101,6 @@ internal class RealZoomableState internal constructor(
     override var contentScale: ContentScale by mutableStateOf(ContentScale.Fit)
 
     override var contentAlignment: Alignment by mutableStateOf(Alignment.Center)
-
-    @get:FloatRange(from = 0.0, to = 1.0)
-    override val zoomFraction: Float? by derivedStateOf {
-        val gestureState = gestureState
-        val baseZoomFactor = baseZoomFactor
-        if (gestureState != null && baseZoomFactor != null) {
-            val min = ContentZoomFactor.minimum(baseZoomFactor, zoomSpec.range).userZoom
-            val max = ContentZoomFactor.maximum(baseZoomFactor, zoomSpec.range).userZoom
-            val current = gestureState.userZoomFactor.coerceIn(min, max)
-            when {
-                current == min && min == max -> 1f  // Content can't zoom.
-                else -> ((current - min) / (max - min)).value.coerceIn(0f, 1f)
-            }
-        } else {
-            null
-        }
-    }
 
     internal var gestureState: GestureState? by mutableStateOf(null)
 
