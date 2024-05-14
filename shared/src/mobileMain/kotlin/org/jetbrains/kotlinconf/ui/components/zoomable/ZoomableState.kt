@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.ui.components.zoomable
 
-import androidx.annotation.FloatRange
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -99,7 +98,6 @@ sealed interface ZoomableState {
    * value hasn't been calculated yet and the content is hidden. A `null` value could be safely
    * treated the same as 0, but [Modifier.zoomable] leaves that decision up to you.
    */
-  @get:FloatRange(from = 0.0, to = 1.0)
   val zoomFraction: Float?
 
   /** See [ZoomableContentLocation]. */

@@ -56,13 +56,11 @@ kotlin {
                 api(compose.foundation)
                 api(compose.animation)
                 api(compose.material)
-                @OptIn(ExperimentalComposeLibrary::class)
                 api(compose.components.resources)
 
-                api(libs.precompose)
+                implementation(libs.androidx.navigation.compose)
                 implementation(libs.multiplatform.markdown.renderer.m3)
                 api(libs.image.loader)
-
             }
         }
 
@@ -79,7 +77,6 @@ kotlin {
                 implementation(compose.foundation)
                 implementation(compose.material)
                 implementation(compose.ui)
-                @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
                 implementation(libs.android.svg)
@@ -106,6 +103,15 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+        }
+
+        val jvmMain by getting {
+            dependsOn(mobileMain)
+
+            dependencies {
+                implementation(compose.desktop.currentOs)
+                implementation(libs.android.svg)
+            }
         }
     }
 }
@@ -134,5 +140,11 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+}
+
+compose.desktop {
+    application {
+        mainClass = "org.jetbrains.kotlinconf.MainKt"
     }
 }

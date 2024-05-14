@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.AboutAppScreen
@@ -22,12 +23,15 @@ import org.jetbrains.kotlinconf.ui.VisitorsPrivacyPolicyScreen
 import org.jetbrains.kotlinconf.ui.VisitorsTermsScreen
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
 import org.jetbrains.kotlinconf.ui.welcome.WelcomeScreen
+import org.jetbrains.kotlinconf.utils.StateFlowClass
 
 typealias View = @Composable (AppController) -> Unit
 
 class AppController(private val service: ConferenceService) {
     private val stack = mutableListOf<View>()
     val last: MutableStateFlow<View?> = MutableStateFlow(null)
+    val sessions: StateFlowClass<List<SessionCardView>> = service.sessionCards
+
     private val currentRoute = MutableStateFlow<String>("")
 
     fun routeTo(value: String) {
@@ -147,10 +151,6 @@ class AppController(private val service: ConferenceService) {
         push {
             Partner(it, partner)
         }
-    }
-
-    fun sessionsForSpeaker(id: String): List<SessionCardView> {
-        return service.sessionsForSpeaker(id)
     }
 
     fun showAboutTheConf() {

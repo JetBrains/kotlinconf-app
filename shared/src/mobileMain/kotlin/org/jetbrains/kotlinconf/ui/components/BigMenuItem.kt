@@ -45,7 +45,7 @@ fun BigMenuItem(
             modifier = Modifier.padding(top = 16.dp, start = 16.dp)
         )
         Text(
-            subtitle.uppercase(), style = MaterialTheme.typography.body2.copy(color = grey50),
+            subtitle, style = MaterialTheme.typography.body2.copy(color = grey50),
             modifier = Modifier.padding(start = 16.dp)
         )
         Spacer(modifier = Modifier.weight(1f))

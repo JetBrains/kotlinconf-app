@@ -233,10 +233,10 @@ private fun SessionDetails(
 ) {
     Column(Modifier.background(MaterialTheme.colors.whiteGrey)) {
         FlowRow(
-            Modifier.padding(16.dp).fillMaxWidth()
+            Modifier.padding(12.dp).fillMaxWidth()
         ) {
             tags.forEach {
-                Tag(null, it, modifier = Modifier.padding(end = 4.dp))
+                Tag(null, it, modifier = Modifier.padding(top=4.dp, end = 4.dp))
             }
         }
 

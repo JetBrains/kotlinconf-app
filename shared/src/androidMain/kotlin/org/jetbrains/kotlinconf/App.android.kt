@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf
 
-import android.content.Context
 import com.seiko.imageloader.ImageLoader
 import com.seiko.imageloader.cache.memory.maxSizePercent
 import com.seiko.imageloader.component.setupDefaultComponents

@@ -1,23 +1,37 @@
 package org.jetbrains.kotlinconf.ui
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.layout.*
-import androidx.compose.ui.unit.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.bookmark
 import kotlinconfapp.shared.generated.resources.bookmark_active
 import kotlinconfapp.shared.generated.resources.speakers
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
-import org.jetbrains.kotlinconf.ui.components.AsyncImage
 import org.jetbrains.kotlinconf.SessionCardView
+import org.jetbrains.kotlinconf.Speaker
+import org.jetbrains.kotlinconf.ui.components.AsyncImage
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
 import org.jetbrains.kotlinconf.ui.theme.grey50
 import org.jetbrains.kotlinconf.ui.theme.grey5Black
@@ -34,6 +48,8 @@ fun SpeakersDetailsScreen(
     speakers: List<Speaker>,
     focusedSpeakerId: String
 ) {
+    val sessions: List<SessionCardView> by controller.sessions.collectAsState()
+
     val state = rememberLazyListState()
     if (focusedSpeakerId.isNotEmpty()) {
         val index = speakers.indexOfFirst { it.id == focusedSpeakerId }
@@ -45,18 +61,25 @@ fun SpeakersDetailsScreen(
     }
 
     Column(Modifier.fillMaxWidth()) {
-        NavigationBar(title = stringResource(Res.string.speakers), isLeftVisible = true, onLeftClick = {
-            controller.back()
-        }, isRightVisible = false)
+        NavigationBar(
+            title = stringResource(Res.string.speakers),
+            isLeftVisible = true,
+            onLeftClick = {
+                controller.back()
+            },
+            isRightVisible = false
+        )
         LazyColumn(state = state) {
             items(speakers) {
-                val sessions = controller.sessionsForSpeaker(it.id)
+                val speakerSessions =
+                    sessions.filter { session -> session.speakerIds.contains(it.id) }
+
                 SpeakerDetailed(
                     it.name,
                     it.position,
                     it.photoUrl,
                     it.description,
-                    sessions,
+                    speakerSessions,
                     showSession = { session ->
                         controller.showSession(session)
                     },
