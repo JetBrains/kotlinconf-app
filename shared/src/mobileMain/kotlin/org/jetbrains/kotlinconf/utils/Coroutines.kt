@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 class StateFlowClass<T>(private val delegate: StateFlow<T>) : StateFlow<T> by delegate {
-    fun subscribe(block: (T) -> Unit) = GlobalScope.launch(Dispatchers.IO_MP) {
+    fun subscribe(block: (T) -> Unit) = GlobalScope.launch(Dispatchers.App) {
         delegate.collect {
             block(it)
         }
