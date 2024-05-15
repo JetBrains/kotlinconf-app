@@ -10,7 +10,7 @@ import com.seiko.imageloader.intercept.painterMemoryCacheConfig
 actual fun createImageLoader(context: ApplicationContext): ImageLoader {
     return ImageLoader {
         components {
-            add(SessionizeUrlsMapper()) //TODO
+            add(SessionizeUrlsMapper())
             setupDefaultComponents { HTTP_CLIENT }
         }
         interceptor {

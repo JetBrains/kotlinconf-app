@@ -1,5 +1,7 @@
 package org.jetbrains.kotlinconf.backend
 
+import io.ktor.client.call.*
+import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -20,6 +22,7 @@ internal fun Routing.api(
     sessions()
     apiVote(store, adminSecret)
     apiSynchronize(sessionizeUrl, adminSecret)
+    synchronizeCom()
     apiTime(adminSecret)
 }
 
@@ -172,3 +175,20 @@ private suspend fun ApplicationCall.validatePrincipal(database: Store): KotlinCo
     return principal
 }
 
+
+private fun Routing.synchronizeCom() {
+    route("sessionize.com/image/{fileName}") {
+        get {
+            val fileName = call.parameters["fileName"] ?: error("No File Name parameter")
+            val httpResponse = client.get("https://sessionize.com/image/$fileName")
+            val bytes = httpResponse.body<ByteArray>()
+            httpResponse.headers.forEach { name, values ->
+                values.forEach { value ->
+                    call.response.headers.append(name, value)
+                }
+            }
+            
+            call.respond(bytes)
+        }
+    }
+}

@@ -12,11 +12,14 @@ import com.seiko.imageloader.LocalImageLoader
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.MainScreen
 
+const val KOTLINCONF_APP_BACKEND = "https://kotlinconf-app-prod.labs.jb.gg/"
+// const val KOTLINCONF_APP_BACKEND = "http://localhost:8080/"
+
 @Composable
 fun App(context: ApplicationContext) {
     KotlinConfTheme {
         val service = remember {
-            ConferenceService(context, "https://kotlinconf-app-prod.labs.jb.gg/")
+            ConferenceService(context, KOTLINCONF_APP_BACKEND)
         }
 
         CompositionLocalProvider(
