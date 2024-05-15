@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -83,14 +84,14 @@ internal fun RowScope.BottomButton(
     tab: TabItem,
     isSelected: Boolean
 ) {
-    val background = if (isSelected) {
-        MaterialTheme.colors.menuSelected
-    } else {
-        MaterialTheme.colors.grey5Black
-    }
-
     BottomNavigationItem(
-        modifier = Modifier.background(background).padding(bottom = 18.dp),
+        modifier = Modifier
+            .run {
+                if (isSelected)
+                    background(MaterialTheme.colors.menuSelected)
+                else this
+            }
+            .padding(bottom = 18.dp),
         selected = isSelected,
         onClick = onClick@{
             navigator.navigate(tab.name)

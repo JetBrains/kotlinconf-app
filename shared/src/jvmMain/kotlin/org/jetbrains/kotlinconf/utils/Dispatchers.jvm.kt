@@ -3,5 +3,5 @@ package org.jetbrains.kotlinconf.utils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-actual val Dispatchers.App: CoroutineDispatcher
+actual val Dispatchers.IO_MP: CoroutineDispatcher
     get() = Dispatchers.IO

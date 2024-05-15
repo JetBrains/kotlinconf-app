@@ -18,15 +18,12 @@ kotlin {
 
     wasmJs {
         binaries.executable()
-        browser {
-        }
+        browser()
     }
 
     js {
         binaries.executable()
-        browser {
-        }
-
+        browser()
     }
 
     listOf(
@@ -41,7 +38,7 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting {
+         val commonMain by getting {
             dependencies {
                 compileOnly(compose.runtime)
 
