@@ -1,8 +1,6 @@
 @file:OptIn(ExperimentalWasmDsl::class)
 
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackOutput
 
 plugins {
     alias(libs.plugins.androidLibrary)
@@ -18,12 +16,20 @@ kotlin {
 
     wasmJs {
         binaries.executable()
-        browser()
+        browser {
+            commonWebpackConfig {
+                outputFileName = "kotlin-app-wasm-js.js"
+            }
+        }
     }
 
     js {
         binaries.executable()
-        browser()
+        browser {
+            commonWebpackConfig {
+                outputFileName = "kotlin-app-js.js"
+            }
+        }
     }
 
     listOf(
@@ -38,7 +44,7 @@ kotlin {
     }
 
     sourceSets {
-         val commonMain by getting {
+          val commonMain by getting {
             dependencies {
                 compileOnly(compose.runtime)
 
@@ -73,6 +79,8 @@ kotlin {
 
                 implementation(libs.androidx.navigation.compose)
                 implementation(libs.multiplatform.markdown.renderer.m3)
+                implementation(libs.ktor.client.core)
+
                 api(libs.image.loader)
             }
         }
@@ -97,6 +105,8 @@ kotlin {
                 implementation(libs.androidx.work.runtime)
                 implementation(libs.androidx.preference)
                 implementation(libs.compose.ui.tooling.preview)
+
+                implementation(libs.ktor.client.cio)
             }
 
             resources.srcDirs("src/commonMain/resources", "src/mobileMain/resources")
@@ -110,7 +120,7 @@ kotlin {
             dependsOn(mobileMain)
 
             dependencies {
-                implementation("io.ktor:ktor-client-ios:2.3.4")
+                implementation(libs.ktor.client.darwin)
             }
 
             iosX64Main.dependsOn(this)
@@ -122,6 +132,7 @@ kotlin {
             dependsOn(mobileMain)
 
             dependencies {
+                implementation(libs.ktor.client.cio)
                 implementation(compose.desktop.currentOs)
                 implementation(libs.android.svg)
             }
@@ -179,4 +190,18 @@ compose.desktop {
 
 compose.experimental {
     web.application {}
+}
+
+val buildWebApp by tasks.creating(Copy::class) {
+    val wasmWebpack = "wasmJsBrowserProductionWebpack"
+    val jsWebpack = "jsBrowserProductionWebpack"
+
+    dependsOn(wasmWebpack, jsWebpack)
+
+    from(tasks.named(jsWebpack).get().outputs.files)
+    from(tasks.named(wasmWebpack).get().outputs.files)
+
+    into("$buildDir/webApp")
+
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
