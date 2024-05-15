@@ -20,14 +20,14 @@ jobs:
 
     - name: Fix permissions
       run: |
-        chmod -v -R +rX "composeApp/build/webApp/" | while read line; do
+        chmod -v -R +rX "shared/build/webApp/" | while read line; do
           echo "::warning title=Invalid file permissions automatically fixed::$line"
         done
 
     - name: Upload Pages artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: composeApp/build/webApp/
+        path: shared/build/webApp/
 
   deploy:
     # Add a dependency to the build job
