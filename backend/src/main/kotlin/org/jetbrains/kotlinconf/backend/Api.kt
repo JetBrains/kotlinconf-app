@@ -11,7 +11,7 @@ import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.Votes
 import java.time.*
 
-internal fun Routing.api(
+internal fun Route.api(
     store: Store,
     sessionizeUrl: String,
     adminSecret: String
@@ -27,7 +27,7 @@ internal fun Routing.api(
 POST http://localhost:8080/sign
 1238476512873162837
  */
-private fun Routing.apiUsers(database: Store) {
+private fun Route.apiUsers(database: Store) {
     post("sign") {
         val userUUID = call.receive<String>()
         val timestamp = LocalDateTime.now(Clock.systemUTC())
@@ -42,7 +42,7 @@ GET http://localhost:8080/vote
 Accept: application/json
 Authorization: Bearer 1238476512873162837
 */
-private fun Routing.apiVote(
+private fun Route.apiVote(
     database: Store,
     adminSecret: String
 ) {
@@ -113,7 +113,7 @@ GET http://localhost:8080/conference
 Accept: application/json
 Authorization: Bearer 1238476512873162837
 */
-private fun Routing.sessions() {
+private fun Route.sessions() {
     get("conference") {
         call.respond(getSessionizeData())
     }
@@ -125,7 +125,7 @@ private fun Routing.sessions() {
  *
  * POST http://localhost:8080/time/1589568000000
  */
-private fun Routing.apiTime(adminSecret: String) {
+private fun Route.apiTime(adminSecret: String) {
     get("time") {
         call.respond(now())
     }
@@ -147,7 +147,7 @@ private fun Routing.apiTime(adminSecret: String) {
 /*
 POST http://localhost:8080/sessionizeSync
 */
-private fun Routing.apiSynchronize(
+private fun Route.apiSynchronize(
     sessionizeUrl: String,
     adminSecret: String
 ) {
