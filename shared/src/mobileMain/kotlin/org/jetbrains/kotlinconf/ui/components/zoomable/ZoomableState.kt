@@ -91,6 +91,16 @@ sealed interface ZoomableState {
    */
   val transformedContentBounds: Rect
 
+  /**
+   * The content's current zoom as a fraction of its min and max allowed zoom factors.
+   *
+   * @return A value between 0 and 1, where 0 indicates that the content is fully zoomed out,
+   * 1 indicates that the content is fully zoomed in, and `null` indicates that an initial zoom
+   * value hasn't been calculated yet and the content is hidden. A `null` value could be safely
+   * treated the same as 0, but [Modifier.zoomable] leaves that decision up to you.
+   */
+  val zoomFraction: Float?
+
   /** See [ZoomableContentLocation]. */
   suspend fun setContentLocation(location: ZoomableContentLocation)
 

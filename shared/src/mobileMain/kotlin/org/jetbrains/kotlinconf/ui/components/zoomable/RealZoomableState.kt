@@ -102,6 +102,22 @@ internal class RealZoomableState internal constructor(
 
     override var contentAlignment: Alignment by mutableStateOf(Alignment.Center)
 
+    override val zoomFraction: Float? by derivedStateOf {
+        val gestureState = gestureState
+        val baseZoomFactor = baseZoomFactor
+        if (gestureState != null && baseZoomFactor != null) {
+            val min = ContentZoomFactor.minimum(baseZoomFactor, zoomSpec.range).userZoom
+            val max = ContentZoomFactor.maximum(baseZoomFactor, zoomSpec.range).userZoom
+            val current = gestureState.userZoomFactor.coerceIn(min, max)
+            when {
+                current == min && min == max -> 1f  // Content can't zoom.
+                else -> ((current - min) / (max - min)).value.coerceIn(0f, 1f)
+            }
+        } else {
+            null
+        }
+    }
+
     internal var gestureState: GestureState? by mutableStateOf(null)
 
     private var zoomSpec by mutableStateOf(ZoomSpec())

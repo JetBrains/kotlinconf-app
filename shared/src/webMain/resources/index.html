@@ -79,9 +79,25 @@
                 right: 10px;
                 cursor: pointer;
             }
+            .github-link {
+                position: absolute;
+                right: 0;
+                width: 37px;
+                height: 37px;
+                margin-left: 0;
+                background-color: white;
+                color: black;
+                border: 1px solid #654ff0;
+                padding: 5px 7px;
+                display: flex;
+                justify-content: center;
+            }
         </style>
     </head>
     <body>
+        <a href="https://github.com/JetBrains/kotlinconf-app" target="_blank" class="github-link" title="https://github.com/JetBrains/kotlinconf-app">
+            <img src="https://zal.im/resources/github-mark.svg" alt="github"> 
+        </a>
         <canvas id="ComposeTarget"></canvas>
         <script type="application/javascript">
             const unhandledError = (event, error) => {

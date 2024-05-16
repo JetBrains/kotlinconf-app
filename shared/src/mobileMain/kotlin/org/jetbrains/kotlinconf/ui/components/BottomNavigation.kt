@@ -84,14 +84,14 @@ internal fun RowScope.BottomButton(
     tab: TabItem,
     isSelected: Boolean
 ) {
+    val background = if (isSelected) {
+        MaterialTheme.colors.menuSelected
+    } else {
+        MaterialTheme.colors.grey5Black
+    }
+
     BottomNavigationItem(
-        modifier = Modifier
-            .run {
-                if (isSelected)
-                    background(MaterialTheme.colors.menuSelected)
-                else this
-            }
-            .padding(bottom = 18.dp),
+        modifier = Modifier.background(background).padding(bottom = 18.dp),
         selected = isSelected,
         onClick = onClick@{
             navigator.navigate(tab.name)
