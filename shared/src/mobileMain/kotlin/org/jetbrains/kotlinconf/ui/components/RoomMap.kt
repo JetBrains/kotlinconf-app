@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
@@ -52,7 +53,7 @@ enum class Room(
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun RoomMap(room: Room) {
+fun ColumnScope.RoomMap(room: Room) {
     val screenSizeIsTooWide = Screen.isTooWide()
     var svg: Svg? by remember { mutableStateOf(null) }
 
@@ -65,8 +66,9 @@ fun RoomMap(room: Room) {
         Modifier
             .run {
                 if (screenSizeIsTooWide) {
-                    width(900.dp)
+                    width(1000.dp)
                         .height(500.dp)
+                        .align(Alignment.CenterHorizontally)
                 } else {
                     fillMaxWidth()
                         .height(343.dp)

@@ -2,15 +2,7 @@ package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -65,6 +57,8 @@ import org.jetbrains.kotlinconf.ui.theme.greyGrey20
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.orange
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
+import org.jetbrains.kotlinconf.utils.Screen
+import org.jetbrains.kotlinconf.utils.isTooWide
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -84,7 +78,7 @@ fun AboutConfScreen(
     val secondDaySpeaker = speakers.all.filter {
         it.name == stringResource(Res.string.second_day_keynote_speaker)
     }
-
+    val screenSizeIsTooWide = Screen.isTooWide()
     val time by service.time.collectAsState()
     val timeString =
         "${time.month.name} ${time.dayOfMonth} ${time.hours}:${time.minutes}:${time.seconds}"
@@ -100,7 +94,17 @@ fun AboutConfScreen(
         Column(
             Modifier.fillMaxWidth().verticalScroll(rememberScrollState())
         ) {
-            AboutConfTopBanner()
+            Column(
+                Modifier.run {
+                  if (Screen.isTooWide()) {
+                      width(800.dp).align(Alignment.CenterHorizontally)
+                  } else {
+                      fillMaxWidth()
+                  }
+                }
+            ) {
+                AboutConfTopBanner()
+            }
             AboutConfSchedule()
             AboutConfDescription()
             AboutConfKeynoteSection(keynoteSpeakers)
