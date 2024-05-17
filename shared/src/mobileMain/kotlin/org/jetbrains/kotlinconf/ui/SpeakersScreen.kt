@@ -9,7 +9,6 @@ import androidx.compose.ui.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.unit.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.AppController
 import org.jetbrains.kotlinconf.ui.theme.subtitle
@@ -17,6 +16,8 @@ import org.jetbrains.kotlinconf.ui.theme.title
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
 import org.jetbrains.kotlinconf.ui.components.AsyncImage
 import org.jetbrains.kotlinconf.ui.components.NavigationBar
+import org.jetbrains.kotlinconf.utils.Screen
+import org.jetbrains.kotlinconf.utils.isTooWide
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -57,6 +58,8 @@ private fun SpeakerCard(
     photoUrl: String,
     onClick: () -> Unit = {}
 ) {
+    val screenSizeIsTooWide = Screen.isTooWide()
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -72,7 +75,7 @@ private fun SpeakerCard(
             Row(modifier = Modifier.fillMaxWidth()) {
                 AsyncImage(
                     modifier = Modifier
-                        .size(85.dp)
+                        .size(if (screenSizeIsTooWide) 170.dp else 85.dp)
                         .padding(0.dp),
                     imageUrl = photoUrl,
                     contentDescription = name,

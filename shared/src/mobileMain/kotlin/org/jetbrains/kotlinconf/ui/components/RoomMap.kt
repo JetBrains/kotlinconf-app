@@ -1,10 +1,7 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,6 +19,8 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.ui.Floor
 import org.jetbrains.kotlinconf.ui.Svg
 import org.jetbrains.kotlinconf.ui.resource
+import org.jetbrains.kotlinconf.utils.Screen
+import org.jetbrains.kotlinconf.utils.isTooWide
 
 enum class Room(
     val title: String,
@@ -54,6 +53,7 @@ enum class Room(
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RoomMap(room: Room) {
+    val screenSizeIsTooWide = Screen.isTooWide()
     var svg: Svg? by remember { mutableStateOf(null) }
 
     val path = room.floor.resource
@@ -61,7 +61,19 @@ fun RoomMap(room: Room) {
         svg = Svg(Res.readBytes(path))
     }
 
-    Box(Modifier.fillMaxWidth().height(343.dp).clipToBounds()) {
+    Box(
+        Modifier
+            .run {
+                if (screenSizeIsTooWide) {
+                    width(900.dp)
+                        .height(500.dp)
+                } else {
+                    fillMaxWidth()
+                        .height(343.dp)
+                }
+            }
+            .clipToBounds()
+    ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             val currentSvg = svg ?: return@Canvas
             val scale = size.width / currentSvg.width
@@ -73,7 +85,7 @@ fun RoomMap(room: Room) {
                     translate(-room.x, -room.y) {
                         val zoom = room.zoom
                         scale(zoom) {
-                            svg?.renderTo(this)
+                            currentSvg.renderTo(this)
                         }
                     }
                 }

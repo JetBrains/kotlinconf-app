@@ -22,8 +22,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
  * if your content prefers applying the transformations in a bespoke manner.
  */
 @Composable
-fun rememberZoomableState(
-): ZoomableState {
+fun rememberZoomableState(): ZoomableState {
   val isLayoutPreview = LocalInspectionMode.current
   val state = rememberSaveable(saver = RealZoomableState.Saver) {
     RealZoomableState(

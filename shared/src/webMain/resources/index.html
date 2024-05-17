@@ -85,28 +85,32 @@
                 width: 37px;
                 height: 37px;
                 margin-left: 0;
-                background-color: white;
-                color: black;
-                border: 1px solid #654ff0;
                 padding: 5px 7px;
                 display: flex;
                 justify-content: center;
+            }
+            @media (prefers-color-scheme: dark) {
+                .github-link svg {
+                    fill: white;
+                }
             }
         </style>
     </head>
     <body>
         <a href="https://github.com/JetBrains/kotlinconf-app" target="_blank" class="github-link" title="https://github.com/JetBrains/kotlinconf-app">
-            <img src="https://zal.im/resources/github-mark.svg" alt="github"> 
+            <svg height="32" viewBox="0 0 16 16" version="1.1" width="32">
+                <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+            </svg>
         </a>
         <canvas id="ComposeTarget"></canvas>
         <script type="application/javascript">
             const unhandledError = (event, error) => {
                 if (error instanceof WebAssembly.CompileError) {
-                    document.getElementById("warning").style.display    =    "initial";
+                    document.getElementById("warning").style.display = "initial";
 
                     // Hide a Scary Webpack Overlay which is less informative in this case.
                     const webpackOverlay = document.getElementById("webpack-dev-server-client-overlay");
-                    if (webpackOverlay != null) webpackOverlay.style.display    =    "none";
+                    if (webpackOverlay != null) webpackOverlay.style.display = "none";
                 }
             }
             addEventListener("error", (event) => unhandledError(event, event.error));
@@ -138,11 +142,11 @@
 	            WebAssembly.validate(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 1, 5, 1, 95, 1, 120, 0]))
 
             const hasWasmExceptionSupport = () =>
-	            WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,10,8,1,6,0,6,64,25,11,11])
+	            WebAssembly.validate(new Uint8Array([0,    97,    115,    109,    1,    0,    0,    0,    1,    4,    1,    96,    0,    0,    3,    2,    1,    0,    10,    8,    1,    6,    0,    6,    64,    25,    11,    11])
 );
 
             const hasWasmReferenceTypeSupport = () =>
-                WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,10,7,1,5,0,208,112,26,11]))
+                WebAssembly.validate(new Uint8Array([0,    97,    115,    109,    1,    0,    0,    0,    1,    4,    1,    96,    0,    0,    3,    2,    1,    0,    10,    7,    1,    5,    0,    208,    112,    26,    11]))
 
             const createScript = (src) => {
                 const script = document.createElement("script")

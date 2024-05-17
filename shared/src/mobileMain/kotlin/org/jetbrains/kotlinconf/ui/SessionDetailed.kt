@@ -52,6 +52,8 @@ import org.jetbrains.kotlinconf.ui.theme.greyGrey5
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.orange
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
+import org.jetbrains.kotlinconf.utils.Screen
+import org.jetbrains.kotlinconf.utils.isTooWide
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -210,13 +212,17 @@ private fun FavoriteButton(isFavorite: Boolean, favoriteClick: () -> Unit) {
 
 @Composable
 private fun SpeakerPhotos(speakers: List<Speaker>, speakerClick: (String) -> Unit) {
+    val screenSizeIsTooWide = Screen.isTooWide()
+    val smallImageSize = if (screenSizeIsTooWide) 156.dp else 78.dp
+    val largeImageSize = if (screenSizeIsTooWide) 240.dp else 120.dp
+
     Row(
         Modifier.padding(top = 24.dp, bottom = 0.dp, start = 16.dp, end = 16.dp)
             .horizontalScroll(rememberScrollState())
     ) {
         speakers.forEach { speaker ->
             AsyncImage(
-                modifier = Modifier.size(if (speakers.size < 3) 120.dp else 78.dp)
+                modifier = Modifier.size(if (speakers.size < 3) largeImageSize else smallImageSize)
                     .padding(end = 8.dp).clickable { speakerClick(speaker.id) },
                 imageUrl = speaker.photoUrl,
                 contentDescription = speaker.name,
