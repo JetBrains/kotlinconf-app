@@ -2,8 +2,6 @@ const KOTLIN_CONF_CACHE = 'kotlin-conf-cache';
 const staticUrlsToCache = [
     './',
     './kotlin-app-wasm-js.js',
-    './kotlin_skiko_mjs.js',
-    './vendors-node_modules_js-joda_core_dist_js-joda_esm_js.js',
     './8433c6b69bfa201b0895.wasm',
     './KotlinConfApp-shared-wasm-js.wasm',
     './manifest.json',
