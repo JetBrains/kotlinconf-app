@@ -2,10 +2,7 @@ package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -35,6 +32,7 @@ internal fun AgendaDayHeader(day: EventDay) {
         modifier = Modifier
             .background(MaterialTheme.colors.agendaHeaderColor)
             .fillMaxWidth()
+            .heightIn(min = 56.dp)
             .padding(top = 4.dp)
     ) {
         Image(

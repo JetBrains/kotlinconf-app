@@ -28,6 +28,8 @@ import org.jetbrains.kotlinconf.ui.components.TabBar
 import org.jetbrains.kotlinconf.ui.components.zoomable.rememberZoomableState
 import org.jetbrains.kotlinconf.ui.components.zoomable.zoomable
 import org.jetbrains.kotlinconf.ui.theme.mapColor
+import org.jetbrains.kotlinconf.utils.Screen
+import org.jetbrains.kotlinconf.utils.isTooWide
 
 @OptIn(ExperimentalResourceApi::class)
 enum class Floor(
@@ -57,10 +59,11 @@ fun LocationScreen() {
     var svg: Svg? by remember { mutableStateOf(null) }
     val path = floor.resource
     val state = rememberZoomableState()
+    val isScreenTooWide = Screen.isTooWide()
 
     LaunchedEffect(path) {
         svg = Svg(Res.readBytes(path))
-        state.contentScale = FixedScale(2.7f)
+        state.contentScale = FixedScale(if (isScreenTooWide) 1.7f else 2.7f)
     }
 
     Box(

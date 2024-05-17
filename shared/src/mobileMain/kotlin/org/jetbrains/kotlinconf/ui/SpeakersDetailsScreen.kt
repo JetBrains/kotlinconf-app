@@ -2,12 +2,7 @@ package org.jetbrains.kotlinconf.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -40,6 +35,8 @@ import org.jetbrains.kotlinconf.ui.theme.greyGrey5
 import org.jetbrains.kotlinconf.ui.theme.greyWhite
 import org.jetbrains.kotlinconf.ui.theme.orange
 import org.jetbrains.kotlinconf.ui.theme.whiteGrey
+import org.jetbrains.kotlinconf.utils.Screen
+import org.jetbrains.kotlinconf.utils.isTooWide
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -102,6 +99,8 @@ private fun SpeakerDetailed(
     showSession: (String) -> Unit,
     onFavoriteClick: (SessionCardView) -> Unit = {},
 ) {
+    val screenSizeIsTooWide = Screen.isTooWide()
+
     Column(
         Modifier
             .fillMaxWidth()
@@ -124,45 +123,83 @@ private fun SpeakerDetailed(
             )
         }
 
-        AsyncImage(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp),
-            imageUrl = photoUrl,
-            contentDescription = "Speaker photo",
-            contentScale = ContentScale.FillWidth,
-        )
-        Column(
-            Modifier
-                .fillMaxWidth()
-        ) {
-            Column(Modifier.padding(16.dp)) {
-                Text(
-                    modifier = Modifier.padding(top = 8.dp),
-                    text = description,
-                    style = MaterialTheme.typography.body2.copy(
-                        color = MaterialTheme.colors.greyGrey20
-                    )
+        val speakerContent = @Composable {
+            val image = @Composable {
+                AsyncImage(
+                    modifier = Modifier
+                        .run {
+                            if (screenSizeIsTooWide) {
+                                width(400.dp)
+                            } else {
+                                fillMaxWidth()
+                            }
+                        }
+                        .aspectRatio(1f)
+                        .padding(start = 16.dp, end = 16.dp),
+                    imageUrl = photoUrl,
+                    contentDescription = "Speaker photo",
+                    contentScale = ContentScale.FillWidth,
                 )
+            }
 
-                if (sessions.isNotEmpty()) {
+            if (screenSizeIsTooWide) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(bottom = 16.dp),
+                ) {
+                    image()
+                }
+            } else {
+                image()
+            }
+
+            Column(
+                Modifier.run {
+                    if (screenSizeIsTooWide) {
+                        weight(1f)
+                    } else {
+                        fillMaxWidth()
+                    }
+                }
+            ) {
+                Column(Modifier.padding(16.dp)) {
                     Text(
-                        "Talks: ", style = MaterialTheme.typography.h4.copy(
+                        modifier = Modifier.padding(top = 8.dp),
+                        text = description,
+                        style = MaterialTheme.typography.body2.copy(
                             color = MaterialTheme.colors.greyGrey20
-                        ), modifier = Modifier.padding(top = 24.dp)
+                        )
                     )
+
+                    if (sessions.isNotEmpty()) {
+                        Text(
+                            "Talks: ", style = MaterialTheme.typography.h4.copy(
+                                color = MaterialTheme.colors.greyGrey20
+                            ), modifier = Modifier.padding(top = 24.dp)
+                        )
+                    }
+                }
+
+                sessions.forEach {
+                    SessionCardCompact(
+                        it.title,
+                        it.locationLine,
+                        it.timeLine,
+                        it.isFavorite,
+                        onSessionClick = { showSession(it.id) }
+                    ) { onFavoriteClick(it) }
                 }
             }
+        }
 
-            sessions.forEach {
-                SessionCardCompact(
-                    it.title,
-                    it.locationLine,
-                    it.timeLine,
-                    it.isFavorite,
-                    onSessionClick = { showSession(it.id) }
-                ) { onFavoriteClick(it) }
+        if (screenSizeIsTooWide) {
+            Row {
+                speakerContent()
             }
+        } else {
+            speakerContent()
         }
     }
 }

@@ -40,7 +40,7 @@ class ConferenceService(
     }
 
     override val coroutineContext: CoroutineContext =
-        SupervisorJob() + Dispatchers.IO
+        SupervisorJob() + Dispatchers.App
 
     private var serverTime = GMTDate()
     private var requestTime = GMTDate()

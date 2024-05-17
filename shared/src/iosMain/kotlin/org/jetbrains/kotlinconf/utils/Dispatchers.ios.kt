@@ -5,7 +5,7 @@ import platform.darwin.*
 import kotlin.coroutines.CoroutineContext
 
 actual val Dispatchers.App: CoroutineDispatcher
-    get() = AppDispatcher
+ get() = AppDispatcher
 
 @OptIn(InternalCoroutinesApi::class)
 private object AppDispatcher : CoroutineDispatcher(), Delay {

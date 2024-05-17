@@ -14,7 +14,6 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.forwardedheaders.*
-import io.ktor.server.plugins.partialcontent.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.plugins.swagger.*
 import io.ktor.server.request.*
@@ -31,6 +30,7 @@ fun Application.conferenceBackend() {
     val mode = serviceConfig.property("environment").getString()
     log.info("Environment: $mode")
     val sessionizeConfig = config.config("sessionize")
+    val imagesUrl = sessionizeConfig.property("imagesUrl").getString()
     val sessionizeUrl = sessionizeConfig.property("url").getString()
     val sessionizeInterval = sessionizeConfig.property("interval").getString().toLong()
     val adminSecret = serviceConfig.property("secret").getString()
@@ -68,15 +68,19 @@ fun Application.conferenceBackend() {
         }
     }
 
-    install(ContentNegotiation) {
-        json()
+    install(CORS){
+        allowHeader(HttpHeaders.Authorization)
+        allowHeader(HttpHeaders.CacheControl)
+        allowCredentials = true
+        allowNonSimpleContentTypes = true
+        listOf(HttpMethod.Put, HttpMethod.Get, HttpMethod.Post, HttpMethod.Delete, HttpMethod.Options).forEach {
+            allowMethod(it)
+        }
+        anyHost()
     }
 
-    install(CORS) {
-        anyHost()
-        allowHeader(HttpHeaders.Authorization)
-        allowCredentials = true
-        listOf(HttpMethod.Put, HttpMethod.Delete, HttpMethod.Options).forEach { allowMethod(it) }
+    install(ContentNegotiation) {
+        json()
     }
 
     val database = Store(this)
@@ -89,7 +93,7 @@ fun Application.conferenceBackend() {
             files("static")
         }
 
-        api(database, sessionizeUrl, adminSecret)
+        api(database, sessionizeUrl, imagesUrl, adminSecret)
 
         get("/healthz") {
             call.respond(HttpStatusCode.OK)

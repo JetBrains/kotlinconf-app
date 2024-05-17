@@ -11,9 +11,10 @@ import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.Votes
 import java.time.*
 
-internal fun Routing.api(
+internal fun Route.api(
     store: Store,
     sessionizeUrl: String,
+    imagesUrl: String,
     adminSecret: String
 ) {
     apiUsers(store)
@@ -21,13 +22,14 @@ internal fun Routing.api(
     apiVote(store, adminSecret)
     apiSynchronize(sessionizeUrl, adminSecret)
     apiTime(adminSecret)
+    apiSessionizeImagesProxy(imagesUrl)
 }
 
 /*
 POST http://localhost:8080/sign
 1238476512873162837
  */
-private fun Routing.apiUsers(database: Store) {
+private fun Route.apiUsers(database: Store) {
     post("sign") {
         val userUUID = call.receive<String>()
         val timestamp = LocalDateTime.now(Clock.systemUTC())
@@ -42,7 +44,7 @@ GET http://localhost:8080/vote
 Accept: application/json
 Authorization: Bearer 1238476512873162837
 */
-private fun Routing.apiVote(
+private fun Route.apiVote(
     database: Store,
     adminSecret: String
 ) {
@@ -113,7 +115,7 @@ GET http://localhost:8080/conference
 Accept: application/json
 Authorization: Bearer 1238476512873162837
 */
-private fun Routing.sessions() {
+private fun Route.sessions() {
     get("conference") {
         call.respond(getSessionizeData())
     }
@@ -125,7 +127,7 @@ private fun Routing.sessions() {
  *
  * POST http://localhost:8080/time/1589568000000
  */
-private fun Routing.apiTime(adminSecret: String) {
+private fun Route.apiTime(adminSecret: String) {
     get("time") {
         call.respond(now())
     }
@@ -147,7 +149,7 @@ private fun Routing.apiTime(adminSecret: String) {
 /*
 POST http://localhost:8080/sessionizeSync
 */
-private fun Routing.apiSynchronize(
+private fun Route.apiSynchronize(
     sessionizeUrl: String,
     adminSecret: String
 ) {
@@ -158,6 +160,17 @@ private fun Routing.apiSynchronize(
         call.respond(HttpStatusCode.OK)
     }
 }
+
+/*
+GET http://localhost:8080/sessionize/image/{imageId}
+Authorization: Bearer 1238476512873162837
+*/
+private fun Route.apiSessionizeImagesProxy(imagesUrl: String) {
+    get("sessionize/image/{imageId}") {
+        call.respond(fetchSessionizeImage(imagesUrl, call.parameters["imageId"] ?: error("No imageId")))
+    }
+}
+
 
 private fun ApplicationCall.validateSecret(adminSecret: String) {
     val principal = principal<KotlinConfPrincipal>()

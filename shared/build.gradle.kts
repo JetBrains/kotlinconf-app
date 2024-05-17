@@ -1,4 +1,6 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
+@file:OptIn(ExperimentalWasmDsl::class)
+
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.androidLibrary)
@@ -12,6 +14,24 @@ kotlin {
     androidTarget()
     jvm()
 
+    wasmJs {
+        binaries.executable()
+        browser {
+            commonWebpackConfig {
+                outputFileName = "kotlin-app-wasm-js.js"
+            }
+        }
+    }
+
+    js {
+        binaries.executable()
+        browser {
+            commonWebpackConfig {
+                outputFileName = "kotlin-app-js.js"
+            }
+        }
+    }
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -24,7 +44,7 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting {
+          val commonMain by getting {
             dependencies {
                 compileOnly(compose.runtime)
 
@@ -34,7 +54,6 @@ kotlin {
                 api(libs.ktor.client.logging)
                 api(libs.ktor.serialization.kotlinx.json)
                 api(libs.ktor.client.content.negotiation)
-                api(libs.ktor.client.cio)
                 api(libs.ktor.utils)
                 api(libs.kotlinx.serialization.json)
 
@@ -60,6 +79,8 @@ kotlin {
 
                 implementation(libs.androidx.navigation.compose)
                 implementation(libs.multiplatform.markdown.renderer.m3)
+                implementation(libs.ktor.client.core)
+
                 api(libs.image.loader)
             }
         }
@@ -84,6 +105,8 @@ kotlin {
                 implementation(libs.androidx.work.runtime)
                 implementation(libs.androidx.preference)
                 implementation(libs.compose.ui.tooling.preview)
+
+                implementation(libs.ktor.client.cio)
             }
 
             resources.srcDirs("src/commonMain/resources", "src/mobileMain/resources")
@@ -97,7 +120,7 @@ kotlin {
             dependsOn(mobileMain)
 
             dependencies {
-                implementation("io.ktor:ktor-client-ios:2.3.4")
+                implementation(libs.ktor.client.darwin)
             }
 
             iosX64Main.dependsOn(this)
@@ -109,9 +132,25 @@ kotlin {
             dependsOn(mobileMain)
 
             dependencies {
+                implementation(libs.ktor.client.cio)
                 implementation(compose.desktop.currentOs)
                 implementation(libs.android.svg)
             }
+        }
+        val webMain by creating {
+            dependsOn(mobileMain)
+
+            dependencies {
+                implementation(libs.ktor.client.js)
+            }
+        }
+
+        val wasmJsMain by getting {
+            dependsOn(webMain)
+        }
+
+        val jsMain by getting {
+            dependsOn(webMain)
         }
     }
 }
@@ -147,4 +186,22 @@ compose.desktop {
     application {
         mainClass = "org.jetbrains.kotlinconf.MainKt"
     }
+}
+
+compose.experimental {
+    web.application {}
+}
+
+val buildWebApp by tasks.creating(Copy::class) {
+    val wasmWebpack = "wasmJsBrowserProductionWebpack"
+    val jsWebpack = "jsBrowserProductionWebpack"
+
+    dependsOn(wasmWebpack, jsWebpack)
+
+    from(tasks.named(jsWebpack).get().outputs.files)
+    from(tasks.named(wasmWebpack).get().outputs.files)
+
+    into("$buildDir/webApp")
+
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }

@@ -4,4 +4,4 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 actual val Dispatchers.App: CoroutineDispatcher
-    get() = Dispatchers.IO
+    get() = Default
