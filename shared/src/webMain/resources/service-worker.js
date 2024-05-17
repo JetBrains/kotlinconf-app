@@ -157,3 +157,24 @@ self.addEventListener('activate', event => {
         )
     );
 });
+
+const map = new Map()
+
+self.addEventListener('message', function(event) {
+    console.log('Service worker received a message: ', event.data);
+
+    if (event.data.command === 'register-notification') {
+        const id = setTimeout(() => {
+          self.registration.showNotification(event.data.title, { body: event.data.body });
+          map.delete(event.data.title)
+        }, event.data.delay)
+        map.set(event.data.title, id)
+    }
+    if (event.data.command === 'cancel-notification') {
+        const id = map.get(event.data.title)
+        if (id != undefined) {
+            clearTimeout(id)
+            map.delete(event.data.title)
+        }
+    }
+  });

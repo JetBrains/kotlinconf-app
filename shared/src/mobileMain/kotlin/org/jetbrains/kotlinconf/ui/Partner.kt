@@ -49,7 +49,7 @@ fun Partner(controller: AppController, partner: Partner) {
             AboutConfTopBanner(partner)
             HDivider()
 
-            Column(Modifier.padding(16.dp)) {
+            Column(Modifier.padding(16.dp).fillMaxWidth()) {
                 Text(
                     stringResource(partner.title), style = MaterialTheme.typography.h2.copy(
                         color = MaterialTheme.colors.greyWhite
