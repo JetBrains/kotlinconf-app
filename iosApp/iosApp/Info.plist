@@ -20,6 +20,8 @@
 	<string>59</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>MBXAccessToken</key>
 	<string></string>
 	<key>NSAppTransportSecurity</key>
