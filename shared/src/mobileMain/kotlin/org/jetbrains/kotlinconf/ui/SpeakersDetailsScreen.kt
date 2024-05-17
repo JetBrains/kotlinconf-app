@@ -134,6 +134,7 @@ private fun SpeakerDetailed(
                                 fillMaxWidth()
                             }
                         }
+                        .aspectRatio(1f)
                         .padding(start = 16.dp, end = 16.dp),
                     imageUrl = photoUrl,
                     contentDescription = "Speaker photo",
