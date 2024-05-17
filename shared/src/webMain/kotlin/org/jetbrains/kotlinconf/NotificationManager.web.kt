@@ -7,8 +7,8 @@ private external object Notification {
 private fun registerNotificationByServiceWorker(delay: Long, title: String, message: String): Unit =
     js(
         """{
-        if (typeof navigator === "undefined" || !navigator.serviceWorker?.ready) return;
-        navigator.serviceWorker.ready.then((registration) => {
+        if (typeof navigator === "undefined" || navigator.serviceWorker == null || !navigator.serviceWorker.ready) return;
+        navigator.serviceWorker.ready.then(function (registration) {
           registration.active.postMessage({
             command: 'register-notification',
             title: title,
@@ -22,8 +22,8 @@ private fun registerNotificationByServiceWorker(delay: Long, title: String, mess
 private fun cancelNotificationByServiceWorker(title: String): Unit =
     js(
         """{
-        if (typeof navigator === "undefined" || !navigator.serviceWorker?.ready) return;
-        navigator.serviceWorker.ready.then((registration) => {
+        if (typeof navigator === "undefined" || navigator.serviceWorker == null || !navigator.serviceWorker.ready) return;
+        navigator.serviceWorker.ready.then(function (registration) {
           registration.active.postMessage({
             command: 'cancel-notification',
             title: title,
