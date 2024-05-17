@@ -1,5 +1,9 @@
 name: Publish Application on GitHub Pages
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+      - web
 jobs:
   # Build job
   build:
