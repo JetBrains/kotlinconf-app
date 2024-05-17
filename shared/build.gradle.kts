@@ -197,6 +197,11 @@ val buildWebApp by tasks.creating(Copy::class) {
     val jsWebpack = "jsBrowserProductionWebpack"
 
     dependsOn(wasmWebpack, jsWebpack)
+    
+    // TODO could be removed after migration to Kotlin 2.0+
+    kotlin.wasmJs {
+        applyBinaryen()
+    }
 
     from(tasks.named(jsWebpack).get().outputs.files)
     from(tasks.named(wasmWebpack).get().outputs.files)
