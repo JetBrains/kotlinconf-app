@@ -13,7 +13,7 @@ androidx-preference = "1.2.1"
 kotlin = "1.9.23"
 
 compose-android = "1.6.4"
-compose-multiplatform = "1.6.10-rc03"
+compose-multiplatform = "1.6.10-dev1640"
 
 exposed = "0.47.0"
 h2 = "2.2.220"
