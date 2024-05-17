@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-val MAX_WIDTH = 1500.dp
+val MAX_WIDTH = 1800.dp
 
 expect object Screen {
     @get:Composable
