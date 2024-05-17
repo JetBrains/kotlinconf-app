@@ -43,6 +43,13 @@ suspend fun synchronizeWithSessionize(
         .toConference()
 }
 
+suspend fun fetchSessionizeImage(
+    imagesUrl: String,
+    imageId: String
+): ByteArray {
+    return client.get("$imagesUrl/$imageId").body<ByteArray>()
+}
+
 fun getSessionizeData(): Conference = conference ?: throw ServiceUnavailable()
 
 fun SessionizeData.toConference(): Conference {

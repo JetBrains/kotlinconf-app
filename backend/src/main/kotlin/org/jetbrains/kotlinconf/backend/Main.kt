@@ -30,6 +30,7 @@ fun Application.conferenceBackend() {
     val mode = serviceConfig.property("environment").getString()
     log.info("Environment: $mode")
     val sessionizeConfig = config.config("sessionize")
+    val imagesUrl = sessionizeConfig.property("imagesUrl").getString()
     val sessionizeUrl = sessionizeConfig.property("url").getString()
     val sessionizeInterval = sessionizeConfig.property("interval").getString().toLong()
     val adminSecret = serviceConfig.property("secret").getString()
@@ -92,7 +93,7 @@ fun Application.conferenceBackend() {
             files("static")
         }
 
-        api(database, sessionizeUrl, adminSecret)
+        api(database, sessionizeUrl, imagesUrl, adminSecret)
 
         get("/healthz") {
             call.respond(HttpStatusCode.OK)

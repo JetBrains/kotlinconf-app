@@ -10,7 +10,7 @@ class SessionizeUrlsMapper : Mapper<Url> {
         if (data !is String) return null
         if (!isApplicable(data)) return null
         if (data.startsWith("https://sessionize.com/")) {
-            val newUri = data.replace("https://sessionize.com/", "/cache/sessionize.com/")
+            val newUri = data.replace("https://sessionize.com/",  "$apiEndpoint/sessionize/")
             return Url(newUri)
         }
         return Url(data)

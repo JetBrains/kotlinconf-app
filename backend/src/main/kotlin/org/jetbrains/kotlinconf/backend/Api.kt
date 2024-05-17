@@ -14,6 +14,7 @@ import java.time.*
 internal fun Route.api(
     store: Store,
     sessionizeUrl: String,
+    imagesUrl: String,
     adminSecret: String
 ) {
     apiUsers(store)
@@ -21,6 +22,7 @@ internal fun Route.api(
     apiVote(store, adminSecret)
     apiSynchronize(sessionizeUrl, adminSecret)
     apiTime(adminSecret)
+    apiSessionizeImagesProxy(imagesUrl)
 }
 
 /*
@@ -158,6 +160,17 @@ private fun Route.apiSynchronize(
         call.respond(HttpStatusCode.OK)
     }
 }
+
+/*
+GET http://localhost:8080/sessionize/image/{imageId}
+Authorization: Bearer 1238476512873162837
+*/
+private fun Route.apiSessionizeImagesProxy(imagesUrl: String) {
+    get("sessionize/image/{imageId}") {
+        call.respond(fetchSessionizeImage(imagesUrl, call.parameters["imageId"] ?: error("No imageId")))
+    }
+}
+
 
 private fun ApplicationCall.validateSecret(adminSecret: String) {
     val principal = principal<KotlinConfPrincipal>()
