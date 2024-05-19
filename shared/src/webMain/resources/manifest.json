@@ -2,17 +2,17 @@
   "name": "KotlinConf",
   "icons": [
     {
-      "src": "/images/AppIcon@3x.png",
+      "src": "./images/AppIcon@3x.png",
       "type": "image/png",
       "sizes": "120x120"
     },
     {
-      "src": "/images/AppIcon~ios-marketing.png",
+      "src": "./images/AppIcon~ios-marketing.png",
       "type": "image/png",
       "sizes": "1024x1024"
     }
   ],
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "white"
 }
