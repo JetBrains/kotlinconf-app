@@ -1,7 +1,36 @@
 package org.jetbrains.kotlinconf
 
-private external object Notification {
-    fun requestPermission(callback: (String) -> Unit)
+import org.jetbrains.kotlinconf.utils.GRANTED_PERMISSION
+import org.jetbrains.kotlinconf.utils.Notification
+
+actual class NotificationManager actual constructor(
+    context: ApplicationContext
+) {
+    private var notificationAllowed =
+        Notification.permission == GRANTED_PERMISSION
+
+    actual fun requestPermission() {
+        Notification.requestPermission {
+            if (it == GRANTED_PERMISSION) {
+                notificationAllowed = true
+            } else {
+                notificationAllowed = false
+            }
+        }
+    }
+
+    actual fun schedule(delay: Long, title: String, message: String): String? {
+        if (!notificationAllowed) return null
+
+        registerNotificationByServiceWorker(delay, title, message)
+        return title
+    }
+
+    actual fun cancel(title: String) {
+        if (!notificationAllowed) return
+        cancelNotificationByServiceWorker(title)
+    }
+
 }
 
 private fun registerNotificationByServiceWorker(delay: Long, title: String, message: String): Unit =
@@ -32,31 +61,3 @@ private fun cancelNotificationByServiceWorker(title: String): Unit =
         }"""
     )
 
-actual class NotificationManager actual constructor(
-    context: ApplicationContext
-) {
-    private var notificationAllowed = false
-
-    actual fun requestPermission() {
-        Notification.requestPermission {
-            if (it == "granted") {
-                notificationAllowed = true
-            } else {
-                notificationAllowed = false
-            }
-        }
-    }
-
-    actual fun schedule(delay: Long, title: String, message: String): String? {
-        if (!notificationAllowed) return null
-
-        registerNotificationByServiceWorker(delay, title, message)
-        return title
-    }
-
-    actual fun cancel(title: String) {
-        if (!notificationAllowed) return
-        cancelNotificationByServiceWorker(title)
-    }
-
-}
