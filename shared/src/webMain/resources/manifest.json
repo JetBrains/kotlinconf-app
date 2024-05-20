@@ -4,7 +4,7 @@
     {
       "src": "./images/AppIcon@3x.png",
       "type": "image/png",
-      "sizes": "120x120"
+      "sizes": "180x180"
     },
     {
       "src": "./images/AppIcon~ios-marketing.png",
