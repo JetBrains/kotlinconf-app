@@ -113,8 +113,13 @@ self.addEventListener('install', function (event) {
     event.waitUntil(
         caches.open(KOTLIN_CONF_CACHE)
             .then(cache =>
-                cache.addAll(staticUrlsToCache),
-            )
+                Promise.all(
+                    staticUrlsToCache.map(file =>
+                        cache.add(file)
+                            .catch(_ => console.error(`Can't load ${file} to cache`))
+                    )
+                )
+            ).then(_ => console.log("Offline mode is Ready!"))
     );
 });
 
