@@ -1,4 +1,11 @@
 
+allprojects {
+    repositories {
+        maven("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
+        google()
+        mavenCentral()
+    }
+}
 plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.androidLibrary) apply false

@@ -55,7 +55,6 @@ kotlin {
                 api(libs.ktor.serialization.kotlinx.json)
                 api(libs.ktor.client.content.negotiation)
                 api(libs.ktor.utils)
-                api(libs.kotlinx.serialization.json)
 
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.material3)
