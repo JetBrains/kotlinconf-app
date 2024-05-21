@@ -3,13 +3,7 @@ package org.jetbrains.kotlinconf.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -225,8 +219,10 @@ enum class Partner(
 @Composable
 fun Partners(showPartner: (Partner) -> Unit, back: () -> Unit) {
     Column(
-        modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.grey5Black)
-            .verticalScroll(rememberScrollState())
+        modifier = Modifier
+            .background(MaterialTheme.colors.whiteGrey)
+            .fillMaxHeight()
+            .fillMaxWidth()
     ) {
         NavigationBar(
             title = "Partners",
@@ -234,40 +230,45 @@ fun Partners(showPartner: (Partner) -> Unit, back: () -> Unit) {
             onLeftClick = { back() },
             isRightVisible = false
         )
-        SectionTitle("Gold")
-        PartnerGrid(showPartner, Partner.Google, Partner.Monta)
-        SectionTitle("Silver")
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+        ) {
+            SectionTitle("Gold")
+            PartnerGrid(showPartner, Partner.Google, Partner.Monta)
+            SectionTitle("Silver")
 
-        PartnerGrid(
-            showPartner,
-            Partner.Gradle,
-            Partner.Sentry,
-            Partner.TouchLab,
-            Partner.CloudInject,
-        )
-        SectionTitle("Bronze")
-        PartnerGrid(
-            showPartner,
-            Partner.Uber,
-            Partner.Kodein,
-            Partner.Mercari,
-            Partner.WorldLine,
-            Partner.BTSystems
-        )
-        SectionTitle("Audio/visual")
-        PartnerGrid(showPartner, Partner.AmericanExpress, Partner.Android)
-        SectionTitle("Media")
-        PartnerGrid(
-            showPartner,
-            Partner.Pretix,
-            Partner.StickerMule,
-            Partner.KotlinWeekly,
-            Partner.KtAcademy
-        )
-        SectionTitle("Game Zone")
-        PartnerGrid(showPartner, Partner.Shape)
-        SectionTitle("Supporter")
-        PartnerGrid(showPartner, Partner.KotlinFoundation)
+            PartnerGrid(
+                showPartner,
+                Partner.Gradle,
+                Partner.Sentry,
+                Partner.TouchLab,
+                Partner.CloudInject,
+            )
+            SectionTitle("Bronze")
+            PartnerGrid(
+                showPartner,
+                Partner.Uber,
+                Partner.Kodein,
+                Partner.Mercari,
+                Partner.WorldLine,
+                Partner.BTSystems
+            )
+            SectionTitle("Audio/visual")
+            PartnerGrid(showPartner, Partner.AmericanExpress, Partner.Android)
+            SectionTitle("Media")
+            PartnerGrid(
+                showPartner,
+                Partner.Pretix,
+                Partner.StickerMule,
+                Partner.KotlinWeekly,
+                Partner.KtAcademy
+            )
+            SectionTitle("Game Zone")
+            PartnerGrid(showPartner, Partner.Shape)
+            SectionTitle("Supporter")
+            PartnerGrid(showPartner, Partner.KotlinFoundation)
+        }
     }
 }
 
