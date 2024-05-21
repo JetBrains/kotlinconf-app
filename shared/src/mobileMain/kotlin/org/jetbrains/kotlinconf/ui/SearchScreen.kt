@@ -18,8 +18,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import kotlinconfapp.shared.generated.resources.*
 import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.close
 import kotlinconfapp.shared.generated.resources.speakers
 import kotlinconfapp.shared.generated.resources.talks
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -82,11 +82,11 @@ fun SearchScreen(
                     selectedTab = it
                 }
             )
-            Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+            Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()) {
                 IconButton(onClick = { controller.back() }) {
                     Icon(
-                        painter = Res.drawable.close.painter(),
-                        "Close",
+                        painter = Res.drawable.back.painter(),
+                        "Back",
                         tint = MaterialTheme.colors.greyGrey5
                     )
                 }
