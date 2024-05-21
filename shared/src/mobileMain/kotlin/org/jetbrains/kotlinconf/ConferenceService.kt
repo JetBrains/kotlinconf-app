@@ -228,16 +228,27 @@ class ConferenceService(
     private fun scheduleNotification(session: SessionCardView) {
         if (!notificationsAllowed) return
 
-        val startTimestamp = session.startsAt.timestamp - 5 * 60 * 1000
-        val delay = startTimestamp - now().timestamp
-        if (delay < 0) {
-            return
+        val startTimestamp = session.startsAt.timestamp
+        val reminderTimestamp = startTimestamp - 5 * 60 * 1000
+        val nowTimestamp = now().timestamp
+        val delay = reminderTimestamp - nowTimestamp
+        val voteTimeStamp = session.endsAt.timestamp
+
+        when {
+            delay >= 0 -> {
+                notificationManager.schedule(delay, session.title, "Starts in 5 minutes.")
+            }
+            nowTimestamp in reminderTimestamp..<startTimestamp -> {
+                notificationManager.schedule(0, session.title, "The session is about to start.")
+            }
+            nowTimestamp in startTimestamp..<voteTimeStamp -> {
+                notificationManager.schedule(0, session.title, "Hurry up! The session has already started!")
+            }
         }
 
-        notificationManager.schedule(delay, session.title, "Starts in 5 minutes.")
-
-        val voteTimeStamp = session.endsAt.timestamp
-        val voteDelay = voteTimeStamp - now().timestamp
+        if (nowTimestamp > voteTimeStamp) return
+        
+        val voteDelay = voteTimeStamp - nowTimestamp
         notificationManager.schedule(
             voteDelay,
             "${session.title} finished",
