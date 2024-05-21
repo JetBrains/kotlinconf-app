@@ -13,16 +13,14 @@ androidx-preference = "1.2.1"
 kotlin = "1.9.23"
 
 compose-android = "1.6.4"
-compose-multiplatform = "1.6.10-dev1640"
+compose-multiplatform = "1.6.10"
 
 exposed = "0.47.0"
 h2 = "2.2.220"
 hikaricp = "5.0.1"
 image-loader = "1.7.8"
 junit = "4.13.2"
-kotlinx-serialization-json = "1.6.3"
 kotlinx-datetime = "0.6.0-RC.2"
-ktor-plugin = "3.0.0-beta-1-eap-58"
 ktor = "3.0.0-beta-2-eap-932"
 android-svg="1.4"
 logbackClassic = "1.4.14"
@@ -37,6 +35,7 @@ androidx-navigation = "2.7.0-alpha04"
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 h2 = { module = "com.h2database:h2", version.ref = "h2" }
 hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
@@ -69,7 +68,23 @@ ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "kto
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-utils = { module = "io.ktor:ktor-utils", version.ref = "ktor" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+ktor-ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref="ktor" }
+ktor-ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref="ktor" }
+ktor-ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref="ktor" }
+ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref="ktor" }
+ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref="ktor" }
+ktor-server-auto-head-response = { module = "io.ktor:ktor-server-auto-head-response", version.ref="ktor" }
+ktor-server-compression = { module = "io.ktor:ktor-server-compression", version.ref="ktor" }
+ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref="ktor" }
+ktor-server-conditional-headers = { module = "io.ktor:ktor-server-conditional-headers", version.ref="ktor" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref="ktor" }
+ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref="ktor" }
+ktor-server-default-headers = { module = "io.ktor:ktor-server-default-headers", version.ref="ktor" }
+ktor-server-forwarded-header = { module = "io.ktor:ktor-server-forwarded-header", version.ref="ktor" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref="ktor" }
+ktor-server-partial-content = { module = "io.ktor:ktor-server-partial-content", version.ref="ktor" }
+ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref="ktor" }
+ktor-server-swagger = { module = "io.ktor:ktor-server-swagger", version.ref="ktor" }
 
 # utility
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
@@ -86,5 +101,3 @@ jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-multip
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-ktor = { id = "io.ktor.plugin", version.ref = "ktor-plugin" }
-

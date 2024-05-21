@@ -1,25 +1,30 @@
 package org.jetbrains.kotlinconf.backend
 
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.application.*
-import io.ktor.server.application.ApplicationCallPipeline.ApplicationPhase.Plugins
-import io.ktor.server.auth.*
-import io.ktor.server.http.content.*
-import io.ktor.server.plugins.autohead.*
-import io.ktor.server.plugins.callloging.*
-import io.ktor.server.plugins.compression.*
-import io.ktor.server.plugins.conditionalheaders.*
-import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.plugins.cors.routing.*
-import io.ktor.server.plugins.defaultheaders.*
-import io.ktor.server.plugins.forwardedheaders.*
-import io.ktor.server.plugins.statuspages.*
-import io.ktor.server.plugins.swagger.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import io.ktor.util.logging.*
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.application.Application
+import io.ktor.server.application.createRouteScopedPlugin
+import io.ktor.server.application.install
+import io.ktor.server.application.log
+import io.ktor.server.auth.Principal
+import io.ktor.server.auth.authentication
+import io.ktor.server.plugins.autohead.AutoHeadResponse
+import io.ktor.server.plugins.callloging.CallLogging
+import io.ktor.server.plugins.compression.Compression
+import io.ktor.server.plugins.conditionalheaders.ConditionalHeaders
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.cors.routing.CORS
+import io.ktor.server.plugins.defaultheaders.DefaultHeaders
+import io.ktor.server.plugins.forwardedheaders.XForwardedHeaders
+import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.request.header
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
+import io.ktor.server.routing.routing
+import io.ktor.util.logging.error
 
 fun main(args: Array<String>): Unit =
     io.ktor.server.netty.EngineMain.main(args)
@@ -85,14 +90,7 @@ fun Application.conferenceBackend() {
 
     val database = Store(this)
     routing {
-        swaggerUI("api")
-
         authenticate()
-        static {
-            default("static/index.html")
-            files("static")
-        }
-
         api(database, sessionizeUrl, imagesUrl, adminSecret)
 
         get("/healthz") {
@@ -104,10 +102,15 @@ fun Application.conferenceBackend() {
 }
 
 private fun Route.authenticate() {
+    install(Authenticate)
+}
+
+private val Authenticate = createRouteScopedPlugin("Authenticate") {
     val bearer = "Bearer "
-    intercept(Plugins) {
-        val authorization = call.request.header(HttpHeaders.Authorization) ?: return@intercept
-        if (!authorization.startsWith(bearer)) return@intercept
+    onCall { call ->
+        val authorization = call.request.header(HttpHeaders.Authorization) ?: return@onCall
+        if (!authorization.startsWith(bearer)) return@onCall
+
         val token = authorization.removePrefix(bearer).trim()
         call.authentication.principal(KotlinConfPrincipal(token))
     }
