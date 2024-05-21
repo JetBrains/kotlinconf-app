@@ -9,7 +9,7 @@ import com.seiko.imageloader.intercept.painterMemoryCacheConfig
 import kotlinx.browser.window
 import org.w3c.dom.url.URL
 
-val defaultSessionizeProxy = apiEndpoint 
+val defaultSessionizeProxy = "https://hi-kotlin-wasm.bashorov.workers.dev" 
 
 actual fun createImageLoader(context: ApplicationContext): ImageLoader {
     return ImageLoader {
