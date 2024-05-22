@@ -138,6 +138,12 @@
                     }).join("-")
                 };
             }
+            if (typeof Notification == "undefined") {
+                self.Notification = class Notification {
+                    static permission = "default";
+                    static requestPermission() {}
+                }
+            }
         </script>
 
         <script type="application/javascript">
