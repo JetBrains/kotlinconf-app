@@ -17,48 +17,41 @@ Once in a while, it connects to APIs to get the latest information about session
 It then augments and republishes this information for clients to consume. 
 It also provides a couple of extra APIs to save your favorites and accumulate votes.
 
-### Android Application
+### iOS, Android, WASM and Desktop Applications
 
-As you can imagine, the Android version is developed in Kotlin/JVM. What's interesting here is that this time
-application utilizes Multiplatform support, which is an experimental feature in Kotlin 1.3.61. Data structures for retrieving data from the backend server and some date-time operations are shared across multiple projects.
-
-### iOS Application
-
-User interface of iOS version is written in Swift, all logic and data written in Kotlin in the common module. 
-This way iOS part itself is responsible only for specifying how the application looks like and how it represents changes requested by logic. Kotlin and Swift are highly interoperable, so from Swift, you can easily use all classes and tools defined in the common module. 
+All applications are developed within a single codebase using [Kotlin Multiplatform technology](https://kotlinlang.org/docs/multiplatform.html).
+The UI is implemented using [Compose Multiplatform UI framework](https://www.jetbrains.com/lp/compose-multiplatform/).
 
 ## How to build and run
 
-### Building the code
-
- * Make sure you have the Android SDK installed
- * Open the project in IntelliJ IDEA (2019.3 recommended)
- * Create a file `local.properties` in the root directory of the project, pointing to your Android SDK installation. On Mac OS, the contents should be `sdk.dir=/Users/<your username>/Library/Android/sdk`. On other OSes, please adjust accordingly.
- * Run `./gradlew build`
-
-### Running the backend
+### Prerequisites
  
- * Run `./gradlew backend:run` from the command line or from Gradle tool window
- * The backend will start serving on localhost:8080, with data stored in a local H2 database
+ * JDK >= 17 
+ * Android Studio with Android SDK
+ * XCode with iOS SDK
+ * Create a file `local.properties` in the root directory of the project, pointing to your Android SDK installation. On Mac OS, the contents should be `sdk.dir=/Users/<your username>/Library/Android/sdk`. On other OSes, please adjust accordingly.
 
 ### Running the Android app
 
- * Create a run configuration of type "Android App"
- * Select module "app" in the run configuration settings
- * Run the configuration
- * Select the emulator or connected device, as normal
+1. Open the project in Android Studio or [JetBrains Fleet](https://www.jetbrains.com/fleet/) and wait until the project finishes loading. 
+2. In Android Studio, select the `androidApp` run configuration from the drop-down list within the [toolbar](https://developer.android.com/studio/intro#user-interface).
+3. Click on the [run icon](https://developer.android.com/studio/run/rundebugconfig#running) to start the simulator.
 
 ### Running the iOS
 
-To run iOS version you need to generate fat framework first:
- * For simulator `./gradlew debugFatFramework`
- * For device `./gradlew releaseFatFramework`
-  
-Next you should install all pods with running:
-```
-cd iosApp
-pod install
-```
+1. Open the project in Android Studio or [JetBrains Fleet](https://www.jetbrains.com/fleet/) and wait until the project finishes loading.
+2. In Android Studio, select the `KotlinConf` run configuration from the drop-down list within the [toolbar](https://developer.android.com/studio/intro#user-interface).
+3. Click on the [run icon](https://developer.android.com/studio/run/rundebugconfig#running) to start the simulator.
 
-Next you can open `iosApp/KotlinConf.xcworkspace`, select a device XCode and hit run.
+### Running the desktop app
 
+* Run `./gradlew :shared:run` to start the desktop application
+### Running the backend
+
+* Run `./gradlew :backend:run` to start the server
+* All API will be available at `http://0.0.0.0:8080`
+
+### Running the WASM web app
+
+* To run the web app in the browser, run `./gradlew :shared:wasmJsBrowserRun`.
+* Open `http://localhost:8000` in your browser after build to see the app.
