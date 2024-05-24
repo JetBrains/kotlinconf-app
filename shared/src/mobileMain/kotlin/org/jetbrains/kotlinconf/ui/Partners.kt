@@ -35,6 +35,8 @@ import kotlinconfapp.shared.generated.resources.partner_cloud_inject
 import kotlinconfapp.shared.generated.resources.partner_cloud_inject_description
 import kotlinconfapp.shared.generated.resources.partner_express
 import kotlinconfapp.shared.generated.resources.partner_express_description
+import kotlinconfapp.shared.generated.resources.partner_foundation
+import kotlinconfapp.shared.generated.resources.partner_foundation_description
 import kotlinconfapp.shared.generated.resources.partner_google
 import kotlinconfapp.shared.generated.resources.partner_google_description
 import kotlinconfapp.shared.generated.resources.partner_gradle
@@ -52,6 +54,7 @@ import kotlinconfapp.shared.generated.resources.partner_pretix_description
 import kotlinconfapp.shared.generated.resources.partner_sentry
 import kotlinconfapp.shared.generated.resources.partner_sentry_description
 import kotlinconfapp.shared.generated.resources.partner_shape
+import kotlinconfapp.shared.generated.resources.partner_shape_description
 import kotlinconfapp.shared.generated.resources.partner_sticker_mule
 import kotlinconfapp.shared.generated.resources.partner_sticker_mule_description
 import kotlinconfapp.shared.generated.resources.partner_touchlab
@@ -201,15 +204,15 @@ enum class Partner(
     // GameZone
     Shape(
         title = Res.string.partner_shape,
-        description = Res.string.partner_monta_description,
+        description = Res.string.partner_shape_description,
         logo = Res.drawable.shape,
         type = Type.GameZone
     ),
 
     // Supporter
     KotlinFoundation(
-        title = Res.string.partner_monta,
-        description = Res.string.partner_monta_description,
+        title = Res.string.partner_foundation,
+        description = Res.string.partner_foundation_description,
         logo = Res.drawable.foundation,
         type = Type.Supporter
     ),
