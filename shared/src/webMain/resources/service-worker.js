@@ -123,7 +123,9 @@ self.addEventListener('install', function (event) {
     );
 });
 
-self.addEventListener('fetch', event =>
+self.addEventListener('fetch', event => {
+    if (event.request === "no-cache") return;
+
     event.respondWith(
         caches.match(event.request)
             .then(response =>
@@ -146,7 +148,7 @@ self.addEventListener('fetch', event =>
                     .catch(error => caches.match(event.request))
             )
     )
-);
+});
 
 self.addEventListener('activate', event => {
     const cacheAllowlist = [KOTLIN_CONF_CACHE];
