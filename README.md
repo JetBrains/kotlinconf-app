@@ -17,7 +17,7 @@ Once in a while, it connects to APIs to get the latest information about session
 It then augments and republishes this information for clients to consume. 
 It also provides a couple of extra APIs to save your favorites and accumulate votes.
 
-### iOS, Android, WASM and Desktop Applications
+### iOS, Android, Browser and Desktop Applications
 
 All applications are developed within a single codebase using [Kotlin Multiplatform technology](https://kotlinlang.org/docs/multiplatform.html).
 The UI is implemented using [Compose Multiplatform UI framework](https://www.jetbrains.com/lp/compose-multiplatform/).
@@ -51,7 +51,7 @@ The UI is implemented using [Compose Multiplatform UI framework](https://www.jet
 * Run `./gradlew :backend:run` to start the server
 * All API will be available at `http://0.0.0.0:8080`
 
-### Running the WASM web app
+### Running the browser app
 
 * To run the web app in the browser, run `./gradlew :shared:wasmJsBrowserRun`.
 * Open `http://localhost:8000` in your browser after build to see the app.
