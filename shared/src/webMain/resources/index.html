@@ -149,15 +149,36 @@
         <script type="application/javascript">
             const body = document.body
 
-            const hasWasmGcSupport = () =>
-                WebAssembly.validate(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 1, 5, 1, 95, 1, 120, 0]))
+            /*
+            Represents the next Wasm module:
+            (module
+              (type $type0 (struct (field $field0 i8))) ;; check [Garbage Collector](https://github.com/WebAssembly/gc/blob/main/proposals/gc/Overview.md) support
+              (func $func0                              ;; check [Exception Handling](https://github.com/WebAssembly/exception-handling/blob/main/proposals/exception-handling/Exceptions.md) support 
+                try
+                catch_all
+                end
+              )
+              (func $func1                              ;; check [Function References](https://github.com/WebAssembly/function-references/blob/main/proposals/function-references/Overview.md) support
+                ref.null func
+                drop
+              )
+            )
+            */
+            const simpleWasmModule = new Uint8Array([
+                0,  97, 115, 109,   1,   0,   0,  0,   1,   8,   2,  95,
+                1, 120,   0,  96,   0,   0,   3,  3,   2,   1,   1,  10,
+               14,   2,   6,   0,   6,  64,  25, 11,  11,   5,   0, 208,
+              112,  26,  11,   0,  45,   4, 110, 97, 109, 101,   1,  15,
+                2,   0,   5, 102, 117, 110,  99, 48,   1,   5, 102, 117,
+              110,  99,  49,   4,   8,   1,   0,  5, 116, 121, 112, 101,
+               48,  10,  11,   1,   0,   1,   0,  6, 102, 105, 101, 108,
+              100,  48
+            ])
 
-            const hasWasmExceptionSupport = () =>
-                WebAssembly.validate(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 1, 4, 1, 96, 0, 0, 3, 2, 1, 0, 10, 8, 1, 6, 0, 6, 64, 25, 11, 11])
-                );
-
-            const hasWasmReferenceTypeSupport = () =>
-                WebAssembly.validate(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 1, 4, 1, 96, 0, 0, 3, 2, 1, 0, 10, 7, 1, 5, 0, 208, 112, 26, 11]))
+            const hasSupportOfAllRequiredWasmFeatures = () => 
+                typeof WebAssembly !== "undefined" &&
+                typeof WebAssembly?.validate === "function" &&
+                WebAssembly.validate(simpleWasmModule)
 
             const createScript = (src) => {
                 const script = document.createElement("script")
@@ -166,13 +187,7 @@
                 return script
             }
 
-            if (
-                typeof WebAssembly !== "undefined" &&
-                typeof WebAssembly?.validate === "function" &&
-                hasWasmGcSupport() &&
-                hasWasmExceptionSupport() &&
-                hasWasmReferenceTypeSupport()
-            ) {
+            if (hasSupportOfAllRequiredWasmFeatures()) {
                 body.appendChild(createScript("kotlin-app-wasm-js.js"))
             } else {
                 body.appendChild(createScript("skiko.js"))
