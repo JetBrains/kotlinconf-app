@@ -151,6 +151,7 @@
 
             /*
             Represents the next Wasm module:
+            ```wat
             (module
               (type $type0 (struct (field $field0 i8))) ;; check [Garbage Collector](https://github.com/WebAssembly/gc/blob/main/proposals/gc/Overview.md) support
               (func $func0                              ;; check [Exception Handling](https://github.com/WebAssembly/exception-handling/blob/main/proposals/exception-handling/Exceptions.md) support 
@@ -163,6 +164,12 @@
                 drop
               )
             )
+            ```
+
+            You can use [wasm-tools](https://github.com/bytecodealliance/wasm-tools) to compile the text above into a binary:
+            ```sh
+            wasm-tools parse YOUR_WAT_WITH_THE_TEXT_ABOVE.wat > YOUR_WASM_WITH_THE_COMPILED_TEXT_ABOVE.wasm
+            ```
             */
             const simpleWasmModule = new Uint8Array([
                 0,  97, 115, 109,   1,   0,   0,  0,   1,   8,   2,  95,
