@@ -47,99 +47,62 @@ kotlin {
     }
 
     sourceSets {
-          val commonMain by getting {
-            dependencies {
-                compileOnly(compose.runtime)
+        commonMain.dependencies {
+            api(compose.runtime)
+            api(compose.foundation)
+            api(compose.animation)
+            api(compose.material)
+            api(compose.components.resources)
 
-                api(libs.components.ui.tooling.preview)
-                api(compose.components.resources)
+            api(libs.components.ui.tooling.preview)
 
-                api(libs.ktor.client.logging)
-                api(libs.ktor.serialization.kotlinx.json)
-                api(libs.ktor.client.content.negotiation)
-                api(libs.ktor.utils)
+            api(libs.ktor.client.logging)
+            api(libs.ktor.serialization.kotlinx.json)
+            api(libs.ktor.client.content.negotiation)
+            api(libs.ktor.utils)
 
-                implementation(libs.kotlinx.datetime)
-                implementation(libs.material3)
-            }
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.material3)
+
+            implementation(libs.androidx.navigation.compose)
+            implementation(libs.multiplatform.markdown.renderer.m3)
+            implementation(libs.ktor.client.core)
+
+            api(libs.image.loader)
         }
 
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
         }
 
-        val mobileMain by creating {
-            dependsOn(commonMain)
-            dependencies {
-                api(compose.runtime)
-                api(compose.foundation)
-                api(compose.animation)
-                api(compose.material)
-                api(compose.components.resources)
+        androidMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
 
-                implementation(libs.androidx.navigation.compose)
-                implementation(libs.multiplatform.markdown.renderer.m3)
-                implementation(libs.ktor.client.core)
+            implementation(libs.android.svg)
+            implementation(libs.androidx.core.ktx)
+            implementation(libs.androidx.work.runtime)
+            implementation(libs.androidx.preference)
+            implementation(libs.compose.ui.tooling.preview)
 
-                api(libs.image.loader)
-            }
+            implementation(libs.ktor.client.cio)
         }
 
-        val mobileTest by creating {
-            dependsOn(mobileMain)
-            dependsOn(commonTest)
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
 
-        val androidMain by getting {
-            dependsOn(mobileMain)
-
-            dependencies {
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material)
-                implementation(compose.ui)
-                implementation(compose.components.resources)
-
-                implementation(libs.android.svg)
-                implementation(libs.androidx.core.ktx)
-                implementation(libs.androidx.work.runtime)
-                implementation(libs.androidx.preference)
-                implementation(libs.compose.ui.tooling.preview)
-
-                implementation(libs.ktor.client.cio)
-            }
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.cio)
+            implementation(compose.desktop.currentOs)
+            implementation(libs.android.svg)
         }
 
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-
-        val iosMain by creating {
-            dependsOn(mobileMain)
-
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-            }
-
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-        }
-
-        val jvmMain by getting {
-            dependsOn(mobileMain)
-
-            dependencies {
-                implementation(libs.ktor.client.cio)
-                implementation(compose.desktop.currentOs)
-                implementation(libs.android.svg)
-            }
-        }
         val webMain by creating {
-            dependsOn(mobileMain)
-
+            dependsOn(commonMain.get())
             dependencies {
                 implementation(libs.ktor.client.js)
             }
@@ -149,7 +112,7 @@ kotlin {
             dependsOn(webMain)
         }
 
-        val jsMain by getting {
+        jsMain {
             dependsOn(webMain)
         }
     }
@@ -193,7 +156,7 @@ val buildWebApp by tasks.creating(Copy::class) {
     val jsWebpack = "jsBrowserProductionWebpack"
 
     dependsOn(wasmWebpack, jsWebpack)
-    
+
     // TODO could be removed after migration to Kotlin 2.0+
     kotlin.wasmJs {
         applyBinaryen()
