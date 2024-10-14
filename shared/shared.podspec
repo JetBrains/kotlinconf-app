@@ -35,5 +35,5 @@ Pod::Spec.new do |spec|
             SCRIPT
         }
     ]
-    spec.resources = ['src/commonMain/resources/**', 'src/iosMain/resources/**', 'src/mobileMain/resources/**']
+    spec.resources = ['src/commonMain/resources/**', 'src/iosMain/resources/**']
 end
