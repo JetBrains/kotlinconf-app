@@ -110,8 +110,6 @@ kotlin {
 
                 implementation(libs.ktor.client.cio)
             }
-
-            resources.srcDirs("src/commonMain/resources", "src/mobileMain/resources")
         }
 
         val iosX64Main by getting
@@ -160,10 +158,6 @@ kotlin {
 android {
     namespace = "org.jetbrains.kotlinconf"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].res.srcDirs("src/mobileMain/resources")
-    sourceSets["main"].resources.srcDirs("src/mobileMain/resources")
 
     defaultConfig {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
