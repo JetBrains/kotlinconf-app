@@ -1,8 +1,5 @@
 name: Build all apps
 on:
-  push: # TODO remove before merge
-    branches:
-      - marton/pr-ci-checks
   pull_request:
 
 jobs:
