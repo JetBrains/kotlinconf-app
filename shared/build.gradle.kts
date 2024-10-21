@@ -46,6 +46,9 @@ kotlin {
         }
     }
 
+    // Required as we create additional custom source sets below
+    applyDefaultHierarchyTemplate()
+
     sourceSets {
         commonMain.dependencies {
             api(compose.runtime)
