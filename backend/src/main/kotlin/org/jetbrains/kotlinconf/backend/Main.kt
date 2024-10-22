@@ -11,7 +11,7 @@ import io.ktor.server.application.log
 import io.ktor.server.auth.Principal
 import io.ktor.server.auth.authentication
 import io.ktor.server.plugins.autohead.AutoHeadResponse
-import io.ktor.server.plugins.callloging.CallLogging
+import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.compression.Compression
 import io.ktor.server.plugins.conditionalheaders.ConditionalHeaders
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation

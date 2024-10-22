@@ -1,13 +1,13 @@
 [versions]
-agp = "8.2.0"
-android-compileSdk = "34"
+agp = "8.7.1"
+android-compileSdk = "35"
 android-minSdk = "24"
-android-targetSdk = "34"
-androidx-activityCompose = "1.8.2"
-androidx-core-ktx = "1.12.0"
-androidx-espresso-core = "3.5.1"
-androidx-test-junit = "1.1.5"
-androidx-work-runtime = "2.9.0"
+android-targetSdk = "35"
+androidx-activityCompose = "1.9.3"
+androidx-core-ktx = "1.13.1"
+androidx-espresso-core = "3.6.1"
+androidx-test-junit = "1.2.1"
+androidx-work-runtime = "2.9.1"
 androidx-preference = "1.2.1"
 
 kotlin = "2.0.21"
@@ -15,18 +15,17 @@ kotlin = "2.0.21"
 compose-android = "1.7.1"
 compose-multiplatform = "1.7.0"
 
-exposed = "0.47.0"
-h2 = "2.2.220"
-hikaricp = "5.0.1"
-image-loader = "1.7.8"
+exposed = "0.55.0"
+h2 = "2.2.224"
+hikaricp = "5.1.0"
+image-loader = "1.9.0"
 junit = "4.13.2"
-kotlinx-datetime = "0.6.0-RC.2"
-ktor = "3.0.0-beta-2-eap-932"
+kotlinx-datetime = "0.6.1"
+ktor = "3.0.0"
 android-svg="1.4"
-logbackClassic = "1.4.14"
-markdown = "0.14.0"
-material3 = "1.6.0"
-postgresql = "42.6.0"
+logbackClassic = "1.5.6"
+markdown = "0.26.0"
+postgresql = "42.7.3"
 androidx-navigation = "2.8.0-alpha10"
 
 [libraries]
@@ -56,7 +55,7 @@ components-ui-tooling-preview = { module = "org.jetbrains.compose.components:com
 
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-android" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-android" }
-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
+material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-multiplatform" }
 multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "markdown" }
 
 # ktor
