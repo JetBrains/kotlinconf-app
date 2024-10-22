@@ -33,6 +33,7 @@ fun MarkdownFileView(file: String) {
             codeText = MaterialTheme.colors.greyWhite,
             linkText = MaterialTheme.colors.blackWhite,
             codeBackground = MaterialTheme.colors.greyGrey20,
+            inlineCodeText = MaterialTheme.colors.greyWhite,
             inlineCodeBackground = MaterialTheme.colors.greyGrey20,
             dividerColor = MaterialTheme.colors.greyGrey20,
         ), typography = DefaultMarkdownTypography(
