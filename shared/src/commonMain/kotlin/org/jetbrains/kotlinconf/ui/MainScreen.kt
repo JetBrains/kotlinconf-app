@@ -8,12 +8,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.rememberNavController
+import kotlinconfapp.shared.generated.resources.*
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.location
 import kotlinconfapp.shared.generated.resources.location_active
 import kotlinconfapp.shared.generated.resources.menu
 import kotlinconfapp.shared.generated.resources.menu_active
-import kotlinconfapp.shared.generated.resources.mytalks
 import kotlinconfapp.shared.generated.resources.mytalks_active
 import kotlinconfapp.shared.generated.resources.speakers
 import kotlinconfapp.shared.generated.resources.speakers_active
@@ -54,19 +54,19 @@ fun MainScreen(service: ConferenceService) {
     TabsView(
         controller,
         navigator,
-        TabItem("menu", Res.drawable.menu, Res.drawable.menu_active) {
+        TabItem("menu", Res.drawable.info_28, Res.drawable.info_28_fill) {
             MenuScreen(controller)
         },
-        TabItem("agenda", Res.drawable.time, Res.drawable.time_active) {
+        TabItem("agenda", Res.drawable.clock_28, Res.drawable.clock_28_fill) {
             AgendaScreen(agenda, agendaScrollState, controller)
         },
         TabItem(
-            "speakers", Res.drawable.speakers, Res.drawable.speakers_active
+            "speakers", Res.drawable.team_28, Res.drawable.team_28_fill
         ) {
             SpeakersScreen(speakers.all, speakersScrollState, controller)
         },
         TabItem(
-            "bookmarks", Res.drawable.mytalks, Res.drawable.mytalks_active
+            "bookmarks", Res.drawable.bookmark_28, Res.drawable.bookmark_28_fill
         ) {
             val favoriteSessions = agenda.days.flatMap { it.timeSlots.flatMap { it.sessions } }
                 .filter { it.isFavorite }.map {
@@ -81,7 +81,7 @@ fun MainScreen(service: ConferenceService) {
             BookmarksScreen(favoriteSessions, controller)
         },
         TabItem(
-            "location", Res.drawable.location, Res.drawable.location_active
+            "location", Res.drawable.location_28, Res.drawable.location_28_fill
         ) {
             LocationScreen()
         },
