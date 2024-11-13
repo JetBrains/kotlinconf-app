@@ -144,6 +144,11 @@ android {
     }
 }
 
+// Android preview support
+dependencies {
+    debugImplementation(compose.uiTooling)
+}
+
 compose.desktop {
     application {
         mainClass = "org.jetbrains.kotlinconf.MainKt"
