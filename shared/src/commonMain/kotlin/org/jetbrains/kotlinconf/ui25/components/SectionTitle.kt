@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.ui25.components
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -12,7 +11,7 @@ fun SectionTitle(
     text: String,
     modifier: Modifier = Modifier,
 ) {
-    KCText(
+    StyledText(
         text = text,
         modifier = modifier,
         style = KotlinConfTheme.typography.h2,
