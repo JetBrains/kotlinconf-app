@@ -71,7 +71,7 @@ fun SwitcherItem(
 
 @Preview
 @Composable
-fun SwitcherItemPreview() {
+private fun SwitcherItemPreview() {
     PreviewHelper {
         SwitcherItem("Normal item", {}, SwitcherItemState.Normal)
         SwitcherItem("Active item", {}, SwitcherItemState.Active)

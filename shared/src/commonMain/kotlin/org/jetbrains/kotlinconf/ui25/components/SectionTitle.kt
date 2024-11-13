@@ -22,7 +22,7 @@ fun SectionTitle(
 
 @Preview
 @Composable
-fun SectionTitlePreview() {
+private fun SectionTitlePreview() {
     PreviewHelper {
         SectionTitle("Section title")
         SectionTitle("7:30")
