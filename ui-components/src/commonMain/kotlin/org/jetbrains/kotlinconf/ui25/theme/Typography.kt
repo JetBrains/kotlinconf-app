@@ -6,10 +6,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.jetbrains_sans_bold
-import kotlinconfapp.shared.generated.resources.jetbrains_sans_regular
-import kotlinconfapp.shared.generated.resources.jetbrains_sans_semibold
+import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.jetbrains_sans_bold
+import kotlinconfapp.ui_components.generated.resources.jetbrains_sans_regular
+import kotlinconfapp.ui_components.generated.resources.jetbrains_sans_semibold
 import org.jetbrains.compose.resources.Font
 
 class Typography(
