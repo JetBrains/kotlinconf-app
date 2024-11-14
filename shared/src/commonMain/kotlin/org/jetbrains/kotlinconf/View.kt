@@ -7,8 +7,6 @@ import kotlinconfapp.shared.generated.resources.day_2
 import kotlinconfapp.shared.generated.resources.day_3
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.kotlinconf.ui.components.Tab
-import org.jetbrains.kotlinconf.utils.dayAndMonth
 import org.jetbrains.kotlinconf.utils.time
 
 data class Agenda(
@@ -23,7 +21,7 @@ data class Speakers(
 }
 
 @OptIn(ExperimentalResourceApi::class)
-enum class EventDay(override val title: StringResource) : Tab {
+enum class EventDay(val title: StringResource) {
     May22(Res.string.day_1),
     May23(Res.string.day_2),
     May24(Res.string.day_3);
@@ -40,9 +38,8 @@ enum class EventDay(override val title: StringResource) : Tab {
 data class Day(
     val day: EventDay,
     val timeSlots: List<TimeSlot>
-) : Tab {
-    @OptIn(ExperimentalResourceApi::class)
-    override val title: StringResource
+) {
+    val title: StringResource
         get() = day.title
 }
 
