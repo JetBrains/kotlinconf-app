@@ -31,10 +31,10 @@ fun main() {
 
 @Composable
 private fun GalleryApp() {
-    CompositionLocalProvider(LocalDensity provides Density(4f)) {
-
+    CompositionLocalProvider(LocalDensity provides Density(2f)) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             CardTagPreview()
+            DayHeaderPreview()
             FilterTagPreview()
             NowButtonPreview()
             NowLabelPreview()
