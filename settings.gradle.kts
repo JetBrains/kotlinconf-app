@@ -26,5 +26,6 @@ plugins {
 }
 
 include(":androidApp")
+include(":ui-components")
 include(":shared")
 include(":backend")
