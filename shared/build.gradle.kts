@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
-    id("kotlin-parcelize")
 }
 
 kotlin {
@@ -56,7 +55,6 @@ kotlin {
             api(compose.runtime)
             api(compose.foundation)
             api(compose.animation)
-            api(compose.material)
             api(compose.components.resources)
 
             api(libs.components.ui.tooling.preview)
@@ -67,7 +65,6 @@ kotlin {
             api(libs.ktor.utils)
 
             implementation(libs.kotlinx.datetime)
-            implementation(libs.material3)
 
             implementation(libs.androidx.navigation.compose)
             implementation(libs.multiplatform.markdown.renderer.m3)
@@ -81,18 +78,11 @@ kotlin {
         }
 
         androidMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-
             implementation(libs.android.svg)
             implementation(libs.androidx.core.ktx)
             implementation(libs.androidx.work.runtime)
             implementation(libs.androidx.preference)
             implementation(libs.compose.ui.tooling.preview)
-
             implementation(libs.ktor.client.cio)
         }
 
@@ -128,7 +118,6 @@ android {
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
     compileOptions {
@@ -137,12 +126,6 @@ android {
     }
     kotlin {
         jvmToolchain(11)
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
-    }
-    buildFeatures {
-        compose = true
     }
 }
 
