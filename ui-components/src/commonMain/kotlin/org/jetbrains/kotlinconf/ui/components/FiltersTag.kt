@@ -67,7 +67,7 @@ fun FilterTag(
 
 @Preview
 @Composable
-private fun FilterTagPreview() {
+internal fun FilterTagPreview() {
     PreviewHelper {
         var state1 by remember { mutableStateOf(false) }
         FilterTag("Label", state1, { state1 = it })

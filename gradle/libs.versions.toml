@@ -14,6 +14,7 @@ kotlin = "2.0.21"
 
 compose-android = "1.7.1"
 compose-multiplatform = "1.7.0"
+compose-hot-reload = "1.0.0-dev.27"
 
 exposed = "0.55.0"
 h2 = "2.2.224"
@@ -99,3 +100,4 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+composeHotReload = { id = "org.jetbrains.compose-hot-reload", version.ref = "compose-hot-reload" }

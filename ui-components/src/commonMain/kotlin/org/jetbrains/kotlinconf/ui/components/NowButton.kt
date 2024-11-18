@@ -76,7 +76,7 @@ fun NowButton(
 
 @Preview
 @Composable
-private fun NowButtonPreview() {
+internal fun NowButtonPreview() {
     PreviewHelper {
         NowButton(true, {})
         NowButton(false, {})

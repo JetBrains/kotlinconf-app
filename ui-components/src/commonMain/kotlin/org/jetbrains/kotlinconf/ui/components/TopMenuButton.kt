@@ -55,7 +55,7 @@ fun TopMenuButton(
 
 @Preview
 @Composable
-private fun TopMenuButtonPreview() {
+internal fun TopMenuButtonPreview() {
     PreviewHelper {
         var state1 by remember { mutableStateOf(false) }
         TopMenuButton(state1, { state1 = it }, null)

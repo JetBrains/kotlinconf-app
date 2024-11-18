@@ -72,7 +72,7 @@ private fun SwitcherItem(
 
 @Preview
 @Composable
-private fun SwitcherItemPreview() {
+internal fun SwitcherItemPreview() {
     PreviewHelper {
         SwitcherItem("Normal item", {}, selected = false)
         SwitcherItem("Selected item", {}, selected = true)
@@ -103,7 +103,7 @@ fun Switcher(
 
 @Composable
 @Preview
-private fun SwitcherPreview() {
+internal fun SwitcherPreview() {
     PreviewHelper {
         var selectedIndex by remember { mutableIntStateOf(0) }
         Switcher(
