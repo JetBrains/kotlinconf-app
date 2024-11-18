@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.composeHotReload)
 }
 
 kotlin {
@@ -30,6 +31,12 @@ kotlin {
             implementation(compose.material3)
             api(compose.components.resources)
             api(compose.components.uiToolingPreview)
+        }
+
+        // For hot-reload
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.logback.classic)
         }
     }
 }

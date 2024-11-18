@@ -9,6 +9,7 @@ pluginManagement {
         google()
         gradlePluginPortal()
         mavenCentral()
+        maven("https://repo.sellmair.io")
     }
 }
 
@@ -18,6 +19,7 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
         google()
         mavenCentral()
+        maven("https://repo.sellmair.io")
     }
 }
 
