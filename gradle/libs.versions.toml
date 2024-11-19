@@ -10,11 +10,12 @@ androidx-test-junit = "1.2.1"
 androidx-work-runtime = "2.9.1"
 androidx-preference = "1.2.1"
 
-kotlin = "2.0.21"
+kotlin = "2.0.21-firework.28"
+firework = "2.0.21-firework.28"
 
 compose-android = "1.7.1"
 compose-multiplatform = "1.7.0"
-compose-hot-reload = "1.0.0-dev.27"
+compose-hot-reload = "1.0.0-dev.28.1"
 
 exposed = "0.55.0"
 h2 = "2.2.224"
@@ -99,5 +100,5 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "firework" }
 composeHotReload = { id = "org.jetbrains.compose-hot-reload", version.ref = "compose-hot-reload" }
