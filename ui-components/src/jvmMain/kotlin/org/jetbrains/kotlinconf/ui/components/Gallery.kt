@@ -3,8 +3,13 @@ package org.jetbrains.kotlinconf.ui.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
@@ -19,7 +24,9 @@ fun main() {
         Window(
             onCloseRequest = ::exitApplication,
             alwaysOnTop = true,
-            state = rememberWindowState(width = 1000.dp, height = 800.dp),
+            state = rememberWindowState(
+                width = 800.dp, height = 600.dp,
+            ),
             title = "Gallery",
         ) {
             DevelopmentEntryPoint {
@@ -31,19 +38,24 @@ fun main() {
 
 @Composable
 private fun GalleryApp() {
-    CompositionLocalProvider(LocalDensity provides Density(2f)) {
-        Column(Modifier.verticalScroll(rememberScrollState())) {
-            CardTagPreview()
-            DayHeaderPreview()
-            FilterTagPreview()
-            NowButtonPreview()
-            NowLabelPreview()
-            SectionTitlePreview()
-            ServiceEventsPreview()
-            SwitcherItemPreview()
-            SwitcherPreview()
-            TopMenuButtonPreview()
-            TopMenuTitlePreview()
+    var denisityFloat by remember { mutableStateOf(1f) }
+    Column {
+        CompositionLocalProvider(LocalDensity provides Density(denisityFloat)) {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                ButtonPreview()
+                CardTagPreview()
+                DayHeaderPreview()
+                FilterTagPreview()
+                NowButtonPreview()
+                NowLabelPreview()
+                SectionTitlePreview()
+                ServiceEventsPreview()
+                SwitcherItemPreview()
+                SwitcherPreview()
+                TopMenuButtonPreview()
+                TopMenuTitlePreview()
+            }
         }
+        Slider(denisityFloat, onValueChange = { denisityFloat = it }, valueRange = 0.5f..4f)
     }
 }
