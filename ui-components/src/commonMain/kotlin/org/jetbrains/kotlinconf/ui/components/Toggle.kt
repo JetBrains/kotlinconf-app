@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,8 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -44,6 +41,7 @@ fun Toggle(
     enabled: Boolean,
     onToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     val toggleColor by animateColorAsState(
         if (enabled) KotlinConfTheme.colors.toggleOn
@@ -57,11 +55,12 @@ fun Toggle(
                 value = enabled,
                 enabled = true,
                 role = Role.Switch,
-                onValueChange = { onToggle(!enabled) }
+                onValueChange = { onToggle(!enabled) },
+                interactionSource = interactionSource,
+                indication = null,
             )
             .clearAndSetSemantics {},
     ) {
-        val interactionSource = remember { MutableInteractionSource() }
         Box(
             Modifier.size(ToggleWidth, ToggleHeight)
                 .clip(ToggleBackgroundShape)

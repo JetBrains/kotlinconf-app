@@ -29,29 +29,35 @@ internal val KotlinConfTypography: Typography
                 fontFamily = JetBrainsSans,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 30.sp,
+                lineHeight = 32.sp,
             ),
             h2 = TextStyle(
                 fontFamily = JetBrainsSans,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 22.sp,
+                lineHeight = 28.sp,
             ),
             h3 = TextStyle(
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = JetBrainsSans,
                 fontSize = 16.sp,
+                lineHeight = 24.sp,
             ),
             h4 = TextStyle(
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = JetBrainsSans,
                 fontSize = 13.sp,
+                lineHeight = 20.sp,
             ),
             text1 = TextStyle(
                 fontFamily = JetBrainsSans,
                 fontSize = 16.sp,
+                lineHeight = 24.sp,
             ),
             text2 = TextStyle(
                 fontFamily = JetBrainsSans,
                 fontSize = 13.sp,
+                lineHeight = 20.sp,
             ),
         )
     }
