@@ -1,11 +1,3 @@
-allprojects {
-    repositories {
-        maven("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
-        google()
-        mavenCentral()
-    }
-}
-
 plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.androidLibrary) apply false
@@ -15,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlinSerialization) apply false
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.composeHotReload) apply false
 }
 
 tasks.wrapper {

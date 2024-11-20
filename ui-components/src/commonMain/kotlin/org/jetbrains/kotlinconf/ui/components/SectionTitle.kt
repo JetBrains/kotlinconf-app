@@ -21,7 +21,7 @@ fun SectionTitle(
 
 @Preview
 @Composable
-private fun SectionTitlePreview() {
+internal fun SectionTitlePreview() {
     PreviewHelper {
         SectionTitle("Section title")
         SectionTitle("7:30")

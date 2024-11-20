@@ -35,7 +35,7 @@ fun NowLabel(modifier: Modifier = Modifier) {
 
 @Composable
 @Preview
-private fun NowLabelPreview() {
+internal fun NowLabelPreview() {
     PreviewHelper {
         NowLabel()
     }

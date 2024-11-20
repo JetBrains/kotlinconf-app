@@ -57,7 +57,7 @@ fun CardTag(
 
 @Preview
 @Composable
-private fun CardTagPreview() {
+internal fun CardTagPreview() {
     PreviewHelper {
         var state1 by remember { mutableStateOf(false) }
         CardTag("Label", state1, { state1 = it })

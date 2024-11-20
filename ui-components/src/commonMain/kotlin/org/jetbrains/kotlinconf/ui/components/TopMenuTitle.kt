@@ -40,7 +40,7 @@ fun TopMenuTitle(
 
 @Preview
 @Composable
-private fun TopMenuTitlePreview() {
+internal fun TopMenuTitlePreview() {
     PreviewHelper {
         TopMenuTitle("Top Menu Title", TopMenuTitleState.Header)
         TopMenuTitle("Top Menu Title", TopMenuTitleState.Completed)
