@@ -64,7 +64,7 @@ fun NowButton(
 
         AnimatedVisibility(enabled) {
             Icon(
-                // TODO review icon sizing later
+                // TODO review icon sizing later, https://github.com/JetBrains/kotlinconf-app/issues/175
                 painter = painterResource(Res.drawable.arrow_down_16),
                 contentDescription = "Now",
                 modifier = Modifier.size(16.dp),

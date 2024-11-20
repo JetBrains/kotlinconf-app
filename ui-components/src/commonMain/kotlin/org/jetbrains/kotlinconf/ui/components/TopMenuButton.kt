@@ -40,7 +40,7 @@ fun TopMenuButton(
     )
 
     Icon(
-        // TODO review icon sizing later
+        // TODO review icon sizing later, https://github.com/JetBrains/kotlinconf-app/issues/175
         modifier = modifier
             .size(30.dp)
             .clip(CircleShape)
