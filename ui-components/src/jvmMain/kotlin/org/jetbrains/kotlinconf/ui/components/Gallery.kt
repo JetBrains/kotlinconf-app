@@ -46,6 +46,7 @@ private fun GalleryApp() {
                 CardTagPreview()
                 DayHeaderPreview()
                 FilterTagPreview()
+                MainNavigationPreview()
                 NowButtonPreview()
                 NowLabelPreview()
                 PageMenuItemPreview()
