@@ -9,8 +9,7 @@ pluginManagement {
         google()
         gradlePluginPortal()
         mavenCentral()
-        maven("https://repo.sellmair.io")
-    }
+        maven("https://packages.jetbrains.team/maven/p/firework/dev")    }
 }
 
 dependencyResolutionManagement {
@@ -19,8 +18,7 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
         google()
         mavenCentral()
-        maven("https://repo.sellmair.io")
-    }
+        maven("https://packages.jetbrains.team/maven/p/firework/dev")    }
 }
 
 plugins {
