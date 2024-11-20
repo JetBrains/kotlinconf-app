@@ -38,9 +38,9 @@ fun main() {
 
 @Composable
 private fun GalleryApp() {
-    var denisityFloat by remember { mutableStateOf(1f) }
+    var densityFloat by remember { mutableStateOf(1f) }
     Column {
-        CompositionLocalProvider(LocalDensity provides Density(denisityFloat)) {
+        CompositionLocalProvider(LocalDensity provides Density(densityFloat)) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 ButtonPreview()
                 CardTagPreview()
@@ -52,10 +52,11 @@ private fun GalleryApp() {
                 ServiceEventsPreview()
                 SwitcherItemPreview()
                 SwitcherPreview()
+                TogglePreview()
                 TopMenuButtonPreview()
                 TopMenuTitlePreview()
             }
         }
-        Slider(denisityFloat, onValueChange = { denisityFloat = it }, valueRange = 0.5f..4f)
+        Slider(densityFloat, onValueChange = { densityFloat = it }, valueRange = 0.5f..4f)
     }
 }
