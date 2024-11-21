@@ -14,7 +14,7 @@ kotlin = "2.0.21-firework.28" # custom version for experimental hot reload suppo
 
 compose-android = "1.7.1"
 compose-multiplatform = "1.7.0"
-compose-hot-reload = "1.0.0-dev.28.1"
+compose-hot-reload = "1.0.0-dev.28.3"
 
 exposed = "0.55.0"
 h2 = "2.2.224"
