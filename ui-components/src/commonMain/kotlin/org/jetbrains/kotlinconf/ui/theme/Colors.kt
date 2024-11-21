@@ -23,6 +23,7 @@ import org.jetbrains.kotlinconf.ui.theme.UI.white10
 import org.jetbrains.kotlinconf.ui.theme.UI.white100
 import org.jetbrains.kotlinconf.ui.theme.UI.white20
 import org.jetbrains.kotlinconf.ui.theme.UI.white30
+import org.jetbrains.kotlinconf.ui.theme.UI.white50
 import org.jetbrains.kotlinconf.ui.theme.UI.white70
 import org.jetbrains.kotlinconf.ui.theme.UI.white80
 
@@ -95,7 +96,7 @@ val KotlinConfDarkColors = Colors(
 
     accentText = magentaTextDark,
     longText = white70,
-    noteText = white05,
+    noteText = white50,
     orangeText = orange,
     placeholderText = white30,
     primaryText = white100,
