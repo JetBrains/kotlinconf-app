@@ -25,10 +25,10 @@ internal object Brand {
 
     val orange = Color(0xFFFF5A13)
 
-    val colorGradient = Brush.linearGradient(
-        0f to Color(0xFFFF9100),
+    val colorGradient = Brush.horizontalGradient(
+        0f to Color(0xFFC202D7),
         0.5f to Color(0xFFF40183),
-        1f to Color(0xFFC202D7),
+        1f to Color(0xFFFF9100),
     )
 
     val purpleTextDark = Color(0xFFBF56FF)
