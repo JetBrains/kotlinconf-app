@@ -9,21 +9,17 @@ kotlin {
     androidTarget()
 
     sourceSets {
-        val androidMain by getting {
-            dependencies {
-                implementation(project(":shared"))
+        androidMain.dependencies {
+            implementation(projects.shared)
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.androidx.activity.compose)
 
-                implementation(libs.compose.ui.tooling.preview)
-                implementation(libs.androidx.activity.compose)
-            }
         }
 
-        val androidUnitTest by getting {
-            dependencies {
-                implementation(libs.junit)
-                implementation(libs.androidx.test.junit)
-                implementation(libs.androidx.espresso.core)
-            }
+        androidUnitTest.dependencies {
+            implementation(libs.junit)
+            implementation(libs.androidx.test.junit)
+            implementation(libs.androidx.espresso.core)
         }
     }
 }
@@ -31,8 +27,6 @@ kotlin {
 android {
     namespace = "com.jetbrains.kotlinconf"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 
     defaultConfig {
         applicationId = "com.jetbrains.kotlinconf"
@@ -62,21 +56,13 @@ android {
     kotlin {
         jvmToolchain(11)
     }
-
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    dependencies {
-        debugImplementation(libs.compose.ui.tooling)
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
-    }
-    buildFeatures {
-        compose = true
-    }
 }
 
-
+dependencies {
+    debugImplementation(libs.compose.ui.tooling)
+}

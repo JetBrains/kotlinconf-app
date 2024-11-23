@@ -5,7 +5,6 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import org.jetbrains.compose.reload.DevelopmentEntryPoint
-import org.jetbrains.kotlinconf.ui.GalleryApp
 
 fun main() {
     application {
