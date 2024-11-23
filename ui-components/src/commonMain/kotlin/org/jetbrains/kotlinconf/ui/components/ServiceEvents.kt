@@ -52,6 +52,7 @@ private fun ServiceEventItem(
                 text = event.note,
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.noteText,
+                maxLines = 1,
             )
         }
 
@@ -60,6 +61,7 @@ private fun ServiceEventItem(
                 text = event.time,
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.primaryText,
+                maxLines = 1,
             )
         }
     }
@@ -117,9 +119,8 @@ internal fun ServiceEventsPreview() {
         ServiceEvent(
             ServiceEventData(
                 name = "Breakfast",
-                now = true,
-                time = "9:00 - 10:00",
-                note = "Note",
+                now = false,
+                time = "9:00 – 10:00",
             )
         )
         ServiceEvents(
@@ -127,13 +128,13 @@ internal fun ServiceEventsPreview() {
                 ServiceEventData(
                     name = "Lunch",
                     now = false,
-                    time = "12:00 - 13:00",
-                    note = "Note",
+                    time = "12:00 – 13:00",
+                    note = "In 30 min",
                 ),
                 ServiceEventData(
                     name = "Dinner",
                     now = true,
-                    time = "17:00 - 18:00",
+                    time = "17:00 – 18:00",
                 ),
                 ServiceEventData(
                     name = "Party",

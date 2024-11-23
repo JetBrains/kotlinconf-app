@@ -19,11 +19,13 @@ fun StyledText(
     modifier: Modifier = Modifier,
     color: Color = KotlinConfTheme.colors.primaryText,
     style: TextStyle = KotlinConfTheme.typography.text1,
+    maxLines: Int = Int.MAX_VALUE,
 ) {
     BasicText(
         text = text,
         modifier = modifier,
         style = style,
-        color = { color }
+        color = { color },
+        maxLines = maxLines,
     )
 }
