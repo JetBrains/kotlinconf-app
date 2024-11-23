@@ -39,6 +39,7 @@ private fun GalleryApp() {
             NowButtonPreview()
             NowLabelPreview()
             SectionTitlePreview()
+            ServiceEventsPreview()
             SwitcherItemPreview()
             SwitcherPreview()
             TopMenuButtonPreview()
