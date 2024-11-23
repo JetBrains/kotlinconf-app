@@ -38,6 +38,7 @@ class Colors(
 
     val strokeFull: Color,
     val strokeInputFocus: Color,
+    val strokeHalf: Color,
     val strokePale: Color,
 
     val accentText: Color,
@@ -65,6 +66,7 @@ val KotlinConfLightColors = Colors(
 
     strokeFull = black100,
     strokeInputFocus = black80,
+    strokeHalf = black40,
     strokePale = black15,
 
     accentText = magenta100,
@@ -92,6 +94,7 @@ val KotlinConfDarkColors = Colors(
 
     strokeFull = white100,
     strokeInputFocus = white80,
+    strokeHalf = white50,
     strokePale = white20,
 
     accentText = magentaTextDark,

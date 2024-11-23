@@ -1,6 +1,8 @@
 package org.jetbrains.kotlinconf.ui.theme
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -34,6 +36,7 @@ fun KotlinConfTheme(
     CompositionLocalProvider(
         LocalColors provides if (darkTheme) KotlinConfDarkColors else KotlinConfLightColors,
         LocalTypography provides KotlinConfTypography,
+        LocalIndication provides ripple(),
     ) {
         content()
     }
