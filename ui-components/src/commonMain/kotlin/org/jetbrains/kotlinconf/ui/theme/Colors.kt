@@ -66,7 +66,7 @@ val KotlinConfLightColors = Colors(
 
     strokeFull = black100,
     strokeInputFocus = black80,
-    strokeHalf = black40, // TODO check design
+    strokeHalf = black40,
     strokePale = black15,
 
     accentText = magenta100,
@@ -94,7 +94,7 @@ val KotlinConfDarkColors = Colors(
 
     strokeFull = white100,
     strokeInputFocus = white80,
-    strokeHalf = white50, // TODO check design
+    strokeHalf = white50,
     strokePale = white20,
 
     accentText = magentaTextDark,
