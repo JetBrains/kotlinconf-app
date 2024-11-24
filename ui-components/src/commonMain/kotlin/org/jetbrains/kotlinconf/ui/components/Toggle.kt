@@ -22,6 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
@@ -34,7 +36,7 @@ private val ToggleThumbShape = CircleShape
 
 private val ToggleWidth = 28.dp
 private val ToggleHeight = 16.dp
-private val ThumbSize = 14.dp
+private val ThumbSize = 18.dp
 
 @Composable
 fun Toggle(
@@ -72,20 +74,23 @@ fun Toggle(
                 .background(toggleColor)
         )
         val xOffset by animateDpAsState(if (enabled) ToggleWidth / 4 else -ToggleWidth / 4)
+        val thumbCenterColor = KotlinConfTheme.colors.mainBackground
         Box(
             Modifier
                 .offset(x = xOffset)
-                .size(ThumbSize + 4.dp)
-                .border(width = 2.dp, color = toggleColor, shape = ToggleThumbShape)
+                .size(ToggleHeight)
                 .wrapContentSize(unbounded = true)
                 .size(ThumbSize)
                 .clip(ToggleThumbShape)
+                .background(toggleColor)
                 .clickable(
                     onClick = { onToggle(!enabled) },
                     interactionSource = interactionSource,
                     indication = LocalIndication.current,
                 )
-                .background(KotlinConfTheme.colors.mainBackground)
+                .drawBehind {
+                    drawCircle(color = thumbCenterColor, radius = (size.minDimension / 2) - 2.dp.toPx())
+                }
         )
     }
 }
