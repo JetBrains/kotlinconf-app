@@ -89,7 +89,7 @@ fun Toggle(
                     indication = LocalIndication.current,
                 )
                 .drawBehind {
-                  drawCircle(color = thumbCenterColor, radius = (size.minDimension / 2) - 2.dp.toPx())
+                    drawCircle(color = thumbCenterColor, radius = (size.minDimension / 2) - 2.dp.toPx())
                 }
         )
     }
