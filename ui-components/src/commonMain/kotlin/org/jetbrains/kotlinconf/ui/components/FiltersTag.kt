@@ -22,7 +22,7 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
 
-private val FilterTagShape = RoundedCornerShape(size = 3.dp)
+private val FilterTagShape = RoundedCornerShape(size = 6.dp)
 
 @Composable
 fun FilterTag(
@@ -54,7 +54,7 @@ fun FilterTag(
             )
             .clickable(onClick = { onSelect(!selected) })
             .background(backgroundColor)
-            .padding(horizontal = 12.dp, vertical = 6.dp),
+            .padding(horizontal = 12.dp, vertical = 10.dp),
         contentAlignment = Alignment.Center,
     ) {
         StyledText(

@@ -26,7 +26,6 @@ private val CardTagShape = RoundedCornerShape(size = 4.dp)
 fun CardTag(
     label: String,
     selected: Boolean,
-    onSelect: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor by animateColorAsState(
@@ -42,7 +41,6 @@ fun CardTag(
         modifier = modifier
             .heightIn(min = 20.dp)
             .clip(CardTagShape)
-            .clickable(onClick = { onSelect(!selected) })
             .background(backgroundColor)
             .padding(horizontal = 4.dp),
         contentAlignment = Alignment.Center,
@@ -60,9 +58,9 @@ fun CardTag(
 internal fun CardTagPreview() {
     PreviewHelper {
         var state1 by remember { mutableStateOf(false) }
-        CardTag("Label", state1, { state1 = it })
+        CardTag("Label", state1)
 
         var state2 by remember { mutableStateOf(true) }
-        CardTag("Label", state2, { state2 = it })
+        CardTag("Label", state2)
     }
 }
