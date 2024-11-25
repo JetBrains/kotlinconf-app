@@ -16,13 +16,13 @@ compose-android = "1.7.1"
 compose-multiplatform = "1.7.0"
 compose-hot-reload = "1.0.0-dev.28.4"
 
+coil = "3.0.3"
 exposed = "0.55.0"
 h2 = "2.2.224"
 hikaricp = "5.1.0"
-image-loader = "1.9.0"
 junit = "4.13.2"
 kotlinx-datetime = "0.6.1"
-ktor = "3.0.0"
+ktor = "3.0.1"
 android-svg = "1.4"
 logbackClassic = "1.5.6"
 markdown = "0.26.0"
@@ -65,6 +65,7 @@ ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-utils = { module = "io.ktor:ktor-utils", version.ref = "ktor" }
@@ -88,8 +89,9 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logbackClassic" }
 
 # images
-image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }
 android-svg = { module = "com.caverock:androidsvg-aar", version.ref = "android-svg" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

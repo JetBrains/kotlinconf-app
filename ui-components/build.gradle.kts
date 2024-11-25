@@ -31,6 +31,21 @@ kotlin {
             implementation(compose.material3)
             api(compose.components.resources)
             api(compose.components.uiToolingPreview)
+
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor3)
+        }
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+        }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+        jsMain.dependencies {
+            implementation(libs.ktor.client.js)
         }
     }
 }

@@ -39,6 +39,7 @@ fun GalleryApp() {
                 SectionTitlePreview()
                 ServiceEventsPreview()
                 SettingsItemPreview()
+                SpeakerPreview()
                 SwitcherItemPreview()
                 SwitcherPreview()
                 TogglePreview()

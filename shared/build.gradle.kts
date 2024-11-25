@@ -69,8 +69,6 @@ kotlin {
             implementation(libs.androidx.navigation.compose)
             implementation(libs.multiplatform.markdown.renderer.m3)
             implementation(libs.ktor.client.core)
-
-            api(libs.image.loader)
         }
 
         commonTest.dependencies {
@@ -83,7 +81,7 @@ kotlin {
             implementation(libs.androidx.work.runtime)
             implementation(libs.androidx.preference)
             implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.okhttp)
         }
 
         iosMain.dependencies {
@@ -91,7 +89,7 @@ kotlin {
         }
 
         jvmMain.dependencies {
-            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.okhttp)
             implementation(compose.desktop.currentOs)
             implementation(libs.android.svg)
         }
