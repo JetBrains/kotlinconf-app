@@ -18,7 +18,14 @@ kotlin {
     iosSimulatorArm64()
 
     @OptIn(ExperimentalWasmDsl::class)
-    wasmJs()
+    wasmJs {
+        binaries.executable()
+        browser {
+            commonWebpackConfig {
+                outputFileName = "kotlinconf-app-gallery.js"
+            }
+        }
+    }
     js {
         browser()
     }
