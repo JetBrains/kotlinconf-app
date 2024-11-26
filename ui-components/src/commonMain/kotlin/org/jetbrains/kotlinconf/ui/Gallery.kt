@@ -29,6 +29,7 @@ fun GalleryApp() {
                 EmptySectionPreview()
                 FilterTagPreview()
                 FiltersPreview()
+                KodeeIconsPreview()
                 MainNavigationPreview()
                 NowButtonPreview()
                 NowLabelPreview()
