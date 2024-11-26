@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -77,9 +77,9 @@ fun PageTitle(
                 modifier = Modifier
                     .size(24.dp)
                     .wrapContentSize(unbounded = true)
-                    .selectable(
-                        selected = bookmarked,
-                        onClick = { onBookmark(!bookmarked) },
+                    .toggleable(
+                        value = bookmarked,
+                        onValueChange = { onBookmark(it) },
                         role = Role.Checkbox,
                         indication = null,
                         interactionSource = null,

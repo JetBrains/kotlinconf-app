@@ -66,7 +66,7 @@ fun DayHeader(
                 day,
                 style = DayDateStyle,
                 color = KotlinConfTheme.colors.primaryTextInverted,
-                modifier = Modifier.width(70.dp),
+                modifier = Modifier.widthIn(min = 72.dp),
             )
             StyledText(
                 "",
