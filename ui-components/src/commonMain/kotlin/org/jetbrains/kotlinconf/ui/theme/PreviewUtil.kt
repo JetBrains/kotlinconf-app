@@ -10,23 +10,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PreviewHelper(content: @Composable ColumnScope.() -> Unit) {
+fun PreviewHelper(
+    paddingEnabled: Boolean = true,
+    content: @Composable ColumnScope.() -> Unit,
+) {
     Column {
         KotlinConfTheme(darkTheme = false) {
-            PreviewColumn(content)
+            PreviewColumn(paddingEnabled, content)
         }
         KotlinConfTheme(darkTheme = true) {
-            PreviewColumn(content)
+            PreviewColumn(paddingEnabled, content)
         }
     }
 }
 
 @Composable
-private fun PreviewColumn(content: @Composable ColumnScope.() -> Unit) {
+private fun PreviewColumn(
+    paddingEnabled: Boolean,
+    content: @Composable ColumnScope.() -> Unit,
+) {
     Column(
         modifier = Modifier
             .background(KotlinConfTheme.colors.mainBackground)
-            .padding(8.dp),
+            .padding(
+                if (paddingEnabled) 8.dp else 0.dp,
+            ),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         content()

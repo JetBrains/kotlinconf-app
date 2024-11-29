@@ -30,6 +30,7 @@ fun GalleryApp() {
                 FilterTagPreview()
                 FiltersPreview()
                 KodeeIconsPreview()
+                MainHeaderPreview()
                 MainNavigationPreview()
                 NowButtonPreview()
                 NowLabelPreview()
@@ -44,7 +45,6 @@ fun GalleryApp() {
                 SwitcherPreview()
                 TogglePreview()
                 TopMenuButtonPreview()
-                TopMenuTitlePreview()
             }
         }
     }
