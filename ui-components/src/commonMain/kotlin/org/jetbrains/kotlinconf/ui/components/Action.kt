@@ -1,6 +1,11 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring.DampingRatioNoBouncy
+import androidx.compose.animation.core.Spring.StiffnessMedium
+import androidx.compose.animation.core.Spring.StiffnessMediumLow
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -11,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
@@ -36,7 +42,8 @@ fun Action(
 ) {
     val color by animateColorAsState(
         if (enabled) KotlinConfTheme.colors.primaryText
-        else KotlinConfTheme.colors.noteText
+        else KotlinConfTheme.colors.noteText,
+        spring(DampingRatioNoBouncy, StiffnessMediumLow),
     )
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -47,6 +54,7 @@ fun Action(
                 enabled = enabled,
                 interactionSource = null,
                 indication = null,
+                role = Role.Button,
             )
     ) {
         StyledText(
