@@ -27,6 +27,7 @@ fun GalleryApp() {
                 CardTagPreview()
                 DayHeaderPreview()
                 EmptySectionPreview()
+                FeedbackFormPreview()
                 FilterTagPreview()
                 FiltersPreview()
                 KodeeIconsPreview()

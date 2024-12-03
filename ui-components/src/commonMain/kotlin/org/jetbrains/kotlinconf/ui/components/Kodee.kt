@@ -109,7 +109,7 @@ fun KodeeEmotion(
         Emotion.Positive -> Res.drawable.kodee_emotion_positive
     }
     Image(
-        bitmap = imageResource(resource),
+        imageVector = vectorResource(resource),
         contentDescription = null,
         modifier = modifier.size(80.dp),
     )
