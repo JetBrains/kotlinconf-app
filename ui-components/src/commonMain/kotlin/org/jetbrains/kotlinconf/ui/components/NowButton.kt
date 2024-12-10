@@ -26,7 +26,9 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.arrow_down_16
+import kotlinconfapp.ui_components.generated.resources.now
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.components.NowButtonState.After
 import org.jetbrains.kotlinconf.ui.components.NowButtonState.Before
@@ -72,7 +74,7 @@ fun NowButton(
         horizontalArrangement = Arrangement.Center,
     ) {
         StyledText(
-            text = "Now",
+            text = stringResource(Res.string.now),
             style = KotlinConfTheme.typography.text2,
             color = textColor,
         )
@@ -87,7 +89,7 @@ fun NowButton(
                 Icon(
                     // TODO review icon sizing later, https://github.com/JetBrains/kotlinconf-app/issues/175
                     painter = painterResource(Res.drawable.arrow_down_16),
-                    contentDescription = "Now",
+                    contentDescription = null,
                     modifier = Modifier
                         .size(16.dp)
                         .rotate(if (time == Before) 0f else 180f),

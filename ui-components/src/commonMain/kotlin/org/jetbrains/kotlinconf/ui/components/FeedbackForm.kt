@@ -9,7 +9,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
@@ -28,13 +27,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
+import kotlinconfapp.ui_components.generated.resources.feedback_form_send
+import kotlinconfapp.ui_components.generated.resources.feedback_form_type_something
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
@@ -124,7 +125,7 @@ fun FeedbackForm(
                         exit = fadeOut(tween(10)),
                     ) {
                         StyledText(
-                            text = "Type something",
+                            text = stringResource(Res.string.feedback_form_type_something),
                             style = KotlinConfTheme.typography.text1,
                             color = KotlinConfTheme.colors.placeholderText
                         )
@@ -142,7 +143,7 @@ fun FeedbackForm(
             KodeeEmotion(emotion = emotion)
             Spacer(Modifier.weight(1f))
             Action(
-                label = "Send",
+                label = stringResource(Res.string.feedback_form_send),
                 icon = Res.drawable.arrow_right_24,
                 size = ActionSize.Large,
                 enabled = feedbackText.isNotEmpty(),
