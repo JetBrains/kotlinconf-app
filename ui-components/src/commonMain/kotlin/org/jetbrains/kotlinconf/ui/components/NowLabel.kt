@@ -28,7 +28,8 @@ fun NowLabel(modifier: Modifier = Modifier) {
         StyledText(
             text = "Now",
             color = KotlinConfTheme.colors.accentText,
-            style = KotlinConfTheme.typography.text2
+            style = KotlinConfTheme.typography.text2,
+            maxLines = 1,
         )
     }
 }

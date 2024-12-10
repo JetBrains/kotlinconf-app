@@ -45,6 +45,7 @@ fun GalleryApp() {
                 SpeakerPreview()
                 SwitcherItemPreview()
                 SwitcherPreview()
+                TalkCardPreview()
                 TogglePreview()
                 TopMenuButtonPreview()
             }

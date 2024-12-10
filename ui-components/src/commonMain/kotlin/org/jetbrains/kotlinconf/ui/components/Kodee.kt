@@ -1,10 +1,19 @@
 package org.jetbrains.kotlinconf.ui.components
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
@@ -41,6 +50,7 @@ enum class Emotion {
 fun KodeeIconSmall(
     emotion: Emotion,
     selected: Boolean,
+    onClick: (Emotion) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val resource = if (selected) {
@@ -56,11 +66,21 @@ fun KodeeIconSmall(
             Emotion.Positive -> Res.drawable.kodee_small_positive_outline
         }
     }
+
+    val tintColor by animateColorAsState(
+        if (selected) KotlinConfTheme.colors.purpleText
+        else KotlinConfTheme.colors.primaryText
+    )
     Image(
         imageVector = vectorResource(resource),
         contentDescription = null, // TODO review as part of https://github.com/JetBrains/kotlinconf-app/issues/193
-        modifier = modifier.size(24.dp),
-        colorFilter = if (!selected) ColorFilter.tint(KotlinConfTheme.colors.primaryText) else null,
+        modifier = modifier.size(24.dp)
+            .clickable(
+                onClick = { onClick(emotion) },
+                indication = null,
+                interactionSource = null,
+            ),
+        colorFilter = ColorFilter.tint(tintColor)
     )
 }
 
@@ -103,16 +123,18 @@ fun KodeeEmotion(
     emotion: Emotion,
     modifier: Modifier = Modifier,
 ) {
-    val resource = when (emotion) {
-        Emotion.Negative -> Res.drawable.kodee_emotion_negative
-        Emotion.Neutral -> Res.drawable.kodee_emotion_neutral
-        Emotion.Positive -> Res.drawable.kodee_emotion_positive
+    AnimatedContent(emotion) { targetEmotion ->
+        val resource = when (targetEmotion) {
+            Emotion.Negative -> Res.drawable.kodee_emotion_negative
+            Emotion.Neutral -> Res.drawable.kodee_emotion_neutral
+            Emotion.Positive -> Res.drawable.kodee_emotion_positive
+        }
+        Image(
+            imageVector = vectorResource(resource),
+            contentDescription = null,
+            modifier = modifier.size(80.dp),
+        )
     }
-    Image(
-        imageVector = vectorResource(resource),
-        contentDescription = null,
-        modifier = modifier.size(80.dp),
-    )
 }
 
 @Preview
@@ -120,13 +142,13 @@ fun KodeeEmotion(
 internal fun KodeeIconsPreview() {
     PreviewHelper {
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            KodeeIconSmall(Emotion.Negative, false)
-            KodeeIconSmall(Emotion.Neutral, false)
-            KodeeIconSmall(Emotion.Positive, false)
+            KodeeIconSmall(Emotion.Negative, false, {})
+            KodeeIconSmall(Emotion.Neutral, false, {})
+            KodeeIconSmall(Emotion.Positive, false, {})
 
-            KodeeIconSmall(Emotion.Negative, true)
-            KodeeIconSmall(Emotion.Neutral, true)
-            KodeeIconSmall(Emotion.Positive, true)
+            KodeeIconSmall(Emotion.Negative, true, {})
+            KodeeIconSmall(Emotion.Neutral, true, {})
+            KodeeIconSmall(Emotion.Positive, true, {})
         }
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             KodeeIconLarge(Emotion.Negative, false)

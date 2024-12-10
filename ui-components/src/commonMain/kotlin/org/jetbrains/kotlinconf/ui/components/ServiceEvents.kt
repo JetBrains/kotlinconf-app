@@ -68,21 +68,6 @@ private fun ServiceEventItem(
 }
 
 @Composable
-private fun Divider(
-    thickness: Dp,
-    color: Color,
-) {
-    Canvas(Modifier.fillMaxWidth().height(thickness)) {
-        drawLine(
-            color = color,
-            strokeWidth = thickness.toPx(),
-            start = Offset(0f, thickness.toPx() / 2),
-            end = Offset(size.width, thickness.toPx() / 2),
-        )
-    }
-}
-
-@Composable
 fun ServiceEvent(
     event: ServiceEventData,
     modifier: Modifier = Modifier,
