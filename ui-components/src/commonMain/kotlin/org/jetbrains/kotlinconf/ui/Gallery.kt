@@ -38,6 +38,7 @@ fun GalleryApp() {
                 PageMenuItemPreview()
                 PageTitlePreview()
                 ParagraphTitlePreview()
+                ScrollIndicatorPreview()
                 SectionTitlePreview()
                 ServiceEventsPreview()
                 SettingsItemPreview()
