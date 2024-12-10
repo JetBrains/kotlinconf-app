@@ -36,7 +36,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.filter_by_tags
+import kotlinconfapp.ui_components.generated.resources.filter_label_category
+import kotlinconfapp.ui_components.generated.resources.filter_label_level
+import kotlinconfapp.ui_components.generated.resources.filter_label_session_format
 import kotlinconfapp.ui_components.generated.resources.up_24
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
@@ -79,7 +84,7 @@ fun Filters(
         ) {
             val iconRotation by animateFloatAsState(if (isExpanded) 0f else 180f)
             Action(
-                label = "Filter by tags",
+                label = stringResource(Res.string.filter_by_tags),
                 icon = Res.drawable.up_24,
                 size = ActionSize.Medium,
                 enabled = true,
@@ -124,9 +129,9 @@ fun Filters(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.padding(12.dp),
             ) {
-                FilterItemGroup("Category", categories, toggleItem)
-                FilterItemGroup("Level", levels, toggleItem)
-                FilterItemGroup("Session format", sessionFormats, toggleItem)
+                FilterItemGroup(stringResource(Res.string.filter_label_category), categories, toggleItem)
+                FilterItemGroup(stringResource(Res.string.filter_label_level), levels, toggleItem)
+                FilterItemGroup(stringResource(Res.string.filter_label_session_format), sessionFormats, toggleItem)
             }
         }
     }

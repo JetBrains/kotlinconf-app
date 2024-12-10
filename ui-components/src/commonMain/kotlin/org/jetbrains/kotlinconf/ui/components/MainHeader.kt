@@ -32,7 +32,11 @@ import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.arrow_left_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.close_24
+import kotlinconfapp.ui_components.generated.resources.main_header_back
+import kotlinconfapp.ui_components.generated.resources.main_header_search_clear
+import kotlinconfapp.ui_components.generated.resources.main_header_search_hint
 import kotlinconfapp.ui_components.generated.resources.search_24
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
@@ -57,7 +61,7 @@ fun MainHeaderSearchBar(
                 onClose()
                 onSearchValueChange("")
             },
-            contentDescription = "Back",
+            contentDescription = stringResource(Res.string.main_header_back),
         )
 
         val focusRequester = remember { FocusRequester() }
@@ -86,7 +90,7 @@ fun MainHeaderSearchBar(
                 exit = fadeOut(tween(10)),
             ) {
                 StyledText(
-                    text = "Type to search",
+                    text = stringResource(Res.string.main_header_search_hint),
                     style = KotlinConfTheme.typography.text1,
                     color = KotlinConfTheme.colors.placeholderText
                 )
@@ -99,7 +103,7 @@ fun MainHeaderSearchBar(
                 onSearchValueChange("")
                 focusRequester.requestFocus()
             },
-            contentDescription = "Clear",
+            contentDescription = stringResource(Res.string.main_header_search_clear),
         )
     }
 }

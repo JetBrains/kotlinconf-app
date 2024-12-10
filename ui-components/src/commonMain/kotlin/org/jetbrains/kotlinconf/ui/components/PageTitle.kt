@@ -23,10 +23,12 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.action_bookmark
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24_fill
 import kotlinconfapp.ui_components.generated.resources.lightning_16_fill
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
@@ -88,7 +90,7 @@ fun PageTitle(
                 painter = painterResource(
                     if (bookmarked) Res.drawable.bookmark_24_fill else Res.drawable.bookmark_24
                 ),
-                contentDescription = "Bookmark",
+                contentDescription = stringResource(Res.string.action_bookmark),
                 tint = iconTint,
             )
         }

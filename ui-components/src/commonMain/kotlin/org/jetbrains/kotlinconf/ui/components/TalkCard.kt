@@ -41,13 +41,18 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.action_bookmark
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24_fill
 import kotlinconfapp.ui_components.generated.resources.lightning_16_fill
+import kotlinconfapp.ui_components.generated.resources.lightning_talk
+import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_talk
+import kotlinconfapp.ui_components.generated.resources.talk_card_your_feedback
 import kotlinconfapp.ui_components.generated.resources.up_24
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.Brand
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -191,7 +196,7 @@ private fun TopBlock(
                     if (bookmarked) Res.drawable.bookmark_24_fill
                     else Res.drawable.bookmark_24
                 ),
-                contentDescription = "Bookmark",
+                contentDescription = stringResource(Res.string.action_bookmark),
                 tint = iconColor,
             )
         }
@@ -250,7 +255,7 @@ private fun TimeBlock(
             Icon(
                 modifier = Modifier.size(16.dp),
                 painter = painterResource(Res.drawable.lightning_16_fill),
-                contentDescription = "Lightning talk",
+                contentDescription = stringResource(Res.string.lightning_talk),
                 tint = KotlinConfTheme.colors.orangeText,
             )
         }
@@ -291,7 +296,7 @@ private fun FeedbackBlock(
                 if (emotionSelected) {
                     val iconRotation by animateFloatAsState(if (feedbackExpanded) 0f else 180f)
                     Action(
-                        label = "Your feedback",
+                        label = stringResource(Res.string.talk_card_your_feedback),
                         icon = Res.drawable.up_24,
                         size = ActionSize.Medium,
                         enabled = true,
@@ -300,7 +305,7 @@ private fun FeedbackBlock(
                     )
                 } else {
                     StyledText(
-                        text = "How was the talk?",
+                        text = stringResource(Res.string.talk_card_how_was_the_talk),
                         style = KotlinConfTheme.typography.text2,
                         color = KotlinConfTheme.colors.primaryText,
                     )
