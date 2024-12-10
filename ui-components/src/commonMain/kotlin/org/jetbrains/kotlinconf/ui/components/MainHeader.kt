@@ -145,22 +145,20 @@ fun MainHeaderContainer(
     titleContent: @Composable () -> Unit = {},
     searchContent: @Composable () -> Unit = {},
 ) {
-    Column {
-        AnimatedContent(
-            targetState = state,
-            transitionSpec = {
-                (fadeIn(tween(50)) + slideIntoContainer(SlideDirection.Down)) togetherWith
-                        (fadeOut(tween(50)) + slideOutOfContainer(SlideDirection.Up))
-            },
-            modifier = modifier
-                .height(48.dp)
-                .fillMaxWidth()
-                .background(KotlinConfTheme.colors.mainBackground),
-        ) { target ->
-            when (target) {
-                MainHeaderContainerState.Title -> titleContent()
-                MainHeaderContainerState.Search -> searchContent()
-            }
+    AnimatedContent(
+        targetState = state,
+        transitionSpec = {
+            (fadeIn(tween(50)) + slideIntoContainer(SlideDirection.Down)) togetherWith
+                    (fadeOut(tween(50)) + slideOutOfContainer(SlideDirection.Up))
+        },
+        modifier = modifier
+            .height(48.dp)
+            .fillMaxWidth()
+            .background(KotlinConfTheme.colors.mainBackground),
+    ) { target ->
+        when (target) {
+            MainHeaderContainerState.Title -> titleContent()
+            MainHeaderContainerState.Search -> searchContent()
         }
     }
 }
