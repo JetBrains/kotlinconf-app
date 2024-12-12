@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
@@ -63,4 +64,9 @@ android {
     kotlin {
         jvmToolchain(11)
     }
+}
+
+// Hot reload support
+composeCompiler {
+    featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
 }
