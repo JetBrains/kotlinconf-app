@@ -9,7 +9,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
@@ -28,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -41,8 +39,8 @@ import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
 @Composable
 fun FeedbackForm(
-    emotion: Emotion,
-    onSubmit: (comment: String) -> Unit,
+    emotion: Emotion?,
+    onSubmit: (emotion: Emotion, comment: String) -> Unit,
     past: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -139,14 +137,20 @@ fun FeedbackForm(
                 .align(Alignment.BottomCenter),
             verticalAlignment = Alignment.Bottom
         ) {
-            KodeeEmotion(emotion = emotion)
+            if (emotion != null) {
+                KodeeEmotion(emotion)
+            }
             Spacer(Modifier.weight(1f))
             Action(
                 label = "Send",
                 icon = Res.drawable.arrow_right_24,
                 size = ActionSize.Large,
                 enabled = feedbackText.isNotEmpty(),
-                onClick = { onSubmit(feedbackText) },
+                onClick = {
+                    if (emotion != null) {
+                        onSubmit(emotion, feedbackText)
+                    }
+                },
             )
         }
     }
@@ -156,7 +160,7 @@ fun FeedbackForm(
 @Composable
 internal fun FeedbackFormPreview() {
     PreviewHelper {
-        FeedbackForm(Emotion.Positive, { text -> println("Feedback: $text") }, true)
-        FeedbackForm(Emotion.Negative, { text -> println("Feedback: $text") }, false)
+        FeedbackForm(Emotion.Positive, { emotion, text -> println("Feedback: $text") }, true)
+        FeedbackForm(Emotion.Negative, { emotion, text -> println("Feedback: $text") }, false)
     }
 }

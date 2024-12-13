@@ -29,7 +29,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,14 +44,11 @@ import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24_fill
 import kotlinconfapp.ui_components.generated.resources.lightning_16_fill
 import kotlinconfapp.ui_components.generated.resources.up_24
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.Brand
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import kotlin.time.Duration.Companion.milliseconds
 
 enum class TalkStatus {
     Past, Now, Upcoming,
@@ -74,7 +70,8 @@ fun TalkCard(
     time: String,
     timeNote: String?,
     status: TalkStatus,
-    onSubmitFeedback: (Emotion, String) -> Unit,
+    onSubmitFeedback: (Emotion?) -> Unit,
+    onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor by animateColorAsState(
@@ -125,6 +122,7 @@ fun TalkCard(
             FeedbackBlock(
                 status = status,
                 onSubmitFeedback = onSubmitFeedback,
+                onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
             )
         }
     }
@@ -269,7 +267,8 @@ private const val FeedbackAnimationDuration = 50
 @Composable
 private fun FeedbackBlock(
     status: TalkStatus,
-    onSubmitFeedback: (Emotion, String) -> Unit,
+    onSubmitFeedback: (Emotion?) -> Unit,
+    onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
 ) {
     var selectedEmotion by remember { mutableStateOf<Emotion?>(null) }
     var feedbackExpanded by remember { mutableStateOf(false) }
@@ -287,6 +286,7 @@ private fun FeedbackBlock(
                             fadeOut(tween(FeedbackAnimationDuration))
                 },
                 modifier = Modifier.fillMaxHeight(),
+                contentAlignment = Alignment.CenterStart,
             ) { emotionSelected ->
                 if (emotionSelected) {
                     val iconRotation by animateFloatAsState(if (feedbackExpanded) 0f else 180f)
@@ -316,8 +316,9 @@ private fun FeedbackBlock(
                         emotion = emotion,
                         selected = selectedEmotion == emotion,
                         onClick = {
-                            selectedEmotion = emotion
-                            feedbackExpanded = true
+                            selectedEmotion = if (emotion == selectedEmotion) null else emotion
+                            feedbackExpanded = selectedEmotion != null
+                            onSubmitFeedback(selectedEmotion)
                         },
                     )
                 }
@@ -328,23 +329,15 @@ private fun FeedbackBlock(
             LaunchedEffect(Unit) {
                 focusRequester.requestFocus()
             }
-            selectedEmotion?.let { emotion ->
-                val scope = rememberCoroutineScope()
-                FeedbackForm(
-                    emotion = emotion,
-                    onSubmit = { comment ->
-                        onSubmitFeedback(emotion, comment)
-
-                        scope.launch {
-                            feedbackExpanded = false
-                            delay(FeedbackAnimationDuration.milliseconds)
-                            selectedEmotion = null
-                        }
-                    },
-                    past = status == TalkStatus.Past,
-                    modifier = Modifier.padding(top = 14.dp).focusRequester(focusRequester)
-                )
-            }
+            FeedbackForm(
+                emotion = selectedEmotion,
+                onSubmit = { emotion, comment ->
+                    onSubmitFeedbackWithComment(emotion, comment)
+                    feedbackExpanded = false
+                },
+                past = status == TalkStatus.Past,
+                modifier = Modifier.padding(top = 14.dp).focusRequester(focusRequester)
+            )
         }
     }
 }
@@ -375,7 +368,8 @@ internal fun TalkCardPreview() {
                 time = "9:00 – 10:00",
                 timeNote = null,
                 status = TalkStatus.Now,
-                onSubmitFeedback = { e, s -> println("Feedback: $e, $s") },
+                onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
+                onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
                 modifier = Modifier.weight(1f),
             )
             Spacer(Modifier.width(16.dp))
@@ -395,7 +389,8 @@ internal fun TalkCardPreview() {
                 time = "9:00 – 10:00",
                 timeNote = "In 10 min",
                 status = TalkStatus.Upcoming,
-                onSubmitFeedback = { e, s -> println("Feedback: $e, $s") },
+                onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
+                onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
                 modifier = Modifier.weight(1f),
             )
         }
