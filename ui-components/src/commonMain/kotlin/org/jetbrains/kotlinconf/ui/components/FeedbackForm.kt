@@ -39,8 +39,8 @@ import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
 @Composable
 fun FeedbackForm(
-    emotion: Emotion,
-    onSubmit: (comment: String) -> Unit,
+    emotion: Emotion?,
+    onSubmit: (emotion: Emotion, comment: String) -> Unit,
     past: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -77,32 +77,34 @@ fun FeedbackForm(
                         .padding(bottom = 40.dp)
                         .drawBehind {
                             val lineWidth = 1.dp.toPx()
+                            val halfLineWidth = lineWidth / 2
+
                             // Top
                             drawLine(
                                 horizontalBorderColor,
-                                Offset(0f, 0f),
-                                Offset(size.width, 0f),
+                                Offset(0f + halfLineWidth, 0f + halfLineWidth),
+                                Offset(size.width - halfLineWidth, 0f + halfLineWidth),
                                 lineWidth
                             )
                             // Bottom
                             drawLine(
                                 horizontalBorderColor,
-                                Offset(0f, size.height),
-                                Offset(size.width, size.height),
+                                Offset(0f + halfLineWidth, size.height - halfLineWidth),
+                                Offset(size.width - halfLineWidth, size.height - halfLineWidth),
                                 lineWidth
                             )
                             // Start
                             drawLine(
                                 verticalBorderColor,
-                                Offset(0f, 0f),
-                                Offset(0f, size.height),
+                                Offset(0f + halfLineWidth, 0f + halfLineWidth),
+                                Offset(0f + halfLineWidth, size.height - halfLineWidth),
                                 lineWidth
                             )
                             // End
                             drawLine(
                                 verticalBorderColor,
-                                Offset(size.width, 0f),
-                                Offset(size.width, size.height),
+                                Offset(size.width - halfLineWidth, 0f + halfLineWidth),
+                                Offset(size.width - halfLineWidth, size.height - halfLineWidth),
                                 lineWidth
                             )
                         }
@@ -135,14 +137,20 @@ fun FeedbackForm(
                 .align(Alignment.BottomCenter),
             verticalAlignment = Alignment.Bottom
         ) {
-            KodeeEmotion(emotion = emotion)
+            if (emotion != null) {
+                KodeeEmotion(emotion)
+            }
             Spacer(Modifier.weight(1f))
             Action(
                 label = "Send",
                 icon = Res.drawable.arrow_right_24,
                 size = ActionSize.Large,
                 enabled = feedbackText.isNotEmpty(),
-                onClick = { onSubmit(feedbackText) },
+                onClick = {
+                    if (emotion != null) {
+                        onSubmit(emotion, feedbackText)
+                    }
+                },
             )
         }
     }
@@ -150,9 +158,9 @@ fun FeedbackForm(
 
 @Preview
 @Composable
-fun FeedbackFormPreview() {
+internal fun FeedbackFormPreview() {
     PreviewHelper {
-        FeedbackForm(Emotion.Positive, { text -> println("Feedback: $text") }, true)
-        FeedbackForm(Emotion.Negative, { text -> println("Feedback: $text") }, false)
+        FeedbackForm(Emotion.Positive, { emotion, text -> println("Feedback: $text") }, true)
+        FeedbackForm(Emotion.Negative, { emotion, text -> println("Feedback: $text") }, false)
     }
 }
