@@ -4,13 +4,13 @@ import io.ktor.util.date.*
 import org.jetbrains.kotlinconf.utils.*
 
 data class SessionCardView(
-    val id: String,
+    val id: SessionId,
     val title: String,
     val speakerLine: String,
     val locationLine: String,
     val startsAt: GMTDate,
     val endsAt: GMTDate,
-    val speakerIds: List<String>,
+    val speakerIds: List<SpeakerId>,
     val vote: Score?,
     val timeLine: String = buildString {
         append(startsAt.dayAndMonth())

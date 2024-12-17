@@ -1,9 +1,10 @@
 package org.jetbrains.kotlinconf.backend
 
-import io.ktor.util.date.*
-import kotlinx.serialization.*
-import kotlinx.serialization.internal.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import org.jetbrains.kotlinconf.GMTDateSerializable
+import org.jetbrains.kotlinconf.SessionId
+import org.jetbrains.kotlinconf.SpeakerId
 
 @Serializable
 class SessionizeData(
@@ -17,10 +18,10 @@ class SessionizeData(
 
 @Serializable
 data class SessionData(
-    val id: String,
+    val id: SessionId,
     val isServiceSession: Boolean,
     val isPlenumSession: Boolean,
-    val speakers: List<String>,
+    val speakers: List<SpeakerId>,
     @SerialName("description")
     var descriptionText: String? = "",
     val startsAt: GMTDateSerializable?,
@@ -46,7 +47,7 @@ class RoomData(
 
 @Serializable
 class SpeakerData(
-    val id: String,
+    val id: SpeakerId,
     val firstName: String,
     val lastName: String,
     val profilePicture: String?,
