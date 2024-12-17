@@ -17,7 +17,7 @@ data class Speakers(
     val all: List<Speaker> = emptyList()
 ) {
     private val dictById = all.associateBy { it.id }
-    operator fun get(id: String): Speaker? = dictById[id]
+    operator fun get(id: SpeakerId): Speaker? = dictById[id]
 }
 
 @OptIn(ExperimentalResourceApi::class)
@@ -66,7 +66,7 @@ data class TimeSlot(
 }
 
 fun Conference.buildAgenda(
-    favorites: Set<String>,
+    favorites: Set<SessionId>,
     votes: List<VoteInfo>,
     now: GMTDate
 ): Agenda {
@@ -87,7 +87,7 @@ fun Conference.buildAgenda(
 fun List<Session>.groupByTime(
     conference: Conference,
     now: GMTDate,
-    favorites: Set<String>,
+    favorites: Set<SessionId>,
     votes: List<VoteInfo>,
 ): List<TimeSlot> {
     val slots = filterNot { it.isLightning }
@@ -114,7 +114,7 @@ fun List<Session>.groupByTime(
 fun Session.asSessionCard(
     conference: Conference,
     now: GMTDate,
-    favorites: Set<String>,
+    favorites: Set<SessionId>,
     votes: List<VoteInfo>,
 ): SessionCardView {
     val isFinished = endsAt <= now
@@ -124,7 +124,7 @@ fun Session.asSessionCard(
         title = title,
         speakerLine = speakerLine(conference),
         locationLine = location,
-        isFavorite = favorites.contains(id),
+        isFavorite = id in favorites,
         startsAt = startsAt,
         endsAt = endsAt,
         speakerIds = speakerIds,

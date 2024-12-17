@@ -10,7 +10,7 @@ import org.jetbrains.kotlinconf.utils.*
 import kotlin.coroutines.*
 
 val UNKNOWN_SESSION_CARD: SessionCardView = SessionCardView(
-    "unknown", "unknown", "unknown",
+    SessionId("unknown"), "unknown", "unknown",
     "unknown",
     GMTDate.START,
     GMTDate.START,
@@ -23,7 +23,7 @@ val UNKNOWN_SESSION_CARD: SessionCardView = SessionCardView(
 )
 
 val UNKNOWN_SPEAKER: Speaker = Speaker(
-    "unknown", "unknown", "unknown", "unknown", ""
+    SpeakerId("unknown"), "unknown", "unknown", "unknown", ""
 )
 
 class ConferenceService(
@@ -46,7 +46,7 @@ class ConferenceService(
     private var requestTime = GMTDate()
     private val notificationManager = NotificationManager(context)
 
-    val favorites = MutableStateFlow(emptySet<String>())
+    val favorites = MutableStateFlow(emptySet<SessionId>())
     private val conference = MutableStateFlow(Conference())
 
     private val votes = MutableStateFlow(emptyList<VoteInfo>())
@@ -124,7 +124,7 @@ class ConferenceService(
 
     fun syncFavorites() {
         launch {
-            val favoritesValue = storage.get<List<String>>("favorites")?.toSet() ?: emptySet()
+            val favoritesValue = storage.get<List<SessionId>>("favorites")?.toSet() ?: emptySet()
             favorites.value = favoritesValue
             favorites.debounce(1000)
                 .onEach {
@@ -182,7 +182,7 @@ class ConferenceService(
     /**
      * Vote for session.
      */
-    suspend fun vote(sessionId: String, rating: Score?): Boolean {
+    suspend fun vote(sessionId: SessionId, rating: Score?): Boolean {
         if (!client.vote(sessionId, rating)) return false
 
         val allVotes = votes.value
@@ -194,21 +194,21 @@ class ConferenceService(
         return true
     }
 
-    suspend fun sendFeedback(sessionId: String, feedbackValue: String): Boolean =
+    suspend fun sendFeedback(sessionId: SessionId, feedbackValue: String): Boolean =
         client.sendFeedback(sessionId, feedbackValue)
 
-    fun speakerById(id: String): Speaker = speakers.value[id] ?: UNKNOWN_SPEAKER
+    fun speakerById(id: SpeakerId): Speaker = speakers.value[id] ?: UNKNOWN_SPEAKER
 
-    fun sessionById(id: String): SessionCardView =
+    fun sessionById(id: SessionId): SessionCardView =
         sessionCards.value.find { it.id == id } ?: UNKNOWN_SESSION_CARD
 
-    fun sessionsForSpeaker(id: String): List<SessionCardView> =
-        sessionCards.value.filter { it.speakerIds.contains(id) }
+    fun sessionsForSpeaker(id: SpeakerId): List<SessionCardView> =
+        sessionCards.value.filter { id in it.speakerIds }
 
     /**
      * Mark session as favorite.
      */
-    fun toggleFavorite(sessionId: String) {
+    fun toggleFavorite(sessionId: SessionId) {
         val newValue = favorites.value.toMutableSet()
         if (sessionId in newValue) {
             newValue.remove(sessionId)
