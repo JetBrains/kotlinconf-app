@@ -7,12 +7,9 @@ import io.ktor.server.application.log
 import io.ktor.server.config.ApplicationConfig
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
@@ -21,6 +18,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.jetbrains.kotlinconf.FeedbackInfo
 import org.jetbrains.kotlinconf.Score
+import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.backend.Votes.sessionId
 import java.time.LocalDateTime
@@ -90,7 +88,7 @@ internal class Store(application: Application) {
 
     suspend fun changeVote(
         userIdValue: String,
-        sessionIdValue: String,
+        sessionIdValue: SessionId,
         scoreValue: Score?,
         timestampValue: LocalDateTime
     ) {
@@ -122,7 +120,7 @@ internal class Store(application: Application) {
 
     suspend fun setFeedback(
         userIdValue: String,
-        sessionIdValue: String,
+        sessionIdValue: SessionId,
         feedbackValue: String,
         timestampValue: LocalDateTime
     ): Boolean = newSuspendedTransaction(Dispatchers.IO) {
@@ -134,7 +132,7 @@ internal class Store(application: Application) {
         }.insertedCount > 0
     }
 
-    suspend fun deleteVote(uuid: String, sessionId: String) {
+    suspend fun deleteVote(uuid: String, sessionId: SessionId) {
         newSuspendedTransaction(Dispatchers.IO) {
             Votes.deleteWhere { (userId eq uuid) and (Votes.sessionId eq sessionId) }
         }
