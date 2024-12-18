@@ -9,11 +9,15 @@ typealias GMTDateSerializable = @Serializable(GMTDateSerializer::class) GMTDate
 
 @Serializable
 @JvmInline
-value class SpeakerId(val id: String)
+value class SpeakerId(val id: String) {
+    override fun toString(): String = id
+}
 
 @Serializable
 @JvmInline
-value class SessionId(val id: String)
+value class SessionId(val id: String) {
+    override fun toString(): String = id
+}
 
 @Serializable
 class Conference(
