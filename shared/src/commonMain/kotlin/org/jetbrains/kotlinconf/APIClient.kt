@@ -83,7 +83,7 @@ class APIClient(
     /**
      * Vote for session.
      */
-    suspend fun vote(sessionId: String, score: Score?): Boolean {
+    suspend fun vote(sessionId: SessionId, score: Score?): Boolean {
         if (userId == null) return false
 
         client.post {
@@ -98,7 +98,7 @@ class APIClient(
     /**
      * Send feedback
      */
-    suspend fun sendFeedback(sessionId: String, feedback: String): Boolean {
+    suspend fun sendFeedback(sessionId: SessionId, feedback: String): Boolean {
         if (userId == null) return false
 
         client.post {
