@@ -3,8 +3,21 @@ package org.jetbrains.kotlinconf
 import io.ktor.util.date.*
 import kotlinx.serialization.*
 import org.jetbrains.kotlinconf.utils.*
+import kotlin.jvm.JvmInline
 
 typealias GMTDateSerializable = @Serializable(GMTDateSerializer::class) GMTDate
+
+@Serializable
+@JvmInline
+value class SpeakerId(val id: String) {
+    override fun toString(): String = id
+}
+
+@Serializable
+@JvmInline
+value class SessionId(val id: String) {
+    override fun toString(): String = id
+}
 
 @Serializable
 class Conference(
@@ -19,7 +32,7 @@ class Votes(
 
 @Serializable
 class Speaker(
-    val id: String,
+    val id: SpeakerId,
     val name: String,
     val position: String,
     val description: String,
@@ -28,10 +41,10 @@ class Speaker(
 
 @Serializable
 class Session(
-    val id: String,
+    val id: SessionId,
     val title: String,
     val description: String,
-    val speakerIds: List<String>,
+    val speakerIds: List<SpeakerId>,
     val location: String,
     val startsAt: GMTDateSerializable,
     val endsAt: GMTDateSerializable,
@@ -42,13 +55,13 @@ class Session(
 
 @Serializable
 class VoteInfo(
-    val sessionId: String,
+    val sessionId: SessionId,
     val score: Score?
 )
 
 @Serializable
 class FeedbackInfo(
-    val sessionId: String,
+    val sessionId: SessionId,
     val value: String
 )
 
