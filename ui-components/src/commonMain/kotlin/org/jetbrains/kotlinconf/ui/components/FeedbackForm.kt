@@ -33,6 +33,9 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
+import kotlinconfapp.ui_components.generated.resources.feedback_form_send
+import kotlinconfapp.ui_components.generated.resources.feedback_form_type_something
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
@@ -122,7 +125,7 @@ fun FeedbackForm(
                         exit = fadeOut(tween(10)),
                     ) {
                         StyledText(
-                            text = "Type something",
+                            text = stringResource(Res.string.feedback_form_type_something),
                             style = KotlinConfTheme.typography.text1,
                             color = KotlinConfTheme.colors.placeholderText
                         )
@@ -142,7 +145,7 @@ fun FeedbackForm(
             }
             Spacer(Modifier.weight(1f))
             Action(
-                label = "Send",
+                label = stringResource(Res.string.feedback_form_send),
                 icon = Res.drawable.arrow_right_24,
                 size = ActionSize.Large,
                 enabled = feedbackText.isNotEmpty(),
