@@ -13,10 +13,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/Theme.App.Splash"
         tools:targetApi="31">
         <activity
             android:name="org.jetbrains.kotlinconf.android.MainActivity"
+            android:theme="@style/Theme.App.Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

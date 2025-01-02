@@ -1,5 +1,0 @@
-<resources>
-    <style name="AppTheme" parent="android:Theme.Material.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_screen_bird</item>
-    </style>
-</resources>
