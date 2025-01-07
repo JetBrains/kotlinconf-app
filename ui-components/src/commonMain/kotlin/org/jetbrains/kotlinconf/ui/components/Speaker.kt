@@ -16,6 +16,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.kodee_emotion_negative
+import kotlinconfapp.ui_components.generated.resources.kodee_emotion_neutral
 import kotlinconfapp.ui_components.generated.resources.kodee_emotion_positive
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -43,7 +45,7 @@ fun Speaker(
                 .background(KotlinConfTheme.colors.tileBackground),
             contentScale = ContentScale.Crop,
             placeholder = painterResource(Res.drawable.kodee_emotion_positive),
-            error = painterResource(Res.drawable.kodee_emotion_positive),
+            error = painterResource(Res.drawable.kodee_emotion_neutral),
         )
         Column {
             StyledText(
@@ -68,12 +70,12 @@ internal fun SpeakerPreview() {
         Speaker(
             name = "John Doe",
             title = "Whatever Role Name at That Company",
-            photoUrl = "bad bad url",
+            photoUrl = "https://example.com/not-an-image.jpg",
         )
         Speaker(
             name = "John Doe",
             title = "Whatever Role Name at That Company",
-            photoUrl = "https://kotlinconf.com/static/sebastian-aigner-ffc95c92c3b7ade7d25a738c40015a68.png",
+            photoUrl = "https://sessionize.com/image/2e2f-0o0o0-XGxKBoqZvxxQxosrZHQHTT.png?download=sebastian-aigner.png",
         )
     }
 }
