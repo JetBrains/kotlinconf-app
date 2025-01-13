@@ -20,7 +20,7 @@ fun Partners() {
         Image(painterResource(Res.drawable.arrow_left_24), "back", modifier = Modifier.clickable { navController.popBackStack() })
         StyledText("Partners")
         for (partner in PARTNER_DESCRIPTIONS) {
-            StyledText(partner.key, modifier = Modifier.clickable { navController.navigate(PartnerDetailsScreen(partner.value)) })
+            StyledText(partner.key, modifier = Modifier.clickable { navController.navigate(PartnerDetailsScreen(partner.key)) })
         }
     }
 }
