@@ -27,6 +27,7 @@ import org.jetbrains.kotlinconf.screens.AboutConference
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
 import org.jetbrains.kotlinconf.screens.PartnerDetails
 import org.jetbrains.kotlinconf.screens.Partners
+import org.jetbrains.kotlinconf.screens.PrivacyPolicyScreen
 import org.jetbrains.kotlinconf.screens.Schedule
 import org.jetbrains.kotlinconf.screens.Session
 import org.jetbrains.kotlinconf.screens.Settings
@@ -37,6 +38,7 @@ import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import kotlin.reflect.typeOf
 import org.jetbrains.compose.reload.DevelopmentEntryPoint
+import org.jetbrains.kotlinconf.screens.NotificationsScreen
 
 const val apiEndpoint = "https://kotlinconf-app-prod.labs.jb.gg"
 
@@ -66,17 +68,24 @@ fun App(context: ApplicationContext) {
                         composable<StartScreen> {
                             Column {
                                 StyledText("Start screen")
+                                StyledText(
+                                    "Privacy policy",
+                                    Modifier.clickable { navController.navigate(PrivacyPolicyScreen) }
+                                )
                                 StyledText("About App", Modifier.clickable { navController.navigate(AboutAppScreen) })
                                 StyledText(
                                     "About Conference",
-                                    Modifier.clickable { navController.navigate(AboutConferenceScreen) })
+                                    Modifier.clickable { navController.navigate(AboutConferenceScreen) }
+                                )
                                 StyledText(
                                     "Code of Conduct",
-                                    Modifier.clickable { navController.navigate(CodeOfConductScreen) })
+                                    Modifier.clickable { navController.navigate(CodeOfConductScreen) }
+                                )
                                 StyledText("Settings", Modifier.clickable { navController.navigate(SettingsScreen) })
                                 StyledText(
                                     "Terms of use",
-                                    Modifier.clickable { navController.navigate(TermsOfUseScreen) })
+                                    Modifier.clickable { navController.navigate(TermsOfUseScreen) }
+                                )
                                 StyledText("Partners", Modifier.clickable { navController.navigate(PartnersScreen) })
                                 StyledText("Schedule", Modifier.clickable { navController.navigate(ScheduleScreen) })
                                 StyledText("Speakers", Modifier.clickable { navController.navigate(SpeakersScreen) })
@@ -84,6 +93,20 @@ fun App(context: ApplicationContext) {
                         }
                         composable<AboutAppScreen> {
                             AboutApp()
+                        }
+                        composable<PrivacyPolicyScreen> {
+                            PrivacyPolicyScreen(
+                                onRejectPolicy = { navController.popBackStack() },
+                                onAcceptPolicy = { navController.navigate(NotificationsScreen) },
+                            )
+                        }
+                        composable<NotificationsScreen> {
+                            NotificationsScreen(
+                                onDone = { notificationSettings ->
+                                    // TODO request notification permission, save settings
+                                    navController.popBackStack(StartScreen, inclusive = false)
+                                }
+                            )
                         }
                         composable<AboutConferenceScreen> {
                             AboutConference()

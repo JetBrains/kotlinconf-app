@@ -24,6 +24,12 @@ data object CodeOfConductScreen
 data object AboutAppScreen
 
 @Serializable
+data object PrivacyPolicyScreen
+
+@Serializable
+data object NotificationsScreen
+
+@Serializable
 data object SettingsScreen
 
 @Serializable

@@ -1,10 +1,6 @@
 package org.jetbrains.kotlinconf
 
 import io.ktor.util.date.GMTDate
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.day_1
-import kotlinconfapp.shared.generated.resources.day_2
-import kotlinconfapp.shared.generated.resources.day_3
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.kotlinconf.utils.time
@@ -21,10 +17,10 @@ data class Speakers(
 }
 
 @OptIn(ExperimentalResourceApi::class)
-enum class EventDay(val title: StringResource) {
-    May22(Res.string.day_1),
-    May23(Res.string.day_2),
-    May24(Res.string.day_3);
+enum class EventDay() {
+    May22(),
+    May23(),
+    May24();
 
     companion object {
         fun from(value: Int) = when (value) {
@@ -39,8 +35,9 @@ data class Day(
     val day: EventDay,
     val timeSlots: List<TimeSlot>
 ) {
-    val title: StringResource
-        get() = day.title
+    // TODO Review usages of this later
+    val title: String
+        get() = day.toString()
 }
 
 data class TimeSlot(
