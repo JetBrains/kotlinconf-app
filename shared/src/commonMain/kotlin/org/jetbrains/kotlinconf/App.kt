@@ -27,7 +27,7 @@ import org.jetbrains.kotlinconf.screens.AboutConference
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
 import org.jetbrains.kotlinconf.screens.PartnerDetails
 import org.jetbrains.kotlinconf.screens.Partners
-import org.jetbrains.kotlinconf.screens.PrivacyPolicyScreen
+import org.jetbrains.kotlinconf.screens.StartPrivacyPolicyScreen
 import org.jetbrains.kotlinconf.screens.Schedule
 import org.jetbrains.kotlinconf.screens.Session
 import org.jetbrains.kotlinconf.screens.Settings
@@ -38,7 +38,7 @@ import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import kotlin.reflect.typeOf
 import org.jetbrains.compose.reload.DevelopmentEntryPoint
-import org.jetbrains.kotlinconf.screens.NotificationsScreen
+import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 
 const val apiEndpoint = "https://kotlinconf-app-prod.labs.jb.gg"
 
@@ -70,7 +70,7 @@ fun App(context: ApplicationContext) {
                                 StyledText("Start screen")
                                 StyledText(
                                     "Privacy policy",
-                                    Modifier.clickable { navController.navigate(PrivacyPolicyScreen) }
+                                    Modifier.clickable { navController.navigate(StartPrivacyPolicyScreen) }
                                 )
                                 StyledText("About App", Modifier.clickable { navController.navigate(AboutAppScreen) })
                                 StyledText(
@@ -94,14 +94,14 @@ fun App(context: ApplicationContext) {
                         composable<AboutAppScreen> {
                             AboutApp()
                         }
-                        composable<PrivacyPolicyScreen> {
-                            PrivacyPolicyScreen(
+                        composable<StartPrivacyPolicyScreen> {
+                            StartPrivacyPolicyScreen(
                                 onRejectPolicy = { navController.popBackStack() },
-                                onAcceptPolicy = { navController.navigate(NotificationsScreen) },
+                                onAcceptPolicy = { navController.navigate(StartNotificationsScreen) },
                             )
                         }
-                        composable<NotificationsScreen> {
-                            NotificationsScreen(
+                        composable<StartNotificationsScreen> {
+                            StartNotificationsScreen(
                                 onDone = { notificationSettings ->
                                     // TODO request notification permission, save settings
                                     navController.popBackStack(StartScreen, inclusive = false)

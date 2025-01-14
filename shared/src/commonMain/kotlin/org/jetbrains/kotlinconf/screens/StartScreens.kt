@@ -53,7 +53,7 @@ import kotlinconfapp.shared.generated.resources.Res as AppRes
 
 
 @Composable
-fun PrivacyPolicyScreen(
+fun StartPrivacyPolicyScreen(
     onRejectPolicy: () -> Unit,
     onAcceptPolicy: () -> Unit,
 ) {
@@ -150,7 +150,7 @@ data class NotificationSettings(
 )
 
 @Composable
-fun NotificationsScreen(
+fun StartNotificationsScreen(
     onDone: (NotificationSettings) -> Unit,
 ) {
     var scheduleUpdates by remember { mutableStateOf(true) }
