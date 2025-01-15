@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -24,7 +25,7 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 fun ScreenWithTitle(
     title: String,
     onBack: () -> Unit,
-    content: @Composable () -> Unit,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(Modifier.fillMaxSize()) {
         MainHeaderTitleBar(
@@ -55,11 +56,11 @@ fun ScreenWithTitle(
 @Composable
 fun MarkdownScreenWithTitle(
     title: String,
-    header: String,
-    subheader: String,
+    header: String = "",
+    subheader: String = "",
     loadText: suspend () -> ByteArray,
     onBack: () -> Unit,
-    endContent: @Composable () -> Unit = {},
+    endContent: @Composable ColumnScope.() -> Unit = {},
 ) {
     ScreenWithTitle(title, onBack) {
         if (header.isNotEmpty()) {

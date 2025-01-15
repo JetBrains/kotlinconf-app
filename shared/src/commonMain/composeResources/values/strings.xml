@@ -18,6 +18,8 @@ We will process your data in accordance with the App Privacy Policy. You can adj
     <string name="notifications_jetbrains_news_description">Get news about JetBrains products.</string>
     <string name="notifications_lets_get_started">Let’s get started!</string>
 
+    <string name="code_of_conduct">Code of Conduct</string>
+
     <string name="general_terms">General Terms and Conditions</string>
     <string name="visitors_terms_title">KotlinConf 2024 General Terms and Conditions for Visitors</string>
     <string name="visitors_terms_version">Version 1.0 of May 1, 2024</string>

@@ -1,21 +1,35 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.arrow_left_24
+import kotlinconfapp.shared.generated.resources.code_of_conduct
+import kotlinconfapp.shared.generated.resources.kodee_code_of_conduct
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.LocalNavController
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.MarkdownScreenWithTitle
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
-fun CodeOfConduct() {
-    val navController = LocalNavController.current
-    Column {
-        Image(painterResource(Res.drawable.arrow_left_24), "back", modifier = Modifier.clickable { navController.popBackStack() })
-        StyledText("Code of Conduct")
+fun CodeOfConduct(onBack: () -> Unit) {
+    MarkdownScreenWithTitle(
+        title = stringResource(Res.string.code_of_conduct),
+        header = stringResource(Res.string.code_of_conduct),
+        loadText = { Res.readBytes("files/code-of-conduct.md") },
+        onBack = onBack,
+    ) {
+        Image(
+            painter = painterResource(Res.drawable.kodee_code_of_conduct),
+            contentDescription = "",
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+
+        Spacer(Modifier.height(24.dp))
     }
 }
