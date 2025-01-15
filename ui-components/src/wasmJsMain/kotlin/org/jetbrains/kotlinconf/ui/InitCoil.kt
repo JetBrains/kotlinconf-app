@@ -18,6 +18,7 @@ fun initCoil() {
     }
 }
 
+private val sessionizeBaseUrl = "https://sessionize.com/"
 private val sessionizeProxy = "https://sessionize-com.labs.jb.gg/"
 
 private class SessionizeImageInterceptor : Interceptor {
@@ -25,8 +26,8 @@ private class SessionizeImageInterceptor : Interceptor {
         val originalRequest = chain.request
         val data = originalRequest.data
 
-        val newChain = if (data is String && data.startsWith("https://sessionize.com/")) {
-            val newUri = data.replace("https://sessionize.com/", sessionizeProxy)
+        val newChain = if (data is String && data.startsWith(sessionizeBaseUrl)) {
+            val newUri = data.replace(sessionizeBaseUrl, sessionizeProxy)
             val newRequest = originalRequest.newBuilder().data(newUri).build()
             chain.withRequest(newRequest)
         } else {
