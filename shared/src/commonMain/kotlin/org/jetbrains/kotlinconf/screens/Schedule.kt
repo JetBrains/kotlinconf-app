@@ -28,7 +28,7 @@ fun Schedule(agenda: Agenda) {
         Image(painterResource(Res.drawable.arrow_left_24), "back", modifier = Modifier.clickable { navController.popBackStack() })
         StyledText("Schedule")
         for (day in agenda.days) {
-            StyledText(stringResource(day.title))
+            StyledText(day.title)
             for (timeSlot in day.timeSlots) {
                 StyledText(timeSlot.title)
                 for (session in timeSlot.sessions) {

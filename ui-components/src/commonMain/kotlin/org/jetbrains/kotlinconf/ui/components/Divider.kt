@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 
 @Composable
-internal fun Divider(
+fun Divider(
     thickness: Dp,
     color: Color,
 ) {

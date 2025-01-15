@@ -70,3 +70,7 @@ android {
 composeCompiler {
     featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
 }
+
+compose.resources {
+    publicResClass = true
+}
