@@ -27,7 +27,13 @@ import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.kodee_notifications
 import kotlinconfapp.shared.generated.resources.kodee_privacy
 import kotlinconfapp.shared.generated.resources.notifications_description
+import kotlinconfapp.shared.generated.resources.notifications_jetbrains_news_description
+import kotlinconfapp.shared.generated.resources.notifications_jetbrains_news_title
+import kotlinconfapp.shared.generated.resources.notifications_kotlinconf_news_description
+import kotlinconfapp.shared.generated.resources.notifications_kotlinconf_news_title
 import kotlinconfapp.shared.generated.resources.notifications_lets_get_started
+import kotlinconfapp.shared.generated.resources.notifications_schedule_update_description
+import kotlinconfapp.shared.generated.resources.notifications_schedule_update_title
 import kotlinconfapp.shared.generated.resources.notifications_title
 import kotlinconfapp.shared.generated.resources.privacy_policy_accept
 import kotlinconfapp.shared.generated.resources.privacy_policy_back
@@ -145,8 +151,8 @@ fun StartPrivacyPolicyScreen(
 
 data class NotificationSettings(
     val scheduleUpdates: Boolean,
-    val changesAndUpdates: Boolean,
-    val futureUpdates: Boolean,
+    val kotlinConfNews: Boolean,
+    val jetbrainsNews: Boolean,
 )
 
 @Composable
@@ -154,8 +160,8 @@ fun StartNotificationsScreen(
     onDone: (NotificationSettings) -> Unit,
 ) {
     var scheduleUpdates by remember { mutableStateOf(true) }
-    var changesAndUpdates by remember { mutableStateOf(true) }
-    var futureUpdates by remember { mutableStateOf(true) }
+    var kotlinConfNews by remember { mutableStateOf(true) }
+    var jetbrainsNews by remember { mutableStateOf(true) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -184,20 +190,22 @@ fun StartNotificationsScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 SettingsItem(
-                    title = "Conference schedule updates",
+                    title = stringResource(AppRes.string.notifications_schedule_update_title),
                     enabled = scheduleUpdates,
                     onToggle = { scheduleUpdates = it },
-                    note = "We recommend keeping this setting enabled to receive timely notifications about any changes or important information."
+                    note = stringResource(AppRes.string.notifications_schedule_update_description),
                 )
                 SettingsItem(
-                    title = "Changes and updates for KotlinConf 2025",
-                    enabled = changesAndUpdates,
-                    onToggle = { changesAndUpdates = it },
+                    title = stringResource(AppRes.string.notifications_kotlinconf_news_title),
+                    enabled = kotlinConfNews,
+                    onToggle = { kotlinConfNews = it },
+                    note = stringResource(AppRes.string.notifications_kotlinconf_news_description),
                 )
                 SettingsItem(
-                    title = "Future KotlinConf or Kotlin related events",
-                    enabled = futureUpdates,
-                    onToggle = { futureUpdates = it },
+                    title = stringResource(AppRes.string.notifications_jetbrains_news_title),
+                    enabled = jetbrainsNews,
+                    onToggle = { jetbrainsNews = it },
+                    note = stringResource(AppRes.string.notifications_jetbrains_news_description),
                 )
             }
         }
@@ -211,8 +219,8 @@ fun StartNotificationsScreen(
                 onClick = {
                     val settings = NotificationSettings(
                         scheduleUpdates = scheduleUpdates,
-                        changesAndUpdates = changesAndUpdates,
-                        futureUpdates = futureUpdates,
+                        kotlinConfNews = kotlinConfNews,
+                        jetbrainsNews = jetbrainsNews,
                     )
                     onDone(settings)
                 },
