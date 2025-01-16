@@ -23,6 +23,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import org.intellij.markdown.html.urlEncode
 import org.jetbrains.compose.reload.DevelopmentEntryPoint
 import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
@@ -40,6 +41,7 @@ import org.jetbrains.kotlinconf.screens.StartPrivacyPolicyScreen
 import org.jetbrains.kotlinconf.screens.TermsOfUse
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.getStoreUrl
 import kotlin.reflect.typeOf
 
 const val apiEndpoint = "https://kotlinconf-app-prod.labs.jb.gg"
@@ -103,11 +105,7 @@ fun App(context: ApplicationContext) {
                             AboutAppScreen(
                                 onBack = { navController.popBackStack() },
                                 onGitHubRepo = { uriHandler.openUri("https://github.com/JetBrains/kotlinconf-app") },
-                                onRateApp = {
-                                    // TODO figure out which link to navigate to
-                                    // https://apps.apple.com/us/app/kotlinconf/id1299196584
-                                    // https://play.google.com/store/apps/details?id=com.jetbrains.kotlinconf
-                                },
+                                onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
                                 onSettings = {},
                                 onPrivacyPolicy = {},
                                 onTermsOfUse = {},

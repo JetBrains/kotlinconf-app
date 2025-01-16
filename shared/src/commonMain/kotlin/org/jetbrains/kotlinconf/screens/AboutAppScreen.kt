@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
@@ -28,6 +29,7 @@ import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.getStoreUrl
 
 @Composable
 fun AboutAppScreen(
@@ -69,11 +71,16 @@ fun AboutAppScreen(
                 drawableResource = Res.drawable.arrow_up_right_24,
                 onClick = onGitHubRepo,
             )
-            PageMenuItem(
-                stringResource(Res.string.about_app_link_rate),
-                drawableResource = Res.drawable.arrow_up_right_24,
-                onClick = onRateApp,
-            )
+            
+            val storeUrlAvailable = remember { getStoreUrl() != null }
+            if (storeUrlAvailable) {
+                PageMenuItem(
+                    stringResource(Res.string.about_app_link_rate),
+                    drawableResource = Res.drawable.arrow_up_right_24,
+                    onClick = onRateApp,
+                )
+            }
+
             PageMenuItem(stringResource(Res.string.about_app_link_settings), onClick = onSettings)
             PageMenuItem(stringResource(Res.string.about_app_link_privacy_policy), onClick = onPrivacyPolicy)
             PageMenuItem(stringResource(Res.string.about_app_link_terms_of_use), onClick = onTermsOfUse)
