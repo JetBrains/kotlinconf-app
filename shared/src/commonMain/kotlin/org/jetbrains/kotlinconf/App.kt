@@ -23,7 +23,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import org.intellij.markdown.html.urlEncode
 import org.jetbrains.compose.reload.DevelopmentEntryPoint
 import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
@@ -31,6 +30,7 @@ import org.jetbrains.kotlinconf.screens.CodeOfConduct
 import org.jetbrains.kotlinconf.screens.InfoScreen
 import org.jetbrains.kotlinconf.screens.PartnerDetails
 import org.jetbrains.kotlinconf.screens.Partners
+import org.jetbrains.kotlinconf.screens.PrivacyPolicyForVisitors
 import org.jetbrains.kotlinconf.screens.Schedule
 import org.jetbrains.kotlinconf.screens.Session
 import org.jetbrains.kotlinconf.screens.Settings
