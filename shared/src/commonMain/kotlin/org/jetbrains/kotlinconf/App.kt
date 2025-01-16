@@ -67,9 +67,8 @@ fun App(context: ApplicationContext) {
                     ) {
                         composable<StartScreen> {
                             Column {
-                                StyledText("Start screen")
                                 StyledText(
-                                    "Privacy policy",
+                                    "Start Screens",
                                     Modifier.clickable { navController.navigate(StartPrivacyPolicyScreen) }
                                 )
                                 StyledText("About App", Modifier.clickable { navController.navigate(AboutAppScreen) })
