@@ -44,6 +44,7 @@ import kotlinconfapp.shared.generated.resources.privacy_policy_title
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.arrow_left_24
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.ui.components.Action
@@ -51,6 +52,7 @@ import org.jetbrains.kotlinconf.ui.components.ActionSize
 import org.jetbrains.kotlinconf.ui.components.Button
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
+import org.jetbrains.kotlinconf.ui.components.MarkdownView
 import org.jetbrains.kotlinconf.ui.components.SettingsItem
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
@@ -92,8 +94,13 @@ fun StartPrivacyPolicyScreen(
                         thickness = 1.dp,
                         color = KotlinConfTheme.colors.strokePale,
                     )
-                    // TODO add actual text of the privacy policy
-                    StyledText("Privacy policy text goes here")
+                    MarkdownView(
+                        loadText = {
+                            @OptIn(ExperimentalResourceApi::class)
+                            AppRes.readBytes("files/app-privacy-policy.md")
+                        },
+                        modifier = Modifier.padding(horizontal = 12.dp).verticalScroll(rememberScrollState())
+                    )
                     Spacer(Modifier.weight(1f))
                     Divider(
                         thickness = 1.dp,
