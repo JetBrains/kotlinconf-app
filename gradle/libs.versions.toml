@@ -26,7 +26,7 @@ kotlinx-datetime = "0.6.1"
 ktor = "3.0.1"
 android-svg = "1.4"
 logbackClassic = "1.5.6"
-markdown = "0.26.0"
+markdown = "0.29.0"
 postgresql = "42.7.3"
 androidx-navigation = "2.8.0-alpha10"
 
@@ -58,7 +58,7 @@ components-ui-tooling-preview = { module = "org.jetbrains.compose.components:com
 
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-android" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-android" }
-multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "markdown" }
+multiplatform-markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "markdown" }
 
 # ktor
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
