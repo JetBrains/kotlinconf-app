@@ -70,7 +70,6 @@ kotlin {
             implementation(libs.kotlinx.datetime)
 
             implementation(libs.androidx.navigation.compose)
-            implementation(libs.multiplatform.markdown.renderer.m3)
             implementation(libs.ktor.client.core)
         }
 

@@ -38,6 +38,7 @@ import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import kotlin.reflect.typeOf
 import org.jetbrains.compose.reload.DevelopmentEntryPoint
+import org.jetbrains.kotlinconf.screens.PrivacyPolicyForVisitors
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 
 const val apiEndpoint = "https://kotlinconf-app-prod.labs.jb.gg"
@@ -82,6 +83,10 @@ fun App(context: ApplicationContext) {
                                 )
                                 StyledText("Settings", Modifier.clickable { navController.navigate(SettingsScreen) })
                                 StyledText(
+                                    "Privacy policy for visitors",
+                                    Modifier.clickable { navController.navigate(PrivacyPolicyForVisitorsScreen) }
+                                )
+                                StyledText(
                                     "Terms of use",
                                     Modifier.clickable { navController.navigate(TermsOfUseScreen) }
                                 )
@@ -116,8 +121,11 @@ fun App(context: ApplicationContext) {
                         composable<SettingsScreen> {
                             Settings()
                         }
+                        composable<PrivacyPolicyForVisitorsScreen> {
+                            PrivacyPolicyForVisitors(onBack = navController::popBackStack)
+                        }
                         composable<TermsOfUseScreen> {
-                            TermsOfUse()
+                            TermsOfUse(onBack = navController::popBackStack)
                         }
                         composable<PartnersScreen> {
                             Partners()
