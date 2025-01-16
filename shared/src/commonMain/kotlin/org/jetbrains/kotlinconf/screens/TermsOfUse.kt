@@ -1,21 +1,24 @@
 package org.jetbrains.kotlinconf.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.arrow_left_24
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.LocalNavController
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import kotlinconfapp.shared.generated.resources.general_terms
+import kotlinconfapp.shared.generated.resources.visitors_terms_title
+import kotlinconfapp.shared.generated.resources.visitors_terms_version
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.MarkdownScreenWithTitle
 
 @Composable
-fun TermsOfUse() {
-    val navController = LocalNavController.current
-    Column {
-        Image(painterResource(Res.drawable.arrow_left_24), "back", modifier = Modifier.clickable { navController.popBackStack() })
-        StyledText("Terms of Use")
-    }
+fun TermsOfUse(onBack: () -> Unit) {
+    MarkdownScreenWithTitle(
+        title = stringResource(Res.string.general_terms),
+        header = stringResource(Res.string.visitors_terms_title),
+        subheader = stringResource(Res.string.visitors_terms_version),
+        loadText = {
+            @OptIn(ExperimentalResourceApi::class)
+            Res.readBytes("files/visitors-terms.md")
+        },
+        onBack = onBack
+    )
 }

@@ -33,6 +33,9 @@ data object StartNotificationsScreen
 data object SettingsScreen
 
 @Serializable
+data object PrivacyPolicyForVisitorsScreen
+
+@Serializable
 data object TermsOfUseScreen
 
 @Serializable

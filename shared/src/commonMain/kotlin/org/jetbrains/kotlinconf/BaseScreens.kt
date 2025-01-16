@@ -74,7 +74,7 @@ fun MarkdownScreenWithTitle(
             )
         }
 
-        MarkdownView(loadText, modifier = Modifier.padding(12.dp))
+        MarkdownView(loadText, modifier = Modifier.padding(vertical = 12.dp))
 
         endContent()
     }
