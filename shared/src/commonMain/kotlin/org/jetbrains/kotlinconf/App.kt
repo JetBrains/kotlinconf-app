@@ -116,7 +116,7 @@ fun App(context: ApplicationContext) {
                             AboutConference()
                         }
                         composable<CodeOfConductScreen> {
-                            CodeOfConduct()
+                            CodeOfConduct(onBack = navController::popBackStack)
                         }
                         composable<SettingsScreen> {
                             Settings()
