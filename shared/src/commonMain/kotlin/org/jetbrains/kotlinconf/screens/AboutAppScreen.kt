@@ -3,10 +3,7 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -19,16 +16,11 @@ import kotlinconfapp.shared.generated.resources.about_app_link_rate
 import kotlinconfapp.shared.generated.resources.about_app_link_settings
 import kotlinconfapp.shared.generated.resources.about_app_link_terms_of_use
 import kotlinconfapp.shared.generated.resources.about_app_title
-import kotlinconfapp.shared.generated.resources.arrow_left_24
 import kotlinconfapp.shared.generated.resources.arrow_up_right_24
-import kotlinconfapp.shared.generated.resources.navigate_back
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
-import org.jetbrains.kotlinconf.ui.components.Divider
-import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.components.StyledText
-import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 
