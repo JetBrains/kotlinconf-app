@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -28,6 +29,7 @@ fun PageMenuItem(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    drawableResource: DrawableResource = Res.drawable.arrow_right_24,
 ) {
     Row(
         modifier
@@ -47,7 +49,7 @@ fun PageMenuItem(
             // TODO review icon sizing later, https://github.com/JetBrains/kotlinconf-app/issues/175
             modifier = modifier
                 .size(24.dp),
-            painter = painterResource(Res.drawable.arrow_right_24),
+            painter = painterResource(drawableResource),
             contentDescription = null,
             tint = KotlinConfTheme.colors.primaryText,
         )

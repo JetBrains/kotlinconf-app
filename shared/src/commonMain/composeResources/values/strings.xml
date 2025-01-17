@@ -1,4 +1,29 @@
 <resources>
+    <!-- General resources -->
+
+    <string name="navigate_back">Back</string>
+
+
+    <!-- Screen resources -->
+
+    <string name="about_app_title">About the app</string>
+    <string name="about_app_description">The KotlinConf application is developed by the JetBrains team using Kotlin Multiplatform for shared logic and Compose Multiplatform for both Android and iOS.
+
+For the source code and more technical details, visit the GitHub repository.</string>
+    <string name="about_app_link_github">GitHub repository</string>
+    <string name="about_app_link_rate">Rate the app</string>
+    <string name="about_app_link_settings">Settings</string>
+    <string name="about_app_link_privacy_policy">App Privacy Policy</string>
+    <string name="about_app_link_terms_of_use">App Terms of Use</string>
+
+    <string name="info_title">Info</string>
+    <string name="info_link_about_conf">About the conference</string>
+    <string name="info_link_about_app">About the app</string>
+    <string name="info_link_partners">Our partners</string>
+    <string name="info_link_code_of_conduct">Code of Conduct</string>
+    <string name="info_link_twitter">@KotlinConf</string>
+    <string name="info_link_slack">#kotlinconf</string>
+
     <string name="privacy_policy_title">Privacy policy</string>
     <string name="privacy_policy_description">For you to maximize the benefits of this app, we need your consent to access and use your device ID so you can provide and we can collect and track your feedback about talks.
 

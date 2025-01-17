@@ -17,29 +17,32 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import org.jetbrains.kotlinconf.screens.AboutApp
+import org.jetbrains.compose.reload.DevelopmentEntryPoint
+import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
+import org.jetbrains.kotlinconf.screens.InfoScreen
 import org.jetbrains.kotlinconf.screens.PartnerDetails
 import org.jetbrains.kotlinconf.screens.Partners
-import org.jetbrains.kotlinconf.screens.StartPrivacyPolicyScreen
+import org.jetbrains.kotlinconf.screens.PrivacyPolicyForVisitors
 import org.jetbrains.kotlinconf.screens.Schedule
 import org.jetbrains.kotlinconf.screens.Session
 import org.jetbrains.kotlinconf.screens.Settings
-import org.jetbrains.kotlinconf.screens.TermsOfUse
-import org.jetbrains.kotlinconf.screens.Speakers
 import org.jetbrains.kotlinconf.screens.Speaker
+import org.jetbrains.kotlinconf.screens.Speakers
+import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
+import org.jetbrains.kotlinconf.screens.StartPrivacyPolicyScreen
+import org.jetbrains.kotlinconf.screens.TermsOfUse
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.getStoreUrl
 import kotlin.reflect.typeOf
-import org.jetbrains.compose.reload.DevelopmentEntryPoint
-import org.jetbrains.kotlinconf.screens.PrivacyPolicyForVisitors
-import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 
 const val apiEndpoint = "https://kotlinconf-app-prod.labs.jb.gg"
 
@@ -73,6 +76,7 @@ fun App(context: ApplicationContext) {
                                     Modifier.clickable { navController.navigate(StartPrivacyPolicyScreen) }
                                 )
                                 StyledText("About App", Modifier.clickable { navController.navigate(AboutAppScreen) })
+                                StyledText("Info", Modifier.clickable { navController.navigate(InfoScreen) })
                                 StyledText(
                                     "About Conference",
                                     Modifier.clickable { navController.navigate(AboutConferenceScreen) }
@@ -96,7 +100,28 @@ fun App(context: ApplicationContext) {
                             }
                         }
                         composable<AboutAppScreen> {
-                            AboutApp()
+                            // TODO add action handlers
+                            val uriHandler = LocalUriHandler.current
+                            AboutAppScreen(
+                                onBack = { navController.popBackStack() },
+                                onGitHubRepo = { uriHandler.openUri("https://github.com/JetBrains/kotlinconf-app") },
+                                onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
+                                onSettings = {},
+                                onPrivacyPolicy = {},
+                                onTermsOfUse = {},
+                            )
+                        }
+                        composable<InfoScreen> {
+                            // TODO add action handlers
+                            val uriHandler = LocalUriHandler.current
+                            InfoScreen(
+                                onAboutConf = {},
+                                onAboutApp = {},
+                                onOurPartners = {},
+                                onCodeOfConduct = {},
+                                onTwitter = { uriHandler.openUri("https://x.com/kotlinconf") },
+                                onSlack = { uriHandler.openUri("https://kotlinlang.slack.com/messages/kotlinconf/") },
+                            )
                         }
                         composable<StartPrivacyPolicyScreen> {
                             StartPrivacyPolicyScreen(
