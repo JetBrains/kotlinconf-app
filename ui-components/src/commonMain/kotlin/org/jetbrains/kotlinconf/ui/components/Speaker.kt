@@ -32,7 +32,7 @@ fun Speaker(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.padding(12.dp),
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

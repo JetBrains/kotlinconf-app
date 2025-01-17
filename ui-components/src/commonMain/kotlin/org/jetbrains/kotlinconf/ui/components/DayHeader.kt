@@ -1,7 +1,12 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +47,8 @@ fun DayHeader(
     day: String,
     line1: String,
     line2: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    day2: String = "",
 ) {
     Row(
         modifier = modifier
@@ -53,26 +59,36 @@ fun DayHeader(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy((-10).dp)
-        ) {
-            StyledText(
-                month,
-                style = KotlinConfTheme.typography.text2,
-                color = white60,
-            )
-            StyledText(
-                day,
-                style = DayDateStyle,
-                color = KotlinConfTheme.colors.primaryTextInverted,
-                modifier = Modifier.widthIn(min = 72.dp),
-            )
-            StyledText(
-                "",
-                style = KotlinConfTheme.typography.text2,
-                color = Color.Transparent,
-            )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy((-10).dp)
+            ) {
+                StyledText(
+                    month,
+                    style = KotlinConfTheme.typography.text2,
+                    color = white60,
+                )
+                StyledText(
+                    day,
+                    style = DayDateStyle,
+                    color = KotlinConfTheme.colors.primaryTextInverted,
+                    modifier = Modifier.widthIn(min = 72.dp),
+                )
+                StyledText(
+                    "",
+                    style = KotlinConfTheme.typography.text2,
+                    color = Color.Transparent,
+                )
+            }
+            if (day2.isNotEmpty()) {
+                StyledText(
+                    "-$day2",
+                    style = DayDateStyle,
+                    color = KotlinConfTheme.colors.primaryTextInverted,
+                    modifier = Modifier.widthIn(min = 72.dp),
+                )
+            }
         }
         Column {
             StyledText(
@@ -95,6 +111,6 @@ internal fun DayHeaderPreview() {
     PreviewHelper {
         DayHeader("TEST", "1", "Test", "Data")
         DayHeader("MAY", "21", "Workshop", "Day")
-        DayHeader("MAY", "23", "Conference", "Day 2")
+        DayHeader("MAY", "22", "Code", "Labs", day2 = "23")
     }
 }
