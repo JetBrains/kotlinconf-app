@@ -29,6 +29,36 @@ For the source code and more technical details, visit the GitHub repository.</st
     <string name="info_link_description_slack">Slack</string>
     <string name="info_link_description_bluesky">Bluesky</string>
 
+    <string name="about_conference_title">About the conference</string>
+    <string name="about_conference_header">KotlinConf 2025</string>
+    <string name="about_conference_timeline">May 21: Workshops
+May 22–23: Conference
+Bella Center, Copenhagen, Denmark</string>
+    <string name="about_conference_description">KotlinConf is the official Kotlin conference by JetBrains. It is a place for the community to gather and discuss all things Kotlin.</string>
+    <string name="about_conference_hashtag">Social media hashtag: #KotlinConf</string>
+
+    <string name="about_conference_privacy_policy_link">Privacy policy for visitors</string>
+    <string name="about_conference_general_terms_link">General terms and conditions</string>
+    <string name="about_conference_website_link">kotlinconf.com</string>
+
+    <string name="about_conference_day1_title_line1">Opening</string>
+    <string name="about_conference_day1_title_line2">keynote</string>
+
+    <string name="about_conference_day2_title_line1">Second day</string>
+    <string name="about_conference_day2_title_line2">keynote</string>
+
+    <string name="about_conference_codelabs_title_line1">Code</string>
+    <string name="about_conference_codelabs_title_line2">Labs</string>
+
+    <string name="about_conference_party_line1"></string>
+    <string name="about_conference_party_line2">Party!</string>
+    <string name="about_conference_party_description">Have fun and mingle with the community at the biggest Kotlin party of the year!</string>
+
+    <string name="about_conference_closingpanel_title_line1">Closing</string>
+    <string name="about_conference_closingpanel_title_line2">panel</string>
+
+    <string name="kotlinconf_by_jetbrains_description">KotlinConf by JetBrains 2025</string>
+
     <string name="privacy_policy_title">Privacy policy</string>
     <string name="privacy_policy_description">For you to maximize the benefits of this app, we need your consent to access and use your device ID so you can provide and we can collect and track your feedback about talks.
 
