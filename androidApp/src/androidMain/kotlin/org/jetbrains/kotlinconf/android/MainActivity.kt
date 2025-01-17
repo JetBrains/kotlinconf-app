@@ -3,6 +3,11 @@ package org.jetbrains.kotlinconf.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.jetbrains.kotlinconf.R
 import org.jetbrains.kotlinconf.App
@@ -20,7 +25,9 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            App(context)
+            Box(Modifier.windowInsetsPadding(WindowInsets.systemBars)) {
+                App(context)
+            }
         }
     }
 }

@@ -13,8 +13,8 @@ androidx-preference = "1.2.1"
 
 kotlin = "2.1.0-firework.32" # custom version for experimental hot reload support
 
-compose-android = "1.7.1"
-compose-multiplatform = "1.7.0"
+compose-android = "1.7.6"
+compose-multiplatform = "1.8.0-alpha01"
 compose-hot-reload = "1.0.0-dev.32.1"
 
 coil = "3.0.3"
@@ -28,7 +28,7 @@ android-svg = "1.4"
 logbackClassic = "1.5.6"
 markdown = "0.29.0"
 postgresql = "42.7.3"
-androidx-navigation = "2.8.0-alpha10"
+androidx-navigation = "2.8.0-alpha11"
 
 [libraries]
 

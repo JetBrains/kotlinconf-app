@@ -28,6 +28,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import kotlin.reflect.KClass
 
 private val MainNavigationButtonShape = RoundedCornerShape(8.dp)
 
@@ -61,29 +62,30 @@ private fun MainNavigationButton(
     )
 }
 
-data class MainNavDestination<T : Any>(
+data class MainNavDestination(
     val label: String,
     val icon: DrawableResource,
-    val route: T,
+    val route: Any,
+    val routeClass: KClass<*>? = null,
 )
 
 @Composable
-fun <T : Any> MainNavigation(
-    currentDestination: MainNavDestination<T>,
-    destinations: List<MainNavDestination<T>>,
-    onSelected: (MainNavDestination<T>) -> Unit,
+fun MainNavigation(
+    currentDestination: MainNavDestination?,
+    destinations: List<MainNavDestination>,
+    onSelect: (MainNavDestination) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.fillMaxWidth().padding(horizontal = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        destinations.forEach {
+        destinations.forEach { destination ->
             MainNavigationButton(
-                iconResource = it.icon,
-                contentDescription = it.label,
-                selected = it == currentDestination,
-                onClick = { onSelected(it) },
+                iconResource = destination.icon,
+                contentDescription = destination.label,
+                selected = destination == currentDestination,
+                onClick = { onSelect(destination) },
                 modifier = Modifier.weight(1f),
             )
         }
@@ -105,7 +107,7 @@ internal fun MainNavigationPreview() {
                 MainNavDestination("Speakers", Res.drawable.team_28, "Speakers"),
                 MainNavDestination("Map", Res.drawable.location_28, "Map"),
             ),
-            onSelected = { currentDestination = it },
+            onSelect = { currentDestination = it },
         )
     }
 }

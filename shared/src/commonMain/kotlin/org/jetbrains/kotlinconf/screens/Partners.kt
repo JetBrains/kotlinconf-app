@@ -8,19 +8,19 @@ import androidx.compose.ui.Modifier
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.arrow_left_24
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.LocalNavController
 import org.jetbrains.kotlinconf.PARTNER_DESCRIPTIONS
-import org.jetbrains.kotlinconf.PartnerDetailsScreen
 import org.jetbrains.kotlinconf.ui.components.StyledText
 
 @Composable
-fun Partners() {
-    val navController = LocalNavController.current
+fun Partners(
+    onBack: () -> Unit,
+    onPartnerDetail: (partnerId: String) -> Unit,
+) {
     Column {
-        Image(painterResource(Res.drawable.arrow_left_24), "back", modifier = Modifier.clickable { navController.popBackStack() })
+        Image(painterResource(Res.drawable.arrow_left_24), "back", modifier = Modifier.clickable { onBack() })
         StyledText("Partners")
         for (partner in PARTNER_DESCRIPTIONS) {
-            StyledText(partner.key, modifier = Modifier.clickable { navController.navigate(PartnerDetailsScreen(partner.key)) })
+            StyledText(partner.key, modifier = Modifier.clickable { onPartnerDetail(partner.key) })
         }
     }
 }

@@ -8,14 +8,12 @@ import androidx.compose.ui.Modifier
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.arrow_left_24
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.LocalNavController
 import org.jetbrains.kotlinconf.ui.components.StyledText
 
 @Composable
-fun Settings() {
-    val navController = LocalNavController.current
+fun Settings(onBack: () -> Unit) {
     Column {
-        Image(painterResource(Res.drawable.arrow_left_24), "back", modifier = Modifier.clickable { navController.popBackStack() })
+        Image(painterResource(Res.drawable.arrow_left_24), "back", modifier = Modifier.clickable { onBack() })
         StyledText("Settings")
     }
 }
