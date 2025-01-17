@@ -23,6 +23,7 @@ import kotlinconfapp.shared.generated.resources.arrow_left_24
 import kotlinconfapp.shared.generated.resources.arrow_up_right_24
 import kotlinconfapp.shared.generated.resources.navigate_back
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
@@ -40,26 +41,11 @@ fun AboutAppScreen(
     onPrivacyPolicy: () -> Unit,
     onTermsOfUse: () -> Unit,
 ) {
-    Column(Modifier.fillMaxSize()) {
-        MainHeaderTitleBar(
-            title = stringResource(Res.string.about_app_title),
-            startContent = {
-                TopMenuButton(
-                    icon = Res.drawable.arrow_left_24,
-                    contentDescription = stringResource(Res.string.navigate_back),
-                    onClick = onBack,
-                )
-            }
-        )
-        Divider(1.dp, KotlinConfTheme.colors.strokePale)
-        Column(
-            Modifier
-                .verticalScroll(rememberScrollState())
-                .fillMaxSize()
-                .padding(horizontal = 12.dp)
-                .padding(bottom = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
+    ScreenWithTitle(
+        title = stringResource(Res.string.about_app_title),
+        onBack = onBack,
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             StyledText(
                 stringResource(Res.string.about_app_description),
                 color = KotlinConfTheme.colors.longText,
@@ -71,7 +57,7 @@ fun AboutAppScreen(
                 drawableResource = Res.drawable.arrow_up_right_24,
                 onClick = onGitHubRepo,
             )
-            
+
             val storeUrlAvailable = remember { getStoreUrl() != null }
             if (storeUrlAvailable) {
                 PageMenuItem(
