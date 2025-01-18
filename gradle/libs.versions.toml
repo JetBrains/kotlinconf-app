@@ -1,4 +1,5 @@
 [versions]
+aboutlibraries = "11.4.0"
 agp = "8.7.1"
 android-compileSdk = "35"
 android-minSdk = "24"
@@ -94,7 +95,10 @@ android-svg = { module = "com.caverock:androidsvg-aar", version.ref = "android-s
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 
+aboutlibraries-compose = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "aboutlibraries" }
+
 [plugins]
+aboutLibraries = { id= "com.mikepenz.aboutlibraries.plugin", version.ref="aboutlibraries"}
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }

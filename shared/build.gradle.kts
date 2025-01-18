@@ -1,6 +1,9 @@
+import com.mikepenz.aboutlibraries.plugin.DuplicateMode
+import com.mikepenz.aboutlibraries.plugin.DuplicateRule
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 
 plugins {
+    alias(libs.plugins.aboutLibraries)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.kotlinParcelize)
@@ -71,6 +74,8 @@ kotlin {
 
             implementation(libs.androidx.navigation.compose)
             implementation(libs.ktor.client.core)
+
+            implementation(libs.aboutlibraries.compose)
         }
 
         commonTest.dependencies {
@@ -166,4 +171,9 @@ val buildWebApp by tasks.creating(Copy::class) {
 // Hot reload support
 composeCompiler {
     featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
+}
+
+aboutLibraries {
+    duplicationMode = DuplicateMode.MERGE
+    duplicationRule = DuplicateRule.SIMPLE
 }
