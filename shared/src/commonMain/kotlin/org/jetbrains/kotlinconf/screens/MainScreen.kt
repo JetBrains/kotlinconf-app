@@ -79,9 +79,8 @@ fun MainScreen(
                 )
             }
             composable<ScheduleScreen> {
-                Schedule(
-                    service.agenda.collectAsState().value,
-                    onBack = { rootNavController.popBackStack() },
+                ScheduleScreen(
+                    service = service,
                     onSession = { rootNavController.navigate(TalkDetailsScreen(it)) },
                 )
             }

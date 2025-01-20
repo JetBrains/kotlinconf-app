@@ -10,6 +10,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -32,10 +34,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
@@ -55,6 +59,27 @@ import org.jetbrains.kotlinconf.ui.theme.Brand
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
+@Composable
+private fun buildHighlightedString(
+    text: String,
+    highlights: List<IntRange>,
+): AnnotatedString = buildAnnotatedString {
+    append(text)
+    highlights.forEach { range ->
+        // Ignore invalid ranges
+        if (!range.isEmpty()) {
+            addStyle(
+                style = SpanStyle(
+                    color = KotlinConfTheme.colors.primaryTextInverted,
+                    background = Brand.magenta100,
+                ),
+                start = range.first,
+                end = range.last + 1,
+            )
+        }
+    }
+}
+
 enum class TalkStatus {
     Past, Now, Upcoming,
 }
@@ -68,8 +93,9 @@ fun TalkCard(
     bookmarked: Boolean,
     onBookmark: (Boolean) -> Unit,
     tags: List<String>,
-    selectedTags: List<String>,
+    tagHighlights: List<String>,
     speakers: String,
+    speakerHighlights: List<IntRange>,
     location: String,
     lightning: Boolean,
     time: String,
@@ -77,6 +103,7 @@ fun TalkCard(
     status: TalkStatus,
     onSubmitFeedback: (Emotion?) -> Unit,
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor by animateColorAsState(
@@ -95,7 +122,13 @@ fun TalkCard(
                 color = KotlinConfTheme.colors.strokePale,
                 shape = CardTalkShape,
             )
-            .background(backgroundColor, CardTalkShape)
+            .clip(CardTalkShape)
+            .clickable(
+                onClick = onClick,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+            )
+            .background(backgroundColor)
     ) {
         TopBlock(
             title = title,
@@ -104,8 +137,9 @@ fun TalkCard(
             bookmarked = bookmarked,
             onBookmark = onBookmark,
             tags = tags,
-            selectedTags = selectedTags,
+            selectedTags = tagHighlights,
             speakers = speakers,
+            speakerHighlights = speakerHighlights,
         )
         Divider(
             thickness = 1.dp,
@@ -144,30 +178,15 @@ private fun TopBlock(
     tags: List<String>,
     selectedTags: List<String>,
     speakers: String,
+    speakerHighlights: List<IntRange>,
 ) {
     Column(
         modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Row {
-            val annotatedTitle = buildAnnotatedString {
-                append(title)
-                titleHighlights.forEach { range ->
-                    // Ignore invalid ranges
-                    if (!range.isEmpty()) {
-                        addStyle(
-                            style = SpanStyle(
-                                color = KotlinConfTheme.colors.primaryTextInverted,
-                                background = Brand.magenta100,
-                            ),
-                            start = range.first,
-                            end = range.last + 1,
-                        )
-                    }
-                }
-            }
             StyledText(
-                text = annotatedTitle,
+                text = buildHighlightedString(title, titleHighlights),
                 style = KotlinConfTheme.typography.h3,
                 color = textColor,
                 modifier = Modifier.weight(1f),
@@ -207,7 +226,7 @@ private fun TopBlock(
             }
         }
         StyledText(
-            text = speakers,
+            text = buildHighlightedString(speakers, speakerHighlights),
             color = KotlinConfTheme.colors.secondaryText,
             style = KotlinConfTheme.typography.text2,
         )
@@ -288,7 +307,7 @@ private fun FeedbackBlock(
                 targetState = selectedEmotion != null,
                 transitionSpec = {
                     fadeIn(tween(FeedbackAnimationDuration)) togetherWith
-                            fadeOut(tween(FeedbackAnimationDuration))
+                        fadeOut(tween(FeedbackAnimationDuration))
                 },
                 modifier = Modifier.fillMaxHeight(),
                 contentAlignment = Alignment.CenterStart,
@@ -364,10 +383,11 @@ internal fun TalkCardPreview() {
                     "Workshop", "Kotlin", "Coroutines", "Multiplatform",
                     "Label", "Label", "Label", "Label", "Label",
                 ),
-                selectedTags = listOf(
+                tagHighlights = listOf(
                     "Kotlin", "Multiplatform",
                 ),
                 speakers = "Sebastian Aigner, Vsevolod Tolstopyatov",
+                speakerHighlights = listOf(10..15),
                 location = "Auditorium 14",
                 lightning = true,
                 time = "9:00 – 10:00",
@@ -375,6 +395,7 @@ internal fun TalkCardPreview() {
                 status = TalkStatus.Now,
                 onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
                 onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
+                onClick = { "Clicked session" },
                 modifier = Modifier.weight(1f),
             )
             Spacer(Modifier.width(16.dp))
@@ -387,8 +408,9 @@ internal fun TalkCardPreview() {
                     "Workshop", "Kotlin", "Coroutines", "Multiplatform",
                     "Label", "Label", "Label", "Label", "Label",
                 ),
-                selectedTags = listOf(),
+                tagHighlights = listOf(),
                 speakers = "Sebastian Aigner, Vsevolod Tolstopyatov",
+                speakerHighlights = emptyList(),
                 location = "Auditorium 14",
                 lightning = true,
                 time = "9:00 – 10:00",
@@ -396,6 +418,7 @@ internal fun TalkCardPreview() {
                 status = TalkStatus.Upcoming,
                 onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
                 onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
+                onClick = { "Clicked session" },
                 modifier = Modifier.weight(1f),
             )
         }

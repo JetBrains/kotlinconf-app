@@ -2,7 +2,6 @@ package org.jetbrains.kotlinconf
 
 import io.ktor.util.date.GMTDate
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.kotlinconf.utils.time
 
 data class Agenda(

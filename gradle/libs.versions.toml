@@ -18,6 +18,7 @@ compose-android = "1.7.6"
 compose-multiplatform = "1.8.0-alpha02"
 compose-hot-reload = "1.0.0-dev.32.1"
 
+coroutines = "1.10.1"
 coil = "3.0.3"
 exposed = "0.55.0"
 h2 = "2.2.224"
@@ -30,6 +31,7 @@ logbackClassic = "1.5.6"
 markdown = "0.29.0"
 postgresql = "42.7.3"
 androidx-navigation = "2.8.0-alpha12"
+doistx-normalize = "1.0.5"
 
 [libraries]
 
@@ -87,8 +89,10 @@ ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", versio
 ktor-server-swagger = { module = "io.ktor:ktor-server-swagger", version.ref = "ktor" }
 
 # utility
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logbackClassic" }
+doistx-normalize = { module = "com.doist.x:normalize", version.ref = "doistx-normalize" }
 
 # images
 android-svg = { module = "com.caverock:androidsvg-aar", version.ref = "android-svg" }

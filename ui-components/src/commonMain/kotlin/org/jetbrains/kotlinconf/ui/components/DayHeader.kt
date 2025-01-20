@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -53,7 +54,7 @@ fun DayHeader(
     Row(
         modifier = modifier
             .background(colorGradient)
-            .width(300.dp)
+            .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 6.dp)
             .semantics(mergeDescendants = true) {},
         verticalAlignment = Alignment.CenterVertically,
