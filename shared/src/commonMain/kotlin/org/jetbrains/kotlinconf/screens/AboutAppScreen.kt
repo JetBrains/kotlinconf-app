@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.about_app_description
 import kotlinconfapp.shared.generated.resources.about_app_link_github
+import kotlinconfapp.shared.generated.resources.about_app_link_licenses
 import kotlinconfapp.shared.generated.resources.about_app_link_privacy_policy
 import kotlinconfapp.shared.generated.resources.about_app_link_rate
 import kotlinconfapp.shared.generated.resources.about_app_link_settings
@@ -32,6 +33,7 @@ fun AboutAppScreen(
     onSettings: () -> Unit,
     onPrivacyPolicy: () -> Unit,
     onTermsOfUse: () -> Unit,
+    onLicenses: () -> Unit,
 ) {
     ScreenWithTitle(
         title = stringResource(Res.string.about_app_title),
@@ -62,6 +64,7 @@ fun AboutAppScreen(
             PageMenuItem(stringResource(Res.string.about_app_link_settings), onClick = onSettings)
             PageMenuItem(stringResource(Res.string.about_app_link_privacy_policy), onClick = onPrivacyPolicy)
             PageMenuItem(stringResource(Res.string.about_app_link_terms_of_use), onClick = onTermsOfUse)
+            PageMenuItem(stringResource(Res.string.about_app_link_licenses), onClick = onLicenses)
         }
     }
 }
