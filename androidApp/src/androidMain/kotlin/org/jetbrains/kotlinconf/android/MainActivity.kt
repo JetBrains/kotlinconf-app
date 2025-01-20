@@ -3,6 +3,7 @@ package org.jetbrains.kotlinconf.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.systemBars
@@ -24,10 +25,10 @@ class MainActivity : ComponentActivity() {
             R.mipmap.ic_launcher,
         )
 
+        enableEdgeToEdge()
+
         setContent {
-            Box(Modifier.windowInsetsPadding(WindowInsets.systemBars)) {
-                App(context)
-            }
+            App(context)
         }
     }
 }
