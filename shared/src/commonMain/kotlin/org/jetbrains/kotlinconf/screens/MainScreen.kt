@@ -100,28 +100,28 @@ private fun BottomNavigation(nestedNavController: NavHostController) {
             MainNavDestination(
                 label = stringResource(Res.string.nav_destination_info),
                 icon = Res.drawable.info_28,
-                iconFilled = Res.drawable.info_28_fill,
+                iconSelected = Res.drawable.info_28_fill,
                 route = InfoScreen,
                 routeClass = InfoScreen::class
             ),
             MainNavDestination(
                 label = stringResource(Res.string.nav_destination_schedule),
                 icon = Res.drawable.clock_28,
-                iconFilled = Res.drawable.clock_28_fill,
+                iconSelected = Res.drawable.clock_28_fill,
                 route = ScheduleScreen,
                 routeClass = ScheduleScreen::class
             ),
             MainNavDestination(
                 label = stringResource(Res.string.nav_destination_speakers),
                 icon = Res.drawable.team_28,
-                iconFilled = Res.drawable.team_28_fill,
+                iconSelected = Res.drawable.team_28_fill,
                 route = SpeakersScreen,
                 routeClass = SpeakersScreen::class
             ),
             MainNavDestination(
                 label = stringResource(Res.string.nav_destination_map),
                 icon = Res.drawable.location_28,
-                iconFilled = Res.drawable.location_28_fill,
+                iconSelected = Res.drawable.location_28_fill,
                 route = MapScreen,
                 routeClass = MapScreen::class
             ),

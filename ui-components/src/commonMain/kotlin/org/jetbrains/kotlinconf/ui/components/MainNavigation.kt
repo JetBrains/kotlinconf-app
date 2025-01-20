@@ -70,8 +70,8 @@ private fun MainNavigationButton(
 data class MainNavDestination(
     val label: String,
     val icon: DrawableResource,
-    val iconFilled: DrawableResource,
     val route: Any,
+    val iconSelected: DrawableResource = icon,
     val routeClass: KClass<*>? = null,
 )
 
@@ -89,7 +89,7 @@ fun MainNavigation(
         destinations.forEach { destination ->
             MainNavigationButton(
                 iconResource = destination.icon,
-                iconFilledResource = destination.iconFilled,
+                iconFilledResource = destination.iconSelected,
                 contentDescription = destination.label,
                 selected = destination == currentDestination,
                 onClick = { onSelect(destination) },
@@ -107,7 +107,7 @@ internal fun MainNavigationPreview() {
             mutableStateOf(MainNavDestination(
                 label = "Schedule",
                 icon = Res.drawable.clock_28,
-                iconFilled = Res.drawable.clock_28_fill,
+                iconSelected = Res.drawable.clock_28_fill,
                 route = "Schedule"
             ))
         }
@@ -117,25 +117,25 @@ internal fun MainNavigationPreview() {
                 MainNavDestination(
                     label = "Info",
                     icon = Res.drawable.info_28,
-                    iconFilled = Res.drawable.info_28_fill,
+                    iconSelected = Res.drawable.info_28_fill,
                     route = "Info"
                 ),
                 MainNavDestination(
                     label = "Schedule",
                     icon = Res.drawable.clock_28,
-                    iconFilled = Res.drawable.clock_28_fill,
+                    iconSelected = Res.drawable.clock_28_fill,
                     route = "Schedule"
                 ),
                 MainNavDestination(
                     label = "Speakers",
                     icon = Res.drawable.team_28,
-                    iconFilled = Res.drawable.team_28_fill,
+                    iconSelected = Res.drawable.team_28_fill,
                     route = "Speakers"
                 ),
                 MainNavDestination(
                     label = "Map",
                     icon = Res.drawable.location_28,
-                    iconFilled = Res.drawable.location_28_fill,
+                    iconSelected = Res.drawable.location_28_fill,
                     route = "Map"
                 ),
             ),
