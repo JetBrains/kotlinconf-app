@@ -21,8 +21,9 @@ For the source code and more technical details, visit the GitHub repository.</st
     <string name="info_link_about_app">About the app</string>
     <string name="info_link_partners">Our partners</string>
     <string name="info_link_code_of_conduct">Code of Conduct</string>
-    <string name="info_link_twitter">@KotlinConf</string>
-    <string name="info_link_slack">#kotlinconf</string>
+    <string name="info_link_description_twitter">Twitter</string>
+    <string name="info_link_description_slack">Slack</string>
+    <string name="info_link_description_bluesky">Bluesky</string>
 
     <string name="privacy_policy_title">Privacy policy</string>
     <string name="privacy_policy_description">For you to maximize the benefits of this app, we need your consent to access and use your device ID so you can provide and we can collect and track your feedback about talks.
