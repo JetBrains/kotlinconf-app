@@ -121,6 +121,7 @@ fun App(context: ApplicationContext) {
                                 onCodeOfConduct = {},
                                 onTwitter = { uriHandler.openUri("https://x.com/kotlinconf") },
                                 onSlack = { uriHandler.openUri("https://kotlinlang.slack.com/messages/kotlinconf/") },
+                                onBluesky = { uriHandler.openUri("https://bsky.app/profile/kotlinconf.com") },
                             )
                         }
                         composable<StartPrivacyPolicyScreen> {
