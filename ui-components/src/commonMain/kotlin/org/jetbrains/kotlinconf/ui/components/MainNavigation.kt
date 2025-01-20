@@ -20,9 +20,13 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.clock_28
+import kotlinconfapp.ui_components.generated.resources.clock_28_fill
 import kotlinconfapp.ui_components.generated.resources.info_28
+import kotlinconfapp.ui_components.generated.resources.info_28_fill
 import kotlinconfapp.ui_components.generated.resources.location_28
+import kotlinconfapp.ui_components.generated.resources.location_28_fill
 import kotlinconfapp.ui_components.generated.resources.team_28
+import kotlinconfapp.ui_components.generated.resources.team_28_fill
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -35,6 +39,7 @@ private val MainNavigationButtonShape = RoundedCornerShape(8.dp)
 @Composable
 private fun MainNavigationButton(
     iconResource: DrawableResource,
+    iconFilledResource: DrawableResource,
     contentDescription: String,
     selected: Boolean,
     onClick: () -> Unit,
@@ -56,7 +61,7 @@ private fun MainNavigationButton(
             )
             .padding(10.dp)
             .size(28.dp),
-        painter = painterResource(iconResource),
+        painter = painterResource(if (selected) iconFilledResource else iconResource),
         contentDescription = contentDescription,
         tint = iconColor,
     )
@@ -65,6 +70,7 @@ private fun MainNavigationButton(
 data class MainNavDestination(
     val label: String,
     val icon: DrawableResource,
+    val iconFilled: DrawableResource,
     val route: Any,
     val routeClass: KClass<*>? = null,
 )
@@ -83,6 +89,7 @@ fun MainNavigation(
         destinations.forEach { destination ->
             MainNavigationButton(
                 iconResource = destination.icon,
+                iconFilledResource = destination.iconFilled,
                 contentDescription = destination.label,
                 selected = destination == currentDestination,
                 onClick = { onSelect(destination) },
@@ -97,15 +104,40 @@ fun MainNavigation(
 internal fun MainNavigationPreview() {
     PreviewHelper {
         var currentDestination by remember {
-            mutableStateOf(MainNavDestination("Schedule", Res.drawable.clock_28, "Schedule"))
+            mutableStateOf(MainNavDestination(
+                label = "Schedule",
+                icon = Res.drawable.clock_28,
+                iconFilled = Res.drawable.clock_28_fill,
+                route = "Schedule"
+            ))
         }
         MainNavigation(
             currentDestination = currentDestination,
             destinations = listOf(
-                MainNavDestination("Info", Res.drawable.info_28, "Info"),
-                MainNavDestination("Schedule", Res.drawable.clock_28, "Schedule"),
-                MainNavDestination("Speakers", Res.drawable.team_28, "Speakers"),
-                MainNavDestination("Map", Res.drawable.location_28, "Map"),
+                MainNavDestination(
+                    label = "Info",
+                    icon = Res.drawable.info_28,
+                    iconFilled = Res.drawable.info_28_fill,
+                    route = "Info"
+                ),
+                MainNavDestination(
+                    label = "Schedule",
+                    icon = Res.drawable.clock_28,
+                    iconFilled = Res.drawable.clock_28_fill,
+                    route = "Schedule"
+                ),
+                MainNavDestination(
+                    label = "Speakers",
+                    icon = Res.drawable.team_28,
+                    iconFilled = Res.drawable.team_28_fill,
+                    route = "Speakers"
+                ),
+                MainNavDestination(
+                    label = "Map",
+                    icon = Res.drawable.location_28,
+                    iconFilled = Res.drawable.location_28_fill,
+                    route = "Map"
+                ),
             ),
             onSelect = { currentDestination = it },
         )

@@ -17,13 +17,17 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.clock_28
+import kotlinconfapp.shared.generated.resources.clock_28_fill
 import kotlinconfapp.shared.generated.resources.info_28
+import kotlinconfapp.shared.generated.resources.info_28_fill
 import kotlinconfapp.shared.generated.resources.location_28
+import kotlinconfapp.shared.generated.resources.location_28_fill
 import kotlinconfapp.shared.generated.resources.nav_destination_info
 import kotlinconfapp.shared.generated.resources.nav_destination_map
 import kotlinconfapp.shared.generated.resources.nav_destination_schedule
 import kotlinconfapp.shared.generated.resources.nav_destination_speakers
 import kotlinconfapp.shared.generated.resources.team_28
+import kotlinconfapp.shared.generated.resources.team_28_fill
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.navigation.AboutAppScreen
@@ -96,24 +100,28 @@ private fun BottomNavigation(nestedNavController: NavHostController) {
             MainNavDestination(
                 label = stringResource(Res.string.nav_destination_info),
                 icon = Res.drawable.info_28,
+                iconFilled = Res.drawable.info_28_fill,
                 route = InfoScreen,
                 routeClass = InfoScreen::class
             ),
             MainNavDestination(
                 label = stringResource(Res.string.nav_destination_schedule),
                 icon = Res.drawable.clock_28,
+                iconFilled = Res.drawable.clock_28_fill,
                 route = ScheduleScreen,
                 routeClass = ScheduleScreen::class
             ),
             MainNavDestination(
                 label = stringResource(Res.string.nav_destination_speakers),
                 icon = Res.drawable.team_28,
+                iconFilled = Res.drawable.team_28_fill,
                 route = SpeakersScreen,
                 routeClass = SpeakersScreen::class
             ),
             MainNavDestination(
                 label = stringResource(Res.string.nav_destination_map),
                 icon = Res.drawable.location_28,
+                iconFilled = Res.drawable.location_28_fill,
                 route = MapScreen,
                 routeClass = MapScreen::class
             ),
