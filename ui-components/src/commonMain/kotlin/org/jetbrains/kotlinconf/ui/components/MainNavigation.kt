@@ -20,20 +20,26 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.clock_28
+import kotlinconfapp.ui_components.generated.resources.clock_28_fill
 import kotlinconfapp.ui_components.generated.resources.info_28
+import kotlinconfapp.ui_components.generated.resources.info_28_fill
 import kotlinconfapp.ui_components.generated.resources.location_28
+import kotlinconfapp.ui_components.generated.resources.location_28_fill
 import kotlinconfapp.ui_components.generated.resources.team_28
+import kotlinconfapp.ui_components.generated.resources.team_28_fill
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import kotlin.reflect.KClass
 
 private val MainNavigationButtonShape = RoundedCornerShape(8.dp)
 
 @Composable
 private fun MainNavigationButton(
     iconResource: DrawableResource,
+    iconFilledResource: DrawableResource,
     contentDescription: String,
     selected: Boolean,
     onClick: () -> Unit,
@@ -55,35 +61,38 @@ private fun MainNavigationButton(
             )
             .padding(10.dp)
             .size(28.dp),
-        painter = painterResource(iconResource),
+        painter = painterResource(if (selected) iconFilledResource else iconResource),
         contentDescription = contentDescription,
         tint = iconColor,
     )
 }
 
-data class MainNavDestination<T : Any>(
+data class MainNavDestination(
     val label: String,
     val icon: DrawableResource,
-    val route: T,
+    val route: Any,
+    val iconSelected: DrawableResource = icon,
+    val routeClass: KClass<*>? = null,
 )
 
 @Composable
-fun <T : Any> MainNavigation(
-    currentDestination: MainNavDestination<T>,
-    destinations: List<MainNavDestination<T>>,
-    onSelected: (MainNavDestination<T>) -> Unit,
+fun MainNavigation(
+    currentDestination: MainNavDestination?,
+    destinations: List<MainNavDestination>,
+    onSelect: (MainNavDestination) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.fillMaxWidth().padding(horizontal = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        destinations.forEach {
+        destinations.forEach { destination ->
             MainNavigationButton(
-                iconResource = it.icon,
-                contentDescription = it.label,
-                selected = it == currentDestination,
-                onClick = { onSelected(it) },
+                iconResource = destination.icon,
+                iconFilledResource = destination.iconSelected,
+                contentDescription = destination.label,
+                selected = destination == currentDestination,
+                onClick = { onSelect(destination) },
                 modifier = Modifier.weight(1f),
             )
         }
@@ -95,17 +104,42 @@ fun <T : Any> MainNavigation(
 internal fun MainNavigationPreview() {
     PreviewHelper {
         var currentDestination by remember {
-            mutableStateOf(MainNavDestination("Schedule", Res.drawable.clock_28, "Schedule"))
+            mutableStateOf(MainNavDestination(
+                label = "Schedule",
+                icon = Res.drawable.clock_28,
+                iconSelected = Res.drawable.clock_28_fill,
+                route = "Schedule"
+            ))
         }
         MainNavigation(
             currentDestination = currentDestination,
             destinations = listOf(
-                MainNavDestination("Info", Res.drawable.info_28, "Info"),
-                MainNavDestination("Schedule", Res.drawable.clock_28, "Schedule"),
-                MainNavDestination("Speakers", Res.drawable.team_28, "Speakers"),
-                MainNavDestination("Map", Res.drawable.location_28, "Map"),
+                MainNavDestination(
+                    label = "Info",
+                    icon = Res.drawable.info_28,
+                    iconSelected = Res.drawable.info_28_fill,
+                    route = "Info"
+                ),
+                MainNavDestination(
+                    label = "Schedule",
+                    icon = Res.drawable.clock_28,
+                    iconSelected = Res.drawable.clock_28_fill,
+                    route = "Schedule"
+                ),
+                MainNavDestination(
+                    label = "Speakers",
+                    icon = Res.drawable.team_28,
+                    iconSelected = Res.drawable.team_28_fill,
+                    route = "Speakers"
+                ),
+                MainNavDestination(
+                    label = "Map",
+                    icon = Res.drawable.location_28,
+                    iconSelected = Res.drawable.location_28_fill,
+                    route = "Map"
+                ),
             ),
-            onSelected = { currentDestination = it },
+            onSelect = { currentDestination = it },
         )
     }
 }

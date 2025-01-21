@@ -3,6 +3,10 @@
 
     <string name="navigate_back">Back</string>
 
+    <string name="nav_destination_info">Info</string>
+    <string name="nav_destination_schedule">Schedule</string>
+    <string name="nav_destination_speakers">Speakers</string>
+    <string name="nav_destination_map">Map</string>
 
     <!-- Screen resources -->
 
