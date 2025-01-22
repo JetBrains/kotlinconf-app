@@ -75,7 +75,13 @@ internal fun KotlinConfNavHost(
             )
         }
         composable<AboutConferenceScreen> {
-            AboutConference(onBack = navController::popBackStack)
+            val urlHandler = LocalUriHandler.current
+            AboutConference(
+                onPrivacyPolicy = { navController.navigate(PrivacyPolicyForVisitorsScreen) },
+                onGeneralTerms = { navController.navigate(TermsOfUseScreen) },
+                onWebsiteLink = { urlHandler.openUri("https://kotlinconf.com/") },
+                onBack = navController::popBackStack,
+            )
         }
         composable<CodeOfConductScreen> {
             CodeOfConduct(onBack = navController::popBackStack)
