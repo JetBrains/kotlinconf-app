@@ -41,6 +41,12 @@ data object TermsOfUseScreen
 data object AppTermsOfUseScreen
 
 @Serializable
+data object LicensesScreen
+
+@Serializable
+data class SingleLicenseScreen(val licenseName: String, val licenseText: String)
+
+@Serializable
 data object PartnersScreen
 
 @Serializable

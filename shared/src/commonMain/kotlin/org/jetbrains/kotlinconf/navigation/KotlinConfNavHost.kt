@@ -24,6 +24,7 @@ import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
+import org.jetbrains.kotlinconf.screens.LicensesScreen
 import org.jetbrains.kotlinconf.screens.MainScreen
 import org.jetbrains.kotlinconf.screens.PartnerDetails
 import org.jetbrains.kotlinconf.screens.Partners
@@ -35,6 +36,7 @@ import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 import org.jetbrains.kotlinconf.screens.StartPrivacyPolicyScreen
 import org.jetbrains.kotlinconf.screens.AppPrivacyPolicy
 import org.jetbrains.kotlinconf.screens.AppTermsOfUse
+import org.jetbrains.kotlinconf.screens.SingleLicenseScreen
 import org.jetbrains.kotlinconf.screens.TermsOfUse
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import kotlin.reflect.typeOf
@@ -74,6 +76,23 @@ internal fun KotlinConfNavHost(
                 onSettings = { navController.navigate(SettingsScreen) },
                 onPrivacyPolicy = { navController.navigate(AppPrivacyPolicyScreen) },
                 onTermsOfUse = { navController.navigate(AppTermsOfUseScreen) },
+                onLicenses = { navController.navigate(LicensesScreen) },
+            )
+        }
+        composable<LicensesScreen> {
+            LicensesScreen(
+                onLicenseClick = { licenseName, licenseText ->
+                    navController.navigate(SingleLicenseScreen(licenseName, licenseText))
+                },
+                onBack = navController::popBackStack,
+            )
+        }
+        composable<SingleLicenseScreen> {
+            val params = it.toRoute<SingleLicenseScreen>()
+            SingleLicenseScreen(
+                licenseName = params.licenseName,
+                licenseContent = params.licenseText,
+                onBack = navController::popBackStack,
             )
         }
         composable<AboutConferenceScreen> {
