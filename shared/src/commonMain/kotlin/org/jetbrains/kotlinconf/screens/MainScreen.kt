@@ -80,7 +80,8 @@ fun MainScreen(
             }
             composable<SpeakersScreen> {
                 Speakers(
-                    onBack = rootNavController::popBackStack
+                    service.speakers.collectAsState().value,
+                    onSpeaker = { rootNavController.navigate(SpeakerDetailsScreen(it)) },
                 )
             }
             composable<ScheduleScreen> {
