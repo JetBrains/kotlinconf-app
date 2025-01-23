@@ -18,8 +18,6 @@ import org.jetbrains.kotlinconf.navigation.KotlinConfNavHost
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import kotlin.random.Random
 
-const val apiEndpoint = "https://kotlinconf-app-prod.labs.jb.gg"
-
 // TODO replace with real data store
 private object FakeDataStore {
     fun isOnboardingComplete(): Flow<Boolean> = flow {
@@ -32,7 +30,7 @@ private object FakeDataStore {
 fun App(context: ApplicationContext) {
     DevelopmentEntryPoint {
         KotlinConfTheme {
-            val service = remember { ConferenceService(context, apiEndpoint) }
+            val service = remember { ConferenceService(context, URLs.API_ENDPOINT) }
 
             val isOnboardingComplete = remember { FakeDataStore.isOnboardingComplete() }
                 .collectAsState(initial = null)

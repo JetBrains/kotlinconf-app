@@ -67,7 +67,7 @@ internal fun KotlinConfNavHost(
             val uriHandler = LocalUriHandler.current
             AboutAppScreen(
                 onBack = { navController.popBackStack() },
-                onGitHubRepo = { uriHandler.openUri("https://github.com/JetBrains/kotlinconf-app") },
+                onGitHubRepo = { uriHandler.openUri(URLs.GITHUB_REPO_URL) },
                 onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
                 onSettings = { navController.navigate(SettingsScreen) },
                 onPrivacyPolicy = { navController.navigate(PrivacyPolicyForVisitorsScreen) },
@@ -79,7 +79,7 @@ internal fun KotlinConfNavHost(
             AboutConference(
                 onPrivacyPolicy = { navController.navigate(PrivacyPolicyForVisitorsScreen) },
                 onGeneralTerms = { navController.navigate(TermsOfUseScreen) },
-                onWebsiteLink = { urlHandler.openUri("https://kotlinconf.com/") },
+                onWebsiteLink = { urlHandler.openUri(URLs.KOTLINCONF_HOMEPAGE) },
                 onBack = navController::popBackStack,
             )
         }

@@ -65,9 +65,9 @@ fun MainScreen(
                     onAboutApp = { rootNavController.navigate(AboutAppScreen) },
                     onOurPartners = { rootNavController.navigate(PartnersScreen) },
                     onCodeOfConduct = { rootNavController.navigate(CodeOfConductScreen) },
-                    onTwitter = { uriHandler.openUri("https://x.com/kotlinconf") },
-                    onSlack = { uriHandler.openUri("https://kotlinlang.slack.com/messages/kotlinconf/") },
-                    onBluesky = { uriHandler.openUri("https://bsky.app/profile/kotlinconf.com") },
+                    onTwitter = { uriHandler.openUri(URLs.TWITTER_URL) },
+                    onSlack = { uriHandler.openUri(URLs.SLACK_URL) },
+                    onBluesky = { uriHandler.openUri(URLs.BLUESKY_URL) },
                 )
             }
             composable<SpeakersScreen> {
