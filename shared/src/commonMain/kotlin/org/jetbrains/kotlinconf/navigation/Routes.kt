@@ -32,7 +32,13 @@ data object SettingsScreen
 data object PrivacyPolicyForVisitorsScreen
 
 @Serializable
+data object AppPrivacyPolicyScreen
+
+@Serializable
 data object TermsOfUseScreen
+
+@Serializable
+data object AppTermsOfUseScreen
 
 @Serializable
 data object PartnersScreen
