@@ -33,6 +33,8 @@ import org.jetbrains.kotlinconf.screens.Settings
 import org.jetbrains.kotlinconf.screens.Speaker
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 import org.jetbrains.kotlinconf.screens.StartPrivacyPolicyScreen
+import org.jetbrains.kotlinconf.screens.AppPrivacyPolicy
+import org.jetbrains.kotlinconf.screens.AppTermsOfUse
 import org.jetbrains.kotlinconf.screens.TermsOfUse
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import kotlin.reflect.typeOf
@@ -70,8 +72,8 @@ internal fun KotlinConfNavHost(
                 onGitHubRepo = { uriHandler.openUri(URLs.GITHUB_REPO) },
                 onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
                 onSettings = { navController.navigate(SettingsScreen) },
-                onPrivacyPolicy = { navController.navigate(PrivacyPolicyForVisitorsScreen) },
-                onTermsOfUse = { navController.navigate(TermsOfUseScreen) },
+                onPrivacyPolicy = { navController.navigate(AppPrivacyPolicyScreen) },
+                onTermsOfUse = { navController.navigate(AppTermsOfUseScreen) },
             )
         }
         composable<AboutConferenceScreen> {
@@ -92,8 +94,14 @@ internal fun KotlinConfNavHost(
         composable<PrivacyPolicyForVisitorsScreen> {
             PrivacyPolicyForVisitors(onBack = navController::popBackStack)
         }
+        composable<AppPrivacyPolicyScreen> {
+            AppPrivacyPolicy(onBack = navController::popBackStack)
+        }
         composable<TermsOfUseScreen> {
             TermsOfUse(onBack = navController::popBackStack)
+        }
+        composable<AppTermsOfUseScreen> {
+            AppTermsOfUse(onBack = navController::popBackStack)
         }
         composable<PartnersScreen> {
             Partners(
