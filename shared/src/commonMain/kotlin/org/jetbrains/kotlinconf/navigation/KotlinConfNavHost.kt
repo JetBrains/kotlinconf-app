@@ -67,7 +67,7 @@ internal fun KotlinConfNavHost(
             val uriHandler = LocalUriHandler.current
             AboutAppScreen(
                 onBack = { navController.popBackStack() },
-                onGitHubRepo = { uriHandler.openUri(URLs.GITHUB_REPO_URL) },
+                onGitHubRepo = { uriHandler.openUri(URLs.GITHUB_REPO) },
                 onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
                 onSettings = { navController.navigate(SettingsScreen) },
                 onPrivacyPolicy = { navController.navigate(PrivacyPolicyForVisitorsScreen) },
