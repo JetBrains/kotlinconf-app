@@ -65,9 +65,9 @@ fun MainScreen(
                     onAboutApp = { rootNavController.navigate(AboutAppScreen) },
                     onOurPartners = { rootNavController.navigate(PartnersScreen) },
                     onCodeOfConduct = { rootNavController.navigate(CodeOfConductScreen) },
-                    onTwitter = { uriHandler.openUri(URLs.TWITTER_URL) },
-                    onSlack = { uriHandler.openUri(URLs.SLACK_URL) },
-                    onBluesky = { uriHandler.openUri(URLs.BLUESKY_URL) },
+                    onTwitter = { uriHandler.openUri(URLs.TWITTER) },
+                    onSlack = { uriHandler.openUri(URLs.SLACK) },
+                    onBluesky = { uriHandler.openUri(URLs.BLUESKY) },
                 )
             }
             composable<SpeakersScreen> {
