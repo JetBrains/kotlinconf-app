@@ -75,7 +75,7 @@ kotlin {
             implementation(libs.androidx.navigation.compose)
             implementation(libs.ktor.client.core)
 
-            implementation(libs.aboutlibraries.compose)
+            implementation(libs.aboutlibraries.core)
         }
 
         commonTest.dependencies {

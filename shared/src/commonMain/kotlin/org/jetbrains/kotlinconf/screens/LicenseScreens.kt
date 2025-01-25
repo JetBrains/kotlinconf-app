@@ -15,16 +15,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.entity.Library
-import com.mikepenz.aboutlibraries.ui.compose.rememberLibraries
-import com.mikepenz.aboutlibraries.ui.compose.util.author
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.licenses_title
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
@@ -37,6 +39,12 @@ private val Library.licenseName: String
 private val Library.licenseContent: String
     get() = licenses.firstOrNull()?.licenseContent ?: ""
 
+private val Library.author: String
+    get() = when {
+        developers.isNotEmpty() -> developers.joinToString { it.name.toString() }
+        else -> organization?.name ?: ""
+    }
+
 @Composable
 fun LicensesScreen(
     onLicenseClick: (licenseName: String, licenseText: String) -> Unit,
@@ -46,12 +54,15 @@ fun LicensesScreen(
         title = stringResource(Res.string.licenses_title),
         onBack = onBack,
     ) {
-        val libraries = rememberLibraries {
-            // To update licenses:
-            // gradlew :shared:exportLibraryDefinitions -PaboutLibraries.exportPath=src/commonMain/composeResources/files
-            @OptIn(ExperimentalResourceApi::class)
-            Res.readBytes("files/aboutlibraries.json").decodeToString()
-        }.value
+        val libraries by produceState<Libs?>(initialValue = null) {
+            value = withContext(Dispatchers.Default) {
+                // To update licenses:
+                // gradlew :shared:exportLibraryDefinitions -PaboutLibraries.exportPath=src/commonMain/composeResources/files
+                @OptIn(ExperimentalResourceApi::class)
+                val json = Res.readBytes("files/aboutlibraries.json").decodeToString()
+                Libs.Builder().withJson(json).build()
+            }
+        }
 
         LibraryList(
             libraries = libraries,

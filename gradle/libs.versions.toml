@@ -95,7 +95,7 @@ android-svg = { module = "com.caverock:androidsvg-aar", version.ref = "android-s
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 
-aboutlibraries-compose = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "aboutlibraries" }
+aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlibraries" }
 
 [plugins]
 aboutLibraries = { id= "com.mikepenz.aboutlibraries.plugin", version.ref="aboutlibraries"}
