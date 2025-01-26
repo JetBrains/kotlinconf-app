@@ -80,3 +80,10 @@ enum class Score(val value: Int) {
         }
     }
 }
+
+@Serializable
+enum class Theme {
+    SYSTEM,
+    LIGHT,
+    DARK,
+}

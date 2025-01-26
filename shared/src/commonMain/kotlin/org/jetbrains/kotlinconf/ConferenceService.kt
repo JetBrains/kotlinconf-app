@@ -34,6 +34,9 @@ class ConferenceService(
     private var userId2024: String? by storage.bind(String.serializer().nullable) { null }
     private var needsOnboarding: Boolean by storage.bind(Boolean.serializer()) { true }
     private var notificationsAllowed: Boolean by storage.bind(Boolean.serializer()) { false }
+    private var _themeStorage: Theme by storage.bind(Theme.serializer()) { Theme.SYSTEM }
+    private val _theme = MutableStateFlow(_themeStorage)
+    val theme: StateFlowClass<Theme> = _theme.asStateFlowClass()
 
     private val client: APIClient by lazy {
         APIClient(endpoint)
@@ -82,6 +85,11 @@ class ConferenceService(
         .map { Speakers(it) }
         .stateIn(this, SharingStarted.Eagerly, Speakers(emptyList()))
         .asStateFlowClass()
+
+    fun setTheme(theme: Theme) {
+        _themeStorage = theme
+        _theme.value = theme
+    }
 
     fun sign() {
         client.userId = userId2024
@@ -247,7 +255,7 @@ class ConferenceService(
         }
 
         if (nowTimestamp > voteTimeStamp) return
-        
+
         val voteDelay = voteTimeStamp - nowTimestamp
         notificationManager.schedule(
             voteDelay,

@@ -25,9 +25,10 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 fun ScreenWithTitle(
     title: String,
     onBack: () -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Column(Modifier.fillMaxSize()) {
+    Column(modifier.fillMaxSize()) {
         MainHeaderTitleBar(
             title = title,
             startContent = {

@@ -1,6 +1,8 @@
 package org.jetbrains.kotlinconf
 
+import URLs
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.delay
@@ -29,9 +32,14 @@ private object FakeDataStore {
 @Composable
 fun App(context: ApplicationContext) {
     DevelopmentEntryPoint {
-        KotlinConfTheme {
-            val service = remember { ConferenceService(context, URLs.API_ENDPOINT) }
-
+        val service = remember { ConferenceService(context, URLs.API_ENDPOINT) }
+        val currentTheme by service.theme.collectAsState()
+        val isDarkTheme = when (currentTheme) {
+            Theme.SYSTEM -> isSystemInDarkTheme()
+            Theme.LIGHT -> false
+            Theme.DARK -> true
+        }
+        KotlinConfTheme(darkTheme = isDarkTheme) {
             val isOnboardingComplete = remember { FakeDataStore.isOnboardingComplete() }
                 .collectAsState(initial = null)
                 .value

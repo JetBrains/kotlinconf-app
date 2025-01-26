@@ -30,7 +30,7 @@ import org.jetbrains.kotlinconf.screens.PartnerDetails
 import org.jetbrains.kotlinconf.screens.Partners
 import org.jetbrains.kotlinconf.screens.PrivacyPolicyForVisitors
 import org.jetbrains.kotlinconf.screens.Session
-import org.jetbrains.kotlinconf.screens.Settings
+import org.jetbrains.kotlinconf.screens.SettingsScreen
 import org.jetbrains.kotlinconf.screens.Speaker
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 import org.jetbrains.kotlinconf.screens.StartPrivacyPolicyScreen
@@ -108,7 +108,9 @@ internal fun KotlinConfNavHost(
             CodeOfConduct(onBack = navController::popBackStack)
         }
         composable<SettingsScreen> {
-            Settings(onBack = navController::popBackStack)
+
+                SettingsScreen(service = service, onBack = navController::popBackStack)
+
         }
         composable<PrivacyPolicyForVisitorsScreen> {
             PrivacyPolicyForVisitors(onBack = navController::popBackStack)
