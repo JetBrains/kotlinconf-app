@@ -34,8 +34,12 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.settings_theme_dark
+import kotlinconfapp.shared.generated.resources.settings_theme_light
+import kotlinconfapp.shared.generated.resources.settings_theme_system
 import kotlinconfapp.shared.generated.resources.settings_theme_title
 import kotlinconfapp.shared.generated.resources.settings_title
 import kotlinconfapp.shared.generated.resources.theme_dark
@@ -179,7 +183,7 @@ private fun ThemeBox(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier.semantics(mergeDescendants = true) {},
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -213,21 +217,19 @@ private fun ThemeBox(
                         Theme.DARK -> Res.drawable.theme_dark
                     }
                 ),
-                contentDescription = when (theme) {
-                    Theme.SYSTEM -> "System theme preview"
-                    Theme.LIGHT -> "Light theme preview"
-                    Theme.DARK -> "Dark theme preview"
-                },
+                contentDescription = null,
                 modifier = Modifier.fillMaxSize()
             )
         }
         Spacer(Modifier.height(8.dp))
         StyledText(
-            text = when (theme) {
-                Theme.SYSTEM -> "System"
-                Theme.LIGHT -> "Light"
-                Theme.DARK -> "Dark"
-            },
+            text = stringResource(
+                when (theme) {
+                    Theme.SYSTEM -> Res.string.settings_theme_system
+                    Theme.LIGHT -> Res.string.settings_theme_light
+                    Theme.DARK -> Res.string.settings_theme_dark
+                }
+            ),
             style = KotlinConfTheme.typography.text2,
             color = KotlinConfTheme.colors.primaryText
         )
