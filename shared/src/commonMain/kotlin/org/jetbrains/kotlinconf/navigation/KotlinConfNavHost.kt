@@ -108,9 +108,14 @@ internal fun KotlinConfNavHost(
             CodeOfConduct(onBack = navController::popBackStack)
         }
         composable<SettingsScreen> {
-
-                SettingsScreen(service = service, onBack = navController::popBackStack)
-
+            SettingsScreen(
+                service = service,
+                onBack = navController::popBackStack,
+                onNotificationSettingsChange = {
+                     // TODO request notification permission, save settings
+                    println("New settings: $it")
+                }
+            )
         }
         composable<PrivacyPolicyForVisitorsScreen> {
             PrivacyPolicyForVisitors(onBack = navController::popBackStack)

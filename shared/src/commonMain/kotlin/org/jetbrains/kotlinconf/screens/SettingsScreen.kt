@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,13 +36,6 @@ import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.notifications_jetbrains_news_description
-import kotlinconfapp.shared.generated.resources.notifications_jetbrains_news_title
-import kotlinconfapp.shared.generated.resources.notifications_kotlinconf_news_description
-import kotlinconfapp.shared.generated.resources.notifications_kotlinconf_news_title
-import kotlinconfapp.shared.generated.resources.notifications_schedule_update_description
-import kotlinconfapp.shared.generated.resources.notifications_schedule_update_title
-import kotlinconfapp.shared.generated.resources.notifications_title
 import kotlinconfapp.shared.generated.resources.settings_theme_title
 import kotlinconfapp.shared.generated.resources.settings_title
 import kotlinconfapp.shared.generated.resources.theme_dark
@@ -55,7 +49,6 @@ import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.Theme
 import org.jetbrains.kotlinconf.ui.components.Divider
-import org.jetbrains.kotlinconf.ui.components.SettingsItem
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import kotlinconfapp.shared.generated.resources.Res as AppRes
@@ -64,10 +57,11 @@ import kotlinconfapp.shared.generated.resources.Res as AppRes
 fun SettingsScreen(
     service: ConferenceService,
     onBack: () -> Unit,
+    onNotificationSettingsChange: (NotificationSettings) -> Unit,
 ) {
     val graphicsLayer = rememberGraphicsLayer()
     val scope = rememberCoroutineScope()
-    var bitmap: ImageBitmap? by remember { mutableStateOf(null) }
+    var bitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var bitmapVisibility = remember { Animatable(1f) }
 
     val currentTheme by service.theme.collectAsState()
@@ -85,6 +79,7 @@ fun SettingsScreen(
                 }
                 service.setTheme(theme)
             },
+            onNotificationSettingsChange = onNotificationSettingsChange,
             modifier = Modifier
                 .drawWithContent {
                     graphicsLayer.record {
@@ -117,10 +112,6 @@ private fun SettingsScreenImpl(
     onNotificationSettingsChange: (NotificationSettings) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var scheduleUpdates by remember { mutableStateOf<Boolean>(true) }
-    var kotlinConfNews by remember { mutableStateOf<Boolean>(true) }
-    var jetbrainsNews by remember { mutableStateOf<Boolean>(true) }
-
     ScreenWithTitle(
         title = stringResource(AppRes.string.settings_title),
         onBack = onBack,
@@ -145,37 +136,12 @@ private fun SettingsScreenImpl(
 
             Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                StyledText(
-                    text = stringResource(AppRes.string.notifications_title),
-                    style = KotlinConfTheme.typography.h2
-                )
-                SettingsItem(
-                    title = stringResource(AppRes.string.notifications_schedule_update_title),
-                    enabled = scheduleUpdates,
-                    onToggle = { enabled ->
-                        scheduleUpdates = enabled
-                    },
-                    note = stringResource(AppRes.string.notifications_schedule_update_description),
-                )
-                SettingsItem(
-                    title = stringResource(AppRes.string.notifications_kotlinconf_news_title),
-                    enabled = kotlinConfNews,
-                    onToggle = { enabled ->
-                        kotlinConfNews = enabled
-                    },
-                    note = stringResource(AppRes.string.notifications_kotlinconf_news_description),
-                )
-                SettingsItem(
-                    title = stringResource(AppRes.string.notifications_jetbrains_news_title),
-                    enabled = jetbrainsNews,
-                    onToggle = { enabled ->
-                        jetbrainsNews = enabled
-                    },
-                    note = stringResource(AppRes.string.notifications_jetbrains_news_description),
-                )
+            val notiState = rememberNotificationSettingsState()
+            NotificationSettings(notiState)
+
+            val model = notiState.model
+            LaunchedEffect(model) {
+                onNotificationSettingsChange(model)
             }
         }
     }

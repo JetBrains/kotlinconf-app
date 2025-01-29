@@ -87,3 +87,9 @@ enum class Theme {
     LIGHT,
     DARK,
 }
+
+data class NotificationSettings(
+    val scheduleUpdates: Boolean,
+    val kotlinConfNews: Boolean,
+    val jetbrainsNews: Boolean,
+)
