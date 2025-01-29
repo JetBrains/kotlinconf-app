@@ -36,7 +36,7 @@ class ConferenceService(
     private var notificationsAllowed: Boolean by storage.bind(Boolean.serializer()) { false }
     private var _themeStorage: Theme by storage.bind(Theme.serializer()) { Theme.SYSTEM }
     private val _theme = MutableStateFlow(_themeStorage)
-    val theme: StateFlowClass<Theme> = _theme.asStateFlowClass()
+    val theme: StateFlow<Theme> = _theme.asStateFlow()
 
     private val client: APIClient by lazy {
         APIClient(endpoint)
@@ -55,10 +55,9 @@ class ConferenceService(
     private val votes = MutableStateFlow(emptyList<VoteInfo>())
 
     private val _time = MutableStateFlow(GMTDate())
-    val time: StateFlowClass<GMTDate> = _time
-        .asStateFlowClass()
+    val time: StateFlow<GMTDate> = _time.asStateFlow()
 
-    val agenda: StateFlowClass<Agenda> by lazy {
+    val agenda: StateFlow<Agenda> by lazy {
         combine(
             conference,
             favorites,
@@ -67,24 +66,21 @@ class ConferenceService(
         ) { conference, favorites, time, votes ->
             conference.buildAgenda(favorites, votes, time)
         }.stateIn(this, SharingStarted.Eagerly, Agenda())
-            .asStateFlowClass()
     }
 
-    val sessionCards: StateFlowClass<List<SessionCardView>> by lazy {
+    val sessionCards: StateFlow<List<SessionCardView>> by lazy {
         agenda.map {
             it.days
                 .flatMap { it.timeSlots }
                 .flatMap { it.sessions }
         }.stateIn(this, SharingStarted.Eagerly, emptyList())
-            .asStateFlowClass()
     }
 
-    val speakers: StateFlowClass<Speakers> = conference
+    val speakers: StateFlow<Speakers> = conference
         .map { it.speakers }
         .map { it.filter { speaker -> speaker.photoUrl.isNotBlank() } }
         .map { Speakers(it) }
         .stateIn(this, SharingStarted.Eagerly, Speakers(emptyList()))
-        .asStateFlowClass()
 
     fun setTheme(theme: Theme) {
         _themeStorage = theme
