@@ -11,9 +11,7 @@ fun main() {
         Window(
             onCloseRequest = ::exitApplication,
             alwaysOnTop = true,
-            state = rememberWindowState(
-                width = 800.dp, height = 600.dp,
-            ),
+            state = rememberWindowState(width = 600.dp, height = 800.dp),
             title = "Gallery",
         ) {
             DevelopmentEntryPoint {
