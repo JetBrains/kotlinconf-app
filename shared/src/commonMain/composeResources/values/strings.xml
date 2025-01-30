@@ -19,6 +19,7 @@ For the source code and more technical details, visit the GitHub repository.</st
     <string name="about_app_link_settings">Settings</string>
     <string name="about_app_link_privacy_policy">App Privacy Policy</string>
     <string name="about_app_link_terms_of_use">App Terms of Use</string>
+    <string name="about_app_link_licenses">Licenses</string>
 
     <string name="info_title">Info</string>
     <string name="info_link_about_conf">About the conference</string>
@@ -93,5 +94,7 @@ We will process your data in accordance with the App Privacy Policy. You can adj
     <string name="app_terms">Terms of Use</string>
     <string name="app_terms_title">KotlinConf App Terms of Use</string>
     <string name="app_terms_version">Version 1.0 of May 1, 2024</string>
+
+    <string name="licenses_title">Licenses</string>
 
 </resources>
