@@ -97,4 +97,10 @@ We will process your data in accordance with the App Privacy Policy. You can adj
 
     <string name="licenses_title">Licenses</string>
 
+    <string name="settings_title">Settings</string>
+    <string name="settings_theme_title">Color theme</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+
 </resources>

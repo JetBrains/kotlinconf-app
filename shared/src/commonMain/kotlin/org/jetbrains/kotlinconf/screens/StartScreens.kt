@@ -27,13 +27,7 @@ import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.kodee_notifications
 import kotlinconfapp.shared.generated.resources.kodee_privacy
 import kotlinconfapp.shared.generated.resources.notifications_description
-import kotlinconfapp.shared.generated.resources.notifications_jetbrains_news_description
-import kotlinconfapp.shared.generated.resources.notifications_jetbrains_news_title
-import kotlinconfapp.shared.generated.resources.notifications_kotlinconf_news_description
-import kotlinconfapp.shared.generated.resources.notifications_kotlinconf_news_title
 import kotlinconfapp.shared.generated.resources.notifications_lets_get_started
-import kotlinconfapp.shared.generated.resources.notifications_schedule_update_description
-import kotlinconfapp.shared.generated.resources.notifications_schedule_update_title
 import kotlinconfapp.shared.generated.resources.notifications_title
 import kotlinconfapp.shared.generated.resources.privacy_policy_accept
 import kotlinconfapp.shared.generated.resources.privacy_policy_back
@@ -47,13 +41,13 @@ import kotlinconfapp.ui_components.generated.resources.arrow_right_24
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
+import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
 import org.jetbrains.kotlinconf.ui.components.Button
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MarkdownView
-import org.jetbrains.kotlinconf.ui.components.SettingsItem
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -156,19 +150,12 @@ fun StartPrivacyPolicyScreen(
     }
 }
 
-data class NotificationSettings(
-    val scheduleUpdates: Boolean,
-    val kotlinConfNews: Boolean,
-    val jetbrainsNews: Boolean,
-)
-
 @Composable
 fun StartNotificationsScreen(
     onDone: (NotificationSettings) -> Unit,
 ) {
-    var scheduleUpdates by remember { mutableStateOf(true) }
-    var kotlinConfNews by remember { mutableStateOf(true) }
-    var jetbrainsNews by remember { mutableStateOf(true) }
+    // TODO populate with real values
+    var notificationSettings by remember { mutableStateOf(NotificationSettings(false, false, false)) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -192,29 +179,7 @@ fun StartNotificationsScreen(
                 stringResource(AppRes.string.notifications_description),
                 color = KotlinConfTheme.colors.longText,
             )
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                SettingsItem(
-                    title = stringResource(AppRes.string.notifications_schedule_update_title),
-                    enabled = scheduleUpdates,
-                    onToggle = { scheduleUpdates = it },
-                    note = stringResource(AppRes.string.notifications_schedule_update_description),
-                )
-                SettingsItem(
-                    title = stringResource(AppRes.string.notifications_kotlinconf_news_title),
-                    enabled = kotlinConfNews,
-                    onToggle = { kotlinConfNews = it },
-                    note = stringResource(AppRes.string.notifications_kotlinconf_news_description),
-                )
-                SettingsItem(
-                    title = stringResource(AppRes.string.notifications_jetbrains_news_title),
-                    enabled = jetbrainsNews,
-                    onToggle = { jetbrainsNews = it },
-                    note = stringResource(AppRes.string.notifications_jetbrains_news_description),
-                )
-            }
+            NotificationSettings(notificationSettings, { notificationSettings = it })
         }
 
         Row(
@@ -223,14 +188,7 @@ fun StartNotificationsScreen(
         ) {
             Button(
                 label = stringResource(AppRes.string.notifications_lets_get_started),
-                onClick = {
-                    val settings = NotificationSettings(
-                        scheduleUpdates = scheduleUpdates,
-                        kotlinConfNews = kotlinConfNews,
-                        jetbrainsNews = jetbrainsNews,
-                    )
-                    onDone(settings)
-                },
+                onClick = { onDone(notificationSettings) },
                 modifier = Modifier.weight(1f),
                 primary = true,
             )

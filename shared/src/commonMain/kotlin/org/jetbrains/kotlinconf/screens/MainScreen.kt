@@ -30,6 +30,7 @@ import kotlinconfapp.shared.generated.resources.team_28
 import kotlinconfapp.shared.generated.resources.team_28_fill
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ConferenceService
+import org.jetbrains.kotlinconf.URLs
 import org.jetbrains.kotlinconf.navigation.AboutAppScreen
 import org.jetbrains.kotlinconf.navigation.AboutConferenceScreen
 import org.jetbrains.kotlinconf.navigation.CodeOfConductScreen

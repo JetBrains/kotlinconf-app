@@ -80,3 +80,16 @@ enum class Score(val value: Int) {
         }
     }
 }
+
+@Serializable
+enum class Theme {
+    SYSTEM,
+    LIGHT,
+    DARK,
+}
+
+data class NotificationSettings(
+    val scheduleUpdates: Boolean,
+    val kotlinConfNews: Boolean,
+    val jetbrainsNews: Boolean,
+)

@@ -1,3 +1,5 @@
+package org.jetbrains.kotlinconf
+
 object URLs {
     // API Endpoints
     const val API_ENDPOINT = "https://kotlinconf-app-prod.labs.jb.gg"
