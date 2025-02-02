@@ -154,7 +154,8 @@ fun StartPrivacyPolicyScreen(
 fun StartNotificationsScreen(
     onDone: (NotificationSettings) -> Unit,
 ) {
-    val notificationSettingsState = rememberNotificationSettingsState()
+    // TODO populate with real values
+    var notificationSettings by remember { mutableStateOf(NotificationSettings(false, false, false)) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -178,10 +179,9 @@ fun StartNotificationsScreen(
                 stringResource(AppRes.string.notifications_description),
                 color = KotlinConfTheme.colors.longText,
             )
-            NotificationSettings(notificationSettingsState)
+            NotificationSettings(notificationSettings, { notificationSettings = it })
         }
 
-        val notificationSettings = notificationSettingsState.model
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
@@ -195,4 +195,3 @@ fun StartNotificationsScreen(
         }
     }
 }
-

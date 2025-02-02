@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -141,13 +140,15 @@ private fun SettingsScreenImpl(
 
             Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
-            val notiState = rememberNotificationSettingsState()
-            NotificationSettings(notiState)
-
-            val model = notiState.model
-            LaunchedEffect(model) {
-                onNotificationSettingsChange(model)
-            }
+            // TODO populate with real values
+            var notificationSettings by remember { mutableStateOf(NotificationSettings(false, false, false)) }
+            NotificationSettings(
+                notificationSettings = notificationSettings,
+                onChangeSettings = { newSettings ->
+                    notificationSettings = newSettings
+                    onNotificationSettingsChange(newSettings)
+                }
+            )
         }
     }
 }
