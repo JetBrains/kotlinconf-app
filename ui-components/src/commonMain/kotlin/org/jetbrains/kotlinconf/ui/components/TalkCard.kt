@@ -199,7 +199,6 @@ private fun TopBlock(
                 else KotlinConfTheme.colors.primaryText
             )
             Icon(
-                // TODO review icon sizing later, https://github.com/JetBrains/kotlinconf-app/issues/175
                 modifier = Modifier
                     .toggleable(
                         value = bookmarked,

@@ -1,20 +1,41 @@
 package org.jetbrains.kotlinconf
 
-import io.ktor.util.date.*
-import io.ktor.utils.io.core.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlinx.serialization.builtins.*
-import org.jetbrains.kotlinconf.storage.*
-import org.jetbrains.kotlinconf.utils.*
-import kotlin.coroutines.*
+import io.ktor.util.date.GMTDate
+import io.ktor.util.date.plus
+import io.ktor.utils.io.core.Closeable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.serialization.builtins.nullable
+import kotlinx.serialization.builtins.serializer
+import org.jetbrains.kotlinconf.storage.ApplicationStorage
+import org.jetbrains.kotlinconf.storage.bind
+import org.jetbrains.kotlinconf.storage.get
+import org.jetbrains.kotlinconf.storage.put
+import org.jetbrains.kotlinconf.utils.App
+import kotlin.coroutines.CoroutineContext
 
 val UNKNOWN_SESSION_CARD: SessionCardView = SessionCardView(
-    SessionId("unknown"), "unknown", "unknown",
-    "unknown",
-    GMTDate.START,
-    GMTDate.START,
-    emptyList(),
+    id = SessionId("unknown"),
+    title = "unknown",
+    speakerLine = "unknown",
+    locationLine = "unknown",
+    startsAt = GMTDate.START,
+    endsAt = GMTDate.START,
+    speakerIds = emptyList(),
     isFinished = false,
     isFavorite = false,
     description = "unknown",
@@ -206,6 +227,15 @@ class ConferenceService(
     fun sessionById(id: SessionId): SessionCardView =
         sessionCards.value.find { it.id == id } ?: UNKNOWN_SESSION_CARD
 
+    fun sessionByIdFlow(id: SessionId): Flow<SessionCardView> =
+        sessionCards
+            .map { sessions -> sessions.find { it.id == id } ?: UNKNOWN_SESSION_CARD }
+
+    fun speakersBySessionId(id: SessionId): Flow<List<Speaker>> =
+        sessionByIdFlow(id).map { session ->
+            session.speakerIds.map { speakerId -> speakerById(speakerId) }
+        }
+
     fun sessionsForSpeaker(id: SpeakerId): List<SessionCardView> =
         sessionCards.value.filter { id in it.speakerIds }
 
@@ -242,9 +272,11 @@ class ConferenceService(
             delay >= 0 -> {
                 notificationManager.schedule(delay, session.title, "Starts in 5 minutes.")
             }
+
             nowTimestamp in reminderTimestamp..<startTimestamp -> {
                 notificationManager.schedule(0, session.title, "The session is about to start.")
             }
+
             nowTimestamp in startTimestamp..<voteTimeStamp -> {
                 notificationManager.schedule(0, session.title, "Hurry up! The session has already started!")
             }

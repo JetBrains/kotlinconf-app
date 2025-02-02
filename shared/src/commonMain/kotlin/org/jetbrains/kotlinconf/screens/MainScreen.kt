@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,7 +30,6 @@ import kotlinconfapp.shared.generated.resources.nav_destination_speakers
 import kotlinconfapp.shared.generated.resources.team_28
 import kotlinconfapp.shared.generated.resources.team_28_fill
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.URLs
 import org.jetbrains.kotlinconf.navigation.AboutAppScreen
 import org.jetbrains.kotlinconf.navigation.AboutConferenceScreen
@@ -40,15 +40,15 @@ import org.jetbrains.kotlinconf.navigation.PartnersScreen
 import org.jetbrains.kotlinconf.navigation.ScheduleScreen
 import org.jetbrains.kotlinconf.navigation.SpeakerDetailsScreen
 import org.jetbrains.kotlinconf.navigation.SpeakersScreen
-import org.jetbrains.kotlinconf.navigation.TalkDetailsScreen
+import org.jetbrains.kotlinconf.navigation.SessionScreen
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainNavDestination
 import org.jetbrains.kotlinconf.ui.components.MainNavigation
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MainScreen(
-    service: ConferenceService,
     rootNavController: NavController,
 ) {
     Column(Modifier.fillMaxSize()) {
@@ -73,15 +73,12 @@ fun MainScreen(
             }
             composable<SpeakersScreen> {
                 Speakers(
-                    service.speakers.collectAsState().value,
-                    onSpeaker = { rootNavController.navigate(SpeakerDetailsScreen(it)) },
                     onBack = rootNavController::popBackStack
                 )
             }
             composable<ScheduleScreen> {
                 ScheduleScreen(
-                    service = service,
-                    onSession = { rootNavController.navigate(TalkDetailsScreen(it)) },
+                    onSession = { rootNavController.navigate(SessionScreen(it)) },
                 )
             }
             composable<MapScreen> {
@@ -141,7 +138,12 @@ private fun BottomNavigation(nestedNavController: NavHostController) {
         destinations = bottomNavDestinations,
         onSelect = {
             nestedNavController.navigate(it.route) {
+                // Avoid stacking multiple copies of the main screens
+                popUpTo(nestedNavController.graph.findStartDestination().route!!) {
+                    saveState = true
+                }
                 launchSingleTop = true
+                restoreState = true
             }
         },
     )

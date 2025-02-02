@@ -20,6 +20,7 @@ compose-hot-reload = "1.0.0-dev.32.1"
 
 coroutines = "1.10.1"
 coil = "3.0.3"
+koin = "4.1.0-Beta5"
 exposed = "0.55.0"
 h2 = "2.2.224"
 hikaricp = "5.1.0"
@@ -100,6 +101,7 @@ coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" 
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 
 aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlibraries" }
+koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
 
 [plugins]
 aboutLibraries = { id= "com.mikepenz.aboutlibraries.plugin", version.ref="aboutlibraries"}

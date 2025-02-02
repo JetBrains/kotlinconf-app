@@ -8,14 +8,10 @@ import androidx.compose.ui.Modifier
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.arrow_left_24
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.SpeakerId
-import org.jetbrains.kotlinconf.Speakers
 import org.jetbrains.kotlinconf.ui.components.StyledText
 
 @Composable
 fun Speakers(
-    speakers: Speakers,
-    onSpeaker: (SpeakerId) -> Unit,
     onBack: () -> Unit,
 ) {
     Column {
@@ -23,12 +19,6 @@ fun Speakers(
             painterResource(Res.drawable.arrow_left_24),
             "back",
             modifier = Modifier.clickable { onBack() })
-        StyledText("Speakers")
-        for (speaker in speakers.all) {
-            StyledText(
-                speaker.name,
-                modifier = Modifier.clickable { onSpeaker(speaker.id) }
-            )
-        }
+        StyledText("Speakers placeholder")
     }
 }

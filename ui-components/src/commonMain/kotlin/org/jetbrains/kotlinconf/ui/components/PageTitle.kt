@@ -46,9 +46,7 @@ fun PageTitle(
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = modifier
-            .padding(horizontal = 12.dp, vertical = 24.dp)
-            .semantics(mergeDescendants = true) {},
+        modifier = modifier.semantics(mergeDescendants = true) {},
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp),

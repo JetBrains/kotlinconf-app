@@ -106,4 +106,8 @@ We will process your data in accordance with the App Privacy Policy. You can adj
     <string name="schedule_action_filter_bookmarked">Filter bookmarked</string>
     <string name="schedule_action_search">Search</string>
 
+    <string name="session_title">Schedule</string>
+    <string name="session_how_was_the_talk">How was the talk?</string>
+    <string name="session_your_feedback">Your feedback</string>
+
 </resources>

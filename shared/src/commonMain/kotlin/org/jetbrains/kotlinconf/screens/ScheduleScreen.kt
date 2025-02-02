@@ -25,7 +25,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.nav_destination_schedule
 import kotlinconfapp.shared.generated.resources.schedule_action_filter_bookmarked
@@ -34,7 +33,6 @@ import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -51,13 +49,13 @@ import org.jetbrains.kotlinconf.ui.components.TalkStatus
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.time
+import org.koin.compose.viewmodel.koinViewModel
 import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 
 @Composable
 fun ScheduleScreen(
-    service: ConferenceService,
     onSession: (SessionId) -> Unit,
-    viewModel: ScheduleViewModel = viewModel { ScheduleViewModel(service) },
+    viewModel: ScheduleViewModel = koinViewModel(),
 ) {
     val scope = rememberCoroutineScope()
     var bookmarkFilterEnabled by remember { mutableStateOf(false) }

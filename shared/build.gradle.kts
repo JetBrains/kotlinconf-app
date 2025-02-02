@@ -67,6 +67,7 @@ kotlin {
             api(compose.components.resources)
 
             api(libs.components.ui.tooling.preview)
+            api(libs.koin.compose.viewmodel.navigation)
 
             api(libs.ktor.client.logging)
             api(libs.ktor.serialization.kotlinx.json)

@@ -48,27 +48,27 @@ import kotlinconfapp.shared.generated.resources.theme_system
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.Theme
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.koin.compose.viewmodel.koinViewModel
 import kotlinconfapp.shared.generated.resources.Res as AppRes
 
 @Composable
 fun SettingsScreen(
-    service: ConferenceService,
     onBack: () -> Unit,
     onNotificationSettingsChange: (NotificationSettings) -> Unit,
+    viewModel: SettingsViewModel = koinViewModel(),
 ) {
     val graphicsLayer = rememberGraphicsLayer()
     val scope = rememberCoroutineScope()
     var bitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var bitmapVisibility = remember { Animatable(1f) }
 
-    val currentTheme by service.theme.collectAsState()
+    val currentTheme by viewModel.theme.collectAsState()
 
     Box(Modifier.fillMaxSize()) {
         SettingsScreenImpl(
@@ -81,7 +81,7 @@ fun SettingsScreen(
                     bitmapVisibility.animateTo(0f, tween(500))
                     bitmap = null
                 }
-                service.setTheme(theme)
+                viewModel.setTheme(theme)
             },
             onNotificationSettingsChange = onNotificationSettingsChange,
             modifier = Modifier
@@ -242,4 +242,3 @@ private fun ThemeBox(
         )
     }
 }
-
