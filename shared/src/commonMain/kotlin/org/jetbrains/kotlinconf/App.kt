@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf
 
-import URLs
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
