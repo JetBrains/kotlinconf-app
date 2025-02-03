@@ -45,6 +45,7 @@ import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 fun MainHeaderSearchBar(
     searchValue: String,
     onSearchValueChange: (String) -> Unit,
+    onClear: () -> Unit,
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -101,6 +102,7 @@ fun MainHeaderSearchBar(
             icon = Res.drawable.close_24,
             onClick = {
                 onSearchValueChange("")
+                onClear()
                 focusRequester.requestFocus()
             },
             contentDescription = stringResource(Res.string.main_header_search_clear),
@@ -215,6 +217,7 @@ internal fun MainHeaderPreview() {
                     searchValue = search1,
                     onSearchValueChange = { search1 = it },
                     onClose = { state1 = MainHeaderContainerState.Title },
+                    onClear = {},
                 )
             }
         )
@@ -241,6 +244,7 @@ internal fun MainHeaderPreview() {
                     searchValue = search2,
                     onSearchValueChange = { search2 = it },
                     onClose = { state2 = MainHeaderContainerState.Title },
+                    onClear = {},
                 )
             }
         )

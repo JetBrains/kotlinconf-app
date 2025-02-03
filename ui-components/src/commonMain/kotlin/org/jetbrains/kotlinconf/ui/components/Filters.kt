@@ -46,17 +46,19 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
+enum class FilterItemType {
+    Category, Level, Format,
+}
+
 data class FilterItem(
-    val id: Int,
+    val type: FilterItemType,
     val value: String,
     val isSelected: Boolean,
 )
 
 @Composable
 fun Filters(
-    categories: List<FilterItem>,
-    levels: List<FilterItem>,
-    sessionFormats: List<FilterItem>,
+    tags: List<FilterItem>,
     toggleItem: (FilterItem, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -105,11 +107,7 @@ fun Filters(
                             .clip(CircleShape)
                             .background(KotlinConfTheme.colors.primaryBackground)
                     ) {
-                        val count = remember(categories, levels, sessionFormats) {
-                            categories.count { it.isSelected } +
-                                    levels.count { it.isSelected } +
-                                    sessionFormats.count { it.isSelected }
-                        }
+                        val count = remember(tags) { tags.count { it.isSelected } }
                         StyledText(
                             text = count.toString(),
                             color = KotlinConfTheme.colors.primaryTextInverted,
@@ -129,9 +127,23 @@ fun Filters(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.padding(12.dp),
             ) {
-                FilterItemGroup(stringResource(Res.string.filter_label_category), categories, toggleItem)
-                FilterItemGroup(stringResource(Res.string.filter_label_level), levels, toggleItem)
-                FilterItemGroup(stringResource(Res.string.filter_label_session_format), sessionFormats, toggleItem)
+                FilterItemGroup(
+                    title = stringResource(Res.string.filter_label_category),
+                    items = remember(tags) { tags.filter { it.type == FilterItemType.Category } },
+                    toggle = toggleItem,
+                )
+
+                FilterItemGroup(
+                    title = stringResource(Res.string.filter_label_level),
+                    items = remember(tags) { tags.filter { it.type == FilterItemType.Level } },
+                    toggle = toggleItem,
+                )
+
+                FilterItemGroup(
+                    title = stringResource(Res.string.filter_label_session_format),
+                    items = remember(tags) { tags.filter { it.type == FilterItemType.Format } },
+                    toggle = toggleItem,
+                )
             }
         }
     }
@@ -173,40 +185,28 @@ private fun FilterItemGroup(
 @Composable
 internal fun FiltersPreview() {
     PreviewHelper {
-        val categories = remember {
+        val tags = remember {
             mutableStateListOf(
-                FilterItem(1, "Server-side", false),
-                FilterItem(2, "Multiplatform", false),
-                FilterItem(3, "Android", false),
-                FilterItem(4, "Extensibility/Tooling", false),
-                FilterItem(5, "Languages and Best Practices", false),
-                FilterItem(6, "Other", false),
-            )
-        }
-        val levels = remember {
-            mutableStateListOf(
-                FilterItem(11, "Introductory and overview", false),
-                FilterItem(12, "Intermediate", false),
-                FilterItem(13, "Advanced", false),
-            )
-        }
-        val sessionFormats = remember {
-            mutableStateListOf(
-                FilterItem(21, "Workshop", false),
-                FilterItem(22, "Regular session", false),
-                FilterItem(23, "Lightning session", false),
+                FilterItem(FilterItemType.Category, "Server-side", false),
+                FilterItem(FilterItemType.Category, "Multiplatform", false),
+                FilterItem(FilterItemType.Category, "Android", false),
+                FilterItem(FilterItemType.Category, "Extensibility/Tooling", false),
+                FilterItem(FilterItemType.Category, "Languages and Best Practices", false),
+                FilterItem(FilterItemType.Category, "Other", false),
+                FilterItem(FilterItemType.Level, "Introductory and overview", false),
+                FilterItem(FilterItemType.Level, "Intermediate", false),
+                FilterItem(FilterItemType.Level, "Advanced", false),
+                FilterItem(FilterItemType.Format, "Workshop", false),
+                FilterItem(FilterItemType.Format, "Regular session", false),
+                FilterItem(FilterItemType.Format, "Lightning session", false),
             )
         }
 
         Filters(
-            categories = categories,
-            levels = levels,
-            sessionFormats = sessionFormats,
+            tags = tags,
             toggleItem = { item, value ->
                 val newItem = item.copy(isSelected = value)
-                categories.replace(item, newItem)
-                levels.replace(item, newItem)
-                sessionFormats.replace(item, newItem)
+                tags.replace(item, newItem)
             }
         )
     }

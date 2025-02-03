@@ -16,7 +16,10 @@ plugins {
 kotlin {
     androidTarget {
         compilerOptions {
-            freeCompilerArgs.addAll("-P", "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=org.jetbrains.kotlinconf.ui.components.zoomable.internal.AndroidParcelize")
+            freeCompilerArgs.addAll(
+                "-P",
+                "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=org.jetbrains.kotlinconf.ui.components.zoomable.internal.AndroidParcelize"
+            )
         }
     }
 
@@ -82,23 +85,41 @@ kotlin {
             implementation(kotlin("test"))
         }
 
-        androidMain.dependencies {
-            implementation(libs.android.svg)
-            implementation(libs.androidx.core.ktx)
-            implementation(libs.androidx.work.runtime)
-            implementation(libs.androidx.preference)
-            implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.ktor.client.okhttp)
+        val nonWebMain by creating {
+            dependsOn(commonMain.get())
+            dependencies {
+                // TODO move this to commonMain once Wasm version is available
+                implementation(libs.doistx.normalize)
+            }
         }
 
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
+        androidMain {
+            dependsOn(nonWebMain)
+            dependencies {
+                implementation(libs.android.svg)
+                implementation(libs.androidx.core.ktx)
+                implementation(libs.androidx.work.runtime)
+                implementation(libs.androidx.preference)
+                implementation(libs.compose.ui.tooling.preview)
+                implementation(libs.ktor.client.okhttp)
+            }
         }
 
-        jvmMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
-            implementation(compose.desktop.currentOs)
-            implementation(libs.android.svg)
+        iosMain {
+            dependsOn(nonWebMain)
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+            }
+        }
+
+        jvmMain {
+            dependsOn(nonWebMain)
+            dependencies {
+                implementation(libs.ktor.client.okhttp)
+                implementation(compose.desktop.currentOs)
+                implementation(libs.android.svg)
+                implementation(libs.kotlinx.coroutines.swing)
+            }
         }
 
         val webMain by creating {
