@@ -18,7 +18,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
-import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.URLs
@@ -40,17 +39,15 @@ import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 import org.jetbrains.kotlinconf.screens.StartPrivacyPolicyScreen
 import org.jetbrains.kotlinconf.screens.TermsOfUse
 import org.jetbrains.kotlinconf.utils.getStoreUrl
-import org.koin.compose.koinInject
 import kotlin.reflect.typeOf
 
 @Composable
-internal fun KotlinConfNavHost() {
+internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
     val navController = rememberNavController()
-    val service = koinInject<ConferenceService>()
 
     NavHost(
         navController = navController,
-        startDestination = if (service.needsOnboarding()) StartScreens else MainScreen,
+        startDestination = if (isOnboardingComplete) MainScreen else StartScreens,
         modifier = Modifier.fillMaxSize(),
         enterTransition = enterTransition { it },
         exitTransition = exitTransition { -it },
@@ -59,9 +56,6 @@ internal fun KotlinConfNavHost() {
     ) {
         startScreens(
             navController = navController,
-            onCompleteOnboarding = {
-                service.completeOnboarding()
-            }
         )
 
         composable<MainScreen> {
@@ -153,7 +147,6 @@ internal fun KotlinConfNavHost() {
 
 fun NavGraphBuilder.startScreens(
     navController: NavHostController,
-    onCompleteOnboarding: () -> Unit,
 ) {
     navigation<StartScreens>(
         startDestination = StartPrivacyPolicyScreen
@@ -172,7 +165,6 @@ fun NavGraphBuilder.startScreens(
                 onDone = { notificationSettings ->
                     // TODO request notification permission, save settings
 
-                    onCompleteOnboarding()
                     navController.navigate(MainScreen) {
                         popUpTo<StartScreens> { inclusive = true }
                     }

@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jetbrains.compose.reload.DevelopmentEntryPoint
 import org.jetbrains.kotlinconf.navigation.KotlinConfNavHost
 import org.jetbrains.kotlinconf.screens.ScheduleViewModel
@@ -28,12 +28,17 @@ fun App(context: ApplicationContext) {
     KoinMultiplatformApplication(koinConfiguration(context)) {
         DevelopmentEntryPoint {
             val service = koinInject<ConferenceService>()
-            val currentTheme by service.theme.collectAsState()
+            val currentTheme by service.getTheme().collectAsStateWithLifecycle(initialValue = Theme.SYSTEM)
             val isDarkTheme = when (currentTheme) {
                 Theme.SYSTEM -> isSystemInDarkTheme()
                 Theme.LIGHT -> false
                 Theme.DARK -> true
             }
+
+            val isOnboardingComplete = service.isOnboardingComplete()
+                .collectAsStateWithLifecycle(initialValue = null)
+                .value
+
             KotlinConfTheme(darkTheme = isDarkTheme) {
                 Box(
                     Modifier
@@ -41,7 +46,9 @@ fun App(context: ApplicationContext) {
                         .background(KotlinConfTheme.colors.mainBackground)
                         .windowInsetsPadding(WindowInsets.safeDrawing)
                 ) {
-                    KotlinConfNavHost()
+                    if (isOnboardingComplete != null) {
+                        KotlinConfNavHost(isOnboardingComplete)
+                    }
                 }
             }
         }

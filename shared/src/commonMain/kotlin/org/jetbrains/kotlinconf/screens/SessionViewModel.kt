@@ -26,8 +26,7 @@ class SessionViewModel(
 
     fun toggleFavorite(isBookmarked: Boolean) {
         viewModelScope.launch {
-            // TODO pass on isBookmarked value to service
-            service.toggleFavorite(sessionId)
+            service.toggleFavorite(sessionId, isBookmarked)
         }
     }
 

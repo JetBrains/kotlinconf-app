@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -30,6 +31,7 @@ import kotlinconfapp.shared.generated.resources.nav_destination_speakers
 import kotlinconfapp.shared.generated.resources.team_28
 import kotlinconfapp.shared.generated.resources.team_28_fill
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.URLs
 import org.jetbrains.kotlinconf.navigation.AboutAppScreen
 import org.jetbrains.kotlinconf.navigation.AboutConferenceScreen
@@ -45,12 +47,18 @@ import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainNavDestination
 import org.jetbrains.kotlinconf.ui.components.MainNavigation
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MainScreen(
     rootNavController: NavController,
+    service: ConferenceService = koinInject(),
 ) {
+    LaunchedEffect(Unit) {
+        service.completeOnboarding()
+    }
+
     Column(Modifier.fillMaxSize()) {
         val nestedNavController = rememberNavController()
         NavHost(
@@ -59,7 +67,6 @@ fun MainScreen(
             modifier = Modifier.fillMaxWidth().weight(1f),
         ) {
             composable<InfoScreen> {
-                // TODO add action handlers
                 val uriHandler = LocalUriHandler.current
                 InfoScreen(
                     onAboutConf = { rootNavController.navigate(AboutConferenceScreen) },

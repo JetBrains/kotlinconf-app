@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +35,7 @@ import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.settings_theme_dark
 import kotlinconfapp.shared.generated.resources.settings_theme_light
@@ -68,7 +68,7 @@ fun SettingsScreen(
     var bitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var bitmapVisibility = remember { Animatable(1f) }
 
-    val currentTheme by viewModel.theme.collectAsState()
+    val currentTheme by viewModel.theme.collectAsStateWithLifecycle()
 
     Box(Modifier.fillMaxSize()) {
         SettingsScreenImpl(
