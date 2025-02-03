@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.nav_destination_schedule
+import kotlinconfapp.shared.generated.resources.schedule_action_filter_bookmarked
+import kotlinconfapp.shared.generated.resources.schedule_action_search
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
@@ -185,12 +187,12 @@ private fun Header(
                         icon = UiRes.drawable.bookmark_24,
                         selected = bookmarkFilterEnabled,
                         onToggle = { onBookmarkFilter(it) },
-                        contentDescription = "Filter bookmarked"
+                        contentDescription = stringResource(Res.string.schedule_action_filter_bookmarked),
                     )
                     TopMenuButton(
                         icon = UiRes.drawable.search_24,
                         onClick = { onHeaderStateChange(MainHeaderContainerState.Search) },
-                        contentDescription = "Search"
+                        contentDescription = stringResource(Res.string.schedule_action_search),
                     )
                 }
             )
