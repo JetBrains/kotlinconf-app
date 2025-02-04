@@ -16,9 +16,11 @@ import org.jetbrains.kotlinconf.navigation.KotlinConfNavHost
 import org.jetbrains.kotlinconf.screens.ScheduleViewModel
 import org.jetbrains.kotlinconf.screens.SessionViewModel
 import org.jetbrains.kotlinconf.screens.SettingsViewModel
+import org.jetbrains.kotlinconf.storage.MultiplatformSettingsStorage
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.KoinMultiplatformApplication
 import org.koin.compose.koinInject
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.koinConfiguration
 import org.koin.dsl.module
@@ -57,13 +59,11 @@ fun App(context: ApplicationContext) {
 
 private fun koinConfiguration(context: ApplicationContext) = koinConfiguration {
     val appModule = module {
-        single<ApplicationContext> { context }
-        single<ConferenceService> {
-            ConferenceService(
-                get<ApplicationContext>(),
-                URLs.API_ENDPOINT
-            )
-        }
+        single { APIClient(URLs.API_ENDPOINT) }
+        single { MultiplatformSettingsStorage(context) }
+        single { NotificationManager(context) }
+        singleOf(::TimeProvider)
+        singleOf(::ConferenceService)
     }
 
     val viewModelModule = module {

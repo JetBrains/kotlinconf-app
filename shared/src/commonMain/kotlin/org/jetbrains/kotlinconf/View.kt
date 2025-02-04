@@ -57,8 +57,6 @@ data class TimeSlot(
 
     val key: String =
         "${startsAt.timestamp}-${endsAt.timestamp}-$title-$isBreak-$isParty-$isLunch-${startsAt.dayOfMonth}"
-
-    val duration: String = "${(endsAt.timestamp - startsAt.timestamp) / 1000 / 60} MIN"
 }
 
 fun Conference.buildAgenda(
@@ -68,11 +66,15 @@ fun Conference.buildAgenda(
 ): Agenda {
     val days = sessions
         .groupBy { it.startsAt.dayOfMonth }
-        .toList()
         .map { (day, sessions) ->
             Day(
-                EventDay.from(day),
-                sessions.groupByTime(conference = this, now, favorites, votes)
+                day = EventDay.from(day),
+                timeSlots = sessions.groupByTime(
+                    conference = this,
+                    now = now,
+                    favorites = favorites,
+                    votes = votes,
+                )
             )
         }
         .sortedBy { it.day }

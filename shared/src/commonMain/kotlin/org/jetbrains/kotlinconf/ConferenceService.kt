@@ -1,23 +1,19 @@
 package org.jetbrains.kotlinconf
 
 import io.ktor.util.date.GMTDate
-import io.ktor.util.date.plus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
-import org.jetbrains.kotlinconf.storage.MultiplatformSettingsStorage
 
 val UNKNOWN_SESSION_CARD: SessionCardView = SessionCardView(
     id = SessionId("unknown"),
@@ -39,31 +35,20 @@ val UNKNOWN_SPEAKER: Speaker = Speaker(
 )
 
 class ConferenceService(
-    val context: ApplicationContext,
-    val endpoint: String,
+    private val client: APIClient,
+    private val timeProvider: TimeProvider,
+    private val storage: ApplicationStorage,
+    private val notificationManager: NotificationManager,
 ) {
-    private val storage: ApplicationStorage = MultiplatformSettingsStorage(context)
-
-    private val client: APIClient by lazy {
-        APIClient(endpoint)
-    }
-
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
-    private var serverTime = GMTDate()
-    private var requestTime = GMTDate()
-    private val notificationManager = NotificationManager(context)
-
     private val votes = MutableStateFlow(emptyList<VoteInfo>())
-
-    private val _time = MutableStateFlow(GMTDate())
-    val time: StateFlow<GMTDate> = _time.asStateFlow()
 
     val agenda: StateFlow<Agenda> by lazy {
         combine(
             storage.getConferenceCache(),
             storage.getFavorites(),
-            time,
+            timeProvider.time,
             votes,
         ) { conference, favorites, time, votes ->
             conference.buildAgenda(favorites, votes, time)
@@ -107,16 +92,7 @@ class ConferenceService(
         }
 
         scope.launch {
-            runCatching {
-                serverTime = client.getServerTime()
-                requestTime = GMTDate()
-            }
-            _time.value = now()
-
-            while (true) {
-                delay(1000)
-                _time.value = now()
-            }
+            timeProvider.run()
         }
     }
 
@@ -213,7 +189,7 @@ class ConferenceService(
 
             val startTimestamp = session.startsAt.timestamp
             val reminderTimestamp = startTimestamp - 5 * 60 * 1000
-            val nowTimestamp = now().timestamp
+            val nowTimestamp = timeProvider.now().timestamp
             val delay = reminderTimestamp - nowTimestamp
             val voteTimeStamp = session.endsAt.timestamp
 
@@ -250,12 +226,5 @@ class ConferenceService(
                 notificationManager.cancel("${session.title} finished")
             }
         }
-    }
-
-    /**
-     * Get current time synchronized with server.
-     */
-    private fun now(): GMTDate {
-        return GMTDate() + (serverTime.timestamp - requestTime.timestamp)
     }
 }
