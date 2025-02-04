@@ -1,6 +1,6 @@
 [versions]
 aboutlibraries = "11.4.0"
-agp = "8.7.1"
+agp = "8.7.3"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
@@ -12,11 +12,11 @@ androidx-test-junit = "1.2.1"
 androidx-work-runtime = "2.9.1"
 androidx-preference = "1.2.1"
 
-kotlin = "2.1.0-firework.32" # custom version for experimental hot reload support
+kotlin = "2.1.20-Beta2"
 
 compose-android = "1.7.6"
 compose-multiplatform = "1.8.0-alpha02"
-compose-hot-reload = "1.0.0-dev.32.1"
+compose-hot-reload = "1.0.0-dev.34.1"
 
 coroutines = "1.10.1"
 coil = "3.0.3"
