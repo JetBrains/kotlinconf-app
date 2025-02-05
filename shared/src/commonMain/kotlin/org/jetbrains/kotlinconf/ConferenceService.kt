@@ -194,7 +194,7 @@ class ConferenceService(
     /**
      * Mark session as favorite.
      */
-    fun toggleFavorite(sessionId: SessionId, favorite: Boolean) {
+    fun setFavorite(sessionId: SessionId, favorite: Boolean) {
         scope.launch {
             val favorites = storage.getFavorites().first().toMutableSet()
             if (favorite) favorites.add(sessionId) else favorites.remove(sessionId)

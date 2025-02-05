@@ -26,7 +26,7 @@ class SessionViewModel(
 
     fun toggleFavorite(isBookmarked: Boolean) {
         viewModelScope.launch {
-            service.toggleFavorite(sessionId, isBookmarked)
+            service.setFavorite(sessionId, isBookmarked)
         }
     }
 

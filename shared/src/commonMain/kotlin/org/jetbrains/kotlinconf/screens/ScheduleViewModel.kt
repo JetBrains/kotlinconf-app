@@ -251,7 +251,7 @@ class ScheduleViewModel(
 
     fun onBookmark(sessionId: SessionId, bookmarked: Boolean) {
         viewModelScope.launch {
-            service.toggleFavorite(sessionId, bookmarked)
+            service.setFavorite(sessionId, bookmarked)
         }
     }
 }
