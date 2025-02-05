@@ -125,6 +125,7 @@ fun Session.asSessionCard(
         isFavorite = id in favorites,
         startsAt = startsAt,
         endsAt = endsAt,
+        isLive = startsAt <= now && now < endsAt,
         speakerIds = speakerIds,
         isFinished = isFinished,
         vote = vote,

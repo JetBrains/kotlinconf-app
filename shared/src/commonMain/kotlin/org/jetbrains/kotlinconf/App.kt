@@ -63,8 +63,8 @@ private fun koinConfiguration(context: ApplicationContext) = koinConfiguration {
         single { APIClient(URLs.API_ENDPOINT) }
         single<ApplicationStorage> { MultiplatformSettingsStorage(context) }
         single { NotificationManager(context) }
-//        single<TimeProvider> { ServerBasedTimeProvider(get()) }
-        single<TimeProvider> { FakeTimeProvider() }
+        single<TimeProvider> { ServerBasedTimeProvider(get()) }
+//        single<TimeProvider> { FakeTimeProvider() }
         singleOf(::ConferenceService)
     }
 

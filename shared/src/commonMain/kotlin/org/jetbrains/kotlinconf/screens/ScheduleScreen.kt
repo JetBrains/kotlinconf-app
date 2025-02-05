@@ -42,6 +42,8 @@ import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
+import org.jetbrains.kotlinconf.ui.components.NowButton
+import org.jetbrains.kotlinconf.ui.components.NowButtonState
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.Switcher
 import org.jetbrains.kotlinconf.ui.components.TalkCard
@@ -78,6 +80,32 @@ fun ScheduleScreen(
     var targetDayIndex by remember { mutableStateOf<Int?>(null) }
     val selectedDayIndex = targetDayIndex ?: computedDayIndex
 
+
+    val firstLiveIndex = remember(items) {
+        items.indexOfFirst { it.isLive() }
+    }
+    val lastLiveIndex = remember(items) {
+        items.indexOfLast { it.isLive() }
+    }
+    var nowScrolling by remember { mutableStateOf(false) }
+    val nowButtonState: NowButtonState? by derivedStateOf {
+        when {
+            nowScrolling -> NowButtonState.Current
+
+            firstLiveIndex != -1 -> {
+                val firstVisible = listState.firstVisibleItemIndex
+                val lastVisible = listState.lastVisibleItemIndex
+                when {
+                    lastVisible - 1 < firstLiveIndex -> NowButtonState.Before
+                    firstVisible + 1 > lastLiveIndex -> NowButtonState.After
+                    else -> NowButtonState.Current
+                }
+            }
+
+            else -> null // No live sessions at current time
+        }
+    }
+
     var headerState by remember { mutableStateOf(MainHeaderContainerState.Title) }
     val isSearch = remember(headerState) {
         headerState == MainHeaderContainerState.Search
@@ -94,6 +122,17 @@ fun ScheduleScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         Header(
+            nowButtonState = nowButtonState,
+            onNowClick = {
+                scope.launch {
+                    nowScrolling = true
+                    try {
+                        listState.animateScrollToItem(firstLiveIndex)
+                    } finally {
+                        nowScrolling = false
+                    }
+                }
+            },
             headerState = headerState,
             onHeaderStateChange = { headerState = it },
             bookmarkFilterEnabled = bookmarkFilterEnabled,
@@ -162,8 +201,13 @@ fun ScheduleScreen(
     }
 }
 
+private val LazyListState.lastVisibleItemIndex
+    get() = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+
 @Composable
 private fun Header(
+    nowButtonState: NowButtonState?,
+    onNowClick: () -> Unit,
     headerState: MainHeaderContainerState,
     onHeaderStateChange: (MainHeaderContainerState) -> Unit,
     bookmarkFilterEnabled: Boolean,
@@ -178,7 +222,9 @@ private fun Header(
             MainHeaderTitleBar(
                 title = stringResource(Res.string.nav_destination_schedule),
                 startContent = {
-                    // TODO Now Button
+                    if (nowButtonState != null) {
+                        NowButton(nowButtonState, onNowClick)
+                    }
                 },
                 endContent = {
                     TopMenuButton(
@@ -266,9 +312,8 @@ fun ScheduleList(
                         time = session.badgeTimeLine,
                         timeNote = null,
                         status = when {
-                            // TODO time handling
                             session.isFinished -> TalkStatus.Past
-//                            timeSlot.isLive -> TalkStatus.Now
+                            session.isLive -> TalkStatus.Now
                             else -> TalkStatus.Upcoming
                         },
                         onSubmitFeedback = { emotion ->
