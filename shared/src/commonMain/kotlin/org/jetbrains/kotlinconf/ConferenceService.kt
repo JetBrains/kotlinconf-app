@@ -48,7 +48,7 @@ class ConferenceService(
         APIClient(endpoint)
     }
 
-    val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     private var serverTime = GMTDate()
     private var requestTime = GMTDate()
