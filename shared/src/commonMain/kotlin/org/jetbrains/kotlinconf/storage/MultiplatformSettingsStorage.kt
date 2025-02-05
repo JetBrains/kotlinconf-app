@@ -20,24 +20,33 @@ expect fun createSettings(context: ApplicationContext): ObservableSettings
 class MultiplatformSettingsStorage(context: ApplicationContext) : ApplicationStorage {
     private val settings = createSettings(context)
 
-    override fun getUserId(): Flow<String?> = settings.getStringOrNullFlow("userid2025")
-    override suspend fun setUserId(value: String?) = settings.set("userid2025", value)
+    override fun getUserId(): Flow<String?> = settings.getStringOrNullFlow(Keys.USER_ID)
+    override suspend fun setUserId(value: String?) = settings.set(Keys.USER_ID, value)
 
-    override fun isOnboardingComplete(): Flow<Boolean> = settings.getBooleanFlow("onboardingComplete", false)
-    override suspend fun setOnboardingComplete(value: Boolean) = settings.set("onboardingComplete", value)
+    override fun isOnboardingComplete(): Flow<Boolean> = settings.getBooleanFlow(Keys.ONBOARDING_COMPLETE, false)
+    override suspend fun setOnboardingComplete(value: Boolean) = settings.set(Keys.ONBOARDING_COMPLETE, value)
 
-    override fun getNotificationsAllowed(): Flow<Boolean> = settings.getBooleanFlow("notificationsAllowed", false)
-    override suspend fun setNotificationsAllowed(value: Boolean) = settings.set("notificationsAllowed", value)
+    override fun getNotificationsAllowed(): Flow<Boolean> = settings.getBooleanFlow(Keys.NOTIFICATIONS_ALLOWED, false)
+    override suspend fun setNotificationsAllowed(value: Boolean) = settings.set(Keys.NOTIFICATIONS_ALLOWED, value)
 
-    override fun getTheme(): Flow<Theme> = settings.getStringOrNullFlow("theme").map { it?.let { Theme.valueOf(it) } ?: Theme.SYSTEM }
-    override suspend fun setTheme(value: Theme) = settings.set("theme", value.name)
+    override fun getTheme(): Flow<Theme> = settings.getStringOrNullFlow(Keys.THEME).map { it?.let { Theme.valueOf(it) } ?: Theme.SYSTEM }
+    override suspend fun setTheme(value: Theme) = settings.set(Keys.THEME, value.name)
 
-    override fun getConferenceCache(): Flow<Conference> = settings.getStringOrNullFlow("conferenceCache").map { it?.let { Json.decodeFromString<Conference>(it) } ?: Conference() }
+    override fun getConferenceCache(): Flow<Conference> = settings.getStringOrNullFlow(Keys.CONFERENCE_CACHE).map { it?.let { Json.decodeFromString<Conference>(it) } ?: Conference() }
     override suspend fun setConferenceCache(value: Conference) = settings.set(
-        "conferenceCache",
+        Keys.CONFERENCE_CACHE,
         Json.encodeToString(value)
     )
 
-    override fun getFavorites(): Flow<Set<SessionId>> = settings.getStringOrNullFlow("favorites").map { it?.let { Json.decodeFromString<Set<SessionId>>(it) } ?: emptySet() }
-    override suspend fun setFavorites(value: Set<SessionId>) = settings.set("favorites", Json.encodeToString(value))
+    override fun getFavorites(): Flow<Set<SessionId>> = settings.getStringOrNullFlow(Keys.FAVORITES).map { it?.let { Json.decodeFromString<Set<SessionId>>(it) } ?: emptySet() }
+    override suspend fun setFavorites(value: Set<SessionId>) = settings.set(Keys.FAVORITES, Json.encodeToString(value))
+
+    private object Keys {
+        const val USER_ID = "userid2025"
+        const val ONBOARDING_COMPLETE = "onboardingComplete"
+        const val NOTIFICATIONS_ALLOWED = "notificationsAllowed"
+        const val THEME = "theme"
+        const val CONFERENCE_CACHE = "conferenceCache"
+        const val FAVORITES = "favorites"
+    }
 }
