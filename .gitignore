@@ -41,4 +41,4 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 android-build
 
-shared/store.json
+shared/store.properties

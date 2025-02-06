@@ -80,6 +80,12 @@ kotlin {
             implementation(libs.ktor.client.core)
 
             implementation(libs.aboutlibraries.core)
+
+            // Multiplatform Settings
+            implementation(libs.settings)
+            implementation(libs.settings.serialization)
+            implementation(libs.settings.observable)
+            implementation(libs.settings.coroutines)
         }
 
         commonTest.dependencies {
