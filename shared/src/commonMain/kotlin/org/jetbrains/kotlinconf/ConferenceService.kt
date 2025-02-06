@@ -10,10 +10,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
+import org.jetbrains.kotlinconf.utils.time
 
 val UNKNOWN_SESSION_CARD: SessionCardView = SessionCardView(
     id = SessionId("unknown"),
@@ -44,6 +46,13 @@ class ConferenceService(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     private val votes = MutableStateFlow(emptyList<VoteInfo>())
+
+    val news: Flow<List<NewsDisplayItem>> = storage.getNews()
+        .map { newsItems ->
+            val now = timeProvider.now()
+            newsItems.map { newsItem -> mapNewsItemToDisplayItem(newsItem, now) }
+        }
+        .flowOn(Dispatchers.Default)
 
     val agenda: StateFlow<Agenda> by lazy {
         combine(
@@ -91,6 +100,9 @@ class ConferenceService(
 
             // Do whatever with votes
             votes.value = client.myVotes()
+
+            // Load fresh news items
+            loadNews()
         }
 
         scope.launch {
@@ -167,6 +179,11 @@ class ConferenceService(
     fun sessionsForSpeaker(id: SpeakerId): List<SessionCardView> =
         sessionCards.value.filter { id in it.speakerIds }
 
+    fun newsById(newsId: String): Flow<NewsDisplayItem?> =
+        news.map { allNews ->
+            allNews.find { it.id == newsId }
+        }
+
     /**
      * Mark session as favorite.
      */
@@ -226,5 +243,32 @@ class ConferenceService(
                 notificationManager.cancel("${session.title} finished")
             }
         }
+    }
+
+    private fun mapNewsItemToDisplayItem(
+        item: NewsItem,
+        now: GMTDate,
+    ): NewsDisplayItem {
+        return NewsDisplayItem(
+            id = item.id,
+            photoUrl = item.photoUrl,
+            date = item.date.toNewsDisplayTime(now),
+            title = item.title,
+            content = item.content,
+        )
+    }
+
+    private fun GMTDate.toNewsDisplayTime(now: GMTDate): String {
+        return if (year == now.year && dayOfYear == now.dayOfYear) {
+            return time()
+        } else if (year == now.year) {
+            "${month.value} $dayOfMonth"
+        } else {
+            "${month.value} $dayOfMonth, $year"
+        }
+    }
+
+    suspend fun loadNews() {
+        storage.setNews(client.getNews())
     }
 }

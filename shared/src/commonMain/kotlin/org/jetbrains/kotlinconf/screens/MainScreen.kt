@@ -37,11 +37,12 @@ import org.jetbrains.kotlinconf.navigation.AboutConferenceScreen
 import org.jetbrains.kotlinconf.navigation.CodeOfConductScreen
 import org.jetbrains.kotlinconf.navigation.InfoScreen
 import org.jetbrains.kotlinconf.navigation.MapScreen
+import org.jetbrains.kotlinconf.navigation.NewsListScreen
 import org.jetbrains.kotlinconf.navigation.PartnersScreen
 import org.jetbrains.kotlinconf.navigation.PrivacyPolicyScreen
 import org.jetbrains.kotlinconf.navigation.ScheduleScreen
-import org.jetbrains.kotlinconf.navigation.SpeakersScreen
 import org.jetbrains.kotlinconf.navigation.SessionScreen
+import org.jetbrains.kotlinconf.navigation.SpeakersScreen
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainNavDestination
 import org.jetbrains.kotlinconf.ui.components.MainNavigation
@@ -69,6 +70,7 @@ fun MainScreen(
                 InfoScreen(
                     onAboutConf = { rootNavController.navigate(AboutConferenceScreen) },
                     onAboutApp = { rootNavController.navigate(AboutAppScreen) },
+                    onNewsFeed = { rootNavController.navigate(NewsListScreen) },
                     onOurPartners = { rootNavController.navigate(PartnersScreen) },
                     onCodeOfConduct = { rootNavController.navigate(CodeOfConductScreen) },
                     onTwitter = { uriHandler.openUri(URLs.TWITTER) },

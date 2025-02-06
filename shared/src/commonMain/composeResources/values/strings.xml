@@ -26,6 +26,7 @@ For the source code and more technical details, visit the GitHub repository.</st
     <string name="info_link_about_app">About the app</string>
     <string name="info_link_partners">Our partners</string>
     <string name="info_link_code_of_conduct">Code of Conduct</string>
+    <string name="info_link_news_feed">News feed</string>
     <string name="info_link_description_twitter">Twitter</string>
     <string name="info_link_description_slack">Slack</string>
     <string name="info_link_description_bluesky">Bluesky</string>
@@ -113,5 +114,7 @@ We will process your data in accordance with the App Privacy Policy. You can adj
     <string name="map_title">Map</string>
     <string name="map_ground_floor">Ground floor</string>
     <string name="map_first_floor">First floor</string>
+
+    <string name="news_feed_title">News</string>
 
 </resources>

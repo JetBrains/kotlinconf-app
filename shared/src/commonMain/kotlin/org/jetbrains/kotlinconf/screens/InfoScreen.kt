@@ -26,6 +26,7 @@ import kotlinconfapp.shared.generated.resources.hej_its_kotlinconf
 import kotlinconfapp.shared.generated.resources.info_link_about_app
 import kotlinconfapp.shared.generated.resources.info_link_about_conf
 import kotlinconfapp.shared.generated.resources.info_link_code_of_conduct
+import kotlinconfapp.shared.generated.resources.info_link_news_feed
 import kotlinconfapp.shared.generated.resources.info_link_description_bluesky
 import kotlinconfapp.shared.generated.resources.info_link_description_slack
 import kotlinconfapp.shared.generated.resources.info_link_description_twitter
@@ -45,6 +46,7 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 fun InfoScreen(
     onAboutConf: () -> Unit,
     onAboutApp: () -> Unit,
+    onNewsFeed: () -> Unit,
     onOurPartners: () -> Unit,
     onCodeOfConduct: () -> Unit,
     onTwitter: () -> Unit,
@@ -73,6 +75,7 @@ fun InfoScreen(
             )
             PageMenuItem(stringResource(Res.string.info_link_about_conf), onClick = onAboutConf)
             PageMenuItem(stringResource(Res.string.info_link_about_app), onClick = onAboutApp)
+            PageMenuItem(stringResource(Res.string.info_link_news_feed), onClick = onNewsFeed)
             PageMenuItem(stringResource(Res.string.info_link_partners), onClick = onOurPartners)
             PageMenuItem(stringResource(Res.string.info_link_code_of_conduct), onClick = onCodeOfConduct)
             Row(

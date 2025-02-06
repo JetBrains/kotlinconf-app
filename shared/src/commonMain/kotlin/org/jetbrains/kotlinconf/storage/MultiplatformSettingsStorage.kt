@@ -11,6 +11,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinconf.ApplicationContext
 import org.jetbrains.kotlinconf.Conference
+import org.jetbrains.kotlinconf.NewsItem
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Theme
 
@@ -41,12 +42,21 @@ class MultiplatformSettingsStorage(context: ApplicationContext) : ApplicationSto
     override fun getFavorites(): Flow<Set<SessionId>> = settings.getStringOrNullFlow(Keys.FAVORITES).map { it?.let { Json.decodeFromString<Set<SessionId>>(it) } ?: emptySet() }
     override suspend fun setFavorites(value: Set<SessionId>) = settings.set(Keys.FAVORITES, Json.encodeToString(value))
 
+    override fun getNews(): Flow<List<NewsItem>> = settings.getStringOrNullFlow(Keys.NEWS_CACHE)
+        .map { it?.let { Json.decodeFromString<List<NewsItem>>(it) } ?: emptyList() }
+
+    override suspend fun setNews(value: List<NewsItem>) = settings.set(
+        Keys.NEWS_CACHE,
+        Json.encodeToString(value)
+    )
+
     private object Keys {
         const val USER_ID = "userid2025"
         const val ONBOARDING_COMPLETE = "onboardingComplete"
         const val NOTIFICATIONS_ALLOWED = "notificationsAllowed"
         const val THEME = "theme"
         const val CONFERENCE_CACHE = "conferenceCache"
+        const val NEWS_CACHE = "newsCache"
         const val FAVORITES = "favorites"
     }
 }

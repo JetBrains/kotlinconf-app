@@ -28,15 +28,17 @@ import org.jetbrains.kotlinconf.screens.AppTermsOfUse
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
 import org.jetbrains.kotlinconf.screens.LicensesScreen
 import org.jetbrains.kotlinconf.screens.MainScreen
+import org.jetbrains.kotlinconf.screens.NewsDetailScreen
+import org.jetbrains.kotlinconf.screens.NewsListScreen
 import org.jetbrains.kotlinconf.screens.PartnerDetails
 import org.jetbrains.kotlinconf.screens.Partners
 import org.jetbrains.kotlinconf.screens.PrivacyPolicyForVisitors
+import org.jetbrains.kotlinconf.screens.PrivacyPolicyScreen
 import org.jetbrains.kotlinconf.screens.SessionScreen
 import org.jetbrains.kotlinconf.screens.SettingsScreen
 import org.jetbrains.kotlinconf.screens.SingleLicenseScreen
 import org.jetbrains.kotlinconf.screens.Speaker
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
-import org.jetbrains.kotlinconf.screens.PrivacyPolicyScreen
 import org.jetbrains.kotlinconf.screens.TermsOfUse
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import kotlin.reflect.typeOf
@@ -148,6 +150,17 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
                 onRejectPolicy = navController::popBackStack,
                 onAcceptPolicy = navController::popBackStack,
             )
+        }
+
+        composable<NewsListScreen> {
+            NewsListScreen(
+                onNewsClick = { newsId -> navController.navigate(NewsDetailScreen(newsId)) },
+                onBack = navController::popBackStack,
+            )
+        }
+        composable<NewsDetailScreen> {
+            val newsId = it.toRoute<NewsDetailScreen>().newsId
+            NewsDetailScreen(newsId, onBack = navController::popBackStack)
         }
     }
 }
