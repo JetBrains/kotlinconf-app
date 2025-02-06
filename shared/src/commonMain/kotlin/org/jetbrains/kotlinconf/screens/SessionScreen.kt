@@ -111,7 +111,7 @@ fun SessionScreen(
                 modifier = Modifier.padding(vertical = 24.dp),
             )
 
-            if (session.isFinished) {
+            if (session.isFinished || session.isLive) {
                 FeedbackPanel(
                     onFeedback = { emotion ->
                         viewModel.submitFeedback(emotion)
