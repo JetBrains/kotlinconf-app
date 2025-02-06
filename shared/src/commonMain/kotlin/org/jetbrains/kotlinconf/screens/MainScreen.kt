@@ -63,7 +63,7 @@ fun MainScreen(
         val nestedNavController = rememberNavController()
         NavHost(
             nestedNavController,
-            startDestination = InfoScreen,
+            startDestination = ScheduleScreen,
             modifier = Modifier.fillMaxWidth().weight(1f),
         ) {
             composable<InfoScreen> {
@@ -102,13 +102,6 @@ private fun BottomNavigation(nestedNavController: NavHostController) {
     val bottomNavDestinations: List<MainNavDestination> =
         listOf(
             MainNavDestination(
-                label = stringResource(Res.string.nav_destination_info),
-                icon = Res.drawable.info_28,
-                iconSelected = Res.drawable.info_28_fill,
-                route = InfoScreen,
-                routeClass = InfoScreen::class
-            ),
-            MainNavDestination(
                 label = stringResource(Res.string.nav_destination_schedule),
                 icon = Res.drawable.clock_28,
                 iconSelected = Res.drawable.clock_28_fill,
@@ -128,6 +121,13 @@ private fun BottomNavigation(nestedNavController: NavHostController) {
                 iconSelected = Res.drawable.location_28_fill,
                 route = MapScreen,
                 routeClass = MapScreen::class
+            ),
+            MainNavDestination(
+                label = stringResource(Res.string.nav_destination_info),
+                icon = Res.drawable.info_28,
+                iconSelected = Res.drawable.info_28_fill,
+                route = InfoScreen,
+                routeClass = InfoScreen::class
             ),
         )
 
