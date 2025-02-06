@@ -10,6 +10,7 @@ data class SessionCardView(
     val locationLine: String,
     val startsAt: GMTDate,
     val endsAt: GMTDate,
+    val isLive: Boolean,
     val speakerIds: List<SpeakerId>,
     val vote: Score?,
     val timeLine: String = buildString {
