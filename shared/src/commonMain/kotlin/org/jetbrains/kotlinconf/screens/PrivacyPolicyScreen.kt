@@ -55,7 +55,7 @@ import kotlinconfapp.shared.generated.resources.Res as AppRes
 fun PrivacyPolicyScreen(
     onRejectPolicy: () -> Unit,
     onAcceptPolicy: () -> Unit,
-    viewModel: StartPrivacyPolicyViewModel = koinViewModel(),
+    viewModel: PrivacyPolicyViewModel = koinViewModel(),
 ) {
     var detailsVisible by remember { mutableStateOf(false) }
     val policyAccepted by viewModel.policyAccepted.collectAsState()

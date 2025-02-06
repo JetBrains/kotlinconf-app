@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jetbrains.compose.reload.DevelopmentEntryPoint
 import org.jetbrains.kotlinconf.navigation.KotlinConfNavHost
-import org.jetbrains.kotlinconf.screens.StartPrivacyPolicyViewModel
+import org.jetbrains.kotlinconf.screens.PrivacyPolicyViewModel
 import org.jetbrains.kotlinconf.screens.ScheduleViewModel
 import org.jetbrains.kotlinconf.screens.SessionViewModel
 import org.jetbrains.kotlinconf.screens.SettingsViewModel
@@ -70,7 +70,7 @@ private fun koinConfiguration(context: ApplicationContext) = koinConfiguration {
     }
 
     val viewModelModule = module {
-        viewModelOf(::StartPrivacyPolicyViewModel)
+        viewModelOf(::PrivacyPolicyViewModel)
         viewModelOf(::ScheduleViewModel)
         viewModelOf(::SessionViewModel)
         viewModelOf(::SettingsViewModel)
