@@ -32,7 +32,7 @@ import org.jetbrains.kotlinconf.screens.MainScreen
 import org.jetbrains.kotlinconf.screens.PartnerDetails
 import org.jetbrains.kotlinconf.screens.Partners
 import org.jetbrains.kotlinconf.screens.PrivacyPolicyForVisitors
-import org.jetbrains.kotlinconf.screens.Session
+import org.jetbrains.kotlinconf.screens.SessionScreen
 import org.jetbrains.kotlinconf.screens.SettingsScreen
 import org.jetbrains.kotlinconf.screens.SingleLicenseScreen
 import org.jetbrains.kotlinconf.screens.Speaker
@@ -40,33 +40,37 @@ import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 import org.jetbrains.kotlinconf.screens.StartPrivacyPolicyScreen
 import org.jetbrains.kotlinconf.screens.TermsOfUse
 import org.jetbrains.kotlinconf.utils.getStoreUrl
+import org.koin.compose.koinInject
 import kotlin.reflect.typeOf
 
 @Composable
-internal fun KotlinConfNavHost(
-    service: ConferenceService,
-    isOnboardingComplete: Boolean,
-) {
+internal fun KotlinConfNavHost() {
     val navController = rememberNavController()
+    val service = koinInject<ConferenceService>()
 
     NavHost(
         navController = navController,
-        startDestination = if (isOnboardingComplete) MainScreen else StartScreens,
+        startDestination = if (service.needsOnboarding()) StartScreens else MainScreen,
         modifier = Modifier.fillMaxSize(),
         enterTransition = enterTransition { it },
         exitTransition = exitTransition { -it },
         popEnterTransition = enterTransition { -it },
         popExitTransition = exitTransition { it },
     ) {
-        startScreens(navController)
+        startScreens(
+            navController = navController,
+            onCompleteOnboarding = {
+                service.completeOnboarding()
+            }
+        )
 
         composable<MainScreen> {
-            MainScreen(service, navController)
+            MainScreen(navController)
         }
 
         composable<SpeakerDetailsScreen>(typeMap = mapOf(typeOf<SpeakerId>() to SpeakerIdNavType)) {
             val speakerId = it.toRoute<SpeakerDetailsScreen>().speakerId
-            Speaker(service.speakerById(speakerId), onBack = navController::popBackStack)
+            Speaker(speakerId, onBack = navController::popBackStack)
         }
         composable<AboutAppScreen> {
             val uriHandler = LocalUriHandler.current
@@ -110,10 +114,9 @@ internal fun KotlinConfNavHost(
         }
         composable<SettingsScreen> {
             SettingsScreen(
-                service = service,
                 onBack = navController::popBackStack,
                 onNotificationSettingsChange = {
-                     // TODO request notification permission, save settings
+                    // TODO request notification permission, save settings
                     println("New settings: $it")
                 }
             )
@@ -139,14 +142,19 @@ internal fun KotlinConfNavHost(
         composable<PartnerDetailsScreen> {
             PartnerDetails(it.toRoute<PartnerDetailsScreen>().partnerId, onBack = navController::popBackStack)
         }
-        composable<TalkDetailsScreen>(typeMap = mapOf(typeOf<SessionId>() to SessionIdNavType)) {
-            val sessionId = it.toRoute<TalkDetailsScreen>().talkId
-            Session(service.sessionById(sessionId), onBack = navController::popBackStack)
+        composable<SessionScreen>(typeMap = mapOf(typeOf<SessionId>() to SessionIdNavType)) {
+            SessionScreen(
+                sessionId = it.toRoute<SessionScreen>().sessionId,
+                onBack = navController::popBackStack,
+            )
         }
     }
 }
 
-fun NavGraphBuilder.startScreens(navController: NavHostController) {
+fun NavGraphBuilder.startScreens(
+    navController: NavHostController,
+    onCompleteOnboarding: () -> Unit,
+) {
     navigation<StartScreens>(
         startDestination = StartPrivacyPolicyScreen
     ) {
@@ -163,6 +171,8 @@ fun NavGraphBuilder.startScreens(navController: NavHostController) {
             StartNotificationsScreen(
                 onDone = { notificationSettings ->
                     // TODO request notification permission, save settings
+
+                    onCompleteOnboarding()
                     navController.navigate(MainScreen) {
                         popUpTo<StartScreens> { inclusive = true }
                     }

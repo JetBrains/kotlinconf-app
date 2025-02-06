@@ -59,7 +59,7 @@ data object MainScreen
 data object ScheduleScreen
 
 @Serializable
-data class TalkDetailsScreen(val talkId: SessionId)
+data class SessionScreen(val sessionId: SessionId)
 
 @Serializable
 data object SpeakersScreen
