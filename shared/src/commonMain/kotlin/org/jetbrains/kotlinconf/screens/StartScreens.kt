@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,15 +53,24 @@ import org.jetbrains.kotlinconf.ui.components.MarkdownView
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.koin.compose.viewmodel.koinViewModel
 import kotlinconfapp.shared.generated.resources.Res as AppRes
 
 
 @Composable
-fun StartPrivacyPolicyScreen(
+fun PrivacyPolicyScreen(
     onRejectPolicy: () -> Unit,
     onAcceptPolicy: () -> Unit,
+    viewModel: StartPrivacyPolicyViewModel = koinViewModel(),
 ) {
     var detailsVisible by remember { mutableStateOf(false) }
+    val policyAccepted by viewModel.policyAccepted.collectAsState()
+
+    LaunchedEffect(policyAccepted) {
+        if (policyAccepted) {
+            onAcceptPolicy()
+        }
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -142,7 +153,7 @@ fun StartPrivacyPolicyScreen(
             )
             Button(
                 label = stringResource(AppRes.string.privacy_policy_accept),
-                onClick = { onAcceptPolicy() },
+                onClick = { viewModel.acceptPrivacyPolicy() },
                 modifier = Modifier.weight(1f),
                 primary = true,
             )

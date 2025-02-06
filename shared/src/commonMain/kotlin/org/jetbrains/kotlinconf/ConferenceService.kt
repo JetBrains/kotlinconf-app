@@ -80,7 +80,8 @@ class ConferenceService(
         scope.launch {
             // Set user ID
             val userId = storage.getUserId().first()
-            if (userId == null) {
+            if (userId != null) {
+                client.userId = userId
                 client.sign()
             }
 
@@ -111,16 +112,14 @@ class ConferenceService(
     /**
      * Accept privacy policy clicked.
      */
-    fun acceptPrivacyPolicy() {
-        scope.launch {
-            val userId = storage.getUserId().first()
-            if (userId != null) return@launch
+    suspend fun acceptPrivacyPolicy() {
+        val userId = storage.getUserId().first()
+        if (userId != null) return
 
-            val newUserId = generateUserId()
-            client.userId = newUserId
-            client.sign()
-            storage.setUserId(newUserId)
-        }
+        val newUserId = generateUserId()
+        client.userId = newUserId
+        client.sign()
+        storage.setUserId(newUserId)
     }
 
     /**

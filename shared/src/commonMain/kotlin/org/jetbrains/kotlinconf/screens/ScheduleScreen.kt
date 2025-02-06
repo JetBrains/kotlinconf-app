@@ -57,6 +57,7 @@ import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 @Composable
 fun ScheduleScreen(
     onSession: (SessionId) -> Unit,
+    onPrivacyPolicyNeeded: () -> Unit,
     viewModel: ScheduleViewModel = koinViewModel(),
 ) {
     val scope = rememberCoroutineScope()
@@ -66,6 +67,14 @@ fun ScheduleScreen(
 
     val days by viewModel.agenda.collectAsState()
     val items by viewModel.items.collectAsState()
+    val shouldNavigateToPrivacyPolicy by viewModel.navigateToPrivacyPolicy.collectAsState()
+
+    LaunchedEffect(shouldNavigateToPrivacyPolicy) {
+        if (shouldNavigateToPrivacyPolicy) {
+            onPrivacyPolicyNeeded()
+            viewModel.onNavigatedToPrivacyPolicy()
+        }
+    }
 
     // Day switcher selection state calculated from the scroll state
     val computedDayIndex by derivedStateOf {

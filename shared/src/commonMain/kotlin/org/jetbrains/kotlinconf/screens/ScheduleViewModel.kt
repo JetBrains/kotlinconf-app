@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -69,6 +70,9 @@ data class ScheduleSearchParams(
 class ScheduleViewModel(
     private val service: ConferenceService,
 ) : ViewModel() {
+    private val _navigateToPrivacyPolicy = MutableStateFlow(false)
+    val navigateToPrivacyPolicy: StateFlow<Boolean> = _navigateToPrivacyPolicy.asStateFlow()
+
     val agenda: StateFlow<List<Day>> = service.agenda.map { it.days }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
@@ -236,7 +240,9 @@ class ScheduleViewModel(
             null -> null
         }
         viewModelScope.launch {
-            service.vote(sessionId, score)
+            if (!service.vote(sessionId, score)) {
+                _navigateToPrivacyPolicy.value = true
+            }
         }
     }
 
@@ -247,9 +253,16 @@ class ScheduleViewModel(
             Emotion.Negative -> Score.BAD
         }
         viewModelScope.launch {
-            service.vote(sessionId, score)
-            service.sendFeedback(sessionId, comment)
+            if (service.vote(sessionId, score)) {
+                service.sendFeedback(sessionId, comment)
+            } else {
+                _navigateToPrivacyPolicy.value = true
+            }
         }
+    }
+
+    fun onNavigatedToPrivacyPolicy() {
+        _navigateToPrivacyPolicy.value = false
     }
 
     fun onBookmark(sessionId: SessionId, bookmarked: Boolean) {

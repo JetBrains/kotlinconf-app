@@ -36,7 +36,7 @@ import org.jetbrains.kotlinconf.screens.SettingsScreen
 import org.jetbrains.kotlinconf.screens.SingleLicenseScreen
 import org.jetbrains.kotlinconf.screens.Speaker
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
-import org.jetbrains.kotlinconf.screens.StartPrivacyPolicyScreen
+import org.jetbrains.kotlinconf.screens.PrivacyPolicyScreen
 import org.jetbrains.kotlinconf.screens.TermsOfUse
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import kotlin.reflect.typeOf
@@ -140,6 +140,13 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
             SessionScreen(
                 sessionId = it.toRoute<SessionScreen>().sessionId,
                 onBack = navController::popBackStack,
+                onPrivacyPolicyNeeded = { navController.navigate(PrivacyPolicyScreen) }
+            )
+        }
+        composable<PrivacyPolicyScreen> {
+            PrivacyPolicyScreen(
+                onRejectPolicy = navController::popBackStack,
+                onAcceptPolicy = navController::popBackStack,
             )
         }
     }
@@ -152,12 +159,13 @@ fun NavGraphBuilder.startScreens(
         startDestination = StartPrivacyPolicyScreen
     ) {
         composable<StartPrivacyPolicyScreen> {
-            StartPrivacyPolicyScreen(
+            PrivacyPolicyScreen(
                 onRejectPolicy = {
-                    // TODO what do we do when the policy is rejected?
                     navController.navigate(StartNotificationsScreen)
                 },
-                onAcceptPolicy = { navController.navigate(StartNotificationsScreen) },
+                onAcceptPolicy = {
+                    navController.navigate(StartNotificationsScreen)
+                },
             )
         }
         composable<StartNotificationsScreen> {

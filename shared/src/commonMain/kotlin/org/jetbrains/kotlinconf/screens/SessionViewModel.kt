@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.ConferenceService
@@ -17,6 +19,9 @@ class SessionViewModel(
     private val service: ConferenceService,
     private val sessionId: SessionId,
 ) : ViewModel() {
+
+    private val _navigateToPrivacyPolicy = MutableStateFlow(false)
+    val navigateToPrivacyPolicy: StateFlow<Boolean> = _navigateToPrivacyPolicy.asStateFlow()
 
     val session: StateFlow<SessionCardView?> = service.sessionByIdFlow(sessionId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
@@ -32,15 +37,24 @@ class SessionViewModel(
 
     fun submitFeedback(emotion: Emotion?) {
         viewModelScope.launch {
-            service.vote(sessionId, emotion?.toScore())
+            if (!service.vote(sessionId, emotion?.toScore())) {
+                _navigateToPrivacyPolicy.value = true
+            }
         }
     }
 
     fun submitFeedbackWithComment(emotion: Emotion, comment: String) {
         viewModelScope.launch {
-            service.vote(sessionId, emotion.toScore())
-            service.sendFeedback(sessionId, comment)
+            if (!service.vote(sessionId, emotion.toScore())) {
+                _navigateToPrivacyPolicy.value = true
+            } else {
+                service.sendFeedback(sessionId, comment)
+            }
         }
+    }
+
+    fun onNavigatedToPrivacyPolicy() {
+        _navigateToPrivacyPolicy.value = false
     }
 
     private fun Emotion.toScore() = when (this) {
