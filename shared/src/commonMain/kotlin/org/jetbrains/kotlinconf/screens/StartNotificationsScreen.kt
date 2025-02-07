@@ -34,7 +34,7 @@ import kotlinconfapp.shared.generated.resources.Res as AppRes
 fun StartNotificationsScreen(
     onDone: (NotificationSettings) -> Unit,
 ) {
-    // TODO populate with real values
+    // TODO populate with real values https://github.com/JetBrains/kotlinconf-app/issues/252
     var notificationSettings by remember { mutableStateOf(NotificationSettings(false, false, false)) }
 
     Column(modifier = Modifier.fillMaxSize()) {
