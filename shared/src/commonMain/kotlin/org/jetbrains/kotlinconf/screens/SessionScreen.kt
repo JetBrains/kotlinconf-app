@@ -65,10 +65,19 @@ import org.koin.core.parameter.parametersOf
 fun SessionScreen(
     sessionId: SessionId,
     onBack: () -> Unit,
+    onPrivacyPolicyNeeded: () -> Unit,
     viewModel: SessionViewModel = koinViewModel { parametersOf(sessionId) }
 ) {
     val session = viewModel.session.collectAsState().value ?: return
     val speakers = viewModel.speakers.collectAsState().value
+    val shouldNavigateToPrivacyPolicy by viewModel.navigateToPrivacyPolicy.collectAsState()
+
+    LaunchedEffect(shouldNavigateToPrivacyPolicy) {
+        if (shouldNavigateToPrivacyPolicy) {
+            onPrivacyPolicyNeeded()
+            viewModel.onNavigatedToPrivacyPolicy()
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         MainHeaderTitleBar(
@@ -102,7 +111,7 @@ fun SessionScreen(
                 modifier = Modifier.padding(vertical = 24.dp),
             )
 
-            if (session.isFinished) {
+            if (session.isFinished || session.isLive) {
                 FeedbackPanel(
                     onFeedback = { emotion ->
                         viewModel.submitFeedback(emotion)

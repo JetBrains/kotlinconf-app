@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
@@ -39,8 +38,8 @@ import org.jetbrains.kotlinconf.navigation.CodeOfConductScreen
 import org.jetbrains.kotlinconf.navigation.InfoScreen
 import org.jetbrains.kotlinconf.navigation.MapScreen
 import org.jetbrains.kotlinconf.navigation.PartnersScreen
+import org.jetbrains.kotlinconf.navigation.PrivacyPolicyScreen
 import org.jetbrains.kotlinconf.navigation.ScheduleScreen
-import org.jetbrains.kotlinconf.navigation.SpeakerDetailsScreen
 import org.jetbrains.kotlinconf.navigation.SpeakersScreen
 import org.jetbrains.kotlinconf.navigation.SessionScreen
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -48,7 +47,6 @@ import org.jetbrains.kotlinconf.ui.components.MainNavDestination
 import org.jetbrains.kotlinconf.ui.components.MainNavigation
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.koinInject
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MainScreen(
@@ -86,6 +84,7 @@ fun MainScreen(
             composable<ScheduleScreen> {
                 ScheduleScreen(
                     onSession = { rootNavController.navigate(SessionScreen(it)) },
+                    onPrivacyPolicyNeeded = { rootNavController.navigate(PrivacyPolicyScreen) },
                 )
             }
             composable<MapScreen> {

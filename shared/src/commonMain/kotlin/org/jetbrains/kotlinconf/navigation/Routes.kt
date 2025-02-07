@@ -26,6 +26,9 @@ data object StartPrivacyPolicyScreen
 data object StartNotificationsScreen
 
 @Serializable
+data object PrivacyPolicyScreen
+
+@Serializable
 data object SettingsScreen
 
 @Serializable
