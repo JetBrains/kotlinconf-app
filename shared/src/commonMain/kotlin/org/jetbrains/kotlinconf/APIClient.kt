@@ -142,7 +142,7 @@ class APIClient(
         apiUrl("time")
     }.bodyAsText().let { response -> GMTDate(response.toLong()) }
 
-    // TODO real api call
+    // TODO real api call https://github.com/JetBrains/kotlinconf-app/issues/268
     suspend fun getNews(): List<NewsItem> = EXAMPLE_NEWS_ITEMS
 
     private fun HttpRequestBuilder.json() {
