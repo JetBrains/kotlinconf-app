@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jetbrains.compose.reload.DevelopmentEntryPoint
 import org.jetbrains.kotlinconf.navigation.KotlinConfNavHost
+import org.jetbrains.kotlinconf.screens.NewsDetailViewModel
+import org.jetbrains.kotlinconf.screens.NewsListViewModel
 import org.jetbrains.kotlinconf.screens.PrivacyPolicyViewModel
 import org.jetbrains.kotlinconf.screens.ScheduleViewModel
 import org.jetbrains.kotlinconf.screens.SessionViewModel
@@ -74,6 +76,8 @@ private fun koinConfiguration(context: ApplicationContext) = koinConfiguration {
         viewModelOf(::ScheduleViewModel)
         viewModelOf(::SessionViewModel)
         viewModelOf(::SettingsViewModel)
+        viewModelOf(::NewsListViewModel)
+        viewModelOf(::NewsDetailViewModel)
     }
 
     modules(appModule, viewModelModule)

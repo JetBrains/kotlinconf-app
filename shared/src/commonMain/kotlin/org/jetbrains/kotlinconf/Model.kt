@@ -88,6 +88,15 @@ enum class Theme {
     DARK,
 }
 
+@Serializable
+class NewsItem(
+    val id: String,
+    val photoUrl: String?,
+    val date: GMTDateSerializable,
+    val title: String,
+    val content: String,
+)
+
 data class NotificationSettings(
     val scheduleUpdates: Boolean,
     val kotlinConfNews: Boolean,

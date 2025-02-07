@@ -72,3 +72,9 @@ data class SpeakerDetailsScreen(val speakerId: SpeakerId)
 
 @Serializable
 data object MapScreen
+
+@Serializable
+data object NewsListScreen
+
+@Serializable
+data class NewsDetailScreen(val newsId: String)

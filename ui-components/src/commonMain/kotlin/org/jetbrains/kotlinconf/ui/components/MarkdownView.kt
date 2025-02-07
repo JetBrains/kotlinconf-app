@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.ui.components
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -8,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.compose.Markdown
 import com.mikepenz.markdown.model.DefaultMarkdownColors
 import com.mikepenz.markdown.model.DefaultMarkdownTypography
@@ -24,6 +22,14 @@ fun MarkdownView(
         text = loadText().decodeToString()
     }
 
+    MarkdownView(text, modifier)
+}
+
+@Composable
+fun MarkdownView(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
     Markdown(
         text, DefaultMarkdownColors(
             text = KotlinConfTheme.colors.longText,

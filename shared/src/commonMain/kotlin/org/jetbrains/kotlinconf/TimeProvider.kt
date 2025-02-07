@@ -45,6 +45,8 @@ class FakeTimeProvider(
     override val time: StateFlow<GMTDate> = MutableStateFlow(fixedTime)
     override fun now(): GMTDate = fixedTime
     override suspend fun run(): Nothing {
-        do while (true)
+        while (true) {
+            delay(Long.MAX_VALUE) // This waits forever on its own
+        }
     }
 }
