@@ -18,7 +18,7 @@ kotlin {
         compilerOptions {
             freeCompilerArgs.addAll(
                 "-P",
-                "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=org.jetbrains.kotlinconf.ui.components.zoomable.internal.AndroidParcelize"
+                "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=org.jetbrains.kotlinconf.zoomable.internal.AndroidParcelize"
             )
         }
     }
@@ -100,6 +100,10 @@ kotlin {
             }
         }
 
+        val nonAndroidMain by creating {
+            dependsOn(commonMain.get())
+        }
+
         androidMain {
             dependsOn(nonWebMain)
             dependencies {
@@ -114,6 +118,7 @@ kotlin {
 
         iosMain {
             dependsOn(nonWebMain)
+            dependsOn(nonAndroidMain)
             dependencies {
                 implementation(libs.ktor.client.darwin)
             }
@@ -121,6 +126,7 @@ kotlin {
 
         jvmMain {
             dependsOn(nonWebMain)
+            dependsOn(nonAndroidMain)
             dependencies {
                 implementation(libs.ktor.client.okhttp)
                 implementation(compose.desktop.currentOs)
@@ -131,6 +137,7 @@ kotlin {
 
         val webMain by creating {
             dependsOn(commonMain.get())
+            dependsOn(nonAndroidMain)
             dependencies {
                 implementation(libs.ktor.client.js)
             }
