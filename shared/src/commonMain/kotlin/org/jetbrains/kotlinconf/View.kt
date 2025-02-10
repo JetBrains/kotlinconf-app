@@ -149,3 +149,12 @@ data class NewsDisplayItem(
     val title: String,
     val content: String,
 )
+
+data class ServiceEvent(
+    val id: String,
+    val title: String,
+    val startsAt: GMTDate,
+    val endsAt: GMTDate,
+    val isLive: Boolean,
+    val startsInMinutes: Int?,
+)

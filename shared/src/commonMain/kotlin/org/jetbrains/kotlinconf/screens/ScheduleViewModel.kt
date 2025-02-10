@@ -22,19 +22,25 @@ import org.jetbrains.kotlinconf.TimeSlot
 import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.components.FilterItem
 import org.jetbrains.kotlinconf.ui.components.FilterItemType
+import org.jetbrains.kotlinconf.ui.components.ServiceEventData
 import org.jetbrains.kotlinconf.utils.containsDiacritics
 import org.jetbrains.kotlinconf.utils.removeDiacritics
 
 sealed interface ScheduleListItem
 
-// TODO add service events
 data class DayHeaderItem(val value: Day) : ScheduleListItem
+
 data class TimeSlotTitleItem(val value: TimeSlot) : ScheduleListItem
+
 data class SessionItem(
     val value: SessionCardView,
     val tagMatches: List<String> = emptyList(),
     val titleHighlights: List<IntRange> = emptyList(),
     val speakerHighlights: List<IntRange> = emptyList(),
+) : ScheduleListItem
+
+data class ServiceEventItem(
+    val value: ServiceEventData,
 ) : ScheduleListItem
 
 data class WorkshopItem(
@@ -187,6 +193,7 @@ class ScheduleViewModel(
         }
     }
 
+    // TODO add ServiceEventItems to this list https://github.com/JetBrains/kotlinconf-app/issues/269
     private fun buildNonSearchItems(
         days: List<Day>,
         isBookmarkedOnly: Boolean,
