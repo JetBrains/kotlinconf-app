@@ -40,6 +40,7 @@ import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -324,35 +325,12 @@ fun ScheduleList(
                             modifier = Modifier.fillMaxWidth(),
                             beyondViewportPageCount = 20,
                         ) { page ->
-                            val session = workshops[page]
-                            TalkCard(
-                                title = session.title,
-                                titleHighlights = emptyList(),
-                                bookmarked = session.isFavorite,
-                                onBookmark = { isBookmarked -> onBookmark(session.id, isBookmarked) },
-                                tags = session.tags,
-                                tagHighlights = emptyList(),
-                                speakers = session.speakerLine,
-                                speakerHighlights = emptyList(),
-                                location = session.locationLine,
-                                lightning = session.isLightning,
-                                time = session.badgeTimeLine,
-                                timeNote = session.startsInMinutes?.let { count ->
-                                    pluralStringResource(Res.plurals.schedule_in_x_minutes, count, count)
-                                },
-                                status = when {
-                                    session.isFinished -> TalkStatus.Past
-                                    session.isLive -> TalkStatus.Now
-                                    session.isUpcoming -> TalkStatus.Upcoming
-                                    else -> TalkStatus.Upcoming // Shouldn't happen
-                                },
-                                onSubmitFeedback = { emotion ->
-                                    onSubmitFeedback(session.id, emotion)
-                                },
-                                onSubmitFeedbackWithComment = { emotion, comment ->
-                                    onSubmitFeedbackWithComment(session.id, emotion, comment)
-                                },
-                                onClick = { onSession(session.id) },
+                            SessionCard(
+                                session = workshops[page],
+                                onBookmark = onBookmark,
+                                onSubmitFeedback = onSubmitFeedback,
+                                onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
+                                onSession = onSession,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .wrapContentHeight(Alignment.Top)
@@ -370,35 +348,15 @@ fun ScheduleList(
                 }
 
                 is SessionItem -> {
-                    val session = item.value
-                    TalkCard(
-                        title = session.title,
+                    SessionCard(
+                        session = item.value,
                         titleHighlights = item.titleHighlights,
-                        bookmarked = session.isFavorite,
-                        onBookmark = { isBookmarked -> onBookmark(session.id, isBookmarked) },
-                        tags = session.tags,
                         tagHighlights = item.tagMatches,
-                        speakers = session.speakerLine,
                         speakerHighlights = item.speakerHighlights,
-                        location = session.locationLine,
-                        lightning = session.isLightning,
-                        time = session.badgeTimeLine,
-                        timeNote = session.startsInMinutes?.let { count ->
-                            pluralStringResource(Res.plurals.schedule_in_x_minutes, count, count)
-                        },
-                        status = when {
-                            session.isFinished -> TalkStatus.Past
-                            session.isLive -> TalkStatus.Now
-                            session.isUpcoming -> TalkStatus.Upcoming
-                            else -> TalkStatus.Upcoming // Shouldn't happen
-                        },
-                        onSubmitFeedback = { emotion ->
-                            onSubmitFeedback(session.id, emotion)
-                        },
-                        onSubmitFeedbackWithComment = { emotion, comment ->
-                            onSubmitFeedbackWithComment(session.id, emotion, comment)
-                        },
-                        onClick = { onSession(session.id) },
+                        onBookmark = onBookmark,
+                        onSubmitFeedback = onSubmitFeedback,
+                        onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
+                        onSession = onSession,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 8.dp)
@@ -415,4 +373,48 @@ fun ScheduleList(
             }
         }
     }
+}
+
+@Composable
+private fun SessionCard(
+    session: SessionCardView,
+    onBookmark: (SessionId, Boolean) -> Unit,
+    onSubmitFeedback: (SessionId, Emotion?) -> Unit,
+    onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
+    onSession: (SessionId) -> Unit,
+    modifier: Modifier = Modifier,
+    titleHighlights: List<IntRange> = emptyList(),
+    tagHighlights: List<String> = emptyList(),
+    speakerHighlights: List<IntRange> = emptyList(),
+) {
+    TalkCard(
+        title = session.title,
+        titleHighlights = titleHighlights,
+        bookmarked = session.isFavorite,
+        onBookmark = { isBookmarked -> onBookmark(session.id, isBookmarked) },
+        tags = session.tags,
+        tagHighlights = tagHighlights,
+        speakers = session.speakerLine,
+        speakerHighlights = speakerHighlights,
+        location = session.locationLine,
+        lightning = session.isLightning,
+        time = session.badgeTimeLine,
+        timeNote = session.startsInMinutes?.let { count ->
+            pluralStringResource(Res.plurals.schedule_in_x_minutes, count, count)
+        },
+        status = when {
+            session.isFinished -> TalkStatus.Past
+            session.isLive -> TalkStatus.Now
+            session.isUpcoming -> TalkStatus.Upcoming
+            else -> TalkStatus.Upcoming // Shouldn't happen
+        },
+        onSubmitFeedback = { emotion ->
+            onSubmitFeedback(session.id, emotion)
+        },
+        onSubmitFeedbackWithComment = { emotion, comment ->
+            onSubmitFeedbackWithComment(session.id, emotion, comment)
+        },
+        onClick = { onSession(session.id) },
+        modifier = modifier,
+    )
 }
