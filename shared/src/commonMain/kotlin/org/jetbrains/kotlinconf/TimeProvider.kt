@@ -3,10 +3,14 @@ package org.jetbrains.kotlinconf
 import io.ktor.util.date.GMTDate
 import io.ktor.util.date.Month
 import io.ktor.util.date.plus
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 interface TimeProvider {
     fun now(): GMTDate
@@ -38,15 +42,27 @@ class ServerBasedTimeProvider(private val client: APIClient) : TimeProvider {
 }
 
 class FakeTimeProvider(
-    private val fixedTime: GMTDate = GMTDate(
-        year = 2024, month = Month.MAY, dayOfMonth = 23, hours = 13, minutes = 40, seconds = 0
-    )
+    private val baseTime: GMTDate = GMTDate(
+        year = 2024, month = Month.MAY, dayOfMonth = 23, hours = 12, minutes = 40, seconds = 0
+    ),
+    private val freezeTime: Boolean = false,
 ) : TimeProvider {
-    override val time: StateFlow<GMTDate> = MutableStateFlow(fixedTime)
-    override fun now(): GMTDate = fixedTime
+    private val _time = MutableStateFlow(baseTime)
+    override val time: StateFlow<GMTDate> = _time
+    override fun now(): GMTDate = baseTime
     override suspend fun run(): Nothing {
-        while (true) {
-            delay(Long.MAX_VALUE) // This waits forever on its own
+        if (freezeTime) {
+            awaitCancellation()
+        } else {
+            while (true) {
+                // Progress time at 4x speed for testing
+                delay(15.seconds)
+                _time.update { t ->
+                    t.plus(1.minutes).also {
+                        println("Fake time is now $it")
+                    }
+                }
+            }
         }
     }
 }
