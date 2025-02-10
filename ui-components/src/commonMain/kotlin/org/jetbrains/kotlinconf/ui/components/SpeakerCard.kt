@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -16,7 +15,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import kotlinconfapp.ui_components.generated.resources.Res
-import kotlinconfapp.ui_components.generated.resources.kodee_emotion_negative
 import kotlinconfapp.ui_components.generated.resources.kodee_emotion_neutral
 import kotlinconfapp.ui_components.generated.resources.kodee_emotion_positive
 import org.jetbrains.compose.resources.painterResource
@@ -25,7 +23,7 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
 @Composable
-fun Speaker(
+fun SpeakerCard(
     name: String,
     title: String,
     photoUrl: String,
@@ -65,14 +63,14 @@ fun Speaker(
 
 @Preview
 @Composable
-internal fun SpeakerPreview() {
+internal fun SpeakerCardPreview() {
     PreviewHelper {
-        Speaker(
+        SpeakerCard(
             name = "John Doe",
             title = "Whatever Role Name at That Company",
             photoUrl = "https://example.com/not-an-image.jpg",
         )
-        Speaker(
+        SpeakerCard(
             name = "John Doe",
             title = "Whatever Role Name at That Company",
             photoUrl = "https://sessionize.com/image/2e2f-0o0o0-XGxKBoqZvxxQxosrZHQHTT.png?download=sebastian-aigner.png",

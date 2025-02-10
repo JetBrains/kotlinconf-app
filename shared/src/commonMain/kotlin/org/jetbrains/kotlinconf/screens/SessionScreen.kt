@@ -54,7 +54,7 @@ import org.jetbrains.kotlinconf.ui.components.FeedbackForm
 import org.jetbrains.kotlinconf.ui.components.KodeeIconLarge
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PageTitle
-import org.jetbrains.kotlinconf.ui.components.Speaker
+import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -125,7 +125,7 @@ fun SessionScreen(
             }
 
             speakers.forEach { speaker ->
-                Speaker(
+                SpeakerCard(
                     name = speaker.name,
                     title = speaker.position,
                     photoUrl = speaker.photoUrl,

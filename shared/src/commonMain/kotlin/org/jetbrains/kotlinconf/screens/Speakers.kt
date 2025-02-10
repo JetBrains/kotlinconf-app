@@ -28,6 +28,7 @@ import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
+import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.containsDiacritics
@@ -84,7 +85,7 @@ fun Speakers(
 
         LazyColumn(Modifier.fillMaxSize()) {
             items(filtered) { speaker ->
-                org.jetbrains.kotlinconf.ui.components.Speaker(
+                SpeakerCard(
                     name = speaker.name,
                     title = speaker.position,
                     photoUrl = speaker.photoUrl,
