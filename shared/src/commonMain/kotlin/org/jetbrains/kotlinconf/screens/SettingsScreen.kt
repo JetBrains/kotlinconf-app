@@ -142,14 +142,15 @@ private fun SettingsScreenImpl(
 
             Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
-            val notificationSettings by viewModel.notificationSettings.collectAsStateWithLifecycle()
-            NotificationSettings(
-                notificationSettings = notificationSettings,
-                onChangeSettings = { newSettings ->
-                    viewModel.setNotificationSettings(newSettings)
-                    onNotificationSettingsChange(newSettings)
-                }
-            )
+            val notificationSettings = viewModel.notificationSettings.collectAsStateWithLifecycle().value
+            if (notificationSettings != null)
+                NotificationSettings(
+                    notificationSettings = notificationSettings,
+                    onChangeSettings = { newSettings ->
+                        viewModel.setNotificationSettings(newSettings)
+                        onNotificationSettingsChange(newSettings)
+                    }
+                )
         }
     }
 }

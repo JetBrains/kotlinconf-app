@@ -100,7 +100,7 @@ class NewsItem(
 
 @Serializable
 data class NotificationSettings(
-    val scheduleUpdates: Boolean = true,
-    val kotlinConfNews: Boolean = true,
-    val jetbrainsNews: Boolean = true,
+    val scheduleUpdates: Boolean,
+    val kotlinConfNews: Boolean,
+    val jetbrainsNews: Boolean,
 )

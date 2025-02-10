@@ -53,8 +53,7 @@ class MultiplatformSettingsStorage(context: ApplicationContext) : ApplicationSto
 
     override fun getNotificationSettings(): Flow<NotificationSettings> =
         settings.getStringOrNullFlow(Keys.NOTIFICATION_SETTINGS)
-            .map { it?.let { Json.decodeFromString<NotificationSettings>(it) } ?: NotificationSettings() }
-
+            .map { it?.let { Json.decodeFromString<NotificationSettings>(it) } ?: NotificationSettings(true, true, true) }
     override suspend fun setNotificationSettings(value: NotificationSettings) = settings.set(
         Keys.NOTIFICATION_SETTINGS,
         Json.encodeToString(value)

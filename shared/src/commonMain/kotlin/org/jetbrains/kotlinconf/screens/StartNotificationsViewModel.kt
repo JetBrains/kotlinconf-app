@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.NotificationSettings
 
@@ -12,10 +13,12 @@ class StartNotificationsViewModel(
     private val service: ConferenceService,
 ) : ViewModel() {
     val notificationSettings: StateFlow<NotificationSettings> = service.getNotificationSettings()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), NotificationSettings())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), NotificationSettings(true, true, true))
 
     fun setNotificationSettings(settings: NotificationSettings) {
-        service.setNotificationSettings(settings)
+        viewModelScope.launch {
+            service.setNotificationSettings(settings)
+        }
     }
 
     fun requestNotificationPermissions() {
