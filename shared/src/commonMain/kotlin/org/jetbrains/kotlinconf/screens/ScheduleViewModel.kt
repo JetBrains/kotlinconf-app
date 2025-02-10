@@ -28,7 +28,6 @@ import org.jetbrains.kotlinconf.utils.removeDiacritics
 sealed interface ScheduleListItem
 
 // TODO add service events
-// TODO separate workshop events from the rest
 data class DayHeaderItem(val value: Day) : ScheduleListItem
 data class TimeSlotTitleItem(val value: TimeSlot) : ScheduleListItem
 data class SessionItem(
@@ -38,15 +37,23 @@ data class SessionItem(
     val speakerHighlights: List<IntRange> = emptyList(),
 ) : ScheduleListItem
 
+data class WorkshopItem(
+    val workshops: List<SessionCardView>,
+) : ScheduleListItem
 
 fun ScheduleListItem.isLive(): Boolean =
-    (this is SessionItem && this.value.isLive) || (this is TimeSlotTitleItem && this.value.isLive)
+    (this is SessionItem && this.value.isLive) ||
+        (this is WorkshopItem && this.workshops.first().isLive) ||
+        (this is TimeSlotTitleItem && this.value.isLive)
 
 fun ScheduleListItem.isUpcoming(): Boolean =
-    (this is SessionItem && this.value.isUpcoming) || (this is TimeSlotTitleItem && this.value.isUpcoming)
+    (this is SessionItem && this.value.isUpcoming) ||
+        (this is WorkshopItem && this.workshops.first().isUpcoming) ||
+        (this is TimeSlotTitleItem && this.value.isUpcoming)
 
 fun ScheduleListItem.isUpcomingSoon(): Boolean =
-    (this is SessionItem && this.value.isUpcoming && this.value.startsInMinutes != null )
+    (this is WorkshopItem && this.workshops.first().startsInMinutes != null) ||
+        (this is SessionItem && this.value.isUpcoming && this.value.startsInMinutes != null)
 
 // TODO get set of tags from the service
 private val categoryTags = listOf(
@@ -158,9 +165,41 @@ class ScheduleViewModel(
                         add(TimeSlotTitleItem(timeSlot))
                     }
 
-                    timeSlot.sessions.forEach { session ->
+                    if (!searchParams.isSearch) {
+                        val (workshops, talks) = timeSlot.sessions.partition { it.tags.contains("Workshop") }
+                        if (workshops.isNotEmpty()) {
+                            add(WorkshopItem(workshops))
+                        }
+                        talks.forEach { session ->
+                            if (searchParams.isSearch) {
+                                val result = this@ScheduleViewModel.match(
+                                    session = session,
+                                    searchQuery = searchParams.searchQuery,
+                                    tags = tagValues,
+                                )
+                                if (result.matched) {
+                                    add(
+                                        SessionItem(
+                                            value = session,
+                                            tagMatches = result.tagMatches,
+                                            titleHighlights = result.titleHighlights,
+                                            speakerHighlights = result.speakerHighlights,
+                                        )
+                                    )
+                                }
+                            } else {
+                                if (!searchParams.isBookmarkedOnly || session.isFavorite) {
+                                    add(SessionItem(session))
+                                }
+                            }
+                        }
+                    }
+
+                    val talks = timeSlot.sessions
+
+                    talks.forEach { session ->
                         if (searchParams.isSearch) {
-                            val result = match(
+                            val result = this@ScheduleViewModel.match(
                                 session = session,
                                 searchQuery = searchParams.searchQuery,
                                 tags = tagValues,

@@ -2,18 +2,45 @@ package org.jetbrains.kotlinconf.screens
 
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateBounds
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.FlingBehavior
+import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListPrefetchStrategy
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -46,6 +73,7 @@ import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.NowButton
 import org.jetbrains.kotlinconf.ui.components.NowButtonState
+import org.jetbrains.kotlinconf.ui.components.ScrollIndicator
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.Switcher
 import org.jetbrains.kotlinconf.ui.components.TalkCard
@@ -267,6 +295,7 @@ private fun Header(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScheduleList(
     scheduleItems: List<ScheduleListItem>,
@@ -305,6 +334,60 @@ fun ScheduleList(
                         modifier = Modifier
                             .padding(horizontal = 12.dp, vertical = 8.dp)
                     )
+                }
+
+                is WorkshopItem -> {
+                    val workshops = item.workshops
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        val pagerState = rememberPagerState(pageCount = { workshops.size })
+                        HorizontalPager(
+                            state = pagerState,
+                            modifier = Modifier.fillMaxWidth(),
+                            beyondViewportPageCount = 20,
+                        ) { page ->
+                            val session = workshops[page]
+                            TalkCard(
+                                title = session.title,
+                                titleHighlights = emptyList(),
+                                bookmarked = session.isFavorite,
+                                onBookmark = { isBookmarked -> onBookmark(session.id, isBookmarked) },
+                                tags = session.tags,
+                                tagHighlights = emptyList(),
+                                speakers = session.speakerLine,
+                                speakerHighlights = emptyList(),
+                                location = session.locationLine,
+                                lightning = session.isLightning,
+                                time = session.badgeTimeLine,
+                                timeNote = session.startsInMinutes?.let { count ->
+                                    pluralStringResource(Res.plurals.schedule_in_x_minutes, count, count)
+                                },
+                                status = when {
+                                    session.isFinished -> TalkStatus.Past
+                                    session.isLive -> TalkStatus.Now
+                                    session.isUpcoming -> TalkStatus.Upcoming
+                                    else -> TalkStatus.Upcoming // Shouldn't happen
+                                },
+                                onSubmitFeedback = { emotion ->
+                                    onSubmitFeedback(session.id, emotion)
+                                },
+                                onSubmitFeedbackWithComment = { emotion, comment ->
+                                    onSubmitFeedbackWithComment(session.id, emotion, comment)
+                                },
+                                onClick = { onSession(session.id) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight(Alignment.Top)
+                                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                            )
+                        }
+                        ScrollIndicator(
+                            pageCount = workshops.size,
+                            selectedPage = pagerState.currentPage,
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(vertical = 8.dp),
+                        )
+                    }
                 }
 
                 is SessionItem -> {
