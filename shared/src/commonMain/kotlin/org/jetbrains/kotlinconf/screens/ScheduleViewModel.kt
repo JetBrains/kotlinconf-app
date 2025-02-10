@@ -38,8 +38,15 @@ data class SessionItem(
     val speakerHighlights: List<IntRange> = emptyList(),
 ) : ScheduleListItem
 
+
 fun ScheduleListItem.isLive(): Boolean =
     (this is SessionItem && this.value.isLive) || (this is TimeSlotTitleItem && this.value.isLive)
+
+fun ScheduleListItem.isUpcoming(): Boolean =
+    (this is SessionItem && this.value.isUpcoming) || (this is TimeSlotTitleItem && this.value.isUpcoming)
+
+fun ScheduleListItem.isUpcomingSoon(): Boolean =
+    (this is SessionItem && this.value.isUpcoming && this.value.startsInMinutes != null )
 
 // TODO get set of tags from the service
 private val categoryTags = listOf(

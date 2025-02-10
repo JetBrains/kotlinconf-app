@@ -29,9 +29,11 @@ import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.nav_destination_schedule
 import kotlinconfapp.shared.generated.resources.schedule_action_filter_bookmarked
 import kotlinconfapp.shared.generated.resources.schedule_action_search
+import kotlinconfapp.shared.generated.resources.schedule_in_x_minutes
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.ui.components.DayHeader
@@ -91,10 +93,10 @@ fun ScheduleScreen(
 
 
     val firstLiveIndex = remember(items) {
-        items.indexOfFirst { it.isLive() }
+        items.indexOfFirst { it.isLive() || it.isUpcoming() }
     }
     val lastLiveIndex = remember(items) {
-        items.indexOfLast { it.isLive() }
+        items.indexOfLast { it.isLive() || it.isUpcomingSoon() }
     }
     var nowScrolling by remember { mutableStateOf(false) }
     val nowButtonState: NowButtonState? by derivedStateOf {
@@ -319,11 +321,14 @@ fun ScheduleList(
                         location = session.locationLine,
                         lightning = session.isLightning,
                         time = session.badgeTimeLine,
-                        timeNote = null,
+                        timeNote = session.startsInMinutes?.let { count ->
+                            pluralStringResource(Res.plurals.schedule_in_x_minutes, count, count)
+                        },
                         status = when {
                             session.isFinished -> TalkStatus.Past
                             session.isLive -> TalkStatus.Now
-                            else -> TalkStatus.Upcoming
+                            session.isUpcoming -> TalkStatus.Upcoming
+                            else -> TalkStatus.Upcoming // Shouldn't happen
                         },
                         onSubmitFeedback = { emotion ->
                             onSubmitFeedback(session.id, emotion)

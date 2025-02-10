@@ -106,6 +106,10 @@ We will process your data in accordance with the App Privacy Policy. You can adj
 
     <string name="schedule_action_filter_bookmarked">Filter bookmarked</string>
     <string name="schedule_action_search">Search</string>
+    <plurals name="schedule_in_x_minutes">
+        <item quantity="one">In %1$d minute</item>
+        <item quantity="other">In %1$d minutes</item>
+    </plurals>
 
     <string name="session_title">Schedule</string>
     <string name="session_how_was_the_talk">How was the talk?</string>

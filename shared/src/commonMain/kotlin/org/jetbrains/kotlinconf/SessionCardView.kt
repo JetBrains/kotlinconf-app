@@ -22,24 +22,16 @@ data class SessionCardView(
     },
     val isFavorite: Boolean,
     val isFinished: Boolean,
+    val isUpcoming: Boolean,
     val description: String,
     val tags: List<String>,
     val badgeTimeLine: String = buildString {
         append(startsAt.time())
         append("-")
         append(endsAt.time())
-    }
-) {
-    val isBreak: Boolean = title == "Break" || title == "Breakfast" || title == "Coffee Break"
-
-    val isLunch: Boolean = title == "Lunch"
-
-    val isParty: Boolean = title.contains("Party")
-
-    val isLightning: Boolean = endsAt.timestamp - startsAt.timestamp <= 15 * 60 * 1000
-
-    val key: String =
-        "${startsAt.timestamp}-${endsAt.timestamp}-$title-$isBreak-$isParty-$isLunch-${startsAt.dayOfMonth}"
-}
+    },
+    val isLightning: Boolean = endsAt.timestamp - startsAt.timestamp <= 15 * 60 * 1000,
+    val startsInMinutes: Int?,
+)
 
 val Session.isLightning: Boolean get() = endsAt.timestamp - startsAt.timestamp <= 15 * 60 * 1000

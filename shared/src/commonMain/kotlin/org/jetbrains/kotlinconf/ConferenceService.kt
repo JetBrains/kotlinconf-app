@@ -28,9 +28,11 @@ val UNKNOWN_SESSION_CARD: SessionCardView = SessionCardView(
     speakerIds = emptyList(),
     isFinished = false,
     isFavorite = false,
+    isUpcoming = false,
     description = "unknown",
     vote = null,
-    tags = emptyList()
+    tags = emptyList(),
+    startsInMinutes = null
 )
 
 val UNKNOWN_SPEAKER: Speaker = Speaker(
