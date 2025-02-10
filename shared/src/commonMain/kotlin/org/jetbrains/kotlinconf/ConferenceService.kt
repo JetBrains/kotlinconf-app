@@ -142,7 +142,16 @@ class ConferenceService(
     fun requestNotificationPermissions() {
         scope.launch {
             storage.setNotificationsAllowed(true)
+            storage.setNotificationSettings(NotificationSettings())  // Set default values (all true)
             notificationManager.requestPermission()
+        }
+    }
+
+    fun getNotificationSettings(): Flow<NotificationSettings> = storage.getNotificationSettings()
+
+    fun setNotificationSettings(settings: NotificationSettings) {
+        scope.launch {
+            storage.setNotificationSettings(settings)
         }
     }
 

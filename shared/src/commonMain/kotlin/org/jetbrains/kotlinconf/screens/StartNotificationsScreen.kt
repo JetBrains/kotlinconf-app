@@ -13,11 +13,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinconfapp.shared.generated.resources.kodee_notifications
 import kotlinconfapp.shared.generated.resources.notifications_description
 import kotlinconfapp.shared.generated.resources.notifications_lets_get_started
@@ -28,14 +26,15 @@ import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.ui.components.Button
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.koin.compose.viewmodel.koinViewModel
 import kotlinconfapp.shared.generated.resources.Res as AppRes
 
 @Composable
 fun StartNotificationsScreen(
     onDone: (NotificationSettings) -> Unit,
+    viewModel: StartNotificationsViewModel = koinViewModel(),
 ) {
-    // TODO populate with real values https://github.com/JetBrains/kotlinconf-app/issues/252
-    var notificationSettings by remember { mutableStateOf(NotificationSettings(false, false, false)) }
+    val notificationSettings by viewModel.notificationSettings.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -59,7 +58,10 @@ fun StartNotificationsScreen(
                 stringResource(AppRes.string.notifications_description),
                 color = KotlinConfTheme.colors.longText,
             )
-            NotificationSettings(notificationSettings, { notificationSettings = it })
+            NotificationSettings(
+                notificationSettings = notificationSettings,
+                onChangeSettings = { viewModel.setNotificationSettings(it) }
+            )
         }
 
         Row(
@@ -68,7 +70,10 @@ fun StartNotificationsScreen(
         ) {
             Button(
                 label = stringResource(AppRes.string.notifications_lets_get_started),
-                onClick = { onDone(notificationSettings) },
+                onClick = {
+                    viewModel.requestNotificationPermissions()
+                    onDone(notificationSettings)
+                },
                 modifier = Modifier.weight(1f),
                 primary = true,
             )

@@ -1,8 +1,9 @@
 package org.jetbrains.kotlinconf
 
-import io.ktor.util.date.*
-import kotlinx.serialization.*
-import org.jetbrains.kotlinconf.utils.*
+import io.ktor.util.date.GMTDate
+import kotlinx.serialization.Serializable
+import org.jetbrains.kotlinconf.utils.GMTDateSerializer
+import org.jetbrains.kotlinconf.utils.time
 import kotlin.jvm.JvmInline
 
 typealias GMTDateSerializable = @Serializable(GMTDateSerializer::class) GMTDate
@@ -97,8 +98,9 @@ class NewsItem(
     val content: String,
 )
 
+@Serializable
 data class NotificationSettings(
-    val scheduleUpdates: Boolean,
-    val kotlinConfNews: Boolean,
-    val jetbrainsNews: Boolean,
+    val scheduleUpdates: Boolean = true,
+    val kotlinConfNews: Boolean = true,
+    val jetbrainsNews: Boolean = true,
 )
