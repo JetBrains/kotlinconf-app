@@ -38,7 +38,6 @@ import kotlinconfapp.shared.generated.resources.schedule_in_x_minutes
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
@@ -400,7 +399,7 @@ private fun SessionCard(
         lightning = session.isLightning,
         time = session.badgeTimeLine,
         timeNote = session.startsInMinutes?.let { count ->
-            pluralStringResource(Res.plurals.schedule_in_x_minutes, count, count)
+            stringResource(Res.string.schedule_in_x_minutes, count)
         },
         status = when {
             session.isFinished -> TalkStatus.Past
