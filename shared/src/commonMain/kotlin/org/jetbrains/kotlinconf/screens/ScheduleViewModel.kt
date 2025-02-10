@@ -145,10 +145,6 @@ class ScheduleViewModel(
             initialValue = emptyList()
         )
 
-    /**
-     * Builds a flat list of items for the UI, taking into account the current
-     * filtering values and active filters.
-     */
     private fun buildItems(
         days: List<Day>,
         searchParams: ScheduleSearchParams,
@@ -156,76 +152,74 @@ class ScheduleViewModel(
     ): List<ScheduleListItem> {
         val tagValues = tags.filter { it.isSelected }.map { it.value }
 
-        return buildList {
-            days.forEach { day ->
-                if (!searchParams.isSearch) add(DayHeaderItem(day))
+        return if (searchParams.isSearch) {
+            buildSearchItems(days, searchParams.searchQuery, tagValues)
+        } else {
+            buildNonSearchItems(days, searchParams.isBookmarkedOnly)
+        }
+    }
 
-                day.timeSlots.forEach { timeSlot ->
-                    if (!searchParams.isSearch) {
-                        add(TimeSlotTitleItem(timeSlot))
-                    }
-
-                    if (!searchParams.isSearch) {
-                        val (workshops, talks) = timeSlot.sessions.partition { it.tags.contains("Workshop") }
-                        if (workshops.isNotEmpty()) {
-                            add(WorkshopItem(workshops))
-                        }
-                        talks.forEach { session ->
-                            if (searchParams.isSearch) {
-                                val result = this@ScheduleViewModel.match(
-                                    session = session,
-                                    searchQuery = searchParams.searchQuery,
-                                    tags = tagValues,
-                                )
-                                if (result.matched) {
-                                    add(
-                                        SessionItem(
-                                            value = session,
-                                            tagMatches = result.tagMatches,
-                                            titleHighlights = result.titleHighlights,
-                                            speakerHighlights = result.speakerHighlights,
-                                        )
-                                    )
-                                }
-                            } else {
-                                if (!searchParams.isBookmarkedOnly || session.isFavorite) {
-                                    add(SessionItem(session))
-                                }
-                            }
-                        }
-                    }
-
-                    val talks = timeSlot.sessions
-
-                    talks.forEach { session ->
-                        if (searchParams.isSearch) {
-                            val result = this@ScheduleViewModel.match(
-                                session = session,
-                                searchQuery = searchParams.searchQuery,
-                                tags = tagValues,
+    private fun buildSearchItems(
+        days: List<Day>,
+        searchQuery: String,
+        tagValues: List<String>,
+    ): List<ScheduleListItem> = buildList {
+        days.forEach { day ->
+            day.timeSlots.forEach { timeSlot ->
+                timeSlot.sessions.forEach { session ->
+                    val result = match(
+                        session = session,
+                        searchQuery = searchQuery,
+                        tags = tagValues,
+                    )
+                    if (result.matched) {
+                        add(
+                            SessionItem(
+                                value = session,
+                                tagMatches = result.tagMatches,
+                                titleHighlights = result.titleHighlights,
+                                speakerHighlights = result.speakerHighlights,
                             )
-                            if (result.matched) {
-                                add(
-                                    SessionItem(
-                                        value = session,
-                                        tagMatches = result.tagMatches,
-                                        titleHighlights = result.titleHighlights,
-                                        speakerHighlights = result.speakerHighlights,
-                                    )
-                                )
-                            }
-                        } else {
-                            if (!searchParams.isBookmarkedOnly || session.isFavorite) {
-                                add(SessionItem(session))
-                            }
-                        }
-                    }
-
-                    // If the timeslot doesn't have any sessions, remove its title
-                    if (!searchParams.isSearch && last() is TimeSlotTitleItem) {
-                        removeLast()
+                        )
                     }
                 }
+            }
+        }
+    }
+
+    private fun buildNonSearchItems(
+        days: List<Day>,
+        isBookmarkedOnly: Boolean,
+    ): List<ScheduleListItem> = buildList {
+        days.forEach { day ->
+            add(DayHeaderItem(day))
+
+            day.timeSlots.forEach { timeSlot ->
+                add(TimeSlotTitleItem(timeSlot))
+
+                val sessions = if (isBookmarkedOnly) {
+                    timeSlot.sessions.filter { it.isFavorite }
+                } else {
+                    timeSlot.sessions
+                }
+
+                val (workshops, talks) = sessions.partition { it.tags.contains("Workshop") }
+                if (workshops.isNotEmpty()) {
+                    add(WorkshopItem(workshops))
+                }
+                talks.forEach { session ->
+                    add(SessionItem(session))
+                }
+
+                // Remove empty time slots
+                if (last() is TimeSlotTitleItem) {
+                    removeLast()
+                }
+            }
+
+            // Remove empty days
+            if (last() is DayHeaderItem) {
+                removeLast()
             }
         }
     }
@@ -247,10 +241,10 @@ class ScheduleViewModel(
         val titleHighlights = mutableListOf<IntRange>()
         val speakerHighlights = mutableListOf<IntRange>()
 
-        // TODO clarify requirements for tag filtering
         if (tags.isNotEmpty()) {
-            tagMatches.addAll(session.tags.filter { it in tags })
-            if (tagMatches.isEmpty()) {
+            if (session.tags.containsAll(tags)) {
+                tagMatches.addAll(tags)
+            } else {
                 return MatchResult(matched = false)
             }
         }
