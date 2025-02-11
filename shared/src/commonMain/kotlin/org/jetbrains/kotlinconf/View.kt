@@ -3,6 +3,7 @@ package org.jetbrains.kotlinconf
 import io.ktor.util.date.GMTDate
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.utils.time
+import kotlin.math.roundToInt
 
 data class Agenda(
     val days: List<Day> = emptyList()
@@ -42,22 +43,14 @@ data class Day(
 data class TimeSlot(
     val startsAt: GMTDate,
     val endsAt: GMTDate,
-    val isLive: Boolean,
-    val isFinished: Boolean,
+    val state: SessionState,
     val sessions: List<SessionCardView>,
-    val isBreak: Boolean,
-    val isLunch: Boolean,
-    val isParty: Boolean
-) {
-    val title: String = if (isLunch || isBreak) {
-        sessions.firstOrNull()?.title ?: ""
-    } else {
-        "${startsAt.time()}-${endsAt.time()}"
-    }
+    val title: String = "${startsAt.time()}-${endsAt.time()}",
+)
 
-    val key: String =
-        "${startsAt.timestamp}-${endsAt.timestamp}-$title-$isBreak-$isParty-$isLunch-${startsAt.dayOfMonth}"
-}
+val TimeSlot.isLive get() = state == SessionState.Live
+val TimeSlot.isUpcoming get() = state == SessionState.Upcoming
+val TimeSlot.isPast get() = state == SessionState.Past
 
 fun Conference.buildAgenda(
     favorites: Set<SessionId>,
@@ -99,13 +92,12 @@ fun List<Session>.groupByTime(
                 it.asSessionCard(conference, now, favorites, votes)
             }
 
-        val isBreak = cards.all { it.isBreak }
-        val isLunch = cards.all { it.isLunch }
-        val isParty = cards.all { it.isParty }
-        val isLive = start <= now && now < end
-        val isFinished = end <= now
-
-        TimeSlot(start, end, isLive, isFinished, cards, isBreak, isLunch, isParty)
+        TimeSlot(
+            startsAt = start,
+            endsAt = end,
+            state = SessionState.from(start, end, now),
+            sessions = cards,
+        )
     }
 }
 
@@ -115,8 +107,6 @@ fun Session.asSessionCard(
     favorites: Set<SessionId>,
     votes: List<VoteInfo>,
 ): SessionCardView {
-    val isFinished = endsAt <= now
-    val vote = votes.find { it.sessionId == id }?.score
     return SessionCardView(
         id = id,
         title = title,
@@ -125,12 +115,19 @@ fun Session.asSessionCard(
         isFavorite = id in favorites,
         startsAt = startsAt,
         endsAt = endsAt,
-        isLive = startsAt <= now && now < endsAt,
+        state = SessionState.from(startsAt, endsAt, now),
         speakerIds = speakerIds,
-        isFinished = isFinished,
-        vote = vote,
+        vote = votes.find { it.sessionId == id }?.score,
         description = description,
-        tags = tags ?: emptyList()
+        tags = tags ?: emptyList(),
+        startsInMinutes = (startsAt.timestamp - now.timestamp).let { diff ->
+            // In the next 30 minutes
+            if (diff > 0 && diff <= 30 * 60 * 1000) {
+                (diff / 60.0 / 1000.0).roundToInt()
+            } else {
+                null
+            }
+        }
     )
 }
 
@@ -145,4 +142,13 @@ data class NewsDisplayItem(
     val date: String,
     val title: String,
     val content: String,
+)
+
+data class ServiceEvent(
+    val id: String,
+    val title: String,
+    val startsAt: GMTDate,
+    val endsAt: GMTDate,
+    val state: SessionState,
+    val startsInMinutes: Int?,
 )

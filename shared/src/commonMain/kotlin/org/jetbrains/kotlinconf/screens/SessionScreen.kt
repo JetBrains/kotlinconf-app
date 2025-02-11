@@ -45,6 +45,7 @@ import kotlinconfapp.shared.generated.resources.session_your_feedback
 import kotlinconfapp.shared.generated.resources.up_24
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionId
+import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -111,7 +112,7 @@ fun SessionScreen(
                 modifier = Modifier.padding(vertical = 24.dp),
             )
 
-            if (session.isFinished || session.isLive) {
+            if (session.state != SessionState.Upcoming) {
                 FeedbackPanel(
                     onFeedback = { emotion ->
                         viewModel.submitFeedback(emotion)

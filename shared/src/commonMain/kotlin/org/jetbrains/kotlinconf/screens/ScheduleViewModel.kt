@@ -19,18 +19,21 @@ import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.TimeSlot
+import org.jetbrains.kotlinconf.isLive
+import org.jetbrains.kotlinconf.isUpcoming
 import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.components.FilterItem
 import org.jetbrains.kotlinconf.ui.components.FilterItemType
+import org.jetbrains.kotlinconf.ui.components.ServiceEventData
 import org.jetbrains.kotlinconf.utils.containsDiacritics
 import org.jetbrains.kotlinconf.utils.removeDiacritics
 
 sealed interface ScheduleListItem
 
-// TODO add service events
-// TODO separate workshop events from the rest
 data class DayHeaderItem(val value: Day) : ScheduleListItem
+
 data class TimeSlotTitleItem(val value: TimeSlot) : ScheduleListItem
+
 data class SessionItem(
     val value: SessionCardView,
     val tagMatches: List<String> = emptyList(),
@@ -38,8 +41,27 @@ data class SessionItem(
     val speakerHighlights: List<IntRange> = emptyList(),
 ) : ScheduleListItem
 
+data class ServiceEventItem(
+    val value: ServiceEventData,
+) : ScheduleListItem
+
+data class WorkshopItem(
+    val workshops: List<SessionCardView>,
+) : ScheduleListItem
+
 fun ScheduleListItem.isLive(): Boolean =
-    (this is SessionItem && this.value.isLive) || (this is TimeSlotTitleItem && this.value.isLive)
+    (this is SessionItem && this.value.isLive) ||
+        (this is WorkshopItem && this.workshops.first().isLive) ||
+        (this is TimeSlotTitleItem && this.value.isLive)
+
+fun ScheduleListItem.isUpcoming(): Boolean =
+    (this is SessionItem && this.value.isUpcoming) ||
+        (this is WorkshopItem && this.workshops.first().isUpcoming) ||
+        (this is TimeSlotTitleItem && this.value.isUpcoming)
+
+fun ScheduleListItem.isUpcomingSoon(): Boolean =
+    (this is WorkshopItem && this.workshops.first().startsInMinutes != null) ||
+        (this is SessionItem && this.value.isUpcoming && this.value.startsInMinutes != null)
 
 // TODO get set of tags from the service
 private val categoryTags = listOf(
@@ -131,10 +153,6 @@ class ScheduleViewModel(
             initialValue = emptyList()
         )
 
-    /**
-     * Builds a flat list of items for the UI, taking into account the current
-     * filtering values and active filters.
-     */
     private fun buildItems(
         days: List<Day>,
         searchParams: ScheduleSearchParams,
@@ -142,44 +160,75 @@ class ScheduleViewModel(
     ): List<ScheduleListItem> {
         val tagValues = tags.filter { it.isSelected }.map { it.value }
 
-        return buildList {
-            days.forEach { day ->
-                if (!searchParams.isSearch) add(DayHeaderItem(day))
+        return if (searchParams.isSearch) {
+            buildSearchItems(days, searchParams.searchQuery, tagValues)
+        } else {
+            buildNonSearchItems(days, searchParams.isBookmarkedOnly)
+        }
+    }
 
-                day.timeSlots.forEach { timeSlot ->
-                    if (!searchParams.isSearch) {
-                        add(TimeSlotTitleItem(timeSlot))
-                    }
-
-                    timeSlot.sessions.forEach { session ->
-                        if (searchParams.isSearch) {
-                            val result = match(
-                                session = session,
-                                searchQuery = searchParams.searchQuery,
-                                tags = tagValues,
+    private fun buildSearchItems(
+        days: List<Day>,
+        searchQuery: String,
+        tagValues: List<String>,
+    ): List<ScheduleListItem> = buildList {
+        days.forEach { day ->
+            day.timeSlots.forEach { timeSlot ->
+                timeSlot.sessions.forEach { session ->
+                    val result = match(
+                        session = session,
+                        searchQuery = searchQuery,
+                        tags = tagValues,
+                    )
+                    if (result.matched) {
+                        add(
+                            SessionItem(
+                                value = session,
+                                tagMatches = result.tagMatches,
+                                titleHighlights = result.titleHighlights,
+                                speakerHighlights = result.speakerHighlights,
                             )
-                            if (result.matched) {
-                                add(
-                                    SessionItem(
-                                        value = session,
-                                        tagMatches = result.tagMatches,
-                                        titleHighlights = result.titleHighlights,
-                                        speakerHighlights = result.speakerHighlights,
-                                    )
-                                )
-                            }
-                        } else {
-                            if (!searchParams.isBookmarkedOnly || session.isFavorite) {
-                                add(SessionItem(session))
-                            }
-                        }
-                    }
-
-                    // If the timeslot doesn't have any sessions, remove its title
-                    if (!searchParams.isSearch && last() is TimeSlotTitleItem) {
-                        removeLast()
+                        )
                     }
                 }
+            }
+        }
+    }
+
+    // TODO add ServiceEventItems to this list https://github.com/JetBrains/kotlinconf-app/issues/269
+    private fun buildNonSearchItems(
+        days: List<Day>,
+        isBookmarkedOnly: Boolean,
+    ): List<ScheduleListItem> = buildList {
+        days.forEach { day ->
+            add(DayHeaderItem(day))
+
+            day.timeSlots.forEach { timeSlot ->
+                add(TimeSlotTitleItem(timeSlot))
+
+                val sessions = if (isBookmarkedOnly) {
+                    timeSlot.sessions.filter { it.isFavorite }
+                } else {
+                    timeSlot.sessions
+                }
+
+                val (workshops, talks) = sessions.partition { it.tags.contains("Workshop") }
+                if (workshops.isNotEmpty()) {
+                    add(WorkshopItem(workshops))
+                }
+                talks.forEach { session ->
+                    add(SessionItem(session))
+                }
+
+                // Remove empty time slots
+                if (last() is TimeSlotTitleItem) {
+                    removeLast()
+                }
+            }
+
+            // Remove empty days
+            if (last() is DayHeaderItem) {
+                removeLast()
             }
         }
     }
@@ -201,10 +250,10 @@ class ScheduleViewModel(
         val titleHighlights = mutableListOf<IntRange>()
         val speakerHighlights = mutableListOf<IntRange>()
 
-        // TODO clarify requirements for tag filtering
         if (tags.isNotEmpty()) {
-            tagMatches.addAll(session.tags.filter { it in tags })
-            if (tagMatches.isEmpty()) {
+            if (session.tags.containsAll(tags)) {
+                tagMatches.addAll(tags)
+            } else {
                 return MatchResult(matched = false)
             }
         }

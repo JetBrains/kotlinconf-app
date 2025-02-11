@@ -81,7 +81,7 @@ private fun buildHighlightedString(
 }
 
 enum class TalkStatus {
-    Past, Now, Upcoming,
+    Past, Live, Upcoming,
 }
 
 private val CardTalkShape = RoundedCornerShape(8.dp)
@@ -263,7 +263,7 @@ private fun TimeBlock(
             )
         }
 
-        if (status == TalkStatus.Now) {
+        if (status == TalkStatus.Live) {
             NowLabel()
         }
 
@@ -391,7 +391,7 @@ internal fun TalkCardPreview() {
                 lightning = true,
                 time = "9:00 – 10:00",
                 timeNote = null,
-                status = TalkStatus.Now,
+                status = TalkStatus.Live,
                 onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
                 onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
                 onClick = { "Clicked session" },

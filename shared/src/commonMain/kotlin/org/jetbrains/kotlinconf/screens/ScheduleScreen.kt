@@ -6,14 +6,18 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -23,17 +27,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.nav_destination_schedule
 import kotlinconfapp.shared.generated.resources.schedule_action_filter_bookmarked
 import kotlinconfapp.shared.generated.resources.schedule_action_search
+import kotlinconfapp.shared.generated.resources.schedule_in_x_minutes
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
+import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.Emotion
@@ -44,6 +52,8 @@ import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.NowButton
 import org.jetbrains.kotlinconf.ui.components.NowButtonState
+import org.jetbrains.kotlinconf.ui.components.ScrollIndicator
+import org.jetbrains.kotlinconf.ui.components.ServiceEvent
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.Switcher
 import org.jetbrains.kotlinconf.ui.components.TalkCard
@@ -91,10 +101,10 @@ fun ScheduleScreen(
 
 
     val firstLiveIndex = remember(items) {
-        items.indexOfFirst { it.isLive() }
+        items.indexOfFirst { it.isLive() || it.isUpcoming() }
     }
     val lastLiveIndex = remember(items) {
-        items.indexOfLast { it.isLive() }
+        items.indexOfLast { it.isLive() || it.isUpcomingSoon() }
     }
     var nowScrolling by remember { mutableStateOf(false) }
     val nowButtonState: NowButtonState? by derivedStateOf {
@@ -265,6 +275,7 @@ private fun Header(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScheduleList(
     scheduleItems: List<ScheduleListItem>,
@@ -305,39 +316,104 @@ fun ScheduleList(
                     )
                 }
 
+                is WorkshopItem -> {
+                    val workshops = item.workshops
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        val pagerState = rememberPagerState(pageCount = { workshops.size })
+                        HorizontalPager(
+                            state = pagerState,
+                            modifier = Modifier.fillMaxWidth(),
+                            beyondViewportPageCount = 20,
+                        ) { page ->
+                            SessionCard(
+                                session = workshops[page],
+                                onBookmark = onBookmark,
+                                onSubmitFeedback = onSubmitFeedback,
+                                onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
+                                onSession = onSession,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight(Alignment.Top)
+                                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                            )
+                        }
+                        ScrollIndicator(
+                            pageCount = workshops.size,
+                            selectedPage = pagerState.currentPage,
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(vertical = 8.dp),
+                        )
+                    }
+                }
+
                 is SessionItem -> {
-                    val session = item.value
-                    TalkCard(
-                        title = session.title,
+                    SessionCard(
+                        session = item.value,
                         titleHighlights = item.titleHighlights,
-                        bookmarked = session.isFavorite,
-                        onBookmark = { isBookmarked -> onBookmark(session.id, isBookmarked) },
-                        tags = session.tags,
                         tagHighlights = item.tagMatches,
-                        speakers = session.speakerLine,
                         speakerHighlights = item.speakerHighlights,
-                        location = session.locationLine,
-                        lightning = session.isLightning,
-                        time = session.badgeTimeLine,
-                        timeNote = null,
-                        status = when {
-                            session.isFinished -> TalkStatus.Past
-                            session.isLive -> TalkStatus.Now
-                            else -> TalkStatus.Upcoming
-                        },
-                        onSubmitFeedback = { emotion ->
-                            onSubmitFeedback(session.id, emotion)
-                        },
-                        onSubmitFeedbackWithComment = { emotion, comment ->
-                            onSubmitFeedbackWithComment(session.id, emotion, comment)
-                        },
-                        onClick = { onSession(session.id) },
+                        onBookmark = onBookmark,
+                        onSubmitFeedback = onSubmitFeedback,
+                        onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
+                        onSession = onSession,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 8.dp)
                     )
                 }
+
+                is ServiceEventItem -> {
+                    val event = item.value
+                    ServiceEvent(
+                        event = event,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+                    )
+                }
             }
         }
     }
+}
+
+@Composable
+private fun SessionCard(
+    session: SessionCardView,
+    onBookmark: (SessionId, Boolean) -> Unit,
+    onSubmitFeedback: (SessionId, Emotion?) -> Unit,
+    onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
+    onSession: (SessionId) -> Unit,
+    modifier: Modifier = Modifier,
+    titleHighlights: List<IntRange> = emptyList(),
+    tagHighlights: List<String> = emptyList(),
+    speakerHighlights: List<IntRange> = emptyList(),
+) {
+    TalkCard(
+        title = session.title,
+        titleHighlights = titleHighlights,
+        bookmarked = session.isFavorite,
+        onBookmark = { isBookmarked -> onBookmark(session.id, isBookmarked) },
+        tags = session.tags,
+        tagHighlights = tagHighlights,
+        speakers = session.speakerLine,
+        speakerHighlights = speakerHighlights,
+        location = session.locationLine,
+        lightning = session.isLightning,
+        time = session.badgeTimeLine,
+        timeNote = session.startsInMinutes?.let { count ->
+            stringResource(Res.string.schedule_in_x_minutes, count)
+        },
+        status = when (session.state) {
+            SessionState.Live -> TalkStatus.Live
+            SessionState.Past -> TalkStatus.Past
+            SessionState.Upcoming -> TalkStatus.Upcoming
+        },
+        onSubmitFeedback = { emotion ->
+            onSubmitFeedback(session.id, emotion)
+        },
+        onSubmitFeedbackWithComment = { emotion, comment ->
+            onSubmitFeedbackWithComment(session.id, emotion, comment)
+        },
+        onClick = { onSession(session.id) },
+        modifier = modifier,
+    )
 }

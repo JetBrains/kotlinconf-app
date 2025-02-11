@@ -17,7 +17,7 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
 data class ServiceEventData(
-    val name: String,
+    val title: String,
     val now: Boolean,
     val note: String? = null,
     val time: String? = null,
@@ -34,7 +34,7 @@ private fun ServiceEventItem(
         modifier = modifier.padding(16.dp)
     ) {
         StyledText(
-            text = event.name,
+            text = event.title,
             style = KotlinConfTheme.typography.h3,
             color = KotlinConfTheme.colors.primaryText,
         )
@@ -101,7 +101,7 @@ internal fun ServiceEventsPreview() {
     PreviewHelper {
         ServiceEvent(
             ServiceEventData(
-                name = "Breakfast",
+                title = "Breakfast",
                 now = false,
                 time = "9:00 – 10:00",
             )
@@ -109,18 +109,18 @@ internal fun ServiceEventsPreview() {
         ServiceEvents(
             listOf(
                 ServiceEventData(
-                    name = "Lunch",
+                    title = "Lunch",
                     now = false,
                     time = "12:00 – 13:00",
                     note = "In 30 min",
                 ),
                 ServiceEventData(
-                    name = "Dinner",
+                    title = "Dinner",
                     now = true,
                     time = "17:00 – 18:00",
                 ),
                 ServiceEventData(
-                    name = "Party",
+                    title = "Party",
                     now = false,
                 )
             )

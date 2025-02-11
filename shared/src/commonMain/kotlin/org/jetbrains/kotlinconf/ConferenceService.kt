@@ -24,13 +24,13 @@ val UNKNOWN_SESSION_CARD: SessionCardView = SessionCardView(
     locationLine = "unknown",
     startsAt = GMTDate.START,
     endsAt = GMTDate.START,
-    isLive = false,
     speakerIds = emptyList(),
-    isFinished = false,
     isFavorite = false,
     description = "unknown",
     vote = null,
-    tags = emptyList()
+    tags = emptyList(),
+    startsInMinutes = null,
+    state = SessionState.Upcoming,
 )
 
 val UNKNOWN_SPEAKER: Speaker = Speaker(
