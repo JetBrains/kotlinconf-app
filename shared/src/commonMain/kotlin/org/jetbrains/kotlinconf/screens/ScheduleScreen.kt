@@ -138,6 +138,12 @@ fun ScheduleScreen(
         viewModel.setSearchParams(params)
     }
 
+    if (items.isNotEmpty() && firstLiveIndex != -1) {
+        LaunchedEffect(Unit) {
+            listState.scrollToItem(firstLiveIndex)
+        }
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         Header(
             nowButtonState = nowButtonState,
@@ -418,6 +424,6 @@ private fun SessionCard(
         },
         onClick = { onSession(session.id) },
         modifier = modifier,
-        feedbackEnabled = feedbackEnabled,
+        feedbackEnabled = feedbackEnabled && session.state != SessionState.Upcoming,
     )
 }

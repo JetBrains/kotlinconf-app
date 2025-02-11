@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.toInstant
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import kotlin.time.Duration.Companion.minutes
@@ -23,7 +22,7 @@ class ConferenceService(
     private val client: APIClient,
     private val timeProvider: TimeProvider,
     private val storage: ApplicationStorage,
-    private val notificationManager: NotificationManager,
+    private val notificationService: NotificationService,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
@@ -36,7 +35,7 @@ class ConferenceService(
         }
         .flowOn(Dispatchers.Default)
 
-    val agenda: StateFlow<Agenda> by lazy {
+    val agenda: StateFlow<Agenda> =
         combine(
             storage.getConferenceCache(),
             storage.getFavorites(),
@@ -45,15 +44,13 @@ class ConferenceService(
         ) { conference, favorites, time, votes ->
             conference.buildAgenda(favorites, votes, time)
         }.stateIn(scope, SharingStarted.Eagerly, Agenda())
-    }
 
-    val sessionCards: StateFlow<List<SessionCardView>> by lazy {
+    private val sessionCards: StateFlow<List<SessionCardView>> =
         agenda.map {
             it.days
                 .flatMap { it.timeSlots }
                 .flatMap { it.sessions }
         }.stateIn(scope, SharingStarted.Eagerly, emptyList())
-    }
 
     val speakers: StateFlow<Speakers> = storage.getConferenceCache()
         .map { it.speakers }
@@ -77,8 +74,7 @@ class ConferenceService(
             }
 
             // Download fresh conference data
-            val conferenceData = client.downloadConferenceData()
-            storage.setConferenceCache(conferenceData)
+            loadConferenceData()
 
             // Do whatever with votes
             votes.value = client.myVotes()
@@ -89,6 +85,20 @@ class ConferenceService(
 
         scope.launch {
             timeProvider.run()
+        }
+    }
+
+    private suspend fun loadConferenceData() {
+        val newData = client.downloadConferenceData()
+        val oldData = storage.getConferenceCache().first()
+
+        storage.setConferenceCache(newData)
+
+        val oldIds = oldData.sessions.map { it.id }
+        val newIds = newData.sessions.map { it.id }
+        val removedIds = oldIds - newIds
+        removedIds.forEach { sessionId ->
+            cancelNotifications(sessionId)
         }
     }
 
@@ -118,12 +128,11 @@ class ConferenceService(
 
     /**
      * Request permissions to send notifications.
+     * @return true if permission was granted, false otherwise
      */
-    fun requestNotificationPermissions() {
-        scope.launch {
-            storage.setNotificationsAllowed(true)
-            notificationManager.requestPermission()
-        }
+    suspend fun requestNotificationPermissions(): Boolean = notificationService.requestPermission().also {
+        // TODO remove
+        println("noti permissions graned: $it")
     }
 
     fun getNotificationSettings(): Flow<NotificationSettings> = storage.getNotificationSettings()
@@ -179,6 +188,15 @@ class ConferenceService(
             val favorites = storage.getFavorites().first().toMutableSet()
             if (favorite) favorites.add(sessionId) else favorites.remove(sessionId)
             storage.setFavorites(favorites)
+
+            if (favorite) {
+                val session = sessionByIdFlow(sessionId).first()
+                if (session != null) {
+                    scheduleNotification(session)
+                }
+            } else {
+                cancelNotifications(sessionId)
+            }
         }
     }
 
@@ -187,41 +205,65 @@ class ConferenceService(
     }
 
     private fun scheduleNotification(session: SessionCardView) {
-        scope.launch {
-            val notificationsAllowed = storage.getNotificationsAllowed().first()
-            if (!notificationsAllowed) return@launch
+        val start = session.startsAt
+        val end = session.endsAt
+        val now = timeProvider.now()
 
-            val start = session.startsAt.toInstant(EVENT_TIME_ZONE)
-            val end = session.endsAt.toInstant(EVENT_TIME_ZONE)
-            val now = timeProvider.now().toInstant(EVENT_TIME_ZONE)
+        val reminderTime = start - 5.minutes
 
-            val reminderTime = start - 5.minutes
+        // Notifications for session start
+        val startsLater = now < reminderTime
+        val startsSoon = now in reminderTime..<start
+        val isLive = now in start..<end
+        when {
+            startsLater -> notificationService.post(
+                time = reminderTime,
+                notificationId = session.id.toNotificationId(NotificationType.Start),
+                title = session.title,
+                message = "Starts in 5 minutes",
+            )
 
-            // Notifications for session start
-            val startsLater = now < reminderTime
-            val startsSoon = now in reminderTime..<start
-            val isLive = now in start..<end
-            when {
-                startsLater -> notificationManager.schedule((reminderTime - now).inWholeMilliseconds, session.title, "Starts in 5 minutes.")
-                startsSoon -> notificationManager.schedule(0, session.title, "The session is about to start.")
-                isLive -> notificationManager.schedule(0, session.title, "Hurry up! The session has already started!")
-            }
+            startsSoon -> notificationService.post(
+                notificationId = session.id.toNotificationId(NotificationType.Start),
+                title = session.title,
+                message = "The session is about to start",
+            )
 
-            // Notifications for session end
-            if (end > now) {
-                notificationManager.schedule((end - now).inWholeMilliseconds, "${session.title} finished", "How was the talk?")
-            }
+            isLive -> notificationService.post(
+                notificationId = session.id.toNotificationId(NotificationType.Start),
+                title = session.title,
+                message = "Hurry up, the session has already started!",
+            )
+        }
+
+        // Notifications for session end
+        if (end > now) {
+            notificationService.post(
+                time = end,
+                notificationId = session.id.toNotificationId(NotificationType.End),
+                title = "${session.title} finished",
+                message = "How was the talk?",
+            )
         }
     }
 
-    private fun cancelNotification(session: SessionCardView) {
-        scope.launch {
-            val allowed = storage.getNotificationsAllowed().first()
-            if (allowed) {
-                notificationManager.cancel(session.title)
-                notificationManager.cancel("${session.title} finished")
-            }
+    private fun cancelNotifications(sessionId: SessionId) {
+        NotificationType.entries.forEach { notificationType ->
+            notificationService.cancel(sessionId.toNotificationId(notificationType))
         }
+    }
+
+    private enum class NotificationType { Start, End }
+
+    private fun SessionId.toNotificationId(type: NotificationType) = buildString {
+        append(id)
+        append("-")
+        append(
+            when (type) {
+                NotificationType.Start -> "start"
+                NotificationType.End -> "end"
+            }
+        )
     }
 
     private fun mapNewsItemToDisplayItem(

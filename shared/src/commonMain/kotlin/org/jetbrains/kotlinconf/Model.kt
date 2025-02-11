@@ -92,5 +92,7 @@ class NewsItem(
 data class NotificationSettings(
     val scheduleUpdates: Boolean,
     val kotlinConfNews: Boolean,
-    val jetbrainsNews: Boolean,
-)
+    val jetBrainsNews: Boolean,
+) {
+    fun hasAnyEnabled() = scheduleUpdates || kotlinConfNews || jetBrainsNews
+}

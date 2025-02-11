@@ -3,10 +3,18 @@ package org.jetbrains.kotlinconf
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import androidx.compose.ui.window.rememberWindowState
+import com.russhwolf.settings.ObservableSettings
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.app_name
 import org.jetbrains.compose.resources.stringResource
-import androidx.compose.ui.window.rememberWindowState
+import org.jetbrains.kotlinconf.storage.createSettings
+import org.koin.dsl.module
+
+private val platformModule = module {
+    single<ObservableSettings> { createSettings() }
+    single<NotificationService> { NotImplementedNotificationService() }
+}
 
 fun main() = application {
     Window(
@@ -15,6 +23,6 @@ fun main() = application {
         alwaysOnTop = true,
         state = rememberWindowState(width = 600.dp, height = 800.dp),
     ) {
-        App(ApplicationContext())
+        App(platformModule)
     }
 }

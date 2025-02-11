@@ -38,8 +38,8 @@ fun NotificationSettings(
         )
         SettingsItem(
             title = stringResource(Res.string.notifications_jetbrains_news_title),
-            enabled = notificationSettings.jetbrainsNews,
-            onToggle = { enabled -> onChangeSettings(notificationSettings.copy(jetbrainsNews = enabled)) },
+            enabled = notificationSettings.jetBrainsNews,
+            onToggle = { enabled -> onChangeSettings(notificationSettings.copy(jetBrainsNews = enabled)) },
             note = stringResource(Res.string.notifications_jetbrains_news_description),
         )
     }

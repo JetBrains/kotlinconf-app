@@ -26,6 +26,9 @@ class SettingsViewModel(
     fun setNotificationSettings(settings: NotificationSettings) {
         viewModelScope.launch {
             service.setNotificationSettings(settings)
+            if (settings.hasAnyEnabled()) {
+                service.requestNotificationPermissions()
+            }
         }
     }
 }
