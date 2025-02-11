@@ -41,6 +41,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
+import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.Emotion
@@ -401,11 +402,10 @@ private fun SessionCard(
         timeNote = session.startsInMinutes?.let { count ->
             stringResource(Res.string.schedule_in_x_minutes, count)
         },
-        status = when {
-            session.isFinished -> TalkStatus.Past
-            session.isLive -> TalkStatus.Now
-            session.isUpcoming -> TalkStatus.Upcoming
-            else -> TalkStatus.Upcoming // Shouldn't happen
+        status = when (session.state) {
+            SessionState.Live -> TalkStatus.Live
+            SessionState.Past -> TalkStatus.Past
+            SessionState.Upcoming -> TalkStatus.Upcoming
         },
         onSubmitFeedback = { emotion ->
             onSubmitFeedback(session.id, emotion)

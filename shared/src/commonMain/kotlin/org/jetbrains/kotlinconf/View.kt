@@ -43,12 +43,14 @@ data class Day(
 data class TimeSlot(
     val startsAt: GMTDate,
     val endsAt: GMTDate,
-    val isLive: Boolean,
-    val isFinished: Boolean,
-    val isUpcoming: Boolean,
+    val state: SessionState,
     val sessions: List<SessionCardView>,
     val title: String = "${startsAt.time()}-${endsAt.time()}",
 )
+
+val TimeSlot.isLive get() = state == SessionState.Live
+val TimeSlot.isUpcoming get() = state == SessionState.Upcoming
+val TimeSlot.isPast get() = state == SessionState.Past
 
 fun Conference.buildAgenda(
     favorites: Set<SessionId>,
@@ -90,16 +92,10 @@ fun List<Session>.groupByTime(
                 it.asSessionCard(conference, now, favorites, votes)
             }
 
-        val isLive = start <= now && now < end
-        val isFinished = end <= now
-        val isUpcoming = start > now
-
         TimeSlot(
             startsAt = start,
             endsAt = end,
-            isLive = isLive,
-            isFinished = isFinished,
-            isUpcoming = isUpcoming,
+            state = SessionState.from(start, end, now),
             sessions = cards,
         )
     }
@@ -119,10 +115,8 @@ fun Session.asSessionCard(
         isFavorite = id in favorites,
         startsAt = startsAt,
         endsAt = endsAt,
-        isLive = startsAt <= now && now < endsAt,
+        state = SessionState.from(startsAt, endsAt, now),
         speakerIds = speakerIds,
-        isFinished = endsAt <= now,
-        isUpcoming = startsAt > now,
         vote = votes.find { it.sessionId == id }?.score,
         description = description,
         tags = tags ?: emptyList(),
@@ -155,6 +149,6 @@ data class ServiceEvent(
     val title: String,
     val startsAt: GMTDate,
     val endsAt: GMTDate,
-    val isLive: Boolean,
+    val state: SessionState,
     val startsInMinutes: Int?,
 )
