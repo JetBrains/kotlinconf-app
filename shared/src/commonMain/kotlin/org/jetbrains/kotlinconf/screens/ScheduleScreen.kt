@@ -60,7 +60,6 @@ import org.jetbrains.kotlinconf.ui.components.TalkCard
 import org.jetbrains.kotlinconf.ui.components.TalkStatus
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.utils.time
 import org.koin.compose.viewmodel.koinViewModel
 import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 
@@ -307,9 +306,8 @@ fun ScheduleList(
                 }
 
                 is TimeSlotTitleItem -> {
-                    val timeSlot = item.value
                     StyledText(
-                        text = "${timeSlot.startsAt.time()} - ${timeSlot.endsAt.time()}",
+                        text = item.value.title,
                         style = KotlinConfTheme.typography.h2,
                         modifier = Modifier
                             .padding(horizontal = 12.dp, vertical = 8.dp)

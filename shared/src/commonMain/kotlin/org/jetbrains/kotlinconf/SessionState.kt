@@ -1,6 +1,6 @@
 package org.jetbrains.kotlinconf
 
-import io.ktor.util.date.GMTDate
+import kotlinx.datetime.LocalDateTime
 
 enum class SessionState {
     Live,
@@ -9,7 +9,7 @@ enum class SessionState {
     ;
 
     companion object {
-        fun from(startsAt: GMTDate, endsAt: GMTDate, now: GMTDate): SessionState = when {
+        fun from(startsAt: LocalDateTime, endsAt: LocalDateTime, now: LocalDateTime): SessionState = when {
             startsAt <= now && now < endsAt -> Live
             endsAt <= now -> Past
             else -> Upcoming
