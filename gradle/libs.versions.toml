@@ -15,8 +15,8 @@ androidx-preference = "1.2.1"
 kotlin = "2.1.10-firework.33"
 
 compose-android = "1.7.6"
-compose-multiplatform = "1.8.0-alpha02"
-compose-hot-reload = "1.0.0-dev-39"
+compose-multiplatform = "1.8.0-alpha03"
+compose-hot-reload = "1.0.0-dev-48"
 
 coroutines = "1.10.1"
 coil = "3.0.3"
@@ -123,4 +123,4 @@ kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = 
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-composeHotReload = { id = "org.jetbrains.compose-hot-reload", version.ref = "compose-hot-reload" }
+composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "compose-hot-reload" }
