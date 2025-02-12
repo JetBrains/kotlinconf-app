@@ -42,7 +42,7 @@ fun SpeakersScreen(
 ) {
     var searchState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
     var searchText by rememberSaveable { mutableStateOf("") }
-    val speakers by viewModel.filteredSpeakers.collectAsState()
+    val speakers by viewModel.speakers.collectAsState()
 
     LaunchedEffect(searchText) {
         viewModel.setSearchText(searchText)
@@ -82,7 +82,9 @@ fun SpeakersScreen(
             items(speakers) { speaker ->
                 SpeakerCard(
                     name = speaker.name,
+                    nameHighlights = speaker.nameHighlights,
                     title = speaker.position,
+                    titleHighlights = speaker.titleHighlights,
                     photoUrl = speaker.photoUrl,
                     modifier = Modifier
                         .fillMaxWidth()

@@ -28,6 +28,8 @@ fun SpeakerCard(
     title: String,
     photoUrl: String,
     modifier: Modifier = Modifier,
+    nameHighlights: List<IntRange> = emptyList(),
+    titleHighlights: List<IntRange> = emptyList(),
 ) {
     Row(
         modifier = modifier,
@@ -47,13 +49,13 @@ fun SpeakerCard(
         )
         Column {
             StyledText(
-                text = name,
+                text = buildHighlightedString(name, nameHighlights),
                 style = KotlinConfTheme.typography.h3,
                 color = KotlinConfTheme.colors.primaryText,
             )
             Spacer(modifier = Modifier.size(6.dp))
             StyledText(
-                text = title,
+                text = buildHighlightedString(title, titleHighlights),
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.secondaryText,
             )
@@ -72,7 +74,9 @@ internal fun SpeakerCardPreview() {
         )
         SpeakerCard(
             name = "John Doe",
+            nameHighlights = listOf(0..3),  // Highlight "John"
             title = "Whatever Role Name at That Company",
+            titleHighlights = listOf(9..12),  // Highlight "Role"
             photoUrl = "https://sessionize.com/image/2e2f-0o0o0-XGxKBoqZvxxQxosrZHQHTT.png?download=sebastian-aigner.png",
         )
     }

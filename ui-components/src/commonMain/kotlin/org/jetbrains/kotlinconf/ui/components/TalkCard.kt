@@ -60,7 +60,7 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
 @Composable
-private fun buildHighlightedString(
+internal fun buildHighlightedString(
     text: String,
     highlights: List<IntRange>,
 ): AnnotatedString = buildAnnotatedString {
