@@ -31,11 +31,11 @@ import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 import org.koin.compose.viewmodel.koinViewModel
+import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 
 @Composable
-fun Speakers(
+fun SpeakersScreen(
     onSpeaker: (SpeakerId) -> Unit,
     viewModel: SpeakersViewModel = koinViewModel()
 ) {

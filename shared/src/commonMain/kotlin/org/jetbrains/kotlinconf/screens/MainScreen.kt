@@ -80,7 +80,7 @@ fun MainScreen(
                 )
             }
             composable<SpeakersScreen> {
-                Speakers(
+                SpeakersScreen(
                     onSpeaker = { rootNavController.navigate(SpeakerDetailsScreen(it)) }
                 )
             }
