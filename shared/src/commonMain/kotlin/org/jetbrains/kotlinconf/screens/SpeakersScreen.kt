@@ -9,10 +9,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,9 +40,13 @@ fun SpeakersScreen(
     onSpeaker: (SpeakerId) -> Unit,
     viewModel: SpeakersViewModel = koinViewModel()
 ) {
-    var searchState by remember { mutableStateOf(MainHeaderContainerState.Title) }
-    val searchText by viewModel.searchText.collectAsState()
-    val filtered by viewModel.filteredSpeakers.collectAsState()
+    var searchState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
+    var searchText by rememberSaveable { mutableStateOf("") }
+    val speakers by viewModel.filteredSpeakers.collectAsState()
+
+    LaunchedEffect(searchText) {
+        viewModel.setSearchText(searchText)
+    }
 
     Column(Modifier.fillMaxSize()) {
         MainHeaderContainer(
@@ -61,12 +66,12 @@ fun SpeakersScreen(
             searchContent = {
                 MainHeaderSearchBar(
                     searchValue = searchText,
-                    onSearchValueChange = { viewModel.searchText.value = it },
+                    onSearchValueChange = { searchText = it },
                     onClose = {
                         searchState = MainHeaderContainerState.Title
-                        viewModel.searchText.value = ""
+                        searchText = ""
                     },
-                    onClear = { viewModel.searchText.value = "" }
+                    onClear = { searchText = "" }
                 )
             }
         )
@@ -74,7 +79,7 @@ fun SpeakersScreen(
         Divider(1.dp, KotlinConfTheme.colors.strokePale)
 
         LazyColumn(Modifier.fillMaxSize()) {
-            items(filtered) { speaker ->
+            items(speakers) { speaker ->
                 SpeakerCard(
                     name = speaker.name,
                     title = speaker.position,

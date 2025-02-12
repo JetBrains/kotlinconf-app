@@ -2,22 +2,27 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.stateIn
 import org.jetbrains.kotlinconf.ConferenceService
-import org.jetbrains.kotlinconf.Speakers
 import org.jetbrains.kotlinconf.utils.containsDiacritics
 import org.jetbrains.kotlinconf.utils.removeDiacritics
 
 class SpeakersViewModel(
     service: ConferenceService,
 ) : ViewModel() {
-    var searchText = MutableStateFlow("")
+    private var searchText = MutableStateFlow("")
 
-    private val speakers: StateFlow<Speakers> = service.speakers
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), Speakers())
+    fun setSearchText(searchText: String) {
+        this.searchText.value = searchText
+    }
 
-    val filteredSpeakers = combine(speakers, searchText) { speakers, searchText ->
-        if (searchText.isEmpty()) {
+    val filteredSpeakers = combine(service.speakers, searchText) { speakers, searchText ->
+        if (searchText.isBlank()) {
             speakers.all
         } else {
             speakers.all.filter {
@@ -30,5 +35,7 @@ class SpeakersViewModel(
                 searchPattern.containsMatchIn(targetName) || searchPattern.containsMatchIn(targetPosition)
             }
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), speakers.value.all)
+    }
+        .flowOn(Dispatchers.Default)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 }
