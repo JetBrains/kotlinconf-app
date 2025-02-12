@@ -12,6 +12,7 @@ import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinconf.ApplicationContext
 import org.jetbrains.kotlinconf.Conference
 import org.jetbrains.kotlinconf.NewsItem
+import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Theme
 
@@ -50,6 +51,14 @@ class MultiplatformSettingsStorage(context: ApplicationContext) : ApplicationSto
         Json.encodeToString(value)
     )
 
+    override fun getNotificationSettings(): Flow<NotificationSettings> =
+        settings.getStringOrNullFlow(Keys.NOTIFICATION_SETTINGS)
+            .map { it?.let { Json.decodeFromString<NotificationSettings>(it) } ?: NotificationSettings(true, true, true) }
+    override suspend fun setNotificationSettings(value: NotificationSettings) = settings.set(
+        Keys.NOTIFICATION_SETTINGS,
+        Json.encodeToString(value)
+    )
+
     private object Keys {
         const val USER_ID = "userid2025"
         const val ONBOARDING_COMPLETE = "onboardingComplete"
@@ -58,5 +67,6 @@ class MultiplatformSettingsStorage(context: ApplicationContext) : ApplicationSto
         const val CONFERENCE_CACHE = "conferenceCache"
         const val NEWS_CACHE = "newsCache"
         const val FAVORITES = "favorites"
+        const val NOTIFICATION_SETTINGS = "notificationSettings"
     }
 }

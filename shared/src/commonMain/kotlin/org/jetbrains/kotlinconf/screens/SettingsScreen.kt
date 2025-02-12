@@ -84,6 +84,7 @@ fun SettingsScreen(
                 viewModel.setTheme(theme)
             },
             onNotificationSettingsChange = onNotificationSettingsChange,
+            viewModel = viewModel,
             modifier = Modifier
                 .drawWithContent {
                     graphicsLayer.record {
@@ -114,6 +115,7 @@ private fun SettingsScreenImpl(
     currentTheme: Theme,
     onThemeChange: (Theme) -> Unit,
     onNotificationSettingsChange: (NotificationSettings) -> Unit,
+    viewModel: SettingsViewModel,
     modifier: Modifier = Modifier,
 ) {
     ScreenWithTitle(
@@ -140,15 +142,15 @@ private fun SettingsScreenImpl(
 
             Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
-            // TODO populate with real values https://github.com/JetBrains/kotlinconf-app/issues/252
-            var notificationSettings by remember { mutableStateOf(NotificationSettings(false, false, false)) }
-            NotificationSettings(
-                notificationSettings = notificationSettings,
-                onChangeSettings = { newSettings ->
-                    notificationSettings = newSettings
-                    onNotificationSettingsChange(newSettings)
-                }
-            )
+            val notificationSettings = viewModel.notificationSettings.collectAsStateWithLifecycle().value
+            if (notificationSettings != null)
+                NotificationSettings(
+                    notificationSettings = notificationSettings,
+                    onChangeSettings = { newSettings ->
+                        viewModel.setNotificationSettings(newSettings)
+                        onNotificationSettingsChange(newSettings)
+                    }
+                )
         }
     }
 }

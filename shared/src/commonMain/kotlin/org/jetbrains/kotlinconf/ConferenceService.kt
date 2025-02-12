@@ -144,6 +144,12 @@ class ConferenceService(
         }
     }
 
+    fun getNotificationSettings(): Flow<NotificationSettings> = storage.getNotificationSettings()
+
+    suspend fun setNotificationSettings(settings: NotificationSettings) {
+        storage.setNotificationSettings(settings)
+    }
+
     /**
      * Vote for session.
      */
