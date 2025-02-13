@@ -1,15 +1,22 @@
 package org.jetbrains.kotlinconf.backend
 
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import io.ktor.util.date.*
-import org.jetbrains.kotlinconf.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.auth.principal
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
+import io.ktor.util.date.GMTDate
+import kotlinx.datetime.toInstant
+import org.jetbrains.kotlinconf.EVENT_TIME_ZONE
+import org.jetbrains.kotlinconf.FeedbackInfo
+import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.Votes
-import java.time.*
+import java.time.Clock
+import java.time.LocalDateTime
 
 internal fun Route.api(
     store: Store,
@@ -64,8 +71,8 @@ private fun Route.apiVote(
 
             val nowTime = now()
 
-            val startVotesAt = session.startsAt
-            val votingPeriodStarted = nowTime >= startVotesAt.timestamp
+            val startVotesAt = session.startsAt.toInstant(EVENT_TIME_ZONE)
+            val votingPeriodStarted = nowTime >= startVotesAt.toEpochMilliseconds()
 
             if (!votingPeriodStarted) {
                 return@post call.respond(comeBackLater)

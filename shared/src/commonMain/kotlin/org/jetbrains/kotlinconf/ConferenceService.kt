@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf
 
-import io.ktor.util.date.GMTDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -14,28 +13,11 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toInstant
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
-import org.jetbrains.kotlinconf.utils.time
-
-val UNKNOWN_SESSION_CARD: SessionCardView = SessionCardView(
-    id = SessionId("unknown"),
-    title = "unknown",
-    speakerLine = "unknown",
-    locationLine = "unknown",
-    startsAt = GMTDate.START,
-    endsAt = GMTDate.START,
-    speakerIds = emptyList(),
-    isFavorite = false,
-    description = "unknown",
-    vote = null,
-    tags = emptyList(),
-    startsInMinutes = null,
-    state = SessionState.Upcoming,
-)
-
-val UNKNOWN_SPEAKER: Speaker = Speaker(
-    SpeakerId("unknown"), "unknown", "unknown", "unknown", ""
-)
+import org.jetbrains.kotlinconf.utils.DateTimeFormatting
+import kotlin.time.Duration.Companion.minutes
 
 class ConferenceService(
     private val client: APIClient,
@@ -168,18 +150,14 @@ class ConferenceService(
     suspend fun sendFeedback(sessionId: SessionId, feedbackValue: String): Boolean =
         client.sendFeedback(sessionId, feedbackValue)
 
-    fun speakerById(id: SpeakerId): Speaker = speakers.value[id] ?: UNKNOWN_SPEAKER
+    fun speakerById(id: SpeakerId): Speaker? = speakers.value[id]
 
-    fun sessionById(id: SessionId): SessionCardView =
-        sessionCards.value.find { it.id == id } ?: UNKNOWN_SESSION_CARD
-
-    fun sessionByIdFlow(id: SessionId): Flow<SessionCardView> =
-        sessionCards
-            .map { sessions -> sessions.find { it.id == id } ?: UNKNOWN_SESSION_CARD }
+    fun sessionByIdFlow(id: SessionId): Flow<SessionCardView?> =
+        sessionCards.map { sessions -> sessions.find { it.id == id } }
 
     fun speakersBySessionId(id: SessionId): Flow<List<Speaker>> =
         sessionByIdFlow(id).map { session ->
-            session.speakerIds.map { speakerId -> speakerById(speakerId) }
+            session?.speakerIds?.mapNotNull { speakerId -> speakerById(speakerId) } ?: emptyList()
         }
 
     fun sessionsForSpeaker(id: SpeakerId): List<SessionCardView> =
@@ -210,34 +188,26 @@ class ConferenceService(
             val notificationsAllowed = storage.getNotificationsAllowed().first()
             if (!notificationsAllowed) return@launch
 
-            val startTimestamp = session.startsAt.timestamp
-            val reminderTimestamp = startTimestamp - 5 * 60 * 1000
-            val nowTimestamp = timeProvider.now().timestamp
-            val delay = reminderTimestamp - nowTimestamp
-            val voteTimeStamp = session.endsAt.timestamp
+            val start = session.startsAt.toInstant(EVENT_TIME_ZONE)
+            val end = session.endsAt.toInstant(EVENT_TIME_ZONE)
+            val now = timeProvider.now().toInstant(EVENT_TIME_ZONE)
 
+            val reminderTime = start - 5.minutes
+
+            // Notifications for session start
+            val startsLater = now < reminderTime
+            val startsSoon = now in reminderTime..<start
+            val isLive = now in start..<end
             when {
-                delay >= 0 -> {
-                    notificationManager.schedule(delay, session.title, "Starts in 5 minutes.")
-                }
-
-                nowTimestamp in reminderTimestamp..<startTimestamp -> {
-                    notificationManager.schedule(0, session.title, "The session is about to start.")
-                }
-
-                nowTimestamp in startTimestamp..<voteTimeStamp -> {
-                    notificationManager.schedule(0, session.title, "Hurry up! The session has already started!")
-                }
+                startsLater -> notificationManager.schedule((reminderTime - now).inWholeMilliseconds, session.title, "Starts in 5 minutes.")
+                startsSoon -> notificationManager.schedule(0, session.title, "The session is about to start.")
+                isLive -> notificationManager.schedule(0, session.title, "Hurry up! The session has already started!")
             }
 
-            if (nowTimestamp > voteTimeStamp) return@launch
-
-            val voteDelay = voteTimeStamp - nowTimestamp
-            notificationManager.schedule(
-                voteDelay,
-                "${session.title} finished",
-                "How was the talk?"
-            )
+            // Notifications for session end
+            if (end > now) {
+                notificationManager.schedule((end - now).inWholeMilliseconds, "${session.title} finished", "How was the talk?")
+            }
         }
     }
 
@@ -253,7 +223,7 @@ class ConferenceService(
 
     private fun mapNewsItemToDisplayItem(
         item: NewsItem,
-        now: GMTDate,
+        now: LocalDateTime,
     ): NewsDisplayItem {
         return NewsDisplayItem(
             id = item.id,
@@ -264,13 +234,12 @@ class ConferenceService(
         )
     }
 
-    private fun GMTDate.toNewsDisplayTime(now: GMTDate): String {
-        return if (year == now.year && dayOfYear == now.dayOfYear) {
-            return time()
-        } else if (year == now.year) {
-            "${month.value} $dayOfMonth"
-        } else {
-            "${month.value} $dayOfMonth, $year"
+    private fun LocalDateTime.toNewsDisplayTime(now: LocalDateTime): String {
+        val isToday = year == now.year && dayOfYear == now.dayOfYear
+        return when {
+            isToday -> DateTimeFormatting.time(this)
+            year == now.year -> DateTimeFormatting.date(this)
+            else -> DateTimeFormatting.dateWithYear(this)
         }
     }
 

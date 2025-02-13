@@ -1,9 +1,8 @@
 package org.jetbrains.kotlinconf
 
-import io.ktor.util.date.GMTDate
+import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.kotlinconf.utils.time
-import kotlin.math.roundToInt
+import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 
 data class Agenda(
     val days: List<Day> = emptyList()
@@ -41,12 +40,13 @@ data class Day(
 }
 
 data class TimeSlot(
-    val startsAt: GMTDate,
-    val endsAt: GMTDate,
+    val startsAt: LocalDateTime,
+    val endsAt: LocalDateTime,
     val state: SessionState,
     val sessions: List<SessionCardView>,
-    val title: String = "${startsAt.time()}-${endsAt.time()}",
-)
+) {
+    val title: String = DateTimeFormatting.timeToTime(startsAt, endsAt)
+}
 
 val TimeSlot.isLive get() = state == SessionState.Live
 val TimeSlot.isUpcoming get() = state == SessionState.Upcoming
@@ -55,7 +55,7 @@ val TimeSlot.isPast get() = state == SessionState.Past
 fun Conference.buildAgenda(
     favorites: Set<SessionId>,
     votes: List<VoteInfo>,
-    now: GMTDate
+    now: LocalDateTime,
 ): Agenda {
     val days = sessions
         .groupBy { it.startsAt.dayOfMonth }
@@ -77,7 +77,7 @@ fun Conference.buildAgenda(
 
 fun List<Session>.groupByTime(
     conference: Conference,
-    now: GMTDate,
+    now: LocalDateTime,
     favorites: Set<SessionId>,
     votes: List<VoteInfo>,
 ): List<TimeSlot> {
@@ -103,7 +103,7 @@ fun List<Session>.groupByTime(
 
 fun Session.asSessionCard(
     conference: Conference,
-    now: GMTDate,
+    now: LocalDateTime,
     favorites: Set<SessionId>,
     votes: List<VoteInfo>,
 ): SessionCardView {
@@ -120,13 +120,8 @@ fun Session.asSessionCard(
         vote = votes.find { it.sessionId == id }?.score,
         description = description,
         tags = tags ?: emptyList(),
-        startsInMinutes = (startsAt.timestamp - now.timestamp).let { diff ->
-            // In the next 30 minutes
-            if (diff > 0 && diff <= 30 * 60 * 1000) {
-                (diff / 60.0 / 1000.0).roundToInt()
-            } else {
-                null
-            }
+        startsInMinutes = (startsAt - now).inWholeMinutes.toInt().let { diff ->
+            if (diff in 1..30) diff else null
         }
     )
 }
@@ -147,8 +142,10 @@ data class NewsDisplayItem(
 data class ServiceEvent(
     val id: String,
     val title: String,
-    val startsAt: GMTDate,
-    val endsAt: GMTDate,
+    val startsAt: LocalDateTime,
+    val endsAt: LocalDateTime,
     val state: SessionState,
     val startsInMinutes: Int?,
-)
+) {
+    val time: String = DateTimeFormatting.timeToTime(startsAt, endsAt)
+}

@@ -1,12 +1,8 @@
 package org.jetbrains.kotlinconf
 
-import io.ktor.util.date.GMTDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
-import org.jetbrains.kotlinconf.utils.GMTDateSerializer
-import org.jetbrains.kotlinconf.utils.time
 import kotlin.jvm.JvmInline
-
-typealias GMTDateSerializable = @Serializable(GMTDateSerializer::class) GMTDate
 
 @Serializable
 @JvmInline
@@ -47,12 +43,10 @@ class Session(
     val description: String,
     val speakerIds: List<SpeakerId>,
     val location: String,
-    val startsAt: GMTDateSerializable,
-    val endsAt: GMTDateSerializable,
+    val startsAt: LocalDateTime,
+    val endsAt: LocalDateTime,
     val tags: List<String>? = null
-) {
-    val timeLine get() = startsAt.time() + " - " + endsAt.time()
-}
+)
 
 @Serializable
 class VoteInfo(
@@ -93,7 +87,7 @@ enum class Theme {
 class NewsItem(
     val id: String,
     val photoUrl: String?,
-    val date: GMTDateSerializable,
+    val date: LocalDateTime,
     val title: String,
     val content: String,
 )
