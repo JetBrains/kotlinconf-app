@@ -50,6 +50,7 @@ import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
+import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 
@@ -195,7 +196,7 @@ private fun Event(
 
         for (speaker in speakers) {
             key(speaker.id) {
-                org.jetbrains.kotlinconf.ui.components.Speaker(speaker.name, speaker.description, speaker.photoUrl, modifier = Modifier.padding(horizontal = 12.dp))
+                SpeakerCard(speaker.name, speaker.description, speaker.photoUrl, modifier = Modifier.padding(horizontal = 12.dp))
             }
         }
 

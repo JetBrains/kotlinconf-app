@@ -42,7 +42,7 @@ fun GalleryApp() {
                 SectionTitlePreview()
                 ServiceEventsPreview()
                 SettingsItemPreview()
-                SpeakerPreview()
+                SpeakerCardPreview()
                 SwitcherItemPreview()
                 SwitcherPreview()
                 TalkCardPreview()
