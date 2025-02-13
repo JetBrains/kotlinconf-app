@@ -7,14 +7,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
@@ -22,16 +22,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.bluesky
-import kotlinconfapp.shared.generated.resources.hej_its_kotlinconf
 import kotlinconfapp.shared.generated.resources.info_link_about_app
 import kotlinconfapp.shared.generated.resources.info_link_about_conf
 import kotlinconfapp.shared.generated.resources.info_link_code_of_conduct
-import kotlinconfapp.shared.generated.resources.info_link_news_feed
 import kotlinconfapp.shared.generated.resources.info_link_description_bluesky
 import kotlinconfapp.shared.generated.resources.info_link_description_slack
 import kotlinconfapp.shared.generated.resources.info_link_description_twitter
+import kotlinconfapp.shared.generated.resources.info_link_news_feed
 import kotlinconfapp.shared.generated.resources.info_link_partners
 import kotlinconfapp.shared.generated.resources.info_title
+import kotlinconfapp.shared.generated.resources.kotlinconf_by_jetbrains
 import kotlinconfapp.shared.generated.resources.slack
 import kotlinconfapp.shared.generated.resources.twitter
 import org.jetbrains.compose.resources.stringResource
@@ -63,15 +63,15 @@ fun InfoScreen(
                 .fillMaxSize()
                 .padding(horizontal = 12.dp)
                 .padding(bottom = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
-                imageVector = vectorResource(Res.drawable.hej_its_kotlinconf),
+                imageVector = vectorResource(Res.drawable.kotlinconf_by_jetbrains),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(24.dp)
-                    .fillMaxWidth()
-                    .height(124.dp)
+                    .widthIn(max = 360.dp)
             )
             PageMenuItem(stringResource(Res.string.info_link_about_conf), onClick = onAboutConf)
             PageMenuItem(stringResource(Res.string.info_link_about_app), onClick = onAboutApp)
