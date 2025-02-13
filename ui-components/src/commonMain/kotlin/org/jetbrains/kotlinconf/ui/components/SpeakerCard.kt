@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.kodee_emotion_neutral
-import kotlinconfapp.ui_components.generated.resources.kodee_emotion_positive
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -27,25 +27,19 @@ fun SpeakerCard(
     name: String,
     title: String,
     photoUrl: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     nameHighlights: List<IntRange> = emptyList(),
     titleHighlights: List<IntRange> = emptyList(),
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.clickable(onClick = onClick),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        AsyncImage(
-            model = photoUrl,
-            contentDescription = null,
-            modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .size(96.dp)
-                .background(KotlinConfTheme.colors.tileBackground),
-            contentScale = ContentScale.Crop,
-            placeholder = painterResource(Res.drawable.kodee_emotion_positive),
-            error = painterResource(Res.drawable.kodee_emotion_neutral),
+        SpeakerAvatar(
+            photoUrl = photoUrl,
+            modifier = Modifier.size(96.dp),
         )
         Column {
             StyledText(
@@ -63,6 +57,22 @@ fun SpeakerCard(
     }
 }
 
+@Composable
+fun SpeakerAvatar(
+    photoUrl: String,
+    modifier: Modifier = Modifier,
+) {
+    AsyncImage(
+        model = photoUrl,
+        contentDescription = null,
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(KotlinConfTheme.colors.tileBackground),
+        contentScale = ContentScale.Crop,
+        error = painterResource(Res.drawable.kodee_emotion_neutral),
+    )
+}
+
 @Preview
 @Composable
 internal fun SpeakerCardPreview() {
@@ -71,6 +81,7 @@ internal fun SpeakerCardPreview() {
             name = "John Doe",
             title = "Whatever Role Name at That Company",
             photoUrl = "https://example.com/not-an-image.jpg",
+            onClick = {},
         )
         SpeakerCard(
             name = "John Doe",
@@ -78,6 +89,7 @@ internal fun SpeakerCardPreview() {
             title = "Whatever Role Name at That Company",
             titleHighlights = listOf(9..12),  // Highlight "Role"
             photoUrl = "https://sessionize.com/image/2e2f-0o0o0-XGxKBoqZvxxQxosrZHQHTT.png?download=sebastian-aigner.png",
+            onClick = {},
         )
     }
 }

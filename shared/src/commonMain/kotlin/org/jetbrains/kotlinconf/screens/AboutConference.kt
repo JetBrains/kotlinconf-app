@@ -61,6 +61,7 @@ fun AboutConference(
     onGeneralTerms: () -> Unit,
     onWebsiteLink: () -> Unit,
     onBack: () -> Unit,
+    onSpeaker: (SpeakerId) -> Unit,
 ) {
     ScreenWithTitle(
         title = stringResource(Res.string.about_conference_title),
@@ -94,6 +95,7 @@ fun AboutConference(
                 ),
                 location = "Hall A",
                 time = "10:00 – 11:00",
+                onSpeaker = onSpeaker,
             )
 
             Event(
@@ -107,6 +109,7 @@ fun AboutConference(
                 ),
                 location = "Hall A",
                 time = "10:00 – 11:00",
+                onSpeaker = onSpeaker,
             )
 
             Event(
@@ -120,6 +123,7 @@ fun AboutConference(
                 location = "",
                 time = "",
                 backgroundColor = KotlinConfTheme.colors.tileBackground,
+                onSpeaker = onSpeaker,
             )
 
             Event(
@@ -132,6 +136,7 @@ fun AboutConference(
                 location = "Hall A",
                 time = "18:00 – 22:30",
                 backgroundColor = KotlinConfTheme.colors.tileBackground,
+                onSpeaker = onSpeaker,
             )
 
             Event(
@@ -145,6 +150,7 @@ fun AboutConference(
                 ),
                 location = "Hall A",
                 time = "17:00 – 18:00",
+                onSpeaker = onSpeaker,
             )
         }
 
@@ -178,6 +184,7 @@ private fun Event(
     location: String,
     time: String,
     day2: String = "",
+    onSpeaker: (SpeakerId) -> Unit,
     backgroundColor: Color = KotlinConfTheme.colors.mainBackground,
 ) {
     val roundedCornerShape = RoundedCornerShape(8.dp)
@@ -199,7 +206,13 @@ private fun Event(
 
         for (speaker in speakers) {
             key(speaker.id) {
-                SpeakerCard(speaker.name, speaker.description, speaker.photoUrl, modifier = Modifier.padding(horizontal = 12.dp))
+                SpeakerCard(
+                    name = speaker.name,
+                    title = speaker.description,
+                    photoUrl = speaker.photoUrl,
+                    modifier = Modifier.padding(horizontal = 12.dp).fillMaxWidth(),
+                    onClick = { onSpeaker(speaker.id) },
+                )
             }
         }
 

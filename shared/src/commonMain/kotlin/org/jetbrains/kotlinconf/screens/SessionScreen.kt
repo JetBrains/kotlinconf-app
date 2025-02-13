@@ -46,6 +46,7 @@ import kotlinconfapp.shared.generated.resources.up_24
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
+import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -66,6 +67,7 @@ import org.koin.core.parameter.parametersOf
 fun SessionScreen(
     sessionId: SessionId,
     onBack: () -> Unit,
+    onSpeaker: (SpeakerId) -> Unit,
     onPrivacyPolicyNeeded: () -> Unit,
     viewModel: SessionViewModel = koinViewModel { parametersOf(sessionId) }
 ) {
@@ -129,7 +131,8 @@ fun SessionScreen(
                     name = speaker.name,
                     title = speaker.position,
                     photoUrl = speaker.photoUrl,
-                    modifier = Modifier.padding(vertical = 12.dp)
+                    modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(),
+                    onClick = { onSpeaker(speaker.id) }
                 )
             }
 

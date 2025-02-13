@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -89,8 +88,8 @@ fun SpeakersScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(12.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .clickable { onSpeaker(speaker.id) }
+                        .clip(RoundedCornerShape(8.dp)),
+                    onClick = { onSpeaker(speaker.id) },
                 )
             }
         }

@@ -19,6 +19,7 @@ import org.jetbrains.kotlinconf.screens.PrivacyPolicyViewModel
 import org.jetbrains.kotlinconf.screens.ScheduleViewModel
 import org.jetbrains.kotlinconf.screens.SessionViewModel
 import org.jetbrains.kotlinconf.screens.SettingsViewModel
+import org.jetbrains.kotlinconf.screens.SpeakerDetailViewModel
 import org.jetbrains.kotlinconf.screens.SpeakersViewModel
 import org.jetbrains.kotlinconf.screens.StartNotificationsViewModel
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
@@ -82,6 +83,7 @@ private fun koinConfiguration(context: ApplicationContext) = koinConfiguration {
         viewModelOf(::StartNotificationsViewModel)
         viewModelOf(::NewsDetailViewModel)
         viewModelOf(::SpeakersViewModel)
+        viewModelOf(::SpeakerDetailViewModel)
     }
 
     modules(appModule, viewModelModule)

@@ -105,6 +105,7 @@ fun TalkCard(
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    feedbackEnabled:  Boolean = status != TalkStatus.Upcoming,
 ) {
     val backgroundColor by animateColorAsState(
         if (status == TalkStatus.Past) KotlinConfTheme.colors.cardBackgroundPast
@@ -153,7 +154,7 @@ fun TalkCard(
             lightning = lightning,
             time = time,
         )
-        AnimatedVisibility(status != TalkStatus.Upcoming) {
+        AnimatedVisibility(feedbackEnabled) {
             Divider(
                 thickness = 1.dp,
                 color = KotlinConfTheme.colors.strokePale,
