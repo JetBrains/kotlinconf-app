@@ -67,28 +67,33 @@ class ConferenceService(
         }
         .flowOn(Dispatchers.Default)
 
-    val agenda: StateFlow<Agenda> =
+    val agenda: StateFlow<List<Day>> =
         combine(
             storage.getConferenceCache(),
             storage.getFavorites(),
             timeProvider.time,
             votes,
         ) { conference, favorites, time, votes ->
-            conference.buildAgenda(favorites, votes, time)
-        }.stateIn(scope, SharingStarted.Eagerly, Agenda())
+            conference?.buildAgenda(favorites, votes, time) ?: emptyList()
+        }.stateIn(scope, SharingStarted.Eagerly, emptyList())
 
     private val sessionCards: StateFlow<List<SessionCardView>> =
         agenda.map {
-            it.days
-                .flatMap { it.timeSlots }
-                .flatMap { it.sessions }
+            it.flatMap { it.timeSlots }.flatMap { it.sessions }
         }.stateIn(scope, SharingStarted.Eagerly, emptyList())
 
-    val speakers: StateFlow<Speakers> = storage.getConferenceCache()
-        .map { it.speakers }
-        .map { it.filter { speaker -> speaker.photoUrl.isNotBlank() } }
-        .map { Speakers(it) }
-        .stateIn(scope, SharingStarted.Eagerly, Speakers(emptyList()))
+    val speakers: StateFlow<List<Speaker>> = storage.getConferenceCache()
+        .map {
+            (it?.speakers ?: emptyList())
+                .filter { speaker -> speaker.photoUrl.isNotBlank() }
+        }
+        .stateIn(scope, SharingStarted.Eagerly, emptyList())
+
+    private val speakersById: StateFlow<Map<SpeakerId, Speaker>> = speakers
+        .map { speakers ->
+            speakers.associateBy { it.id }
+        }
+        .stateIn(scope, SharingStarted.Eagerly, emptyMap())
 
     fun getTheme(): Flow<Theme> = storage.getTheme()
 
@@ -96,17 +101,19 @@ class ConferenceService(
         scope.launch { storage.setTheme(theme) }
     }
 
-    private suspend fun loadConferenceData() {
-        val newData = client.downloadConferenceData()
+    suspend fun loadConferenceData() {
+        val newData = client.downloadConferenceData() ?: return
         val oldData = storage.getConferenceCache().first()
 
         storage.setConferenceCache(newData)
 
-        val oldIds = oldData.sessions.map { it.id }
-        val newIds = newData.sessions.map { it.id }
-        val removedIds = oldIds - newIds
-        removedIds.forEach { sessionId ->
-            cancelNotifications(sessionId)
+        if (oldData != null) {
+            val oldIds = oldData.sessions.map { it.id }
+            val newIds = newData.sessions.map { it.id }
+            val removedIds = oldIds - newIds
+            removedIds.forEach { sessionId ->
+                cancelNotifications(sessionId)
+            }
         }
     }
 
@@ -170,16 +177,16 @@ class ConferenceService(
     suspend fun sendFeedback(sessionId: SessionId, feedbackValue: String): Boolean =
         client.sendFeedback(sessionId, feedbackValue)
 
-    fun speakerById(id: SpeakerId): Speaker? = speakers.value[id]
+    fun speakerById(speakerId: SpeakerId): Speaker? = speakersById.value[speakerId]
 
-    fun speakerByIdFlow(id: SpeakerId): Flow<Speaker?> =
-        speakers.map { it[id] }
+    fun speakerByIdFlow(speakerId: SpeakerId): Flow<Speaker?> =
+        speakersById.map { it[speakerId] }
 
-    fun sessionByIdFlow(id: SessionId): Flow<SessionCardView?> =
-        sessionCards.map { sessions -> sessions.find { it.id == id } }
+    fun sessionByIdFlow(sessionId: SessionId): Flow<SessionCardView?> =
+        sessionCards.map { sessions -> sessions.find { it.id == sessionId } }
 
-    fun speakersBySessionId(id: SessionId): Flow<List<Speaker>> =
-        sessionByIdFlow(id).map { session ->
+    fun speakersBySessionId(sessionId: SessionId): Flow<List<Speaker>> =
+        sessionByIdFlow(sessionId).map { session ->
             session?.speakerIds?.mapNotNull { speakerId -> speakerById(speakerId) } ?: emptyList()
         }
 
@@ -300,6 +307,7 @@ class ConferenceService(
     }
 
     suspend fun loadNews() {
-        storage.setNews(client.getNews())
+        val news = client.getNews() ?: return
+        storage.setNews(news)
     }
 }

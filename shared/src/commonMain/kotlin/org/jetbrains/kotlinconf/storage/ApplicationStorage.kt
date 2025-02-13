@@ -17,7 +17,7 @@ interface ApplicationStorage {
     fun getTheme(): Flow<Theme>
     suspend fun setTheme(value: Theme)
 
-    fun getConferenceCache(): Flow<Conference>
+    fun getConferenceCache(): Flow<Conference?>
     suspend fun setConferenceCache(value: Conference)
 
     fun getFavorites(): Flow<Set<SessionId>>

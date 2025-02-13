@@ -14,7 +14,7 @@ import org.jetbrains.kotlinconf.SpeakerId
 
 class SpeakerDetailViewModel(
     private val service: ConferenceService,
-    private val speakerId: SpeakerId,
+    speakerId: SpeakerId,
 ) : ViewModel() {
     fun onBookmark(sessionId: SessionId, bookmarked: Boolean) {
         viewModelScope.launch {

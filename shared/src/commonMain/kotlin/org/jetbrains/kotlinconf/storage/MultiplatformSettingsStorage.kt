@@ -30,8 +30,8 @@ class MultiplatformSettingsStorage(
     override suspend fun setTheme(value: Theme) = settings
         .set(Keys.THEME, value.name)
 
-    override fun getConferenceCache(): Flow<Conference> = settings.getStringOrNullFlow(Keys.CONFERENCE_CACHE)
-        .map { it?.let { Json.decodeFromString<Conference>(it) } ?: Conference() }
+    override fun getConferenceCache(): Flow<Conference?> = settings.getStringOrNullFlow(Keys.CONFERENCE_CACHE)
+        .map { it?.let { Json.decodeFromString<Conference>(it) } }
 
     override suspend fun setConferenceCache(value: Conference) = settings
         .set(Keys.CONFERENCE_CACHE, Json.encodeToString(value))
