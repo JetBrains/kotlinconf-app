@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
@@ -150,7 +151,9 @@ fun AboutConference(
         Image(
             painter = painterResource(Res.drawable.kotlinconf_by_jetbrains),
             contentDescription = stringResource(Res.string.kotlinconf_by_jetbrains_description),
-            modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 64.dp)
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+                .padding(vertical = 64.dp)
+                .widthIn(max = 360.dp)
         )
 
         Column(
