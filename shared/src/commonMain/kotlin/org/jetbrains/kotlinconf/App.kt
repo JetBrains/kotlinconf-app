@@ -3,10 +3,7 @@ package org.jetbrains.kotlinconf
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -52,7 +49,6 @@ fun App(context: ApplicationContext) {
                     Modifier
                         .fillMaxSize()
                         .background(KotlinConfTheme.colors.mainBackground)
-                        .windowInsetsPadding(WindowInsets.safeDrawing)
                 ) {
                     if (isOnboardingComplete != null) {
                         KotlinConfNavHost(isOnboardingComplete)

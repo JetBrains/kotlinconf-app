@@ -32,6 +32,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.bottomInsetPadding
+import org.jetbrains.kotlinconf.utils.plus
 
 private val Library.licenseName: String
     get() = licenses.firstOrNull()?.name ?: "Unknown license"
@@ -83,7 +85,7 @@ fun SingleLicenseScreen(
             licenseContent,
             style = KotlinConfTheme.typography.text2,
             color = KotlinConfTheme.colors.noteText,
-            modifier = Modifier.padding(vertical = 12.dp),
+            modifier = Modifier.padding(PaddingValues(vertical = 12.dp) + bottomInsetPadding()),
         )
     }
 }
@@ -102,7 +104,7 @@ private fun LibraryList(
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = 16.dp),
+        contentPadding = PaddingValues(vertical = 16.dp) + bottomInsetPadding(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(sortedLibraries) { library ->
