@@ -1,14 +1,11 @@
 package org.jetbrains.kotlinconf.android
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.jetbrains.kotlinconf.R
 import org.jetbrains.kotlinconf.App
@@ -25,10 +22,19 @@ class MainActivity : ComponentActivity() {
             R.mipmap.ic_launcher,
         )
 
-        enableEdgeToEdge()
-
         setContent {
-            App(context)
+            App(
+                context = context,
+                onThemeChange = { isDarkMode ->
+                    enableEdgeToEdge(
+                        statusBarStyle = SystemBarStyle.auto(
+                            lightScrim = Color.TRANSPARENT,
+                            darkScrim = Color.TRANSPARENT,
+                            detectDarkMode = { isDarkMode }
+                        )
+                    )
+                },
+            )
         }
     }
 }

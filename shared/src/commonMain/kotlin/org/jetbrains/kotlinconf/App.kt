@@ -5,6 +5,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,7 +30,10 @@ import org.koin.dsl.koinConfiguration
 import org.koin.dsl.module
 
 @Composable
-fun App(context: ApplicationContext) {
+fun App(
+    context: ApplicationContext,
+    onThemeChange: ((isDarkTheme: Boolean) -> Unit)? = null,
+) {
     KoinMultiplatformApplication(koinConfiguration(context)) {
         DevelopmentEntryPoint {
             val service = koinInject<ConferenceService>()
@@ -38,6 +42,10 @@ fun App(context: ApplicationContext) {
                 Theme.SYSTEM -> isSystemInDarkTheme()
                 Theme.LIGHT -> false
                 Theme.DARK -> true
+            }
+
+            if (onThemeChange != null) {
+                LaunchedEffect(isDarkTheme) { onThemeChange(isDarkTheme) }
             }
 
             val isOnboardingComplete = service.isOnboardingComplete()
