@@ -20,6 +20,7 @@ import org.jetbrains.kotlinconf.ui.components.MarkdownView
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
 fun ScreenWithTitle(
@@ -28,7 +29,11 @@ fun ScreenWithTitle(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Column(modifier.fillMaxSize()) {
+    Column(
+        modifier
+            .fillMaxSize()
+            .padding(topInsetPadding())
+    ) {
         MainHeaderTitleBar(
             title = title,
             startContent = {

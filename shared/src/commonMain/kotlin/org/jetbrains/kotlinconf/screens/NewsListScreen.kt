@@ -14,6 +14,8 @@ import kotlinconfapp.shared.generated.resources.news_feed_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.ui.components.NewsCard
+import org.jetbrains.kotlinconf.utils.bottomInsetPadding
+import org.jetbrains.kotlinconf.utils.plus
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -27,9 +29,10 @@ fun NewsListScreen(
         onBack = onBack,
     ) {
         val news by viewModel.news.collectAsState()
+
         LazyColumn(
             modifier = Modifier.weight(1f),
-            contentPadding = PaddingValues(vertical = 16.dp),
+            contentPadding = PaddingValues(vertical = 16.dp) + bottomInsetPadding(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(news) { newsItem ->
