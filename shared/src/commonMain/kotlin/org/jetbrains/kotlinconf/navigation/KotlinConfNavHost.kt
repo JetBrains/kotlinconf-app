@@ -37,7 +37,7 @@ import org.jetbrains.kotlinconf.screens.PrivacyPolicyScreen
 import org.jetbrains.kotlinconf.screens.SessionScreen
 import org.jetbrains.kotlinconf.screens.SettingsScreen
 import org.jetbrains.kotlinconf.screens.SingleLicenseScreen
-import org.jetbrains.kotlinconf.screens.Speaker
+import org.jetbrains.kotlinconf.screens.SpeakerDetailScreen
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 import org.jetbrains.kotlinconf.screens.TermsOfUse
 import org.jetbrains.kotlinconf.utils.getStoreUrl
@@ -65,8 +65,11 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
         }
 
         composable<SpeakerDetailsScreen>(typeMap = mapOf(typeOf<SpeakerId>() to SpeakerIdNavType)) {
-            val speakerId = it.toRoute<SpeakerDetailsScreen>().speakerId
-            Speaker(speakerId, onBack = navController::popBackStack)
+            SpeakerDetailScreen(
+                speakerId = it.toRoute<SpeakerDetailsScreen>().speakerId,
+                onBack = navController::popBackStack,
+                onSession = { navController.navigate(SessionScreen(it)) }
+            )
         }
         composable<AboutAppScreen> {
             val uriHandler = LocalUriHandler.current
@@ -103,6 +106,7 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
                 onGeneralTerms = { navController.navigate(TermsOfUseScreen) },
                 onWebsiteLink = { urlHandler.openUri(URLs.KOTLINCONF_HOMEPAGE) },
                 onBack = navController::popBackStack,
+                onSpeaker = { speakerId -> navController.navigate(SpeakerDetailsScreen(speakerId)) },
             )
         }
         composable<CodeOfConductScreen> {
@@ -142,7 +146,8 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
             SessionScreen(
                 sessionId = it.toRoute<SessionScreen>().sessionId,
                 onBack = navController::popBackStack,
-                onPrivacyPolicyNeeded = { navController.navigate(PrivacyPolicyScreen) }
+                onPrivacyPolicyNeeded = { navController.navigate(PrivacyPolicyScreen) },
+                onSpeaker = { speakerId -> navController.navigate(SpeakerDetailsScreen(speakerId)) }
             )
         }
         composable<PrivacyPolicyScreen> {

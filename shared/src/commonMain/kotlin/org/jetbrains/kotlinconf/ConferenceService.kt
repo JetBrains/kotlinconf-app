@@ -152,6 +152,9 @@ class ConferenceService(
 
     fun speakerById(id: SpeakerId): Speaker? = speakers.value[id]
 
+    fun speakerByIdFlow(id: SpeakerId): Flow<Speaker?> =
+        speakers.map { it[id] }
+
     fun sessionByIdFlow(id: SessionId): Flow<SessionCardView?> =
         sessionCards.map { sessions -> sessions.find { it.id == id } }
 
@@ -160,8 +163,8 @@ class ConferenceService(
             session?.speakerIds?.mapNotNull { speakerId -> speakerById(speakerId) } ?: emptyList()
         }
 
-    fun sessionsForSpeaker(id: SpeakerId): List<SessionCardView> =
-        sessionCards.value.filter { id in it.speakerIds }
+    fun sessionsForSpeakerFlow(id: SpeakerId): Flow<List<SessionCardView>> =
+        sessionCards.map { sessions -> sessions.filter { id in it.speakerIds } }
 
     fun newsById(newsId: String): Flow<NewsDisplayItem?> =
         news.map { allNews ->

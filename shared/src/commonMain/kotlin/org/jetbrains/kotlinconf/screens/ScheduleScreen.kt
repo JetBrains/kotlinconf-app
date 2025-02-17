@@ -206,6 +206,7 @@ fun ScheduleScreen(
             scheduleItems = items,
             onSession = onSession,
             listState = listState,
+            feedbackEnabled = !isSearch,
             onSubmitFeedback = { sessionId, emotion ->
                 viewModel.onSubmitFeedback(sessionId, emotion)
             },
@@ -280,6 +281,7 @@ fun ScheduleList(
     scheduleItems: List<ScheduleListItem>,
     onSession: (SessionId) -> Unit,
     listState: LazyListState,
+    feedbackEnabled: Boolean,
     onSubmitFeedback: (SessionId, Emotion?) -> Unit,
     onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
     onBookmark: (SessionId, Boolean) -> Unit,
@@ -325,6 +327,7 @@ fun ScheduleList(
                         ) { page ->
                             SessionCard(
                                 session = workshops[page],
+                                feedbackEnabled = feedbackEnabled,
                                 onBookmark = onBookmark,
                                 onSubmitFeedback = onSubmitFeedback,
                                 onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
@@ -348,6 +351,7 @@ fun ScheduleList(
                 is SessionItem -> {
                     SessionCard(
                         session = item.value,
+                        feedbackEnabled = feedbackEnabled,
                         titleHighlights = item.titleHighlights,
                         tagHighlights = item.tagMatches,
                         speakerHighlights = item.speakerHighlights,
@@ -380,6 +384,7 @@ private fun SessionCard(
     onSubmitFeedback: (SessionId, Emotion?) -> Unit,
     onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
     onSession: (SessionId) -> Unit,
+    feedbackEnabled: Boolean,
     modifier: Modifier = Modifier,
     titleHighlights: List<IntRange> = emptyList(),
     tagHighlights: List<String> = emptyList(),
@@ -413,5 +418,6 @@ private fun SessionCard(
         },
         onClick = { onSession(session.id) },
         modifier = modifier,
+        feedbackEnabled = feedbackEnabled,
     )
 }
