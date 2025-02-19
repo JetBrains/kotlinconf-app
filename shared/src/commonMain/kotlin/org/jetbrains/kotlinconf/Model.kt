@@ -6,15 +6,11 @@ import kotlin.jvm.JvmInline
 
 @Serializable
 @JvmInline
-value class SpeakerId(val id: String) {
-    override fun toString(): String = id
-}
+value class SpeakerId(val id: String)
 
 @Serializable
 @JvmInline
-value class SessionId(val id: String) {
-    override fun toString(): String = id
-}
+value class SessionId(val id: String)
 
 @Serializable
 class Conference(
