@@ -1,8 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.kotlinSerialization)
-    application
-    id("io.ktor.plugin") version "2.3.11"
+    alias(libs.plugins.ktor)
 }
 
 kotlin {
@@ -12,6 +11,7 @@ kotlin {
 application {
     mainClass.set("org.jetbrains.kotlinconf.backend.MainKt")
 }
+
 
 dependencies {
     implementation(projects.shared)
@@ -40,6 +40,11 @@ dependencies {
     implementation(libs.postgresql)
 
     implementation(libs.hikaricp)
-
     implementation(libs.logback.classic)
+
+    testImplementation(libs.ktor.server.test.host)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

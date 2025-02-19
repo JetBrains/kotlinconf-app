@@ -8,14 +8,15 @@ import io.ktor.server.application.log
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.Conference
 import org.jetbrains.kotlinconf.Session
 import org.jetbrains.kotlinconf.Speaker
 import java.util.concurrent.TimeUnit
 
-@Volatile
-private var conference: Conference? = null
+private val conference = MutableSharedFlow<Conference>()
 val comeBackLater = HttpStatusCode(477, "Come Back Later")
 val GMT_TIME_OFFSET = 2 * 60 * 60 * 1000
 
@@ -38,9 +39,11 @@ fun Application.launchSyncJob(
 suspend fun synchronizeWithSessionize(
     sessionizeUrl: String,
 ) {
-    conference = client.get(sessionizeUrl)
+    val updatedValue = client.get(sessionizeUrl)
         .body<SessionizeData>()
         .toConference()
+
+    conference.emit(updatedValue)
 }
 
 suspend fun fetchSessionizeImage(
@@ -50,7 +53,7 @@ suspend fun fetchSessionizeImage(
     return client.get("$imagesUrl/$imageId").body<ByteArray>()
 }
 
-fun getSessionizeData(): Conference = conference ?: throw ServiceUnavailable()
+suspend fun getSessionizeData(): Conference = conference.first()
 
 fun SessionizeData.toConference(): Conference {
     val tags: Map<Int, CategoryItemData> = categories
@@ -73,7 +76,7 @@ fun SessionizeData.toConference(): Conference {
             endsAt,
             tags
         )
-    }
+    }.mergeWorkshops()
 
     val speakers = speakers.map {
         Speaker(
@@ -86,4 +89,35 @@ fun SessionizeData.toConference(): Conference {
     }
 
     return Conference(sessions, speakers)
+}
+
+internal fun List<Session>.mergeWorkshops(): List<Session> {
+    val (workshopParts, nonWorkshop) = partition { it.tags?.contains("Workshop") == true }
+
+    // Group by room
+    val workshopPartsByLocations = workshopParts.groupBy { it.location }
+    val workshops = workshopPartsByLocations.values.mapNotNull { parts ->
+        val startTime = parts.minOf { it.startsAt }
+        val endTime = parts.maxOf { it.endsAt }
+        val first = parts.find { it.title.contains("Part 1") } ?: return@mapNotNull null
+        val title = first.title.dropAfter(". Part").trim()
+
+        Session(
+            first.id,
+            title,
+            parts.joinToString("\n") { it.description },
+            parts.flatMap { it.speakerIds },
+            first.location,
+            startTime,
+            endTime,
+            first.tags
+        )
+    }
+
+    return nonWorkshop + workshops
+}
+
+internal fun String.dropAfter(chunk: String): String {
+    val index = indexOf(chunk)
+    return if (index == -1) this else substring(0, index)
 }

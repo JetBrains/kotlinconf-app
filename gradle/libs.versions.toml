@@ -21,12 +21,12 @@ compose-hot-reload = "1.0.0-dev-39"
 coroutines = "1.10.1"
 coil = "3.0.3"
 koin = "4.1.0-Beta5"
-exposed = "0.55.0"
+exposed = "0.59.0"
 h2 = "2.2.224"
 hikaricp = "5.1.0"
 junit = "4.13.2"
 kotlinx-datetime = "0.6.1"
-ktor = "3.0.1"
+ktor = "3.1.0"
 android-svg = "1.4"
 logbackClassic = "1.5.6"
 markdown = "0.29.0"
@@ -89,6 +89,7 @@ ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor"
 ktor-server-partial-content = { module = "io.ktor:ktor-server-partial-content", version.ref = "ktor" }
 ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
 ktor-server-swagger = { module = "io.ktor:ktor-server-swagger", version.ref = "ktor" }
+ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 
 # utility
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
@@ -119,5 +120,6 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 composeHotReload = { id = "org.jetbrains.compose-hot-reload", version.ref = "compose-hot-reload" }
