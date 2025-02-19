@@ -12,7 +12,7 @@ androidx-test-junit = "1.2.1"
 androidx-work-runtime = "2.9.1"
 androidx-preference = "1.2.1"
 
-kotlin = "2.1.10-firework.33"
+kotlin = "2.1.20-RC"
 
 compose-android = "1.8.0-beta01"
 compose-multiplatform = "1.8.0-alpha03"
