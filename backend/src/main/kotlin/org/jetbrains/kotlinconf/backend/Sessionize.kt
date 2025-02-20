@@ -6,17 +6,22 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.log
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted.Companion.Eagerly
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.replay
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.Conference
 import org.jetbrains.kotlinconf.Session
 import org.jetbrains.kotlinconf.Speaker
 import java.util.concurrent.TimeUnit
 
-private val conference = MutableSharedFlow<Conference>()
+private val conference = MutableSharedFlow<Conference>(replay = 1)
+
 val comeBackLater = HttpStatusCode(477, "Come Back Later")
 val GMT_TIME_OFFSET = 2 * 60 * 60 * 1000
 
