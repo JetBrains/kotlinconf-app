@@ -100,7 +100,7 @@ internal fun List<Session>.mergeWorkshops(): List<Session> {
         val startTime = parts.minOf { it.startsAt }
         val endTime = parts.maxOf { it.endsAt }
         val first = parts.find { it.title.contains("Part 1") } ?: return@mapNotNull null
-        val title = first.title.dropAfter(". Part").trim()
+        val title = first.title.substringAfter(". Part").trim()
 
         Session(
             first.id,
@@ -115,9 +115,4 @@ internal fun List<Session>.mergeWorkshops(): List<Session> {
     }
 
     return nonWorkshop + workshops
-}
-
-internal fun String.dropAfter(chunk: String): String {
-    val index = indexOf(chunk)
-    return if (index == -1) this else substring(0, index)
 }
