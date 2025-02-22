@@ -9,6 +9,11 @@ import com.russhwolf.settings.observable.makeObservable
 import org.jetbrains.kotlinconf.ui.initCoil
 import org.koin.dsl.module
 
+@JsModule("@js-joda/timezone")
+external object JsJodaTimeZoneModule
+
+private val jsJodaTz = JsJodaTimeZoneModule
+
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     initCoil()
