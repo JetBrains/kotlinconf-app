@@ -9,11 +9,14 @@ import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.app_name
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.storage.createSettings
+import org.jetbrains.kotlinconf.utils.JvmLogger
+import org.jetbrains.kotlinconf.utils.Logger
 import org.koin.dsl.module
 
 private val platformModule = module {
     single<ObservableSettings> { createSettings() }
     single<NotificationService> { NotImplementedNotificationService() }
+    single<Logger> { JvmLogger() }
 }
 
 fun main() = application {

@@ -7,6 +7,8 @@ import androidx.preference.PreferenceManager
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.SharedPreferencesSettings
 import kotlinx.coroutines.channels.Channel
+import org.jetbrains.kotlinconf.utils.AndroidLogger
+import org.jetbrains.kotlinconf.utils.Logger
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -34,5 +36,6 @@ fun platformModule(
                 iconId = notificationIconId,
             )
         }
+        single<Logger> { AndroidLogger() }
     }
 }
