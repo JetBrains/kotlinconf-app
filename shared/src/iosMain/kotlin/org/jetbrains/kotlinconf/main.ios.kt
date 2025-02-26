@@ -10,7 +10,7 @@ import platform.Foundation.NSUserDefaults
 import platform.UIKit.UIViewController
 
 private val platformModule = module {
-    single<NotificationService> { IOSNotificationService(get()) }
+    single<NotificationService> { IOSNotificationService(get(), get()) }
     single<ObservableSettings> {
         NSUserDefaultsSettings(NSUserDefaults.standardUserDefaults)
     }

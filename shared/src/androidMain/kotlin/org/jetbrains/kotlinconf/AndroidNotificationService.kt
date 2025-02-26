@@ -17,7 +17,10 @@ import androidx.core.content.getSystemService
 import kotlinx.coroutines.channels.Channel
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
+import org.jetbrains.kotlinconf.utils.Logger
+import org.koin.mp.KoinPlatformTools
 
+private const val LOG_TAG = "AndroidNotificationService"
 private const val EXTRA_TITLE = "title"
 private const val EXTRA_MESSAGE = "message"
 private const val EXTRA_NOTIFICATION_ID = "notificationId"
@@ -31,6 +34,7 @@ class AndroidNotificationService(
     private val iconId: Int,
     private val permissionResult: Channel<Boolean>,
     private val permissionLauncher: ActivityResultLauncher<Array<String>>,
+    private val logger: Logger,
 ) : NotificationService {
 
     private val notificationManager = NotificationManagerCompat.from(context)
@@ -65,6 +69,7 @@ class AndroidNotificationService(
                 iconId = iconId,
                 notificationManager = notificationManager,
                 notificationId = notificationId,
+                logger = logger,
             )
         }
     }
@@ -98,20 +103,20 @@ class AndroidNotificationService(
             ContextCompat.checkSelfPermission(context, Manifest.permission.USE_EXACT_ALARM)
             != PackageManager.PERMISSION_GRANTED
         ) {
-            println("No permission to schedule notification $notificationId")
+            logger.log(LOG_TAG) { "No permission to schedule notification $notificationId" }
             return
         }
 
-        println("Setting alarm for notification $notificationId, $triggerTime ($triggerAtMillis)")
+        logger.log(LOG_TAG) { "Setting alarm for notification $notificationId, $triggerTime ($triggerAtMillis)" }
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
     }
 
     override fun cancel(notificationId: String) {
-        println("Canceling notification $notificationId")
+        logger.log(LOG_TAG) { "Canceling notification $notificationId" }
 
         // Cancel the notification if it's currently shown
         notificationManager.cancel(notificationId.hashCode())
-        println("Canceled existing notification $notificationId")
+        logger.log(LOG_TAG) { "Canceled existing notification $notificationId" }
 
         // Cancel any pending alarms for this notification
         val intent = Intent(context, AlarmBroadcastReceiver::class.java).apply {
@@ -124,13 +129,16 @@ class AndroidNotificationService(
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
         )
         pendingIntent?.let { alarmManager?.cancel(it) }
-        println("Canceled scheduled notification $notificationId")
+        logger.log(LOG_TAG) { "Canceled scheduled notification $notificationId" }
     }
 }
 
 class AlarmBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        println("Received notification alarm")
+        // Grab logger from Koin if available
+        val logger = KoinPlatformTools.defaultContext().getOrNull()?.getOrNull<Logger>()
+
+        logger?.log(LOG_TAG) { "Received notification alarm" }
 
         if (intent.action != ACTION_SHOW_NOTIFICATION) return
 
@@ -147,6 +155,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
             iconId = iconId,
             notificationManager = NotificationManagerCompat.from(context),
             notificationId = notificationId,
+            logger = logger,
         )
     }
 }
@@ -158,12 +167,13 @@ private fun showNotification(
     iconId: Int,
     notificationManager: NotificationManagerCompat,
     notificationId: String,
+    logger: Logger?,
 ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
         ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
         != PackageManager.PERMISSION_GRANTED
     ) {
-        println("Skipping notification $notificationId, no permission")
+        logger?.log(LOG_TAG) { "Skipping notification $notificationId, no permission" }
         return
     }
 
@@ -185,6 +195,6 @@ private fun showNotification(
         .setAutoCancel(true)
         .build()
 
-    println("Showing notification: $notification")
+    logger?.log(LOG_TAG) { "Showing notification: $notification" }
     notificationManager.notify(notificationId.hashCode(), notification)
 }

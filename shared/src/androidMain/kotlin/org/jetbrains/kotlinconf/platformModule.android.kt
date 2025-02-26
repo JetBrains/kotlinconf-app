@@ -34,6 +34,7 @@ fun platformModule(
                 permissionResult = permissionResult,
                 permissionLauncher = permissionLauncher,
                 iconId = notificationIconId,
+                logger = get(),
             )
         }
         single<Logger> { AndroidLogger() }
