@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
@@ -46,6 +47,7 @@ import kotlinconfapp.shared.generated.resources.kotlinconf_by_jetbrains_descript
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
+import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.ui.components.DayHeader
@@ -63,9 +65,12 @@ fun AboutConference(
     onBack: () -> Unit,
     onSpeaker: (SpeakerId) -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+    ScrollToTopHandler(scrollState)
     ScreenWithTitle(
         title = stringResource(Res.string.about_conference_title),
         onBack = onBack,
+        contentScrollState = scrollState,
     ) {
         Column(
             modifier = Modifier.padding(top = 24.dp),

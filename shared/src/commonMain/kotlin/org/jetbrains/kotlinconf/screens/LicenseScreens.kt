@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,6 +31,7 @@ import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
+import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
@@ -52,9 +54,12 @@ fun LicensesScreen(
     onLicenseClick: (licenseName: String, licenseText: String) -> Unit,
     onBack: () -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+    ScrollToTopHandler(scrollState)
     ScreenWithTitle(
         title = stringResource(Res.string.licenses_title),
         onBack = onBack,
+        contentScrollState = scrollState,
     ) {
         val libraries by produceState<Libs?>(initialValue = null) {
             value = withContext(Dispatchers.Default) {

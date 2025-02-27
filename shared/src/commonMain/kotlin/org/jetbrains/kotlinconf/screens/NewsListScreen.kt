@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -13,6 +14,7 @@ import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.news_feed_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
+import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.ui.components.NewsCard
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
@@ -24,9 +26,12 @@ fun NewsListScreen(
     onBack: () -> Unit,
     viewModel: NewsListViewModel = koinViewModel(),
 ) {
+    val scrollState = rememberScrollState()
+    ScrollToTopHandler(scrollState)
     ScreenWithTitle(
         title = stringResource(Res.string.news_feed_title),
         onBack = onBack,
+        contentScrollState = scrollState,
     ) {
         val news by viewModel.news.collectAsState()
 
