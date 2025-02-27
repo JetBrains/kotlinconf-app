@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         val platformModule = platformModule(
             activity = this,
             application = application,
-            notificationIconId = R.mipmap.ic_launcher,
+            notificationIconId = R.drawable.kotlinconf_notification_icon,
         )
         setContent {
             App(
