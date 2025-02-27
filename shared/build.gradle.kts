@@ -120,6 +120,7 @@ kotlin {
             dependsOn(nonWebMain)
             dependsOn(nonAndroidMain)
             dependencies {
+                implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.ktor.client.darwin)
             }
         }
