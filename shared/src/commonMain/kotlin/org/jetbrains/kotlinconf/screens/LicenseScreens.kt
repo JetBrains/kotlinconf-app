@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -54,12 +54,9 @@ fun LicensesScreen(
     onLicenseClick: (licenseName: String, licenseText: String) -> Unit,
     onBack: () -> Unit,
 ) {
-    val scrollState = rememberScrollState()
-    ScrollToTopHandler(scrollState)
     ScreenWithTitle(
         title = stringResource(Res.string.licenses_title),
         onBack = onBack,
-        contentScrollState = scrollState,
     ) {
         val libraries by produceState<Libs?>(initialValue = null) {
             value = withContext(Dispatchers.Default) {
@@ -107,10 +104,13 @@ private fun LibraryList(
         libraries.libraries.sortedBy { it.name }
     }
 
+    val listState = rememberLazyListState()
+    ScrollToTopHandler(listState)
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(vertical = 16.dp) + bottomInsetPadding(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        state = listState,
     ) {
         items(sortedLibraries) { library ->
             LibraryItem(

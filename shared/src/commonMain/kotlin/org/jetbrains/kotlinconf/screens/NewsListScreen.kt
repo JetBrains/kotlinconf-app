@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,19 +26,19 @@ fun NewsListScreen(
     onBack: () -> Unit,
     viewModel: NewsListViewModel = koinViewModel(),
 ) {
-    val scrollState = rememberScrollState()
-    ScrollToTopHandler(scrollState)
     ScreenWithTitle(
         title = stringResource(Res.string.news_feed_title),
         onBack = onBack,
-        contentScrollState = scrollState,
     ) {
         val news by viewModel.news.collectAsState()
 
+        val listState = rememberLazyListState()
+        ScrollToTopHandler(listState)
         LazyColumn(
             modifier = Modifier.weight(1f),
             contentPadding = PaddingValues(vertical = 16.dp) + bottomInsetPadding(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            state = listState,
         ) {
             items(news) { newsItem ->
                 NewsCard(
