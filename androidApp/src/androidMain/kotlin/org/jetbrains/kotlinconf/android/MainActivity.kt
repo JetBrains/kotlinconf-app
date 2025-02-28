@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
 
         val context = ApplicationContext(
             application,
-            R.mipmap.ic_launcher,
+            R.drawable.ic_launcher,
         )
 
         setContent {
