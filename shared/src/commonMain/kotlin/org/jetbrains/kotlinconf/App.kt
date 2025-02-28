@@ -23,6 +23,8 @@ import org.jetbrains.kotlinconf.screens.StartNotificationsViewModel
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.storage.MultiplatformSettingsStorage
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.Logger
+import org.jetbrains.kotlinconf.utils.NoopProdLogger
 import org.koin.compose.KoinMultiplatformApplication
 import org.koin.compose.koinInject
 import org.koin.core.module.Module
@@ -71,11 +73,12 @@ fun App(
 
 private fun koinConfiguration(platformModule: Module) = koinConfiguration {
     val appModule = module {
-        single { APIClient(URLs.API_ENDPOINT) }
+        single { APIClient(URLs.API_ENDPOINT, get()) }
         single<ApplicationStorage> { MultiplatformSettingsStorage(get()) }
-        single<TimeProvider> { ServerBasedTimeProvider(get()) }
 //        single<TimeProvider> { FakeTimeProvider() }
+        single<TimeProvider> { ServerBasedTimeProvider(get()) }
         singleOf(::ConferenceService)
+        single<Logger> { NoopProdLogger() }
     }
 
     val viewModelModule = module {
@@ -90,5 +93,7 @@ private fun koinConfiguration(platformModule: Module) = koinConfiguration {
         viewModelOf(::SpeakerDetailViewModel)
     }
 
+    // Note that the order of modules here is significant, later
+    // modules can override dependencies from earlier modules
     modules(platformModule, appModule, viewModelModule)
 }

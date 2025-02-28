@@ -12,6 +12,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -63,6 +64,7 @@ class FakeTimeProvider(
     baseTime: LocalDateTime = LocalDateTime.parse("2024-05-23T13:39:00"),
     private val freezeTime: Boolean = false,
     private val speedMultiplier: Double = 20.0,
+    private val logger: Logger,
 ) : TimeProvider {
     private val _time = MutableStateFlow(baseTime)
     override val time: StateFlow<LocalDateTime> = _time
@@ -78,7 +80,7 @@ class FakeTimeProvider(
                         .plus(1.minutes)
                         .toLocalDateTime(EVENT_TIME_ZONE)
                         .also {
-                            println("Fake time is now $it")
+                            logger.log("FakeTimeProvider") { "Fake time is now $it" }
                         }
                 }
             }

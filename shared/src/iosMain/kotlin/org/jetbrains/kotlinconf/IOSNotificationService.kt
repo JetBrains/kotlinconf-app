@@ -3,6 +3,7 @@ package org.jetbrains.kotlinconf
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toNSTimeZone
+import org.jetbrains.kotlinconf.utils.Logger
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSDateComponents
 import platform.Foundation.NSError
@@ -16,7 +17,12 @@ import kotlin.coroutines.resume
 
 class IOSNotificationService(
     private val timeProvider: TimeProvider,
+    private val logger: Logger,
 ) : NotificationService {
+    private companion object {
+        private const val LOG_TAG = "IOSNotificationService"
+    }
+
     private val notificationCenter = UNUserNotificationCenter.currentNotificationCenter()
 
     override suspend fun requestPermission(): Boolean {
@@ -33,7 +39,7 @@ class IOSNotificationService(
         message: String,
         time: LocalDateTime?
     ) {
-        println("Posting: $time, $notificationId, $title, $message")
+        logger.log(LOG_TAG) { "Posting: $time, $notificationId, $title, $message" }
 
         val content = UNMutableNotificationContent().apply {
             setTitle(title)
@@ -60,13 +66,12 @@ class IOSNotificationService(
         }
         val request = UNNotificationRequest.requestWithIdentifier(notificationId, content, trigger)
         notificationCenter.addNotificationRequest(request) { error: NSError? ->
-            // TODO use logger
-            println("Notification completed with: $error")
+            logger.log(LOG_TAG) { "Notification completed with error: $error" }
         }
     }
 
     override fun cancel(notificationId: String) {
-        println("Cancelling: $notificationId")
+        logger.log(LOG_TAG) { "Cancelling: $notificationId" }
         notificationCenter.removePendingNotificationRequestsWithIdentifiers(listOf(notificationId))
     }
 }

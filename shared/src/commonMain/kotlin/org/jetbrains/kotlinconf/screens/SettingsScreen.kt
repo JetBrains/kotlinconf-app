@@ -49,7 +49,6 @@ import kotlinconfapp.shared.generated.resources.theme_system
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.Theme
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -61,7 +60,6 @@ import kotlinconfapp.shared.generated.resources.Res as AppRes
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
-    onNotificationSettingsChange: (NotificationSettings) -> Unit,
     viewModel: SettingsViewModel = koinViewModel(),
 ) {
     val graphicsLayer = rememberGraphicsLayer()
@@ -84,7 +82,6 @@ fun SettingsScreen(
                 }
                 viewModel.setTheme(theme)
             },
-            onNotificationSettingsChange = onNotificationSettingsChange,
             viewModel = viewModel,
             modifier = Modifier
                 .drawWithContent {
@@ -115,7 +112,6 @@ private fun SettingsScreenImpl(
     onBack: () -> Unit,
     currentTheme: Theme,
     onThemeChange: (Theme) -> Unit,
-    onNotificationSettingsChange: (NotificationSettings) -> Unit,
     viewModel: SettingsViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -149,7 +145,6 @@ private fun SettingsScreenImpl(
                     notificationSettings = notificationSettings,
                     onChangeSettings = { newSettings ->
                         viewModel.setNotificationSettings(newSettings)
-                        onNotificationSettingsChange(newSettings)
                     }
                 )
         }

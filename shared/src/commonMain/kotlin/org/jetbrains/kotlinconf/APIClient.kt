@@ -26,14 +26,17 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.core.Closeable
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
-import org.jetbrains.kotlinconf.utils.appLogger
+import org.jetbrains.kotlinconf.utils.Logger
+import io.ktor.client.plugins.logging.Logger as KtorLogger
 
 /**
  * Adapter to handle backend API and manage auth information.
  */
 class APIClient(
-    private val apiUrl: String
+    private val apiUrl: String,
+    private val appLogger: Logger
 ) : Closeable {
+
     var userId: String? = null
 
     private val client = HttpClient {
@@ -43,7 +46,11 @@ class APIClient(
 
         install(Logging) {
             level = LogLevel.HEADERS
-            logger = appLogger()
+            logger = object : KtorLogger {
+                override fun log(message: String) {
+                    appLogger.log("HttpClient") { message }
+                }
+            }
         }
 
         HttpResponseValidator {

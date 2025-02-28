@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
+import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.time.Duration.Companion.minutes
 
 class ConferenceService(
@@ -23,7 +24,12 @@ class ConferenceService(
     private val timeProvider: TimeProvider,
     private val storage: ApplicationStorage,
     private val notificationService: NotificationService,
+    private val logger: Logger,
 ) {
+    companion object {
+        private const val LOG_TAG = "ConferenceService"
+    }
+
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     private val votes = MutableStateFlow(emptyList<VoteInfo>())
@@ -131,8 +137,7 @@ class ConferenceService(
      * @return true if permission was granted, false otherwise
      */
     suspend fun requestNotificationPermissions(): Boolean = notificationService.requestPermission().also {
-        // TODO remove
-        println("noti permissions graned: $it")
+        logger.log(LOG_TAG) { "Notification permissions granted: $it" }
     }
 
     fun getNotificationSettings(): Flow<NotificationSettings> = storage.getNotificationSettings()
