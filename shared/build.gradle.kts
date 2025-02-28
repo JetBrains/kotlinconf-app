@@ -141,6 +141,7 @@ kotlin {
             dependsOn(nonAndroidMain)
             dependencies {
                 implementation(libs.ktor.client.js)
+                implementation(npm("@js-joda/timezone", "2.3.0"))
             }
         }
 

@@ -188,9 +188,7 @@ fun NavGraphBuilder.startScreens(
         }
         composable<StartNotificationsScreen> {
             StartNotificationsScreen(
-                onDone = { notificationSettings ->
-                    // TODO request notification permission, save settings
-
+                onDone = {
                     navController.navigate(MainScreen) {
                         popUpTo<StartScreens> { inclusive = true }
                     }

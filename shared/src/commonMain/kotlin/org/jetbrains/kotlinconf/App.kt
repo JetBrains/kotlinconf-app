@@ -25,6 +25,7 @@ import org.jetbrains.kotlinconf.storage.MultiplatformSettingsStorage
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.KoinMultiplatformApplication
 import org.koin.compose.koinInject
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.koinConfiguration
@@ -32,10 +33,10 @@ import org.koin.dsl.module
 
 @Composable
 fun App(
-    context: ApplicationContext,
+    platformModule: Module = module {},
     onThemeChange: ((isDarkTheme: Boolean) -> Unit)? = null,
 ) {
-    KoinMultiplatformApplication(koinConfiguration(context)) {
+    KoinMultiplatformApplication(koinConfiguration(platformModule)) {
         DevelopmentEntryPoint {
             val service = koinInject<ConferenceService>()
             val currentTheme by service.getTheme().collectAsStateWithLifecycle(initialValue = Theme.SYSTEM)
@@ -68,11 +69,10 @@ fun App(
     }
 }
 
-private fun koinConfiguration(context: ApplicationContext) = koinConfiguration {
+private fun koinConfiguration(platformModule: Module) = koinConfiguration {
     val appModule = module {
         single { APIClient(URLs.API_ENDPOINT) }
-        single<ApplicationStorage> { MultiplatformSettingsStorage(context) }
-        single { NotificationManager(context) }
+        single<ApplicationStorage> { MultiplatformSettingsStorage(get()) }
         single<TimeProvider> { ServerBasedTimeProvider(get()) }
 //        single<TimeProvider> { FakeTimeProvider() }
         singleOf(::ConferenceService)
@@ -90,5 +90,5 @@ private fun koinConfiguration(context: ApplicationContext) = koinConfiguration {
         viewModelOf(::SpeakerDetailViewModel)
     }
 
-    modules(appModule, viewModelModule)
+    modules(platformModule, appModule, viewModelModule)
 }

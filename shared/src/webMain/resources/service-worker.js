@@ -174,15 +174,15 @@ self.addEventListener('message', function(event) {
     if (event.data.command === 'register-notification') {
         const id = setTimeout(() => {
           self.registration.showNotification(event.data.title, { body: event.data.body });
-          map.delete(event.data.title)
+          map.delete(event.data.notificationId)
         }, event.data.delay)
-        map.set(event.data.title, id)
+        map.set(event.data.notificationId, id)
     }
     if (event.data.command === 'cancel-notification') {
-        const id = map.get(event.data.title)
+        const id = map.get(event.data.notificationId)
         if (id != undefined) {
             clearTimeout(id)
-            map.delete(event.data.title)
+            map.delete(event.data.notificationId)
         }
     }
   });

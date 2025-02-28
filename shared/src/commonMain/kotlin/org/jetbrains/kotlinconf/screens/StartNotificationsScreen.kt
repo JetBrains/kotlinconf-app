@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -25,7 +26,6 @@ import kotlinconfapp.shared.generated.resources.notifications_lets_get_started
 import kotlinconfapp.shared.generated.resources.notifications_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
-import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.ui.components.Button
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -34,10 +34,16 @@ import kotlinconfapp.shared.generated.resources.Res as AppRes
 
 @Composable
 fun StartNotificationsScreen(
-    onDone: (NotificationSettings) -> Unit,
+    onDone: () -> Unit,
     viewModel: StartNotificationsViewModel = koinViewModel(),
 ) {
     val notificationSettings by viewModel.notificationSettings.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.permissionHandlingDone.collect { done ->
+            if (done) onDone()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -79,7 +85,6 @@ fun StartNotificationsScreen(
                 label = stringResource(AppRes.string.notifications_lets_get_started),
                 onClick = {
                     viewModel.requestNotificationPermissions()
-                    onDone(notificationSettings)
                 },
                 modifier = Modifier.weight(1f),
                 primary = true,
