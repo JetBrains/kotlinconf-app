@@ -23,7 +23,7 @@ import org.koin.mp.KoinPlatformTools
 private const val LOG_TAG = "AndroidNotificationService"
 private const val EXTRA_TITLE = "title"
 private const val EXTRA_MESSAGE = "message"
-private const val EXTRA_NOTIFICATION_ID = "notificationId"
+const val EXTRA_NOTIFICATION_ID = "notificationId"
 private const val EXTRA_ICON_ID = "iconId"
 private const val NOTIFICATION_CHANNEL_ID = "channel_all_notifications"
 private const val ACTION_SHOW_NOTIFICATION = "org.jetbrains.kotlinconf.SHOW_NOTIFICATION"
@@ -54,6 +54,7 @@ class AndroidNotificationService(
         message: String,
         time: LocalDateTime?,
     ) {
+        logger.log(LOG_TAG) { "Posting notification: $notificationId, $title at $time" }
         if (time != null) {
             scheduleNotification(
                 title = title,
@@ -187,14 +188,25 @@ private fun showNotification(
         )
     }
 
+    val mainActivityIntent = Intent(context, Class.forName("org.jetbrains.kotlinconf.android.MainActivity"))
+        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        .putExtra(EXTRA_NOTIFICATION_ID, notificationId)
+    val pendingIntent = PendingIntent.getActivity(
+        context,
+        notificationId.hashCode(),
+        mainActivityIntent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
     val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
         .setContentTitle(title)
         .setContentText(message)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setSmallIcon(iconId)
         .setAutoCancel(true)
+        .setContentIntent(pendingIntent)
         .build()
 
-    logger?.log(LOG_TAG) { "Showing notification: $notification" }
+    logger?.log(LOG_TAG) { "Showing notification: $notificationId, $notification" }
     notificationManager.notify(notificationId.hashCode(), notification)
 }

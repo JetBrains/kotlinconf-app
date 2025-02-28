@@ -61,10 +61,10 @@ class ServerBasedTimeProvider(private val client: APIClient) : TimeProvider {
 }
 
 class FakeTimeProvider(
+    private val logger: Logger,
     baseTime: LocalDateTime = LocalDateTime.parse("2024-05-23T13:39:00"),
     private val freezeTime: Boolean = false,
     private val speedMultiplier: Double = 20.0,
-    private val logger: Logger,
 ) : TimeProvider {
     private val _time = MutableStateFlow(baseTime)
     override val time: StateFlow<LocalDateTime> = _time

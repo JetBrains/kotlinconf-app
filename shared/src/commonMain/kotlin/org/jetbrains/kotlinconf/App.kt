@@ -75,8 +75,8 @@ private fun koinConfiguration(platformModule: Module) = koinConfiguration {
     val appModule = module {
         single { APIClient(URLs.API_ENDPOINT, get()) }
         single<ApplicationStorage> { MultiplatformSettingsStorage(get()) }
-//        single<TimeProvider> { FakeTimeProvider() }
         single<TimeProvider> { ServerBasedTimeProvider(get()) }
+//        single<TimeProvider> { FakeTimeProvider(get()) }
         singleOf(::ConferenceService)
         single<Logger> { NoopProdLogger() }
     }

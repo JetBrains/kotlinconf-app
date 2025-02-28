@@ -8,6 +8,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.navigation.NavBackStackEntry
@@ -18,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import kotlinx.coroutines.channels.Channel
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.URLs
@@ -43,9 +45,23 @@ import org.jetbrains.kotlinconf.screens.TermsOfUse
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import kotlin.reflect.typeOf
 
+fun navigateToSession(notificationId: String) {
+    val sessionId = SessionId(notificationId.substringBefore("-"))
+    sessionIds.trySend(sessionId)
+}
+
+private val sessionIds = Channel<SessionId>(capacity = 1)
+
 @Composable
 internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
     val navController = rememberNavController()
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            val sessionId = sessionIds.receive()
+            navController.navigate(SessionScreen(sessionId))
+        }
+    }
 
     NavHost(
         navController = navController,
