@@ -41,6 +41,7 @@ import kotlinconfapp.ui_components.generated.resources.arrow_right_24
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
+import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
 import org.jetbrains.kotlinconf.ui.components.Button
@@ -97,12 +98,14 @@ fun PrivacyPolicyScreen(
                         thickness = 1.dp,
                         color = KotlinConfTheme.colors.strokePale,
                     )
+                    val scrollState = rememberScrollState()
+                    ScrollToTopHandler(scrollState)
                     MarkdownView(
                         loadText = {
                             @OptIn(ExperimentalResourceApi::class)
                             AppRes.readBytes("files/app-privacy-policy.md")
                         },
-                        modifier = Modifier.padding(horizontal = 12.dp).verticalScroll(rememberScrollState())
+                        modifier = Modifier.padding(horizontal = 12.dp).verticalScroll(scrollState),
                     )
                     Spacer(Modifier.weight(1f))
                     Divider(

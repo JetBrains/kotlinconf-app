@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,6 +31,7 @@ import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
+import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
@@ -102,10 +104,13 @@ private fun LibraryList(
         libraries.libraries.sortedBy { it.name }
     }
 
+    val listState = rememberLazyListState()
+    ScrollToTopHandler(listState)
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(vertical = 16.dp) + bottomInsetPadding(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        state = listState,
     ) {
         items(sortedLibraries) { library ->
             LibraryItem(

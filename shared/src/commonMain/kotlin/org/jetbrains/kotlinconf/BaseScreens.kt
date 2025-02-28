@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -27,6 +28,7 @@ fun ScreenWithTitle(
     title: String,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    contentScrollState: ScrollState = rememberScrollState(),
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
@@ -52,7 +54,7 @@ fun ScreenWithTitle(
                 .fillMaxSize()
                 .background(color = KotlinConfTheme.colors.mainBackground)
                 .padding(horizontal = 12.dp)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(contentScrollState)
         ) {
             content()
         }
@@ -68,7 +70,9 @@ fun MarkdownScreenWithTitle(
     onBack: () -> Unit,
     endContent: @Composable ColumnScope.() -> Unit = {},
 ) {
-    ScreenWithTitle(title, onBack) {
+    val scrollState = rememberScrollState()
+    ScrollToTopHandler(scrollState)
+    ScreenWithTitle(title, onBack, contentScrollState = scrollState) {
         if (header.isNotEmpty()) {
             StyledText(header, style = KotlinConfTheme.typography.h1, modifier = Modifier.padding(vertical = 12.dp))
         }

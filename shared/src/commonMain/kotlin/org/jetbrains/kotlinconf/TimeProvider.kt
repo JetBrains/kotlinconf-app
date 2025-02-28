@@ -20,12 +20,18 @@ interface TimeProvider {
     fun now(): LocalDateTime
     val time: StateFlow<LocalDateTime>
     suspend fun run(): Nothing
+
+    fun getNotificationTime(notificationTime: LocalDateTime): LocalDateTime = notificationTime
+    fun getNotificationDelay(notificationTime: LocalDateTime): Duration = notificationTime - now()
 }
 
 val EVENT_TIME_ZONE = TimeZone.of("Europe/Copenhagen")
 
 operator fun LocalDateTime.minus(other: LocalDateTime): Duration =
     toInstant(EVENT_TIME_ZONE) - other.toInstant(EVENT_TIME_ZONE)
+
+operator fun LocalDateTime.minus(duration: Duration): LocalDateTime =
+    (toInstant(EVENT_TIME_ZONE) - duration).toLocalDateTime(EVENT_TIME_ZONE)
 
 class ServerBasedTimeProvider(private val client: APIClient) : TimeProvider {
     private var serverTime: Instant = Clock.System.now()
@@ -54,19 +60,19 @@ class ServerBasedTimeProvider(private val client: APIClient) : TimeProvider {
 }
 
 class FakeTimeProvider(
-    private val baseTime: LocalDateTime = LocalDateTime.parse("2024-05-23T12:40:00"),
+    baseTime: LocalDateTime = LocalDateTime.parse("2024-05-23T13:39:00"),
     private val freezeTime: Boolean = false,
+    private val speedMultiplier: Double = 20.0,
 ) : TimeProvider {
     private val _time = MutableStateFlow(baseTime)
     override val time: StateFlow<LocalDateTime> = _time
-    override fun now(): LocalDateTime = baseTime
+    override fun now(): LocalDateTime = _time.value
     override suspend fun run(): Nothing {
         if (freezeTime) {
             awaitCancellation()
         } else {
             while (true) {
-                // Progress time at 4x speed for testing
-                delay(15.seconds)
+                delay((60.0 / speedMultiplier).seconds)
                 _time.update { t ->
                     t.toInstant(EVENT_TIME_ZONE)
                         .plus(1.minutes)
@@ -78,4 +84,10 @@ class FakeTimeProvider(
             }
         }
     }
+
+    override fun getNotificationTime(notificationTime: LocalDateTime): LocalDateTime =
+        (Clock.System.now() + getNotificationDelay(notificationTime)).toLocalDateTime(EVENT_TIME_ZONE)
+
+    override fun getNotificationDelay(notificationTime: LocalDateTime): Duration =
+        (notificationTime - now()) / speedMultiplier
 }

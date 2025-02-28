@@ -14,9 +14,6 @@ interface ApplicationStorage {
     fun isOnboardingComplete(): Flow<Boolean>
     suspend fun setOnboardingComplete(value: Boolean)
 
-    fun getNotificationsAllowed(): Flow<Boolean>
-    suspend fun setNotificationsAllowed(value: Boolean)
-
     fun getTheme(): Flow<Theme>
     suspend fun setTheme(value: Theme)
 

@@ -105,7 +105,7 @@ fun TalkCard(
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    feedbackEnabled:  Boolean = status != TalkStatus.Upcoming,
+    feedbackEnabled: Boolean,
 ) {
     val backgroundColor by animateColorAsState(
         if (status == TalkStatus.Past) KotlinConfTheme.colors.cardBackgroundPast
@@ -397,6 +397,7 @@ internal fun TalkCardPreview() {
                 onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
                 onClick = { "Clicked session" },
                 modifier = Modifier.weight(1f),
+                feedbackEnabled = true,
             )
             Spacer(Modifier.width(16.dp))
             TalkCard(
@@ -420,6 +421,7 @@ internal fun TalkCardPreview() {
                 onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
                 onClick = { "Clicked session" },
                 modifier = Modifier.weight(1f),
+                feedbackEnabled = false,
             )
         }
     }
