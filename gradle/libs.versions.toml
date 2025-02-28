@@ -2,7 +2,7 @@
 aboutlibraries = "11.4.0"
 agp = "8.7.3"
 android-compileSdk = "35"
-android-minSdk = "24"
+android-minSdk = "26"
 android-targetSdk = "35"
 androidx-activityCompose = "1.9.3"
 androidx-core-ktx = "1.13.1"

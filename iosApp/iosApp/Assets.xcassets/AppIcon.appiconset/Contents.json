@@ -1,127 +1,125 @@
 {
   "images" : [
     {
-      "filename" : "AppIcon-20@2x.png",
+      "filename" : "iPhone_Notifications_20_2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "AppIcon-20@3x.png",
+      "filename" : "iPhone_Notifications_20_3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
-      "filename" : "AppIcon-29.png",
+      "filename" : "iPad_Settings_29_1x.png",
       "idiom" : "iphone",
       "scale" : "1x",
       "size" : "29x29"
     },
     {
-      "filename" : "AppIcon-29@2x.png",
+      "filename" : "iPhone_Settings_29_2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "AppIcon-29@3x.png",
+      "filename" : "iPhone_Settings_29_3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
-      "filename" : "AppIcon-40@2x.png",
+      "filename" : "iPhone_Spotlight_40_2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "AppIcon-40@3x.png",
+      "filename" : "iPhone_Spotlight_40_3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
-      "filename" : "AppIcon@2x.png",
+      "filename" : "iPhone_App_60_2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "AppIcon@3x.png",
+      "filename" : "iPhone_App_60_3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "AppIcon-20~ipad.png",
+      "filename" : "iPad_Notifications_20_1x.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "20x20"
     },
     {
-      "filename" : "AppIcon-20@2x~ipad.png",
+      "filename" : "iPad_Notifications_20_2x.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "AppIcon-29~ipad.png",
+      "filename" : "iPad_Settings_29_1x 1.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "29x29"
     },
     {
-      "filename" : "AppIcon-29@2x~ipad.png",
+      "filename" : "iPad_Settings_29_2x.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "AppIcon-40~ipad.png",
+      "filename" : "iPad_Spotlight_40_1x.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "40x40"
     },
     {
-      "filename" : "AppIcon-40@2x~ipad.png",
+      "filename" : "iPad_Spotlight_40_2x.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "AppIcon~ipad.png",
+      "filename" : "iPad_App_76_1x.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "76x76"
     },
     {
-      "filename" : "AppIcon@2x~ipad.png",
+      "filename" : "iPad_App_76_2x.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "76x76"
     },
     {
-      "filename" : "AppIcon-83.5@2x~ipad.png",
+      "filename" : "iPad_Pro_App_83.5_2x.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "AppIcon-60@2x~car.png",
       "idiom" : "car",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "AppIcon-60@3x~car.png",
       "idiom" : "car",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "AppIcon~ios-marketing.png",
+      "filename" : "App_store_1024_1x.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
