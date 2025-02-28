@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,6 +23,7 @@ import kotlinconfapp.shared.generated.resources.speakers_title
 import kotlinconfapp.ui_components.generated.resources.main_header_search_hint
 import kotlinconfapp.ui_components.generated.resources.search_24
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
@@ -77,7 +79,12 @@ fun SpeakersScreen(
 
         Divider(1.dp, KotlinConfTheme.colors.strokePale)
 
-        LazyColumn(Modifier.fillMaxSize()) {
+        val listState = rememberLazyListState()
+        ScrollToTopHandler(listState)
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = listState,
+        ) {
             items(speakers) { speaker ->
                 SpeakerCard(
                     name = speaker.name,

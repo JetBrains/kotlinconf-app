@@ -6,7 +6,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,6 +38,7 @@ import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
@@ -275,7 +275,6 @@ private fun Header(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScheduleList(
     scheduleItems: List<ScheduleListItem>,
@@ -287,6 +286,7 @@ fun ScheduleList(
     onBookmark: (SessionId, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    ScrollToTopHandler(listState)
     LazyColumn(
         state = listState,
         modifier = modifier,
