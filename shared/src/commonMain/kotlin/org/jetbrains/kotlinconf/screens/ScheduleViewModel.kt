@@ -206,11 +206,6 @@ class ScheduleViewModel(
                     removeLast()
                 }
             }
-
-            // Remove empty days
-            if (last() is DayHeaderItem) {
-                removeLast()
-            }
         }
     }
 
