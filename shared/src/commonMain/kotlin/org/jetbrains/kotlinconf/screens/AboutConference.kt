@@ -43,6 +43,7 @@ import kotlinconfapp.shared.generated.resources.about_conference_title
 import kotlinconfapp.shared.generated.resources.about_conference_website_link
 import kotlinconfapp.shared.generated.resources.arrow_up_right_24
 import kotlinconfapp.shared.generated.resources.kotlinconf_by_jetbrains
+import kotlinconfapp.shared.generated.resources.kotlinconf_by_jetbrains_dark
 import kotlinconfapp.shared.generated.resources.kotlinconf_by_jetbrains_description
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -160,7 +161,10 @@ fun AboutConference(
         }
 
         Image(
-            painter = painterResource(Res.drawable.kotlinconf_by_jetbrains),
+            painter = painterResource(
+                if (KotlinConfTheme.colors.isDark) Res.drawable.kotlinconf_by_jetbrains_dark
+                else Res.drawable.kotlinconf_by_jetbrains
+            ),
             contentDescription = stringResource(Res.string.kotlinconf_by_jetbrains_description),
             modifier = Modifier.align(Alignment.CenterHorizontally)
                 .padding(vertical = 64.dp)

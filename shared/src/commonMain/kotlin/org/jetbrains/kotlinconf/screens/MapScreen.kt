@@ -1,7 +1,6 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -58,7 +57,7 @@ enum class Floor(
 }
 
 val Floor.resource: String
-    @Composable get() = if (isSystemInDarkTheme()) resourceDark else resourceLight
+    @Composable get() = if (KotlinConfTheme.colors.isDark) resourceDark else resourceLight
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

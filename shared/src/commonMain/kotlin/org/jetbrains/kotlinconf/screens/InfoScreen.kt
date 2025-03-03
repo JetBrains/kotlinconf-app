@@ -32,6 +32,7 @@ import kotlinconfapp.shared.generated.resources.info_link_news_feed
 import kotlinconfapp.shared.generated.resources.info_link_partners
 import kotlinconfapp.shared.generated.resources.info_title
 import kotlinconfapp.shared.generated.resources.kotlinconf_by_jetbrains
+import kotlinconfapp.shared.generated.resources.kotlinconf_by_jetbrains_dark
 import kotlinconfapp.shared.generated.resources.slack
 import kotlinconfapp.shared.generated.resources.twitter
 import org.jetbrains.compose.resources.stringResource
@@ -67,7 +68,10 @@ fun InfoScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
-                imageVector = vectorResource(Res.drawable.kotlinconf_by_jetbrains),
+                imageVector = vectorResource(
+                    if (KotlinConfTheme.colors.isDark) Res.drawable.kotlinconf_by_jetbrains_dark
+                    else Res.drawable.kotlinconf_by_jetbrains
+                ),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(24.dp)
