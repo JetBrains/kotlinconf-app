@@ -1,4 +1,5 @@
 import SwiftUI
+import shared
 
 @main
 struct iOSApp: App {
@@ -7,18 +8,18 @@ struct iOSApp: App {
 			ContentView()
 		}
 	}
-    
+
     let appDelegate = AppDelegate()
-    
+
     init() {
         UNUserNotificationCenter.current().delegate = appDelegate
     }
 }
 
-/**
- Makes sure that any notifications requested while the app in the foreground are shown.
-*/
 class AppDelegate : UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+    /**
+     Makes sure that any notifications requested while the app in the foreground are shown.
+    */
     func userNotificationCenter(
       _ center: UNUserNotificationCenter,
       willPresent notification: UNNotification,
@@ -26,5 +27,14 @@ class AppDelegate : UIResponder, UIApplicationDelegate, UNUserNotificationCenter
       @escaping (UNNotificationPresentationOptions) -> Void
     ) {
       completionHandler([.banner, .sound, .badge])
+    }
+
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        IOSNotificationServiceKt.handleNotificationResponse(response: response)
+        completionHandler()
     }
 }

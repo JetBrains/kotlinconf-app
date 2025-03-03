@@ -3,6 +3,7 @@ package org.jetbrains.kotlinconf
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toNSTimeZone
+import org.jetbrains.kotlinconf.navigation.navigateToSession
 import org.jetbrains.kotlinconf.utils.Logger
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSDateComponents
@@ -11,15 +12,16 @@ import platform.UserNotifications.UNAuthorizationOptionAlert
 import platform.UserNotifications.UNCalendarNotificationTrigger
 import platform.UserNotifications.UNMutableNotificationContent
 import platform.UserNotifications.UNNotificationRequest
+import platform.UserNotifications.UNNotificationResponse
 import platform.UserNotifications.UNUserNotificationCenter
 import kotlin.coroutines.resume
-
 
 class IOSNotificationService(
     private val timeProvider: TimeProvider,
     private val logger: Logger,
 ) : NotificationService {
-    private companion object {
+    companion object {
+        const val NOTIFICATION_ID_KEY = "notificationId"
         private const val LOG_TAG = "IOSNotificationService"
     }
 
@@ -44,6 +46,7 @@ class IOSNotificationService(
         val content = UNMutableNotificationContent().apply {
             setTitle(title)
             setBody(message)
+            setUserInfo(mapOf(NOTIFICATION_ID_KEY to notificationId))
         }
         val trigger = if (time != null) {
             val adjustedTime = timeProvider.getNotificationTime(time)
@@ -73,5 +76,14 @@ class IOSNotificationService(
     override fun cancel(notificationId: String) {
         logger.log(LOG_TAG) { "Cancelling: $notificationId" }
         notificationCenter.removePendingNotificationRequestsWithIdentifiers(listOf(notificationId))
+    }
+}
+
+@Suppress("unused") // Called from Swift
+fun handleNotificationResponse(response: UNNotificationResponse) {
+    val sessionId = response.notification.request.content
+        .userInfo[IOSNotificationService.NOTIFICATION_ID_KEY] as? String
+    if (sessionId != null) {
+        navigateToSession(sessionId)
     }
 }
