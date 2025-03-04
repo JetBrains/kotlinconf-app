@@ -14,6 +14,11 @@ sessionize:
     imagesUrl: "https://sessionize.com/image/"
     interval: 60
 
+news:
+    repo: "JetBrains/kotlinconf-app"
+    branch: "e5l/news"
+    folder: "news"
+
 database:
     host: "$DB0_HOST:"
     user: "$DB0_USERNAME:"

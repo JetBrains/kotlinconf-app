@@ -2,62 +2,46 @@ package org.jetbrains.kotlinconf.backend.services
 
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.utils.io.core.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import java.io.File
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
+import org.jetbrains.kotlinconf.NewsItem
+import org.jetbrains.kotlinconf.backend.model.GitHubItem
+import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
+import org.slf4j.LoggerFactory
 
-class NewsService {
-    private val client = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-                prettyPrint = true
-            })
+class NewsService(private val client: HttpClient, config: ConferenceConfig): Closeable {
+    private val log = LoggerFactory.getLogger("NewsService")
+    private val repo: String = config.newsRepo
+    private val branch: String = config.newsBranch
+    private val folder: String = config.newsFolder
+    private val updateInterval = config.sessionizeInterval
+
+    private val news = MutableSharedFlow<List<NewsItem>>(replay = 1)
+
+    val syncJob = GlobalScope.launch(Dispatchers.IO) {
+        while (true) {
+            runCatching { updateNews() }.onFailure {
+                log.error("Failed to update news", it)
+            }
+
+            kotlinx.coroutines.delay(updateInterval * 1000)
         }
     }
 
-    @Serializable
-    data class GitHubItem(
-        val name: String,
-        val path: String,
-        val type: String,
-        val download_url: String? = null
-    )
+    suspend fun getNews(): List<NewsItem> = news.first()
 
-    /**
-     * Downloads all files from a specific folder in a public GitHub repository branch
-     *
-     * @param org The organization or username that owns the repository
-     * @param repo The repository name
-     * @param branch The branch name (e.g., "main", "master")
-     * @param folderPath The path to the folder inside the repository
-     * @param outputDir The local directory where files should be saved
-     * @param fileFilter Optional predicate to filter which files to download
-     */
-    suspend fun downloadFilesFromGitHub(
-        org: String,
-        repo: String,
-        branch: String,
-        folderPath: String,
-        outputDir: String,
-        fileFilter: (GitHubItem) -> Boolean = { true }
-    ) {
-        // Create output directory if it doesn't exist
-        withContext(Dispatchers.IO) {
-            File(outputDir).mkdirs()
-        }
+    suspend fun updateNews() {
+        news.emit(downloadNews())
+    }
 
-        // Normalize folder path to remove leading/trailing slashes
-        val normalizedPath = folderPath.trim('/')
-
-        // Get contents of the specified folder in the specified branch
-        val url = "https://api.github.com/repos/$org/$repo/contents/$normalizedPath?ref=$branch"
+    private suspend fun downloadNews(): List<NewsItem> {
+        val url = "https://api.github.com/repos/$repo/contents/$folder?ref=$branch"
 
         val contents: List<GitHubItem> = try {
             client.get(url) {
@@ -65,49 +49,84 @@ class NewsService {
                     append("Accept", "application/vnd.github.v3+json")
                 }
             }.body()
-        } catch (e: Exception) {
-            println("Error fetching repository contents: ${e.message}")
-            emptyList()
+        } catch (cause: Throwable) {
+            log.warn("Error fetching repository contents: ${cause.message}")
+            return emptyList()
         }
 
-        // Print the files found
-        println("Files found in $org/$repo/$branch/$normalizedPath:")
-        contents.forEach {
-            println("- ${it.name} (${it.type})")
-        }
+        val urls = contents
+            .filter { it.type == "file" && it.name.endsWith(".md") }
+            .mapNotNull { it.download_url }
 
-        // Download each file that passes the filter
-        var downloadCount = 0
-        contents.forEach { item ->
-            when (item.type) {
-                "dir" -> {
-                    // If it's a directory, we could recursively download, but we'll skip for now
-                    println("Skipping directory: ${item.path}")
-                }
-                "file" -> {
-                    // Check if we should download this file
-                    if (fileFilter(item)) {
-                        item.download_url?.let { url ->
-                            try {
-                                val content = client.get(url).body<String>()
-                                withContext(Dispatchers.IO) {
-                                    File("$outputDir/${item.name}").writeText(content)
-                                }
-                                println("Downloaded: ${item.path}")
-                                downloadCount++
-                            } catch (e: Exception) {
-                                println("Error downloading ${item.path}: ${e.message}")
-                            }
-                        }
-                    }
-                }
+        val result = mutableListOf<NewsItem>()
+        for (url in urls) {
+            try {
+                val content = client.get(url).body<String>()
+                val item = parseNewsItem(content)
+                result.add(item)
+            } catch (cause: Throwable) {
+                log.warn("Error downloading $url: ${cause.message}")
             }
         }
 
-        println("Downloaded $downloadCount files to $outputDir")
+        return result
     }
 
-    suspend fun stop() {
-        client.close()
+    /**
+     * Parses a Markdown file and converts it to a NewsItem object.
+     *
+     * The Markdown file should have the following format:
+     * ```
+     * id: idstring
+     * photoUrl: http://example.com/photo.jpg
+     * title: title of the page
+     * publicationDate: "2024-01-20T00:00:00"
+     * ---
+     * <content in markdown format>
+     * ```
+     * @return NewsItem object parsed from the markdown file
+     * @throws IllegalArgumentException if the file format is invalid or required fields are missing
+     */
+    internal fun parseNewsItem(markdownContent: String): NewsItem {
+        val metadataEnd = markdownContent.indexOf("---")
+        val metadataSection = markdownContent.substring(0, metadataEnd)
+        val bodyContent = markdownContent.substring(metadataEnd + 3)
+
+        val metadataLines = metadataSection.split("\n")
+        val metadata = mutableMapOf<String, String>()
+
+        for (line in metadataLines) {
+            if (line.isBlank()) continue
+            val keyValue = line.split(":", limit = 2)
+            if (keyValue.size == 2) {
+                val key = keyValue[0].trim()
+                val value = keyValue[1].trim()
+                metadata[key] = value
+            }
+        }
+
+        // Extract required fields
+        val id = metadata["id"] ?: throw IllegalArgumentException("Missing required field: id")
+        val photoUrl = metadata["photoUrl"]?.takeIf { it.isNotEmpty() }
+        val title = metadata["title"] ?: throw IllegalArgumentException("Missing required field: title")
+
+        // Parse publication date
+        val publicationDateStr = metadata["publicationDate"]
+            ?: throw IllegalArgumentException("Missing required field: publicationDate")
+
+        val publicationDate = LocalDateTime.parse(publicationDateStr)
+
+        return NewsItem(
+            id = id,
+            photoUrl = photoUrl,
+            title = title,
+            publicationDate = publicationDate,
+            content = bodyContent
+        )
+    }
+
+
+    override fun close() {
+        syncJob.cancel()
     }
 }

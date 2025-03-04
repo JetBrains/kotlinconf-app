@@ -24,6 +24,7 @@ class SessionizeService(
     config: ConferenceConfig
 ): Closeable {
     private val conference = MutableSharedFlow<Conference>(replay = 1)
+
     private val sessionizeUrl: String = config.sessionizeUrl
     private val sessionizeInterval: Long = config.sessionizeInterval
     private val log = LoggerFactory.getLogger("SessionizeService")

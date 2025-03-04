@@ -2,10 +2,7 @@ package org.jetbrains.kotlinconf.backend.repositories
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.ktor.server.application.Application
-import io.ktor.server.application.log
-import io.ktor.server.config.ApplicationConfig
-import io.ktor.util.logging.Logger
+import io.ktor.server.config.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.exposed.sql.Database
@@ -28,9 +25,11 @@ import org.jetbrains.kotlinconf.backend.schema.Feedback
 import org.jetbrains.kotlinconf.backend.schema.News
 import org.jetbrains.kotlinconf.backend.schema.Users
 import org.jetbrains.kotlinconf.backend.schema.Votes
+import org.slf4j.LoggerFactory
 import java.util.*
 
-internal class KotlinConfRepository(log: Logger, config: ApplicationConfig) {
+internal class KotlinConfRepository(config: ApplicationConfig) {
+    private val log = LoggerFactory.getLogger("KotlinConfRepository")
 
     init {
         val hikariConfig = HikariConfig()
