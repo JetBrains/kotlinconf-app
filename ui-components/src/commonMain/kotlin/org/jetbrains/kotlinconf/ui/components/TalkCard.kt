@@ -307,7 +307,7 @@ private fun FeedbackBlock(
                 targetState = selectedEmotion != null,
                 transitionSpec = {
                     fadeIn(tween(FeedbackAnimationDuration)) togetherWith
-                        fadeOut(tween(FeedbackAnimationDuration))
+                            fadeOut(tween(FeedbackAnimationDuration))
                 },
                 modifier = Modifier.fillMaxHeight(),
                 contentAlignment = Alignment.CenterStart,
@@ -333,7 +333,7 @@ private fun FeedbackBlock(
             Spacer(Modifier.weight(1f))
             Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
                 val feedbackEmotions = remember {
-                    listOf(Emotion.Positive, Emotion.Neutral, Emotion.Negative)
+                    listOf(Emotion.Negative, Emotion.Neutral, Emotion.Positive)
                 }
                 feedbackEmotions.forEach { emotion ->
                     KodeeIconSmall(
