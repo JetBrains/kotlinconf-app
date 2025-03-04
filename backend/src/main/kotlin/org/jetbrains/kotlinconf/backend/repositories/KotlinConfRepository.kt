@@ -1,11 +1,13 @@
-package org.jetbrains.kotlinconf.backend
+package org.jetbrains.kotlinconf.backend.repositories
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.application.Application
 import io.ktor.server.application.log
 import io.ktor.server.config.ApplicationConfig
+import io.ktor.util.logging.Logger
 import kotlinx.coroutines.Dispatchers
+import kotlinx.datetime.LocalDateTime
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -16,16 +18,23 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import kotlinx.datetime.LocalDateTime
-import org.jetbrains.kotlinconf.*
-import org.jetbrains.kotlinconf.backend.Votes.sessionId
+import org.jetbrains.kotlinconf.FeedbackInfo
+import org.jetbrains.kotlinconf.NewsItem
+import org.jetbrains.kotlinconf.NewsRequest
+import org.jetbrains.kotlinconf.Score
+import org.jetbrains.kotlinconf.SessionId
+import org.jetbrains.kotlinconf.VoteInfo
+import org.jetbrains.kotlinconf.backend.schema.Feedback
+import org.jetbrains.kotlinconf.backend.schema.News
+import org.jetbrains.kotlinconf.backend.schema.Users
+import org.jetbrains.kotlinconf.backend.schema.Votes
+import java.util.*
 
-
-internal class Store(application: Application) {
+internal class KotlinConfRepository(log: Logger, config: ApplicationConfig) {
 
     init {
         val hikariConfig = HikariConfig()
-        val dbConfig = application.environment.config.config("database")
+        val dbConfig = config.config("database")
         val dbHost = dbConfig.getOrNull("host")
         val dbPoolSize = dbConfig.property("poolSize").getString().toInt()
         val database = dbConfig.getOrNull("database")
@@ -39,15 +48,15 @@ internal class Store(application: Application) {
                 maximumPoolSize = dbPoolSize
             }
         } else {
-            application.log.info("Host not found, using fallback")
+            log.info("Host not found, using fallback")
             hikariConfig.jdbcUrl = "jdbc:h2:file:./kotlinconfg"
             hikariConfig.validate()
         }
 
-        application.log.info("Connecting to database at '${hikariConfig.jdbcUrl}")
+        log.info("Connecting to database at '${hikariConfig.jdbcUrl}")
 
         val connectionPool = HikariDataSource(hikariConfig)
-        Database.connect(connectionPool)
+        Database.Companion.connect(connectionPool)
 
         transaction {
             SchemaUtils.create(Users, Votes, Feedback, News)
@@ -74,13 +83,13 @@ internal class Store(application: Application) {
 
     suspend fun getVotes(uuid: String): List<VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
         Votes.selectAll().where { Votes.userId eq uuid }
-            .map { VoteInfo(it[sessionId], Score.fromValue(it[Votes.rating])) }
+            .map { VoteInfo(it[Votes.sessionId], Score.Companion.fromValue(it[Votes.rating])) }
 
     }
 
     suspend fun getAllVotes(): List<VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
         Votes.selectAll()
-            .map { VoteInfo(it[sessionId], Score.fromValue(it[Votes.rating])) }
+            .map { VoteInfo(it[Votes.sessionId], Score.Companion.fromValue(it[Votes.rating])) }
     }
 
     suspend fun changeVote(
@@ -96,7 +105,7 @@ internal class Store(application: Application) {
 
         newSuspendedTransaction(Dispatchers.IO) {
             val count = Votes.selectAll()
-                .where { (Votes.userId eq userIdValue) and (sessionId eq sessionIdValue) }.count()
+                .where { (Votes.userId eq userIdValue) and (Votes.sessionId eq sessionIdValue) }.count()
 
             if (count == 0L) {
                 Votes.insert {
@@ -108,7 +117,7 @@ internal class Store(application: Application) {
                 return@newSuspendedTransaction
             }
 
-            Votes.update({ (Votes.userId eq userIdValue) and (sessionId eq sessionIdValue) }) {
+            Votes.update({ (Votes.userId eq userIdValue) and (Votes.sessionId eq sessionIdValue) }) {
                 it[rating] = scoreValue.value
             }
         }
@@ -148,7 +157,7 @@ internal class Store(application: Application) {
             NewsItem(
                 id = it[News.id],
                 title = it[News.title],
-                publicationDate = LocalDateTime.parse(it[News.publicationDate]),
+                publicationDate = LocalDateTime.Companion.parse(it[News.publicationDate]),
                 content = it[News.content],
                 photoUrl = it[News.photoUrl]
             )
@@ -161,7 +170,7 @@ internal class Store(application: Application) {
                 NewsItem(
                     id = it[News.id],
                     title = it[News.title],
-                    publicationDate = LocalDateTime.parse(it[News.publicationDate]),
+                    publicationDate = LocalDateTime.Companion.parse(it[News.publicationDate]),
                     content = it[News.content],
                     photoUrl = it[News.photoUrl]
                 )
@@ -170,7 +179,7 @@ internal class Store(application: Application) {
     }
 
     suspend fun createNews(request: NewsRequest): NewsItem = newSuspendedTransaction(Dispatchers.IO) {
-        val id = java.util.UUID.randomUUID().toString()
+        val id = UUID.randomUUID().toString()
 
         News.insert {
             it[News.id] = id
@@ -201,6 +210,6 @@ internal class Store(application: Application) {
     }
 }
 
-private fun ApplicationConfig.getOrNull(name: String): String? = kotlin.runCatching {
+internal fun ApplicationConfig.getOrNull(name: String): String? = kotlin.runCatching {
     property(name).getString()
 }.getOrNull()

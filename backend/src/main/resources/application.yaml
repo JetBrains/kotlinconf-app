@@ -4,7 +4,9 @@ ktor:
 
     application:
         modules:
-            - org.jetbrains.kotlinconf.backend.MainKt.conferenceBackend
+            - org.jetbrains.kotlinconf.backend.DiModuleKt.diModule
+            - org.jetbrains.kotlinconf.backend.PluginsModuleKt.pluginsSetup
+            - org.jetbrains.kotlinconf.backend.RoutesModuleKt.routesModule
 
 
 sessionize:

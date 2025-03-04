@@ -9,7 +9,7 @@ kotlin {
 }
 
 application {
-    mainClass.set("org.jetbrains.kotlinconf.backend.MainKt")
+    mainClass = "io.ktor.server.netty.EngineMain"
 }
 
 
@@ -38,6 +38,10 @@ dependencies {
     implementation(libs.exposed.jdbc)
     implementation(libs.h2)
     implementation(libs.postgresql)
+
+    implementation(libs.koin.ktor)
+    implementation(libs.koin.core)
+    implementation(libs.koin.slf4j)
 
     implementation(libs.hikaricp)
     implementation(libs.logback.classic)
