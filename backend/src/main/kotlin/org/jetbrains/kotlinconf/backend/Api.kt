@@ -1,22 +1,21 @@
 package org.jetbrains.kotlinconf.backend
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.ApplicationCall
-import io.ktor.server.auth.principal
-import io.ktor.server.request.receive
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
-import io.ktor.server.routing.post
-import io.ktor.server.routing.route
-import io.ktor.util.date.GMTDate
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.util.date.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.kotlinconf.EVENT_TIME_ZONE
 import org.jetbrains.kotlinconf.FeedbackInfo
+import org.jetbrains.kotlinconf.NewsRequest
 import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.Votes
-import java.time.Clock
-import java.time.LocalDateTime
 
 internal fun Route.api(
     store: Store,
@@ -27,6 +26,7 @@ internal fun Route.api(
     apiUsers(store)
     sessions()
     apiVote(store, adminSecret)
+    apiNews(store, adminSecret)
     apiSynchronize(sessionizeUrl, adminSecret)
     apiTime(adminSecret)
     apiSessionizeImagesProxy(imagesUrl)
@@ -39,10 +39,54 @@ POST http://localhost:8080/sign
 private fun Route.apiUsers(database: Store) {
     post("sign") {
         val userUUID = call.receive<String>()
-        val timestamp = LocalDateTime.now(Clock.systemUTC())
+        val timestamp = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val created = database.createUser(userUUID, timestamp)
         val code = if (created) HttpStatusCode.Created else HttpStatusCode.Conflict
         call.respond(code)
+    }
+}
+
+private fun Route.apiNews(store: Store, adminSecret: String) {
+    route("news") {
+        get {
+            try {
+                val news = store.getAllNews()
+                call.respond(news) // Tests expect List<NewsItem> directly
+            } catch (cause: Exception) {
+                call.application.log.error("Failed to get news", cause)
+                call.respond(HttpStatusCode.InternalServerError)
+            }
+        }
+
+        post {
+            call.checkSecret(adminSecret)
+            val request = call.receive<NewsRequest>()
+            val news = store.createNews(request)
+            call.respond(HttpStatusCode.Created, mapOf("id" to news.id))
+        }
+
+        put("{id}") {
+            call.checkSecret(adminSecret)
+            val id = call.parameters["id"] ?: throw IllegalArgumentException("Missing id")
+            val request = call.receive<NewsRequest>()
+            val updated = store.updateNews(id, request)
+            if (updated) {
+                call.respond(HttpStatusCode.OK)
+            } else {
+                call.respond(HttpStatusCode.NotFound)
+            }
+        }
+
+        delete("{id}") {
+            call.checkSecret(adminSecret)
+            val id = call.parameters["id"] ?: throw IllegalArgumentException("Missing id")
+            val deleted = store.deleteNews(id)
+            if (deleted) {
+                call.respond(HttpStatusCode.OK)
+            } else {
+                call.respond(HttpStatusCode.NotFound)
+            }
+        }
     }
 }
 
@@ -78,7 +122,7 @@ private fun Route.apiVote(
                 return@post call.respond(comeBackLater)
             }
 
-            val timestamp = LocalDateTime.now(Clock.systemUTC())
+            val timestamp = Clock.System.now().toLocalDateTime(TimeZone.UTC)
             database.changeVote(principal.token, sessionId, vote.score, timestamp)
             call.respond(HttpStatusCode.OK)
         }
@@ -87,7 +131,7 @@ private fun Route.apiVote(
          * Admin endpoints
          */
         get("all") {
-            call.validateSecret(adminSecret)
+            call.checkSecret(adminSecret)
 
             val votes = database.getAllVotes()
             call.respond(votes)
@@ -98,7 +142,7 @@ private fun Route.apiVote(
             val principal = call.validatePrincipal(database) ?: throw Unauthorized()
             val feedback = call.receive<FeedbackInfo>()
 
-            val timestamp = LocalDateTime.now(Clock.systemUTC())
+            val timestamp = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
             val result = database.setFeedback(
                 principal.token, feedback.sessionId, feedback.value, timestamp
@@ -111,7 +155,7 @@ private fun Route.apiVote(
             }
         }
         get("summary") {
-            call.validateSecret(adminSecret)
+            call.checkSecret(adminSecret)
             call.respond(database.getFeedbackSummary())
         }
     }
@@ -139,7 +183,7 @@ private fun Route.apiTime(adminSecret: String) {
         call.respond(now())
     }
     post("time/{timestamp}") {
-        call.validateSecret(adminSecret)
+        call.checkSecret(adminSecret)
 
         val timestamp = call.parameters["timestamp"] ?: error("No time")
         val time = if (timestamp == "null") {
@@ -161,7 +205,7 @@ private fun Route.apiSynchronize(
     adminSecret: String
 ) {
     post("sessionizeSync") {
-        call.validateSecret(adminSecret)
+        call.checkSecret(adminSecret)
 
         synchronizeWithSessionize(sessionizeUrl)
         call.respond(HttpStatusCode.OK)
@@ -179,7 +223,7 @@ private fun Route.apiSessionizeImagesProxy(imagesUrl: String) {
 }
 
 
-private fun ApplicationCall.validateSecret(adminSecret: String) {
+internal fun ApplicationCall.checkSecret(adminSecret: String) {
     val principal = principal<KotlinConfPrincipal>()
     if (principal?.token != adminSecret) {
         throw Unauthorized()
@@ -191,4 +235,3 @@ private suspend fun ApplicationCall.validatePrincipal(database: Store): KotlinCo
     if (!database.validateUser(principal.token)) return null
     return principal
 }
-

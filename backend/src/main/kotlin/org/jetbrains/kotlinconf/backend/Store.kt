@@ -16,12 +16,9 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import org.jetbrains.kotlinconf.FeedbackInfo
-import org.jetbrains.kotlinconf.Score
-import org.jetbrains.kotlinconf.SessionId
-import org.jetbrains.kotlinconf.VoteInfo
+import kotlinx.datetime.LocalDateTime
+import org.jetbrains.kotlinconf.*
 import org.jetbrains.kotlinconf.backend.Votes.sessionId
-import java.time.LocalDateTime
 
 
 internal class Store(application: Application) {
@@ -53,7 +50,7 @@ internal class Store(application: Application) {
         Database.connect(connectionPool)
 
         transaction {
-            SchemaUtils.create(Users, Votes, Feedback)
+            SchemaUtils.create(Users, Votes, Feedback, News)
         }
     }
 
@@ -145,8 +142,64 @@ internal class Store(application: Application) {
             )
         }
     }
-}
 
+    suspend fun getAllNews(): List<NewsItem> = newSuspendedTransaction(Dispatchers.IO) {
+        News.selectAll().map {
+            NewsItem(
+                id = it[News.id],
+                title = it[News.title],
+                publicationDate = LocalDateTime.parse(it[News.publicationDate]),
+                content = it[News.content],
+                photoUrl = it[News.photoUrl]
+            )
+        }
+    }
+
+    suspend fun getNewsById(id: String): NewsItem? = newSuspendedTransaction(Dispatchers.IO) {
+        News.selectAll().where { News.id eq id }
+            .map {
+                NewsItem(
+                    id = it[News.id],
+                    title = it[News.title],
+                    publicationDate = LocalDateTime.parse(it[News.publicationDate]),
+                    content = it[News.content],
+                    photoUrl = it[News.photoUrl]
+                )
+            }
+            .singleOrNull()
+    }
+
+    suspend fun createNews(request: NewsRequest): NewsItem = newSuspendedTransaction(Dispatchers.IO) {
+        val id = java.util.UUID.randomUUID().toString()
+
+        News.insert {
+            it[News.id] = id
+            it[title] = request.title
+            it[publicationDate] = request.publicationDate.toString()
+            it[content] = request.content
+        }
+
+        NewsItem(
+            id = id,
+            title = request.title,
+            publicationDate = request.publicationDate,
+            content = request.content,
+            photoUrl = request.photoUrl
+        )
+    }
+
+    suspend fun updateNews(id: String, request: NewsRequest): Boolean = newSuspendedTransaction(Dispatchers.IO) {
+        News.update({ News.id eq id }) {
+            it[title] = request.title
+            it[publicationDate] = request.publicationDate.toString()
+            it[content] = request.content
+        } > 0
+    }
+
+    suspend fun deleteNews(id: String): Boolean = newSuspendedTransaction(Dispatchers.IO) {
+        News.deleteWhere { News.id eq id } > 0
+    }
+}
 
 private fun ApplicationConfig.getOrNull(name: String): String? = kotlin.runCatching {
     property(name).getString()

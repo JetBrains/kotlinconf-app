@@ -22,4 +22,4 @@ database:
 
 service:
     environment: production
-    secret: "$ADMIN_SECRET:"
+    secret: "$ADMIN_SECRET:test"

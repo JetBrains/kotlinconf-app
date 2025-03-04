@@ -83,9 +83,22 @@ enum class Theme {
 class NewsItem(
     val id: String,
     val photoUrl: String?,
-    val date: LocalDateTime,
     val title: String,
+    val publicationDate: LocalDateTime,
     val content: String,
+)
+
+@Serializable
+data class NewsRequest(
+    val title: String,
+    val publicationDate: LocalDateTime,
+    val photoUrl: String,
+    val content: String,
+)
+
+@Serializable
+data class NewsListResponse(
+    val items: List<NewsItem>
 )
 
 @Serializable
