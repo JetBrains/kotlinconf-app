@@ -67,10 +67,10 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
         navController = navController,
         startDestination = if (isOnboardingComplete) MainScreen else StartScreens,
         modifier = Modifier.fillMaxSize(),
-        enterTransition = enterTransition { it },
-        exitTransition = exitTransition { -it },
-        popEnterTransition = enterTransition { -it },
-        popExitTransition = exitTransition { it },
+//        enterTransition = enterTransition { it },
+//        exitTransition = exitTransition { -it },
+//        popEnterTransition = enterTransition { -it },
+//        popExitTransition = exitTransition { it },
     ) {
         startScreens(
             navController = navController,
