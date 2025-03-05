@@ -17,6 +17,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import kotlinx.coroutines.channels.Channel
+import org.jetbrains.kotlinconf.PARTNERS
+import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.URLs
@@ -39,6 +41,7 @@ import org.jetbrains.kotlinconf.screens.SingleLicenseScreen
 import org.jetbrains.kotlinconf.screens.SpeakerDetailScreen
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 import org.jetbrains.kotlinconf.screens.TermsOfUse
+import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import kotlin.jvm.JvmSuppressWildcards
 import kotlin.reflect.typeOf
@@ -162,11 +165,21 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
     composable<PartnersScreen> {
         Partners(
             onBack = navController::popBackStack,
-            onPartnerDetail = { partnerId -> navController.navigate(PartnerDetailsScreen(partnerId)) }
+            onPartnerDetail = { partnerId ->
+                // TODO: get partner's details (description and location on the exhibition floor) or remove the details screen
+                // navController.navigate(PartnerDetailsScreen(partnerId))
+            }
         )
     }
-    composable<PartnerDetailsScreen> {
-        PartnerDetails(it.toRoute<PartnerDetailsScreen>().partnerId, onBack = navController::popBackStack)
+    composable<PartnerDetailsScreen>(typeMap = mapOf(typeOf<PartnerId>() to PartnerIdNavType)) {
+        val partnerId = it.toRoute<PartnerDetailsScreen>().partnerId
+        val partner = PARTNERS.values.flatten().firstOrNull {  it.id == partnerId } ?: return@composable
+        PartnerDetails(
+            name = partner.name,
+            logo = partner.logo(KotlinConfTheme.colors.isDark),
+            description = partner.description,
+            onBack = navController::popBackStack,
+        )
     }
     composable<SessionScreen>(typeMap = mapOf(typeOf<SessionId>() to SessionIdNavType)) {
         SessionScreen(

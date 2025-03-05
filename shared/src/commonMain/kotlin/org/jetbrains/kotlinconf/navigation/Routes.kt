@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf.navigation
 
 import kotlinx.serialization.Serializable
+import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
 
@@ -53,7 +54,7 @@ data class SingleLicenseScreen(val licenseName: String, val licenseText: String)
 data object PartnersScreen
 
 @Serializable
-data class PartnerDetailsScreen(val partnerId: String)
+data class PartnerDetailsScreen(val partnerId: PartnerId)
 
 @Serializable
 data object MainScreen

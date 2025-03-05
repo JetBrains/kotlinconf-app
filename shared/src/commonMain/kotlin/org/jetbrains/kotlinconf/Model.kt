@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.DrawableResource
 import kotlin.jvm.JvmInline
 
 @Serializable
@@ -70,6 +71,21 @@ enum class Score(val value: Int) {
             else -> null
         }
     }
+}
+
+@Serializable
+@JvmInline
+value class PartnerId(val id: String)
+
+class Partner(
+    val id: PartnerId,
+    val name: String,
+    val description: String,
+    private val lightIcon: DrawableResource,
+    private val darkIcon: DrawableResource,
+) {
+    fun logo(isDarkTheme: Boolean): DrawableResource =
+        if (isDarkTheme) darkIcon else lightIcon
 }
 
 @Serializable

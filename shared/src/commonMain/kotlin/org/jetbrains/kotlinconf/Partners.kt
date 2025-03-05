@@ -1,16 +1,69 @@
 package org.jetbrains.kotlinconf
 
-internal val PARTNER_DESCRIPTIONS: Map<String, String> = mapOf(
-    "android" to "The Google and Android teams will join KotlinConf’23 as Gold Partners. It’s their fourth year helping us make KotlinConf a great learning and networking event!",
-    "google" to "The Google and Android teams will join KotlinConf’23 as Gold Partners. It’s their fourth year helping us make KotlinConf a great learning and networking event!",
-    "Android & Google" to "The Google and Android teams will join KotlinConf’23 as Gold Partners. It’s their fourth year helping us make KotlinConf a great learning and networking event!",
-    "xebia" to "The global full-stack tech consultancy offers software development expertise in languages like Kotlin, Java, Scala, and Go, in areas like DevOps and cloud, and more.",
-    "kodein" to "Devoted to Kotlin Multiplatform Mobile, Kodein Koders provides training and expertise to help teams reach their development goals with Kotlin, wherever it is needed (Android, iOS, Desktop, and Web).",
-    "adyen" to "Based in Amsterdam and globally, Adyen offers end-to-end payments, data, and financial management in a single solution.",
-    "lunatech" to "Lunatech provides simple and elegant IT solutions for businesses, including Kotlin programming language expertise. Stop by their booth at the conference for a chat about DevOps, machine learning, system integration, and more!",
-    "source" to "As award-winning technology and life science recruitment specialists, Source Group International helps businesses secure extraordinary talent.",
-    "sentry" to "Sentry is a developer-first error tracking and performance monitoring platform that helps developers see the things that matter, solve problems faster, and continuously learn about their apps.",
-    "gradle" to "Gradle Enterprise leverages acceleration technologies to speed up the software build and test process and data analytics to make troubleshooting more efficient.",
-    "aws" to "AWS Amplify is a complete solution that lets frontend web and mobile developers easily build, ship, and host full-stack applications on AWS.",
-    "jetbrains" to "Stop by the JetBrains booth, where you can chat with members of the Kotlin and product teams, and check out the latest things we're working on for your favorite tools!"
+import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.partner_american_express
+import kotlinconfapp.shared.generated.resources.partner_american_express_dark
+import kotlinconfapp.shared.generated.resources.partner_gitar
+import kotlinconfapp.shared.generated.resources.partner_gitar_dark
+import kotlinconfapp.shared.generated.resources.partner_google
+import kotlinconfapp.shared.generated.resources.partner_google_dark
+import kotlinconfapp.shared.generated.resources.partner_gradle
+import kotlinconfapp.shared.generated.resources.partner_gradle_dark
+import kotlinconfapp.shared.generated.resources.partner_jvm_weekly
+import kotlinconfapp.shared.generated.resources.partner_jvm_weekly_dark
+import kotlinconfapp.shared.generated.resources.partner_kodeinkoders
+import kotlinconfapp.shared.generated.resources.partner_kodeinkoders_dark
+import kotlinconfapp.shared.generated.resources.partner_kotlin_foundation
+import kotlinconfapp.shared.generated.resources.partner_kotlin_foundation_dark
+import kotlinconfapp.shared.generated.resources.partner_revenuecat
+import kotlinconfapp.shared.generated.resources.partner_revenuecat_dark
+import kotlinconfapp.shared.generated.resources.partner_sentry
+import kotlinconfapp.shared.generated.resources.partner_sentry_dark
+import kotlinconfapp.shared.generated.resources.partner_typealias
+import kotlinconfapp.shared.generated.resources.partner_typealias_dark
+import kotlinconfapp.shared.generated.resources.partner_worldline
+import kotlinconfapp.shared.generated.resources.partner_worldline_dark
+import kotlinconfapp.shared.generated.resources.partners_bronze
+import kotlinconfapp.shared.generated.resources.partners_codelab
+import kotlinconfapp.shared.generated.resources.partners_digital
+import kotlinconfapp.shared.generated.resources.partners_gold
+import kotlinconfapp.shared.generated.resources.partners_media
+import kotlinconfapp.shared.generated.resources.partners_platinum
+import kotlinconfapp.shared.generated.resources.partners_silver
+import kotlinconfapp.shared.generated.resources.partners_swag
+import kotlinconfapp.shared.generated.resources.partners_video
+import org.jetbrains.compose.resources.StringResource
+
+internal val PARTNERS: Map<StringResource, List<Partner>> = mapOf(
+    Res.string.partners_platinum to listOf(
+        Partner(PartnerId("revenuecat"), "RevenueCat", "", Res.drawable.partner_revenuecat, Res.drawable.partner_revenuecat_dark),
+    ),
+    Res.string.partners_gold to listOf(
+        Partner(PartnerId("google"), "Google", "", Res.drawable.partner_google, Res.drawable.partner_google_dark),
+    ),
+    Res.string.partners_silver to listOf(
+        Partner(PartnerId("gradle"), "Gradle", "", Res.drawable.partner_gradle, Res.drawable.partner_gradle_dark),
+    ),
+    Res.string.partners_bronze to listOf(
+        Partner(PartnerId("kotlinfoundation"), "Kotlin Foundation", "", Res.drawable.partner_kotlin_foundation, Res.drawable.partner_kotlin_foundation_dark),
+        Partner(PartnerId("gitar"), "Gitar", "", Res.drawable.partner_gitar, Res.drawable.partner_gitar_dark),
+        Partner(PartnerId("sentry"), "Sentry", "", Res.drawable.partner_sentry, Res.drawable.partner_sentry_dark),
+    ),
+    Res.string.partners_video to listOf(
+        Partner(PartnerId("amex"), "American Express", "", Res.drawable.partner_american_express, Res.drawable.partner_american_express_dark),
+    ),
+    Res.string.partners_codelab to listOf(
+        Partner(PartnerId("google"), "Google", "", Res.drawable.partner_google, Res.drawable.partner_google_dark),
+    ),
+    Res.string.partners_digital to listOf(
+        Partner(PartnerId("kodein"), "Kodein Koders", "", Res.drawable.partner_kodeinkoders, Res.drawable.partner_kodeinkoders_dark),
+        Partner(PartnerId("typealias"), "Typealias Studios", "", Res.drawable.partner_typealias, Res.drawable.partner_typealias_dark),
+        Partner(PartnerId("worldline"), "World Line", "", Res.drawable.partner_worldline, Res.drawable.partner_worldline_dark),
+    ),
+    Res.string.partners_media to listOf(
+        Partner(PartnerId("jvmweekly"), "JVM Weekly", "", Res.drawable.partner_jvm_weekly, Res.drawable.partner_jvm_weekly_dark),
+    ),
+    Res.string.partners_swag to listOf(
+        Partner(PartnerId("revenuecat"), "RevenueCat", "", Res.drawable.partner_revenuecat, Res.drawable.partner_revenuecat_dark),
+    ),
 )
