@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf.screens
 
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,6 +50,7 @@ fun StartNotificationsScreen(
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.safeDrawing)
+            .background(color = KotlinConfTheme.colors.mainBackground)
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(24.dp),

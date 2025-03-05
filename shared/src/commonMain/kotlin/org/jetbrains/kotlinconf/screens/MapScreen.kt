@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -73,7 +74,7 @@ fun LocationScreen() {
         state.contentScale = FixedScale(if (isScreenTooWide) 1.7f else 2.7f)
     }
 
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
         MainHeaderTitleBar(
             title = stringResource(Res.string.map_title),
         )

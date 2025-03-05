@@ -34,7 +34,9 @@ fun ScreenWithTitle(
     Column(
         modifier
             .fillMaxSize()
+            .background(color = KotlinConfTheme.colors.mainBackground)
             .padding(topInsetPadding())
+            .background(color = KotlinConfTheme.colors.mainBackground)
     ) {
         MainHeaderTitleBar(
             title = title,

@@ -36,7 +36,7 @@ fun NewsDetailScreen(
 ) {
     val state = viewModel.newsItem.collectAsState().value
 
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
         MainHeaderTitleBar(
             title = state?.date ?: stringResource(Res.string.news_feed_title),
             startContent = {
