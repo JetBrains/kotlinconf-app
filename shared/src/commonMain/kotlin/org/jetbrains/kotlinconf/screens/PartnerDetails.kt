@@ -1,24 +1,34 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.arrow_left_24
+import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.PARTNER_DESCRIPTIONS
+import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.ui.components.StyledText
 
 @Composable
 fun PartnerDetails(
-    id: String,
+    name: String,
+    logo: DrawableResource,
+    description: String,
     onBack: () -> Unit,
 ) {
-    Column {
-        Image(painterResource(Res.drawable.arrow_left_24), "back", modifier = Modifier.clickable { onBack() })
-        StyledText(id)
-        StyledText(PARTNER_DESCRIPTIONS[id]!!)
+    ScreenWithTitle(
+        title = name,
+        onBack = onBack,
+    ) {
+        Image(
+            painter = painterResource(logo),
+            contentDescription = name,
+            modifier = Modifier.height(120.dp).align(Alignment.CenterHorizontally)
+        )
+        StyledText(description)
+
+        // TODO: add map when it is ready
     }
 }
