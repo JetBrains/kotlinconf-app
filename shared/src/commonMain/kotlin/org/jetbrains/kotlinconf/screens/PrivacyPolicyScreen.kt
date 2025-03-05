@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -72,7 +73,7 @@ fun PrivacyPolicyScreen(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing)
+        modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing).background(color = KotlinConfTheme.colors.mainBackground)
     ) {
         AnimatedContent(
             targetState = detailsVisible,
