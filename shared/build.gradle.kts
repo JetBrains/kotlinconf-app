@@ -14,6 +14,9 @@ plugins {
 }
 
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
     androidTarget {
         compilerOptions {
             freeCompilerArgs.addAll(
@@ -25,6 +28,7 @@ kotlin {
 
     jvm()
 
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
     wasmJs {
         binaries.executable()
         browser {
@@ -182,25 +186,16 @@ compose.desktop {
     }
 }
 
-compose.experimental {
-    web.application {}
-}
-
 val buildWebApp by tasks.creating(Copy::class) {
     val wasmWebpack = "wasmJsBrowserProductionWebpack"
     val jsWebpack = "jsBrowserProductionWebpack"
 
     dependsOn(wasmWebpack, jsWebpack)
 
-    // TODO could be removed after migration to Kotlin 2.0+
-    kotlin.wasmJs {
-        applyBinaryen()
-    }
-
     from(tasks.named(jsWebpack).get().outputs.files)
     from(tasks.named(wasmWebpack).get().outputs.files)
 
-    into("$buildDir/webApp")
+    into(layout.buildDirectory.dir("webApp"))
 
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
