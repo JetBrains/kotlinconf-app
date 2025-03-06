@@ -189,10 +189,14 @@ fun NavGraphBuilder.startScreens(
         composable<StartPrivacyPolicyScreen> {
             PrivacyPolicyScreen(
                 onRejectPolicy = {
-                    navController.navigate(StartNotificationsScreen)
+                    navController.navigate(StartNotificationsScreen) {
+                        popUpTo<StartScreens>()
+                    }
                 },
                 onAcceptPolicy = {
-                    navController.navigate(StartNotificationsScreen)
+                    navController.navigate(StartNotificationsScreen) {
+                        popUpTo<StartScreens>()
+                    }
                 },
             )
         }
