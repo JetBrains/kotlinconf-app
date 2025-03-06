@@ -26,11 +26,37 @@ class ConferenceService(
     private val notificationService: NotificationService,
     private val logger: Logger,
 ) {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    init {
+        storage.ensureCurrentVersion()
+
+        scope.launch {
+            // Set user ID
+            val userId = storage.getUserId().first()
+            if (userId != null) {
+                client.userId = userId
+                client.sign()
+            }
+
+            // Download fresh conference data
+            loadConferenceData()
+
+            // Do whatever with votes
+            votes.value = client.myVotes()
+
+            // Load fresh news items
+            loadNews()
+        }
+
+        scope.launch {
+            timeProvider.run()
+        }
+    }
+
     companion object {
         private const val LOG_TAG = "ConferenceService"
     }
-
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     private val votes = MutableStateFlow(emptyList<VoteInfo>())
 
@@ -68,30 +94,6 @@ class ConferenceService(
 
     fun setTheme(theme: Theme) {
         scope.launch { storage.setTheme(theme) }
-    }
-
-    init {
-        scope.launch {
-            // Set user ID
-            val userId = storage.getUserId().first()
-            if (userId != null) {
-                client.userId = userId
-                client.sign()
-            }
-
-            // Download fresh conference data
-            loadConferenceData()
-
-            // Do whatever with votes
-            votes.value = client.myVotes()
-
-            // Load fresh news items
-            loadNews()
-        }
-
-        scope.launch {
-            timeProvider.run()
-        }
     }
 
     private suspend fun loadConferenceData() {

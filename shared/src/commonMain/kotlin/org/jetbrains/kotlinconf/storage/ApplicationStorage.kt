@@ -28,4 +28,6 @@ interface ApplicationStorage {
 
     fun getNotificationSettings(): Flow<NotificationSettings>
     suspend fun setNotificationSettings(value: NotificationSettings)
+
+    fun ensureCurrentVersion()
 }
