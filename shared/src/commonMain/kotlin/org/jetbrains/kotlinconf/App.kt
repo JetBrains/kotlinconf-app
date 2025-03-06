@@ -1,5 +1,8 @@
 package org.jetbrains.kotlinconf
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -9,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
 import org.jetbrains.compose.reload.DevelopmentEntryPoint
 import org.jetbrains.kotlinconf.navigation.KotlinConfNavHost
 import org.jetbrains.kotlinconf.screens.NewsDetailViewModel
@@ -32,12 +36,16 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.koinConfiguration
 import org.koin.dsl.module
+import kotlin.jvm.JvmSuppressWildcards
 
 @Composable
 fun App(
     platformModule: Module = module {},
     onThemeChange: ((isDarkTheme: Boolean) -> Unit)? = null,
+    popEnterTransition: (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition)? = null,
+    popExitTransition: (@JvmSuppressWildcards AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition)? = null,
 ) {
+
     KoinMultiplatformApplication(koinConfiguration(platformModule)) {
         DevelopmentEntryPoint {
             val service = koinInject<ConferenceService>()
@@ -63,7 +71,7 @@ fun App(
                         .background(KotlinConfTheme.colors.mainBackground)
                 ) {
                     if (isOnboardingComplete != null) {
-                        KotlinConfNavHost(isOnboardingComplete)
+                        KotlinConfNavHost(isOnboardingComplete, popEnterTransition, popExitTransition)
                     }
                 }
             }
