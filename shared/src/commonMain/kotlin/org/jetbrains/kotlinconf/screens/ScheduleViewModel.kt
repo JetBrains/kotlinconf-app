@@ -21,11 +21,11 @@ import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.TagValues
 import org.jetbrains.kotlinconf.TimeSlot
 import org.jetbrains.kotlinconf.isLive
+import org.jetbrains.kotlinconf.isServiceEvent
 import org.jetbrains.kotlinconf.isUpcoming
 import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.components.FilterItem
 import org.jetbrains.kotlinconf.ui.components.FilterItemType
-import org.jetbrains.kotlinconf.ui.components.ServiceEventData
 import org.jetbrains.kotlinconf.utils.containsDiacritics
 import org.jetbrains.kotlinconf.utils.removeDiacritics
 
@@ -43,7 +43,11 @@ data class SessionItem(
 ) : ScheduleListItem
 
 data class ServiceEventItem(
-    val value: ServiceEventData,
+    val value: SessionCardView,
+) : ScheduleListItem
+
+data class ServiceEventGroupItem(
+    val value: List<SessionCardView>,
 ) : ScheduleListItem
 
 data class WorkshopItem(
@@ -52,17 +56,17 @@ data class WorkshopItem(
 
 fun ScheduleListItem.isLive(): Boolean =
     (this is SessionItem && this.value.isLive) ||
-        (this is WorkshopItem && this.workshops.first().isLive) ||
-        (this is TimeSlotTitleItem && this.value.isLive)
+            (this is WorkshopItem && this.workshops.first().isLive) ||
+            (this is TimeSlotTitleItem && this.value.isLive)
 
 fun ScheduleListItem.isUpcoming(): Boolean =
     (this is SessionItem && this.value.isUpcoming) ||
-        (this is WorkshopItem && this.workshops.first().isUpcoming) ||
-        (this is TimeSlotTitleItem && this.value.isUpcoming)
+            (this is WorkshopItem && this.workshops.first().isUpcoming) ||
+            (this is TimeSlotTitleItem && this.value.isUpcoming)
 
 fun ScheduleListItem.isUpcomingSoon(): Boolean =
     (this is WorkshopItem && this.workshops.first().startsInMinutes != null) ||
-        (this is SessionItem && this.value.isUpcoming && this.value.startsInMinutes != null)
+            (this is SessionItem && this.value.isUpcoming && this.value.startsInMinutes != null)
 
 data class ScheduleSearchParams(
     val searchQuery: String = "",
@@ -193,9 +197,16 @@ class ScheduleViewModel(
                     timeSlot.sessions
                 }
 
-                val (workshops, talks) = sessions.partition { it.tags.contains("Workshop") }
+                val (workshops, notWorkshops) = sessions.partition { it.tags.contains("Workshop") }
                 if (workshops.isNotEmpty()) {
                     add(WorkshopItem(workshops))
+                }
+
+                val (serviceEvents, talks) = notWorkshops.partition { it.isServiceEvent }
+                if (serviceEvents.size == 1) {
+                    add(ServiceEventItem(serviceEvents.first()))
+                } else if (serviceEvents.size > 1) {
+                    add(ServiceEventGroupItem(serviceEvents))
                 }
                 talks.forEach { session ->
                     add(SessionItem(session))
@@ -221,6 +232,10 @@ class ScheduleViewModel(
         searchQuery: String,
         tags: List<String>,
     ): MatchResult {
+        if (session.isServiceEvent) {
+            return MatchResult(matched = false)
+        }
+
         // Result variables
         val tagMatches = mutableListOf<String>()
         val titleHighlights = mutableListOf<IntRange>()
