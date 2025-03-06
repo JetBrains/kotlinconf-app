@@ -49,8 +49,8 @@ fun StartNotificationsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.safeDrawing)
             .background(color = KotlinConfTheme.colors.mainBackground)
+            .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(24.dp),
