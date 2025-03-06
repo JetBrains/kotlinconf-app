@@ -86,8 +86,8 @@ fun SessionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(topInsetPadding())
             .background(color = KotlinConfTheme.colors.mainBackground)
+            .padding(topInsetPadding())
     ) {
         MainHeaderTitleBar(
             title = stringResource(Res.string.session_title),

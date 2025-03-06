@@ -73,7 +73,9 @@ fun PrivacyPolicyScreen(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing).background(color = KotlinConfTheme.colors.mainBackground)
+        modifier = Modifier
+            .background(color = KotlinConfTheme.colors.mainBackground)
+            .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         AnimatedContent(
             targetState = detailsVisible,
