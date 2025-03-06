@@ -29,13 +29,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>UIAppFonts</key>
-	<array>
-		<string>JetBrainsMono-Bold.ttf</string>
-		<string>JetBrainsMono-Light.ttf</string>
-		<string>JetBrainsMono-ExtraBold.ttf</string>
-		<string>JetBrainsMono-Regular.ttf</string>
-	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

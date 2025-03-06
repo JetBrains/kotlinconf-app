@@ -191,7 +191,7 @@ private fun FeedbackPanel(
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 val feedbackEmotions = remember {
-                    listOf(Emotion.Positive, Emotion.Neutral, Emotion.Negative)
+                    listOf(Emotion.Negative, Emotion.Neutral, Emotion.Positive)
                 }
                 feedbackEmotions.forEach { emotion ->
                     KodeeIconLarge(
