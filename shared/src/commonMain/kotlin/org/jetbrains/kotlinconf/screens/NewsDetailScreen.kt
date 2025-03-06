@@ -25,6 +25,7 @@ import org.jetbrains.kotlinconf.ui.components.NetworkImage
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.topInsetPadding
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -36,7 +37,12 @@ fun NewsDetailScreen(
 ) {
     val state = viewModel.newsItem.collectAsState().value
 
-    Column(Modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(color = KotlinConfTheme.colors.mainBackground)
+            .padding(topInsetPadding())
+    ) {
         MainHeaderTitleBar(
             title = state?.date ?: stringResource(Res.string.news_feed_title),
             startContent = {
