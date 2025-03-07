@@ -3,9 +3,9 @@ package org.jetbrains.kotlinconf
 object URLs {
     // API Endpoints
     // TODO: https://github.com/JetBrains/kotlinconf-app/issues/296
-    const val STAGINGING_URL = "https://kotlinconf-app-staging.labs.jb.gg"
+    const val STAGING_URL = "https://kotlinconf-app-staging.labs.jb.gg"
     const val PRODUCTION_URL = "https://kotlinconf-app-prod.labs.jb.gg"
-    const val API_ENDPOINT = STAGINGING_URL
+    const val API_ENDPOINT = STAGING_URL
 
     // kotlinconf.com
     const val KOTLINCONF_HOMEPAGE = "https://kotlinconf.com/"
