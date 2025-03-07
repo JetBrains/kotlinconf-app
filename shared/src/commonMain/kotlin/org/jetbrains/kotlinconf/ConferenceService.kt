@@ -148,6 +148,10 @@ class ConferenceService(
         storage.setNotificationSettings(settings)
     }
 
+    fun canVote(): Boolean {
+        return client.userId != null
+    }
+
     /**
      * Vote for session.
      */
