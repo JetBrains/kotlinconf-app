@@ -13,11 +13,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.jetbrains.kotlinconf.R
 import org.jetbrains.kotlinconf.App
 import org.jetbrains.kotlinconf.EXTRA_NOTIFICATION_ID
+import org.jetbrains.kotlinconf.PermissionHandler
 import org.jetbrains.kotlinconf.navigation.navigateToSession
-import org.jetbrains.kotlinconf.platformModule
+import org.koin.dsl.module
+import org.koin.mp.KoinPlatformTools
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,14 +28,16 @@ class MainActivity : ComponentActivity() {
 
         processIntent(intent)
 
-        val platformModule = platformModule(
-            activity = this,
-            application = application,
-            notificationIconId = R.drawable.kotlinconf_notification_icon,
-        )
+        val permissionHandler = PermissionHandler(activity = this)
+        val activityModule = module {
+            single<PermissionHandler> { permissionHandler }
+        }
+        KoinPlatformTools.defaultContext()
+            .get()
+            .loadModules(listOf(activityModule))
+
         setContent {
             App(
-                platformModule = platformModule,
                 onThemeChange = { isDarkMode ->
                     enableEdgeToEdge(
                         statusBarStyle = SystemBarStyle.auto(

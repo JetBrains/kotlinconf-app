@@ -9,12 +9,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import kotlinx.coroutines.channels.Channel
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
 import org.jetbrains.kotlinconf.utils.Logger
@@ -32,8 +30,7 @@ class AndroidNotificationService(
     private val timeProvider: TimeProvider,
     private val context: Context,
     private val iconId: Int,
-    private val permissionResult: Channel<Boolean>,
-    private val permissionLauncher: ActivityResultLauncher<Array<String>>,
+    private val permissionHandler: PermissionHandler,
     private val logger: Logger,
 ) : NotificationService {
 
@@ -44,8 +41,7 @@ class AndroidNotificationService(
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true
 
         val permissions = arrayOf(Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.USE_EXACT_ALARM)
-        permissionLauncher.launch(permissions)
-        return permissionResult.receive()
+        return permissionHandler.requestPermissions(permissions)
     }
 
     override fun post(
