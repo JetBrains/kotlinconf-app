@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.kodee_emotion_negative
@@ -33,8 +34,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
-enum class Emotion {
-    Negative, Neutral, Positive;
+enum class Emotion(val hapticFeedback: HapticFeedbackType) {
+    Negative(HapticFeedbackType.Reject),
+    Neutral(HapticFeedbackType.ContextClick),
+    Positive(HapticFeedbackType.Confirm)
+    ;
 }
 
 @Composable
