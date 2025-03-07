@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf
 
 import android.app.Application
 import androidx.preference.PreferenceManager
+import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.SharedPreferencesSettings
 import org.jetbrains.kotlinconf.utils.AndroidLogger
@@ -12,13 +13,14 @@ import org.koin.dsl.module
 fun platformModule(
     application: Application,
     notificationIconId: Int,
+    notificationConfig: NotificationPlatformConfiguration.Android,
 ): Module {
     return module {
         single<ObservableSettings> {
             SharedPreferencesSettings(PreferenceManager.getDefaultSharedPreferences(application))
         }
-        single<NotificationService> {
-            AndroidNotificationService(
+        single<LocalNotificationService> {
+            AndroidLocalNotificationService(
                 timeProvider = get(),
                 context = application,
                 iconId = notificationIconId,
@@ -26,5 +28,6 @@ fun platformModule(
             )
         }
         single<Logger> { AndroidLogger() }
+        single<NotificationPlatformConfiguration> { notificationConfig}
     }
 }

@@ -3,6 +3,7 @@ package org.jetbrains.kotlinconf
 import android.Manifest
 import android.app.AlarmManager
 import android.app.NotificationChannel
+import android.app.NotificationManager.IMPORTANCE_HIGH
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -18,18 +19,18 @@ import kotlinx.datetime.toInstant
 import org.jetbrains.kotlinconf.utils.Logger
 import org.koin.mp.KoinPlatform
 
-const val EXTRA_NOTIFICATION_ID = "notificationId"
+const val EXTRA_LOCAL_NOTIFICATION_ID = "localNotificationId"
 private const val EXTRA_TITLE = "title"
 private const val EXTRA_MESSAGE = "message"
 private const val NOTIFICATION_CHANNEL_ID = "channel_all_notifications"
 private const val ACTION_SHOW_NOTIFICATION = "org.jetbrains.kotlinconf.SHOW_NOTIFICATION"
 
-class AndroidNotificationService(
+class AndroidLocalNotificationService(
     private val timeProvider: TimeProvider,
     private val context: Context,
     private val iconId: Int,
     private val logger: Logger,
-) : NotificationService {
+) : LocalNotificationService {
 
     companion object {
         private const val LOG_TAG = "AndroidNotificationService"
@@ -37,6 +38,11 @@ class AndroidNotificationService(
 
     private val notificationManager = NotificationManagerCompat.from(context)
     private val alarmManager = context.getSystemService<AlarmManager>()
+
+    init {
+        val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, "All notifications", IMPORTANCE_HIGH)
+        notificationManager.createNotificationChannel(channel)
+    }
 
     override suspend fun requestPermission(): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true
@@ -48,24 +54,24 @@ class AndroidNotificationService(
     }
 
     override fun post(
-        notificationId: String,
+        localNotificationId: LocalNotificationId,
         title: String,
         message: String,
         time: LocalDateTime?,
     ) {
-        logger.log(LOG_TAG) { "Posting notification: $notificationId, $title at $time" }
+        logger.log(LOG_TAG) { "Posting notification: $localNotificationId, $title at $time" }
         if (time != null) {
             scheduleNotification(
                 title = title,
                 message = message,
-                notificationId = notificationId,
+                localNotificationId = localNotificationId,
                 time = time,
             )
         } else {
             showNotification(
                 title = title,
                 message = message,
-                notificationId = notificationId,
+                localNotificationId = localNotificationId,
             )
         }
     }
@@ -73,7 +79,7 @@ class AndroidNotificationService(
     private fun scheduleNotification(
         title: String,
         message: String,
-        notificationId: String,
+        localNotificationId: LocalNotificationId,
         time: LocalDateTime
     ) {
         alarmManager ?: return
@@ -82,11 +88,11 @@ class AndroidNotificationService(
             .setAction(ACTION_SHOW_NOTIFICATION)
             .putExtra(EXTRA_TITLE, title)
             .putExtra(EXTRA_MESSAGE, message)
-            .putExtra(EXTRA_NOTIFICATION_ID, notificationId)
+            .putExtra(EXTRA_LOCAL_NOTIFICATION_ID, localNotificationId.toString())
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            notificationId.hashCode(),
+            localNotificationId.hashCode(),
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -98,41 +104,33 @@ class AndroidNotificationService(
             ContextCompat.checkSelfPermission(context, Manifest.permission.USE_EXACT_ALARM)
             != PackageManager.PERMISSION_GRANTED
         ) {
-            logger.log(LOG_TAG) { "No permission to schedule notification $notificationId" }
+            logger.log(LOG_TAG) { "No permission to schedule notification $localNotificationId" }
             return
         }
 
-        logger.log(LOG_TAG) { "Setting alarm for notification $notificationId, $triggerTime ($triggerAtMillis)" }
+        logger.log(LOG_TAG) { "Setting alarm for notification $localNotificationId, $triggerTime ($triggerAtMillis)" }
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
     }
 
     private fun showNotification(
         title: String,
         message: String,
-        notificationId: String,
+        localNotificationId: LocalNotificationId,
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
             != PackageManager.PERMISSION_GRANTED
         ) {
-            logger.log(LOG_TAG) { "Skipping notification $notificationId, no permission" }
+            logger.log(LOG_TAG) { "Skipping notification $localNotificationId, no permission" }
             return
         }
 
-        notificationManager.createNotificationChannel(
-            NotificationChannel(
-                NOTIFICATION_CHANNEL_ID,
-                "All notifications",
-                android.app.NotificationManager.IMPORTANCE_HIGH
-            )
-        )
-
         val mainActivityIntent = Intent(context, Class.forName("org.jetbrains.kotlinconf.android.MainActivity"))
             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            .putExtra(EXTRA_NOTIFICATION_ID, notificationId)
+            .putExtra(EXTRA_LOCAL_NOTIFICATION_ID, localNotificationId.toString())
         val pendingIntent = PendingIntent.getActivity(
             context,
-            notificationId.hashCode(),
+            localNotificationId.hashCode(),
             mainActivityIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -146,16 +144,16 @@ class AndroidNotificationService(
             .setContentIntent(pendingIntent)
             .build()
 
-        logger.log(LOG_TAG) { "Showing notification: $notificationId, $notification" }
-        notificationManager.notify(notificationId.hashCode(), notification)
+        logger.log(LOG_TAG) { "Showing notification: $localNotificationId, $notification" }
+        notificationManager.notify(localNotificationId.hashCode(), notification)
     }
 
-    override fun cancel(notificationId: String) {
-        logger.log(LOG_TAG) { "Canceling notification $notificationId" }
+    override fun cancel(localNotificationId: LocalNotificationId) {
+        logger.log(LOG_TAG) { "Canceling notification $localNotificationId" }
 
         // Cancel the notification if it's currently shown
-        notificationManager.cancel(notificationId.hashCode())
-        logger.log(LOG_TAG) { "Canceled existing notification $notificationId" }
+        notificationManager.cancel(localNotificationId.hashCode())
+        logger.log(LOG_TAG) { "Canceled existing notification $localNotificationId" }
 
         // Cancel any pending alarms for this notification
         val intent = Intent(context, AlarmBroadcastReceiver::class.java).apply {
@@ -163,12 +161,12 @@ class AndroidNotificationService(
         }
         val pendingIntent: PendingIntent? = PendingIntent.getBroadcast(
             context,
-            notificationId.hashCode(),
+            localNotificationId.hashCode(),
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
         )
         pendingIntent?.let { alarmManager?.cancel(it) }
-        logger.log(LOG_TAG) { "Canceled scheduled notification $notificationId" }
+        logger.log(LOG_TAG) { "Canceled scheduled notification $localNotificationId" }
     }
 }
 
@@ -178,13 +176,13 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
 
         val title = intent.getStringExtra(EXTRA_TITLE) ?: return
         val message = intent.getStringExtra(EXTRA_MESSAGE) ?: return
-        val notificationId = intent.getStringExtra(EXTRA_NOTIFICATION_ID) ?: return
+        val notificationId = intent.getStringExtra(EXTRA_LOCAL_NOTIFICATION_ID) ?: return
 
-        val notificationService = KoinPlatform.getKoin().get<NotificationService>()
-        notificationService.post(
+        val localNotificationService = KoinPlatform.getKoin().get<LocalNotificationService>()
+        localNotificationService.post(
             title = title,
             message = message,
-            notificationId = notificationId,
+            localNotificationId = LocalNotificationId.parse(notificationId) ?: return,
         )
     }
 }

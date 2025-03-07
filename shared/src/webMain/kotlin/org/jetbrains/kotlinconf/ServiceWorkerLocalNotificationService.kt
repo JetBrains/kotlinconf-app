@@ -6,9 +6,9 @@ import org.jetbrains.kotlinconf.utils.GRANTED_PERMISSION
 import org.jetbrains.kotlinconf.utils.Notification
 import kotlin.coroutines.resume
 
-class ServiceWorkerNotificationService(
+class ServiceWorkerLocalNotificationService(
     private val timeProvider: TimeProvider,
-) : NotificationService {
+) : LocalNotificationService {
     override suspend fun requestPermission(): Boolean {
         return suspendCancellableCoroutine { continuation ->
             Notification.requestPermission { result ->
@@ -18,7 +18,7 @@ class ServiceWorkerNotificationService(
     }
 
     override fun post(
-        notificationId: String,
+        localNotificationId: LocalNotificationId,
         title: String,
         message: String,
         time: LocalDateTime?,
@@ -30,14 +30,14 @@ class ServiceWorkerNotificationService(
         }
         registerNotificationByServiceWorker(
             delay = delay,
-            notificationId = notificationId,
+            notificationId = localNotificationId.toString(),
             title = title,
             message = message,
         )
     }
 
-    override fun cancel(notificationId: String) {
-        cancelNotificationByServiceWorker(notificationId)
+    override fun cancel(localNotificationId: LocalNotificationId) {
+        cancelNotificationByServiceWorker(localNotificationId.toString())
     }
 }
 

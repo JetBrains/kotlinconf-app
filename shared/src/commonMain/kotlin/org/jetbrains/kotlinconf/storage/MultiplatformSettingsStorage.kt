@@ -51,12 +51,9 @@ class MultiplatformSettingsStorage(
     override suspend fun setNews(value: List<NewsItem>) = settings
         .set(Keys.NEWS_CACHE, Json.encodeToString(value))
 
-    override fun getNotificationSettings(): Flow<NotificationSettings> =
+    override fun getNotificationSettings(): Flow<NotificationSettings?> =
         settings.getStringOrNullFlow(Keys.NOTIFICATION_SETTINGS)
-            .map {
-                it?.let { Json.decodeFromString<NotificationSettings>(it) }
-                    ?: NotificationSettings(true, true, true)
-            }
+            .map { it?.let { Json.decodeFromString<NotificationSettings>(it) } }
 
     override suspend fun setNotificationSettings(value: NotificationSettings) = settings
         .set(Keys.NOTIFICATION_SETTINGS, Json.encodeToString(value))

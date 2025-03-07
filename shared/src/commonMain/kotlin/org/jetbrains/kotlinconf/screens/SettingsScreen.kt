@@ -77,7 +77,7 @@ fun SettingsScreen(
                 scope.launch {
                     bitmap = graphicsLayer.toImageBitmap()
                     bitmapVisibility.snapTo(1f)
-                    bitmapVisibility.animateTo(0f, tween(800, easing = EaseOutQuad))
+                    bitmapVisibility.animateTo(0f, tween(500, easing = EaseOutQuad))
                     bitmap = null
                 }
                 viewModel.setTheme(theme)

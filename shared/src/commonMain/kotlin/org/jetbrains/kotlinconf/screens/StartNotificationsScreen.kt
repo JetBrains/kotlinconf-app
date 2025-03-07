@@ -17,7 +17,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -38,7 +37,7 @@ fun StartNotificationsScreen(
     onDone: () -> Unit,
     viewModel: StartNotificationsViewModel = koinViewModel(),
 ) {
-    val notificationSettings by viewModel.notificationSettings.collectAsStateWithLifecycle()
+    val notificationSettings = viewModel.notificationSettings.collectAsStateWithLifecycle().value
 
     LaunchedEffect(Unit) {
         viewModel.permissionHandlingDone.collect { done ->
@@ -73,10 +72,12 @@ fun StartNotificationsScreen(
                 stringResource(AppRes.string.notifications_description),
                 color = KotlinConfTheme.colors.longText,
             )
-            NotificationSettings(
-                notificationSettings = notificationSettings,
-                onChangeSettings = { viewModel.setNotificationSettings(it) }
-            )
+            if (notificationSettings != null) {
+                NotificationSettings(
+                    notificationSettings = notificationSettings,
+                    onChangeSettings = { viewModel.setNotificationSettings(it) }
+                )
+            }
         }
 
         Row(

@@ -29,7 +29,7 @@ interface ApplicationStorage {
     fun getNews(): Flow<List<NewsItem>>
     suspend fun setNews(value: List<NewsItem>)
 
-    fun getNotificationSettings(): Flow<NotificationSettings>
+    fun getNotificationSettings(): Flow<NotificationSettings?>
     suspend fun setNotificationSettings(value: NotificationSettings)
 
     fun ensureCurrentVersion()

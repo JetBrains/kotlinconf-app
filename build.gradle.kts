@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.composeHotReload) apply false
     alias(libs.plugins.jib) apply false
+    alias(libs.plugins.googleServices) apply false
 }
 
 tasks.wrapper {
