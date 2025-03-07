@@ -16,7 +16,7 @@ sessionize:
 
 news:
     repo: "JetBrains/kotlinconf-app"
-    branch: "e5l/news"
+    branch: "kotlinconf-2025"
     folder: "news"
 
 database:
