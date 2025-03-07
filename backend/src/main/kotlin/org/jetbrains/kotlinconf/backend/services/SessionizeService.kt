@@ -34,7 +34,12 @@ class SessionizeService(
         log.info("Synchronizing each $sessionizeInterval minutes with $sessionizeUrl")
         while (true) {
             log.trace("Synchronizing to Sessionize…")
-            synchronizeWithSessionize(sessionizeUrl)
+            runCatching {
+                synchronizeWithSessionize(sessionizeUrl)
+            }.onFailure { cause ->
+                log.error("Failed to synchronize to Sessionize: ${cause.message}", cause)
+            }
+
             log.trace("Finished loading data from Sessionize.")
             delay(TimeUnit.MINUTES.toMillis(sessionizeInterval))
         }
