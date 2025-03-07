@@ -45,6 +45,7 @@ import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
+import org.jetbrains.kotlinconf.isLive
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.Emotion
@@ -57,6 +58,8 @@ import org.jetbrains.kotlinconf.ui.components.NowButton
 import org.jetbrains.kotlinconf.ui.components.NowButtonState
 import org.jetbrains.kotlinconf.ui.components.ScrollIndicator
 import org.jetbrains.kotlinconf.ui.components.ServiceEvent
+import org.jetbrains.kotlinconf.ui.components.ServiceEventData
+import org.jetbrains.kotlinconf.ui.components.ServiceEvents
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.Switcher
 import org.jetbrains.kotlinconf.ui.components.TalkCard
@@ -314,7 +317,7 @@ fun ScheduleList(
                         line2 = dayValues?.line2 ?: "",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 16.dp)
+                            .padding(top = 8.dp)
                     )
                 }
 
@@ -323,7 +326,8 @@ fun ScheduleList(
                         text = item.value.title,
                         style = KotlinConfTheme.typography.h2,
                         modifier = Modifier
-                            .padding(horizontal = 12.dp, vertical = 8.dp)
+                            .padding(horizontal = 12.dp)
+                            .padding(top = 24.dp, bottom = 8.dp)
                     )
                 }
 
@@ -379,8 +383,31 @@ fun ScheduleList(
                 is ServiceEventItem -> {
                     val event = item.value
                     ServiceEvent(
-                        event = event,
+                        event = ServiceEventData(
+                            title = event.title,
+                            now = event.isLive,
+                            note = event.startsInMinutes?.let { count ->
+                                stringResource(Res.string.schedule_in_x_minutes, count)
+                            }
+                        ),
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+                    )
+                }
+
+                is ServiceEventGroupItem -> {
+                    val events = item.value
+                    ServiceEvents(
+                        events = events.map {
+                            ServiceEventData(
+                                title = it.title,
+                                now = it.isLive,
+                                time = it.badgeTimeLine,
+                                note = it.startsInMinutes?.let { count ->
+                                    stringResource(Res.string.schedule_in_x_minutes, count)
+                                }
+                            )
+                        },
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
                     )
                 }
             }

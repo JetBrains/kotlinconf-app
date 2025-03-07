@@ -28,11 +28,10 @@ data class DayValues(
     val line2: String,
 ) {
     companion object {
-        // TODO update for 2025 data
         val map = mapOf<LocalDate, DayValues>(
-            LocalDate(2024, 5, 22) to DayValues("Workshop", "Day"),
-            LocalDate(2024, 5, 23) to DayValues("Conference", "Day 1"),
-            LocalDate(2024, 5, 24) to DayValues("Conference", "Day 2"),
+            LocalDate(2025, 5, 21) to DayValues("Workshop", "Day"),
+            LocalDate(2025, 5, 22) to DayValues("Conference", "Day 1"),
+            LocalDate(2025, 5, 23) to DayValues("Conference", "Day 2"),
         )
     }
 }

@@ -3,10 +3,13 @@ package org.jetbrains.kotlinconf.ui.components
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -109,11 +112,13 @@ fun TalkCard(
 ) {
     val backgroundColor by animateColorAsState(
         if (status == TalkStatus.Past) KotlinConfTheme.colors.cardBackgroundPast
-        else KotlinConfTheme.colors.mainBackground
+        else KotlinConfTheme.colors.mainBackground,
+        animationSpec = tween(1000),
     )
     val textColor by animateColorAsState(
         if (status == TalkStatus.Past) KotlinConfTheme.colors.secondaryText
-        else KotlinConfTheme.colors.primaryText
+        else KotlinConfTheme.colors.primaryText,
+        animationSpec = tween(1000),
     )
 
     Column(
@@ -154,7 +159,11 @@ fun TalkCard(
             lightning = lightning,
             time = time,
         )
-        AnimatedVisibility(feedbackEnabled) {
+        AnimatedVisibility(
+            visible = feedbackEnabled,
+            enter = fadeIn(tween(300, 70, EaseOut)) + expandVertically(tween(150, 0, EaseOut)),
+            exit = fadeOut(tween(300, 70, EaseOut)) + shrinkVertically(tween(150, 0, EaseOut)),
+        ) {
             Divider(
                 thickness = 1.dp,
                 color = KotlinConfTheme.colors.strokePale,

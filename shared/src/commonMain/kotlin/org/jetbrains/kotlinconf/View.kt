@@ -67,11 +67,15 @@ fun List<Session>.groupByTime(
         .distinct()
         .sortedBy { it.first }
 
+    val handledSessionIds = mutableSetOf<SessionId>()
     return slots.map { (start, end) ->
-        val cards: List<SessionCardView> = filter { it.startsAt >= start && it.endsAt <= end }
+        val cards: List<SessionCardView> =
+            filter { it.startsAt >= start && it.endsAt <= end && it.id !in handledSessionIds }
             .map {
                 it.asSessionCard(conference, now, favorites, votes)
             }
+
+        handledSessionIds += cards.map { it.id }
 
         TimeSlot(
             startsAt = start,
