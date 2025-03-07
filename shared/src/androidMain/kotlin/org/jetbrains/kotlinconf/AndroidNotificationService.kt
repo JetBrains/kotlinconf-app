@@ -16,13 +16,11 @@ import androidx.core.content.getSystemService
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
 import org.jetbrains.kotlinconf.utils.Logger
-import org.koin.mp.KoinPlatformTools
+import org.koin.mp.KoinPlatform
 
-private const val LOG_TAG = "AndroidNotificationService"
+const val EXTRA_NOTIFICATION_ID = "notificationId"
 private const val EXTRA_TITLE = "title"
 private const val EXTRA_MESSAGE = "message"
-const val EXTRA_NOTIFICATION_ID = "notificationId"
-private const val EXTRA_ICON_ID = "iconId"
 private const val NOTIFICATION_CHANNEL_ID = "channel_all_notifications"
 private const val ACTION_SHOW_NOTIFICATION = "org.jetbrains.kotlinconf.SHOW_NOTIFICATION"
 
@@ -30,9 +28,12 @@ class AndroidNotificationService(
     private val timeProvider: TimeProvider,
     private val context: Context,
     private val iconId: Int,
-    private val permissionHandler: PermissionHandler,
     private val logger: Logger,
 ) : NotificationService {
+
+    companion object {
+        private const val LOG_TAG = "AndroidNotificationService"
+    }
 
     private val notificationManager = NotificationManagerCompat.from(context)
     private val alarmManager = context.getSystemService<AlarmManager>()
@@ -41,7 +42,9 @@ class AndroidNotificationService(
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true
 
         val permissions = arrayOf(Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.USE_EXACT_ALARM)
-        return permissionHandler.requestPermissions(permissions)
+
+        val permissionHandler = KoinPlatform.getKoin().getOrNull<PermissionHandler>()
+        return permissionHandler?.requestPermissions(permissions) ?: false
     }
 
     override fun post(
@@ -60,13 +63,9 @@ class AndroidNotificationService(
             )
         } else {
             showNotification(
-                context = context,
                 title = title,
                 message = message,
-                iconId = iconId,
-                notificationManager = notificationManager,
                 notificationId = notificationId,
-                logger = logger,
             )
         }
     }
@@ -84,7 +83,6 @@ class AndroidNotificationService(
             .putExtra(EXTRA_TITLE, title)
             .putExtra(EXTRA_MESSAGE, message)
             .putExtra(EXTRA_NOTIFICATION_ID, notificationId)
-            .putExtra(EXTRA_ICON_ID, iconId)
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
@@ -106,6 +104,50 @@ class AndroidNotificationService(
 
         logger.log(LOG_TAG) { "Setting alarm for notification $notificationId, $triggerTime ($triggerAtMillis)" }
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+    }
+
+    private fun showNotification(
+        title: String,
+        message: String,
+        notificationId: String,
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            logger.log(LOG_TAG) { "Skipping notification $notificationId, no permission" }
+            return
+        }
+
+        notificationManager.createNotificationChannel(
+            NotificationChannel(
+                NOTIFICATION_CHANNEL_ID,
+                "All notifications",
+                android.app.NotificationManager.IMPORTANCE_HIGH
+            )
+        )
+
+        val mainActivityIntent = Intent(context, Class.forName("org.jetbrains.kotlinconf.android.MainActivity"))
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            .putExtra(EXTRA_NOTIFICATION_ID, notificationId)
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            notificationId.hashCode(),
+            mainActivityIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setSmallIcon(iconId)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .build()
+
+        logger.log(LOG_TAG) { "Showing notification: $notificationId, $notification" }
+        notificationManager.notify(notificationId.hashCode(), notification)
     }
 
     override fun cancel(notificationId: String) {
@@ -132,77 +174,17 @@ class AndroidNotificationService(
 
 class AlarmBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        // Grab logger from Koin if available
-        val logger = KoinPlatformTools.defaultContext().getOrNull()?.getOrNull<Logger>()
-
-        logger?.log(LOG_TAG) { "Received notification alarm" }
-
         if (intent.action != ACTION_SHOW_NOTIFICATION) return
 
         val title = intent.getStringExtra(EXTRA_TITLE) ?: return
         val message = intent.getStringExtra(EXTRA_MESSAGE) ?: return
         val notificationId = intent.getStringExtra(EXTRA_NOTIFICATION_ID) ?: return
-        val iconId = intent.getIntExtra(EXTRA_ICON_ID, 0)
-        if (iconId == 0) return
 
-        showNotification(
-            context = context,
+        val notificationService = KoinPlatform.getKoin().get<NotificationService>()
+        notificationService.post(
             title = title,
             message = message,
-            iconId = iconId,
-            notificationManager = NotificationManagerCompat.from(context),
             notificationId = notificationId,
-            logger = logger,
         )
     }
-}
-
-private fun showNotification(
-    context: Context,
-    title: String,
-    message: String,
-    iconId: Int,
-    notificationManager: NotificationManagerCompat,
-    notificationId: String,
-    logger: Logger?,
-) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-        ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
-        != PackageManager.PERMISSION_GRANTED
-    ) {
-        logger?.log(LOG_TAG) { "Skipping notification $notificationId, no permission" }
-        return
-    }
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        notificationManager.createNotificationChannel(
-            NotificationChannel(
-                NOTIFICATION_CHANNEL_ID,
-                "All notifications",
-                android.app.NotificationManager.IMPORTANCE_HIGH
-            )
-        )
-    }
-
-    val mainActivityIntent = Intent(context, Class.forName("org.jetbrains.kotlinconf.android.MainActivity"))
-        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        .putExtra(EXTRA_NOTIFICATION_ID, notificationId)
-    val pendingIntent = PendingIntent.getActivity(
-        context,
-        notificationId.hashCode(),
-        mainActivityIntent,
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )
-
-    val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-        .setContentTitle(title)
-        .setContentText(message)
-        .setPriority(NotificationCompat.PRIORITY_HIGH)
-        .setSmallIcon(iconId)
-        .setAutoCancel(true)
-        .setContentIntent(pendingIntent)
-        .build()
-
-    logger?.log(LOG_TAG) { "Showing notification: $notificationId, $notification" }
-    notificationManager.notify(notificationId.hashCode(), notification)
 }

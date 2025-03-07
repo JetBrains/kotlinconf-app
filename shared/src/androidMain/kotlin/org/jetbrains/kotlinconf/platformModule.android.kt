@@ -21,7 +21,6 @@ fun platformModule(
             AndroidNotificationService(
                 timeProvider = get(),
                 context = application,
-                permissionHandler = get(),
                 iconId = notificationIconId,
                 logger = get(),
             )
