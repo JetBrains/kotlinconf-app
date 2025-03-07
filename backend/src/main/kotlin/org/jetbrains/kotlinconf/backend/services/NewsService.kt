@@ -90,8 +90,9 @@ class NewsService(private val client: HttpClient, config: ConferenceConfig): Clo
      * @throws IllegalArgumentException if the file format is invalid or required fields are missing
      */
     internal fun parseNewsItem(markdownContent: String): NewsItem {
-        val metadataEnd = markdownContent.indexOf("---")
-        val metadataSection = markdownContent.substring(0, metadataEnd)
+        val metadataStart = markdownContent.indexOf("---")
+        val metadataEnd = markdownContent.indexOf("---", startIndex = metadataStart + 3)
+        val metadataSection = markdownContent.substring(metadataStart + 3, metadataEnd)
         val bodyContent = markdownContent.substring(metadataEnd + 3)
 
         val metadataLines = metadataSection.split("\n")

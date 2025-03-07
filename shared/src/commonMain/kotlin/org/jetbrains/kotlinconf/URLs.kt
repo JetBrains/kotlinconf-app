@@ -5,6 +5,7 @@ object URLs {
     // TODO: https://github.com/JetBrains/kotlinconf-app/issues/296
     const val STAGING_URL = "https://kotlin-conf-staging.labs.jb.gg/"
     const val PRODUCTION_URL = "https://kotlinconf-app-prod.labs.jb.gg"
+    const val LOCAL_URL = "http://10.0.2.2:8080"
     const val API_ENDPOINT = STAGING_URL
 
     // kotlinconf.com

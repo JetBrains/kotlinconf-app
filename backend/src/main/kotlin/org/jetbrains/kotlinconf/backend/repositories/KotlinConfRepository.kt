@@ -2,7 +2,7 @@ package org.jetbrains.kotlinconf.backend.repositories
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.ktor.server.config.*
+import io.ktor.server.config.ApplicationConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.exposed.sql.Database
@@ -16,17 +16,13 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.jetbrains.kotlinconf.FeedbackInfo
-import org.jetbrains.kotlinconf.NewsItem
-import org.jetbrains.kotlinconf.NewsRequest
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.backend.schema.Feedback
-import org.jetbrains.kotlinconf.backend.schema.News
 import org.jetbrains.kotlinconf.backend.schema.Users
 import org.jetbrains.kotlinconf.backend.schema.Votes
 import org.slf4j.LoggerFactory
-import java.util.*
 
 internal class KotlinConfRepository(config: ApplicationConfig) {
     private val log = LoggerFactory.getLogger("KotlinConfRepository")
@@ -58,7 +54,7 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         Database.Companion.connect(connectionPool)
 
         transaction {
-            SchemaUtils.create(Users, Votes, Feedback, News)
+            SchemaUtils.create(Users, Votes, Feedback)
         }
     }
 
@@ -149,63 +145,6 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
                 it[Feedback.sessionId], it[Feedback.feedback]
             )
         }
-    }
-
-    suspend fun getAllNews(): List<NewsItem> = newSuspendedTransaction(Dispatchers.IO) {
-        News.selectAll().map {
-            NewsItem(
-                id = it[News.id],
-                title = it[News.title],
-                publicationDate = LocalDateTime.Companion.parse(it[News.publicationDate]),
-                content = it[News.content],
-                photoUrl = it[News.photoUrl]
-            )
-        }
-    }
-
-    suspend fun getNewsById(id: String): NewsItem? = newSuspendedTransaction(Dispatchers.IO) {
-        News.selectAll().where { News.id eq id }
-            .map {
-                NewsItem(
-                    id = it[News.id],
-                    title = it[News.title],
-                    publicationDate = LocalDateTime.Companion.parse(it[News.publicationDate]),
-                    content = it[News.content],
-                    photoUrl = it[News.photoUrl]
-                )
-            }
-            .singleOrNull()
-    }
-
-    suspend fun createNews(request: NewsRequest): NewsItem = newSuspendedTransaction(Dispatchers.IO) {
-        val id = UUID.randomUUID().toString()
-
-        News.insert {
-            it[News.id] = id
-            it[title] = request.title
-            it[publicationDate] = request.publicationDate.toString()
-            it[content] = request.content
-        }
-
-        NewsItem(
-            id = id,
-            title = request.title,
-            publicationDate = request.publicationDate,
-            content = request.content,
-            photoUrl = request.photoUrl
-        )
-    }
-
-    suspend fun updateNews(id: String, request: NewsRequest): Boolean = newSuspendedTransaction(Dispatchers.IO) {
-        News.update({ News.id eq id }) {
-            it[title] = request.title
-            it[publicationDate] = request.publicationDate.toString()
-            it[content] = request.content
-        } > 0
-    }
-
-    suspend fun deleteNews(id: String): Boolean = newSuspendedTransaction(Dispatchers.IO) {
-        News.deleteWhere { News.id eq id } > 0
     }
 }
 
