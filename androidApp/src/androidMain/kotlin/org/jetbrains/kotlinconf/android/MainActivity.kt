@@ -7,6 +7,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.jetbrains.kotlinconf.R
 import org.jetbrains.kotlinconf.App
@@ -38,6 +43,14 @@ class MainActivity : ComponentActivity() {
                             detectDarkMode = { isDarkMode }
                         )
                     )
+                },
+                popEnterTransition = {
+                    scaleIn(initialScale = 1.05f) +
+                            fadeIn(animationSpec = tween(50))
+                },
+                popExitTransition = {
+                    scaleOut(targetScale = 0.9f, animationSpec = tween(50)) +
+                            fadeOut(animationSpec = tween(50, delayMillis = 50))
                 },
             )
         }

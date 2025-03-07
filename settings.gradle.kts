@@ -8,7 +8,6 @@ pluginManagement {
         google()
         gradlePluginPortal()
         mavenCentral()
-        maven("https://packages.jetbrains.team/maven/p/firework/dev")
     }
 }
 
@@ -17,7 +16,6 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         google()
         mavenCentral()
-        maven("https://packages.jetbrains.team/maven/p/firework/dev")
     }
 }
 

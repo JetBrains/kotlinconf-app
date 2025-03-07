@@ -86,6 +86,7 @@ fun SessionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = KotlinConfTheme.colors.mainBackground)
             .padding(topInsetPadding())
     ) {
         MainHeaderTitleBar(
@@ -190,7 +191,7 @@ private fun FeedbackPanel(
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 val feedbackEmotions = remember {
-                    listOf(Emotion.Positive, Emotion.Neutral, Emotion.Negative)
+                    listOf(Emotion.Negative, Emotion.Neutral, Emotion.Positive)
                 }
                 feedbackEmotions.forEach { emotion ->
                     KodeeIconLarge(

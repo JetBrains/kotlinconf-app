@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +40,7 @@ import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.DayValues
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
@@ -60,6 +63,7 @@ import org.jetbrains.kotlinconf.ui.components.TalkCard
 import org.jetbrains.kotlinconf.ui.components.TalkStatus
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.koin.compose.viewmodel.koinViewModel
 import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 
@@ -70,8 +74,8 @@ fun ScheduleScreen(
     viewModel: ScheduleViewModel = koinViewModel(),
 ) {
     val scope = rememberCoroutineScope()
-    var bookmarkFilterEnabled by remember { mutableStateOf(false) }
-    var searchQuery by remember { mutableStateOf("") }
+    var bookmarkFilterEnabled by rememberSaveable { mutableStateOf(false) }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
     val listState = rememberLazyListState()
 
     val days by viewModel.agenda.collectAsState()
@@ -86,13 +90,15 @@ fun ScheduleScreen(
     }
 
     // Day switcher selection state calculated from the scroll state
+    val conferenceDates = days.map { it.date }
     val computedDayIndex by derivedStateOf {
         items.asSequence()
             .take(listState.firstVisibleItemIndex + 1)
             .findLast { it is DayHeaderItem }
-            .let {
-                (it as? DayHeaderItem)?.value?.day?.ordinal ?: 0
-            }
+            ?.let {
+                val visibleDate = (it as DayHeaderItem).value.date
+                conferenceDates.indexOf(visibleDate)
+            } ?: 0
     }
     // Override for the day switcher selection
     var targetDayIndex by remember { mutableStateOf<Int?>(null) }
@@ -124,7 +130,7 @@ fun ScheduleScreen(
         }
     }
 
-    var headerState by remember { mutableStateOf(MainHeaderContainerState.Title) }
+    var headerState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
     val isSearch = remember(headerState) {
         headerState == MainHeaderContainerState.Search
     }
@@ -144,7 +150,7 @@ fun ScheduleScreen(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
         Header(
             nowButtonState = nowButtonState,
             onNowClick = {
@@ -185,9 +191,8 @@ fun ScheduleScreen(
                 )
             } else {
                 Switcher(
-                    items = days.map {
-                        // TODO proper date handling
-                        "May ${it.day.ordinal + 22}"
+                    items = remember(conferenceDates) {
+                        conferenceDates.map { DateTimeFormatting.date(it) }
                     },
                     selectedIndex = selectedDayIndex,
                     onSelect = { index ->
@@ -300,13 +305,13 @@ fun ScheduleList(
         items(scheduleItems) { item ->
             when (item) {
                 is DayHeaderItem -> {
-                    val day = item.value
-                    // TODO pack these pieces of text into DayHeaderItem
+                    val date = item.value.date
+                    val dayValues = DayValues.map[date]
                     DayHeader(
-                        month = "MAY",
-                        day = (day.day.ordinal + 22).toString(),
-                        line1 = "Conference",
-                        line2 = "Day ${day.day.ordinal + 1}",
+                        month = DateTimeFormatting.month(date).uppercase(),
+                        day = date.dayOfMonth.toString(),
+                        line1 = dayValues?.line1 ?: "",
+                        line2 = dayValues?.line2 ?: "",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp)

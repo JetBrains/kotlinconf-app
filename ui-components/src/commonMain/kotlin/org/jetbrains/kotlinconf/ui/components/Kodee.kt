@@ -1,16 +1,13 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.kodee_emotion_negative
@@ -61,10 +58,6 @@ fun KodeeIconSmall(
         }
     }
 
-    val tintColor by animateColorAsState(
-        if (selected) KotlinConfTheme.colors.purpleText
-        else KotlinConfTheme.colors.primaryText
-    )
     Image(
         imageVector = vectorResource(resource),
         contentDescription = null, // TODO review as part of https://github.com/JetBrains/kotlinconf-app/issues/193
@@ -74,7 +67,6 @@ fun KodeeIconSmall(
                 indication = null,
                 interactionSource = null,
             ),
-        colorFilter = ColorFilter.tint(tintColor)
     )
 }
 
