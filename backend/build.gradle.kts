@@ -4,14 +4,18 @@ plugins {
     alias(libs.plugins.ktor)
 }
 
-kotlin {
-    jvmToolchain(11)
-}
-
 application {
     mainClass = "io.ktor.server.netty.EngineMain"
+
+    val isDevelopment: Boolean = project.ext.has("development")
+    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+jib {
+    container {
+        mainClass = "io.ktor.server.netty.EngineMain"
+    }
+}
 
 dependencies {
     implementation(projects.shared)
