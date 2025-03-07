@@ -104,7 +104,7 @@ class SessionizeService(
             val startTime = parts.minOf { it.startsAt }
             val endTime = parts.maxOf { it.endsAt }
             val first = parts.find { it.title.contains("Part 1") } ?: return@mapNotNull null
-            val title = first.title.substringAfter(". Part").trim()
+            val title = first.title.substringBefore(". Part").trim()
 
             Session(
                 first.id,

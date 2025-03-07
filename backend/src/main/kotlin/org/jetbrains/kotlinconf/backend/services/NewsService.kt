@@ -77,6 +77,8 @@ class NewsService(private val client: HttpClient, config: ConferenceConfig): Clo
      *
      * The Markdown file should have the following format:
      * ```
+     *
+     * ---
      * id: idstring
      * photoUrl: http://example.com/photo.jpg
      * title: title of the page
