@@ -18,6 +18,7 @@ import org.jetbrains.kotlinconf.Day
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
+import org.jetbrains.kotlinconf.TagValues
 import org.jetbrains.kotlinconf.TimeSlot
 import org.jetbrains.kotlinconf.isLive
 import org.jetbrains.kotlinconf.isUpcoming
@@ -63,26 +64,6 @@ fun ScheduleListItem.isUpcomingSoon(): Boolean =
     (this is WorkshopItem && this.workshops.first().startsInMinutes != null) ||
         (this is SessionItem && this.value.isUpcoming && this.value.startsInMinutes != null)
 
-// TODO get set of tags from the service
-private val categoryTags = listOf(
-    "Server-side",
-    "Multiplatform",
-    "Android",
-    "Extensibility/Tooling",
-    "Languages and Best Practices",
-    "Other",
-)
-private val levelTags = listOf(
-    "Introductory and overview",
-    "Intermediate",
-    "Advanced",
-)
-private val formatTags = listOf(
-    "Workshop",
-    "Regular Session",
-    "Lightning Session",
-)
-
 data class ScheduleSearchParams(
     val searchQuery: String = "",
     val isSearch: Boolean = false,
@@ -105,9 +86,9 @@ class ScheduleViewModel(
     }
 
     val filterItems = MutableStateFlow<List<FilterItem>>(
-        categoryTags.toTags(FilterItemType.Category) +
-            levelTags.toTags(FilterItemType.Level) +
-            formatTags.toTags(FilterItemType.Format)
+        TagValues.categories.toTags(FilterItemType.Category) +
+                TagValues.levels.toTags(FilterItemType.Level) +
+                TagValues.formats.toTags(FilterItemType.Format)
     )
 
     private fun <T> MutableList<T>.replace(old: T, new: T) {
@@ -224,11 +205,6 @@ class ScheduleViewModel(
                 if (last() is TimeSlotTitleItem) {
                     removeLast()
                 }
-            }
-
-            // Remove empty days
-            if (last() is DayHeaderItem) {
-                removeLast()
             }
         }
     }

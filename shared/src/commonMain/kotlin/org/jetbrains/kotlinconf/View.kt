@@ -1,7 +1,7 @@
 package org.jetbrains.kotlinconf
 
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 
 data class Agenda(
@@ -15,29 +15,10 @@ data class Speakers(
     operator fun get(id: SpeakerId): Speaker? = dictById[id]
 }
 
-@OptIn(ExperimentalResourceApi::class)
-enum class EventDay() {
-    May22(),
-    May23(),
-    May24();
-
-    companion object {
-        fun from(value: Int) = when (value) {
-            22 -> May22
-            23 -> May23
-            else -> May24
-        }
-    }
-}
-
 data class Day(
-    val day: EventDay,
+    val date: LocalDate,
     val timeSlots: List<TimeSlot>
-) {
-    // TODO Review usages of this later
-    val title: String
-        get() = day.toString()
-}
+)
 
 data class TimeSlot(
     val startsAt: LocalDateTime,
@@ -58,10 +39,10 @@ fun Conference.buildAgenda(
     now: LocalDateTime,
 ): Agenda {
     val days = sessions
-        .groupBy { it.startsAt.dayOfMonth }
-        .map { (day, sessions) ->
+        .groupBy { it.startsAt.date }
+        .map { (date, sessions) ->
             Day(
-                day = EventDay.from(day),
+                date = date,
                 timeSlots = sessions.groupByTime(
                     conference = this,
                     now = now,
@@ -70,7 +51,7 @@ fun Conference.buildAgenda(
                 )
             )
         }
-        .sortedBy { it.day }
+        .sortedBy { it.date }
 
     return Agenda(days)
 }
