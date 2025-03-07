@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.composeHotReload) apply false
+    alias(libs.plugins.jib) apply false
 }
 
 tasks.wrapper {
