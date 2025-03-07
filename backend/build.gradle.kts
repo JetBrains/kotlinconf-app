@@ -4,14 +4,18 @@ plugins {
     alias(libs.plugins.ktor)
 }
 
-kotlin {
-    jvmToolchain(11)
-}
-
 application {
-    mainClass.set("org.jetbrains.kotlinconf.backend.MainKt")
+    mainClass = "io.ktor.server.netty.EngineMain"
+
+    val isDevelopment: Boolean = project.ext.has("development")
+    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+jib {
+    container {
+        mainClass = "io.ktor.server.netty.EngineMain"
+    }
+}
 
 dependencies {
     implementation(projects.shared)
@@ -38,6 +42,10 @@ dependencies {
     implementation(libs.exposed.jdbc)
     implementation(libs.h2)
     implementation(libs.postgresql)
+
+    implementation(libs.koin.ktor)
+    implementation(libs.koin.core)
+    implementation(libs.koin.slf4j)
 
     implementation(libs.hikaricp)
     implementation(libs.logback.classic)

@@ -4,13 +4,20 @@ ktor:
 
     application:
         modules:
-            - org.jetbrains.kotlinconf.backend.MainKt.conferenceBackend
+            - org.jetbrains.kotlinconf.backend.DiModuleKt.diModule
+            - org.jetbrains.kotlinconf.backend.PluginsModuleKt.pluginsSetup
+            - org.jetbrains.kotlinconf.backend.RoutesModuleKt.routesModule
 
 
 sessionize:
     url: "https://sessionize.com/api/v2/oleuq4yu/view/All"
     imagesUrl: "https://sessionize.com/image/"
     interval: 60
+
+news:
+    repo: "JetBrains/kotlinconf-app"
+    branch: "e5l/news"
+    folder: "news"
 
 database:
     host: "$DB0_HOST:"
@@ -22,4 +29,4 @@ database:
 
 service:
     environment: production
-    secret: "$ADMIN_SECRET:"
+    secret: "$ADMIN_SECRET:test"

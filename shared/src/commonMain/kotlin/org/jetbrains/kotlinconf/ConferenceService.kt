@@ -278,7 +278,7 @@ class ConferenceService(
         return NewsDisplayItem(
             id = item.id,
             photoUrl = item.photoUrl,
-            date = item.date.toNewsDisplayTime(now),
+            date = item.publicationDate.toNewsDisplayTime(now),
             title = item.title,
             content = item.content,
         )

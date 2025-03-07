@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.backend
+package org.jetbrains.kotlinconf.backend.model
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.SerialName

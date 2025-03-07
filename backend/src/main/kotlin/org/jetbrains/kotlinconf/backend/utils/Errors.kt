@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.backend
+package org.jetbrains.kotlinconf.backend.utils
 
 class ServiceUnavailable: Throwable()
 class BadRequest: Throwable()
