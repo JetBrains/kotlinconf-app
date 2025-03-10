@@ -24,10 +24,13 @@ import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PartnerCard
-import org.jetbrains.kotlinconf.ui.components.SectionTitle
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.bottomInsetPadding
+import org.jetbrains.kotlinconf.utils.plus
+import org.jetbrains.kotlinconf.utils.topInsetPadding
+import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 
 
 @Composable
@@ -35,13 +38,17 @@ fun Partners(
     onBack: () -> Unit,
     onPartnerDetail: (partnerId: PartnerId) -> Unit,
 ) {
-    Column(Modifier.fillMaxSize()) {
+    Column(
+        Modifier.fillMaxSize()
+            .background(color = KotlinConfTheme.colors.mainBackground)
+            .padding(topInsetPadding())
+    ) {
         MainHeaderTitleBar(
             title = stringResource(Res.string.partners_title),
             startContent = {
                 TopMenuButton(
-                    icon = kotlinconfapp.ui_components.generated.resources.Res.drawable.arrow_left_24,
-                    contentDescription = stringResource(kotlinconfapp.ui_components.generated.resources.Res.string.main_header_back),
+                    icon = UiRes.drawable.arrow_left_24,
+                    contentDescription = stringResource(UiRes.string.main_header_back),
                     onClick = onBack,
                 )
             }
@@ -54,7 +61,7 @@ fun Partners(
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
-            contentPadding = PaddingValues(vertical = 12.dp),
+            contentPadding = PaddingValues(vertical = 12.dp) + bottomInsetPadding(),
             state = lazyListState,
         ) {
             for ((level, partners) in PARTNERS) {
