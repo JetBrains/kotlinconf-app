@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 
 /**
@@ -28,6 +29,7 @@ fun StyledText(
         style = style,
         color = { color },
         maxLines = maxLines,
+        overflow = TextOverflow.Ellipsis,
     )
 }
 
@@ -45,5 +47,6 @@ fun StyledText(
         style = style,
         color = { color },
         maxLines = maxLines,
+        overflow = TextOverflow.Ellipsis,
     )
 }
