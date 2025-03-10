@@ -8,10 +8,10 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -334,28 +334,31 @@ fun ScheduleList(
                 is WorkshopItem -> {
                     val workshops = item.workshops
                     Column(modifier = Modifier.fillMaxWidth()) {
-                        val pagerState = rememberPagerState(pageCount = { workshops.size })
+                        val pagerState = rememberPagerState(
+                            pageCount = { Int.MAX_VALUE },
+                            initialPage = Int.MAX_VALUE / 2,
+                        )
+
                         HorizontalPager(
                             state = pagerState,
                             modifier = Modifier.fillMaxWidth(),
-                            beyondViewportPageCount = 20,
-                        ) { page ->
+                            beyondViewportPageCount = 10,
+                            contentPadding = PaddingValues(horizontal = 24.dp),
+                        ) { pageIndex ->
                             SessionCard(
-                                session = workshops[page],
+                                session = workshops[pageIndex % workshops.size],
                                 feedbackEnabled = feedbackEnabled,
                                 onBookmark = onBookmark,
                                 onSubmitFeedback = onSubmitFeedback,
                                 onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
                                 onSession = onSession,
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight(Alignment.Top)
-                                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                                    .padding(horizontal = 8.dp, vertical = 8.dp)
                             )
                         }
                         ScrollIndicator(
                             pageCount = workshops.size,
-                            selectedPage = pagerState.currentPage,
+                            selectedPage = pagerState.currentPage % workshops.size,
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
                                 .padding(vertical = 8.dp),
