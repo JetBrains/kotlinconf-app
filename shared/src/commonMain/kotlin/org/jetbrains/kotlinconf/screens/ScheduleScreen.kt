@@ -336,8 +336,8 @@ fun ScheduleList(
                     val workshops = item.workshops
                     Column(modifier = Modifier.fillMaxWidth()) {
                         val pagerState = rememberPagerState(
-                            pageCount = { Int.MAX_VALUE },
-                            initialPage = Int.MAX_VALUE / 2,
+                            pageCount = { Int.MAX_VALUE }, // Pretend we have "infinite" pages
+                            initialPage = Int.MAX_VALUE / 2, // Start from the middle
                         )
 
                         HorizontalPager(
