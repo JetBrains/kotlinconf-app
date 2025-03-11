@@ -17,8 +17,7 @@ import org.jetbrains.kotlinconf.App
 import org.jetbrains.kotlinconf.EXTRA_NOTIFICATION_ID
 import org.jetbrains.kotlinconf.PermissionHandler
 import org.jetbrains.kotlinconf.navigation.navigateToSession
-import org.koin.dsl.module
-import org.koin.mp.KoinPlatformTools
+import org.koin.mp.KoinPlatform
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,13 +27,7 @@ class MainActivity : ComponentActivity() {
 
         processIntent(intent)
 
-        val permissionHandler = PermissionHandler(activity = this)
-        val activityModule = module {
-            single<PermissionHandler> { permissionHandler }
-        }
-        KoinPlatformTools.defaultContext()
-            .get()
-            .loadModules(listOf(activityModule))
+        KoinPlatform.getKoin().declare(PermissionHandler(activity = this))
 
         setContent {
             App(
