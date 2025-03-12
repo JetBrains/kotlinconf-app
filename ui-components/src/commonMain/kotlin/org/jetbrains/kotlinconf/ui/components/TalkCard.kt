@@ -107,8 +107,8 @@ fun TalkCard(
     onSubmitFeedback: (Emotion?) -> Unit,
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     feedbackEnabled: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     val backgroundColor by animateColorAsState(
         if (status == TalkStatus.Past) KotlinConfTheme.colors.cardBackgroundPast
@@ -147,6 +147,7 @@ fun TalkCard(
             speakers = speakers,
             speakerHighlights = speakerHighlights,
         )
+        Spacer(Modifier.weight(1f))
         Divider(
             thickness = 1.dp,
             color = KotlinConfTheme.colors.strokePale,
@@ -199,6 +200,7 @@ private fun TopBlock(
                 text = buildHighlightedString(title, titleHighlights),
                 style = KotlinConfTheme.typography.h3,
                 color = textColor,
+                maxLines = 2,
                 modifier = Modifier.weight(1f),
             )
 
@@ -238,6 +240,7 @@ private fun TopBlock(
             text = buildHighlightedString(speakers, speakerHighlights),
             color = KotlinConfTheme.colors.secondaryText,
             style = KotlinConfTheme.typography.text2,
+            maxLines = 1,
         )
     }
 }
