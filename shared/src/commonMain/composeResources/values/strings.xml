@@ -11,7 +11,7 @@
     <!-- Screen resources -->
 
     <string name="about_app_title">About the app</string>
-    <string name="about_app_description">The KotlinConf application is developed by the JetBrains team using Kotlin Multiplatform for shared logic and Compose Multiplatform for both Android and iOS.
+    <string name="about_app_description">The KotlinConf application is developed by the JetBrains team using Kotlin Multiplatform for shared logic and Compose Multiplatform for UI across Android, iOS, and Web platforms.
 
 For the source code and more technical details, visit the GitHub repository.</string>
     <string name="about_app_link_github">GitHub repository</string>
