@@ -42,3 +42,4 @@ captures
 android-build
 
 shared/store.properties
+/tmp/
