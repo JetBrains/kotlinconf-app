@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.backend.model
 
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -24,8 +25,8 @@ data class SessionData(
     val speakers: List<SpeakerId>,
     @SerialName("description")
     var descriptionText: String? = "",
-    val startsAt: LocalDateTime?,
-    val endsAt: LocalDateTime?,
+    val startsAt: Instant?,
+    val endsAt: Instant?,
     val title: String,
     val roomId: Int?,
     val questionAnswers: List<QuestionAnswerData> = emptyList(),

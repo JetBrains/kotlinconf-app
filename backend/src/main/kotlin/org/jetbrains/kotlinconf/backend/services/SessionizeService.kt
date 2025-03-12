@@ -10,7 +10,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.kotlinconf.Conference
+import org.jetbrains.kotlinconf.EVENT_TIME_ZONE
 import org.jetbrains.kotlinconf.Session
 import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.backend.model.CategoryItemData
@@ -81,8 +83,8 @@ class SessionizeService(
                 it.descriptionText ?: "",
                 it.speakers,
                 it.roomId?.let { findRoom(it) } ?: "unknown",
-                startsAt,
-                endsAt,
+                startsAt.toLocalDateTime(EVENT_TIME_ZONE),
+                endsAt.toLocalDateTime(EVENT_TIME_ZONE),
                 tags
             )
         }.mergeWorkshops()

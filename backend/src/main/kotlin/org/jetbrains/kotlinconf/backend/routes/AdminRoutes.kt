@@ -7,7 +7,6 @@ import org.jetbrains.kotlinconf.backend.services.SessionizeService
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.koin.ktor.ext.inject
 
-
 /*
 POST http://localhost:8080/sessionizeSync
 */
