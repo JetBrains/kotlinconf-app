@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.nav_destination_schedule
 import kotlinconfapp.shared.generated.resources.schedule_action_filter_bookmarked
@@ -82,9 +83,12 @@ fun ScheduleScreen(
     var searchQuery by rememberSaveable { mutableStateOf("") }
     val listState = rememberLazyListState()
 
-    val days by viewModel.agenda.collectAsState()
-    val items by viewModel.items.collectAsState()
-    val shouldNavigateToPrivacyPolicy by viewModel.navigateToPrivacyPolicy.collectAsState()
+    val days by viewModel.agenda.collectAsStateWithLifecycle()
+    val items by viewModel.items.collectAsStateWithLifecycle()
+    val shouldNavigateToPrivacyPolicy by viewModel.navigateToPrivacyPolicy.collectAsStateWithLifecycle()
+
+    val firstLiveIndex by viewModel.firstLiveIndex.collectAsStateWithLifecycle()
+    val lastLiveIndex by viewModel.lastLiveIndex.collectAsStateWithLifecycle()
 
     LaunchedEffect(shouldNavigateToPrivacyPolicy) {
         if (shouldNavigateToPrivacyPolicy) {
@@ -108,29 +112,24 @@ fun ScheduleScreen(
     var targetDayIndex by remember { mutableStateOf<Int?>(null) }
     val selectedDayIndex = targetDayIndex ?: computedDayIndex
 
-
-    val firstLiveIndex = remember(items) {
-        items.indexOfFirst { it.isLive() || it.isUpcoming() }
-    }
-    val lastLiveIndex = remember(items) {
-        items.indexOfLast { it.isLive() || it.isUpcomingSoon() }
-    }
     var nowScrolling by remember { mutableStateOf(false) }
     val nowButtonState: NowButtonState? by derivedStateOf {
         when {
             nowScrolling -> NowButtonState.Current
 
-            firstLiveIndex != -1 -> {
-                val firstVisible = listState.firstVisibleItemIndex
-                val lastVisible = listState.lastVisibleItemIndex
+            firstLiveIndex == -1 || lastLiveIndex == -1 -> null
+
+            else -> {
+                val firstMostlyVisible = listState.firstVisibleItemIndex +
+                        (if (listState.firstVisibleItemScrollOffset > 50) 1 else 0)
+                val lastFullyVisible = listState.lastVisibleItemIndex - 1
+
                 when {
-                    lastVisible - 1 < firstLiveIndex -> NowButtonState.Before
-                    firstVisible + 1 > lastLiveIndex -> NowButtonState.After
+                    lastFullyVisible < firstLiveIndex -> NowButtonState.Before
+                    firstMostlyVisible > lastLiveIndex -> NowButtonState.After
                     else -> NowButtonState.Current
                 }
             }
-
-            else -> null // No live sessions at current time
         }
     }
 
@@ -393,7 +392,7 @@ fun ScheduleList(
                             now = event.isLive,
                             note = event.startsInMinutes?.let { count ->
                                 stringResource(Res.string.schedule_in_x_minutes, count)
-                            }
+                            },
                         ),
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
                     )
@@ -409,8 +408,7 @@ fun ScheduleList(
                                 time = it.badgeTimeLine,
                                 note = it.startsInMinutes?.let { count ->
                                     stringResource(Res.string.schedule_in_x_minutes, count)
-                                }
-                            )
+                                })
                         },
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
                     )

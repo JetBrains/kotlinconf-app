@@ -1,17 +1,18 @@
 package org.jetbrains.kotlinconf.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -67,7 +68,6 @@ fun NowButton(
             .clip(NowButtonShape)
             .clickable(onClick = onClick, enabled = enabled)
             .background(background)
-            .animateContentSize()
             .width(72.dp)
             .heightIn(min = 36.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -79,23 +79,24 @@ fun NowButton(
             color = textColor,
         )
 
-        AnimatedVisibility(
-            visible = active,
-            enter = fadeIn() + expandHorizontally(clip = false, expandFrom = Alignment.Start),
-            exit = fadeOut() + shrinkHorizontally(clip = false, shrinkTowards = Alignment.Start),
-        ) {
-            Row {
-                Spacer(Modifier.width(2.dp))
-                Icon(
-                    // TODO review icon sizing later, https://github.com/JetBrains/kotlinconf-app/issues/175
-                    painter = painterResource(Res.drawable.arrow_down_16),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(16.dp)
-                        .rotate(if (time == Before) 0f else 180f),
-                    tint = textColor,
-                )
-            }
+        AnimatedContent(
+            targetState = time,
+            transitionSpec = {
+                (fadeIn() + expandHorizontally(clip = false, expandFrom = Alignment.Start)) togetherWith
+                        (fadeOut() + shrinkHorizontally(clip = false, shrinkTowards = Alignment.Start))
+            },
+            modifier = Modifier.height(16.dp)
+        ) { targetTime ->
+            if (targetTime == Current) return@AnimatedContent
+            Spacer(Modifier.width(2.dp))
+            Icon(
+                painter = painterResource(Res.drawable.arrow_down_16),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(16.dp)
+                    .rotate(if (targetTime == Before) 0f else 180f),
+                tint = textColor,
+            )
         }
     }
 }

@@ -22,7 +22,6 @@ import org.jetbrains.kotlinconf.TagValues
 import org.jetbrains.kotlinconf.TimeSlot
 import org.jetbrains.kotlinconf.isLive
 import org.jetbrains.kotlinconf.isServiceEvent
-import org.jetbrains.kotlinconf.isUpcoming
 import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.components.FilterItem
 import org.jetbrains.kotlinconf.ui.components.FilterItemType
@@ -54,19 +53,16 @@ data class WorkshopItem(
     val workshops: List<SessionCardView>,
 ) : ScheduleListItem
 
-fun ScheduleListItem.isLive(): Boolean =
-    (this is SessionItem && this.value.isLive) ||
-            (this is WorkshopItem && this.workshops.first().isLive) ||
-            (this is TimeSlotTitleItem && this.value.isLive)
-
-fun ScheduleListItem.isUpcoming(): Boolean =
-    (this is SessionItem && this.value.isUpcoming) ||
-            (this is WorkshopItem && this.workshops.first().isUpcoming) ||
-            (this is TimeSlotTitleItem && this.value.isUpcoming)
-
-fun ScheduleListItem.isUpcomingSoon(): Boolean =
-    (this is WorkshopItem && this.workshops.first().startsInMinutes != null) ||
-            (this is SessionItem && this.value.isUpcoming && this.value.startsInMinutes != null)
+fun ScheduleListItem.isLive(): Boolean {
+    return when (this) {
+        is DayHeaderItem -> false
+        is ServiceEventGroupItem -> this.value.any { it.isLive }
+        is ServiceEventItem -> this.value.isLive
+        is SessionItem -> this.value.isLive
+        is TimeSlotTitleItem -> this.value.isLive
+        is WorkshopItem -> this.workshops.any { it.isLive }
+    }
+}
 
 data class ScheduleSearchParams(
     val searchQuery: String = "",
@@ -136,6 +132,24 @@ class ScheduleViewModel(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
+        )
+
+    val firstLiveIndex = items
+        .map { items -> items.indexOfFirst { it.isLive() } }
+        .flowOn(Dispatchers.Default)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = -1
+        )
+
+    val lastLiveIndex = items
+        .map { items -> items.indexOfLast { it.isLive() } }
+        .flowOn(Dispatchers.Default)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = -1
         )
 
     private fun buildItems(
