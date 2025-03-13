@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.AnnotatedString
@@ -351,9 +352,9 @@ private fun FeedbackBlock(
                         emotion = emotion,
                         selected = selectedEmotion == emotion,
                         onClick = {
+                            hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
                             selectedEmotion = if (emotion == selectedEmotion) null else emotion
                             feedbackExpanded = selectedEmotion != null
-                            selectedEmotion?.hapticFeedback?.let(hapticFeedback::performHapticFeedback)
                             onSubmitFeedback(selectedEmotion)
                         },
                     )
@@ -365,9 +366,11 @@ private fun FeedbackBlock(
             LaunchedEffect(Unit) {
                 focusRequester.requestFocus()
             }
+            val hapticFeedback = LocalHapticFeedback.current
             FeedbackForm(
                 emotion = selectedEmotion,
                 onSubmit = { emotion, comment ->
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
                     onSubmitFeedbackWithComment(emotion, comment)
                     feedbackExpanded = false
                 },
