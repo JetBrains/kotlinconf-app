@@ -51,6 +51,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.SpeakerId
+import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -141,7 +142,8 @@ fun SessionScreen(
                             onFeedbackWithComment = { emotion, comment ->
                                 viewModel.submitFeedbackWithComment(emotion, comment)
                             },
-                            modifier = Modifier.padding(bottom = 20.dp)
+                            initialEmotion = session.vote?.toEmotion(),
+                            modifier = Modifier.padding(bottom = 20.dp),
                         )
                     }
 
@@ -179,8 +181,9 @@ private fun FeedbackPanel(
     onFeedback: (Emotion?) -> Unit,
     onFeedbackWithComment: (Emotion, String) -> Unit,
     modifier: Modifier = Modifier,
+    initialEmotion: Emotion? = null,
 ) {
-    var selectedEmotion by remember { mutableStateOf<Emotion?>(null) }
+    var selectedEmotion by remember { mutableStateOf<Emotion?>(initialEmotion) }
     var feedbackExpanded by remember { mutableStateOf(false) }
 
     Column(

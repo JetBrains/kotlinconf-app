@@ -128,7 +128,7 @@ class APIClient(
         if (userId == null) return emptyList()
 
         return safeApiCall {
-            client.get { apiUrl("vote") }.body()
+            client.get { apiUrl("vote") }.body<Votes>().votes
         } ?: emptyList()
     }
 

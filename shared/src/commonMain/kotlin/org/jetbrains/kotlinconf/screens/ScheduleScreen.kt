@@ -51,6 +51,7 @@ import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.isLive
+import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.Emotion
@@ -524,6 +525,7 @@ private fun SessionCard(
             SessionState.Past -> TalkStatus.Past
             SessionState.Upcoming -> TalkStatus.Upcoming
         },
+        initialEmotion = session.vote?.toEmotion(),
         onSubmitFeedback = { emotion ->
             onSubmitFeedback(session.id, emotion)
         },

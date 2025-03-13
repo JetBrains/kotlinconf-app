@@ -46,9 +46,9 @@ class Session(
 )
 
 @Serializable
-class VoteInfo(
+data class VoteInfo(
     val sessionId: SessionId,
-    val score: Score?
+    val score: Score?,
 )
 
 @Serializable

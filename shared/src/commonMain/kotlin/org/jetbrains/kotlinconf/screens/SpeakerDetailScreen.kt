@@ -25,6 +25,7 @@ import kotlinconfapp.ui_components.generated.resources.main_header_back
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
+import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MajorError
@@ -133,6 +134,7 @@ fun SpeakerDetailScreen(
                                 stringResource(Res.string.schedule_in_x_minutes, count)
                             },
                             status = TalkStatus.Upcoming,
+                            initialEmotion = session.vote?.toEmotion(),
                             feedbackEnabled = false,
                             onSubmitFeedback = { /* Not enabled on this screen */ },
                             onSubmitFeedbackWithComment = { _, _ -> /* Not enabled on this screen */ },

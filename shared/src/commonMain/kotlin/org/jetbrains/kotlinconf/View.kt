@@ -27,6 +27,7 @@ fun Conference.buildAgenda(
     votes: List<VoteInfo>,
     now: LocalDateTime,
 ): List<Day> {
+    val votesBySessionId = votes.associateBy { it.sessionId }
     return sessions
         .groupBy { it.startsAt.date }
         .map { (date, sessions) ->
@@ -36,7 +37,7 @@ fun Conference.buildAgenda(
                     conference = this,
                     now = now,
                     favorites = favorites,
-                    votes = votes,
+                    votes = votesBySessionId,
                 )
             )
         }
@@ -47,7 +48,7 @@ fun List<Session>.groupByTime(
     conference: Conference,
     now: LocalDateTime,
     favorites: Set<SessionId>,
-    votes: List<VoteInfo>,
+    votes: Map<SessionId, VoteInfo>,
 ): List<TimeSlot> {
     val slots = filterNot { it.isLightning }
         .map { it.startsAt to it.endsAt }
@@ -59,7 +60,7 @@ fun List<Session>.groupByTime(
         val cards: List<SessionCardView> =
             filter { it.startsAt >= start && it.endsAt <= end && it.id !in handledSessionIds }
                 .map {
-                    it.asSessionCard(conference, now, favorites, votes)
+                    it.asSessionCard(conference, now, favorites, votes[it.id])
                 }
 
         handledSessionIds += cards.map { it.id }
@@ -77,7 +78,7 @@ fun Session.asSessionCard(
     conference: Conference,
     now: LocalDateTime,
     favorites: Set<SessionId>,
-    votes: List<VoteInfo>,
+    vote: VoteInfo?,
 ): SessionCardView {
     return SessionCardView(
         id = id,
@@ -89,7 +90,7 @@ fun Session.asSessionCard(
         endsAt = endsAt,
         state = SessionState.from(startsAt, endsAt, now),
         speakerIds = speakerIds,
-        vote = votes.find { it.sessionId == id }?.score,
+        vote = vote?.score,
         description = description,
         tags = tags ?: emptyList(),
         startsInMinutes = (startsAt - now).inWholeMinutes.toInt().let { diff ->

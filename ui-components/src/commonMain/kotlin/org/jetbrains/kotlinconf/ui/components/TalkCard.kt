@@ -106,6 +106,7 @@ fun TalkCard(
     time: String,
     timeNote: String?,
     status: TalkStatus,
+    initialEmotion: Emotion? = null,
     onSubmitFeedback: (Emotion?) -> Unit,
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     onClick: () -> Unit,
@@ -173,6 +174,7 @@ fun TalkCard(
             )
             FeedbackBlock(
                 status = status,
+                initialEmotion = initialEmotion,
                 onSubmitFeedback = onSubmitFeedback,
                 onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
             )
@@ -305,10 +307,11 @@ private const val FeedbackAnimationDuration = 50
 @Composable
 private fun FeedbackBlock(
     status: TalkStatus,
+    initialEmotion: Emotion? = null,
     onSubmitFeedback: (Emotion?) -> Unit,
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
 ) {
-    var selectedEmotion by remember { mutableStateOf<Emotion?>(null) }
+    var selectedEmotion by remember { mutableStateOf<Emotion?>(initialEmotion) }
     var feedbackExpanded by remember { mutableStateOf(false) }
 
     Column(Modifier.padding(vertical = 14.dp)) {
@@ -411,6 +414,7 @@ internal fun TalkCardPreview() {
                 time = "9:00 – 10:00",
                 timeNote = null,
                 status = TalkStatus.Live,
+                initialEmotion = Emotion.Positive,
                 onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
                 onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
                 onClick = { "Clicked session" },
@@ -435,6 +439,7 @@ internal fun TalkCardPreview() {
                 time = "9:00 – 10:00",
                 timeNote = "In 10 min",
                 status = TalkStatus.Upcoming,
+                initialEmotion = null,
                 onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
                 onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
                 onClick = { "Clicked session" },

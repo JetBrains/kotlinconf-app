@@ -6,7 +6,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -36,6 +35,7 @@ class ConferenceService(
     companion object {
         private const val LOG_TAG = "ConferenceService"
     }
+
     private val taggedLogger = logger.tagged(LOG_TAG)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
@@ -61,8 +61,8 @@ class ConferenceService(
             // Wait for user ID to be loaded
             userIdLoaded.await()
 
-            // Load user votes
-            votes.value = client.myVotes()
+            // Synchronize user votes
+            syncVotes()
         }
 
         scope.launch {
@@ -87,8 +87,6 @@ class ConferenceService(
         }
     }
 
-    private val votes = MutableStateFlow(emptyList<VoteInfo>())
-
     val news: Flow<List<NewsDisplayItem>> = storage.getNews()
         .map { newsItems ->
             val now = timeProvider.now()
@@ -101,7 +99,7 @@ class ConferenceService(
             storage.getConferenceCache(),
             storage.getFavorites(),
             timeProvider.time,
-            votes,
+            storage.getVotes(),
         ) { conference, favorites, time, votes ->
             conference?.buildAgenda(favorites, votes, time) ?: emptyList()
         }.stateIn(scope, SharingStarted.Eagerly, emptyList())
@@ -234,15 +232,17 @@ class ConferenceService(
      */
     suspend fun vote(sessionId: SessionId, rating: Score?): Boolean {
         if (!checkUserId()) return false
-        if (!client.vote(sessionId, rating)) return false
 
-        val allVotes = votes.value
-            .filter { it.sessionId != sessionId }
-            .toMutableList()
+        val localVotes = storage.getVotes().first().toMutableList()
+        val existingIndex = localVotes.indexOfFirst { it.sessionId == sessionId }
+        if (existingIndex != -1) {
+            localVotes[existingIndex] = VoteInfo(sessionId, rating)
+        } else {
+            localVotes += VoteInfo(sessionId, rating)
+        }
+        storage.setVotes(localVotes)
 
-        allVotes.add(VoteInfo(sessionId, rating))
-        votes.value = allVotes
-        return true
+        return client.vote(sessionId, rating)
     }
 
     suspend fun sendFeedback(sessionId: SessionId, feedbackValue: String): Boolean {
@@ -364,5 +364,24 @@ class ConferenceService(
     suspend fun loadNews() {
         val news = client.getNews() ?: return
         storage.setNews(news)
+    }
+
+    private suspend fun syncVotes() {
+        if (!checkUserId()) return
+
+        val apiVotes = client.myVotes().associateBy { it.sessionId }
+        val localVotes = storage.getVotes().first().associateBy { it.sessionId }
+        val mergedVotes = (apiVotes.keys union localVotes.keys)
+            .mapNotNull { sessionId ->
+                val localVote = localVotes[sessionId]
+                val apiVote = apiVotes[sessionId]
+
+                if (localVote?.score != apiVote?.score) {
+                    client.vote(sessionId, localVote?.score)
+                }
+
+                localVote ?: apiVote
+            }
+        storage.setVotes(mergedVotes)
     }
 }
