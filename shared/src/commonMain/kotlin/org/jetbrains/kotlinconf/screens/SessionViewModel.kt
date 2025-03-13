@@ -2,9 +2,9 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -37,7 +37,9 @@ class SessionViewModel(
 
     fun submitFeedback(emotion: Emotion?) {
         viewModelScope.launch {
-            if (!service.vote(sessionId, emotion?.toScore())) {
+            if (service.canVote()) {
+                service.vote(sessionId, emotion?.toScore())
+            } else {
                 _navigateToPrivacyPolicy.value = true
             }
         }
@@ -45,10 +47,11 @@ class SessionViewModel(
 
     fun submitFeedbackWithComment(emotion: Emotion, comment: String) {
         viewModelScope.launch {
-            if (!service.vote(sessionId, emotion.toScore())) {
-                _navigateToPrivacyPolicy.value = true
-            } else {
+            if (service.canVote()) {
+                service.vote(sessionId, emotion.toScore())
                 service.sendFeedback(sessionId, comment)
+            } else {
+                _navigateToPrivacyPolicy.value = true
             }
         }
     }

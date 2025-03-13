@@ -41,6 +41,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -347,11 +349,13 @@ private fun FeedbackBlock(
                 val feedbackEmotions = remember {
                     listOf(Emotion.Negative, Emotion.Neutral, Emotion.Positive)
                 }
+                val hapticFeedback = LocalHapticFeedback.current
                 feedbackEmotions.forEach { emotion ->
                     KodeeIconSmall(
                         emotion = emotion,
                         selected = selectedEmotion == emotion,
                         onClick = {
+                            hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
                             selectedEmotion = if (emotion == selectedEmotion) null else emotion
                             feedbackExpanded = selectedEmotion != null
                             onSubmitFeedback(selectedEmotion)
@@ -365,9 +369,11 @@ private fun FeedbackBlock(
             LaunchedEffect(Unit) {
                 focusRequester.requestFocus()
             }
+            val hapticFeedback = LocalHapticFeedback.current
             FeedbackForm(
                 emotion = selectedEmotion,
                 onSubmit = { emotion, comment ->
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
                     onSubmitFeedbackWithComment(emotion, comment)
                     feedbackExpanded = false
                 },

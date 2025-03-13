@@ -294,7 +294,9 @@ class ScheduleViewModel(
             null -> null
         }
         viewModelScope.launch {
-            if (!service.vote(sessionId, score)) {
+            if (service.canVote()) {
+                service.vote(sessionId, score)
+            } else {
                 _navigateToPrivacyPolicy.value = true
             }
         }
@@ -307,7 +309,8 @@ class ScheduleViewModel(
             Emotion.Negative -> Score.BAD
         }
         viewModelScope.launch {
-            if (service.vote(sessionId, score)) {
+            if (service.canVote()) {
+                service.vote(sessionId, score)
                 service.sendFeedback(sessionId, comment)
             } else {
                 _navigateToPrivacyPolicy.value = true
