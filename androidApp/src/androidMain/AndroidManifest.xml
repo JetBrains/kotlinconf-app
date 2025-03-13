@@ -13,6 +13,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:name="org.jetbrains.kotlinconf.android.KotlinConfApplication"
         android:theme="@style/Theme.App.Splash">
         <activity
             android:name="org.jetbrains.kotlinconf.android.MainActivity"

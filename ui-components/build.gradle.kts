@@ -47,8 +47,17 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
-        jsMain.dependencies {
-            implementation(libs.ktor.client.js)
+        val webMain by creating {
+            dependsOn(commonMain.get())
+        }
+        wasmJsMain {
+            dependsOn(webMain)
+        }
+        jsMain {
+            dependsOn(webMain)
+            dependencies {
+                implementation(libs.ktor.client.js)
+            }
         }
     }
 }

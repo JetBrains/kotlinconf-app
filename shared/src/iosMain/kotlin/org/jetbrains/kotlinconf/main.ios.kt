@@ -9,6 +9,11 @@ import org.koin.dsl.module
 import platform.Foundation.NSUserDefaults
 import platform.UIKit.UIViewController
 
+@Suppress("unused") // Called from Swift
+fun initKoin() {
+    initKoin(platformModule)
+}
+
 private val platformModule = module {
     single<NotificationService> { IOSNotificationService(get(), get()) }
     single<ObservableSettings> {
@@ -17,6 +22,7 @@ private val platformModule = module {
     single<Logger> { IOSLogger() }
 }
 
+@Suppress("unused") // Called from Swift
 fun MainViewController(): UIViewController = ComposeUIViewController {
-    App(platformModule)
+    App()
 }

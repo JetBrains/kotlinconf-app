@@ -12,6 +12,7 @@ struct iOSApp: App {
     let appDelegate = AppDelegate()
 
     init() {
+        Main_iosKt.doInitKoin()
         UNUserNotificationCenter.current().delegate = appDelegate
     }
 }

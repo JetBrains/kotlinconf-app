@@ -7,6 +7,7 @@ import androidx.compose.ui.window.rememberWindowState
 import com.russhwolf.settings.ObservableSettings
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.app_name
+import org.jetbrains.compose.reload.DevelopmentEntryPoint
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.storage.createSettings
 import org.jetbrains.kotlinconf.utils.JvmLogger
@@ -19,13 +20,19 @@ private val platformModule = module {
     single<Logger> { JvmLogger() }
 }
 
-fun main() = application {
-    Window(
-        onCloseRequest = ::exitApplication,
-        title = stringResource(Res.string.app_name),
-        alwaysOnTop = true,
-        state = rememberWindowState(width = 600.dp, height = 800.dp),
-    ) {
-        App(platformModule)
+fun main() {
+    initKoin(platformModule)
+
+    application {
+        Window(
+            onCloseRequest = ::exitApplication,
+            title = stringResource(Res.string.app_name),
+            alwaysOnTop = true,
+            state = rememberWindowState(width = 600.dp, height = 800.dp),
+        ) {
+            DevelopmentEntryPoint {
+                App()
+            }
+        }
     }
 }
