@@ -3,6 +3,7 @@ package org.jetbrains.kotlinconf
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
@@ -57,6 +58,11 @@ class APIClient(
         expectSuccess = true
         install(HttpTimeout) {
             requestTimeoutMillis = 5000
+        }
+
+        install(HttpRequestRetry) {
+            retryOnServerErrors(maxRetries = 3)
+            exponentialDelay()
         }
 
         install(DefaultRequest) {
