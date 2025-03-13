@@ -26,9 +26,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.ui.components.Divider
-import org.jetbrains.kotlinconf.ui.components.Error
-import org.jetbrains.kotlinconf.ui.components.ErrorSeverity
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
+import org.jetbrains.kotlinconf.ui.components.MajorError
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.TalkCard
@@ -75,9 +74,8 @@ fun SpeakerDetailScreen(
             modifier = Modifier.fillMaxSize().weight(1f)
         ) { currentSpeaker ->
             if (currentSpeaker == null) {
-                Error(
+                MajorError(
                     message = stringResource(Res.string.speaker_detail_error_not_found),
-                    severity = ErrorSeverity.Major,
                     modifier = Modifier.fillMaxSize(),
                 )
             } else {

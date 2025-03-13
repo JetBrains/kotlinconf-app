@@ -54,14 +54,13 @@ import org.jetbrains.kotlinconf.isLive
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.Emotion
-import org.jetbrains.kotlinconf.ui.components.Error
-import org.jetbrains.kotlinconf.ui.components.ErrorSeverity
 import org.jetbrains.kotlinconf.ui.components.Filters
-import org.jetbrains.kotlinconf.ui.components.Loading
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
+import org.jetbrains.kotlinconf.ui.components.MinorError
+import org.jetbrains.kotlinconf.ui.components.NormalErrorWithLoading
 import org.jetbrains.kotlinconf.ui.components.NowButton
 import org.jetbrains.kotlinconf.ui.components.NowButtonState
 import org.jetbrains.kotlinconf.ui.components.ScrollIndicator
@@ -144,7 +143,13 @@ fun ScheduleScreen(
         AnimatedContent(
             targetState = state,
             modifier = Modifier.fillMaxSize(),
-            contentKey = { it::class },
+            contentKey = {
+                when (state) {
+                    is ScheduleUiState.Content -> 1
+                    ScheduleUiState.Error, ScheduleUiState.Loading -> 2
+                    ScheduleUiState.NoSearchResults -> 3
+                }
+            },
             transitionSpec = { FadingAnimationSpec },
         ) { targetState ->
             when (targetState) {
@@ -229,23 +234,18 @@ fun ScheduleScreen(
                     }
                 }
 
-                ScheduleUiState.Error -> {
-                    Error(
+                ScheduleUiState.Error, ScheduleUiState.Loading -> {
+                    NormalErrorWithLoading(
                         message = stringResource(Res.string.schedule_error_no_data),
-                        severity = ErrorSeverity.Normal,
+                        isLoading = targetState is ScheduleUiState.Loading,
                         modifier = Modifier.fillMaxSize(),
-                        onRetry = { viewModel.refresh() }
+                        onRetry = { viewModel.refresh() },
                     )
                 }
 
-                ScheduleUiState.Loading -> {
-                    Loading()
-                }
-
                 ScheduleUiState.NoSearchResults -> {
-                    Error(
+                    MinorError(
                         message = stringResource(Res.string.schedule_error_no_results),
-                        severity = ErrorSeverity.Minor,
                         modifier = Modifier.fillMaxSize(),
                     )
                 }

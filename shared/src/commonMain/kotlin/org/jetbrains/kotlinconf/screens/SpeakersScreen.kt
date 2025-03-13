@@ -30,13 +30,12 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.ui.components.Divider
-import org.jetbrains.kotlinconf.ui.components.Error
-import org.jetbrains.kotlinconf.ui.components.ErrorSeverity
-import org.jetbrains.kotlinconf.ui.components.Loading
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
+import org.jetbrains.kotlinconf.ui.components.MinorError
+import org.jetbrains.kotlinconf.ui.components.NormalErrorWithLoading
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -91,7 +90,13 @@ fun SpeakersScreen(
         AnimatedContent(
             uiState,
             modifier = Modifier.fillMaxSize(),
-            contentKey = { it::class },
+            contentKey = {
+                when (uiState) {
+                    is SpeakersUiState.Content -> 1
+                    SpeakersUiState.Error, SpeakersUiState.Loading -> 2
+                    SpeakersUiState.NoSearchResults -> 3
+                }
+            },
             transitionSpec = { FadingAnimationSpec }
         ) { targetState ->
             when (targetState) {
@@ -120,25 +125,20 @@ fun SpeakersScreen(
                     }
                 }
 
-                SpeakersUiState.Error -> {
-                    Error(
+                SpeakersUiState.Error, SpeakersUiState.Loading -> {
+                    NormalErrorWithLoading(
                         message = stringResource(Res.string.speakers_error_no_data),
-                        severity = ErrorSeverity.Normal,
+                        isLoading = uiState is SpeakersUiState.Loading,
                         modifier = Modifier.fillMaxSize(),
-                        onRetry = { viewModel.refresh() }
+                        onRetry = { viewModel.refresh() },
                     )
                 }
 
                 SpeakersUiState.NoSearchResults -> {
-                    Error(
+                    MinorError(
                         message = stringResource(Res.string.speakers_error_no_results),
-                        severity = ErrorSeverity.Minor,
                         modifier = Modifier.fillMaxSize(),
                     )
-                }
-
-                SpeakersUiState.Loading -> {
-                    Loading()
                 }
             }
         }

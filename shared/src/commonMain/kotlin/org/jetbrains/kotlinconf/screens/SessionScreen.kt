@@ -55,12 +55,11 @@ import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.Emotion
-import org.jetbrains.kotlinconf.ui.components.Error
-import org.jetbrains.kotlinconf.ui.components.ErrorSeverity
 import org.jetbrains.kotlinconf.ui.components.FeedbackForm
 import org.jetbrains.kotlinconf.ui.components.KodeeIconLarge
 import org.jetbrains.kotlinconf.ui.components.Loading
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
+import org.jetbrains.kotlinconf.ui.components.MajorError
 import org.jetbrains.kotlinconf.ui.components.PageTitle
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.StyledText
@@ -172,10 +171,9 @@ fun SessionScreen(
                 }
 
                 SessionUiState.Error -> {
-                    Error(
+                    MajorError(
                         message = stringResource(Res.string.session_screen_error),
-                        severity = ErrorSeverity.Major,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
 
