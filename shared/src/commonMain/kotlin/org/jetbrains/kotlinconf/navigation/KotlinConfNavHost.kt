@@ -193,6 +193,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
         PrivacyPolicyScreen(
             onRejectPolicy = navController::popBackStack,
             onAcceptPolicy = navController::popBackStack,
+            confirmationRequired = true,
         )
     }
 
@@ -226,6 +227,7 @@ fun NavGraphBuilder.startScreens(
                         popUpTo<StartScreens>()
                     }
                 },
+                confirmationRequired = false,
             )
         }
         composable<StartNotificationsScreen> {

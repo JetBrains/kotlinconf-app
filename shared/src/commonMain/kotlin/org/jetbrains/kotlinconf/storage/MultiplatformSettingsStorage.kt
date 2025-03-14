@@ -21,6 +21,9 @@ class MultiplatformSettingsStorage(
     override fun getUserId(): Flow<String?> = settings.getStringOrNullFlow(Keys.USER_ID)
     override suspend fun setUserId(value: String?) = settings.set(Keys.USER_ID, value)
 
+    override fun getPendingUserId(): Flow<String?> = settings.getStringOrNullFlow(Keys.PENDING_USER_ID)
+    override suspend fun setPendingUserId(value: String?) = settings.set(Keys.PENDING_USER_ID, value)
+
     override fun isOnboardingComplete(): Flow<Boolean> = settings.getBooleanFlow(Keys.ONBOARDING_COMPLETE, false)
     override suspend fun setOnboardingComplete(value: Boolean) = settings.set(Keys.ONBOARDING_COMPLETE, value)
 
@@ -73,7 +76,8 @@ class MultiplatformSettingsStorage(
 
     private object Keys {
         const val STORAGE_VERSION = "storageVersion"
-        const val USER_ID = "userid2025"
+        const val USER_ID = "userId2025"
+        const val PENDING_USER_ID = "pendingUserId2025"
         const val ONBOARDING_COMPLETE = "onboardingComplete"
         const val THEME = "theme"
         const val CONFERENCE_CACHE = "conferenceCache"
