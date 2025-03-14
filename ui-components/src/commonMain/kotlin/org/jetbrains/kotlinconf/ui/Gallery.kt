@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.Density
 fun GalleryApp() {
     var densityFloat by remember { mutableStateOf(2f) }
     Column {
-        Slider(densityFloat, onValueChange = { densityFloat = it }, valueRange = 0.5f..4f)
+        Slider(densityFloat, onValueChange = { densityFloat = it }, valueRange = 0.5f..6f)
 
         CompositionLocalProvider(LocalDensity provides Density(densityFloat)) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
@@ -31,6 +31,7 @@ fun GalleryApp() {
                 FilterTagPreview()
                 FiltersPreview()
                 KodeeIconsPreview()
+                LoadingPreview()
                 MainHeaderPreview()
                 MainNavigationPreview()
                 NowButtonPreview()

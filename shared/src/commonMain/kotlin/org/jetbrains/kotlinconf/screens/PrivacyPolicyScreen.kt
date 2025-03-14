@@ -1,10 +1,6 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -52,6 +48,7 @@ import org.jetbrains.kotlinconf.ui.components.MarkdownView
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
 import org.koin.compose.viewmodel.koinViewModel
 import kotlinconfapp.shared.generated.resources.Res as AppRes
 
@@ -80,10 +77,7 @@ fun PrivacyPolicyScreen(
         AnimatedContent(
             targetState = detailsVisible,
             modifier = Modifier.weight(1f),
-            transitionSpec = {
-                fadeIn(animationSpec = tween(100, delayMillis = 90))
-                    .togetherWith(fadeOut(animationSpec = tween(90)))
-            }
+            transitionSpec = { FadingAnimationSpec }
         ) { detailsVis ->
             if (detailsVis) {
                 Column {

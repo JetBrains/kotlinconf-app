@@ -4,17 +4,6 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 
-data class Agenda(
-    val days: List<Day> = emptyList()
-)
-
-data class Speakers(
-    val all: List<Speaker> = emptyList()
-) {
-    private val dictById = all.associateBy { it.id }
-    operator fun get(id: SpeakerId): Speaker? = dictById[id]
-}
-
 data class Day(
     val date: LocalDate,
     val timeSlots: List<TimeSlot>
@@ -37,8 +26,8 @@ fun Conference.buildAgenda(
     favorites: Set<SessionId>,
     votes: List<VoteInfo>,
     now: LocalDateTime,
-): Agenda {
-    val days = sessions
+): List<Day> {
+    return sessions
         .groupBy { it.startsAt.date }
         .map { (date, sessions) ->
             Day(
@@ -52,8 +41,6 @@ fun Conference.buildAgenda(
             )
         }
         .sortedBy { it.date }
-
-    return Agenda(days)
 }
 
 fun List<Session>.groupByTime(
@@ -71,9 +58,9 @@ fun List<Session>.groupByTime(
     return slots.map { (start, end) ->
         val cards: List<SessionCardView> =
             filter { it.startsAt >= start && it.endsAt <= end && it.id !in handledSessionIds }
-            .map {
-                it.asSessionCard(conference, now, favorites, votes)
-            }
+                .map {
+                    it.asSessionCard(conference, now, favorites, votes)
+                }
 
         handledSessionIds += cards.map { it.id }
 

@@ -107,10 +107,14 @@ We will process your data in accordance with the App Privacy Policy. You can adj
     <string name="schedule_action_filter_bookmarked">Filter bookmarked</string>
     <string name="schedule_action_search">Search</string>
     <string name="schedule_in_x_minutes">in %1$d min</string>
+    <string name="schedule_error_no_data">Please hold on, our schedule is stuck in traffic. We’re clearing the jam!
+    </string>
+    <string name="schedule_error_no_results">No results</string>
 
     <string name="session_title">Schedule</string>
     <string name="session_how_was_the_talk">How was the talk?</string>
     <string name="session_your_feedback">Your feedback</string>
+    <string name="session_screen_error">The details of this session are not available at the moment.</string>
 
     <string name="map_title">Map</string>
     <string name="map_ground_floor">Ground floor</string>
@@ -119,4 +123,8 @@ We will process your data in accordance with the App Privacy Policy. You can adj
     <string name="news_feed_title">News</string>
 
     <string name="speakers_title">Speakers</string>
+    <string name="speakers_error_no_results">No results</string>
+    <string name="speakers_error_no_data">Our speakers are playing hide and seek. Give us a moment to find them!</string>
+
+    <string name="speaker_detail_error_not_found">Sorry, we can’t find the details for that speaker.</string>
 </resources>

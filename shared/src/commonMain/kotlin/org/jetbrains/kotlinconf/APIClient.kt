@@ -4,7 +4,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpRequestRetry
-import io.ktor.client.plugins.HttpResponseValidator
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
@@ -16,14 +16,13 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.http.encodedPath
 import io.ktor.http.isSuccess
-import io.ktor.http.path
 import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.core.Closeable
+import kotlinx.coroutines.CancellationException
 import kotlinx.datetime.Instant
 import org.jetbrains.kotlinconf.utils.Logger
 import io.ktor.client.plugins.logging.Logger as KtorLogger
@@ -33,8 +32,12 @@ import io.ktor.client.plugins.logging.Logger as KtorLogger
  */
 class APIClient(
     private val apiUrl: String,
-    private val appLogger: Logger
+    private val appLogger: Logger,
 ) : Closeable {
+
+    companion object {
+        private const val LOG_TAG = "APIClient"
+    }
 
     var userId: String? = null
 
@@ -47,29 +50,19 @@ class APIClient(
             level = LogLevel.HEADERS
             logger = object : KtorLogger {
                 override fun log(message: String) {
-                    appLogger.log("HttpClient") { message }
+                    appLogger.log(LOG_TAG) { message }
                 }
             }
         }
 
-        HttpResponseValidator {
-            validateResponse {
-                when (it.status) {
-                    COMEBACK_LATER_STATUS -> throw TooEarlyVote()
-                    TOO_LATE_STATUS -> throw TooLateVote()
-                    HttpStatusCode.Conflict -> return@validateResponse
-                    HttpStatusCode.Unauthorized -> throw Unauthorized()
-                }
-            }
+        expectSuccess = true
+        install(HttpTimeout) {
+            requestTimeoutMillis = 5000
         }
 
         install(HttpRequestRetry) {
-            maxRetries = Int.MAX_VALUE
-            delay {
-                kotlinx.coroutines.delay(it)
-            }
-            constantDelay(10 * 1000L)
-            retryOnException(retryOnTimeout = true)
+            retryOnServerErrors(maxRetries = 3)
+            exponentialDelay()
         }
 
         install(DefaultRequest) {
@@ -83,20 +76,22 @@ class APIClient(
     suspend fun sign(): Boolean {
         val userId = userId ?: return false
 
-        val response = client.post {
-            apiUrl("sign")
-            setBody(userId)
-        }
-
-        return response.status.isSuccess()
+        return safeApiCall {
+            client.post {
+                apiUrl("sign")
+                setBody(userId)
+            }.status.isSuccess()
+        } ?: false
     }
 
     /**
      * Get [ConferenceData] info
      */
-    suspend fun downloadConferenceData(): Conference = client.get {
-        url.path("conference")
-    }.body()
+    suspend fun downloadConferenceData(): Conference? {
+        return safeApiCall {
+            client.get("conference").body()
+        }
+    }
 
     /**
      * Vote for session.
@@ -104,17 +99,13 @@ class APIClient(
     suspend fun vote(sessionId: SessionId, score: Score?): Boolean {
         if (userId == null) return false
 
-        return try {
+        return safeApiCall {
             client.post {
                 apiUrl("vote")
                 json()
                 setBody(VoteInfo(sessionId, score))
-            }
-            true
-        } catch (_: APIException) {
-            false
-        }
-        return true
+            }.status.isSuccess()
+        } ?: false
     }
 
     /**
@@ -123,13 +114,13 @@ class APIClient(
     suspend fun sendFeedback(sessionId: SessionId, feedback: String): Boolean {
         if (userId == null) return false
 
-        client.post {
-            apiUrl("feedback")
-            json()
-            setBody(FeedbackInfo(sessionId, feedback))
-        }
-
-        return true
+        return safeApiCall {
+            client.post {
+                apiUrl("feedback")
+                json()
+                setBody(FeedbackInfo(sessionId, feedback))
+            }.status.isSuccess()
+        } ?: false
     }
 
     /**
@@ -138,16 +129,37 @@ class APIClient(
     suspend fun myVotes(): List<VoteInfo> {
         if (userId == null) return emptyList()
 
-        return client.get {
-            apiUrl("vote")
-        }.body<Votes>().votes
+        return safeApiCall {
+            client.get { apiUrl("vote") }.body()
+        } ?: emptyList()
     }
 
-    suspend fun getServerTime(): Instant = client.get {
-        apiUrl("time")
-    }.bodyAsText().let { response -> Instant.fromEpochMilliseconds(response.toLong()) }
+    suspend fun getServerTime(): Instant? {
+        return safeApiCall {
+            client.get { apiUrl("time") }.bodyAsText()
+                .let { response -> Instant.fromEpochMilliseconds(response.toLong()) }
+        }
+    }
 
-    suspend fun getNews(): List<NewsItem> = client.get("news").body<NewsListResponse>().items
+    suspend fun getNews(): List<NewsItem>? {
+        return safeApiCall { client.get("news").body<NewsListResponse>().items }
+    }
+
+    /**
+     * Runs the [call], returning its result or `null` if exceptions occurred.
+     */
+    private suspend fun <T> safeApiCall(
+        call: suspend () -> T,
+    ): T? {
+        return try {
+            call()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            appLogger.log(LOG_TAG) { "API call failed: ${e.message}" }
+            null
+        }
+    }
 
     private fun HttpRequestBuilder.json() {
         contentType(ContentType.Application.Json)

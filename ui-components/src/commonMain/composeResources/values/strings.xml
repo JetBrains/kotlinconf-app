@@ -2,9 +2,11 @@
     <!-- Common -->
     <string name="lightning_talk">Lightning talk</string>
     <string name="now">Now</string>
+    <string name="loading">Loading…</string>
 
     <!-- Actions -->
     <string name="action_bookmark">Bookmark</string>
+    <string name="action_error_reload">Reload</string>
 
     <!-- Components -->
     <string name="feedback_form_type_something">Type something</string>

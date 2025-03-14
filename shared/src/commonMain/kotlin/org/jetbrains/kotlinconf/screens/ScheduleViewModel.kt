@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -70,14 +69,25 @@ data class ScheduleSearchParams(
     val isBookmarkedOnly: Boolean = false,
 )
 
+sealed class ScheduleUiState {
+    data object Loading : ScheduleUiState()
+    data object Error : ScheduleUiState()
+    data object NoSearchResults : ScheduleUiState()
+
+    data class Content(
+        val days: List<Day>,
+        val items: List<ScheduleListItem>,
+    ) : ScheduleUiState() {
+        val firstLiveIndex: Int = items.indexOfFirst { it.isLive() }
+        val lastLiveIndex: Int = items.indexOfLast { it.isLive() }
+    }
+}
+
 class ScheduleViewModel(
     private val service: ConferenceService,
 ) : ViewModel() {
     private val _navigateToPrivacyPolicy = MutableStateFlow(false)
     val navigateToPrivacyPolicy: StateFlow<Boolean> = _navigateToPrivacyPolicy.asStateFlow()
-
-    val agenda: StateFlow<List<Day>> = service.agenda.map { it.days }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private val searchParams = MutableStateFlow(ScheduleSearchParams())
 
@@ -91,14 +101,16 @@ class ScheduleViewModel(
                 TagValues.formats.toTags(FilterItemType.Format)
     )
 
-    private fun <T> MutableList<T>.replace(old: T, new: T) {
-        val index = indexOf(old)
-        if (index >= 0) {
-            set(index, new)
-        }
-    }
+    private var loading = MutableStateFlow(false)
 
     fun toggleFilter(item: FilterItem, selected: Boolean) {
+        fun <T> MutableList<T>.replace(old: T, new: T) {
+            val index = indexOf(old)
+            if (index >= 0) {
+                set(index, new)
+            }
+        }
+
         val newItem = item.copy(isSelected = selected)
         filterItems.update {
             it.toMutableList().apply {
@@ -117,54 +129,44 @@ class ScheduleViewModel(
         this.searchParams.value = searchParams
     }
 
-    val items = combine(
-        agenda,
+    val uiState: StateFlow<ScheduleUiState> = combine(
+        service.agenda,
         searchParams,
         filterItems,
-    ) { days, searchParams, tags ->
-        buildItems(
-            days = days,
-            searchParams = searchParams,
-            tags = tags,
-        )
-    }.flowOn(Dispatchers.Default)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+        loading,
+    ) { agenda, searchParams, tags, loading ->
+        when {
+            loading -> ScheduleUiState.Loading
 
-    val firstLiveIndex = items
-        .map { items -> items.indexOfFirst { it.isLive() } }
-        .flowOn(Dispatchers.Default)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = -1
-        )
+            searchParams.isSearch -> {
+                val searchItems = buildSearchItems(
+                    days = agenda,
+                    searchQuery = searchParams.searchQuery,
+                    tagValues = tags.filter { it.isSelected }.map { it.value }
+                )
+                if (searchItems.isEmpty()) {
+                    ScheduleUiState.NoSearchResults
+                } else {
+                    ScheduleUiState.Content(agenda, searchItems)
+                }
+            }
 
-    val lastLiveIndex = items
-        .map { items -> items.indexOfLast { it.isLive() } }
-        .flowOn(Dispatchers.Default)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = -1
-        )
-
-    private fun buildItems(
-        days: List<Day>,
-        searchParams: ScheduleSearchParams,
-        tags: List<FilterItem>,
-    ): List<ScheduleListItem> {
-        val tagValues = tags.filter { it.isSelected }.map { it.value }
-
-        return if (searchParams.isSearch) {
-            buildSearchItems(days, searchParams.searchQuery, tagValues)
-        } else {
-            buildNonSearchItems(days, searchParams.isBookmarkedOnly)
+            else -> {
+                val items = buildNonSearchItems(days = agenda, isBookmarkedOnly = searchParams.isBookmarkedOnly)
+                if (items.isEmpty()) {
+                    ScheduleUiState.Error
+                } else {
+                    ScheduleUiState.Content(agenda, items)
+                }
+            }
         }
     }
+        .flowOn(Dispatchers.Default)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ScheduleUiState.Loading
+        )
 
     private fun buildSearchItems(
         days: List<Day>,
@@ -194,7 +196,6 @@ class ScheduleViewModel(
         }
     }
 
-    // TODO add ServiceEventItems to this list https://github.com/JetBrains/kotlinconf-app/issues/269
     private fun buildNonSearchItems(
         days: List<Day>,
         isBookmarkedOnly: Boolean,
@@ -327,4 +328,16 @@ class ScheduleViewModel(
             service.setFavorite(sessionId, bookmarked)
         }
     }
+
+    fun refresh() {
+        viewModelScope.launch {
+            loading.value = true
+            try {
+                service.loadConferenceData()
+            } finally {
+                loading.value = false
+            }
+        }
+    }
+
 }

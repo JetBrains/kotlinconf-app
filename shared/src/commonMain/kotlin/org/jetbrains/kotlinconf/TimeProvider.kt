@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -35,7 +34,6 @@ operator fun LocalDateTime.minus(duration: Duration): LocalDateTime =
     (toInstant(EVENT_TIME_ZONE) - duration).toLocalDateTime(EVENT_TIME_ZONE)
 
 class ServerBasedTimeProvider(private val client: APIClient) : TimeProvider {
-    private var serverTime: Instant = Clock.System.now()
     private var offset: Duration = Duration.ZERO
 
     override fun now(): LocalDateTime {
@@ -47,9 +45,11 @@ class ServerBasedTimeProvider(private val client: APIClient) : TimeProvider {
 
     override suspend fun run(): Nothing {
         runCatching {
-            serverTime = client.getServerTime()
-            val requestTime = Clock.System.now()
-            offset = serverTime - requestTime
+            val serverTime = client.getServerTime()
+            if (serverTime != null) {
+                val requestTime = Clock.System.now()
+                offset = serverTime - requestTime
+            }
         }
         _time.value = now()
 
