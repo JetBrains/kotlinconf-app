@@ -54,7 +54,7 @@ data class SingleLicenseScreen(val licenseName: String, val licenseText: String)
 data object PartnersScreen
 
 @Serializable
-data class PartnerDetailsScreen(val partnerId: PartnerId)
+data class PartnerDetailScreen(val partnerId: PartnerId)
 
 @Serializable
 data object MainScreen
@@ -69,7 +69,7 @@ data class SessionScreen(val sessionId: SessionId)
 data object SpeakersScreen
 
 @Serializable
-data class SpeakerDetailsScreen(val speakerId: SpeakerId)
+data class SpeakerDetailScreen(val speakerId: SpeakerId)
 
 @Serializable
 data object MapScreen

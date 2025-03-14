@@ -17,7 +17,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import kotlinx.coroutines.channels.Channel
-import org.jetbrains.kotlinconf.PARTNERS
 import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
@@ -31,8 +30,8 @@ import org.jetbrains.kotlinconf.screens.LicensesScreen
 import org.jetbrains.kotlinconf.screens.MainScreen
 import org.jetbrains.kotlinconf.screens.NewsDetailScreen
 import org.jetbrains.kotlinconf.screens.NewsListScreen
-import org.jetbrains.kotlinconf.screens.PartnerDetails
-import org.jetbrains.kotlinconf.screens.Partners
+import org.jetbrains.kotlinconf.screens.PartnerDetailScreen
+import org.jetbrains.kotlinconf.screens.PartnersScreen
 import org.jetbrains.kotlinconf.screens.PrivacyPolicyForVisitors
 import org.jetbrains.kotlinconf.screens.PrivacyPolicyScreen
 import org.jetbrains.kotlinconf.screens.SessionScreen
@@ -41,7 +40,6 @@ import org.jetbrains.kotlinconf.screens.SingleLicenseScreen
 import org.jetbrains.kotlinconf.screens.SpeakerDetailScreen
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 import org.jetbrains.kotlinconf.screens.TermsOfUse
-import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import kotlin.jvm.JvmSuppressWildcards
 import kotlin.reflect.typeOf
@@ -99,9 +97,9 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
         MainScreen(navController)
     }
 
-    composable<SpeakerDetailsScreen>(typeMap = mapOf(typeOf<SpeakerId>() to SpeakerIdNavType)) {
+    composable<SpeakerDetailScreen>(typeMap = mapOf(typeOf<SpeakerId>() to SpeakerIdNavType)) {
         SpeakerDetailScreen(
-            speakerId = it.toRoute<SpeakerDetailsScreen>().speakerId,
+            speakerId = it.toRoute<SpeakerDetailScreen>().speakerId,
             onBack = navController::popBackStack,
             onSession = { navController.navigate(SessionScreen(it)) }
         )
@@ -141,7 +139,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             onGeneralTerms = { navController.navigate(TermsOfUseScreen) },
             onWebsiteLink = { urlHandler.openUri(URLs.KOTLINCONF_HOMEPAGE) },
             onBack = navController::popBackStack,
-            onSpeaker = { speakerId -> navController.navigate(SpeakerDetailsScreen(speakerId)) },
+            onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) },
         )
     }
     composable<CodeOfConductScreen> {
@@ -163,21 +161,17 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
         AppTermsOfUse(onBack = navController::popBackStack)
     }
     composable<PartnersScreen> {
-        Partners(
+        PartnersScreen(
             onBack = navController::popBackStack,
             onPartnerDetail = { partnerId ->
                 // TODO: get partner's details (description and location on the exhibition floor) or remove the details screen
-                // navController.navigate(PartnerDetailsScreen(partnerId))
+                // navController.navigate(PartnerDetailScreen(partnerId))
             }
         )
     }
-    composable<PartnerDetailsScreen>(typeMap = mapOf(typeOf<PartnerId>() to PartnerIdNavType)) {
-        val partnerId = it.toRoute<PartnerDetailsScreen>().partnerId
-        val partner = PARTNERS.values.flatten().firstOrNull {  it.id == partnerId } ?: return@composable
-        PartnerDetails(
-            name = partner.name,
-            logo = partner.logo(KotlinConfTheme.colors.isDark),
-            description = partner.description,
+    composable<PartnerDetailScreen>(typeMap = mapOf(typeOf<PartnerId>() to PartnerIdNavType)) {
+        PartnerDetailScreen(
+            partnerId = it.toRoute<PartnerDetailScreen>().partnerId,
             onBack = navController::popBackStack,
         )
     }
@@ -186,7 +180,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             sessionId = it.toRoute<SessionScreen>().sessionId,
             onBack = navController::popBackStack,
             onPrivacyPolicyNeeded = { navController.navigate(PrivacyPolicyScreen) },
-            onSpeaker = { speakerId -> navController.navigate(SpeakerDetailsScreen(speakerId)) }
+            onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) }
         )
     }
     composable<PrivacyPolicyScreen> {

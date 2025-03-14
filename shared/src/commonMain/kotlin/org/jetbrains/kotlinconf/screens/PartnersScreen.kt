@@ -34,7 +34,7 @@ import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 
 
 @Composable
-fun Partners(
+fun PartnersScreen(
     onBack: () -> Unit,
     onPartnerDetail: (partnerId: PartnerId) -> Unit,
 ) {
