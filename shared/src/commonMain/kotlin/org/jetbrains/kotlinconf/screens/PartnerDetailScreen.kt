@@ -12,7 +12,6 @@ import org.jetbrains.kotlinconf.PARTNERS
 import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.ui.components.StyledText
-import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 
 @Composable
 fun PartnerDetailScreen(
@@ -28,7 +27,7 @@ fun PartnerDetailScreen(
         onBack = onBack,
     ) {
         Image(
-            painter = painterResource(partner.logo(KotlinConfTheme.colors.isDark)),
+            painter = painterResource(partner.icon),
             contentDescription = partner.name,
             modifier = Modifier.height(120.dp).align(Alignment.CenterHorizontally)
         )
