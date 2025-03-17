@@ -5,6 +5,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
 
@@ -28,6 +29,12 @@ object KotlinConfTheme {
         get() = LocalTypography.current
 }
 
+// Exposes custom theme value to Compose resources, https://youtrack.jetbrains.com/issue/CMP-4197
+expect object LocalAppTheme {
+    val current: Boolean @Composable get
+    @Composable infix fun provides(value: Boolean?): ProvidedValue<*>
+}
+
 @Composable
 fun KotlinConfTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -37,6 +44,7 @@ fun KotlinConfTheme(
         LocalColors provides if (darkTheme) KotlinConfDarkColors else KotlinConfLightColors,
         LocalTypography provides KotlinConfTypography,
         LocalIndication provides ripple(),
+        LocalAppTheme provides darkTheme,
     ) {
         content()
     }
