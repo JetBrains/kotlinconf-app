@@ -4,6 +4,8 @@ on:
     branches:
       - master
       - web
+      - kotlinconf-2025
+
 jobs:
   # Build job
   build:
