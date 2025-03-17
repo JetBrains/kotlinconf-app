@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <link rel="manifest" href="manifest.json"/>
-        <link rel="icon" type="image/x-icon" sizes="180x180" href="./images/AppIcon@3x.png">
+        <link rel="icon" type="image/x-icon" sizes="360x360" href="./images/KotlinConf2025-icon-360.png">
 
         <title>KotlinConf</title>
 
@@ -142,7 +142,7 @@
             if (typeof Notification == "undefined") {
                 self.Notification = class Notification {
                     static permission = "default";
-                    static requestPermission(callback: (permission) => void) {
+                    static requestPermission(callback/*: (permission) => void*/) {
                         callback("default");
                     }
                 }
