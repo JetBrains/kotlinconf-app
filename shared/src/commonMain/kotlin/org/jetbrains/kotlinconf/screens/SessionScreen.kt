@@ -57,7 +57,6 @@ import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.components.FeedbackForm
 import org.jetbrains.kotlinconf.ui.components.KodeeIconLarge
-import org.jetbrains.kotlinconf.ui.components.Loading
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MajorError
 import org.jetbrains.kotlinconf.ui.components.PageTitle
@@ -79,7 +78,8 @@ fun SessionScreen(
     onPrivacyPolicyNeeded: () -> Unit,
     viewModel: SessionViewModel = koinViewModel { parametersOf(sessionId) }
 ) {
-    val uiState = viewModel.uiState.collectAsState().value
+    val session = viewModel.session.collectAsState().value
+    val speakers = viewModel.speakers.collectAsState().value
     val shouldNavigateToPrivacyPolicy by viewModel.navigateToPrivacyPolicy.collectAsState()
 
     LaunchedEffect(shouldNavigateToPrivacyPolicy) {
@@ -112,74 +112,63 @@ fun SessionScreen(
         )
 
         AnimatedContent(
-            uiState,
+            session != null,
             modifier = Modifier.fillMaxSize(),
             contentKey = { it::class },
             transitionSpec = { FadingAnimationSpec }
-        ) { targetState ->
-            when (targetState) {
-                is SessionUiState.Content -> {
-                    val session = targetState.session
-                    val speakers = targetState.speakers
-
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp)
-                            .verticalScroll(rememberScrollState())
-                    ) {
-                        PageTitle(
-                            time = session.timeLine,
-                            title = session.title,
-                            lightning = session.isLightning,
-                            tags = session.tags,
-                            bookmarked = session.isFavorite,
-                            onBookmark = { viewModel.toggleFavorite(it) },
-                            modifier = Modifier.padding(vertical = 24.dp),
-                        )
-
-                        if (session.state != SessionState.Upcoming) {
-                            FeedbackPanel(
-                                onFeedback = { emotion ->
-                                    viewModel.submitFeedback(emotion)
-                                },
-                                onFeedbackWithComment = { emotion, comment ->
-                                    viewModel.submitFeedbackWithComment(emotion, comment)
-                                },
-                                modifier = Modifier.padding(bottom = 20.dp)
-                            )
-                        }
-
-                        speakers.forEach { speaker ->
-                            SpeakerCard(
-                                name = speaker.name,
-                                title = speaker.position,
-                                photoUrl = speaker.photoUrl,
-                                modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(),
-                                onClick = { onSpeaker(speaker.id) }
-                            )
-                        }
-
-                        RoomSection(roomName = session.locationLine)
-
-                        StyledText(
-                            text = session.description,
-                            style = KotlinConfTheme.typography.text1
-                        )
-
-                        Spacer(Modifier.height(24.dp))
-                    }
-                }
-
-                SessionUiState.Error -> {
-                    MajorError(
-                        message = stringResource(Res.string.session_screen_error),
-                        modifier = Modifier.fillMaxSize(),
+        ) { hasState ->
+            if (hasState && session != null) {
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    PageTitle(
+                        time = session.timeLine,
+                        title = session.title,
+                        lightning = session.isLightning,
+                        tags = session.tags,
+                        bookmarked = session.isFavorite,
+                        onBookmark = { viewModel.toggleFavorite(it) },
+                        modifier = Modifier.padding(vertical = 24.dp),
                     )
-                }
 
-                SessionUiState.Loading -> {
-                    Loading()
+                    if (session.state != SessionState.Upcoming) {
+                        FeedbackPanel(
+                            onFeedback = { emotion ->
+                                viewModel.submitFeedback(emotion)
+                            },
+                            onFeedbackWithComment = { emotion, comment ->
+                                viewModel.submitFeedbackWithComment(emotion, comment)
+                            },
+                            modifier = Modifier.padding(bottom = 20.dp)
+                        )
+                    }
+
+                    speakers.forEach { speaker ->
+                        SpeakerCard(
+                            name = speaker.name,
+                            title = speaker.position,
+                            photoUrl = speaker.photoUrl,
+                            modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(),
+                            onClick = { onSpeaker(speaker.id) }
+                        )
+                    }
+
+                    RoomSection(roomName = session.locationLine)
+
+                    StyledText(
+                        text = session.description,
+                        style = KotlinConfTheme.typography.text1
+                    )
+
+                    Spacer(Modifier.height(24.dp))
                 }
+            } else {
+                MajorError(
+                    message = stringResource(Res.string.session_screen_error),
+                    modifier = Modifier.fillMaxSize(),
+                )
             }
         }
     }
