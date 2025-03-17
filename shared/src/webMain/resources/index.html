@@ -142,7 +142,9 @@
             if (typeof Notification == "undefined") {
                 self.Notification = class Notification {
                     static permission = "default";
-                    static requestPermission() {}
+                    static requestPermission(callback: (permission) => void) {
+                        callback("default");
+                    }
                 }
             }
         </script>
