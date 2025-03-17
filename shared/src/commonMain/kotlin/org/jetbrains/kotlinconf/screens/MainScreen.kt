@@ -45,7 +45,7 @@ import org.jetbrains.kotlinconf.navigation.PartnersScreen
 import org.jetbrains.kotlinconf.navigation.PrivacyPolicyScreen
 import org.jetbrains.kotlinconf.navigation.ScheduleScreen
 import org.jetbrains.kotlinconf.navigation.SessionScreen
-import org.jetbrains.kotlinconf.navigation.SpeakerDetailsScreen
+import org.jetbrains.kotlinconf.navigation.SpeakerDetailScreen
 import org.jetbrains.kotlinconf.navigation.SpeakersScreen
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainNavDestination
@@ -90,7 +90,7 @@ fun MainScreen(
             }
             composable<SpeakersScreen> {
                 SpeakersScreen(
-                    onSpeaker = { rootNavController.navigate(SpeakerDetailsScreen(it)) }
+                    onSpeaker = { rootNavController.navigate(SpeakerDetailScreen(it)) }
                 )
             }
             composable<ScheduleScreen> {
