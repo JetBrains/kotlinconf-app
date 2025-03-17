@@ -187,13 +187,13 @@ compose.desktop {
 }
 
 val buildWebApp by tasks.creating(Copy::class) {
-    val wasmWebpack = "wasmJsBrowserProductionWebpack"
-    val jsWebpack = "jsBrowserProductionWebpack"
+    val wasmDist = "wasmJsBrowserDistribution"
+    val jsDist = "jsBrowserDistribution"
 
-    dependsOn(wasmWebpack, jsWebpack)
+    dependsOn(wasmDist, jsDist)
 
-    from(tasks.named(jsWebpack).get().outputs.files)
-    from(tasks.named(wasmWebpack).get().outputs.files)
+    from(tasks.named(jsDist).get().outputs.files)
+    from(tasks.named(wasmDist).get().outputs.files)
 
     into(layout.buildDirectory.dir("webApp"))
 
