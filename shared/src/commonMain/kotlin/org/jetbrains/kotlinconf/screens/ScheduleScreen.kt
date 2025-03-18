@@ -114,9 +114,13 @@ fun ScheduleScreen(
     }
 
     // Scroll to first live event on first content load
-    LaunchedEffect(state is ScheduleUiState.Content) {
-        if (state is ScheduleUiState.Content && state.firstLiveIndex != -1) {
-            listState.scrollToItem(state.firstLiveIndex)
+    var firstScrollPerformed by rememberSaveable { mutableStateOf(false) }
+    if (!firstScrollPerformed) {
+        LaunchedEffect(state) {
+            if (state is ScheduleUiState.Content && state.firstLiveIndex != -1) {
+                listState.scrollToItem(state.firstLiveIndex)
+                firstScrollPerformed = true
+            }
         }
     }
 
