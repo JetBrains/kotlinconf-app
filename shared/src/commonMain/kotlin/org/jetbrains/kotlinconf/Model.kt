@@ -81,12 +81,8 @@ class Partner(
     val id: PartnerId,
     val name: String,
     val description: String,
-    private val lightIcon: DrawableResource,
-    private val darkIcon: DrawableResource,
-) {
-    fun logo(isDarkTheme: Boolean): DrawableResource =
-        if (isDarkTheme) darkIcon else lightIcon
-}
+    val icon: DrawableResource,
+)
 
 @Serializable
 enum class Theme {

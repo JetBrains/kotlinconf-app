@@ -10,6 +10,9 @@ plugins {
 }
 
 kotlin {
+    // Required as we create additional custom source sets below
+    applyDefaultHierarchyTemplate()
+
     androidTarget()
 
     jvm()
@@ -38,17 +41,29 @@ kotlin {
 
             implementation(libs.multiplatform.markdown.renderer)
         }
-        jvmMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
+        val nonAndroid by creating {
+            dependsOn(commonMain.get())
         }
-        androidMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
+        androidMain {
+            dependencies {
+                implementation(libs.ktor.client.okhttp)
+            }
         }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
+        jvmMain {
+            dependsOn(nonAndroid)
+            dependencies {
+                implementation(libs.ktor.client.okhttp)
+            }
+        }
+        iosMain {
+            dependsOn(nonAndroid)
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+            }
         }
         val webMain by creating {
             dependsOn(commonMain.get())
+            dependsOn(nonAndroid)
         }
         wasmJsMain {
             dependsOn(webMain)

@@ -100,14 +100,14 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
     composable<SpeakerDetailScreen>(typeMap = mapOf(typeOf<SpeakerId>() to SpeakerIdNavType)) {
         SpeakerDetailScreen(
             speakerId = it.toRoute<SpeakerDetailScreen>().speakerId,
-            onBack = navController::popBackStack,
+            onBack = navController::navigateUp,
             onSession = { navController.navigate(SessionScreen(it)) }
         )
     }
     composable<AboutAppScreen> {
         val uriHandler = LocalUriHandler.current
         AboutAppScreen(
-            onBack = { navController.popBackStack() },
+            onBack = navController::navigateUp,
             onGitHubRepo = { uriHandler.openUri(URLs.GITHUB_REPO) },
             onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
             onSettings = { navController.navigate(SettingsScreen) },
@@ -121,7 +121,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             onLicenseClick = { licenseName, licenseText ->
                 navController.navigate(SingleLicenseScreen(licenseName, licenseText))
             },
-            onBack = navController::popBackStack,
+            onBack = navController::navigateUp,
         )
     }
     composable<SingleLicenseScreen> {
@@ -129,7 +129,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
         SingleLicenseScreen(
             licenseName = params.licenseName,
             licenseContent = params.licenseText,
-            onBack = navController::popBackStack,
+            onBack = navController::navigateUp,
         )
     }
     composable<AboutConferenceScreen> {
@@ -138,31 +138,31 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             onPrivacyPolicy = { navController.navigate(PrivacyPolicyForVisitorsScreen) },
             onGeneralTerms = { navController.navigate(TermsOfUseScreen) },
             onWebsiteLink = { urlHandler.openUri(URLs.KOTLINCONF_HOMEPAGE) },
-            onBack = navController::popBackStack,
+            onBack = navController::navigateUp,
             onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) },
         )
     }
     composable<CodeOfConductScreen> {
-        CodeOfConduct(onBack = navController::popBackStack)
+        CodeOfConduct(onBack = navController::navigateUp)
     }
     composable<SettingsScreen> {
-        SettingsScreen(onBack = navController::popBackStack)
+        SettingsScreen(onBack = navController::navigateUp)
     }
     composable<PrivacyPolicyForVisitorsScreen> {
-        PrivacyPolicyForVisitors(onBack = navController::popBackStack)
+        PrivacyPolicyForVisitors(onBack = navController::navigateUp)
     }
     composable<AppPrivacyPolicyScreen> {
-        AppPrivacyPolicy(onBack = navController::popBackStack)
+        AppPrivacyPolicy(onBack = navController::navigateUp)
     }
     composable<TermsOfUseScreen> {
-        TermsOfUse(onBack = navController::popBackStack)
+        TermsOfUse(onBack = navController::navigateUp)
     }
     composable<AppTermsOfUseScreen> {
-        AppTermsOfUse(onBack = navController::popBackStack)
+        AppTermsOfUse(onBack = navController::navigateUp)
     }
     composable<PartnersScreen> {
         PartnersScreen(
-            onBack = navController::popBackStack,
+            onBack = navController::navigateUp,
             onPartnerDetail = { partnerId ->
                 // TODO: get partner's details (description and location on the exhibition floor) or remove the details screen
                 // navController.navigate(PartnerDetailScreen(partnerId))
@@ -172,21 +172,21 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
     composable<PartnerDetailScreen>(typeMap = mapOf(typeOf<PartnerId>() to PartnerIdNavType)) {
         PartnerDetailScreen(
             partnerId = it.toRoute<PartnerDetailScreen>().partnerId,
-            onBack = navController::popBackStack,
+            onBack = navController::navigateUp,
         )
     }
     composable<SessionScreen>(typeMap = mapOf(typeOf<SessionId>() to SessionIdNavType)) {
         SessionScreen(
             sessionId = it.toRoute<SessionScreen>().sessionId,
-            onBack = navController::popBackStack,
+            onBack = navController::navigateUp,
             onPrivacyPolicyNeeded = { navController.navigate(PrivacyPolicyScreen) },
             onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) }
         )
     }
     composable<PrivacyPolicyScreen> {
         PrivacyPolicyScreen(
-            onRejectPolicy = navController::popBackStack,
-            onAcceptPolicy = navController::popBackStack,
+            onRejectPolicy = navController::navigateUp,
+            onAcceptPolicy = navController::navigateUp,
             confirmationRequired = true,
         )
     }
@@ -194,12 +194,12 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
     composable<NewsListScreen> {
         NewsListScreen(
             onNewsClick = { newsId -> navController.navigate(NewsDetailScreen(newsId)) },
-            onBack = navController::popBackStack,
+            onBack = navController::navigateUp,
         )
     }
     composable<NewsDetailScreen> {
         val newsId = it.toRoute<NewsDetailScreen>().newsId
-        NewsDetailScreen(newsId, onBack = navController::popBackStack)
+        NewsDetailScreen(newsId, onBack = navController::navigateUp)
     }
 }
 

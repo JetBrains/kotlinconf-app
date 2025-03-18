@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.action_error_reload
 import kotlinconfapp.ui_components.generated.resources.kodee_error_loading_anim_bg
-import kotlinconfapp.ui_components.generated.resources.kodee_error_loading_anim_bg_dark
 import kotlinconfapp.ui_components.generated.resources.kodee_error_lost
 import kotlinconfapp.ui_components.generated.resources.loading
 import kotlinx.coroutines.NonCancellable
@@ -156,12 +155,7 @@ fun Loading(
 ) {
     Box(modifier = modifier.size(95.dp, 80.dp)) {
         val kodeeLoadingPainter = rememberVectorPainter(
-            vectorResource(
-                if (KotlinConfTheme.colors.isDark)
-                    Res.drawable.kodee_error_loading_anim_bg_dark
-                else
-                    Res.drawable.kodee_error_loading_anim_bg
-            )
+            vectorResource(Res.drawable.kodee_error_loading_anim_bg)
         )
 
         var lastValue by remember { mutableStateOf(0f) }

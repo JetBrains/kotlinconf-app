@@ -75,7 +75,7 @@ fun PartnersScreen(
                 items(partners) { partner ->
                     PartnerCard(
                         name = partner.name,
-                        logo = partner.logo(KotlinConfTheme.colors.isDark),
+                        logo = partner.icon,
                         onClick = { onPartnerDetail(partner.id) }
                     )
                 }
