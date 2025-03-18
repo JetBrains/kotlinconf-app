@@ -11,6 +11,9 @@ interface ApplicationStorage {
     fun getUserId(): Flow<String?>
     suspend fun setUserId(value: String?)
 
+    fun getPendingUserId(): Flow<String?>
+    suspend fun setPendingUserId(value: String?)
+
     fun isOnboardingComplete(): Flow<Boolean>
     suspend fun setOnboardingComplete(value: Boolean)
 

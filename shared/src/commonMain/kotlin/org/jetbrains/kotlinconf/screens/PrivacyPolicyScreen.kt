@@ -57,13 +57,14 @@ import kotlinconfapp.shared.generated.resources.Res as AppRes
 fun PrivacyPolicyScreen(
     onRejectPolicy: () -> Unit,
     onAcceptPolicy: () -> Unit,
+    confirmationRequired: Boolean,
     viewModel: PrivacyPolicyViewModel = koinViewModel(),
 ) {
     var detailsVisible by remember { mutableStateOf(false) }
-    val policyAccepted by viewModel.policyAccepted.collectAsState()
+    val policyState by viewModel.policyState.collectAsState()
 
-    LaunchedEffect(policyAccepted) {
-        if (policyAccepted) {
+    LaunchedEffect(policyState) {
+        if (policyState is PrivacyPolicyState.Done) {
             onAcceptPolicy()
         }
     }
@@ -148,12 +149,14 @@ fun PrivacyPolicyScreen(
             Button(
                 label = stringResource(AppRes.string.privacy_policy_reject),
                 onClick = { onRejectPolicy() },
+                enabled = policyState !is PrivacyPolicyState.Loading,
             )
             Button(
                 label = stringResource(AppRes.string.privacy_policy_accept),
-                onClick = { viewModel.acceptPrivacyPolicy() },
+                onClick = { viewModel.acceptPrivacyPolicy(confirmationRequired) },
                 modifier = Modifier.weight(1f),
                 primary = true,
+                enabled = policyState !is PrivacyPolicyState.Loading,
             )
         }
     }

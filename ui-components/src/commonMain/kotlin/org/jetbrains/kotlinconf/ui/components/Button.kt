@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
@@ -30,6 +32,7 @@ fun Button(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     primary: Boolean = false,
+    enabled: Boolean = true,
 ) {
     val backgroundColor by animateColorAsState(
         if (primary) KotlinConfTheme.colors.primaryBackground
@@ -43,13 +46,15 @@ fun Button(
         if (primary) KotlinConfTheme.colors.primaryTextInverted
         else KotlinConfTheme.colors.primaryText
     )
+    val alpha by animateFloatAsState(if (enabled) 1f else 0.5f)
 
     Box(
         modifier = modifier
+            .alpha(alpha)
             .heightIn(min = 56.dp)
             .border(width = 1.dp, color = borderColor, shape = ButtonShape)
             .clip(ButtonShape)
-            .clickable(onClick = onClick)
+            .then(if (enabled) Modifier.clickable(onClick = onClick) else Modifier)
             .semantics { role = Role.Button }
             .background(backgroundColor)
             .padding(horizontal = 32.dp),

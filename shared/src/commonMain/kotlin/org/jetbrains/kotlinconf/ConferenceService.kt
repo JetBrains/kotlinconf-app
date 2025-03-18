@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf
 
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -31,22 +32,27 @@ class ConferenceService(
     init {
         storage.ensureCurrentVersion()
 
-        scope.launch {
-            // Set user ID
-            val userId = storage.getUserId().first()
-            if (userId != null) {
-                client.userId = userId
-                client.sign()
-            }
+        val userIdLoaded = CompletableDeferred<Unit>()
 
+        scope.launch {
+            storage.getUserId().collect {
+                userIdLoaded.complete(Unit)
+                client.userId = it
+            }
+        }
+
+        scope.launch {
             // Download fresh conference data
             loadConferenceData()
 
-            // Do whatever with votes
-            votes.value = client.myVotes()
-
             // Load fresh news items
             loadNews()
+
+            // Wait for user ID to be loaded
+            userIdLoaded.await()
+
+            // Load user votes
+            votes.value = client.myVotes()
         }
 
         scope.launch {
@@ -128,17 +134,48 @@ class ConferenceService(
         storage.setOnboardingComplete(true)
     }
 
-    /**
-     * Accept privacy policy clicked.
-     */
-    suspend fun acceptPrivacyPolicy() {
+    suspend fun acceptPrivacyPolicy(): Boolean {
         val userId = storage.getUserId().first()
-        if (userId != null) return
+        if (userId != null) return true
 
-        val newUserId = generateUserId()
-        client.userId = newUserId
-        client.sign()
-        storage.setUserId(newUserId)
+        return registerUser(generateUserId())
+    }
+
+    fun acceptPrivacyPolicyAsync() {
+        scope.launch {
+            acceptPrivacyPolicy()
+        }
+    }
+
+    private suspend fun registerUser(newUserId: String): Boolean {
+        val success = client.sign(newUserId)
+        if (success) {
+            storage.setUserId(newUserId)
+            storage.setPendingUserId(null)
+            logger.log(LOG_TAG) { "Signed up successfully with $newUserId" }
+        } else {
+            storage.setPendingUserId(newUserId)
+            logger.log(LOG_TAG) { "Sign up failed, stored pending user ID $newUserId" }
+        }
+        return success
+    }
+
+    /**
+     * Ensure that we have a valid user ID.
+     *
+     * If a user ID is not yet set, but there's a pending user ID,
+     * this method will attempt to send that to the server.
+     *
+     * @return true if there's a valid user ID set.
+     */
+    private suspend fun checkUserId(): Boolean {
+        val userId = storage.getUserId().first()
+        if (userId != null) return true
+
+        val pendingUserId = storage.getPendingUserId().first()
+        if (pendingUserId == null) return false
+
+        return registerUser(pendingUserId)
     }
 
     /**
@@ -163,6 +200,7 @@ class ConferenceService(
      * Vote for session.
      */
     suspend fun vote(sessionId: SessionId, rating: Score?): Boolean {
+        if (!checkUserId()) return false
         if (!client.vote(sessionId, rating)) return false
 
         val allVotes = votes.value
@@ -174,8 +212,10 @@ class ConferenceService(
         return true
     }
 
-    suspend fun sendFeedback(sessionId: SessionId, feedbackValue: String): Boolean =
-        client.sendFeedback(sessionId, feedbackValue)
+    suspend fun sendFeedback(sessionId: SessionId, feedbackValue: String): Boolean {
+        if (!checkUserId()) return false
+        return client.sendFeedback(sessionId, feedbackValue)
+    }
 
     fun speakerById(speakerId: SpeakerId): Speaker? = speakersById.value[speakerId]
 

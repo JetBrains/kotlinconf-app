@@ -25,7 +25,7 @@ fun initKoin(platformModule: Module) {
             single { APIClient(URLs.API_ENDPOINT, get()) }
             single<ApplicationStorage> { MultiplatformSettingsStorage(get()) }
             single<TimeProvider> { ServerBasedTimeProvider(get()) }
-//        single<TimeProvider> { FakeTimeProvider(get()) }
+//            single<TimeProvider> { FakeTimeProvider(get()) }
             singleOf(::ConferenceService)
             single<Logger> { NoopProdLogger() }
         }

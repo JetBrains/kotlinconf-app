@@ -73,9 +73,7 @@ class APIClient(
     /**
      * @return status of request.
      */
-    suspend fun sign(): Boolean {
-        val userId = userId ?: return false
-
+    suspend fun sign(userId :String): Boolean {
         return safeApiCall {
             client.post {
                 apiUrl("sign")
