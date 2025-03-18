@@ -95,7 +95,7 @@ class APIClient(
      * Vote for session.
      */
     suspend fun vote(sessionId: SessionId, score: Score?): Boolean {
-        userId ?: return false
+        if (userId == null) return false
 
         return safeApiCall {
             client.post {
@@ -110,7 +110,7 @@ class APIClient(
      * Send feedback
      */
     suspend fun sendFeedback(sessionId: SessionId, feedback: String): Boolean {
-        userId ?: return false
+        if (userId == null) return false
 
         return safeApiCall {
             client.post {
@@ -125,7 +125,7 @@ class APIClient(
      * List my votes.
      */
     suspend fun myVotes(): List<VoteInfo> {
-        userId ?:  return emptyList()
+        if (userId == null) return emptyList()
 
         return safeApiCall {
             client.get { apiUrl("vote") }.body()
