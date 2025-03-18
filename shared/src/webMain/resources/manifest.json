@@ -2,14 +2,9 @@
   "name": "KotlinConf",
   "icons": [
     {
-      "src": "./images/AppIcon@3x.png",
+      "src": "./images/KotlinConf2025-icon-512.png",
       "type": "image/png",
-      "sizes": "180x180"
-    },
-    {
-      "src": "./images/AppIcon~ios-marketing.png",
-      "type": "image/png",
-      "sizes": "1024x1024"
+      "sizes": "512x512"
     }
   ],
   "start_url": "./",

@@ -1,7 +1,7 @@
 package org.jetbrains.kotlinconf
 
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.window.CanvasBasedWindow
+import androidx.compose.ui.window.ComposeViewport
 import org.jetbrains.kotlinconf.ui.initCoil
 
 @JsModule("@js-joda/timezone")
@@ -14,7 +14,7 @@ fun main() {
     initCoil()
     initKoin(platformModule)
 
-    CanvasBasedWindow {
+    ComposeViewport("ComposeApp") {
         App()
     }
 }
