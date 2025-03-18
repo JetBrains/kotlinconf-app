@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.utils
 
-/**
- * No normalize support for web targets for now. Returns the original string.
- */
-actual fun String.normalizeNfd(): String = this
+actual fun String.normalizeNfd(): String = normalizeImpl(this)
+
+private fun normalizeImpl(str: String): String = js("""str.normalize("NFD")""")

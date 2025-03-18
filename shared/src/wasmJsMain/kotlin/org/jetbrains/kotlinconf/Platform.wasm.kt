@@ -1,3 +1,3 @@
 package org.jetbrains.kotlinconf
 
-actual fun generateUserId(): String = "web-wasm-" + randomUUID()
+actual fun getPlatformId(): String = "web-wasm"

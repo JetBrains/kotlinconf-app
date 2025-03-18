@@ -1,3 +1,3 @@
 package org.jetbrains.kotlinconf
 
-expect fun generateUserId(): String
+internal expect fun getPlatformId(): String
