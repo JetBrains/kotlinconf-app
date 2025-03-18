@@ -116,7 +116,7 @@ class SessionizeService(
             Session(
                 first.id,
                 title,
-                parts.joinToString("\n") { it.description },
+                first.description,
                 parts.flatMap { it.speakerIds }.distinct(),
                 first.location,
                 startTime,
