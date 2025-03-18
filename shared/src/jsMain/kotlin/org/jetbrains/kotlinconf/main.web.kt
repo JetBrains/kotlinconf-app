@@ -1,7 +1,7 @@
 package org.jetbrains.kotlinconf
 
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.window.CanvasBasedWindow
+import androidx.compose.ui.window.ComposeViewport
 import org.jetbrains.kotlinconf.ui.initCoil
 import org.jetbrains.skiko.wasm.onWasmReady
 
@@ -11,7 +11,7 @@ fun main() {
     initKoin(platformModule)
 
     onWasmReady {
-        CanvasBasedWindow {
+        ComposeViewport("ComposeApp") {
             App()
         }
     }

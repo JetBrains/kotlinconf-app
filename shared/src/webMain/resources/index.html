@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <link rel="manifest" href="manifest.json"/>
         <link rel="icon" type="image/x-icon" sizes="360x360" href="./images/KotlinConf2025-icon-360.png">
@@ -41,10 +41,19 @@
                 background-repeat: no-repeat;
                 background-position: center;
             }
+            
+            #ComposeApp {
+                margin-top: env(safe-area-inset-top);
+                margin-bottom: env(safe-area-inset-bottom);
+                margin-left: env(safe-area-inset-left);
+                margin-right: env(safe-area-inset-right);
+                height: calc(100% - env(safe-area-inset-top));
+                width: calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right));
+            }
         </style>
     </head>
     <body>
-        <canvas id="ComposeTarget"></canvas>
+        <div id="ComposeApp"></div>
         <script type="application/javascript">
             const unhandledError = (event, error) => {
                 if (error instanceof WebAssembly.CompileError) {
