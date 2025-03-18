@@ -19,6 +19,8 @@ import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.time.Duration.Companion.minutes
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class ConferenceService(
     private val client: APIClient,
@@ -138,7 +140,9 @@ class ConferenceService(
         val userId = storage.getUserId().first()
         if (userId != null) return true
 
-        return registerUser(generateUserId())
+        @OptIn(ExperimentalUuidApi::class)
+        val generatedUserId = "${getPlatformId()}-${Uuid.random()}"
+        return registerUser(generatedUserId)
     }
 
     fun acceptPrivacyPolicyAsync() {
