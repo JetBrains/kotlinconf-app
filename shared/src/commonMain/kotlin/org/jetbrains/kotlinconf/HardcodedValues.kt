@@ -8,9 +8,12 @@ import kotlinconfapp.shared.generated.resources.partner_gradle
 import kotlinconfapp.shared.generated.resources.partner_jvm_weekly
 import kotlinconfapp.shared.generated.resources.partner_kodeinkoders
 import kotlinconfapp.shared.generated.resources.partner_kotlin_foundation
+import kotlinconfapp.shared.generated.resources.partner_kotlin_weekly
+import kotlinconfapp.shared.generated.resources.partner_kotzilla
 import kotlinconfapp.shared.generated.resources.partner_revenuecat
 import kotlinconfapp.shared.generated.resources.partner_sentry
 import kotlinconfapp.shared.generated.resources.partner_typealias
+import kotlinconfapp.shared.generated.resources.partner_uber
 import kotlinconfapp.shared.generated.resources.partner_worldline
 import kotlinconfapp.shared.generated.resources.partners_bronze
 import kotlinconfapp.shared.generated.resources.partners_codelab
@@ -67,9 +70,11 @@ internal val PARTNERS: Map<StringResource, List<Partner>> = mapOf(
     ),
     Res.string.partners_silver to listOf(
         Partner(PartnerId("gradle"), "Gradle", "", Res.drawable.partner_gradle),
+        Partner(PartnerId("uber"), "Uber", "", Res.drawable.partner_uber),
+        Partner(PartnerId("kotlinfoundation"), "Kotlin Foundation", "", Res.drawable.partner_kotlin_foundation),
+        Partner(PartnerId("kotzilla"), "Kotlin Foundation", "", Res.drawable.partner_kotzilla),
     ),
     Res.string.partners_bronze to listOf(
-        Partner(PartnerId("kotlinfoundation"), "Kotlin Foundation", "", Res.drawable.partner_kotlin_foundation),
         Partner(PartnerId("gitar"), "Gitar", "", Res.drawable.partner_gitar),
         Partner(PartnerId("sentry"), "Sentry", "", Res.drawable.partner_sentry),
     ),
@@ -86,6 +91,7 @@ internal val PARTNERS: Map<StringResource, List<Partner>> = mapOf(
     ),
     Res.string.partners_media to listOf(
         Partner(PartnerId("jvmweekly"), "JVM Weekly", "", Res.drawable.partner_jvm_weekly),
+        Partner(PartnerId("kotlinweekly"), "Kotlin Weekly", "", Res.drawable.partner_kotlin_weekly),
     ),
     Res.string.partners_swag to listOf(
         Partner(PartnerId("revenuecat"), "RevenueCat", "", Res.drawable.partner_revenuecat),
