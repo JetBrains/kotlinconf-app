@@ -118,46 +118,35 @@ kotlin {
             implementation(kotlin("test"))
         }
 
-        val nonWebMain by getting {
-            dependencies {
-                // TODO move this to commonMain once Wasm version is available
-                implementation(libs.doistx.normalize)
-            }
+        get("nonWebMain").dependencies {
+            // TODO move this to commonMain once Wasm version is available
+            implementation(libs.doistx.normalize)
         }
 
-
-        androidMain {
-            dependencies {
-                implementation(libs.android.svg)
-                implementation(libs.androidx.core.ktx)
-                implementation(libs.androidx.work.runtime)
-                implementation(libs.androidx.preference)
-                implementation(libs.compose.ui.tooling.preview)
-                implementation(libs.ktor.client.okhttp)
-            }
+        androidMain.dependencies {
+            implementation(libs.android.svg)
+            implementation(libs.androidx.core.ktx)
+            implementation(libs.androidx.work.runtime)
+            implementation(libs.androidx.preference)
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.ktor.client.okhttp)
         }
 
-        iosMain {
-            dependencies {
-                implementation(libs.kotlinx.coroutines.core)
-                implementation(libs.ktor.client.darwin)
-            }
+        iosMain.dependencies {
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.ktor.client.darwin)
         }
 
-        jvmMain {
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
-                implementation(compose.desktop.currentOs)
-                implementation(libs.android.svg)
-                implementation(libs.kotlinx.coroutines.swing)
-            }
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+            implementation(compose.desktop.currentOs)
+            implementation(libs.android.svg)
+            implementation(libs.kotlinx.coroutines.swing)
         }
 
-        val webMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.js)
-                implementation(npm("@js-joda/timezone", "2.3.0"))
-            }
+        get("webMain").dependencies {
+            implementation(libs.ktor.client.js)
+            implementation(npm("@js-joda/timezone", "2.3.0"))
         }
     }
 }

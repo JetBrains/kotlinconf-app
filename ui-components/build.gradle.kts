@@ -58,25 +58,17 @@ kotlin {
             implementation(libs.multiplatform.markdown.renderer)
         }
 
-        androidMain {
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
-            }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
         }
-        jvmMain {
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
-            }
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
         }
-        iosMain {
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-            }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
-        jsMain {
-            dependencies {
-                implementation(libs.ktor.client.js)
-            }
+        jsMain.dependencies {
+            implementation(libs.ktor.client.js)
         }
     }
 }
