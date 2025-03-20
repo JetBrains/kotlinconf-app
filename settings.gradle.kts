@@ -21,14 +21,7 @@ pluginManagement {
 
             }
         }
-        gradlePluginPortal {
-            content {
-                includeGroupAndSubgroups("org.gradle")
-                includeGroupAndSubgroups("com.mikepenz.aboutlibraries")
-                includeGroupAndSubgroups("com.google.cloud.tools")
-                includeGroupAndSubgroups("io.ktor")
-            }
-        }
+        gradlePluginPortal()
         mavenCentral()
     }
 }
