@@ -1,5 +1,7 @@
 package org.jetbrains.kotlinconf
 
+import com.mmk.kmpnotifier.extensions.onNotificationClicked
+import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.PayloadData
 import org.jetbrains.kotlinconf.navigation.navigateByLocalNotificationId
 import platform.UserNotifications.UNNotificationContent
@@ -16,9 +18,7 @@ fun handleNotificationResponse(response: UNNotificationResponse) {
     }
 
     // Process push notifications
-    // TODO simplify this to NotifierManager.onNotificationClicked(content) and inline notifierManagerListener
-    val payloadData = content.userInfo.toPayloadData()
-    notifierManagerListener.onNotificationClicked(payloadData)
+    NotifierManager.onNotificationClicked(content)
 }
 
 internal fun Map<Any?, *>?.toPayloadData(): PayloadData {

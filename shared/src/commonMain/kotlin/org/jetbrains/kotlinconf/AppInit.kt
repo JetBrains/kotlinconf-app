@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf
 
 import com.mmk.kmpnotifier.notification.NotifierManager
+import com.mmk.kmpnotifier.notification.NotifierManager.Listener
 import com.mmk.kmpnotifier.notification.PayloadData
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import org.jetbrains.kotlinconf.navigation.navigateToNews
@@ -63,39 +64,37 @@ private fun initKoin(platformModule: Module): Koin {
     }.koin
 }
 
-var taggedLogger: TaggedLogger? = null
-val notifierManagerListener = object : NotifierManager.Listener {
-    override fun onNotificationClicked(data: PayloadData) {
-        super.onNotificationClicked(data)
-        taggedLogger?.log { "Notification clicked with $data" }
-
-        val newsId = data[PushNotificationConstants.KEY_NEWS_ID] as? String
-        if (newsId != null) {
-            taggedLogger?.log { "Navigating to news: $newsId" }
-            navigateToNews(newsId)
-            return
-        }
-
-        val sessionId = data[PushNotificationConstants.KEY_SESSION_ID] as? String
-        if (sessionId != null) {
-            taggedLogger?.log { "Navigating to session: $sessionId" }
-            navigateToSession(SessionId(sessionId))
-            return
-        }
-
-        taggedLogger?.log { "No data to navigate with, ignoring notification" }
-    }
-
-    override fun onNewToken(token: String) {
-        taggedLogger?.log { "New token received: $token" }
-    }
-}
-
 private fun initNotifier(
     configuration: NotificationPlatformConfiguration,
     logger: Logger,
 ) {
     NotifierManager.initialize(configuration)
-    taggedLogger = logger.tagged("KMPNotifier")
-    NotifierManager.addListener(notifierManagerListener)
+    NotifierManager.addListener(object : Listener {
+        var taggedLogger: TaggedLogger? = logger.tagged("KMPNotifier")
+
+        override fun onNotificationClicked(data: PayloadData) {
+            super.onNotificationClicked(data)
+            taggedLogger?.log { "Notification clicked with $data" }
+
+            val newsId = data[PushNotificationConstants.KEY_NEWS_ID] as? String
+            if (newsId != null) {
+                taggedLogger?.log { "Navigating to news: $newsId" }
+                navigateToNews(newsId)
+                return
+            }
+
+            val sessionId = data[PushNotificationConstants.KEY_SESSION_ID] as? String
+            if (sessionId != null) {
+                taggedLogger?.log { "Navigating to session: $sessionId" }
+                navigateToSession(SessionId(sessionId))
+                return
+            }
+
+            taggedLogger?.log { "No data to navigate with, ignoring notification" }
+        }
+
+        override fun onNewToken(token: String) {
+            taggedLogger?.log { "New token received: $token" }
+        }
+    })
 }
