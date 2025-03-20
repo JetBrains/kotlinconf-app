@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     ) -> Bool {
         FirebaseApp.configure()
         Main_iosKt.doInitApp()
-        UNUserNotificationCenter.current().delegate = delegate
+        UNUserNotificationCenter.current().delegate = self
         return true
     }
 
