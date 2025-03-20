@@ -72,7 +72,6 @@ data class ScheduleSearchParams(
 sealed class ScheduleUiState {
     data object Loading : ScheduleUiState()
     data object Error : ScheduleUiState()
-    data object NoSearchResults : ScheduleUiState()
 
     data class Content(
         val days: List<Day>,
@@ -144,11 +143,7 @@ class ScheduleViewModel(
                     searchQuery = searchParams.searchQuery,
                     tagValues = tags.filter { it.isSelected }.map { it.value }
                 )
-                if (searchItems.isEmpty()) {
-                    ScheduleUiState.NoSearchResults
-                } else {
-                    ScheduleUiState.Content(agenda, searchItems)
-                }
+                ScheduleUiState.Content(agenda, searchItems)
             }
 
             else -> {
