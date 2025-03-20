@@ -61,7 +61,6 @@ kotlin {
         }
     }
 
-    // Required as we create additional custom source sets below
     applyDefaultHierarchyTemplate {
         common {
             group("web") {
