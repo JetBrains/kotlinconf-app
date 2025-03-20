@@ -103,18 +103,23 @@ class ScheduleViewModel(
     private var loading = MutableStateFlow(false)
 
     fun toggleFilter(item: FilterItem, selected: Boolean) {
-        fun <T> MutableList<T>.replace(old: T, new: T) {
-            val index = indexOf(old)
-            if (index >= 0) {
-                set(index, new)
-            }
-        }
-
-        val newItem = item.copy(isSelected = selected)
         filterItems.update {
-            it.toMutableList().apply {
-                replace(item, newItem)
+            val list = it.toMutableList()
+
+            if (item.type == FilterItemType.Level || item.type == FilterItemType.Format) {
+                // Remove previous format or level selection, if there is one
+                val prevSelectedIndex = list.indexOfFirst { it.type == item.type && it.isSelected }
+                if (prevSelectedIndex >= 0) {
+                    list[prevSelectedIndex] = list[prevSelectedIndex].copy(isSelected = false)
+                }
             }
+
+            val index = list.indexOf(item)
+            if (index >= 0) {
+                list[index] = item.copy(isSelected = selected)
+            }
+
+            list
         }
     }
 
