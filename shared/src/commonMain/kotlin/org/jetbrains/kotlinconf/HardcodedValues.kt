@@ -97,3 +97,55 @@ internal val PARTNERS: Map<StringResource, List<Partner>> = mapOf(
         Partner(PartnerId("revenuecat"), "RevenueCat", "", Res.drawable.partner_revenuecat),
     ),
 )
+
+data class AboutBlock(
+    val sessionId: SessionId?,
+    val month: String,
+    val day: String,
+    val title1: String,
+    val title2: String,
+    val description: String?,
+)
+
+internal val ABOUT_CONFERENCE_BLOCKS = listOf(
+    AboutBlock(
+        sessionId = SessionId("857088"),
+        month = "MAY",
+        day = "22",
+        title1 = "Opening",
+        title2 = "keynote",
+        description = null,
+    ),
+    AboutBlock(
+        sessionId = SessionId("797367"),
+        month = "MAY",
+        day = "23",
+        title1 = "Second day",
+        title2 = "keynote",
+        description = null,
+    ),
+    AboutBlock(
+        sessionId = null,
+        month = "MAY",
+        day = "22-23",
+        title1 = "Code",
+        title2 = "labs",
+        description = null, // TODO add real description https://github.com/JetBrains/kotlinconf-app/issues/339
+    ),
+    AboutBlock(
+        sessionId = SessionId("62b7f3ff-2afa-4b2e-8aec-e69e536cdb6a"),
+        month = "MAY",
+        day = "22",
+        title1 = "",
+        title2 = "Party",
+        description = "Have fun and mingle with the community at the biggest Kotlin party of the year!",
+    ),
+    AboutBlock(
+        sessionId = SessionId("857092"),
+        month = "MAY",
+        day = "23",
+        title1 = "Closing",
+        title2 = "panel",
+        description = "Come and seize the opportunity to ask the KotlinConf speakers your questions in person.",
+    )
+)

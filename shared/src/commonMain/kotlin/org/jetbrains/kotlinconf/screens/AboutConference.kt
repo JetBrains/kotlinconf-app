@@ -15,30 +15,18 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.about_conference_closingpanel_title_line1
-import kotlinconfapp.shared.generated.resources.about_conference_closingpanel_title_line2
-import kotlinconfapp.shared.generated.resources.about_conference_codelabs_title_line1
-import kotlinconfapp.shared.generated.resources.about_conference_codelabs_title_line2
-import kotlinconfapp.shared.generated.resources.about_conference_day1_title_line1
-import kotlinconfapp.shared.generated.resources.about_conference_day1_title_line2
-import kotlinconfapp.shared.generated.resources.about_conference_day2_title_line1
-import kotlinconfapp.shared.generated.resources.about_conference_day2_title_line2
 import kotlinconfapp.shared.generated.resources.about_conference_description
 import kotlinconfapp.shared.generated.resources.about_conference_general_terms_link
-import kotlinconfapp.shared.generated.resources.about_conference_hashtag
 import kotlinconfapp.shared.generated.resources.about_conference_header
-import kotlinconfapp.shared.generated.resources.about_conference_party_description
-import kotlinconfapp.shared.generated.resources.about_conference_party_line1
-import kotlinconfapp.shared.generated.resources.about_conference_party_line2
 import kotlinconfapp.shared.generated.resources.about_conference_privacy_policy_link
-import kotlinconfapp.shared.generated.resources.about_conference_timeline
 import kotlinconfapp.shared.generated.resources.about_conference_title
 import kotlinconfapp.shared.generated.resources.about_conference_website_link
 import kotlinconfapp.shared.generated.resources.arrow_up_right_24
@@ -56,6 +44,7 @@ import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AboutConference(
@@ -64,6 +53,7 @@ fun AboutConference(
     onWebsiteLink: () -> Unit,
     onBack: () -> Unit,
     onSpeaker: (SpeakerId) -> Unit,
+    viewModel: AboutConferenceViewModel = koinViewModel(),
 ) {
     val scrollState = rememberScrollState()
     ScrollToTopHandler(scrollState)
@@ -77,9 +67,7 @@ fun AboutConference(
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             StyledText(text = stringResource(Res.string.about_conference_header), style = KotlinConfTheme.typography.h1)
-            StyledText(text = stringResource(Res.string.about_conference_timeline))
             StyledText(text = stringResource(Res.string.about_conference_description))
-            StyledText(text = stringResource(Res.string.about_conference_hashtag))
         }
 
         Spacer(modifier = Modifier.height(48.dp))
@@ -87,76 +75,20 @@ fun AboutConference(
         Column(
             verticalArrangement = Arrangement.spacedBy(48.dp),
         ) {
-            // TODO retrieve data from the service
-            Event(
-                month = "MAY",
-                day = "22",
-                line1 = stringResource(Res.string.about_conference_day1_title_line1),
-                line2 = stringResource(Res.string.about_conference_day1_title_line2),
-                description = "",
-                speakers = listOf(
-                    Speaker(SpeakerId("0"), "Hadi Hariri", "", "Never believed in elevator pitches", ""),
-                    Speaker(SpeakerId("1"), "Hadi Hariri", "", "Never believed in elevator pitches", ""),
-                ),
-                location = "Hall A",
-                time = "10:00 – 11:00",
-                onSpeaker = onSpeaker,
-            )
-
-            Event(
-                month = "MAY",
-                day = "23",
-                line1 = stringResource(Res.string.about_conference_day2_title_line1),
-                line2 = stringResource(Res.string.about_conference_day2_title_line2),
-                description = "",
-                speakers = listOf(
-                    Speaker(SpeakerId("2"), "Hadi Hariri", "", "Never believed in elevator pitches", ""),
-                ),
-                location = "Hall A",
-                time = "10:00 – 11:00",
-                onSpeaker = onSpeaker,
-            )
-
-            Event(
-                month = "MAY",
-                day = "22",
-                day2 = "23",
-                line1 = stringResource(Res.string.about_conference_codelabs_title_line1),
-                line2 = stringResource(Res.string.about_conference_codelabs_title_line2),
-                description = "TBA",
-                speakers = emptyList(),
-                location = "",
-                time = "",
-                backgroundColor = KotlinConfTheme.colors.tileBackground,
-                onSpeaker = onSpeaker,
-            )
-
-            Event(
-                month = "MAY",
-                day = "22",
-                line1 = stringResource(Res.string.about_conference_party_line1),
-                line2 = stringResource(Res.string.about_conference_party_line2),
-                description = stringResource(Res.string.about_conference_party_description),
-                speakers = emptyList(),
-                location = "Hall A",
-                time = "18:00 – 22:30",
-                backgroundColor = KotlinConfTheme.colors.tileBackground,
-                onSpeaker = onSpeaker,
-            )
-
-            Event(
-                month = "MAY",
-                day = "23",
-                line1 = stringResource(Res.string.about_conference_closingpanel_title_line1),
-                line2 = stringResource(Res.string.about_conference_closingpanel_title_line2),
-                description = "",
-                speakers = listOf(
-                    Speaker(SpeakerId("3"), "Hadi Hariri", "", "Never believed in elevator pitches", ""),
-                ),
-                location = "Hall A",
-                time = "17:00 – 18:00",
-                onSpeaker = onSpeaker,
-            )
+            val events by viewModel.events.collectAsState()
+            for (event in events) {
+                EventCard(
+                    month = event.month,
+                    day = event.day,
+                    line1 = event.title1,
+                    line2 = event.title2,
+                    description = event.description ?: "",
+                    speakers = event.speakers ?: emptyList(),
+                    location = event.sessionCard?.locationLine ?: "",
+                    time = event.sessionCard?.badgeTimeLine ?: "",
+                    onSpeaker = onSpeaker,
+                )
+            }
         }
 
         Image(
@@ -189,7 +121,7 @@ fun AboutConference(
 }
 
 @Composable
-private fun Event(
+private fun EventCard(
     month: String,
     day: String,
     line1: String,
@@ -211,30 +143,37 @@ private fun Event(
                 color = KotlinConfTheme.colors.strokePale,
                 shape = roundedCornerShape,
             ).clip(roundedCornerShape),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         DayHeader(month, day, line1, line2, modifier = Modifier.fillMaxWidth(), day2 = day2)
 
         if (description.isNotEmpty()) {
-            StyledText(description, modifier = Modifier.padding(horizontal = 12.dp))
+            StyledText(description, modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp))
         }
 
-        for (speaker in speakers) {
-            key(speaker.id) {
-                SpeakerCard(
-                    name = speaker.name,
-                    title = speaker.description,
-                    photoUrl = speaker.photoUrl,
-                    modifier = Modifier.padding(horizontal = 12.dp).fillMaxWidth(),
-                    onClick = { onSpeaker(speaker.id) },
-                )
+        if (speakers.isNotEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                for (speaker in speakers) {
+                    SpeakerCard(
+                        name = speaker.name,
+                        title = speaker.position,
+                        photoUrl = speaker.photoUrl,
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { onSpeaker(speaker.id) },
+                    )
+                }
             }
         }
 
         if (location.isNotEmpty() || time.isNotEmpty()) {
             Divider(1.dp, KotlinConfTheme.colors.strokePale)
 
-            Row(Modifier.padding(horizontal = 12.dp).padding(bottom = 12.dp).fillMaxSize(), Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.padding(16.dp).fillMaxSize(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 StyledText(location, style = KotlinConfTheme.typography.text2)
                 StyledText(time, style = KotlinConfTheme.typography.text2)
             }

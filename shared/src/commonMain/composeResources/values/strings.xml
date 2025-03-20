@@ -33,11 +33,13 @@ For the source code and more technical details, visit the GitHub repository.</st
 
     <string name="about_conference_title">About the conference</string>
     <string name="about_conference_header">KotlinConf 2025</string>
-    <string name="about_conference_timeline">May 21: Workshops
+    <string name="about_conference_description">May 21: Workshops
 May 22–23: Conference
-Bella Center, Copenhagen, Denmark</string>
-    <string name="about_conference_description">KotlinConf is the official Kotlin conference by JetBrains. It is a place for the community to gather and discuss all things Kotlin.</string>
-    <string name="about_conference_hashtag">Social media hashtag: #KotlinConf</string>
+Bella Center, Copenhagen, Denmark
+
+KotlinConf is the official Kotlin conference by JetBrains. It is a place for the community to gather and discuss all things Kotlin.
+
+Social media hashtag: #KotlinConf</string>
 
     <string name="about_conference_privacy_policy_link">Privacy policy for visitors</string>
     <string name="about_conference_general_terms_link">General terms and conditions</string>
