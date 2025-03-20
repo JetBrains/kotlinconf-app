@@ -17,7 +17,7 @@ import org.koin.dsl.module
 
 private val platformModule = module {
     single<ObservableSettings> { createSettings() }
-    single<LocalNotificationService> { NotImplementedLocalNotificationService() }
+    single<LocalNotificationService> { EmptyLocalNotificationService() }
     single<Logger> { JvmLogger() }
     single<NotificationPlatformConfiguration> {
         NotificationPlatformConfiguration.Desktop(
