@@ -58,6 +58,7 @@ kotlin {
         it.binaries.framework {
             baseName = "shared"
             isStatic = true
+            export(libs.kmpnotifier)
         }
     }
 
@@ -111,6 +112,8 @@ kotlin {
             implementation(libs.settings.serialization)
             implementation(libs.settings.observable)
             implementation(libs.settings.coroutines)
+
+            api(libs.kmpnotifier)
         }
 
         commonTest.dependencies {

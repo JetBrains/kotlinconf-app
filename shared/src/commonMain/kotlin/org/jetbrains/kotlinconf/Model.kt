@@ -115,9 +115,10 @@ data class NewsListResponse(
 
 @Serializable
 data class NotificationSettings(
+    val sessionReminders: Boolean,
     val scheduleUpdates: Boolean,
     val kotlinConfNews: Boolean,
     val jetBrainsNews: Boolean,
 ) {
-    fun hasAnyEnabled() = scheduleUpdates || kotlinConfNews || jetBrainsNews
+    fun hasAnyEnabled() = sessionReminders || scheduleUpdates || kotlinConfNews || jetBrainsNews
 }

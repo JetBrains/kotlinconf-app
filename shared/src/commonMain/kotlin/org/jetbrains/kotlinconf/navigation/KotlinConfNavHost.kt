@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import kotlinx.coroutines.channels.Channel
+import org.jetbrains.kotlinconf.LocalNotificationId
 import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
@@ -44,12 +45,34 @@ import org.jetbrains.kotlinconf.utils.getStoreUrl
 import kotlin.jvm.JvmSuppressWildcards
 import kotlin.reflect.typeOf
 
-fun navigateToSession(notificationId: String) {
-    val sessionId = SessionId(notificationId.substringBefore("-"))
-    sessionIds.trySend(sessionId)
+fun navigateByLocalNotificationId(notificationId: String) {
+    LocalNotificationId.parse(notificationId)?.let {
+        when (it.type) {
+            LocalNotificationId.Type.SessionStart, LocalNotificationId.Type.SessionEnd ->
+                navigateToSession(SessionId(it.id))
+        }
+    }
 }
 
-private val sessionIds = Channel<SessionId>(capacity = 1)
+fun navigateToSession(sessionId: SessionId) {
+    notificationNavRequests.trySend(SessionScreen(sessionId))
+}
+
+fun navigateToNews(newsId: String) {
+    notificationNavRequests.trySend(NewsDetailScreen(newsId = newsId))
+}
+
+private val notificationNavRequests = Channel<Any>(capacity = 1)
+
+@Composable
+private fun NotificationHandler(navController: NavHostController) {
+    LaunchedEffect(Unit) {
+        while (true) {
+            val destination = notificationNavRequests.receive()
+            navController.navigate(destination)
+        }
+    }
+}
 
 @Composable
 internal fun KotlinConfNavHost(
@@ -59,12 +82,7 @@ internal fun KotlinConfNavHost(
 ) {
     val navController = rememberNavController()
 
-    LaunchedEffect(Unit) {
-        while (true) {
-            val sessionId = sessionIds.receive()
-            navController.navigate(SessionScreen(sessionId))
-        }
-    }
+    NotificationHandler(navController)
 
     val startDestination = if (isOnboardingComplete) MainScreen else StartScreens
     if (popEnterTransition != null && popExitTransition != null) {
@@ -101,7 +119,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
         SpeakerDetailScreen(
             speakerId = it.toRoute<SpeakerDetailScreen>().speakerId,
             onBack = navController::navigateUp,
-            onSession = { navController.navigate(SessionScreen(it)) }
+            onSession = { navController.navigate(SessionScreen(it)) },
         )
     }
     composable<AboutAppScreen> {
@@ -180,7 +198,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             sessionId = it.toRoute<SessionScreen>().sessionId,
             onBack = navController::navigateUp,
             onPrivacyPolicyNeeded = { navController.navigate(PrivacyPolicyScreen) },
-            onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) }
+            onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) },
         )
     }
     composable<PrivacyPolicyScreen> {
@@ -230,8 +248,7 @@ fun NavGraphBuilder.startScreens(
                     navController.navigate(MainScreen) {
                         popUpTo<StartScreens> { inclusive = true }
                     }
-                }
-            )
+                })
         }
     }
 }

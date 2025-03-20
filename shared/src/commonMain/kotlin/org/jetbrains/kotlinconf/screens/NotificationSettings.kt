@@ -11,6 +11,8 @@ import kotlinconfapp.shared.generated.resources.notifications_kotlinconf_news_de
 import kotlinconfapp.shared.generated.resources.notifications_kotlinconf_news_title
 import kotlinconfapp.shared.generated.resources.notifications_schedule_update_description
 import kotlinconfapp.shared.generated.resources.notifications_schedule_update_title
+import kotlinconfapp.shared.generated.resources.notifications_session_reminders_description
+import kotlinconfapp.shared.generated.resources.notifications_session_reminders_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.ui.components.SettingsItem
@@ -24,6 +26,12 @@ fun NotificationSettings(
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        SettingsItem(
+            title = stringResource(Res.string.notifications_session_reminders_title),
+            enabled = notificationSettings.sessionReminders,
+            onToggle = { enabled -> onChangeSettings(notificationSettings.copy(sessionReminders = enabled)) },
+            note = stringResource(Res.string.notifications_session_reminders_description),
+        )
         SettingsItem(
             title = stringResource(Res.string.notifications_schedule_update_title),
             enabled = notificationSettings.scheduleUpdates,

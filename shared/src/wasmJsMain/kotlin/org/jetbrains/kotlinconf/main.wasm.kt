@@ -12,7 +12,7 @@ private val jsJodaTz = JsJodaTimeZoneModule
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     initCoil()
-    initKoin(platformModule)
+    initApp(platformModule)
 
     ComposeViewport("ComposeApp") {
         App()

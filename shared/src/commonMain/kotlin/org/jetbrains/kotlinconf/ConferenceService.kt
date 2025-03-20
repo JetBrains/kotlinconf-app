@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf
 
+import com.mmk.kmpnotifier.notification.NotifierManager
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -9,15 +10,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
+import org.jetbrains.kotlinconf.LocalNotificationId.Type
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.Logger
+import org.jetbrains.kotlinconf.utils.tagged
 import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -26,9 +30,13 @@ class ConferenceService(
     private val client: APIClient,
     private val timeProvider: TimeProvider,
     private val storage: ApplicationStorage,
-    private val notificationService: NotificationService,
-    private val logger: Logger,
+    private val localNotificationService: LocalNotificationService,
+    logger: Logger,
 ) {
+    companion object {
+        private const val LOG_TAG = "ConferenceService"
+    }
+    private val taggedLogger = logger.tagged(LOG_TAG)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     init {
@@ -60,10 +68,23 @@ class ConferenceService(
         scope.launch {
             timeProvider.run()
         }
-    }
 
-    companion object {
-        private const val LOG_TAG = "ConferenceService"
+        scope.launch {
+            storage.getNotificationSettings()
+                .filterNotNull()
+                .collect { settings ->
+                    taggedLogger.log { "Synchronizing settings to Firebase topics: $settings" }
+                    val notifier = NotifierManager.getPushNotifier()
+                    listOf(
+                        settings.scheduleUpdates to PushNotificationConstants.TOPIC_SCHEDULE_UPDATES,
+                        settings.kotlinConfNews to PushNotificationConstants.TOPIC_KOTLINCONF_NEWS,
+                        settings.jetBrainsNews to PushNotificationConstants.TOPIC_JETBRAINS_NEWS,
+                    ).forEach { (enabled, topic) ->
+                        if (enabled) notifier.subscribeToTopic(topic)
+                        else notifier.unSubscribeFromTopic(topic)
+                    }
+                }
+        }
     }
 
     private val votes = MutableStateFlow(emptyList<VoteInfo>())
@@ -156,10 +177,10 @@ class ConferenceService(
         if (success) {
             storage.setUserId(newUserId)
             storage.setPendingUserId(null)
-            logger.log(LOG_TAG) { "Signed up successfully with $newUserId" }
+            taggedLogger.log { "Signed up successfully with $newUserId" }
         } else {
             storage.setPendingUserId(newUserId)
-            logger.log(LOG_TAG) { "Sign up failed, stored pending user ID $newUserId" }
+            taggedLogger.log { "Sign up failed, stored pending user ID $newUserId" }
         }
         return success
     }
@@ -186,11 +207,19 @@ class ConferenceService(
      * Request permissions to send notifications.
      * @return true if permission was granted, false otherwise
      */
-    suspend fun requestNotificationPermissions(): Boolean = notificationService.requestPermission().also {
-        logger.log(LOG_TAG) { "Notification permissions granted: $it" }
-    }
+    suspend fun requestNotificationPermissions(): Boolean = localNotificationService.requestPermission()
+        .also { taggedLogger.log { "Notification permissions granted: $it" } }
 
     fun getNotificationSettings(): Flow<NotificationSettings> = storage.getNotificationSettings()
+        .map {
+            // No stored value yet, create settings with everything enabled by default
+            it ?: NotificationSettings(
+                sessionReminders = true,
+                scheduleUpdates = true,
+                kotlinConfNews = true,
+                jetBrainsNews = true,
+            )
+        }
 
     suspend fun setNotificationSettings(settings: NotificationSettings) {
         storage.setNotificationSettings(settings)
@@ -274,21 +303,21 @@ class ConferenceService(
         val startsSoon = now in reminderTime..<start
         val isLive = now in start..<end
         when {
-            startsLater -> notificationService.post(
+            startsLater -> localNotificationService.post(
                 time = reminderTime,
-                notificationId = session.id.toNotificationId(NotificationType.Start),
+                localNotificationId = LocalNotificationId(Type.SessionStart, session.id.id),
                 title = session.title,
                 message = "Starts in 5 minutes",
             )
 
-            startsSoon -> notificationService.post(
-                notificationId = session.id.toNotificationId(NotificationType.Start),
+            startsSoon -> localNotificationService.post(
+                localNotificationId = LocalNotificationId(Type.SessionStart, session.id.id),
                 title = session.title,
                 message = "The session is about to start",
             )
 
-            isLive -> notificationService.post(
-                notificationId = session.id.toNotificationId(NotificationType.Start),
+            isLive -> localNotificationService.post(
+                localNotificationId = LocalNotificationId(Type.SessionStart, session.id.id),
                 title = session.title,
                 message = "Hurry up, the session has already started!",
             )
@@ -296,9 +325,9 @@ class ConferenceService(
 
         // Notifications for session end
         if (end > now) {
-            notificationService.post(
+            localNotificationService.post(
                 time = end,
-                notificationId = session.id.toNotificationId(NotificationType.End),
+                localNotificationId = LocalNotificationId(Type.SessionEnd, session.id.id),
                 title = "${session.title} finished",
                 message = "How was the talk?",
             )
@@ -306,22 +335,8 @@ class ConferenceService(
     }
 
     private fun cancelNotifications(sessionId: SessionId) {
-        NotificationType.entries.forEach { notificationType ->
-            notificationService.cancel(sessionId.toNotificationId(notificationType))
-        }
-    }
-
-    private enum class NotificationType { Start, End }
-
-    private fun SessionId.toNotificationId(type: NotificationType) = buildString {
-        append(id)
-        append("-")
-        append(
-            when (type) {
-                NotificationType.Start -> "start"
-                NotificationType.End -> "end"
-            }
-        )
+        localNotificationService.cancel(LocalNotificationId(Type.SessionStart, sessionId.id))
+        localNotificationService.cancel(LocalNotificationId(Type.SessionEnd, sessionId.id))
     }
 
     private fun mapNewsItemToDisplayItem(

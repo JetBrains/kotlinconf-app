@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf
 
+import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.StorageSettings
@@ -11,5 +12,8 @@ val platformModule = module {
         @OptIn(ExperimentalSettingsApi::class)
         StorageSettings().makeObservable()
     }
-    single<NotificationService> { ServiceWorkerNotificationService(get()) }
+    single<LocalNotificationService> { ServiceWorkerLocalNotificationService(get()) }
+    single<NotificationPlatformConfiguration> {
+        NotificationPlatformConfiguration.Web(false, null)
+    }
 }

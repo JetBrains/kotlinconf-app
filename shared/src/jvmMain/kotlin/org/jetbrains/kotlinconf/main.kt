@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import com.russhwolf.settings.ObservableSettings
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.app_name
@@ -16,12 +17,18 @@ import org.koin.dsl.module
 
 private val platformModule = module {
     single<ObservableSettings> { createSettings() }
-    single<NotificationService> { NotImplementedNotificationService() }
+    single<LocalNotificationService> { EmptyLocalNotificationService() }
     single<Logger> { JvmLogger() }
+    single<NotificationPlatformConfiguration> {
+        NotificationPlatformConfiguration.Desktop(
+            showPushNotification = false,
+            notificationIconPath = null,
+        )
+    }
 }
 
 fun main() {
-    initKoin(platformModule)
+    initApp(platformModule)
 
     application {
         Window(

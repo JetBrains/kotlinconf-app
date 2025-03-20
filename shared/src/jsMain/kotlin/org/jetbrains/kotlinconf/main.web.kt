@@ -8,7 +8,7 @@ import org.jetbrains.skiko.wasm.onWasmReady
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     initCoil()
-    initKoin(platformModule)
+    initApp(platformModule)
 
     onWasmReady {
         ComposeViewport("ComposeApp") {

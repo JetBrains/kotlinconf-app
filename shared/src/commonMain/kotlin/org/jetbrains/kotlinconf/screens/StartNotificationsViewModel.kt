@@ -16,8 +16,8 @@ class StartNotificationsViewModel(
     private val _permissionRequestComplete = MutableStateFlow<Boolean>(false)
     val permissionHandlingDone = _permissionRequestComplete
 
-    val notificationSettings: StateFlow<NotificationSettings> = service.getNotificationSettings()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), NotificationSettings(true, true, true))
+    val notificationSettings: StateFlow<NotificationSettings?> = service.getNotificationSettings()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     fun setNotificationSettings(settings: NotificationSettings) {
         viewModelScope.launch {
@@ -27,7 +27,8 @@ class StartNotificationsViewModel(
 
     fun requestNotificationPermissions() {
         viewModelScope.launch {
-            if (notificationSettings.value.hasAnyEnabled()) {
+            val settings = notificationSettings.value
+            if (settings != null && settings.hasAnyEnabled()) {
                 service.requestNotificationPermissions()
             }
             _permissionRequestComplete.emit(true)

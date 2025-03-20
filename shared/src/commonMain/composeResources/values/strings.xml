@@ -72,8 +72,10 @@ We will process your data in accordance with the App Privacy Policy. You can adj
 
     <string name="notifications_title">Notifications</string>
     <string name="notifications_description">Customize your preferences to ensure you receive only the notifications that matter to you, avoiding unnecessary disruptions.</string>
-    <string name="notifications_schedule_update_title">Conference schedule updates</string>
-    <string name="notifications_schedule_update_description">Get talk reminders and important information during the event. We recommend keeping this setting enabled to receive timely notifications about any changes.</string>
+    <string name="notifications_session_reminders_title">Session reminders</string>
+    <string name="notifications_session_reminders_description">Get reminders for sessions that you’ve bookmarked in the schedule to make sure you don’t miss them.</string>
+    <string name="notifications_schedule_update_title">Schedule updates</string>
+    <string name="notifications_schedule_update_description">Stay informed about crucial changes! Get an alert if there's a significant update to the event schedule.</string>
     <string name="notifications_kotlinconf_news_title">KotlinConf News</string>
     <string name="notifications_kotlinconf_news_description">Receive news in between KotlinConf events, including notifications about ticket sales, new videos, contests, schedule announcements, and more.</string>
     <string name="notifications_jetbrains_news_title">JetBrains News</string>

@@ -3,7 +3,6 @@ package org.jetbrains.kotlinconf
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toNSTimeZone
-import org.jetbrains.kotlinconf.navigation.navigateToSession
 import org.jetbrains.kotlinconf.utils.Logger
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSDateComponents
@@ -12,16 +11,15 @@ import platform.UserNotifications.UNAuthorizationOptionAlert
 import platform.UserNotifications.UNCalendarNotificationTrigger
 import platform.UserNotifications.UNMutableNotificationContent
 import platform.UserNotifications.UNNotificationRequest
-import platform.UserNotifications.UNNotificationResponse
 import platform.UserNotifications.UNUserNotificationCenter
 import kotlin.coroutines.resume
 
-class IOSNotificationService(
+class IOSLocalNotificationService(
     private val timeProvider: TimeProvider,
     private val logger: Logger,
-) : NotificationService {
+) : LocalNotificationService {
     companion object {
-        const val NOTIFICATION_ID_KEY = "notificationId"
+        const val LOCAL_NOTIFICATION_ID_KEY = "localNotificationId"
         private const val LOG_TAG = "IOSNotificationService"
     }
 
@@ -36,17 +34,17 @@ class IOSNotificationService(
     }
 
     override fun post(
-        notificationId: String,
+        localNotificationId: LocalNotificationId,
         title: String,
         message: String,
         time: LocalDateTime?
     ) {
-        logger.log(LOG_TAG) { "Posting: $time, $notificationId, $title, $message" }
+        logger.log(LOG_TAG) { "Posting: $time, $localNotificationId, $title, $message" }
 
         val content = UNMutableNotificationContent().apply {
             setTitle(title)
             setBody(message)
-            setUserInfo(mapOf(NOTIFICATION_ID_KEY to notificationId))
+            setUserInfo(mapOf(LOCAL_NOTIFICATION_ID_KEY to localNotificationId.toString()))
         }
         val trigger = if (time != null) {
             val adjustedTime = timeProvider.getNotificationTime(time)
@@ -67,23 +65,21 @@ class IOSNotificationService(
         } else {
             null
         }
-        val request = UNNotificationRequest.requestWithIdentifier(notificationId, content, trigger)
+        val request = UNNotificationRequest.requestWithIdentifier(localNotificationId.toString(), content, trigger)
         notificationCenter.addNotificationRequest(request) { error: NSError? ->
-            logger.log(LOG_TAG) { "Notification completed with error: $error" }
+            logger.log(LOG_TAG) {
+                if (error == null) {
+                    "Notification request completed successfully"
+                } else {
+                    "Notification request failed with error: $error"
+                }
+            }
         }
     }
 
-    override fun cancel(notificationId: String) {
-        logger.log(LOG_TAG) { "Cancelling: $notificationId" }
-        notificationCenter.removePendingNotificationRequestsWithIdentifiers(listOf(notificationId))
-    }
-}
-
-@Suppress("unused") // Called from Swift
-fun handleNotificationResponse(response: UNNotificationResponse) {
-    val sessionId = response.notification.request.content
-        .userInfo[IOSNotificationService.NOTIFICATION_ID_KEY] as? String
-    if (sessionId != null) {
-        navigateToSession(sessionId)
+    override fun cancel(localNotificationId: LocalNotificationId) {
+        logger.log(LOG_TAG) { "Cancelling: $localNotificationId" }
+        val identifiers = listOf(localNotificationId.toString())
+        notificationCenter.removePendingNotificationRequestsWithIdentifiers(identifiers)
     }
 }

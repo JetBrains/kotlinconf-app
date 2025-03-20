@@ -13,10 +13,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
+import com.mmk.kmpnotifier.notification.NotifierManager
 import org.jetbrains.kotlinconf.App
-import org.jetbrains.kotlinconf.EXTRA_NOTIFICATION_ID
+import org.jetbrains.kotlinconf.EXTRA_LOCAL_NOTIFICATION_ID
 import org.jetbrains.kotlinconf.PermissionHandler
-import org.jetbrains.kotlinconf.navigation.navigateToSession
+import org.jetbrains.kotlinconf.navigation.navigateByLocalNotificationId
 import org.koin.mp.KoinPlatform
 
 class MainActivity : ComponentActivity() {
@@ -58,9 +60,16 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun processIntent(intent: Intent?) {
-        val notificationId = intent?.getStringExtra(EXTRA_NOTIFICATION_ID)
+        if (intent == null) return
+
+        val notificationId = intent.getStringExtra(EXTRA_LOCAL_NOTIFICATION_ID)
         if (notificationId != null) {
-            navigateToSession(notificationId)
+            // Local notification clicked
+            navigateByLocalNotificationId(notificationId)
+            return
         }
+
+        // Process push notifications
+        NotifierManager.onCreateOrOnNewIntent(intent)
     }
 }

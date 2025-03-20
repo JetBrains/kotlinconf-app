@@ -2,15 +2,15 @@ package org.jetbrains.kotlinconf
 
 import kotlinx.datetime.LocalDateTime
 
-interface NotificationService {
+interface LocalNotificationService {
     suspend fun requestPermission(): Boolean
 
     fun post(
-        notificationId: String,
+        localNotificationId: LocalNotificationId,
         title: String,
         message: String,
         time: LocalDateTime? = null,
     )
 
-    fun cancel(notificationId: String)
+    fun cancel(localNotificationId: LocalNotificationId)
 }
