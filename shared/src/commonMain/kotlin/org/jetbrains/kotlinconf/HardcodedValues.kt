@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf
 
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.partner_american_express
+import kotlinconfapp.shared.generated.resources.partner_android_weekly
 import kotlinconfapp.shared.generated.resources.partner_gitar
 import kotlinconfapp.shared.generated.resources.partner_google
 import kotlinconfapp.shared.generated.resources.partner_gradle
@@ -70,9 +71,9 @@ internal val PARTNERS: Map<StringResource, List<Partner>> = mapOf(
     ),
     Res.string.partners_silver to listOf(
         Partner(PartnerId("gradle"), "Gradle", "", Res.drawable.partner_gradle),
-        Partner(PartnerId("uber"), "Uber", "", Res.drawable.partner_uber),
         Partner(PartnerId("kotlinfoundation"), "Kotlin Foundation", "", Res.drawable.partner_kotlin_foundation),
-        Partner(PartnerId("kotzilla"), "Kotlin Foundation", "", Res.drawable.partner_kotzilla),
+        Partner(PartnerId("kotzilla"), "Kotzilla", "", Res.drawable.partner_kotzilla),
+        Partner(PartnerId("uber"), "Uber", "", Res.drawable.partner_uber),
     ),
     Res.string.partners_bronze to listOf(
         Partner(PartnerId("gitar"), "Gitar", "", Res.drawable.partner_gitar),
@@ -90,6 +91,7 @@ internal val PARTNERS: Map<StringResource, List<Partner>> = mapOf(
         Partner(PartnerId("worldline"), "World Line", "", Res.drawable.partner_worldline),
     ),
     Res.string.partners_media to listOf(
+        Partner(PartnerId("androidweekly"), "Android Weekly", "", Res.drawable.partner_android_weekly),
         Partner(PartnerId("jvmweekly"), "JVM Weekly", "", Res.drawable.partner_jvm_weekly),
         Partner(PartnerId("kotlinweekly"), "Kotlin Weekly", "", Res.drawable.partner_kotlin_weekly),
     ),
