@@ -151,7 +151,6 @@ fun ScheduleScreen(
                 when (state) {
                     is ScheduleUiState.Content -> 1
                     ScheduleUiState.Error, ScheduleUiState.Loading -> 2
-                    ScheduleUiState.NoSearchResults -> 3
                 }
             },
             transitionSpec = { FadingAnimationSpec },
@@ -220,21 +219,36 @@ fun ScheduleScreen(
                             }
                         }
 
-                        ScheduleList(
-                            scheduleItems = items,
-                            onSession = onSession,
-                            listState = listState,
-                            feedbackEnabled = !isSearch,
-                            onSubmitFeedback = { sessionId, emotion ->
-                                viewModel.onSubmitFeedback(sessionId, emotion)
-                            },
-                            onSubmitFeedbackWithComment = { sessionId, emotion, comment ->
-                                viewModel.onSubmitFeedbackWithComment(sessionId, emotion, comment)
-                            },
-                            onBookmark = { sessionId, isBookmarked ->
-                                viewModel.onBookmark(sessionId, isBookmarked)
-                            },
-                        )
+                        AnimatedContent(
+                            targetState = items.isNotEmpty(),
+                            transitionSpec = { FadingAnimationSpec },
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.weight(1f),
+                        ) { hasItems ->
+                            if (hasItems) {
+                                ScheduleList(
+                                    scheduleItems = items,
+                                    onSession = onSession,
+                                    listState = listState,
+                                    feedbackEnabled = !isSearch,
+                                    onSubmitFeedback = { sessionId, emotion ->
+                                        viewModel.onSubmitFeedback(sessionId, emotion)
+                                    },
+                                    onSubmitFeedbackWithComment = { sessionId, emotion, comment ->
+                                        viewModel.onSubmitFeedbackWithComment(sessionId, emotion, comment)
+                                    },
+                                    onBookmark = { sessionId, isBookmarked ->
+                                        viewModel.onBookmark(sessionId, isBookmarked)
+                                    },
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            } else {
+                                MinorError(
+                                    message = stringResource(Res.string.schedule_error_no_results),
+                                    modifier = Modifier.fillMaxSize(),
+                                )
+                            }
+                        }
                     }
                 }
 
@@ -244,13 +258,6 @@ fun ScheduleScreen(
                         isLoading = targetState is ScheduleUiState.Loading,
                         modifier = Modifier.fillMaxSize(),
                         onRetry = { viewModel.refresh() },
-                    )
-                }
-
-                ScheduleUiState.NoSearchResults -> {
-                    MinorError(
-                        message = stringResource(Res.string.schedule_error_no_results),
-                        modifier = Modifier.fillMaxSize(),
                     )
                 }
             }

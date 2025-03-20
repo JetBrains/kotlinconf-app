@@ -15,6 +15,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.kodee_emotion_neutral
 import org.jetbrains.compose.resources.painterResource
@@ -63,7 +66,10 @@ fun SpeakerAvatar(
     modifier: Modifier = Modifier,
 ) {
     AsyncImage(
-        model = photoUrl,
+        model = ImageRequest.Builder(LocalPlatformContext.current)
+            .data(photoUrl)
+            .crossfade(true)
+            .build(),
         contentDescription = null,
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
