@@ -33,7 +33,7 @@ object TagValues {
         "Multiplatform",
         "Android",
         "Extensibility/Tooling",
-        "Languages and best practices",
+        "Language and best practices",
         "Other",
     )
     val levels = listOf(

@@ -191,7 +191,7 @@ internal fun FiltersPreview() {
                 FilterItem(FilterItemType.Category, "Multiplatform", false),
                 FilterItem(FilterItemType.Category, "Android", false),
                 FilterItem(FilterItemType.Category, "Extensibility/Tooling", false),
-                FilterItem(FilterItemType.Category, "Languages and Best Practices", false),
+                FilterItem(FilterItemType.Category, "Language and Best Practices", false),
                 FilterItem(FilterItemType.Category, "Other", false),
                 FilterItem(FilterItemType.Level, "Introductory and overview", false),
                 FilterItem(FilterItemType.Level, "Intermediate", false),
