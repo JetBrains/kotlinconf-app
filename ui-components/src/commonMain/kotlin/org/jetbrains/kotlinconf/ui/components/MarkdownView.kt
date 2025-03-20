@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextLinkStyles
 import com.mikepenz.markdown.compose.Markdown
 import com.mikepenz.markdown.model.DefaultMarkdownColors
 import com.mikepenz.markdown.model.DefaultMarkdownTypography
@@ -57,6 +58,7 @@ fun MarkdownView(
             list = KotlinConfTheme.typography.text1,
             link = KotlinConfTheme.typography.text1,
             inlineCode = KotlinConfTheme.typography.text1,
+            textLink = TextLinkStyles(),
         ),
         modifier = modifier
     )
