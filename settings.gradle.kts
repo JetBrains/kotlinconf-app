@@ -1,11 +1,26 @@
+@file:Suppress("UnstableApiUsage")
+
 rootProject.name = "KotlinConfApp"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
     repositories {
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        google()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev") {
+            mavenContent {
+                includeGroupAndSubgroups("org.jetbrains.compose")
+                includeGroupAndSubgroups("org.jetbrains.androidx")
+            }
+        }
+        google {
+            mavenContent {
+                includeGroupAndSubgroups("android")
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
+
+            }
+        }
         gradlePluginPortal()
         mavenCentral()
     }
@@ -13,8 +28,20 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        google()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev") {
+            mavenContent {
+                includeGroupAndSubgroups("org.jetbrains.compose")
+                includeGroupAndSubgroups("org.jetbrains.androidx")
+            }
+        }
+        google {
+            mavenContent {
+                includeGroupAndSubgroups("android")
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
+            }
+        }
         mavenCentral()
     }
 }

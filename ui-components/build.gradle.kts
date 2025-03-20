@@ -1,4 +1,7 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
@@ -10,8 +13,20 @@ plugins {
 }
 
 kotlin {
-    // Required as we create additional custom source sets below
-    applyDefaultHierarchyTemplate()
+    applyDefaultHierarchyTemplate {
+        common {
+            group("nonAndroid") {
+                group("ios")
+                group("web")
+                withJvm()
+            }
+
+            group("web") {
+                withJs()
+                withWasmJs()
+            }
+        }
+    }
 
     androidTarget()
 
@@ -41,38 +56,18 @@ kotlin {
 
             implementation(libs.multiplatform.markdown.renderer)
         }
-        val nonAndroid by creating {
-            dependsOn(commonMain.get())
+
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
         }
-        androidMain {
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
-            }
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
         }
-        jvmMain {
-            dependsOn(nonAndroid)
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
-            }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
-        iosMain {
-            dependsOn(nonAndroid)
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-            }
-        }
-        val webMain by creating {
-            dependsOn(commonMain.get())
-            dependsOn(nonAndroid)
-        }
-        wasmJsMain {
-            dependsOn(webMain)
-        }
-        jsMain {
-            dependsOn(webMain)
-            dependencies {
-                implementation(libs.ktor.client.js)
-            }
+        jsMain.dependencies {
+            implementation(libs.ktor.client.js)
         }
     }
 }

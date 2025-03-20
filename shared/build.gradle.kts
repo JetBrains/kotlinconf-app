@@ -1,6 +1,9 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
 import com.mikepenz.aboutlibraries.plugin.DuplicateMode
 import com.mikepenz.aboutlibraries.plugin.DuplicateRule
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
 plugins {
     alias(libs.plugins.aboutLibraries)
@@ -58,8 +61,26 @@ kotlin {
         }
     }
 
-    // Required as we create additional custom source sets below
-    applyDefaultHierarchyTemplate()
+    applyDefaultHierarchyTemplate {
+        common {
+            group("web") {
+                withJs()
+                withWasmJs()
+            }
+
+            group("nonWeb") {
+                group("ios")
+                withAndroidTarget()
+                withJvm()
+            }
+
+            group("nonAndroid") {
+                group("ios")
+                group("web")
+                withJvm()
+            }
+        }
+    }
 
     sourceSets {
         commonMain.dependencies {
@@ -96,65 +117,35 @@ kotlin {
             implementation(kotlin("test"))
         }
 
-        val nonWebMain by creating {
-            dependsOn(commonMain.get())
-            dependencies {
-                // TODO move this to commonMain once Wasm version is available
-                implementation(libs.doistx.normalize)
-            }
+        get("nonWebMain").dependencies {
+            // TODO move this to commonMain once Wasm version is available
+            implementation(libs.doistx.normalize)
         }
 
-        val nonAndroidMain by creating {
-            dependsOn(commonMain.get())
+        androidMain.dependencies {
+            implementation(libs.android.svg)
+            implementation(libs.androidx.core.ktx)
+            implementation(libs.androidx.work.runtime)
+            implementation(libs.androidx.preference)
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.ktor.client.okhttp)
         }
 
-        androidMain {
-            dependsOn(nonWebMain)
-            dependencies {
-                implementation(libs.android.svg)
-                implementation(libs.androidx.core.ktx)
-                implementation(libs.androidx.work.runtime)
-                implementation(libs.androidx.preference)
-                implementation(libs.compose.ui.tooling.preview)
-                implementation(libs.ktor.client.okhttp)
-            }
+        iosMain.dependencies {
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.ktor.client.darwin)
         }
 
-        iosMain {
-            dependsOn(nonWebMain)
-            dependsOn(nonAndroidMain)
-            dependencies {
-                implementation(libs.kotlinx.coroutines.core)
-                implementation(libs.ktor.client.darwin)
-            }
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+            implementation(compose.desktop.currentOs)
+            implementation(libs.android.svg)
+            implementation(libs.kotlinx.coroutines.swing)
         }
 
-        jvmMain {
-            dependsOn(nonWebMain)
-            dependsOn(nonAndroidMain)
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
-                implementation(compose.desktop.currentOs)
-                implementation(libs.android.svg)
-                implementation(libs.kotlinx.coroutines.swing)
-            }
-        }
-
-        val webMain by creating {
-            dependsOn(commonMain.get())
-            dependsOn(nonAndroidMain)
-            dependencies {
-                implementation(libs.ktor.client.js)
-                implementation(npm("@js-joda/timezone", "2.3.0"))
-            }
-        }
-
-        val wasmJsMain by getting {
-            dependsOn(webMain)
-        }
-
-        jsMain {
-            dependsOn(webMain)
+        get("webMain").dependencies {
+            implementation(libs.ktor.client.js)
+            implementation(npm("@js-joda/timezone", "2.3.0"))
         }
     }
 }
