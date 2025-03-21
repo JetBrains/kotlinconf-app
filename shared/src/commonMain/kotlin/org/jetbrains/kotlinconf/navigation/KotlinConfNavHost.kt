@@ -104,7 +104,15 @@ internal fun KotlinConfNavHost(
             screens(navController)
         }
     }
+
+    PlatformNavControllerSync(navController)
 }
+
+/**
+ * Currently, it's needed only for web target to synchronize with the address line and browser history
+ */
+@Composable
+internal expect fun PlatformNavControllerSync(navController: NavHostController)
 
 fun NavGraphBuilder.screens(navController: NavHostController) {
     startScreens(
