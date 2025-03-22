@@ -116,7 +116,7 @@ fun TalkCard(
 ) {
     val backgroundColor by animateColorAsState(
         if (status == TalkStatus.Past) KotlinConfTheme.colors.cardBackgroundPast
-        else KotlinConfTheme.colors.mainBackground,
+        else Color.Transparent,
         animationSpec = tween(1000),
     )
     val textColor by animateColorAsState(
@@ -282,7 +282,7 @@ private fun TimeBlock(
             )
         }
 
-        if (status == TalkStatus.Live) {
+        AnimatedVisibility(status == TalkStatus.Live, enter = fadeIn(), exit = fadeOut()) {
             NowLabel()
         }
 
