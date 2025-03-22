@@ -228,7 +228,7 @@ private fun FeedbackPanel(
                     KodeeIconLarge(
                         emotion = emotion,
                         selected = selectedEmotion == emotion,
-                        onClick = {
+                        modifier = Modifier.clickable(indication = null, interactionSource = null) {
                             val newEmotion = if (emotion == selectedEmotion) null else emotion
                             if (userSignedIn) {
                                 hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)

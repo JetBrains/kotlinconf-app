@@ -2,7 +2,6 @@ package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -41,7 +40,6 @@ enum class Emotion {
 fun KodeeIconSmall(
     emotion: Emotion,
     selected: Boolean,
-    onClick: (Emotion) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val resource = if (selected) {
@@ -61,12 +59,7 @@ fun KodeeIconSmall(
     Image(
         imageVector = vectorResource(resource),
         contentDescription = null, // TODO review as part of https://github.com/JetBrains/kotlinconf-app/issues/193
-        modifier = modifier.size(24.dp)
-            .clickable(
-                onClick = { onClick(emotion) },
-                indication = null,
-                interactionSource = null,
-            ),
+        modifier = modifier.size(24.dp),
     )
 }
 
@@ -74,7 +67,6 @@ fun KodeeIconSmall(
 fun KodeeIconLarge(
     emotion: Emotion,
     selected: Boolean,
-    onClick: (Emotion) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val resource = if (selected) {
@@ -102,13 +94,7 @@ fun KodeeIconLarge(
     Image(
         imageVector = vectorResource(resource),
         contentDescription = null, // TODO review as part of https://github.com/JetBrains/kotlinconf-app/issues/194
-        modifier = modifier
-            .size(width = 64.dp, height = 55.dp)
-            .clickable(
-                onClick = { onClick(emotion) },
-                indication = null,
-                interactionSource = null,
-            )
+        modifier = modifier.size(width = 64.dp, height = 55.dp)
     )
 }
 
@@ -136,22 +122,22 @@ fun KodeeEmotion(
 internal fun KodeeIconsPreview() {
     PreviewHelper {
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            KodeeIconSmall(Emotion.Negative, false, {})
-            KodeeIconSmall(Emotion.Neutral, false, {})
-            KodeeIconSmall(Emotion.Positive, false, {})
+            KodeeIconSmall(Emotion.Negative, false)
+            KodeeIconSmall(Emotion.Neutral, false)
+            KodeeIconSmall(Emotion.Positive, false)
 
-            KodeeIconSmall(Emotion.Negative, true, {})
-            KodeeIconSmall(Emotion.Neutral, true, {})
-            KodeeIconSmall(Emotion.Positive, true, {})
+            KodeeIconSmall(Emotion.Negative, true)
+            KodeeIconSmall(Emotion.Neutral, true)
+            KodeeIconSmall(Emotion.Positive, true)
         }
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            KodeeIconLarge(Emotion.Negative, false, {})
-            KodeeIconLarge(Emotion.Neutral, false, {})
-            KodeeIconLarge(Emotion.Positive, false, {})
+            KodeeIconLarge(Emotion.Negative, false)
+            KodeeIconLarge(Emotion.Neutral, false)
+            KodeeIconLarge(Emotion.Positive, false)
 
-            KodeeIconLarge(Emotion.Negative, true, {})
-            KodeeIconLarge(Emotion.Neutral, true, {})
-            KodeeIconLarge(Emotion.Positive, true, {})
+            KodeeIconLarge(Emotion.Negative, true)
+            KodeeIconLarge(Emotion.Neutral, true)
+            KodeeIconLarge(Emotion.Positive, true)
         }
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             KodeeEmotion(Emotion.Negative)
