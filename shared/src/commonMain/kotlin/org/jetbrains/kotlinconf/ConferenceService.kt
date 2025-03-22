@@ -109,6 +109,9 @@ class ConferenceService(
             it.flatMap { it.timeSlots }.flatMap { it.sessions }
         }.stateIn(scope, SharingStarted.Eagerly, emptyList())
 
+    val userId: StateFlow<String?> = storage.getUserId()
+        .stateIn(scope, SharingStarted.Eagerly, null)
+
     val speakers: StateFlow<List<Speaker>> = storage.getConferenceCache()
         .map {
             (it?.speakers ?: emptyList())

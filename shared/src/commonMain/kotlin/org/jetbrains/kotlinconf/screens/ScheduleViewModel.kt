@@ -76,6 +76,7 @@ sealed class ScheduleUiState {
     data class Content(
         val days: List<Day>,
         val items: List<ScheduleListItem>,
+        val userSignedIn: Boolean,
     ) : ScheduleUiState() {
         val firstLiveIndex: Int = items.indexOfFirst { it.isLive() }
         val lastLiveIndex: Int = items.indexOfLast { it.isLive() }
@@ -135,10 +136,11 @@ class ScheduleViewModel(
 
     val uiState: StateFlow<ScheduleUiState> = combine(
         service.agenda,
+        service.userId,
         searchParams,
         filterItems,
         loading,
-    ) { agenda, searchParams, tags, loading ->
+    ) { agenda, userId, searchParams, tags, loading ->
         when {
             loading -> ScheduleUiState.Loading
 
@@ -146,17 +148,20 @@ class ScheduleViewModel(
                 val searchItems = buildSearchItems(
                     days = agenda,
                     searchQuery = searchParams.searchQuery,
-                    tagValues = tags.filter { it.isSelected }.map { it.value }
+                    tagValues = tags.filter { it.isSelected }.map { it.value },
                 )
-                ScheduleUiState.Content(agenda, searchItems)
+                ScheduleUiState.Content(agenda, searchItems, userId != null)
             }
 
             else -> {
-                val items = buildNonSearchItems(days = agenda, isBookmarkedOnly = searchParams.isBookmarkedOnly)
+                val items = buildNonSearchItems(
+                    days = agenda,
+                    isBookmarkedOnly = searchParams.isBookmarkedOnly,
+                )
                 if (items.isEmpty()) {
                     ScheduleUiState.Error
                 } else {
-                    ScheduleUiState.Content(agenda, items)
+                    ScheduleUiState.Content(agenda, items, userId != null)
                 }
             }
         }

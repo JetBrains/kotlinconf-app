@@ -111,6 +111,7 @@ fun TalkCard(
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     onClick: () -> Unit,
     feedbackEnabled: Boolean,
+    userSignedIn: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor by animateColorAsState(
@@ -174,6 +175,7 @@ fun TalkCard(
             )
             FeedbackBlock(
                 status = status,
+                userSignedIn = userSignedIn,
                 initialEmotion = initialEmotion,
                 onSubmitFeedback = onSubmitFeedback,
                 onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
@@ -307,6 +309,7 @@ private const val FeedbackAnimationDuration = 50
 @Composable
 private fun FeedbackBlock(
     status: TalkStatus,
+    userSignedIn: Boolean,
     initialEmotion: Emotion? = null,
     onSubmitFeedback: (Emotion?) -> Unit,
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
@@ -358,10 +361,15 @@ private fun FeedbackBlock(
                         emotion = emotion,
                         selected = selectedEmotion == emotion,
                         onClick = {
-                            hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
-                            selectedEmotion = if (emotion == selectedEmotion) null else emotion
-                            feedbackExpanded = selectedEmotion != null
-                            onSubmitFeedback(selectedEmotion)
+                            if (userSignedIn) {
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
+                                selectedEmotion = if (emotion == selectedEmotion) null else emotion
+                                feedbackExpanded = selectedEmotion != null
+                                onSubmitFeedback(selectedEmotion)
+                            } else {
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Reject)
+                                onSubmitFeedback(selectedEmotion)
+                            }
                         },
                     )
                 }
@@ -369,9 +377,6 @@ private fun FeedbackBlock(
         }
         AnimatedVisibility(visible = feedbackExpanded) {
             val focusRequester = remember { FocusRequester() }
-            LaunchedEffect(Unit) {
-                focusRequester.requestFocus()
-            }
             val hapticFeedback = LocalHapticFeedback.current
             FeedbackForm(
                 emotion = selectedEmotion,
@@ -420,6 +425,7 @@ internal fun TalkCardPreview() {
                 onClick = { "Clicked session" },
                 modifier = Modifier.weight(1f),
                 feedbackEnabled = true,
+                userSignedIn = true,
             )
             Spacer(Modifier.width(16.dp))
             TalkCard(
@@ -445,6 +451,7 @@ internal fun TalkCardPreview() {
                 onClick = { "Clicked session" },
                 modifier = Modifier.weight(1f),
                 feedbackEnabled = false,
+                userSignedIn = true,
             )
         }
     }

@@ -135,9 +135,10 @@ fun SpeakerDetailScreen(
                             },
                             status = TalkStatus.Upcoming,
                             initialEmotion = session.vote?.toEmotion(),
-                            feedbackEnabled = false,
-                            onSubmitFeedback = { /* Not enabled on this screen */ },
-                            onSubmitFeedbackWithComment = { _, _ -> /* Not enabled on this screen */ },
+                            feedbackEnabled = false, // Feedback not enabled on this screen
+                            userSignedIn = false, // Feedback not enabled on this screen
+                            onSubmitFeedback = { }, // Feedback not enabled on this screen
+                            onSubmitFeedbackWithComment = { _, _ -> }, // Feedback not enabled on this screen
                             onClick = { onSession(session.id) },
                             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                         )

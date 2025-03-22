@@ -81,6 +81,7 @@ fun SessionScreen(
 ) {
     val session = viewModel.session.collectAsState().value
     val speakers = viewModel.speakers.collectAsState().value
+    val userSignedIn by viewModel.userSignedIn.collectAsState()
     val shouldNavigateToPrivacyPolicy by viewModel.navigateToPrivacyPolicy.collectAsState()
 
     LaunchedEffect(shouldNavigateToPrivacyPolicy) {
@@ -142,6 +143,7 @@ fun SessionScreen(
                             onFeedbackWithComment = { emotion, comment ->
                                 viewModel.submitFeedbackWithComment(emotion, comment)
                             },
+                            userSignedIn= userSignedIn,
                             initialEmotion = session.vote?.toEmotion(),
                             modifier = Modifier.padding(bottom = 20.dp),
                         )
@@ -180,6 +182,7 @@ fun SessionScreen(
 private fun FeedbackPanel(
     onFeedback: (Emotion?) -> Unit,
     onFeedbackWithComment: (Emotion, String) -> Unit,
+    userSignedIn: Boolean,
     modifier: Modifier = Modifier,
     initialEmotion: Emotion? = null,
 ) {
@@ -222,11 +225,16 @@ private fun FeedbackPanel(
                         emotion = emotion,
                         selected = selectedEmotion == emotion,
                         onClick = {
-                            hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
                             val newEmotion = if (emotion == selectedEmotion) null else emotion
-                            selectedEmotion = newEmotion
-                            feedbackExpanded = newEmotion != null
-                            onFeedback(newEmotion)
+                            if (userSignedIn) {
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
+                                selectedEmotion = newEmotion
+                                feedbackExpanded = newEmotion != null
+                                onFeedback(newEmotion)
+                            } else {
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Reject)
+                                onFeedback(newEmotion)
+                            }
                         },
                     )
                 }
