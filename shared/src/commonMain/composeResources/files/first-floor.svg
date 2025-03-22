@@ -44,13 +44,13 @@
 <path fill-rule="evenodd" clip-rule="evenodd" d="M889.074 998.75H884.141C882.633 998.75 881.346 997.77 881.012 996.363L878.979 987.812H894.887C896.568 987.812 897.937 989.182 897.937 990.863C897.937 992.18 897.1 993.342 895.852 993.758L892.556 994.878L892.203 996.363C891.869 997.768 890.582 998.75 889.074 998.75ZM892.987 993.065L895.357 992.275C895.967 992.072 896.375 991.504 896.375 990.863C896.375 990.043 895.707 989.375 894.887 989.375H893.865L892.987 993.065ZM880.957 989.375L882.533 996.002C882.697 996.689 883.373 997.188 884.143 997.188H889.078C889.848 997.188 890.523 996.689 890.687 996.002L892.264 989.375H880.957Z" fill="#19191C"/>
 <path d="M877.625 1000.31V1001.88H896.375V1000.31H877.625Z" fill="#19191C"/>
 <path d="M887 986.25C887 985.523 887.201 984.816 887.568 984.256L887.615 984.191L889.088 982.379C889.248 982.182 889.344 981.875 889.344 981.561H890.906C890.906 982.244 890.691 982.883 890.301 983.365L888.855 985.143C888.666 985.445 888.562 985.838 888.562 986.248V986.25H887Z" fill="#19191C"/>
-<mask id="mask0_5003_6253" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="527" y="769" width="355" height="248">
-<path d="M580.934 1004.28C570.546 1001.02 560.475 996.988 550.834 992.258L605.648 882.947" stroke="#EB008B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M636.064 1014.01C622.508 1013.4 609.268 1011.52 596.459 1008.53" stroke="#EB008B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M696.038 1008.48C681.871 1011.81 667.183 1013.76 652.087 1014.17" stroke="#EB008B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M577.426 1014.57L540.107 1000.83C539.654 1000.68 539.315 1000.27 539.247 999.771L529.017 928.934C528.882 928.074 529.561 927.305 530.443 927.305H583.446L605.603 882.97H660.756H687.484L742.003 992.009C732.226 996.829 722.042 1000.93 711.518 1004.23" stroke="#EB008B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M612.935 1011.02L631.923 882.947" stroke="#EB008B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M879.714 770.853H812V940.658H879.714V770.853Z" stroke="#EB008B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<mask id="mask0_5003_6253" maskUnits="userSpaceOnUse" x="527" y="769" width="355" height="248">
+<path d="M580.934 1004.28C570.546 1001.02 560.475 996.988 550.834 992.258L605.648 882.947" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M636.064 1014.01C622.508 1013.4 609.268 1011.52 596.459 1008.53" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M696.038 1008.48C681.871 1011.81 667.183 1013.76 652.087 1014.17" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M577.426 1014.57L540.107 1000.83C539.654 1000.68 539.315 1000.27 539.247 999.771L529.017 928.934C528.882 928.074 529.561 927.305 530.443 927.305H583.446L605.603 882.97H660.756H687.484L742.003 992.009C732.226 996.829 722.042 1000.93 711.518 1004.23" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M612.935 1011.02L631.923 882.947" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M879.714 770.853H812V940.658H879.714V770.853Z" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 </mask>
 <g mask="url(#mask0_5003_6253)">
 <rect x="524" y="762" width="373" height="263" fill="url(#paint0_linear_5003_6253)"/>
