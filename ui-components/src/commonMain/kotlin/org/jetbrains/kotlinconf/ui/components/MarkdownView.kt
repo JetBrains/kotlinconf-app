@@ -8,9 +8,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.unit.dp
 import com.mikepenz.markdown.compose.Markdown
 import com.mikepenz.markdown.model.DefaultMarkdownColors
 import com.mikepenz.markdown.model.DefaultMarkdownTypography
+import com.mikepenz.markdown.model.markdownAnimations
+import com.mikepenz.markdown.model.markdownPadding
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 
 @Composable
@@ -32,7 +35,8 @@ fun MarkdownView(
     modifier: Modifier = Modifier,
 ) {
     Markdown(
-        text, DefaultMarkdownColors(
+        text,
+        DefaultMarkdownColors(
             text = KotlinConfTheme.colors.longText,
             codeText = KotlinConfTheme.colors.secondaryText,
             linkText = KotlinConfTheme.colors.primaryText,
@@ -42,7 +46,8 @@ fun MarkdownView(
             dividerColor = KotlinConfTheme.colors.strokePale,
             tableText = KotlinConfTheme.colors.longText,
             tableBackground = KotlinConfTheme.colors.mainBackground,
-        ), typography = DefaultMarkdownTypography(
+        ),
+        typography = DefaultMarkdownTypography(
             text = KotlinConfTheme.typography.text1,
             code = KotlinConfTheme.typography.text1,
             h1 = KotlinConfTheme.typography.h1,
@@ -58,8 +63,11 @@ fun MarkdownView(
             list = KotlinConfTheme.typography.text1,
             link = KotlinConfTheme.typography.text1,
             inlineCode = KotlinConfTheme.typography.text1,
+            table = KotlinConfTheme.typography.text1,
             textLink = TextLinkStyles(),
         ),
-        modifier = modifier
+        animations = markdownAnimations { this },
+        padding = markdownPadding(block = 6.dp),
+        modifier = modifier,
     )
 }
