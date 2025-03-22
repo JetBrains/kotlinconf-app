@@ -387,7 +387,11 @@ private fun FeedbackBlock(
                 }
             }
         }
-        AnimatedVisibility(visible = feedbackExpanded) {
+        AnimatedVisibility(
+            visible = feedbackExpanded,
+            enter = fadeIn() + expandVertically(clip = false, expandFrom = Alignment.Top),
+            exit = fadeOut() + shrinkVertically(clip = false, shrinkTowards = Alignment.Top),
+        ) {
             val focusRequester = remember { FocusRequester() }
             val hapticFeedback = LocalHapticFeedback.current
             FeedbackForm(
