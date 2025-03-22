@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.map_first_floor
@@ -45,6 +46,7 @@ import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.Switcher
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import kotlin.math.sqrt
 
 enum class Floor(
     val title: StringResource,
@@ -64,14 +66,14 @@ enum class Floor(
 }
 
 val rooms = mapOf(
-    "Room #173" to LocationInfo(Floor.FIRST, Offset(0.3045643154f, 0.6523076923f)),
-    "Hall D3" to LocationInfo(Floor.GROUND, Offset(0.4157676349f, 0.8164102564f)),
-    "Hall D2" to LocationInfo(Floor.GROUND, Offset(0.3394190871f, 0.7753846154f)),
-    "Auditorium 15" to LocationInfo(Floor.GROUND, Offset(0.4771784232f, 0.5928205128f)),
-    "Auditorium 11+12" to LocationInfo(Floor.FIRST, Offset(0.3692946058f, 0.6564102564f)),
-    "Auditorium 10 (Lightning talks)" to LocationInfo(Floor.FIRST, Offset(0.3286307054f, 0.6543589744f)),
+    "Room #173" to LocationInfo(Floor.FIRST, Offset(0.30f, 0.65f)),
+    "Hall D3" to LocationInfo(Floor.GROUND, Offset(0.42f, 0.82f)),
+    "Hall D2" to LocationInfo(Floor.GROUND, Offset(0.34f, 0.78f)),
+    "Auditorium 15" to LocationInfo(Floor.GROUND, Offset(0.48f, 0.59f)),
+    "Auditorium 11+12" to LocationInfo(Floor.FIRST, Offset(0.37f, 0.66f)),
+    "Auditorium 10 (Lightning talks)" to LocationInfo(Floor.FIRST, Offset(0.33f, 0.65f)),
 )
-private val venue = LocationInfo(Floor.GROUND, Offset(0.4174273859f, 0.7158974359f))
+private val venue = LocationInfo(Floor.GROUND, Offset(0.4f, 0.69f))
 
 /**
  * The [offset] here are values for centering the map on the given location.
@@ -120,9 +122,11 @@ fun MapScreen(roomName: String?) {
         )
 
         svg?.let {
+            val containerSize = LocalWindowInfo.current.containerSize
+            val scaleAdjustment = remember { sqrt(containerSize.width / it.width * (containerSize.height / it.height)) }
             Map(
                 svg = it,
-                initialZoom = 2f,
+                initialZoom = 2f * scaleAdjustment,
                 initialOffset = location.offset.asSvgOffset(it),
                 zoomRange = 1f..6f
             )
