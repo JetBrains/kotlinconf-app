@@ -17,7 +17,7 @@ kotlin = "2.1.20"
 
 compose-android = "1.8.0-beta02"
 compose-multiplatform = "1.8.0-beta01"
-compose-hot-reload = "1.0.0-alpha01"
+compose-hot-reload = "1.0.0-alpha03"
 
 coroutines = "1.10.1"
 coil = "3.1.0"
