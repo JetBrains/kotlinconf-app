@@ -83,6 +83,7 @@ internal fun KotlinConfNavHost(
     val navController = rememberNavController()
 
     NotificationHandler(navController)
+    PlatformNavHandler(navController)
 
     val startDestination = if (isOnboardingComplete) MainScreen() else StartScreens
     if (popEnterTransition != null && popExitTransition != null) {
@@ -105,6 +106,8 @@ internal fun KotlinConfNavHost(
         }
     }
 }
+
+
 
 fun NavGraphBuilder.screens(navController: NavHostController) {
     startScreens(
