@@ -116,7 +116,6 @@ We will process your data in accordance with the App Privacy Policy. You can adj
     <string name="schedule_error_no_results">No results</string>
 
     <string name="session_title">Schedule</string>
-    <string name="session_how_was_the_talk">How was the talk?</string>
     <string name="session_your_feedback">Your feedback</string>
     <string name="session_screen_error">The details of this session are not available at the moment.</string>
 

@@ -410,19 +410,9 @@ fun ScheduleList(
                 is WorkshopItem -> {
                     val workshops = item.workshops
                     Column(modifier = Modifier.fillMaxWidth()) {
-                        val pagerState = rememberPagerState(
-                            pageCount = { Int.MAX_VALUE }, // Pretend we have "infinite" pages
-                            initialPage = Int.MAX_VALUE / 2, // Start from the middle
-                        )
-
-                        HorizontalPager(
-                            state = pagerState,
-                            modifier = Modifier.fillMaxWidth(),
-                            beyondViewportPageCount = 10,
-                            contentPadding = PaddingValues(horizontal = 24.dp),
-                        ) { pageIndex ->
+                        if (workshops.size == 1) {
                             SessionCard(
-                                session = workshops[pageIndex % workshops.size],
+                                session = workshops[0],
                                 feedbackEnabled = feedbackEnabled,
                                 userSignedIn = userSignedIn,
                                 onBookmark = onBookmark,
@@ -430,17 +420,40 @@ fun ScheduleList(
                                 onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
                                 onSession = onSession,
                                 modifier = Modifier
-                                    .padding(horizontal = 8.dp, vertical = 8.dp)
-                                    .height(180.dp)
+                                    .padding(horizontal = 32.dp)
+                                    .padding(top = 12.dp, bottom = 16.dp)
+                            )
+                        } else {
+                            val pagerState = rememberPagerState(
+                                pageCount = { Int.MAX_VALUE }, // Pretend we have "infinite" pages
+                                initialPage = Int.MAX_VALUE / 2, // Start from the middle
+                            )
+                            HorizontalPager(
+                                state = pagerState,
+                                modifier = Modifier.fillMaxWidth(),
+                                beyondViewportPageCount = 10,
+                                contentPadding = PaddingValues(horizontal = 24.dp),
+                            ) { pageIndex ->
+                                SessionCard(
+                                    session = workshops[pageIndex % workshops.size],
+                                    feedbackEnabled = feedbackEnabled,
+                                    userSignedIn = userSignedIn,
+                                    onBookmark = onBookmark,
+                                    onSubmitFeedback = onSubmitFeedback,
+                                    onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
+                                    onSession = onSession,
+                                    modifier = Modifier
+                                        .padding(horizontal = 8.dp, vertical = 8.dp)
+                                )
+                            }
+                            ScrollIndicator(
+                                pageCount = workshops.size,
+                                selectedPage = pagerState.currentPage % workshops.size,
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(vertical = 8.dp),
                             )
                         }
-                        ScrollIndicator(
-                            pageCount = workshops.size,
-                            selectedPage = pagerState.currentPage % workshops.size,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(vertical = 8.dp),
-                        )
                     }
                 }
 

@@ -43,11 +43,12 @@ import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.arrow_left_24
 import kotlinconfapp.shared.generated.resources.down_24
 import kotlinconfapp.shared.generated.resources.navigate_back
-import kotlinconfapp.shared.generated.resources.session_how_was_the_talk
 import kotlinconfapp.shared.generated.resources.session_screen_error
 import kotlinconfapp.shared.generated.resources.session_title
 import kotlinconfapp.shared.generated.resources.session_your_feedback
 import kotlinconfapp.shared.generated.resources.up_24
+import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_talk
+import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_workshop
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionId
@@ -71,6 +72,7 @@ import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
+import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -146,8 +148,12 @@ fun SessionScreen(
                             onFeedbackWithComment = { emotion, comment ->
                                 viewModel.submitFeedbackWithComment(emotion, comment)
                             },
-                            userSignedIn= userSignedIn,
+                            userSignedIn = userSignedIn,
                             initialEmotion = session.vote?.toEmotion(),
+                            feedbackQuestion = stringResource(
+                                if (session.tags.contains("Workshop")) UiRes.string.talk_card_how_was_the_workshop
+                                else UiRes.string.talk_card_how_was_the_talk
+                            ),
                             modifier = Modifier.padding(bottom = 20.dp),
                         )
                     }
@@ -191,6 +197,7 @@ private fun FeedbackPanel(
     userSignedIn: Boolean,
     modifier: Modifier = Modifier,
     initialEmotion: Emotion? = null,
+    feedbackQuestion: String,
 ) {
     var selectedEmotion by remember { mutableStateOf<Emotion?>(initialEmotion) }
     var feedbackExpanded by remember { mutableStateOf(false) }
@@ -213,7 +220,7 @@ private fun FeedbackPanel(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             StyledText(
-                text = stringResource(Res.string.session_how_was_the_talk),
+                text = feedbackQuestion,
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.primaryText,
             )
