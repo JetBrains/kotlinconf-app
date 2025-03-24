@@ -83,6 +83,7 @@ internal fun KotlinConfNavHost(
     val navController = rememberNavController()
 
     NotificationHandler(navController)
+    PlatformNavHandler(navController)
 
     val startDestination = if (isOnboardingComplete) MainScreen() else StartScreens
     if (popEnterTransition != null && popExitTransition != null) {
@@ -104,15 +105,9 @@ internal fun KotlinConfNavHost(
             screens(navController)
         }
     }
-
-    PlatformNavControllerSync(navController)
 }
 
-/**
- * Currently, it's needed only for web target to synchronize with the address line and browser history
- */
-@Composable
-internal expect fun PlatformNavControllerSync(navController: NavHostController)
+
 
 fun NavGraphBuilder.screens(navController: NavHostController) {
     startScreens(

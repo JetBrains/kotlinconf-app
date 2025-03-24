@@ -9,7 +9,7 @@ import kotlinx.browser.window
 
 @OptIn(ExperimentalBrowserHistoryApi::class)
 @Composable
-internal actual fun PlatformNavControllerSync(navController: NavHostController) {
+internal actual fun PlatformNavHandler(navController: NavHostController) {
     LaunchedEffect(Unit) {
         window.bindToNavigation(navController)
     }

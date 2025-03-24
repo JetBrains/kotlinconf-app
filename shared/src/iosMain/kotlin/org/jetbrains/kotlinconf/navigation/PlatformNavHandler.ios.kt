@@ -4,6 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 
 @Composable
-internal actual fun PlatformNavControllerSync(navController: NavHostController) {
+internal actual fun PlatformNavHandler(navController: NavHostController) {
     // Nothing to do
 }
