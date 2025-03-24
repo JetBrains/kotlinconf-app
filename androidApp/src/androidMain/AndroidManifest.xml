@@ -17,6 +17,7 @@
         android:theme="@style/Theme.App.Splash">
         <activity
             android:name="org.jetbrains.kotlinconf.android.MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.App.Splash"
             android:exported="true">
             <intent-filter>
