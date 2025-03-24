@@ -116,7 +116,7 @@ fun TalkCard(
 ) {
     val backgroundColor by animateColorAsState(
         if (status == TalkStatus.Past) KotlinConfTheme.colors.cardBackgroundPast
-        else KotlinConfTheme.colors.mainBackground,
+        else Color.Transparent,
         animationSpec = tween(1000),
     )
     val textColor by animateColorAsState(
@@ -282,7 +282,7 @@ private fun TimeBlock(
             )
         }
 
-        if (status == TalkStatus.Live) {
+        AnimatedVisibility(status == TalkStatus.Live, enter = fadeIn(), exit = fadeOut()) {
             NowLabel()
         }
 
@@ -317,11 +317,21 @@ private fun FeedbackBlock(
     var selectedEmotion by remember { mutableStateOf<Emotion?>(initialEmotion) }
     var feedbackExpanded by remember { mutableStateOf(false) }
 
-    Column(Modifier.padding(vertical = 14.dp)) {
+    Column(
+        Modifier
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+            ) {
+                if (selectedEmotion != null) {
+                    feedbackExpanded = !feedbackExpanded
+                }
+            },
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(start = 16.dp),
         ) {
             AnimatedContent(
                 targetState = selectedEmotion != null,
@@ -351,7 +361,7 @@ private fun FeedbackBlock(
                 }
             }
             Spacer(Modifier.weight(1f))
-            Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+            Row {
                 val feedbackEmotions = remember {
                     listOf(Emotion.Negative, Emotion.Neutral, Emotion.Positive)
                 }
@@ -360,22 +370,28 @@ private fun FeedbackBlock(
                     KodeeIconSmall(
                         emotion = emotion,
                         selected = selectedEmotion == emotion,
-                        onClick = {
-                            if (userSignedIn) {
-                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
-                                selectedEmotion = if (emotion == selectedEmotion) null else emotion
-                                feedbackExpanded = selectedEmotion != null
-                                onSubmitFeedback(selectedEmotion)
-                            } else {
-                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Reject)
-                                onSubmitFeedback(selectedEmotion)
+                        modifier = Modifier
+                            .clickable(indication = null, interactionSource = null) {
+                                if (userSignedIn) {
+                                    hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
+                                    selectedEmotion = if (emotion == selectedEmotion) null else emotion
+                                    feedbackExpanded = selectedEmotion != null
+                                    onSubmitFeedback(selectedEmotion)
+                                } else {
+                                    hapticFeedback.performHapticFeedback(HapticFeedbackType.Reject)
+                                    onSubmitFeedback(selectedEmotion)
+                                }
                             }
-                        },
+                            .padding(12.dp),
                     )
                 }
             }
         }
-        AnimatedVisibility(visible = feedbackExpanded) {
+        AnimatedVisibility(
+            visible = feedbackExpanded,
+            enter = fadeIn() + expandVertically(clip = false, expandFrom = Alignment.Top),
+            exit = fadeOut() + shrinkVertically(clip = false, shrinkTowards = Alignment.Top),
+        ) {
             val focusRequester = remember { FocusRequester() }
             val hapticFeedback = LocalHapticFeedback.current
             FeedbackForm(
@@ -386,7 +402,7 @@ private fun FeedbackBlock(
                     feedbackExpanded = false
                 },
                 past = status == TalkStatus.Past,
-                modifier = Modifier.padding(top = 14.dp).focusRequester(focusRequester)
+                modifier = Modifier.padding(bottom = 14.dp).focusRequester(focusRequester)
             )
         }
     }
@@ -422,7 +438,7 @@ internal fun TalkCardPreview() {
                 initialEmotion = Emotion.Positive,
                 onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
                 onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
-                onClick = { "Clicked session" },
+                onClick = { println("Clicked session") },
                 modifier = Modifier.weight(1f),
                 feedbackEnabled = true,
                 userSignedIn = true,
@@ -448,7 +464,7 @@ internal fun TalkCardPreview() {
                 initialEmotion = null,
                 onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
                 onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
-                onClick = { "Clicked session" },
+                onClick = { println("Clicked session") },
                 modifier = Modifier.weight(1f),
                 feedbackEnabled = false,
                 userSignedIn = true,

@@ -3,6 +3,7 @@ package org.jetbrains.kotlinconf.screens
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -47,6 +48,7 @@ import kotlinconfapp.shared.generated.resources.session_screen_error
 import kotlinconfapp.shared.generated.resources.session_title
 import kotlinconfapp.shared.generated.resources.session_your_feedback
 import kotlinconfapp.shared.generated.resources.up_24
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
@@ -228,7 +230,7 @@ private fun FeedbackPanel(
                     KodeeIconLarge(
                         emotion = emotion,
                         selected = selectedEmotion == emotion,
-                        onClick = {
+                        modifier = Modifier.clickable(indication = null, interactionSource = null) {
                             val newEmotion = if (emotion == selectedEmotion) null else emotion
                             if (userSignedIn) {
                                 hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
@@ -245,7 +247,11 @@ private fun FeedbackPanel(
             }
         }
 
-        AnimatedVisibility(selectedEmotion != null) {
+        AnimatedVisibility(
+            selectedEmotion != null,
+            enter = fadeIn() + expandVertically(clip = false, expandFrom = Alignment.Top),
+            exit = fadeOut(animationSpec = tween(100)) + shrinkVertically(clip = false, shrinkTowards = Alignment.Top),
+        ) {
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 

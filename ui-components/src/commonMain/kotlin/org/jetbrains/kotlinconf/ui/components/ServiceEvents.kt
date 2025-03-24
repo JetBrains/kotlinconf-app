@@ -1,5 +1,8 @@
 package org.jetbrains.kotlinconf.ui.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,7 +44,7 @@ private fun ServiceEventItem(
 
         Spacer(Modifier.weight(1f))
 
-        if (event.now) {
+        AnimatedVisibility(event.now, enter = fadeIn(), exit = fadeOut()) {
             NowLabel()
         }
 
