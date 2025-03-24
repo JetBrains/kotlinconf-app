@@ -6,6 +6,7 @@ import com.mmk.kmpnotifier.notification.PayloadData
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import org.jetbrains.kotlinconf.navigation.navigateToNews
 import org.jetbrains.kotlinconf.navigation.navigateToSession
+import org.jetbrains.kotlinconf.screens.AboutConferenceViewModel
 import org.jetbrains.kotlinconf.screens.NewsDetailViewModel
 import org.jetbrains.kotlinconf.screens.NewsListViewModel
 import org.jetbrains.kotlinconf.screens.PrivacyPolicyViewModel
@@ -47,6 +48,7 @@ private fun initKoin(platformModule: Module): Koin {
         }
 
         val viewModelModule = module {
+            viewModelOf(::AboutConferenceViewModel)
             viewModelOf(::NewsDetailViewModel)
             viewModelOf(::NewsListViewModel)
             viewModelOf(::PrivacyPolicyViewModel)
