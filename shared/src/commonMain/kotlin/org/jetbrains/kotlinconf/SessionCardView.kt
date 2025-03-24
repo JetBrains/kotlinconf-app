@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf
 
 import kotlinx.datetime.LocalDateTime
+import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
@@ -29,7 +30,6 @@ val SessionCardView.isLive get() = state == SessionState.Live
 val SessionCardView.isUpcoming get() = state == SessionState.Upcoming
 val SessionCardView.isPast get() = state == SessionState.Past
 
-
 val SessionCardView.isServiceEvent: Boolean
     get() = speakerIds.isEmpty() && tags.isEmpty()
 
@@ -38,3 +38,11 @@ val Session.isLightning: Boolean
 
 // Maximum duration of a talk for it to be considered a lighting talk
 private val LIGHTNING_TALK_LIMIT: Duration = 15.minutes
+
+fun Score.toEmotion(): Emotion {
+    return when (this) {
+        Score.GOOD -> Emotion.Positive
+        Score.OK -> Emotion.Neutral
+        Score.BAD -> Emotion.Negative
+    }
+}

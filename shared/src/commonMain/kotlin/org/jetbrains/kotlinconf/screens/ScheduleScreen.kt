@@ -51,6 +51,7 @@ import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.isLive
+import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.Emotion
@@ -231,6 +232,7 @@ fun ScheduleScreen(
                                     onSession = onSession,
                                     listState = listState,
                                     feedbackEnabled = !isSearch,
+                                    userSignedIn = targetState.userSignedIn,
                                     onSubmitFeedback = { sessionId, emotion ->
                                         viewModel.onSubmitFeedback(sessionId, emotion)
                                     },
@@ -368,6 +370,7 @@ fun ScheduleList(
     onSession: (SessionId) -> Unit,
     listState: LazyListState,
     feedbackEnabled: Boolean,
+    userSignedIn: Boolean,
     onSubmitFeedback: (SessionId, Emotion?) -> Unit,
     onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
     onBookmark: (SessionId, Boolean) -> Unit,
@@ -421,6 +424,7 @@ fun ScheduleList(
                             SessionCard(
                                 session = workshops[pageIndex % workshops.size],
                                 feedbackEnabled = feedbackEnabled,
+                                userSignedIn = userSignedIn,
                                 onBookmark = onBookmark,
                                 onSubmitFeedback = onSubmitFeedback,
                                 onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
@@ -444,6 +448,7 @@ fun ScheduleList(
                     SessionCard(
                         session = item.value,
                         feedbackEnabled = feedbackEnabled,
+                        userSignedIn = userSignedIn,
                         titleHighlights = item.titleHighlights,
                         tagHighlights = item.tagMatches,
                         speakerHighlights = item.speakerHighlights,
@@ -499,6 +504,7 @@ private fun SessionCard(
     onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
     onSession: (SessionId) -> Unit,
     feedbackEnabled: Boolean,
+    userSignedIn: Boolean,
     modifier: Modifier = Modifier,
     titleHighlights: List<IntRange> = emptyList(),
     tagHighlights: List<String> = emptyList(),
@@ -524,6 +530,7 @@ private fun SessionCard(
             SessionState.Past -> TalkStatus.Past
             SessionState.Upcoming -> TalkStatus.Upcoming
         },
+        initialEmotion = session.vote?.toEmotion(),
         onSubmitFeedback = { emotion ->
             onSubmitFeedback(session.id, emotion)
         },
@@ -533,5 +540,6 @@ private fun SessionCard(
         onClick = { onSession(session.id) },
         modifier = modifier,
         feedbackEnabled = feedbackEnabled && session.state != SessionState.Upcoming,
+        userSignedIn = userSignedIn,
     )
 }

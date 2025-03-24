@@ -51,6 +51,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.SpeakerId
+import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -80,6 +81,7 @@ fun SessionScreen(
 ) {
     val session = viewModel.session.collectAsState().value
     val speakers = viewModel.speakers.collectAsState().value
+    val userSignedIn by viewModel.userSignedIn.collectAsState()
     val shouldNavigateToPrivacyPolicy by viewModel.navigateToPrivacyPolicy.collectAsState()
 
     LaunchedEffect(shouldNavigateToPrivacyPolicy) {
@@ -141,7 +143,9 @@ fun SessionScreen(
                             onFeedbackWithComment = { emotion, comment ->
                                 viewModel.submitFeedbackWithComment(emotion, comment)
                             },
-                            modifier = Modifier.padding(bottom = 20.dp)
+                            userSignedIn= userSignedIn,
+                            initialEmotion = session.vote?.toEmotion(),
+                            modifier = Modifier.padding(bottom = 20.dp),
                         )
                     }
 
@@ -178,9 +182,11 @@ fun SessionScreen(
 private fun FeedbackPanel(
     onFeedback: (Emotion?) -> Unit,
     onFeedbackWithComment: (Emotion, String) -> Unit,
+    userSignedIn: Boolean,
     modifier: Modifier = Modifier,
+    initialEmotion: Emotion? = null,
 ) {
-    var selectedEmotion by remember { mutableStateOf<Emotion?>(null) }
+    var selectedEmotion by remember { mutableStateOf<Emotion?>(initialEmotion) }
     var feedbackExpanded by remember { mutableStateOf(false) }
 
     Column(
@@ -219,11 +225,16 @@ private fun FeedbackPanel(
                         emotion = emotion,
                         selected = selectedEmotion == emotion,
                         onClick = {
-                            hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
                             val newEmotion = if (emotion == selectedEmotion) null else emotion
-                            selectedEmotion = newEmotion
-                            feedbackExpanded = newEmotion != null
-                            onFeedback(newEmotion)
+                            if (userSignedIn) {
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
+                                selectedEmotion = newEmotion
+                                feedbackExpanded = newEmotion != null
+                                onFeedback(newEmotion)
+                            } else {
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Reject)
+                                onFeedback(newEmotion)
+                            }
                         },
                     )
                 }

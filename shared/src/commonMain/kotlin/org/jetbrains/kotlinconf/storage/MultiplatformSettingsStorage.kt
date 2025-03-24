@@ -13,6 +13,7 @@ import org.jetbrains.kotlinconf.NewsItem
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Theme
+import org.jetbrains.kotlinconf.VoteInfo
 
 @OptIn(ExperimentalSettingsApi::class)
 class MultiplatformSettingsStorage(
@@ -58,6 +59,12 @@ class MultiplatformSettingsStorage(
     override suspend fun setNotificationSettings(value: NotificationSettings) = settings
         .set(Keys.NOTIFICATION_SETTINGS, Json.encodeToString(value))
 
+    override fun getVotes(): Flow<List<VoteInfo>> = settings.getStringOrNullFlow(Keys.VOTES)
+        .map { it?.let { Json.decodeFromString<List<VoteInfo>>(it) } ?: emptyList() }
+
+    override suspend fun setVotes(value: List<VoteInfo>) = settings
+        .set(Keys.VOTES, Json.encodeToString(value))
+
     override fun ensureCurrentVersion() {
         val version = settings.getInt(Keys.STORAGE_VERSION, 0)
         if (version < CURRENT_STORAGE_VERSION) {
@@ -81,5 +88,6 @@ class MultiplatformSettingsStorage(
         const val NEWS_CACHE = "newsCache"
         const val FAVORITES = "favorites"
         const val NOTIFICATION_SETTINGS = "notificationSettings"
+        const val VOTES = "votes"
     }
 }

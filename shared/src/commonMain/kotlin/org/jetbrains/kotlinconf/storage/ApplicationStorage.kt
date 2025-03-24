@@ -6,6 +6,7 @@ import org.jetbrains.kotlinconf.NewsItem
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Theme
+import org.jetbrains.kotlinconf.VoteInfo
 
 interface ApplicationStorage {
     fun getUserId(): Flow<String?>
@@ -31,6 +32,9 @@ interface ApplicationStorage {
 
     fun getNotificationSettings(): Flow<NotificationSettings?>
     suspend fun setNotificationSettings(value: NotificationSettings)
+
+    fun getVotes(): Flow<List<VoteInfo>>
+    suspend fun setVotes(value: List<VoteInfo>)
 
     fun ensureCurrentVersion()
 }
