@@ -69,12 +69,6 @@ kotlin {
                 withWasmJs()
             }
 
-            group("nonWeb") {
-                group("ios")
-                withAndroidTarget()
-                withJvm()
-            }
-
             group("nonAndroid") {
                 group("ios")
                 group("web")
@@ -114,15 +108,12 @@ kotlin {
             implementation(libs.settings.coroutines)
 
             api(libs.kmpnotifier)
+
+            implementation(libs.doistx.normalize)
         }
 
         commonTest.dependencies {
             implementation(kotlin("test"))
-        }
-
-        get("nonWebMain").dependencies {
-            // TODO move this to commonMain once Wasm version is available
-            implementation(libs.doistx.normalize)
         }
 
         androidMain.dependencies {
