@@ -4,11 +4,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -106,8 +111,17 @@ fun MainScreen(
             }
         }
 
-        BottomNavigation(nestedNavController)
+        val keyboardVisible by keyboardAsState()
+        if (!keyboardVisible) {
+            BottomNavigation(nestedNavController)
+        }
     }
+}
+
+@Composable
+private fun keyboardAsState(): State<Boolean> {
+    val isImeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+    return rememberUpdatedState(isImeVisible)
 }
 
 @Composable
