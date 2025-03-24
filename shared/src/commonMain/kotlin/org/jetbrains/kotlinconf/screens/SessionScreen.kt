@@ -9,8 +9,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
@@ -77,6 +77,7 @@ fun SessionScreen(
     onBack: () -> Unit,
     onSpeaker: (SpeakerId) -> Unit,
     onPrivacyPolicyNeeded: () -> Unit,
+    onNavigateToMap: (String) -> Unit,
     viewModel: SessionViewModel = koinViewModel { parametersOf(sessionId) }
 ) {
     val session = viewModel.session.collectAsState().value
@@ -159,7 +160,10 @@ fun SessionScreen(
                         )
                     }
 
-                    RoomSection(roomName = session.locationLine)
+                    RoomSection(
+                        roomName = session.locationLine,
+                        onNavigateToMap = onNavigateToMap
+                    )
 
                     StyledText(
                         text = session.description,
@@ -283,32 +287,46 @@ private fun FeedbackPanel(
 @Composable
 private fun RoomSection(
     roomName: String,
+    onNavigateToMap: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     val iconRotation by animateFloatAsState(if (isExpanded) 180f else 0f)
 
     Column(modifier = modifier.padding(vertical = 16.dp)) {
-        Action(
-            label = roomName,
-            icon = Res.drawable.down_24,
-            size = ActionSize.Large,
-            enabled = true,
-            onClick = { isExpanded = !isExpanded },
-            iconRotation = iconRotation
-        )
-        AnimatedVisibility(
-            visible = isExpanded,
-            enter = fadeIn() + expandVertically(),
-            exit = fadeOut() + shrinkVertically(),
-        ) {
-            // TODO add real map
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .height(200.dp)
-                    .background(Color.Blue.copy(alpha = 0.2f))
+        if (rooms[roomName] == null) {
+            StyledText(
+                text = roomName,
+                style = KotlinConfTheme.typography.h3,
             )
+        } else {
+            Action(
+                label = roomName,
+                icon = Res.drawable.down_24,
+                size = ActionSize.Large,
+                enabled = true,
+                onClick = { isExpanded = !isExpanded },
+                iconRotation = iconRotation,
+                modifier = Modifier.fillMaxWidth()
+            )
+            AnimatedVisibility(
+                visible = isExpanded,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically(),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                StaticMap(
+                    roomName = roomName,
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable {
+                            onNavigateToMap(roomName)
+                        }
+                        .fillMaxWidth()
+                        .heightIn(max = 400.dp),
+                )
+            }
         }
     }
 }

@@ -57,7 +57,7 @@ data object PartnersScreen
 data class PartnerDetailScreen(val partnerId: PartnerId)
 
 @Serializable
-data object MainScreen
+data class MainScreen(val roomNameForMap: String? = null)
 
 @Serializable
 data object ScheduleScreen
@@ -72,7 +72,7 @@ data object SpeakersScreen
 data class SpeakerDetailScreen(val speakerId: SpeakerId)
 
 @Serializable
-data object MapScreen
+data class MapScreenParam(val roomName: String? = null)
 
 @Serializable
 data object NewsListScreen

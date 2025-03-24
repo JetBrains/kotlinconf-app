@@ -84,7 +84,7 @@ internal fun KotlinConfNavHost(
 
     NotificationHandler(navController)
 
-    val startDestination = if (isOnboardingComplete) MainScreen else StartScreens
+    val startDestination = if (isOnboardingComplete) MainScreen() else StartScreens
     if (popEnterTransition != null && popExitTransition != null) {
         NavHost(
             navController = navController,
@@ -112,7 +112,10 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
     )
 
     composable<MainScreen> {
-        MainScreen(navController)
+        MainScreen(
+            rootNavController = navController,
+            roomNameForMap = it.toRoute<MainScreen>().roomNameForMap,
+        )
     }
 
     composable<SpeakerDetailScreen>(typeMap = mapOf(typeOf<SpeakerId>() to SpeakerIdNavType)) {
@@ -199,6 +202,11 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             onBack = navController::navigateUp,
             onPrivacyPolicyNeeded = { navController.navigate(PrivacyPolicyScreen) },
             onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) },
+            onNavigateToMap = { roomName ->
+                navController.navigate(MainScreen(roomNameForMap = roomName)) {
+                    popUpTo<MainScreen>()
+                }
+            },
         )
     }
     composable<PrivacyPolicyScreen> {
@@ -245,7 +253,7 @@ fun NavGraphBuilder.startScreens(
         composable<StartNotificationsScreen> {
             StartNotificationsScreen(
                 onDone = {
-                    navController.navigate(MainScreen) {
+                    navController.navigate(MainScreen()) {
                         popUpTo<StartScreens> { inclusive = true }
                     }
                 })
