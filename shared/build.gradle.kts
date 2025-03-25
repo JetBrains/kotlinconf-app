@@ -4,6 +4,7 @@ import com.mikepenz.aboutlibraries.plugin.DuplicateMode
 import com.mikepenz.aboutlibraries.plugin.DuplicateRule
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.aboutLibraries)
@@ -37,6 +38,20 @@ kotlin {
         browser {
             commonWebpackConfig {
                 outputFileName = "kotlin-app-wasm-js.js"
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                    // Uncomment and configure this if you want to open a browser different from the system default 
+                    // open = mapOf(
+                    //     "app" to mapOf(
+                    //         "name" to "google chrome"
+                    //     )
+                    // )
+
+                    static = (static ?: mutableListOf()).apply {
+                        // Serve sources to debug inside a browser
+                        add(project.projectDir.path)
+                        add(project.rootDir.path)
+                    }
+                }
             }
         }
     }
