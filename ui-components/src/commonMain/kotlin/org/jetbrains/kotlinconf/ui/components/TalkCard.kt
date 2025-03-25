@@ -55,6 +55,7 @@ import kotlinconfapp.ui_components.generated.resources.bookmark_24_fill
 import kotlinconfapp.ui_components.generated.resources.lightning_16_fill
 import kotlinconfapp.ui_components.generated.resources.lightning_talk
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_talk
+import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_workshop
 import kotlinconfapp.ui_components.generated.resources.talk_card_your_feedback
 import kotlinconfapp.ui_components.generated.resources.up_24
 import org.jetbrains.compose.resources.painterResource
@@ -179,6 +180,7 @@ fun TalkCard(
                 initialEmotion = initialEmotion,
                 onSubmitFeedback = onSubmitFeedback,
                 onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
+                isWorkshop = tags.contains("Workshop"),
             )
         }
     }
@@ -313,6 +315,7 @@ private fun FeedbackBlock(
     initialEmotion: Emotion? = null,
     onSubmitFeedback: (Emotion?) -> Unit,
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
+    isWorkshop: Boolean,
 ) {
     var selectedEmotion by remember { mutableStateOf<Emotion?>(initialEmotion) }
     var feedbackExpanded by remember { mutableStateOf(false) }
@@ -354,7 +357,10 @@ private fun FeedbackBlock(
                     )
                 } else {
                     StyledText(
-                        text = stringResource(Res.string.talk_card_how_was_the_talk),
+                        text = stringResource(
+                            if (isWorkshop) Res.string.talk_card_how_was_the_workshop
+                            else Res.string.talk_card_how_was_the_talk
+                        ),
                         style = KotlinConfTheme.typography.text2,
                         color = KotlinConfTheme.colors.primaryText,
                     )

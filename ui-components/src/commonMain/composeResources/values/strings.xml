@@ -23,4 +23,5 @@
 
     <string name="talk_card_your_feedback">Your feedback</string>
     <string name="talk_card_how_was_the_talk">How was the talk?</string>
+    <string name="talk_card_how_was_the_workshop">How was the workshop?</string>
 </resources>
