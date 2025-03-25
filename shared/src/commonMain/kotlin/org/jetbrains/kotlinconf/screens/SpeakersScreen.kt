@@ -17,7 +17,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.unit.dp
@@ -74,6 +76,11 @@ fun SpeakersScreen(
                 )
             },
             searchContent = {
+                @OptIn(ExperimentalComposeUiApi::class)
+                BackHandler(true) {
+                    searchState = MainHeaderContainerState.Title
+                    searchText = ""
+                }
                 MainHeaderSearchBar(
                     searchValue = searchText,
                     onSearchValueChange = { searchText = it },

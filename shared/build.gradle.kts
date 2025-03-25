@@ -112,6 +112,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
 
             implementation(libs.androidx.navigation.compose)
+            implementation(libs.compose.ui.backhandler)
             implementation(libs.ktor.client.core)
 
             implementation(libs.aboutlibraries.core)
