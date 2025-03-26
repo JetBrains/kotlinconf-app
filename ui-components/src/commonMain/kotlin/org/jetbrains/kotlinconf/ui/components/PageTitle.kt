@@ -99,6 +99,7 @@ fun PageTitle(
         )
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             tags.forEach { tag ->
                 CardTag(label = tag, selected = false)

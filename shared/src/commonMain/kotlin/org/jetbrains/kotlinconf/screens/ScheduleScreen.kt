@@ -7,12 +7,12 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -31,7 +31,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinconfapp.shared.generated.resources.Res
@@ -147,7 +150,7 @@ fun ScheduleScreen(
 
         AnimatedContent(
             targetState = state,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().clipToBounds(),
             contentKey = {
                 when (state) {
                     is ScheduleUiState.Content -> 1
@@ -155,6 +158,7 @@ fun ScheduleScreen(
                 }
             },
             transitionSpec = { FadingAnimationSpec },
+            contentAlignment = Alignment.Center,
         ) { targetState ->
             when (targetState) {
                 is ScheduleUiState.Content -> {
@@ -350,6 +354,11 @@ private fun Header(
             )
         },
         searchContent = {
+            @OptIn(ExperimentalComposeUiApi::class)
+            BackHandler(true) {
+                onHeaderStateChange(MainHeaderContainerState.Title)
+                onSearchQueryChange("")
+            }
             MainHeaderSearchBar(
                 searchValue = searchQuery,
                 // clearing the input should also reset tags
@@ -381,31 +390,44 @@ fun ScheduleList(
         state = listState,
         modifier = modifier,
     ) {
-        items(scheduleItems) { item ->
-            when (item) {
-                is DayHeaderItem -> {
-                    val date = item.value.date
-                    val dayValues = DayValues.map[date]
-                    DayHeader(
-                        month = DateTimeFormatting.month(date).uppercase(),
-                        day = date.dayOfMonth.toString(),
-                        line1 = dayValues?.line1 ?: "",
-                        line2 = dayValues?.line2 ?: "",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp)
-                    )
+        items(
+            scheduleItems,
+            key = {
+                when (it) {
+                    is DayHeaderItem -> it.value.date.toString()
+                    is ServiceEventGroupItem -> it.value.map { it.id.id }
+                    is ServiceEventItem -> it.value.id.id
+                    is SessionItem -> it.value.id.id
+                    is TimeSlotTitleItem -> it.value.startsAt.toString()
+                    is WorkshopItem -> "workshops"
                 }
+            },
+        ) { item ->
+            Box(Modifier.animateItem()) {
+                when (item) {
+                    is DayHeaderItem -> {
+                        val date = item.value.date
+                        val dayValues = DayValues.map[date]
+                        DayHeader(
+                            month = DateTimeFormatting.month(date).uppercase(),
+                            day = date.dayOfMonth.toString(),
+                            line1 = dayValues?.line1 ?: "",
+                            line2 = dayValues?.line2 ?: "",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp)
+                        )
+                    }
 
-                is TimeSlotTitleItem -> {
-                    StyledText(
-                        text = item.value.title,
-                        style = KotlinConfTheme.typography.h2,
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp)
-                            .padding(top = 24.dp, bottom = 8.dp)
-                    )
-                }
+                    is TimeSlotTitleItem -> {
+                        StyledText(
+                            text = item.value.title,
+                            style = KotlinConfTheme.typography.h2,
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp)
+                                .padding(top = 24.dp, bottom = 8.dp)
+                        )
+                    }
 
                 is WorkshopItem -> {
                     val workshops = item.workshops
@@ -457,52 +479,53 @@ fun ScheduleList(
                     }
                 }
 
-                is SessionItem -> {
-                    SessionCard(
-                        session = item.value,
-                        feedbackEnabled = feedbackEnabled,
-                        userSignedIn = userSignedIn,
-                        titleHighlights = item.titleHighlights,
-                        tagHighlights = item.tagMatches,
-                        speakerHighlights = item.speakerHighlights,
-                        onBookmark = onBookmark,
-                        onSubmitFeedback = onSubmitFeedback,
-                        onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
-                        onSession = onSession,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 8.dp)
-                    )
-                }
+                    is SessionItem -> {
+                        SessionCard(
+                            session = item.value,
+                            feedbackEnabled = feedbackEnabled,
+                            userSignedIn = userSignedIn,
+                            titleHighlights = item.titleHighlights,
+                            tagHighlights = item.tagMatches,
+                            speakerHighlights = item.speakerHighlights,
+                            onBookmark = onBookmark,
+                            onSubmitFeedback = onSubmitFeedback,
+                            onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
+                            onSession = onSession,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 12.dp, vertical = 8.dp)
+                        )
+                    }
 
-                is ServiceEventItem -> {
-                    val event = item.value
-                    ServiceEvent(
-                        event = ServiceEventData(
-                            title = event.title,
-                            now = event.isLive,
-                            note = event.startsInMinutes?.let { count ->
-                                stringResource(Res.string.schedule_in_x_minutes, count)
-                            },
-                        ),
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
-                    )
-                }
-
-                is ServiceEventGroupItem -> {
-                    val events = item.value
-                    ServiceEvents(
-                        events = events.map {
-                            ServiceEventData(
-                                title = it.title,
-                                now = it.isLive,
-                                time = it.badgeTimeLine,
-                                note = it.startsInMinutes?.let { count ->
+                    is ServiceEventItem -> {
+                        val event = item.value
+                        ServiceEvent(
+                            event = ServiceEventData(
+                                title = event.title,
+                                now = event.isLive,
+                                note = event.startsInMinutes?.let { count ->
                                     stringResource(Res.string.schedule_in_x_minutes, count)
-                                })
-                        },
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
-                    )
+                                },
+                            ),
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+                        )
+                    }
+
+                    is ServiceEventGroupItem -> {
+                        val events = item.value
+                        ServiceEvents(
+                            events = events.map {
+                                ServiceEventData(
+                                    title = it.title,
+                                    now = it.isLive,
+                                    time = it.badgeTimeLine,
+                                    note = it.startsInMinutes?.let { count ->
+                                        stringResource(Res.string.schedule_in_x_minutes, count)
+                                    })
+                            },
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
+                        )
+                    }
                 }
             }
         }

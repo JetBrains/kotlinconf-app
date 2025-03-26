@@ -17,8 +17,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.speakers_error_no_data
@@ -73,6 +76,11 @@ fun SpeakersScreen(
                 )
             },
             searchContent = {
+                @OptIn(ExperimentalComposeUiApi::class)
+                BackHandler(true) {
+                    searchState = MainHeaderContainerState.Title
+                    searchText = ""
+                }
                 MainHeaderSearchBar(
                     searchValue = searchText,
                     onSearchValueChange = { searchText = it },
@@ -89,7 +97,7 @@ fun SpeakersScreen(
 
         AnimatedContent(
             uiState,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().clipToBounds(),
             contentKey = {
                 when (uiState) {
                     is SpeakersUiState.Content -> 1
@@ -107,7 +115,7 @@ fun SpeakersScreen(
                         state = listState,
                         modifier = Modifier.fillMaxSize(),
                     ) {
-                        items(targetState.speakers) { speakerWithHighlights ->
+                        items(targetState.speakers, key = { it.speaker.id.id }) { speakerWithHighlights ->
                             val speaker = speakerWithHighlights.speaker
                             SpeakerCard(
                                 name = speaker.name,
@@ -116,6 +124,7 @@ fun SpeakersScreen(
                                 titleHighlights = speakerWithHighlights.titleHighlights,
                                 photoUrl = speaker.photoUrl,
                                 modifier = Modifier
+                                    .animateItem()
                                     .fillMaxWidth()
                                     .padding(12.dp)
                                     .clip(RoundedCornerShape(8.dp)),

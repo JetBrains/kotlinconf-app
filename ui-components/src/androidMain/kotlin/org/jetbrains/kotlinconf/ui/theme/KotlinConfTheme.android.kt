@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.ui.theme
 
+import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -14,7 +15,7 @@ actual object LocalAppTheme {
 
     @Composable
     actual infix fun provides(value: Boolean?): ProvidedValue<*> {
-        val configuration = LocalConfiguration.current
+        val configuration = Configuration(LocalConfiguration.current)
 
         if (default == null) {
             default = configuration.uiMode

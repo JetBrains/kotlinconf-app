@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,9 +66,13 @@ fun MainHeaderSearchBar(
             contentDescription = stringResource(Res.string.main_header_back),
         )
 
+        var focusRequested by rememberSaveable {mutableStateOf(false)}
         val focusRequester = remember { FocusRequester() }
-        LaunchedEffect(Unit) {
-            focusRequester.requestFocus()
+        if (!focusRequested) {
+            LaunchedEffect(Unit) {
+                focusRequester.requestFocus()
+                focusRequested = true
+            }
         }
 
         Box(
