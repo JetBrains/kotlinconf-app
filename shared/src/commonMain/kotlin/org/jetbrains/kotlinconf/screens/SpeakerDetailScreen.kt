@@ -19,7 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.schedule_in_x_minutes
 import kotlinconfapp.shared.generated.resources.speaker_detail_error_not_found
-import kotlinconfapp.shared.generated.resources.speakers_title
+import kotlinconfapp.shared.generated.resources.speaker_detail_title
 import kotlinconfapp.ui_components.generated.resources.arrow_left_24
 import kotlinconfapp.ui_components.generated.resources.main_header_back
 import org.jetbrains.compose.resources.stringResource
@@ -57,7 +57,7 @@ fun SpeakerDetailScreen(
             .padding(topInsetPadding())
     ) {
         MainHeaderTitleBar(
-            title = stringResource(Res.string.speakers_title),
+            title = stringResource(Res.string.speaker_detail_title),
             startContent = {
                 TopMenuButton(
                     icon = kotlinconfapp.ui_components.generated.resources.Res.drawable.arrow_left_24,
