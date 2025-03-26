@@ -147,6 +147,7 @@ fun SpeakerDetailScreen(
                             userSignedIn = false, // Feedback not enabled on this screen
                             onSubmitFeedback = { }, // Feedback not enabled on this screen
                             onSubmitFeedbackWithComment = { _, _ -> }, // Feedback not enabled on this screen
+                            onRequestFeedbackWithComment = null, // Feedback not enabled on this screen
                             onClick = { onSession(session.id) },
                             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                         )

@@ -21,9 +21,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -51,6 +51,7 @@ import kotlinconfapp.shared.generated.resources.up_24
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_talk
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_workshop
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.SpeakerId
@@ -79,6 +80,7 @@ import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 @Composable
 fun SessionScreen(
     sessionId: SessionId,
+    openedForFeedback: Boolean,
     onBack: () -> Unit,
     onSpeaker: (SpeakerId) -> Unit,
     onPrivacyPolicyNeeded: () -> Unit,
@@ -126,62 +128,80 @@ fun SessionScreen(
             transitionSpec = { FadingAnimationSpec }
         ) { hasState ->
             if (hasState && session != null) {
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 12.dp)
-                        .padding(bottomInsetPadding())
-                        .verticalScroll(rememberScrollState())
+                val listState = rememberLazyListState()
+
+                LaunchedEffect(openedForFeedback) {
+                    if (openedForFeedback) {
+                        listState.animateScrollToItem(1)
+                    }
+                }
+
+                ScrollToTopHandler(listState)
+
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    contentPadding = bottomInsetPadding()
                 ) {
-                    PageTitle(
-                        time = session.fullTimeline,
-                        title = session.title,
-                        lightning = session.isLightning,
-                        tags = session.tags,
-                        bookmarked = session.isFavorite,
-                        onBookmark = { viewModel.toggleFavorite(it) },
-                        modifier = Modifier.padding(vertical = 24.dp),
-                    )
-
-                    if (session.state != SessionState.Upcoming) {
-                        FeedbackPanel(
-                            onFeedback = { emotion ->
-                                viewModel.submitFeedback(emotion)
-                            },
-                            onFeedbackWithComment = { emotion, comment ->
-                                viewModel.submitFeedbackWithComment(emotion, comment)
-                            },
-                            userSignedIn = userSignedIn,
-                            initialEmotion = session.vote?.toEmotion(),
-                            feedbackQuestion = stringResource(
-                                if (session.tags.contains("Workshop")) UiRes.string.talk_card_how_was_the_workshop
-                                else UiRes.string.talk_card_how_was_the_talk
-                            ),
-                            modifier = Modifier.padding(bottom = 20.dp),
+                    item {
+                        PageTitle(
+                            time = session.fullTimeline,
+                            title = session.title,
+                            lightning = session.isLightning,
+                            tags = session.tags,
+                            bookmarked = session.isFavorite,
+                            onBookmark = { viewModel.toggleFavorite(it) },
+                            modifier = Modifier.padding(vertical = 24.dp),
                         )
                     }
 
-                    speakers.forEach { speaker ->
-                        SpeakerCard(
-                            name = speaker.name,
-                            title = speaker.position,
-                            photoUrl = speaker.photoUrl,
-                            modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(),
-                            onClick = { onSpeaker(speaker.id) }
-                        )
+                    item {
+                        if (session.state != SessionState.Upcoming) {
+                            FeedbackPanel(
+                                onFeedback = { emotion ->
+                                    viewModel.submitFeedback(emotion)
+                                },
+                                onFeedbackWithComment = { emotion, comment ->
+                                    viewModel.submitFeedbackWithComment(emotion, comment)
+                                },
+                                userSignedIn = userSignedIn,
+                                startExpanded = openedForFeedback,
+                                initialEmotion = session.vote?.toEmotion(),
+                                feedbackQuestion = stringResource(
+                                    if (session.tags.contains("Workshop")) UiRes.string.talk_card_how_was_the_workshop
+                                    else UiRes.string.talk_card_how_was_the_talk
+                                ),
+                                modifier = Modifier.padding(bottom = 20.dp),
+                            )
+                        }
                     }
 
-                    RoomSection(
-                        roomName = session.locationLine,
-                        onNavigateToMap = onNavigateToMap
-                    )
+                    item {
+                        Column(Modifier.fillMaxWidth()) {
+                            speakers.forEach { speaker ->
+                                SpeakerCard(
+                                    name = speaker.name,
+                                    title = speaker.position,
+                                    photoUrl = speaker.photoUrl,
+                                    modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(),
+                                    onClick = { onSpeaker(speaker.id) }
+                                )
+                            }
 
-                    StyledText(
-                        text = session.description,
-                        style = KotlinConfTheme.typography.text1,
-                        selectable = true,
-                    )
+                            RoomSection(
+                                roomName = session.locationLine,
+                                onNavigateToMap = onNavigateToMap
+                            )
 
-                    Spacer(Modifier.height(24.dp))
+                            StyledText(
+                                text = session.description,
+                                style = KotlinConfTheme.typography.text1,
+                                selectable = true,
+                            )
+
+                            Spacer(Modifier.height(24.dp))
+                        }
+                    }
                 }
             } else {
                 MajorError(
@@ -199,11 +219,12 @@ private fun FeedbackPanel(
     onFeedbackWithComment: (Emotion, String) -> Unit,
     userSignedIn: Boolean,
     modifier: Modifier = Modifier,
+    startExpanded: Boolean,
     initialEmotion: Emotion? = null,
     feedbackQuestion: String,
 ) {
     var selectedEmotion by remember { mutableStateOf<Emotion?>(initialEmotion) }
-    var feedbackExpanded by rememberSaveable { mutableStateOf(false) }
+    var feedbackExpanded by rememberSaveable { mutableStateOf(initialEmotion != null && startExpanded) }
 
     Column(
         modifier = modifier

@@ -199,8 +199,10 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
         )
     }
     composable<SessionScreen>(typeMap = mapOf(typeOf<SessionId>() to SessionIdNavType)) {
+        val params = it.toRoute<SessionScreen>()
         SessionScreen(
-            sessionId = it.toRoute<SessionScreen>().sessionId,
+            sessionId = params.sessionId,
+            openedForFeedback = params.openedForFeedback,
             onBack = navController::navigateUp,
             onPrivacyPolicyNeeded = { navController.navigate(PrivacyPolicyScreen) },
             onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) },

@@ -50,6 +50,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.action_bookmark
+import kotlinconfapp.ui_components.generated.resources.arrow_right_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24_fill
 import kotlinconfapp.ui_components.generated.resources.lightning_16_fill
@@ -109,6 +110,7 @@ fun TalkCard(
     status: TalkStatus,
     initialEmotion: Emotion? = null,
     onSubmitFeedback: (Emotion?) -> Unit,
+    onRequestFeedbackWithComment: (() -> Unit)?,
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     onClick: () -> Unit,
     feedbackEnabled: Boolean,
@@ -176,6 +178,7 @@ fun TalkCard(
                 initialEmotion = initialEmotion,
                 onSubmitFeedback = onSubmitFeedback,
                 onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
+                onRequestFeedbackWithComment = onRequestFeedbackWithComment,
                 isWorkshop = tags.contains("Workshop"),
             )
         }
@@ -310,10 +313,11 @@ private fun FeedbackBlock(
     userSignedIn: Boolean,
     initialEmotion: Emotion? = null,
     onSubmitFeedback: (Emotion?) -> Unit,
+    onRequestFeedbackWithComment: (() -> Unit)?,
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     isWorkshop: Boolean,
 ) {
-    var selectedEmotion by remember { mutableStateOf<Emotion?>(initialEmotion) }
+    var selectedEmotion by remember { mutableStateOf(initialEmotion) }
     var feedbackExpanded by remember { mutableStateOf(false) }
 
     Column(
@@ -342,15 +346,23 @@ private fun FeedbackBlock(
                 contentAlignment = Alignment.CenterStart,
             ) { emotionSelected ->
                 if (emotionSelected) {
-                    val iconRotation by animateFloatAsState(if (feedbackExpanded) 0f else 180f)
-                    Action(
-                        label = stringResource(Res.string.talk_card_your_feedback),
-                        icon = Res.drawable.up_24,
-                        size = ActionSize.Medium,
-                        enabled = true,
-                        onClick = { feedbackExpanded = !feedbackExpanded },
-                        iconRotation = iconRotation,
-                    )
+                    if (onRequestFeedbackWithComment != null) {
+                        Action(
+                            label = stringResource(Res.string.talk_card_your_feedback),
+                            icon = Res.drawable.arrow_right_24,
+                            size = ActionSize.Medium,
+                            onClick = onRequestFeedbackWithComment,
+                        )
+                    } else {
+                        val iconRotation by animateFloatAsState(if (feedbackExpanded) 0f else 180f)
+                        Action(
+                            label = stringResource(Res.string.talk_card_your_feedback),
+                            icon = Res.drawable.up_24,
+                            size = ActionSize.Medium,
+                            onClick = { feedbackExpanded = !feedbackExpanded },
+                            iconRotation = iconRotation,
+                        )
+                    }
                 } else {
                     StyledText(
                         text = stringResource(
@@ -377,8 +389,17 @@ private fun FeedbackBlock(
                                 if (userSignedIn) {
                                     hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
                                     selectedEmotion = if (emotion == selectedEmotion) null else emotion
-                                    feedbackExpanded = selectedEmotion != null
                                     onSubmitFeedback(selectedEmotion)
+
+                                    if (selectedEmotion != null) {
+                                        if (onRequestFeedbackWithComment != null) {
+                                            onRequestFeedbackWithComment()
+                                        } else {
+                                            feedbackExpanded = true
+                                        }
+                                    } else {
+                                        feedbackExpanded = false
+                                    }
                                 } else {
                                     hapticFeedback.performHapticFeedback(HapticFeedbackType.Reject)
                                     onSubmitFeedback(selectedEmotion)
@@ -438,6 +459,7 @@ internal fun TalkCardPreview() {
                 timeNote = null,
                 status = TalkStatus.Live,
                 initialEmotion = Emotion.Positive,
+                onRequestFeedbackWithComment = null,
                 onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
                 onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
                 onClick = { println("Clicked session") },
@@ -464,6 +486,7 @@ internal fun TalkCardPreview() {
                 timeNote = "In 10 min",
                 status = TalkStatus.Upcoming,
                 initialEmotion = null,
+                onRequestFeedbackWithComment = null,
                 onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
                 onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
                 onClick = { println("Clicked session") },

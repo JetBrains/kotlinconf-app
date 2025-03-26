@@ -116,6 +116,9 @@ fun MainScreen(
                 ScheduleScreen(
                     onSession = { rootNavController.navigate(SessionScreen(it)) },
                     onPrivacyPolicyNeeded = { rootNavController.navigate(PrivacyPolicyScreen) },
+                    onRequestFeedbackWithComment = { sessionId ->
+                        rootNavController.navigate(SessionScreen(sessionId, openedForFeedback = true))
+                    },
                 )
             }
             composable<MapScreen> {
@@ -136,7 +139,7 @@ fun MainBackHandler() {
     if (!LocalFlags.current.enableBackOnMainScreens) {
         // Prevent back navigation with an empty handler
         @OptIn(ExperimentalComposeUiApi::class)
-        BackHandler(true) {  }
+        BackHandler(true) { }
     }
 }
 
