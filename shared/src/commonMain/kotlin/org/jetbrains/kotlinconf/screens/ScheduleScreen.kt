@@ -44,6 +44,7 @@ import kotlinconfapp.shared.generated.resources.schedule_action_search
 import kotlinconfapp.shared.generated.resources.schedule_error_no_data
 import kotlinconfapp.shared.generated.resources.schedule_error_no_results
 import kotlinconfapp.shared.generated.resources.schedule_in_x_minutes
+import kotlinconfapp.shared.generated.resources.schedule_label_no_bookmarks
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
@@ -400,6 +401,7 @@ fun ScheduleList(
                     is SessionItem -> it.value.id.id
                     is TimeSlotTitleItem -> it.value.startsAt.toString()
                     is WorkshopItem -> "workshops"
+                    is NoBookmarksItem -> it.id
                 }
             },
         ) { item ->
@@ -429,35 +431,12 @@ fun ScheduleList(
                         )
                     }
 
-                is WorkshopItem -> {
-                    val workshops = item.workshops
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        if (workshops.size == 1) {
-                            SessionCard(
-                                session = workshops[0],
-                                feedbackEnabled = feedbackEnabled,
-                                userSignedIn = userSignedIn,
-                                onBookmark = onBookmark,
-                                onSubmitFeedback = onSubmitFeedback,
-                                onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
-                                onSession = onSession,
-                                modifier = Modifier
-                                    .padding(horizontal = 32.dp)
-                                    .padding(top = 12.dp, bottom = 16.dp)
-                            )
-                        } else {
-                            val pagerState = rememberPagerState(
-                                pageCount = { Int.MAX_VALUE }, // Pretend we have "infinite" pages
-                                initialPage = Int.MAX_VALUE / 2, // Start from the middle
-                            )
-                            HorizontalPager(
-                                state = pagerState,
-                                modifier = Modifier.fillMaxWidth(),
-                                beyondViewportPageCount = 10,
-                                contentPadding = PaddingValues(horizontal = 24.dp),
-                            ) { pageIndex ->
+                    is WorkshopItem -> {
+                        val workshops = item.workshops
+                        Column(modifier = Modifier.fillMaxWidth()) {
+                            if (workshops.size == 1) {
                                 SessionCard(
-                                    session = workshops[pageIndex % workshops.size],
+                                    session = workshops[0],
                                     feedbackEnabled = feedbackEnabled,
                                     userSignedIn = userSignedIn,
                                     onBookmark = onBookmark,
@@ -465,19 +444,42 @@ fun ScheduleList(
                                     onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
                                     onSession = onSession,
                                     modifier = Modifier
-                                        .padding(horizontal = 8.dp, vertical = 8.dp)
+                                        .padding(horizontal = 32.dp)
+                                        .padding(top = 12.dp, bottom = 16.dp)
+                                )
+                            } else {
+                                val pagerState = rememberPagerState(
+                                    pageCount = { Int.MAX_VALUE }, // Pretend we have "infinite" pages
+                                    initialPage = Int.MAX_VALUE / 2, // Start from the middle
+                                )
+                                HorizontalPager(
+                                    state = pagerState,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    beyondViewportPageCount = 10,
+                                    contentPadding = PaddingValues(horizontal = 24.dp),
+                                ) { pageIndex ->
+                                    SessionCard(
+                                        session = workshops[pageIndex % workshops.size],
+                                        feedbackEnabled = feedbackEnabled,
+                                        userSignedIn = userSignedIn,
+                                        onBookmark = onBookmark,
+                                        onSubmitFeedback = onSubmitFeedback,
+                                        onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
+                                        onSession = onSession,
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp, vertical = 8.dp)
+                                    )
+                                }
+                                ScrollIndicator(
+                                    pageCount = workshops.size,
+                                    selectedPage = pagerState.currentPage % workshops.size,
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(vertical = 8.dp),
                                 )
                             }
-                            ScrollIndicator(
-                                pageCount = workshops.size,
-                                selectedPage = pagerState.currentPage % workshops.size,
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(vertical = 8.dp),
-                            )
                         }
                     }
-                }
 
                     is SessionItem -> {
                         SessionCard(
@@ -524,6 +526,14 @@ fun ScheduleList(
                                     })
                             },
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
+                        )
+                    }
+
+                    is NoBookmarksItem -> {
+                        StyledText(
+                            stringResource(Res.string.schedule_label_no_bookmarks),
+                            color = KotlinConfTheme.colors.noteText,
+                            modifier = modifier.padding(12.dp),
                         )
                     }
                 }

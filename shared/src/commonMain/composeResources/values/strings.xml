@@ -114,6 +114,7 @@ We will process your data in accordance with the App Privacy Policy. You can adj
     <string name="schedule_error_no_data">Please hold on, our schedule is stuck in traffic. We’re clearing the jam!
     </string>
     <string name="schedule_error_no_results">No results</string>
+    <string name="schedule_label_no_bookmarks">No bookmarks added here</string>
 
     <string name="session_title">Schedule</string>
     <string name="session_your_feedback">Your feedback</string>
