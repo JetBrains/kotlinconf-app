@@ -188,8 +188,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
         PartnersScreen(
             onBack = navController::navigateUp,
             onPartnerDetail = { partnerId ->
-                // TODO: get partner's details (description and location on the exhibition floor) or remove the details screen
-                // navController.navigate(PartnerDetailScreen(partnerId))
+                 navController.navigate(PartnerDetailScreen(partnerId))
             }
         )
     }

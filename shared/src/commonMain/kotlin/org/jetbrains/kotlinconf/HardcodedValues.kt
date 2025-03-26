@@ -64,39 +64,39 @@ data class DayValues(
 
 internal val PARTNERS: Map<StringResource, List<Partner>> = mapOf(
     Res.string.partners_platinum to listOf(
-        Partner(PartnerId("revenuecat"), "RevenueCat", "", Res.drawable.partner_revenuecat),
+        Partner(PartnerId("revenuecat"), "RevenueCat", "RevenueCat makes it easy to build analyze, and grow in-app subscriptions. Trusted by over 38k apps, developers can manage cross-platform payments, track customer data, and access powerful analytics to maximize their app's revenue.", Res.drawable.partner_revenuecat, "https://www.rev.cat"),
     ),
     Res.string.partners_gold to listOf(
-        Partner(PartnerId("google"), "Google", "", Res.drawable.partner_google),
+        Partner(PartnerId("google"), "Google", "Google's mission is to organize the world's information and make it universally accessible and useful.", Res.drawable.partner_google, "https://about.google/"),
     ),
     Res.string.partners_silver to listOf(
-        Partner(PartnerId("gradle"), "Gradle", "", Res.drawable.partner_gradle),
-        Partner(PartnerId("kotlinfoundation"), "Kotlin Foundation", "", Res.drawable.partner_kotlin_foundation),
-        Partner(PartnerId("kotzilla"), "Kotzilla", "", Res.drawable.partner_kotzilla),
-        Partner(PartnerId("uber"), "Uber", "", Res.drawable.partner_uber),
+        Partner(PartnerId("gradle"), "Gradle", "Develocity is the leading software solution for improving developer productivity & the developer experience. It does this by leveraging advanced build and test performance acceleration technologies.", Res.drawable.partner_gradle, "http://www.gradle.com/"),
+        Partner(PartnerId("kotlinfoundation"), "Kotlin Foundation", "The Kotlin Foundation is a non-profit company whose mission is to promote and advance the Kotlin ecosystem.", Res.drawable.partner_kotlin_foundation, "https://kotlinfoundation.org/"),
+        Partner(PartnerId("kotzilla"), "Kotzilla", "Creators of Koin, the popular Kotlin dependency injection framework, Kotzilla provides debugging tools for Kotlin devs to resolve complex app issues, empowering them to develop safer, faster apps.", Res.drawable.partner_kotzilla, "https://kotzilla.io/"),
+        Partner(PartnerId("uber"), "Uber", "We reimagine the way the world moves for the better Movement is what we power.", Res.drawable.partner_uber, "https://www.uber.com/nl/en/"),
     ),
     Res.string.partners_bronze to listOf(
-        Partner(PartnerId("gitar"), "Gitar", "", Res.drawable.partner_gitar),
-        Partner(PartnerId("sentry"), "Sentry", "", Res.drawable.partner_sentry),
+        Partner(PartnerId("gitar"), "Gitar", "Gitar simplifies code maintenance for developers with automated solutions for dead code cleanup, feature flag removal, and seamless app migrations. Boost efficiency and code quality effortlessly!", Res.drawable.partner_gitar, "www.gitar.ai"),
+        Partner(PartnerId("sentry"), "Sentry", "For software teams, Sentry is essential for monitoring application code quality. From Error tracking to Performance monitoring, developers can see clearer, solve quicker, and learn continuously about their applications — from frontend to backend. Loved by nearly 4 million developers and 90,000 organizations worldwide, Sentry provides code-level observability to many of the world's best-known companies like Disney, Cloudflare, Eventbrite, Slack, Supercell, and Rockstar Games.", Res.drawable.partner_sentry, "https://sentry.io/welcome"),
     ),
     Res.string.partners_video to listOf(
-        Partner(PartnerId("amex"), "American Express", "", Res.drawable.partner_american_express),
+        Partner(PartnerId("amex"), "American Express", "American Express is a globally integrated payments company, providing customers with access to products, insights and experiences that enrich lives and build business success. Find your place in Tech at Amex.", Res.drawable.partner_american_express, "americanexpress.com/techcareers"),
     ),
     Res.string.partners_codelab to listOf(
-        Partner(PartnerId("google"), "Google", "", Res.drawable.partner_google),
+        Partner(PartnerId("google"), "Google", "Google's mission is to organize the world's information and make it universally accessible and useful.", Res.drawable.partner_google, "https://about.google/"),
     ),
     Res.string.partners_digital to listOf(
-        Partner(PartnerId("kodein"), "Kodein Koders", "", Res.drawable.partner_kodeinkoders),
-        Partner(PartnerId("typealias"), "Typealias Studios", "", Res.drawable.partner_typealias),
-        Partner(PartnerId("worldline"), "World Line", "", Res.drawable.partner_worldline),
+        Partner(PartnerId("kodein"), "Kodein Koders", "Level-up your Kotlin expertise with Kodein Koders: guiding developers to master Kotlin Multiplatform through hands-on workshops to tackle real-world Android, iOS, Desktop, and Web challenges.", Res.drawable.partner_kodeinkoders, "https://kodein.net"),
+        Partner(PartnerId("typealias"), "Typealias Studios", "TypeAlias Studios makes it easy to level up your Kotlin and Android skills with illustrated articles, videos, livestreams, and courses—equipping developers at every level, from beginner to pro.", Res.drawable.partner_typealias, "https://typealias.com"),
+        Partner(PartnerId("worldline"), "World Line", "Worldline is a global payments player, employing over 7000 tech engineers. Our technology powers the growth of millions of businesses around the world; from your local coffee shop, to global e-commerce players and international banks.", Res.drawable.partner_worldline, "https://worldline.com/"),
     ),
     Res.string.partners_media to listOf(
-        Partner(PartnerId("androidweekly"), "Android Weekly", "", Res.drawable.partner_android_weekly),
-        Partner(PartnerId("jvmweekly"), "JVM Weekly", "", Res.drawable.partner_jvm_weekly),
-        Partner(PartnerId("kotlinweekly"), "Kotlin Weekly", "", Res.drawable.partner_kotlin_weekly),
+        Partner(PartnerId("androidweekly"), "Android Weekly", "Android Weekly is a free newsletter that helps you to stay cutting-edge with your Android Development.", Res.drawable.partner_android_weekly, "https://androidweekly.net"),
+        Partner(PartnerId("jvmweekly"), "JVM Weekly", "From the latest updates in JVM languages like Java, Kotlin, and Scala to emerging technologies like GraalVM and Quarkus, this newsletter covers a wide range of topics that are of interest to developers and tech enthusiasts.", Res.drawable.partner_jvm_weekly, "https://www.jvm-weekly.com/"),
+        Partner(PartnerId("kotlinweekly"), "Kotlin Weekly", "Kotlin Weekly is your weekly source of Kotlin news, libraries, and events going on the Kotlin world.", Res.drawable.partner_kotlin_weekly, "https://kotlinweekly.net/"),
     ),
     Res.string.partners_swag to listOf(
-        Partner(PartnerId("revenuecat"), "RevenueCat", "", Res.drawable.partner_revenuecat),
+        Partner(PartnerId("revenuecat"), "RevenueCat", "RevenueCat makes it easy to build analyze, and grow in-app subscriptions. Trusted by over 38k apps, developers can manage cross-platform payments, track customer data, and access powerful analytics to maximize their app's revenue.", Res.drawable.partner_revenuecat, "https://www.rev.cat"),
     ),
 )
 

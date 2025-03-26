@@ -82,6 +82,7 @@ class Partner(
     val name: String,
     val description: String,
     val icon: DrawableResource,
+    val url: String,
 )
 
 @Serializable
