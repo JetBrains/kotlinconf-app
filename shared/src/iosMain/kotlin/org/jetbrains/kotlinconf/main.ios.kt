@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf
 
+import androidx.compose.ui.uikit.OnFocusBehavior
 import androidx.compose.ui.window.ComposeUIViewController
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import com.russhwolf.settings.NSUserDefaultsSettings
@@ -29,6 +30,8 @@ private val platformModule = module {
 fun initApp() = initApp(platformModule)
 
 @Suppress("unused") // Called from Swift
-fun MainViewController(): UIViewController = ComposeUIViewController {
+fun MainViewController(): UIViewController = ComposeUIViewController(
+    configure = { this.onFocusBehavior = OnFocusBehavior.DoNothing },
+) {
     App()
 }
