@@ -28,7 +28,7 @@ private val platformModule = module {
 }
 
 fun main() {
-    initApp(platformModule)
+    initApp(platformModule, Flags(supportsNotifications = false))
 
     application {
         Window(
