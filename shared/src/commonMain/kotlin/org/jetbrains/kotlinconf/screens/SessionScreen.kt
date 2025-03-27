@@ -30,6 +30,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -200,7 +201,7 @@ private fun FeedbackPanel(
     feedbackQuestion: String,
 ) {
     var selectedEmotion by remember { mutableStateOf<Emotion?>(initialEmotion) }
-    var feedbackExpanded by remember { mutableStateOf(false) }
+    var feedbackExpanded by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -303,7 +304,7 @@ private fun RoomSection(
     onNavigateToMap: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
     val iconRotation by animateFloatAsState(if (isExpanded) 180f else 0f)
 
     Column(modifier = modifier.padding(vertical = 16.dp)) {
