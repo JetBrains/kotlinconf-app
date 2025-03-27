@@ -21,6 +21,8 @@ import org.jetbrains.kotlinconf.ui.components.MarkdownView
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.bottomInsetPadding
+import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
@@ -35,7 +37,7 @@ fun ScreenWithTitle(
         modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .padding(topInsetPadding() + bottomInsetPadding())
     ) {
         MainHeaderTitleBar(
             title = title,

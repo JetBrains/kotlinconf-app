@@ -1,8 +1,7 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,9 +26,7 @@ fun CodeOfConduct(onBack: () -> Unit) {
         Image(
             painter = painterResource(Res.drawable.kodee_code_of_conduct),
             contentDescription = "",
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 12.dp)
         )
-
-        Spacer(Modifier.height(24.dp))
     }
 }

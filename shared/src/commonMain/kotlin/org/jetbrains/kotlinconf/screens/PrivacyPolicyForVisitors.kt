@@ -22,7 +22,5 @@ fun PrivacyPolicyForVisitors(onBack: () -> Unit) {
         subheader = stringResource(Res.string.privacy_policy_for_visitors_version),
         loadText = { Res.readBytes("files/visitors-privacy-policy.md") },
         onBack = onBack
-    ) {
-        Spacer(Modifier.height(24.dp))
-    }
+    )
 }

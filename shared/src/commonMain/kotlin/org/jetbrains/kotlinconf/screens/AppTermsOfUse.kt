@@ -1,10 +1,6 @@
 package org.jetbrains.kotlinconf.screens
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.app_terms
 import kotlinconfapp.shared.generated.resources.app_terms_title
@@ -24,7 +20,5 @@ fun AppTermsOfUse(onBack: () -> Unit) {
             Res.readBytes("files/app-terms.md")
         },
         onBack = onBack
-    ) {
-        Spacer(Modifier.height(24.dp))
-    }
+    )
 }
