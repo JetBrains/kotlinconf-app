@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf.screens
 
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -450,7 +451,7 @@ fun ScheduleList(
                                     onSession = onSession,
                                     modifier = Modifier
                                         .padding(horizontal = 32.dp)
-                                        .padding(top = 12.dp, bottom = 16.dp)
+                                        .padding(top = 16.dp, bottom = 16.dp)
                                 )
                             } else {
                                 val pagerState = rememberPagerState(
