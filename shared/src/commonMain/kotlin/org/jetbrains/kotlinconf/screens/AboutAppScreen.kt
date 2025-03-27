@@ -1,13 +1,18 @@
 package org.jetbrains.kotlinconf.screens
 
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.about_app_description
@@ -68,11 +73,17 @@ fun AboutAppScreen(
             PageMenuItem(stringResource(Res.string.about_app_link_terms_of_use), onClick = onTermsOfUse)
             PageMenuItem(stringResource(Res.string.about_app_link_licenses), onClick = onLicenses)
 
+            val clipboardManager = LocalClipboardManager.current
+            val appVersion = stringResource(resource = Res.string.app_version)
             StyledText(
-                text = stringResource(resource = Res.string.app_version),
+                text = appVersion,
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.secondaryText,
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp)
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable { clipboardManager.setText(AnnotatedString(appVersion)) }
+                    .padding(16.dp)
             )
         }
     }
