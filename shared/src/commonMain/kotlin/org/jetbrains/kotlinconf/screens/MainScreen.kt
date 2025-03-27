@@ -1,9 +1,13 @@
 package org.jetbrains.kotlinconf.screens
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -61,6 +65,7 @@ import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainNavDestination
 import org.jetbrains.kotlinconf.ui.components.MainNavigation
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.MainBackHandler
 import org.koin.compose.koinInject
 
 @Composable
@@ -86,10 +91,11 @@ fun MainScreen(
                 .weight(1f),
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None },
-            popEnterTransition = { EnterTransition.None },
+            popEnterTransition = { fadeIn() },
             popExitTransition = { fadeOut() },
         ) {
             composable<InfoScreen> {
+                MainBackHandler()
                 val uriHandler = LocalUriHandler.current
                 InfoScreen(
                     onAboutConf = { rootNavController.navigate(AboutConferenceScreen) },
@@ -103,17 +109,20 @@ fun MainScreen(
                 )
             }
             composable<SpeakersScreen> {
+                MainBackHandler()
                 SpeakersScreen(
                     onSpeaker = { rootNavController.navigate(SpeakerDetailScreen(it)) }
                 )
             }
             composable<ScheduleScreen> {
+                MainBackHandler()
                 ScheduleScreen(
                     onSession = { rootNavController.navigate(SessionScreen(it)) },
                     onPrivacyPolicyNeeded = { rootNavController.navigate(PrivacyPolicyScreen) },
                 )
             }
             composable<MapScreen> {
+                MainBackHandler()
                 MapScreen()
             }
         }
