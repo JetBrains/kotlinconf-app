@@ -33,6 +33,8 @@ data class DayHeaderItem(val value: Day) : ScheduleListItem
 
 data class TimeSlotTitleItem(val value: TimeSlot) : ScheduleListItem
 
+data class NoBookmarksItem(val id: String) : ScheduleListItem
+
 data class SessionItem(
     val value: SessionCardView,
     val tagMatches: List<String> = emptyList(),
@@ -60,6 +62,7 @@ fun ScheduleListItem.isLive(): Boolean {
         is SessionItem -> this.value.isLive
         is TimeSlotTitleItem -> this.value.isLive
         is WorkshopItem -> this.workshops.any { it.isLive }
+        is NoBookmarksItem -> false
     }
 }
 
@@ -217,24 +220,28 @@ class ScheduleViewModel(
                     timeSlot.sessions
                 }
 
-                val (workshops, notWorkshops) = sessions.partition { it.tags.contains("Workshop") }
-                if (workshops.isNotEmpty()) {
-                    add(WorkshopItem(workshops))
+                val (allWorkshops, notWorkshops) = timeSlot.sessions.partition { it.tags.contains("Workshop") }
+                val validWorkshops = if (isBookmarkedOnly) allWorkshops.filter { it.isFavorite } else allWorkshops
+                if (validWorkshops.isNotEmpty()) {
+                    add(WorkshopItem(validWorkshops))
                 }
 
-                val (serviceEvents, talks) = notWorkshops.partition { it.isServiceEvent }
+                val (serviceEvents, allTalks) = notWorkshops.partition { it.isServiceEvent }
                 if (serviceEvents.size == 1) {
                     add(ServiceEventItem(serviceEvents.first()))
                 } else if (serviceEvents.size > 1) {
                     add(ServiceEventGroupItem(serviceEvents))
                 }
-                talks.forEach { session ->
+
+                val validTalks = if (isBookmarkedOnly) allTalks.filter { it.isFavorite } else allTalks
+                validTalks.forEach { session ->
                     add(SessionItem(session))
                 }
 
-                // Remove empty time slots
-                if (last() is TimeSlotTitleItem) {
-                    removeLast()
+                // If nothing was added to this slot, but there were workshops or talks,
+                // they must have been filtered out because none of them are bookmarked
+                if (last() is TimeSlotTitleItem && (allWorkshops.isNotEmpty() || allTalks.isNotEmpty())) {
+                    add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
                 }
             }
         }
