@@ -8,7 +8,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.animation.AnimatedVisibility
@@ -49,6 +48,7 @@ fun MainHeaderSearchBar(
     onClear: () -> Unit,
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
+    hasAdditionalInputs: Boolean = false,
 ) {
     Row(
         modifier = modifier
@@ -103,15 +103,21 @@ fun MainHeaderSearchBar(
             }
         }
 
-        TopMenuButton(
-            icon = Res.drawable.close_24,
-            onClick = {
-                onSearchValueChange("")
-                onClear()
-                focusRequester.requestFocus()
-            },
-            contentDescription = stringResource(Res.string.main_header_search_clear),
-        )
+        AnimatedVisibility(
+            visible = searchValue.isNotEmpty() || hasAdditionalInputs,
+            enter = fadeIn(tween(200)),
+            exit = fadeOut(tween(100)),
+        ) {
+            TopMenuButton(
+                icon = Res.drawable.close_24,
+                onClick = {
+                    onSearchValueChange("")
+                    onClear()
+                    focusRequester.requestFocus()
+                },
+                contentDescription = stringResource(Res.string.main_header_search_clear),
+            )
+        }
     }
 }
 
@@ -223,6 +229,7 @@ internal fun MainHeaderPreview() {
                     onSearchValueChange = { search1 = it },
                     onClose = { state1 = MainHeaderContainerState.Title },
                     onClear = {},
+                    hasAdditionalInputs = bookmarkFilter1,
                 )
             }
         )
@@ -250,6 +257,7 @@ internal fun MainHeaderPreview() {
                     onSearchValueChange = { search2 = it },
                     onClose = { state2 = MainHeaderContainerState.Title },
                     onClear = {},
+                    hasAdditionalInputs = false,
                 )
             }
         )

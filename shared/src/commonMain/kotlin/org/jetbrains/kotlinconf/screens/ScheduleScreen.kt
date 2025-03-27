@@ -142,7 +142,8 @@ fun ScheduleScreen(
             onBookmarkFilter = { bookmarkFilterEnabled = it },
             searchQuery = searchQuery,
             onSearchQueryChange = { searchQuery = it },
-            onClearSearch = { viewModel.resetFilters() }
+            onClearSearch = { viewModel.resetFilters() },
+            viewModel = viewModel
         )
         Divider(
             thickness = 1.dp,
@@ -332,6 +333,7 @@ private fun Header(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     onClearSearch: () -> Unit,
+    viewModel: ScheduleViewModel = koinViewModel(),
 ) {
     MainHeaderContainer(
         state = headerState,
@@ -360,6 +362,8 @@ private fun Header(
                 onHeaderStateChange(MainHeaderContainerState.Title)
                 onSearchQueryChange("")
             }
+            val filterItems by viewModel.filterItems.collectAsState()
+
             MainHeaderSearchBar(
                 searchValue = searchQuery,
                 // clearing the input should also reset tags
@@ -369,6 +373,7 @@ private fun Header(
                     onSearchQueryChange("")
                 },
                 onClear = onClearSearch,
+                hasAdditionalInputs = filterItems.any { it.isSelected },
             )
         }
     )

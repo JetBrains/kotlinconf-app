@@ -88,7 +88,7 @@ fun SpeakersScreen(
                         searchState = MainHeaderContainerState.Title
                         searchText = ""
                     },
-                    onClear = { searchText = "" }
+                    onClear = { searchText = "" },
                 )
             }
         )
