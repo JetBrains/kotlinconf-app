@@ -31,12 +31,16 @@ import org.koin.dsl.module
 
 fun initApp(
     platformModule: Module,
+    flags: Flags = Flags(),
 ) {
-    val koin = initKoin(platformModule)
+    val koin = initKoin(platformModule, flags)
     initNotifier(configuration = koin.get(), logger = koin.get())
 }
 
-private fun initKoin(platformModule: Module): Koin {
+private fun initKoin(
+    platformModule: Module,
+    flags: Flags,
+): Koin {
     return startKoin {
         val appModule = module {
             single { APIClient(URLs.API_ENDPOINT, get()) }
@@ -45,6 +49,7 @@ private fun initKoin(platformModule: Module): Koin {
 //            single<TimeProvider> { FakeTimeProvider(get()) }
             singleOf(::ConferenceService)
             single<Logger> { NoopProdLogger() }
+            single<Flags> { flags }
         }
 
         val viewModelModule = module {

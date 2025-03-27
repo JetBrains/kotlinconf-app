@@ -1,12 +1,7 @@
 package org.jetbrains.kotlinconf.screens
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.Transition
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
@@ -21,7 +16,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
@@ -48,6 +45,7 @@ import kotlinconfapp.shared.generated.resources.team_28
 import kotlinconfapp.shared.generated.resources.team_28_fill
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ConferenceService
+import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.URLs
 import org.jetbrains.kotlinconf.navigation.AboutAppScreen
 import org.jetbrains.kotlinconf.navigation.AboutConferenceScreen
@@ -65,7 +63,6 @@ import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainNavDestination
 import org.jetbrains.kotlinconf.ui.components.MainNavigation
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.utils.MainBackHandler
 import org.koin.compose.koinInject
 
 @Composable
@@ -131,6 +128,15 @@ fun MainScreen(
         if (!keyboardVisible) {
             BottomNavigation(nestedNavController)
         }
+    }
+}
+
+@Composable
+fun MainBackHandler() {
+    if (!LocalFlags.current.enableBackOnMainScreens) {
+        // Prevent back navigation with an empty handler
+        @OptIn(ExperimentalComposeUiApi::class)
+        BackHandler(true) {  }
     }
 }
 
