@@ -1,5 +1,10 @@
 package org.jetbrains.kotlinconf.screens
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.Transition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -79,6 +84,10 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { fadeOut() },
         ) {
             composable<InfoScreen> {
                 val uriHandler = LocalUriHandler.current
