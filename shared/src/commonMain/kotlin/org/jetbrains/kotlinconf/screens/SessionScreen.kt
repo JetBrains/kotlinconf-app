@@ -175,7 +175,8 @@ fun SessionScreen(
 
                     StyledText(
                         text = session.description,
-                        style = KotlinConfTheme.typography.text1
+                        style = KotlinConfTheme.typography.text1,
+                        selectable = true,
                     )
 
                     Spacer(Modifier.height(24.dp))

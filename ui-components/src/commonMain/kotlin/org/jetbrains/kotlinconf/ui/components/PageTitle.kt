@@ -95,7 +95,8 @@ fun PageTitle(
         StyledText(
             text = title,
             style = KotlinConfTheme.typography.h1,
-            color = KotlinConfTheme.colors.primaryText
+            color = KotlinConfTheme.colors.primaryText,
+            selectable = true,
         )
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(4.dp),

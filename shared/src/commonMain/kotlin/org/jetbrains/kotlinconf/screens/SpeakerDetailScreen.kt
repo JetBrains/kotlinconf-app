@@ -89,6 +89,7 @@ fun SpeakerDetailScreen(
                         text = currentSpeaker.name,
                         style = KotlinConfTheme.typography.h2,
                         color = KotlinConfTheme.colors.primaryText,
+                        selectable = true,
                     )
 
                     Spacer(Modifier.height(4.dp))
@@ -97,6 +98,7 @@ fun SpeakerDetailScreen(
                         text = currentSpeaker.position,
                         style = KotlinConfTheme.typography.text2,
                         color = KotlinConfTheme.colors.secondaryText,
+                        selectable = true,
                     )
 
                     Spacer(Modifier.height(16.dp))
@@ -113,6 +115,7 @@ fun SpeakerDetailScreen(
                         text = currentSpeaker.description,
                         style = KotlinConfTheme.typography.text2,
                         color = KotlinConfTheme.colors.longText,
+                        selectable = true,
                     )
 
                     Spacer(Modifier.height(16.dp))
