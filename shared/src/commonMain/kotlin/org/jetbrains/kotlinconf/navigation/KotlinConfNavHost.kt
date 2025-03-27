@@ -205,12 +205,14 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
     }
     composable<SessionScreen>(typeMap = mapOf(typeOf<SessionId>() to SessionIdNavType)) {
         val params = it.toRoute<SessionScreen>()
+        val urlHandler = LocalUriHandler.current
         SessionScreen(
             sessionId = params.sessionId,
             openedForFeedback = params.openedForFeedback,
             onBack = navController::navigateUp,
             onPrivacyPolicyNeeded = { navController.navigate(PrivacyPolicyScreen) },
             onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) },
+            onWatchVideo = { videoUrl -> urlHandler.openUri(videoUrl) },
             onNavigateToMap = { roomName ->
                 navController.navigate(NestedMapScreen(roomName))
             },

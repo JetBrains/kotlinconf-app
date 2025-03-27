@@ -113,7 +113,7 @@ fun AboutConference(
             )
             PageMenuItem(
                 label = stringResource(Res.string.about_conference_website_link),
-                drawableResource = Res.drawable.arrow_up_right_24,
+                drawableEnd = Res.drawable.arrow_up_right_24,
                 onClick = onWebsiteLink,
             )
         }

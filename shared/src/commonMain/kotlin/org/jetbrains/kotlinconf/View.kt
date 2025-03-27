@@ -93,7 +93,8 @@ fun Session.asSessionCard(
         tags = tags ?: emptyList(),
         startsInMinutes = (startsAt - now).inWholeMinutes.toInt().let { diff ->
             if (diff in 1..30) diff else null
-        }
+        },
+        videoUrl = videoUrl,
     )
 }
 

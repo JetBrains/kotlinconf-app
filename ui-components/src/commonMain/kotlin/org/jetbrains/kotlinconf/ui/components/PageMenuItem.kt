@@ -1,9 +1,10 @@
 package org.jetbrains.kotlinconf.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,6 +19,7 @@ import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
@@ -29,7 +31,8 @@ fun PageMenuItem(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    drawableResource: DrawableResource = Res.drawable.arrow_right_24,
+    drawableStart: DrawableResource? = null,
+    drawableEnd: DrawableResource = Res.drawable.arrow_right_24,
 ) {
     Row(
         modifier
@@ -39,17 +42,22 @@ fun PageMenuItem(
             .background(KotlinConfTheme.colors.tileBackground)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
+        if (drawableStart != null) {
+            Image(
+                painter = painterResource(drawableStart),
+                modifier = Modifier.padding(end = 8.dp).size(24.dp),
+                contentDescription = null,
+            )
+        }
         StyledText(
             text = label,
             style = KotlinConfTheme.typography.h3,
         )
+        Spacer(Modifier.weight(1f))
         Icon(
-            // TODO review icon sizing later, https://github.com/JetBrains/kotlinconf-app/issues/175
-            modifier = modifier
-                .size(24.dp),
-            painter = painterResource(drawableResource),
+            modifier = Modifier.size(24.dp),
+            painter = painterResource(drawableEnd),
             contentDescription = null,
             tint = KotlinConfTheme.colors.primaryText,
         )
