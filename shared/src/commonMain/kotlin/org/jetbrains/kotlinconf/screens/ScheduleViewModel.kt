@@ -238,10 +238,15 @@ class ScheduleViewModel(
                     add(SessionItem(session))
                 }
 
-                // If nothing was added to this slot, but there were workshops or talks,
-                // they must have been filtered out because none of them are bookmarked
-                if (last() is TimeSlotTitleItem && (allWorkshops.isNotEmpty() || allTalks.isNotEmpty())) {
-                    add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
+                if (last() is TimeSlotTitleItem) {
+                    if (isBookmarkedOnly && (allWorkshops.isNotEmpty() || allTalks.isNotEmpty())) {
+                        // If nothing was added to this slot, but there were workshops or talks,
+                        // they must have been filtered out because none of them are bookmarked
+                        add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
+                    } else {
+                        // Otherwise we hide empty slots, probably service events that got grouped
+                        removeLast()
+                    }
                 }
             }
         }
