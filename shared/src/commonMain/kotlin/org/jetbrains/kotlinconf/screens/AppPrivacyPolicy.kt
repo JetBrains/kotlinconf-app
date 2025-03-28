@@ -18,7 +18,5 @@ fun AppPrivacyPolicy(onBack: () -> Unit) {
         title = stringResource(Res.string.app_privacy_policy_title),
         loadText = { Res.readBytes("files/app-privacy-policy.md") },
         onBack = onBack
-    ) {
-        Spacer(Modifier.height(24.dp))
-    }
+    )
 }

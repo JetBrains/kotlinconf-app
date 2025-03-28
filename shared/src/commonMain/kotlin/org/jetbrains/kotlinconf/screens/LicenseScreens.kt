@@ -108,7 +108,7 @@ private fun LibraryList(
     ScrollToTopHandler(listState)
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = 16.dp) + bottomInsetPadding(),
+        contentPadding = PaddingValues(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         state = listState,
     ) {

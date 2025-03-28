@@ -36,6 +36,7 @@ import org.jetbrains.kotlinconf.ui.components.TalkStatus
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
+import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -83,6 +84,7 @@ fun SpeakerDetailScreen(
                 Column(
                     modifier = Modifier
                         .padding(vertical = 16.dp, horizontal = 12.dp)
+                        .padding(bottomInsetPadding())
                         .verticalScroll(rememberScrollState()),
                 ) {
                     StyledText(

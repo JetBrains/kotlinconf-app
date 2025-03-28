@@ -24,7 +24,5 @@ fun TermsOfUse(onBack: () -> Unit) {
             Res.readBytes("files/visitors-terms.md")
         },
         onBack = onBack
-    ) {
-        Spacer(Modifier.height(24.dp))
-    }
+    )
 }
