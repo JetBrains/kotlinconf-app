@@ -42,7 +42,10 @@ fun App(
         .value
 
     CompositionLocalProvider(LocalFlags provides koinInject()) {
-        KotlinConfTheme(darkTheme = isDarkTheme) {
+        KotlinConfTheme(
+            darkTheme = isDarkTheme,
+            rippleEnabled = LocalFlags.current.rippleEnabled,
+        ) {
             Box(
                 Modifier
                     .fillMaxSize()

@@ -31,6 +31,7 @@ fun initApp() = initApp(
     platformModule = platformModule,
     flags = Flags(
         enableBackOnMainScreens = false,
+        rippleEnabled = false,
     )
 )
 
