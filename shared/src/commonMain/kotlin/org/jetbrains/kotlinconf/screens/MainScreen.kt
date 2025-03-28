@@ -24,7 +24,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.clock_28
 import kotlinconfapp.shared.generated.resources.clock_28_fill
@@ -45,7 +44,7 @@ import org.jetbrains.kotlinconf.navigation.AboutAppScreen
 import org.jetbrains.kotlinconf.navigation.AboutConferenceScreen
 import org.jetbrains.kotlinconf.navigation.CodeOfConductScreen
 import org.jetbrains.kotlinconf.navigation.InfoScreen
-import org.jetbrains.kotlinconf.navigation.MapScreenParam
+import org.jetbrains.kotlinconf.navigation.MapScreen
 import org.jetbrains.kotlinconf.navigation.NewsListScreen
 import org.jetbrains.kotlinconf.navigation.PartnersScreen
 import org.jetbrains.kotlinconf.navigation.PrivacyPolicyScreen
@@ -62,7 +61,6 @@ import org.koin.compose.koinInject
 @Composable
 fun MainScreen(
     rootNavController: NavController,
-    roomNameForMap: String?,
     service: ConferenceService = koinInject(),
 ) {
     LaunchedEffect(Unit) {
@@ -77,7 +75,7 @@ fun MainScreen(
         val nestedNavController = rememberNavController()
         NavHost(
             nestedNavController,
-            startDestination = if (roomNameForMap != null) MapScreenParam(roomNameForMap) else ScheduleScreen,
+            startDestination = ScheduleScreen,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
@@ -106,8 +104,8 @@ fun MainScreen(
                     onPrivacyPolicyNeeded = { rootNavController.navigate(PrivacyPolicyScreen) },
                 )
             }
-            composable<MapScreenParam> {
-                MapScreen(roomName = it.toRoute<MapScreenParam>().roomName)
+            composable<MapScreen> {
+                MapScreen()
             }
         }
 
@@ -146,8 +144,8 @@ private fun BottomNavigation(nestedNavController: NavHostController) {
                 label = stringResource(Res.string.nav_destination_map),
                 icon = Res.drawable.location_28,
                 iconSelected = Res.drawable.location_28_fill,
-                route = MapScreenParam(),
-                routeClass = MapScreenParam::class
+                route = MapScreen,
+                routeClass = MapScreen::class
             ),
             MainNavDestination(
                 label = stringResource(Res.string.nav_destination_info),

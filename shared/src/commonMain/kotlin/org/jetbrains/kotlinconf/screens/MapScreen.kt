@@ -34,9 +34,13 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.arrow_left_24
 import kotlinconfapp.shared.generated.resources.map_first_floor
 import kotlinconfapp.shared.generated.resources.map_ground_floor
 import kotlinconfapp.shared.generated.resources.map_title
+import kotlinconfapp.shared.generated.resources.navigate_back
+import kotlinconfapp.ui_components.generated.resources.arrow_left_24
+import kotlinconfapp.ui_components.generated.resources.main_header_back
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -45,7 +49,9 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.Switcher
+import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.topInsetPadding
 import kotlin.math.sqrt
 
 enum class Floor(
@@ -99,8 +105,24 @@ private val Floor.resource: String
     @Composable get() = if (KotlinConfTheme.colors.isDark) resourceDark else resourceLight
 
 @Composable
-fun MapScreen(roomName: String?) {
-    val location = remember(roomName) { rooms[roomName] ?: venue }
+fun NestedMapScreen(
+    roomName: String,
+    onBack: (() -> Unit),
+) {
+    MapScreenImpl(rooms[roomName] ?: venue, onBack, Modifier.padding(topInsetPadding()))
+}
+
+@Composable
+fun MapScreen() {
+    MapScreenImpl(venue, null)
+}
+
+@Composable
+private fun MapScreenImpl(
+    location: LocationInfo,
+    onBack: (() -> Unit)?,
+    modifier: Modifier = Modifier,
+) {
     var floorIndex by rememberSaveable { mutableStateOf(location.floor.ordinal) }
     val floor: Floor = remember(floorIndex) { Floor.entries[floorIndex] }
     val path = floor.resource
@@ -108,9 +130,18 @@ fun MapScreen(roomName: String?) {
         value = Svg(Res.readBytes(path))
     }
 
-    Column(Modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
+    Column(modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
         MainHeaderTitleBar(
             title = stringResource(Res.string.map_title),
+            startContent = {
+                if (onBack != null) {
+                    TopMenuButton(
+                        icon = Res.drawable.arrow_left_24,
+                        contentDescription = stringResource(Res.string.navigate_back),
+                        onClick = onBack,
+                    )
+                }
+            }
         )
         Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 

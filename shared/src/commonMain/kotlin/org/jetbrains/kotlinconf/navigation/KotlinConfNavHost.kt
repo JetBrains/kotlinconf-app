@@ -29,6 +29,8 @@ import org.jetbrains.kotlinconf.screens.AppTermsOfUse
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
 import org.jetbrains.kotlinconf.screens.LicensesScreen
 import org.jetbrains.kotlinconf.screens.MainScreen
+import org.jetbrains.kotlinconf.screens.MapScreen
+import org.jetbrains.kotlinconf.screens.NestedMapScreen
 import org.jetbrains.kotlinconf.screens.NewsDetailScreen
 import org.jetbrains.kotlinconf.screens.NewsListScreen
 import org.jetbrains.kotlinconf.screens.PartnerDetailScreen
@@ -85,7 +87,7 @@ internal fun KotlinConfNavHost(
     NotificationHandler(navController)
     PlatformNavHandler(navController)
 
-    val startDestination = if (isOnboardingComplete) MainScreen() else StartScreens
+    val startDestination = if (isOnboardingComplete) MainScreen else StartScreens
     if (popEnterTransition != null && popExitTransition != null) {
         NavHost(
             navController = navController,
@@ -117,7 +119,6 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
     composable<MainScreen> {
         MainScreen(
             rootNavController = navController,
-            roomNameForMap = it.toRoute<MainScreen>().roomNameForMap,
         )
     }
 
@@ -205,9 +206,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             onPrivacyPolicyNeeded = { navController.navigate(PrivacyPolicyScreen) },
             onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) },
             onNavigateToMap = { roomName ->
-                navController.navigate(MainScreen(roomNameForMap = roomName)) {
-                    popUpTo<MainScreen>()
-                }
+                navController.navigate(NestedMapScreen(roomName))
             },
         )
     }
@@ -228,6 +227,14 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
     composable<NewsDetailScreen> {
         val newsId = it.toRoute<NewsDetailScreen>().newsId
         NewsDetailScreen(newsId, onBack = navController::navigateUp)
+    }
+
+    composable<NestedMapScreen> {
+        val nestedMapParam = it.toRoute<NestedMapScreen>()
+        NestedMapScreen(
+            roomName = nestedMapParam.roomName,
+            onBack = navController::navigateUp,
+        )
     }
 }
 
@@ -255,7 +262,7 @@ fun NavGraphBuilder.startScreens(
         composable<StartNotificationsScreen> {
             StartNotificationsScreen(
                 onDone = {
-                    navController.navigate(MainScreen()) {
+                    navController.navigate(MainScreen) {
                         popUpTo<StartScreens> { inclusive = true }
                     }
                 })

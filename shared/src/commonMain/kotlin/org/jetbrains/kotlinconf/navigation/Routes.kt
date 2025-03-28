@@ -76,7 +76,7 @@ data class PartnerDetailScreen(val partnerId: PartnerId)
 
 @Serializable
 @SerialName("Main")
-data class MainScreen(val roomNameForMap: String? = null)
+data object MainScreen
 
 @Serializable
 @SerialName("Schedule")
@@ -96,7 +96,11 @@ data class SpeakerDetailScreen(val speakerId: SpeakerId)
 
 @Serializable
 @SerialName("Map")
-data class MapScreenParam(val roomName: String? = null)
+data object MapScreen
+
+@Serializable
+@SerialName("MapDetail")
+data class NestedMapScreen(val roomName: String)
 
 @Serializable
 @SerialName("News")
