@@ -44,13 +44,23 @@ class AndroidLocalNotificationService(
         notificationManager.createNotificationChannel(channel)
     }
 
+    private fun getRelevantAlarmPermission(): String? {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            return Manifest.permission.USE_EXACT_ALARM
+
+        if (Build.VERSION.SDK_INT in Build.VERSION_CODES.S..<Build.VERSION_CODES.TIRAMISU)
+            return Manifest.permission.SCHEDULE_EXACT_ALARM
+
+        return null
+    }
+
     override suspend fun requestPermission(): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true
 
-        val permissions = arrayOf(Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.USE_EXACT_ALARM)
+        val permissions = listOfNotNull(Manifest.permission.POST_NOTIFICATIONS, getRelevantAlarmPermission())
 
         val permissionHandler = KoinPlatform.getKoin().getOrNull<PermissionHandler>()
-        return permissionHandler?.requestPermissions(permissions) ?: false
+        return permissionHandler?.requestPermissions(permissions.toTypedArray()) ?: false
     }
 
     override fun post(
@@ -100,11 +110,11 @@ class AndroidLocalNotificationService(
         val triggerTime = timeProvider.getNotificationTime(time).toInstant(EVENT_TIME_ZONE)
         val triggerAtMillis = triggerTime.toEpochMilliseconds()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            ContextCompat.checkSelfPermission(context, Manifest.permission.USE_EXACT_ALARM)
-            != PackageManager.PERMISSION_GRANTED
+        val alarmPermission = getRelevantAlarmPermission()
+        if (alarmPermission != null &&
+            ContextCompat.checkSelfPermission(context, alarmPermission) != PackageManager.PERMISSION_GRANTED
         ) {
-            logger.log(LOG_TAG) { "No permission to schedule notification $localNotificationId" }
+            logger.log(LOG_TAG) { "No ${alarmPermission}} permission to schedule notification $localNotificationId" }
             return
         }
 
