@@ -8,6 +8,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -40,14 +41,16 @@ fun App(
         .collectAsStateWithLifecycle(initialValue = null)
         .value
 
-    KotlinConfTheme(darkTheme = isDarkTheme) {
-        Box(
-            Modifier
-                .fillMaxSize()
-                .background(KotlinConfTheme.colors.mainBackground)
-        ) {
-            if (isOnboardingComplete != null) {
-                KotlinConfNavHost(isOnboardingComplete, popEnterTransition, popExitTransition)
+    CompositionLocalProvider(LocalFlags provides koinInject()) {
+        KotlinConfTheme(darkTheme = isDarkTheme) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(KotlinConfTheme.colors.mainBackground)
+            ) {
+                if (isOnboardingComplete != null) {
+                    KotlinConfNavHost(isOnboardingComplete, popEnterTransition, popExitTransition)
+                }
             }
         }
     }

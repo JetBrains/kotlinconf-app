@@ -27,7 +27,12 @@ private val platformModule = module {
 }
 
 @Suppress("unused") // Called from Swift
-fun initApp() = initApp(platformModule)
+fun initApp() = initApp(
+    platformModule = platformModule,
+    flags = Flags(
+        enableBackOnMainScreens = false,
+    )
+)
 
 @Suppress("unused") // Called from Swift
 fun MainViewController(): UIViewController = ComposeUIViewController(

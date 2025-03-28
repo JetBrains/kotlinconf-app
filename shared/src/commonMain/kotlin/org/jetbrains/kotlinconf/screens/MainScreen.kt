@@ -1,5 +1,9 @@
 package org.jetbrains.kotlinconf.screens
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +16,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
@@ -39,6 +45,7 @@ import kotlinconfapp.shared.generated.resources.team_28
 import kotlinconfapp.shared.generated.resources.team_28_fill
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ConferenceService
+import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.URLs
 import org.jetbrains.kotlinconf.navigation.AboutAppScreen
 import org.jetbrains.kotlinconf.navigation.AboutConferenceScreen
@@ -79,8 +86,13 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { fadeIn() },
+            popExitTransition = { fadeOut() },
         ) {
             composable<InfoScreen> {
+                MainBackHandler()
                 val uriHandler = LocalUriHandler.current
                 InfoScreen(
                     onAboutConf = { rootNavController.navigate(AboutConferenceScreen) },
@@ -94,17 +106,20 @@ fun MainScreen(
                 )
             }
             composable<SpeakersScreen> {
+                MainBackHandler()
                 SpeakersScreen(
                     onSpeaker = { rootNavController.navigate(SpeakerDetailScreen(it)) }
                 )
             }
             composable<ScheduleScreen> {
+                MainBackHandler()
                 ScheduleScreen(
                     onSession = { rootNavController.navigate(SessionScreen(it)) },
                     onPrivacyPolicyNeeded = { rootNavController.navigate(PrivacyPolicyScreen) },
                 )
             }
             composable<MapScreen> {
+                MainBackHandler()
                 MapScreen()
             }
         }
@@ -113,6 +128,15 @@ fun MainScreen(
         if (!keyboardVisible) {
             BottomNavigation(nestedNavController)
         }
+    }
+}
+
+@Composable
+fun MainBackHandler() {
+    if (!LocalFlags.current.enableBackOnMainScreens) {
+        // Prevent back navigation with an empty handler
+        @OptIn(ExperimentalComposeUiApi::class)
+        BackHandler(true) {  }
     }
 }
 
