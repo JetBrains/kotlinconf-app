@@ -245,7 +245,7 @@ class ScheduleViewModel(
                         add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
                     } else {
                         // Otherwise we hide empty slots, probably service events that got grouped
-                        removeLast()
+                        removeAt(lastIndex) // Don't use removeLast https://developer.android.com/about/versions/15/behavior-changes-15#openjdk-api-changes
                     }
                 }
             }
