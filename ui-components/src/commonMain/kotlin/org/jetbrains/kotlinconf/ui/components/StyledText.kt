@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,14 +23,15 @@ fun StyledText(
     color: Color = KotlinConfTheme.colors.primaryText,
     style: TextStyle = KotlinConfTheme.typography.text1,
     maxLines: Int = Int.MAX_VALUE,
+    selectable: Boolean = false,
 ) {
-    BasicText(
-        text = text,
+    StyledText(
+        text = AnnotatedString(text),
         modifier = modifier,
+        color = color,
         style = style,
-        color = { color },
         maxLines = maxLines,
-        overflow = TextOverflow.Ellipsis,
+        selectable = selectable,
     )
 }
 
@@ -40,13 +42,23 @@ fun StyledText(
     color: Color = KotlinConfTheme.colors.primaryText,
     style: TextStyle = KotlinConfTheme.typography.text1,
     maxLines: Int = Int.MAX_VALUE,
+    selectable: Boolean = false,
 ) {
-    BasicText(
-        text = text,
-        modifier = modifier,
-        style = style,
-        color = { color },
-        maxLines = maxLines,
-        overflow = TextOverflow.Ellipsis,
-    )
+    val content = @Composable{
+        BasicText(
+            text = text,
+            modifier = modifier,
+            style = style,
+            color = { color },
+            maxLines = maxLines,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+
+    if (selectable) {
+        SelectionContainer { content() }
+    } else {
+        content()
+    }
 }
+
