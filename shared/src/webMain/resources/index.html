@@ -84,6 +84,7 @@
                     }).join("-")
                 };
             }
+            self.supportsNotifications = (typeof Notification != "undefined");
             if (typeof Notification == "undefined") {
                 self.Notification = class Notification {
                     static permission = "default";
