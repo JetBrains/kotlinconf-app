@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
@@ -65,7 +66,7 @@ fun FeedbackForm(
         else KotlinConfTheme.colors.tileBackground,
     )
 
-    Box(modifier.fillMaxWidth()) {
+    Box(modifier.fillMaxWidth().onKeyEvent { true }) {
         var feedbackText by remember { mutableStateOf("") }
         BasicTextField(
             value = feedbackText,
