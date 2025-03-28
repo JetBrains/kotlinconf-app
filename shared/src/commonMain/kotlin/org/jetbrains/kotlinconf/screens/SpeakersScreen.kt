@@ -126,8 +126,7 @@ fun SpeakersScreen(
                                 modifier = Modifier
                                     .animateItem()
                                     .fillMaxWidth()
-                                    .padding(12.dp)
-                                    .clip(RoundedCornerShape(8.dp)),
+                                    .padding(12.dp),
                                 onClick = { onSpeaker(speaker.id) },
                             )
                         }
