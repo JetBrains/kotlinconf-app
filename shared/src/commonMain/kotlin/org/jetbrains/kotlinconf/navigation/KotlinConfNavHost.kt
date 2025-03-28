@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import kotlinx.coroutines.channels.Channel
+import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.LocalNotificationId
 import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.SessionId
@@ -29,7 +30,6 @@ import org.jetbrains.kotlinconf.screens.AppTermsOfUse
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
 import org.jetbrains.kotlinconf.screens.LicensesScreen
 import org.jetbrains.kotlinconf.screens.MainScreen
-import org.jetbrains.kotlinconf.screens.MapScreen
 import org.jetbrains.kotlinconf.screens.NestedMapScreen
 import org.jetbrains.kotlinconf.screens.NewsDetailScreen
 import org.jetbrains.kotlinconf.screens.NewsListScreen
@@ -110,7 +110,6 @@ internal fun KotlinConfNavHost(
 }
 
 
-
 fun NavGraphBuilder.screens(navController: NavHostController) {
     startScreens(
         navController = navController,
@@ -189,7 +188,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
         PartnersScreen(
             onBack = navController::navigateUp,
             onPartnerDetail = { partnerId ->
-                 navController.navigate(PartnerDetailScreen(partnerId))
+                navController.navigate(PartnerDetailScreen(partnerId))
             }
         )
     }
@@ -245,15 +244,16 @@ fun NavGraphBuilder.startScreens(
         startDestination = StartPrivacyPolicyScreen
     ) {
         composable<StartPrivacyPolicyScreen> {
+            val skipNotifications = LocalFlags.current.supportsNotifications.not()
             PrivacyPolicyScreen(
                 onRejectPolicy = {
-                    navController.navigate(StartNotificationsScreen) {
-                        popUpTo<StartScreens>()
+                    navController.navigate(if (skipNotifications) MainScreen else StartNotificationsScreen) {
+                        popUpTo<StartScreens> { inclusive = skipNotifications }
                     }
                 },
                 onAcceptPolicy = {
-                    navController.navigate(StartNotificationsScreen) {
-                        popUpTo<StartScreens>()
+                    navController.navigate(if (skipNotifications) MainScreen else StartNotificationsScreen) {
+                        popUpTo<StartScreens> { inclusive = skipNotifications }
                     }
                 },
                 confirmationRequired = false,

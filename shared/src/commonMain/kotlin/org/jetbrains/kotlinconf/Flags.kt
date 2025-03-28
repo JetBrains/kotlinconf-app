@@ -4,6 +4,7 @@ import androidx.compose.runtime.compositionLocalOf
 
 data class Flags(
     val enableBackOnMainScreens: Boolean = true,
+    val supportsNotifications: Boolean = true,
 )
 
 val LocalFlags = compositionLocalOf<Flags> {

@@ -49,6 +49,7 @@ import kotlinconfapp.shared.generated.resources.theme_system
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.Theme
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -137,16 +138,18 @@ private fun SettingsScreenImpl(
                 )
             }
 
-            Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+            if (LocalFlags.current.supportsNotifications) {
+                Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
-            val notificationSettings = viewModel.notificationSettings.collectAsStateWithLifecycle().value
-            if (notificationSettings != null)
-                NotificationSettings(
-                    notificationSettings = notificationSettings,
-                    onChangeSettings = { newSettings ->
-                        viewModel.setNotificationSettings(newSettings)
-                    }
-                )
+                val notificationSettings = viewModel.notificationSettings.collectAsStateWithLifecycle().value
+                if (notificationSettings != null)
+                    NotificationSettings(
+                        notificationSettings = notificationSettings,
+                        onChangeSettings = { newSettings ->
+                            viewModel.setNotificationSettings(newSettings)
+                        }
+                    )
+            }
         }
     }
 }
