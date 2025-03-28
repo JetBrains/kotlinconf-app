@@ -25,6 +25,7 @@ tasks.register("updateAppVersions") {
     description = "Updates app version code and name across all platforms"
 
     doLast {
+        // Read current state
         val versionCodes = mutableListOf<Int?>()
         val versionNames = mutableListOf<String?>()
 
@@ -48,6 +49,15 @@ tasks.register("updateAppVersions") {
                 .toList()
         )
 
+        val iosInfoPlist = file("iosApp/iosApp/Info.plist")
+        val iosInfoPlistContent = iosInfoPlist.readText()
+        versionCodes.add(
+            """<key>CFBundleVersion</key>\s*<string>(\d+)</string>""".toRegex().find(iosInfoPlistContent)?.groupValues?.get(1)?.toIntOrNull()
+        )
+        versionNames.add(
+            """<key>CFBundleShortVersionString</key>\s*<string>([^<]+)</string>""".toRegex().find(iosInfoPlistContent)?.groupValues?.get(1)
+        )
+
         val sharedVersionXml = file("shared/src/commonMain/composeResources/values/version.xml")
         val sharedVersionXmlContent = sharedVersionXml.readText()
         val sharedVersionMatch =
@@ -55,6 +65,7 @@ tasks.register("updateAppVersions") {
         versionCodes.add(sharedVersionMatch?.groupValues?.get(2)?.toIntOrNull())
         versionNames.add(sharedVersionMatch?.groupValues?.get(1))
 
+        // Check version, determine new version
         if (versionCodes.distinct().size != 1 || versionNames.distinct().size != 1) {
             throw GradleException("Version mismatch.\nVersion codes found: $versionCodes\nVersion names found: $versionNames")
         }
@@ -71,6 +82,7 @@ tasks.register("updateAppVersions") {
             "${currentVersionName.substringBeforeLast('.')}.${currentVersionName.substringAfterLast('.').toInt() + 1}"
         println("New version: $newVersionName ($newVersionCode)")
 
+        // Write changes
         androidBuildGradle.writeText(
             androidBuildGradleContent
                 .replace("""versionCode = $currentVersionCode""", """versionCode = $newVersionCode""")
@@ -83,6 +95,19 @@ tasks.register("updateAppVersions") {
                     """CURRENT_PROJECT_VERSION = $newVersionCode"""
                 )
                 .replace("""MARKETING_VERSION = $currentVersionName""", """MARKETING_VERSION = $newVersionName""")
+        )
+        iosInfoPlist.writeText(
+            iosInfoPlistContent
+                .replace(
+                    """<key>CFBundleVersion</key>\s*<string>$currentVersionCode</string>""".toRegex(),
+                    """<key>CFBundleVersion</key>
+	<string>$newVersionCode</string>"""
+                )
+                .replace(
+                    """<key>CFBundleShortVersionString</key>\s*<string>$currentVersionName</string>""".toRegex(),
+                    """<key>CFBundleShortVersionString</key>
+	<string>$newVersionName</string>"""
+                )
         )
         sharedVersionXml.writeText(
             sharedVersionXmlContent
