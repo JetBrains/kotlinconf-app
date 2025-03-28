@@ -101,6 +101,8 @@ private fun UIScrollView(scrollViewDelegate: UIScrollViewDelegateProtocol): UISc
             delegate = scrollViewDelegate
             // without setting content size, scroll to top wouldn't work
             setContentSize(CGSizeMake(10000.0, 10000.0))
+            showsVerticalScrollIndicator = false
+            showsHorizontalScrollIndicator = false
         }
     }
 
