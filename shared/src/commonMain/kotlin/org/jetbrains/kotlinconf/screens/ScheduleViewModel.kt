@@ -214,12 +214,6 @@ class ScheduleViewModel(
             day.timeSlots.forEach { timeSlot ->
                 add(TimeSlotTitleItem(timeSlot))
 
-                val sessions = if (isBookmarkedOnly) {
-                    timeSlot.sessions.filter { it.isFavorite }
-                } else {
-                    timeSlot.sessions
-                }
-
                 val (allWorkshops, notWorkshops) = timeSlot.sessions.partition { it.tags.contains("Workshop") }
                 val validWorkshops = if (isBookmarkedOnly) allWorkshops.filter { it.isFavorite } else allWorkshops
                 if (validWorkshops.isNotEmpty()) {
