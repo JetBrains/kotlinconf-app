@@ -461,7 +461,7 @@ fun ScheduleList(
                                 HorizontalPager(
                                     state = pagerState,
                                     modifier = Modifier.fillMaxWidth(),
-                                    beyondViewportPageCount = 10,
+                                    beyondViewportPageCount = 1,
                                     contentPadding = PaddingValues(horizontal = 24.dp),
                                 ) { pageIndex ->
                                     SessionCard(
