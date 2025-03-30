@@ -50,7 +50,6 @@ import kotlinconfapp.shared.generated.resources.session_your_feedback
 import kotlinconfapp.shared.generated.resources.up_24
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_talk
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_workshop
-import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
@@ -134,7 +133,7 @@ fun SessionScreen(
                         .verticalScroll(rememberScrollState())
                 ) {
                     PageTitle(
-                        time = session.timeLine,
+                        time = session.fullTimeline,
                         title = session.title,
                         lightning = session.isLightning,
                         tags = session.tags,

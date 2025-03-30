@@ -85,7 +85,7 @@ fun AboutConference(
                     description = event.description ?: "",
                     speakers = event.speakers ?: emptyList(),
                     location = event.sessionCard?.locationLine ?: "",
-                    time = event.sessionCard?.badgeTimeLine ?: "",
+                    time = event.sessionCard?.shortTimeline ?: "",
                     onSpeaker = onSpeaker,
                 )
             }

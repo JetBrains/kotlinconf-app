@@ -2,7 +2,6 @@ package org.jetbrains.kotlinconf.screens
 
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -522,14 +521,15 @@ fun ScheduleList(
                     is ServiceEventGroupItem -> {
                         val events = item.value
                         ServiceEvents(
-                            events = events.map {
+                            events = events.map { event ->
                                 ServiceEventData(
-                                    title = it.title,
-                                    now = it.isLive,
-                                    time = it.badgeTimeLine,
-                                    note = it.startsInMinutes?.let { count ->
+                                    title = event.title,
+                                    now = event.isLive,
+                                    time = event.shortTimeline,
+                                    note = event.startsInMinutes?.let { count ->
                                         stringResource(Res.string.schedule_in_x_minutes, count)
-                                    })
+                                    },
+                                )
                             },
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
                         )
@@ -573,7 +573,7 @@ private fun SessionCard(
         speakerHighlights = speakerHighlights,
         location = session.locationLine,
         lightning = session.isLightning,
-        time = session.badgeTimeLine,
+        time = session.shortTimeline,
         timeNote = session.startsInMinutes?.let { count ->
             stringResource(Res.string.schedule_in_x_minutes, count)
         },
