@@ -98,7 +98,7 @@ class ScheduleViewModel(
         return map { FilterItem(type = type, value = it, isSelected = false) }
     }
 
-    val filterItems = MutableStateFlow<List<FilterItem>>(
+    val filterItems = MutableStateFlow(
         TagValues.categories.toTags(FilterItemType.Category) +
                 TagValues.levels.toTags(FilterItemType.Level) +
                 TagValues.formats.toTags(FilterItemType.Format)

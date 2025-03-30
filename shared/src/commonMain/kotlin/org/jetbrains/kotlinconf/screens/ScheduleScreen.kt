@@ -371,6 +371,7 @@ private fun Header(
                 onClose = {
                     onHeaderStateChange(MainHeaderContainerState.Title)
                     onSearchQueryChange("")
+                    onClearSearch()
                 },
                 onClear = onClearSearch,
                 hasAdditionalInputs = filterItems.any { it.isSelected },
