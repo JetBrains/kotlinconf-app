@@ -1,6 +1,9 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring.DampingRatioNoBouncy
+import androidx.compose.animation.core.Spring.StiffnessMediumLow
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -33,15 +36,18 @@ fun FilterTag(
 ) {
     val backgroundColor by animateColorAsState(
         if (selected) KotlinConfTheme.colors.primaryBackground
-        else KotlinConfTheme.colors.mainBackground
+        else KotlinConfTheme.colors.mainBackground,
+        ColorSpringSpec,
     )
     val textColor by animateColorAsState(
         if (selected) KotlinConfTheme.colors.primaryTextInverted
-        else KotlinConfTheme.colors.primaryText
+        else KotlinConfTheme.colors.primaryText,
+        ColorSpringSpec,
     )
     val strokeColor by animateColorAsState(
         if (selected) Color.Transparent
-        else KotlinConfTheme.colors.strokeFull
+        else KotlinConfTheme.colors.strokeFull,
+        ColorSpringSpec,
     )
 
     Box(

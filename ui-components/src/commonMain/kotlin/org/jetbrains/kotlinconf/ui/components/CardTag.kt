@@ -1,6 +1,9 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring.DampingRatioNoBouncy
+import androidx.compose.animation.core.Spring.StiffnessMediumLow
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,11 +33,13 @@ fun CardTag(
 ) {
     val backgroundColor by animateColorAsState(
         if (selected) KotlinConfTheme.colors.primaryBackground
-        else KotlinConfTheme.colors.tileBackground
+        else KotlinConfTheme.colors.tileBackground,
+        ColorSpringSpec,
     )
     val textColor by animateColorAsState(
         if (selected) KotlinConfTheme.colors.primaryTextInverted
-        else KotlinConfTheme.colors.secondaryText
+        else KotlinConfTheme.colors.secondaryText,
+        ColorSpringSpec,
     )
 
     Box(
