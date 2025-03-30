@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.UIKitView
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -46,15 +46,15 @@ actual fun ScrollToTopHandler(scrollState: ScrollState) {
         }
     }
 
-    val scrollView = UIScrollView(scrollViewDelegate)
-
-    // Sync from Compose to Native
-    LaunchedEffect(scrollState.value) {
-        val currentOffset = scrollView.contentOffset.useContents { y.toInt() }
-        if (currentOffset != scrollState.value) {
-            scrollView.setContentOffset(CGPointMake(0.0, scrollState.value.toDouble()))
+    UIScrollView(
+        scrollViewDelegate,
+        update = { scrollView ->
+            val currentOffset = scrollView.contentOffset.useContents { y.toInt() }
+            if (currentOffset != scrollState.value) {
+                scrollView.setContentOffset(CGPointMake(0.0, scrollState.value.toDouble()))
+            }
         }
-    }
+    )
 }
 
 @Composable
@@ -80,36 +80,44 @@ actual fun ScrollToTopHandler(listState: LazyListState) {
         }
     }
 
-    val scrollView = UIScrollView(scrollViewDelegate)
-
-    // Sync from Compose to Native
-    LaunchedEffect(listState.firstVisibleItemIndex, listState.firstVisibleItemScrollOffset) {
-        val currentOffset = scrollView.contentOffset.useContents { x.toInt() * FAKE_ITEM_SIZE + y.toInt() }
-        if (currentOffset != listState.firstVisibleItemIndex * FAKE_ITEM_SIZE + listState.firstVisibleItemScrollOffset) {
-            scrollView.setContentOffset(CGPointMake(0.0, (listState.firstVisibleItemIndex * FAKE_ITEM_SIZE + listState.firstVisibleItemScrollOffset).toDouble()))
+    UIScrollView(
+        scrollViewDelegate,
+        update = { scrollView ->
+            val currentOffset = scrollView.contentOffset.useContents { x.toInt() * FAKE_ITEM_SIZE + y.toInt() }
+            if (currentOffset != listState.firstVisibleItemIndex * FAKE_ITEM_SIZE + listState.firstVisibleItemScrollOffset) {
+                scrollView.setContentOffset(
+                    CGPointMake(
+                        0.0,
+                        (listState.firstVisibleItemIndex * FAKE_ITEM_SIZE + listState.firstVisibleItemScrollOffset).toDouble()
+                    )
+                )
+            }
         }
-    }
+    )
+}
+
+@Composable
+private fun UIScrollView(
+    scrollViewDelegate: UIScrollViewDelegateProtocol,
+    update: (UIScrollView) -> Unit,
+) {
+    UIKitView(
+        factory = {
+            UIScrollView(CGRectMake(0.0, 0.0, 10000.0, 1.0)).apply {
+                scrollsToTop = true
+                delegate = scrollViewDelegate
+                // without setting content size, scroll to top wouldn't work
+                setContentSize(CGSizeMake(10000.0, 10000.0))
+                showsVerticalScrollIndicator = false
+                showsHorizontalScrollIndicator = false
+            }
+        },
+        update = update,
+        modifier = Modifier
+            .alpha(0f)
+            .height(1.dp)
+            .fillMaxWidth()
+    )
 }
 
 private const val FAKE_ITEM_SIZE = 1000
-
-@Composable
-private fun UIScrollView(scrollViewDelegate: UIScrollViewDelegateProtocol): UIScrollView {
-    val scrollView = remember {
-        UIScrollView(CGRectMake(0.0, 0.0, 10000.0, 1.0)).apply {
-            scrollsToTop = true
-            delegate = scrollViewDelegate
-            // without setting content size, scroll to top wouldn't work
-            setContentSize(CGSizeMake(10000.0, 10000.0))
-            showsVerticalScrollIndicator = false
-            showsHorizontalScrollIndicator = false
-        }
-    }
-
-    // Native view to handle system event
-    UIKitView(
-        factory = { scrollView },
-        modifier = Modifier.height(1.dp).fillMaxWidth()
-    )
-    return scrollView
-}
