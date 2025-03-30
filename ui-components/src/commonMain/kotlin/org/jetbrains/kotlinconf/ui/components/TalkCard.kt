@@ -134,11 +134,7 @@ fun TalkCard(
                 shape = CardTalkShape,
             )
             .clip(CardTalkShape)
-            .clickable(
-                onClick = onClick,
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() },
-            )
+            .clickable(onClick = onClick)
             .background(backgroundColor)
     ) {
         TopBlock(
