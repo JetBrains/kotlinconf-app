@@ -371,6 +371,7 @@ private fun Header(
                 onClose = {
                     onHeaderStateChange(MainHeaderContainerState.Title)
                     onSearchQueryChange("")
+                    onClearSearch()
                 },
                 onClear = onClearSearch,
                 hasAdditionalInputs = filterItems.any { it.isSelected },
@@ -460,7 +461,7 @@ fun ScheduleList(
                                 HorizontalPager(
                                     state = pagerState,
                                     modifier = Modifier.fillMaxWidth(),
-                                    beyondViewportPageCount = 10,
+                                    beyondViewportPageCount = 1,
                                     contentPadding = PaddingValues(horizontal = 24.dp),
                                 ) { pageIndex ->
                                     SessionCard(
@@ -521,14 +522,15 @@ fun ScheduleList(
                     is ServiceEventGroupItem -> {
                         val events = item.value
                         ServiceEvents(
-                            events = events.map {
+                            events = events.map { event ->
                                 ServiceEventData(
-                                    title = it.title,
-                                    now = it.isLive,
-                                    time = it.badgeTimeLine,
-                                    note = it.startsInMinutes?.let { count ->
+                                    title = event.title,
+                                    now = event.isLive,
+                                    time = event.shortTimeline,
+                                    note = event.startsInMinutes?.let { count ->
                                         stringResource(Res.string.schedule_in_x_minutes, count)
-                                    })
+                                    },
+                                )
                             },
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
                         )
@@ -572,7 +574,7 @@ private fun SessionCard(
         speakerHighlights = speakerHighlights,
         location = session.locationLine,
         lightning = session.isLightning,
-        time = session.badgeTimeLine,
+        time = session.shortTimeline,
         timeNote = session.startsInMinutes?.let { count ->
             stringResource(Res.string.schedule_in_x_minutes, count)
         },

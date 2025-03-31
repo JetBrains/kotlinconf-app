@@ -133,7 +133,7 @@ fun SessionScreen(
                         .verticalScroll(rememberScrollState())
                 ) {
                     PageTitle(
-                        time = session.timeLine,
+                        time = session.fullTimeline,
                         title = session.title,
                         lightning = session.isLightning,
                         tags = session.tags,

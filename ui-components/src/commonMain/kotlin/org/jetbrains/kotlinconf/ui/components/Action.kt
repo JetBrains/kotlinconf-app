@@ -41,7 +41,7 @@ fun Action(
     val color by animateColorAsState(
         if (enabled) KotlinConfTheme.colors.primaryText
         else KotlinConfTheme.colors.noteText,
-        spring(DampingRatioNoBouncy, StiffnessMediumLow),
+        ColorSpringSpec,
     )
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),

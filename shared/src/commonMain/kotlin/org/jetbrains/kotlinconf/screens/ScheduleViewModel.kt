@@ -98,7 +98,7 @@ class ScheduleViewModel(
         return map { FilterItem(type = type, value = it, isSelected = false) }
     }
 
-    val filterItems = MutableStateFlow<List<FilterItem>>(
+    val filterItems = MutableStateFlow(
         TagValues.categories.toTags(FilterItemType.Category) +
                 TagValues.levels.toTags(FilterItemType.Level) +
                 TagValues.formats.toTags(FilterItemType.Format)
@@ -239,7 +239,7 @@ class ScheduleViewModel(
                         add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
                     } else {
                         // Otherwise we hide empty slots, probably service events that got grouped
-                        removeLast()
+                        removeAt(lastIndex) // Don't use removeLast https://developer.android.com/about/versions/15/behavior-changes-15#openjdk-api-changes
                     }
                 }
             }

@@ -21,8 +21,8 @@ data class SessionCardView(
     val tags: List<String>,
     val startsInMinutes: Int?,
 ) {
-    val timeLine: String = DateTimeFormatting.dateAndTime(startsAt)
-    val badgeTimeLine: String = DateTimeFormatting.timeToTime(startsAt, endsAt)
+    val fullTimeline: String = DateTimeFormatting.dateAndTime(startsAt)
+    val shortTimeline: String = DateTimeFormatting.timeToTime(startsAt, endsAt)
     val isLightning: Boolean = endsAt - startsAt <= LIGHTNING_TALK_LIMIT
 }
 

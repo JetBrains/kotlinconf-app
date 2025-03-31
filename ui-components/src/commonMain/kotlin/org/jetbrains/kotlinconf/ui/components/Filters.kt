@@ -22,9 +22,11 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -67,7 +69,8 @@ fun Filters(
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
-            .background(KotlinConfTheme.colors.tileBackground),
+            .background(KotlinConfTheme.colors.tileBackground)
+            .verticalScroll(rememberScrollState()),
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,

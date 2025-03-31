@@ -134,7 +134,7 @@ fun SpeakerDetailScreen(
                             speakerHighlights = emptyList(),
                             location = session.locationLine,
                             lightning = session.isLightning,
-                            time = session.badgeTimeLine,
+                            time = session.fullTimeline,
                             timeNote = session.startsInMinutes?.let { count ->
                                 stringResource(Res.string.schedule_in_x_minutes, count)
                             },
