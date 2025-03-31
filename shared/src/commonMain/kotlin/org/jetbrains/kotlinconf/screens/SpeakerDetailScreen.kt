@@ -23,6 +23,7 @@ import kotlinconfapp.shared.generated.resources.speaker_detail_title
 import kotlinconfapp.ui_components.generated.resources.arrow_left_24
 import kotlinconfapp.ui_components.generated.resources.main_header_back
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.toEmotion
@@ -81,11 +82,13 @@ fun SpeakerDetailScreen(
                     modifier = Modifier.fillMaxSize(),
                 )
             } else {
+                val scrollState = rememberScrollState()
+                ScrollToTopHandler(scrollState)
                 Column(
                     modifier = Modifier
                         .padding(vertical = 16.dp, horizontal = 12.dp)
                         .padding(bottomInsetPadding())
-                        .verticalScroll(rememberScrollState()),
+                        .verticalScroll(scrollState),
                 ) {
                     StyledText(
                         text = currentSpeaker.name,
