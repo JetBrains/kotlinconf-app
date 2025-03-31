@@ -36,7 +36,9 @@ fun SpeakerCard(
     titleHighlights: List<IntRange> = emptyList(),
 ) {
     Row(
-        modifier = modifier.clickable(onClick = onClick),
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .clickable(onClick = onClick),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
