@@ -27,8 +27,6 @@ data class SessionCardView(
 }
 
 val SessionCardView.isLive get() = state == SessionState.Live
-val SessionCardView.isUpcoming get() = state == SessionState.Upcoming
-val SessionCardView.isPast get() = state == SessionState.Past
 
 val SessionCardView.isServiceEvent: Boolean
     get() = speakerIds.isEmpty() && tags.isEmpty()

@@ -19,8 +19,6 @@ data class TimeSlot(
 }
 
 val TimeSlot.isLive get() = state == SessionState.Live
-val TimeSlot.isUpcoming get() = state == SessionState.Upcoming
-val TimeSlot.isPast get() = state == SessionState.Past
 
 fun Conference.buildAgenda(
     favorites: Set<SessionId>,
@@ -111,14 +109,3 @@ data class NewsDisplayItem(
     val title: String,
     val content: String,
 )
-
-data class ServiceEvent(
-    val id: String,
-    val title: String,
-    val startsAt: LocalDateTime,
-    val endsAt: LocalDateTime,
-    val state: SessionState,
-    val startsInMinutes: Int?,
-) {
-    val time: String = DateTimeFormatting.timeToTime(startsAt, endsAt)
-}

@@ -39,8 +39,6 @@ import kotlinconfapp.shared.generated.resources.map_first_floor
 import kotlinconfapp.shared.generated.resources.map_ground_floor
 import kotlinconfapp.shared.generated.resources.map_title
 import kotlinconfapp.shared.generated.resources.navigate_back
-import kotlinconfapp.ui_components.generated.resources.arrow_left_24
-import kotlinconfapp.ui_components.generated.resources.main_header_back
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi

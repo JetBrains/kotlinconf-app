@@ -2,7 +2,6 @@ package org.jetbrains.kotlinconf
 
 import com.mmk.kmpnotifier.extensions.onNotificationClicked
 import com.mmk.kmpnotifier.notification.NotifierManager
-import com.mmk.kmpnotifier.notification.PayloadData
 import org.jetbrains.kotlinconf.navigation.navigateByLocalNotificationId
 import platform.UserNotifications.UNNotificationContent
 import platform.UserNotifications.UNNotificationResponse
@@ -19,13 +18,4 @@ fun handleNotificationResponse(response: UNNotificationResponse) {
 
     // Process push notifications
     NotifierManager.onNotificationClicked(content)
-}
-
-internal fun Map<Any?, *>?.toPayloadData(): PayloadData {
-    return this.orEmpty().let { data ->
-        data.keys
-            .filterNotNull()
-            .filterIsInstance<String>()
-            .associateWith { key -> data[key] }
-    }
 }
