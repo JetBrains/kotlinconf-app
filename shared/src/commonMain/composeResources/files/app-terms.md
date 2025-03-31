@@ -23,7 +23,7 @@ number: 74098896, VAT ID number: NL85977129B01.
 
 2.1. KotlinConf App is licensed for use under the Apache 2.0 license
 (see
-[<u>https://github.com/JetBrains/kotlinconf-app/blob/master/LICENSE</u>](https://github.com/JetBrains/kotlinconf-app/blob/master/LICENSE)).
+[<u>https://github.com/JetBrains/kotlinconf-app/tree/HEAD/LICENSE</u>](https://github.com/JetBrains/kotlinconf-app/tree/HEAD/LICENSE)).
 
 In connection with Your use of KotlinConf App, You may:
 

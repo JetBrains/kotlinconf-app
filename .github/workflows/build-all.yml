@@ -1,6 +1,10 @@
 name: Build all apps
 on:
   pull_request:
+  push:
+    branches:
+      - main
+      - kotlinconf-2025
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
