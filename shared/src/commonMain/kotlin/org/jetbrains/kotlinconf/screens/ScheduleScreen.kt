@@ -50,6 +50,7 @@ import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.DayValues
+import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
 import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionCardView
@@ -401,6 +402,8 @@ private fun ScheduleList(
     modifier: Modifier = Modifier,
 ) {
     ScrollToTopHandler(listState)
+    HideKeyboardOnDragHandler(listState)
+
     LazyColumn(
         state = listState,
         modifier = modifier,

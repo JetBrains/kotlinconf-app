@@ -7,6 +7,7 @@ data class Flags(
     val supportsNotifications: Boolean = true,
     val rippleEnabled: Boolean = true,
     val redirectFeedbackToSessionPage: Boolean = false,
+    val hideKeyboardOnDrag: Boolean = false,
 )
 
 val LocalFlags = compositionLocalOf<Flags> {

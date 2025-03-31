@@ -421,8 +421,8 @@ private fun FeedbackBlock(
             val bringIntoViewRequester = remember { BringIntoViewRequester() }
             val hapticFeedback = LocalHapticFeedback.current
             LaunchedEffect(focusRequester) {
-                focusRequester.requestFocus()
                 bringIntoViewRequester.bringIntoView()
+                focusRequester.requestFocus()
             }
             FeedbackForm(
                 emotion = selectedEmotion,
