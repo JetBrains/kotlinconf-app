@@ -420,17 +420,7 @@ private fun ScheduleList(
     ) {
         items(
             scheduleItems,
-            key = {
-                when (it) {
-                    is DayHeaderItem -> it.value.date.toString()
-                    is ServiceEventGroupItem -> it.value.map { it.id.id }
-                    is ServiceEventItem -> it.value.id.id
-                    is SessionItem -> it.value.id.id
-                    is TimeSlotTitleItem -> it.value.startsAt.toString()
-                    is WorkshopItem -> "workshops"
-                    is NoBookmarksItem -> it.id
-                }
-            },
+            key = { it.key },
         ) { item ->
             Box(Modifier.animateItem()) {
                 when (item) {
@@ -560,14 +550,6 @@ private fun ScheduleList(
                                 )
                             },
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
-                        )
-                    }
-
-                    is NoBookmarksItem -> {
-                        Text(
-                            stringResource(Res.string.schedule_label_no_bookmarks),
-                            color = KotlinConfTheme.colors.noteText,
-                            modifier = modifier.padding(12.dp),
                         )
                     }
                 }

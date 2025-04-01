@@ -28,32 +28,48 @@ import org.jetbrains.kotlinconf.ui.components.FilterItemType
 import org.jetbrains.kotlinconf.utils.containsDiacritics
 import org.jetbrains.kotlinconf.utils.removeDiacritics
 
-sealed interface ScheduleListItem
+sealed interface ScheduleListItem {
+    val key: String
+}
 
-data class DayHeaderItem(val value: Day) : ScheduleListItem
+data class DayHeaderItem(val value: Day) : ScheduleListItem {
+    override val key: String = value.date.toString()
+}
 
-data class TimeSlotTitleItem(val value: TimeSlot) : ScheduleListItem
+data class TimeSlotTitleItem(val value: TimeSlot) : ScheduleListItem {
+    override val key: String = value.startsAt.toString()
+}
 
-data class NoBookmarksItem(val id: String) : ScheduleListItem
+//data class NoBookmarksItem(val id: String) : ScheduleListItem {
+//    override val key: String = "no-bookmarks-$id"
+//}
 
 data class SessionItem(
     val value: SessionCardView,
     val tagMatches: List<String> = emptyList(),
     val titleHighlights: List<IntRange> = emptyList(),
     val speakerHighlights: List<IntRange> = emptyList(),
-) : ScheduleListItem
+) : ScheduleListItem {
+    override val key: String = value.id.id
+}
 
 data class ServiceEventItem(
     val value: SessionCardView,
-) : ScheduleListItem
+) : ScheduleListItem {
+    override val key: String = value.id.id
+}
 
 data class ServiceEventGroupItem(
     val value: List<SessionCardView>,
-) : ScheduleListItem
+) : ScheduleListItem {
+    override val key: String = value.map { it.id.id }.toString()
+}
 
 data class WorkshopItem(
     val workshops: List<SessionCardView>,
-) : ScheduleListItem
+) : ScheduleListItem {
+    override val key: String get() = "workshops"
+}
 
 data class ScheduleSearchParams(
     val searchQuery: String = "",
@@ -252,9 +268,9 @@ class ScheduleViewModel(
                         add(SessionItem(session))
                     }
 
-                    if (last() is TimeSlotTitleItem && isBookmarkedOnly) {
-                        add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
-                    }
+//                    if (last() is TimeSlotTitleItem && isBookmarkedOnly) {
+//                        add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
+//                    }
 
                     if (activeTimeSlot) { // This was the active slot
                         lastActiveIndex = lastIndex // Mark its end

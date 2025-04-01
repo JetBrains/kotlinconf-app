@@ -1,10 +1,14 @@
-@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class, InternalHotReloadGradleApi::class)
 
 import com.mikepenz.aboutlibraries.plugin.DuplicateMode
 import com.mikepenz.aboutlibraries.plugin.DuplicateRule
+import org.jetbrains.compose.reload.ComposeReloadHotClasspathTask
+import org.jetbrains.compose.reload.gradle.InternalHotReloadGradleApi
+import org.jetbrains.compose.reload.isHotReloadBuild
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompileTool
 
 plugins {
     alias(libs.plugins.aboutLibraries)
@@ -212,4 +216,15 @@ aboutLibraries {
     duplicationMode = DuplicateMode.MERGE
     duplicationRule = DuplicateRule.SIMPLE
     outputPath = "src/commonMain/composeResources/files"
+}
+
+if (isHotReloadBuild) {
+    gradle.taskGraph.whenReady {
+        allTasks.forEach { task ->
+            task.enabled = when (task) {
+                is KotlinCompileTool, is Jar, is Sync, is Copy, is ComposeReloadHotClasspathTask -> true
+                else -> false
+            }
+        }
+    }
 }
