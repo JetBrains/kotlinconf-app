@@ -46,6 +46,7 @@ object TagValues {
         "Workshop",
         "Regular session",
         "Lightning talk",
+        "Codelab",
     )
 }
 
@@ -132,7 +133,7 @@ internal val ABOUT_CONFERENCE_BLOCKS = listOf(
         day = "22-23",
         title1 = "Code",
         title2 = "labs",
-        description = null, // TODO add real description https://github.com/JetBrains/kotlinconf-app/issues/339
+        description = "Participate in code labs by Google and get practical, hands-on experience with Kotlin Multiplatform! They'll guide you through setting up your environment, introducing shared logic to a mobile app, and migrating existing Android code to multiple platforms.",
     ),
     AboutBlock(
         sessionId = SessionId("62b7f3ff-2afa-4b2e-8aec-e69e536cdb6a"),
