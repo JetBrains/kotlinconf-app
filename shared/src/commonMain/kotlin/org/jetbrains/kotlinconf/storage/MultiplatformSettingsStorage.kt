@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinconf.Conference
+import org.jetbrains.kotlinconf.Flags
 import org.jetbrains.kotlinconf.NewsItem
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.SessionId
@@ -65,6 +66,15 @@ class MultiplatformSettingsStorage(
     override suspend fun setVotes(value: List<VoteInfo>) = settings
         .set(Keys.VOTES, Json.encodeToString(value))
 
+    override fun getFlagsBlocking(): Flags? =
+        settings.getStringOrNull(Keys.FLAGS)?.let { Json.decodeFromString<Flags>(it) }
+
+    override fun getFlags(): Flow<Flags?> = settings.getStringOrNullFlow(Keys.FLAGS)
+        .map { it?.let { Json.decodeFromString<Flags>(it) } }
+
+    override suspend fun setFlags(value: Flags) = settings
+        .set(Keys.FLAGS, Json.encodeToString(value))
+
     override fun ensureCurrentVersion() {
         val version = settings.getInt(Keys.STORAGE_VERSION, 0)
         if (version < CURRENT_STORAGE_VERSION) {
@@ -89,5 +99,6 @@ class MultiplatformSettingsStorage(
         const val FAVORITES = "favorites"
         const val NOTIFICATION_SETTINGS = "notificationSettings"
         const val VOTES = "votes"
+        const val FLAGS = "flags"
     }
 }

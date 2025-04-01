@@ -62,7 +62,7 @@ class ServerBasedTimeProvider(private val client: APIClient) : TimeProvider {
 
 class FakeTimeProvider(
     private val logger: Logger,
-    baseTime: LocalDateTime = LocalDateTime.parse("2025-05-22T14:37:00"),
+    baseTime: LocalDateTime = LocalDateTime.parse("2025-05-22T14:30:00"),
     private val freezeTime: Boolean = false,
     private val speedMultiplier: Double = 20.0,
 ) : TimeProvider {

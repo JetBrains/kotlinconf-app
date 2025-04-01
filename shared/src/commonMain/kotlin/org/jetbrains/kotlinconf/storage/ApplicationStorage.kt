@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf.storage
 
 import kotlinx.coroutines.flow.Flow
 import org.jetbrains.kotlinconf.Conference
+import org.jetbrains.kotlinconf.Flags
 import org.jetbrains.kotlinconf.NewsItem
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.SessionId
@@ -35,6 +36,10 @@ interface ApplicationStorage {
 
     fun getVotes(): Flow<List<VoteInfo>>
     suspend fun setVotes(value: List<VoteInfo>)
+
+    fun getFlagsBlocking(): Flags?
+    fun getFlags(): Flow<Flags?>
+    suspend fun setFlags(value: Flags)
 
     fun ensureCurrentVersion()
 }
