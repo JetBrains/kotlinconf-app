@@ -25,18 +25,7 @@ tasks.register("prepareRelease") {
     group = "releases"
     description = "Bumps versions and prepares release notes"
 
-    dependsOn("updateVersion", "updateReleaseNotes")
-
-    doLast {
-        // Export library definitions for licenses
-        project.exec {
-            commandLine = listOf(
-                "./gradlew",
-                ":shared:exportLibraryDefinitions",
-                "-PaboutLibraries.exportPath=src/commonMain/composeResources/files"
-            )
-        }
-    }
+    dependsOn("updateVersion", "updateReleaseNotes", ":shared:exportLibraryDefinitions")
 }
 
 tasks.register("updateVersion") {
