@@ -33,7 +33,7 @@ data class DayHeaderItem(val value: Day) : ScheduleListItem
 
 data class TimeSlotTitleItem(val value: TimeSlot) : ScheduleListItem
 
-data class NoBookmarksItem(val id: String) : ScheduleListItem
+//data class NoBookmarksItem(val id: String) : ScheduleListItem
 
 data class SessionItem(
     val value: SessionCardView,
@@ -62,7 +62,6 @@ fun ScheduleListItem.isLive(): Boolean {
         is SessionItem -> this.value.isLive
         is TimeSlotTitleItem -> this.value.isLive
         is WorkshopItem -> this.workshops.any { it.isLive }
-        is NoBookmarksItem -> false
     }
 }
 
@@ -236,7 +235,7 @@ class ScheduleViewModel(
                     if (isBookmarkedOnly && (allWorkshops.isNotEmpty() || allTalks.isNotEmpty())) {
                         // If nothing was added to this slot, but there were workshops or talks,
                         // they must have been filtered out because none of them are bookmarked
-                        add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
+//                        add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
                     } else {
                         // Otherwise we hide empty slots, probably service events that got grouped
                         removeAt(lastIndex) // Don't use removeLast https://developer.android.com/about/versions/15/behavior-changes-15#openjdk-api-changes

@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOutQuad
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -66,7 +67,7 @@ fun SettingsScreen(
     val graphicsLayer = rememberGraphicsLayer()
     val scope = rememberCoroutineScope()
     var bitmap by remember { mutableStateOf<ImageBitmap?>(null) }
-    var bitmapVisibility = remember { Animatable(1f) }
+    var bitmapHeight = remember { Animatable(1f) }
 
     val currentTheme by viewModel.theme.collectAsStateWithLifecycle()
 
@@ -77,8 +78,8 @@ fun SettingsScreen(
             onThemeChange = { theme ->
                 scope.launch {
                     bitmap = graphicsLayer.toImageBitmap()
-                    bitmapVisibility.snapTo(1f)
-                    bitmapVisibility.animateTo(0f, tween(500, easing = EaseOutQuad))
+                    bitmapHeight.snapTo(1f)
+                    bitmapHeight.animateTo(0f, tween(500, easing = LinearEasing))
                     bitmap = null
                 }
                 viewModel.setTheme(theme)
@@ -98,7 +99,7 @@ fun SettingsScreen(
                 bitmap = bitmap,
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxHeight(fraction = bitmapVisibility.value)
+                    .fillMaxHeight(fraction = bitmapHeight.value)
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter),
                 contentScale = ContentScale.Crop,

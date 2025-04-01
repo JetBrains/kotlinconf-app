@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -14,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -50,8 +54,8 @@ fun SpeakersScreen(
     onSpeaker: (SpeakerId) -> Unit,
     viewModel: SpeakersViewModel = koinViewModel(),
 ) {
-    var searchState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
-    var searchText by rememberSaveable { mutableStateOf("") }
+    var searchState by remember { mutableStateOf(MainHeaderContainerState.Title) }
+    var searchText by remember { mutableStateOf("") }
 
     val uiState = viewModel.speakers.collectAsState().value
 
@@ -111,8 +115,9 @@ fun SpeakersScreen(
                     val listState = rememberLazyListState()
                     ScrollToTopHandler(listState)
                     HideKeyboardOnDragHandler(listState)
-                    LazyColumn(
-                        state = listState,
+
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(1),
                         modifier = Modifier.fillMaxSize(),
                     ) {
                         items(targetState.speakers, key = { it.speaker.id.id }) { speakerWithHighlights ->

@@ -39,6 +39,7 @@ import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
+import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 
 
@@ -63,7 +64,7 @@ fun InfoScreen(
                 .fillMaxSize()
                 .padding(horizontal = 12.dp)
                 .padding(bottom = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
@@ -79,7 +80,7 @@ fun InfoScreen(
             PageMenuItem(stringResource(Res.string.info_link_partners), onClick = onOurPartners)
             PageMenuItem(stringResource(Res.string.info_link_code_of_conduct), onClick = onCodeOfConduct)
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 SocialSquare(
                     image = vectorResource(Res.drawable.twitter),
