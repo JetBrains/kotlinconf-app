@@ -30,6 +30,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -50,6 +51,8 @@ import kotlinconfapp.shared.generated.resources.session_your_feedback
 import kotlinconfapp.shared.generated.resources.up_24
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_talk
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_workshop
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionId
@@ -157,12 +160,19 @@ fun SessionScreen(
 
                     item {
                         if (session.state != SessionState.Upcoming) {
+                            val scope = rememberCoroutineScope()
                             FeedbackPanel(
                                 onFeedback = { emotion ->
                                     viewModel.submitFeedback(emotion)
                                 },
                                 onFeedbackWithComment = { emotion, comment ->
                                     viewModel.submitFeedbackWithComment(emotion, comment)
+                                },
+                                onFeedbackExpanded = {
+                                    scope.launch {
+                                        delay(100)
+                                        listState.animateScrollToItem(1)
+                                    }
                                 },
                                 userSignedIn = userSignedIn,
                                 startExpanded = openedForFeedback,
@@ -217,6 +227,7 @@ fun SessionScreen(
 private fun FeedbackPanel(
     onFeedback: (Emotion?) -> Unit,
     onFeedbackWithComment: (Emotion, String) -> Unit,
+    onFeedbackExpanded: () -> Unit,
     userSignedIn: Boolean,
     modifier: Modifier = Modifier,
     startExpanded: Boolean,
@@ -225,6 +236,12 @@ private fun FeedbackPanel(
 ) {
     var selectedEmotion by remember { mutableStateOf<Emotion?>(initialEmotion) }
     var feedbackExpanded by rememberSaveable { mutableStateOf(initialEmotion != null && startExpanded) }
+
+    LaunchedEffect(feedbackExpanded) {
+        if (feedbackExpanded) {
+            onFeedbackExpanded()
+        }
+    }
 
     Column(
         modifier = modifier
