@@ -147,9 +147,6 @@ class ConferenceService(
         }
     }
 
-    /**
-     * Returns true if app is launched first time.
-     */
     fun isOnboardingComplete(): Flow<Boolean> {
         return storage.isOnboardingComplete()
     }
@@ -230,9 +227,6 @@ class ConferenceService(
         return client.userId != null
     }
 
-    /**
-     * Vote for session.
-     */
     suspend fun vote(sessionId: SessionId, rating: Score?): Boolean {
         if (!checkUserId()) return false
 
@@ -274,9 +268,6 @@ class ConferenceService(
             allNews.find { it.id == newsId }
         }
 
-    /**
-     * Mark session as favorite.
-     */
     fun setFavorite(sessionId: SessionId, favorite: Boolean) {
         scope.launch {
             val favorites = storage.getFavorites().first().toMutableSet()

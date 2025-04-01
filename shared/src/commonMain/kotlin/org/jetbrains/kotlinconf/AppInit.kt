@@ -39,17 +39,27 @@ fun initApp(
 
 private fun initKoin(
     platformModule: Module,
-    flags: Flags,
+    platformFlags: Flags,
 ): Koin {
     return startKoin {
         val appModule = module {
             single { APIClient(URLs.API_ENDPOINT, get()) }
             single<ApplicationStorage> { MultiplatformSettingsStorage(get()) }
-            single<TimeProvider> { ServerBasedTimeProvider(get()) }
-//            single<TimeProvider> { FakeTimeProvider(get()) }
+            single<TimeProvider> {
+                if (isProd()) {
+                    ServerBasedTimeProvider(get())
+                } else {
+                    val flags = get<ApplicationStorage>().getFlagsBlocking()
+                    if (flags != null && flags.useFakeTime) {
+                        FakeTimeProvider(get())
+                    } else {
+                        ServerBasedTimeProvider(get())
+                    }
+                }
+            }
             singleOf(::ConferenceService)
             single<Logger> { NoopProdLogger() }
-            single<Flags> { flags }
+            single { FlagsManager(platformFlags, get()) }
         }
 
         val viewModelModule = module {

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import org.jetbrains.kotlinconf.navigation.KotlinConfNavHost
+import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.koinInject
 import kotlin.jvm.JvmSuppressWildcards
@@ -41,7 +42,8 @@ fun App(
         .collectAsStateWithLifecycle(initialValue = null)
         .value
 
-    CompositionLocalProvider(LocalFlags provides koinInject()) {
+    val flags by koinInject<FlagsManager>().flags.collectAsStateWithLifecycle()
+    CompositionLocalProvider(LocalFlags provides flags) {
         KotlinConfTheme(
             darkTheme = isDarkTheme,
             rippleEnabled = LocalFlags.current.rippleEnabled,

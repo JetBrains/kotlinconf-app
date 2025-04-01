@@ -56,7 +56,9 @@ import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
+import org.jetbrains.kotlinconf.TimeProvider
 import org.jetbrains.kotlinconf.isLive
+import org.jetbrains.kotlinconf.isProd
 import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -82,6 +84,7 @@ import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 
@@ -347,7 +350,12 @@ private fun Header(
         state = headerState,
         titleContent = {
             MainHeaderTitleBar(
-                title = stringResource(Res.string.nav_destination_schedule),
+                title = if (!isProd() && LocalFlags.current.useFakeTime) {
+                    val dateTime by koinInject<TimeProvider>().time.collectAsStateWithLifecycle()
+                    "Fake time: ${DateTimeFormatting.dateAndTime(dateTime)}"
+                } else {
+                    stringResource(Res.string.nav_destination_schedule)
+                },
                 startContent = startContent,
                 endContent = {
                     TopMenuButton(

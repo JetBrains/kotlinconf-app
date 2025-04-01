@@ -115,3 +115,7 @@ data object NewsListScreen
 @Serializable
 @SerialName("News")
 data class NewsDetailScreen(val newsId: String)
+
+@Serializable
+@SerialName("DeveloperMenu")
+data object DeveloperMenuScreen

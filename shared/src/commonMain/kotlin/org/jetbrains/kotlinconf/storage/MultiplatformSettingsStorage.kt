@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinconf.Conference
+import org.jetbrains.kotlinconf.Flags
 import org.jetbrains.kotlinconf.NewsItem
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.SessionId
@@ -19,6 +20,10 @@ import org.jetbrains.kotlinconf.VoteInfo
 class MultiplatformSettingsStorage(
     private val settings: ObservableSettings
 ) : ApplicationStorage {
+    private val json = Json {
+        ignoreUnknownKeys = true
+    }
+
     override fun getUserId(): Flow<String?> = settings.getStringOrNullFlow(Keys.USER_ID)
     override suspend fun setUserId(value: String?) = settings.set(Keys.USER_ID, value)
 
@@ -35,35 +40,44 @@ class MultiplatformSettingsStorage(
         .set(Keys.THEME, value.name)
 
     override fun getConferenceCache(): Flow<Conference?> = settings.getStringOrNullFlow(Keys.CONFERENCE_CACHE)
-        .map { it?.let { Json.decodeFromString<Conference>(it) } }
+        .map { it?.let { json.decodeFromString<Conference>(it) } }
 
     override suspend fun setConferenceCache(value: Conference) = settings
-        .set(Keys.CONFERENCE_CACHE, Json.encodeToString(value))
+        .set(Keys.CONFERENCE_CACHE, json.encodeToString(value))
 
     override fun getFavorites(): Flow<Set<SessionId>> = settings.getStringOrNullFlow(Keys.FAVORITES)
-        .map { it?.let { Json.decodeFromString<Set<SessionId>>(it) } ?: emptySet() }
+        .map { it?.let { json.decodeFromString<Set<SessionId>>(it) } ?: emptySet() }
 
     override suspend fun setFavorites(value: Set<SessionId>) = settings
-        .set(Keys.FAVORITES, Json.encodeToString(value))
+        .set(Keys.FAVORITES, json.encodeToString(value))
 
     override fun getNews(): Flow<List<NewsItem>> = settings.getStringOrNullFlow(Keys.NEWS_CACHE)
-        .map { it?.let { Json.decodeFromString<List<NewsItem>>(it) } ?: emptyList() }
+        .map { it?.let { json.decodeFromString<List<NewsItem>>(it) } ?: emptyList() }
 
     override suspend fun setNews(value: List<NewsItem>) = settings
-        .set(Keys.NEWS_CACHE, Json.encodeToString(value))
+        .set(Keys.NEWS_CACHE, json.encodeToString(value))
 
     override fun getNotificationSettings(): Flow<NotificationSettings?> =
         settings.getStringOrNullFlow(Keys.NOTIFICATION_SETTINGS)
-            .map { it?.let { Json.decodeFromString<NotificationSettings>(it) } }
+            .map { it?.let { json.decodeFromString<NotificationSettings>(it) } }
 
     override suspend fun setNotificationSettings(value: NotificationSettings) = settings
-        .set(Keys.NOTIFICATION_SETTINGS, Json.encodeToString(value))
+        .set(Keys.NOTIFICATION_SETTINGS, json.encodeToString(value))
 
     override fun getVotes(): Flow<List<VoteInfo>> = settings.getStringOrNullFlow(Keys.VOTES)
-        .map { it?.let { Json.decodeFromString<List<VoteInfo>>(it) } ?: emptyList() }
+        .map { it?.let { json.decodeFromString<List<VoteInfo>>(it) } ?: emptyList() }
 
     override suspend fun setVotes(value: List<VoteInfo>) = settings
-        .set(Keys.VOTES, Json.encodeToString(value))
+        .set(Keys.VOTES, json.encodeToString(value))
+
+    override fun getFlagsBlocking(): Flags? =
+        settings.getStringOrNull(Keys.FLAGS)?.let { json.decodeFromString<Flags>(it) }
+
+    override fun getFlags(): Flow<Flags?> = settings.getStringOrNullFlow(Keys.FLAGS)
+        .map { it?.let { json.decodeFromString<Flags>(it) } }
+
+    override suspend fun setFlags(value: Flags) = settings
+        .set(Keys.FLAGS, json.encodeToString(value))
 
     override fun ensureCurrentVersion() {
         val version = settings.getInt(Keys.STORAGE_VERSION, 0)
@@ -89,5 +103,6 @@ class MultiplatformSettingsStorage(
         const val FAVORITES = "favorites"
         const val NOTIFICATION_SETTINGS = "notificationSettings"
         const val VOTES = "votes"
+        const val FLAGS = "flags"
     }
 }
