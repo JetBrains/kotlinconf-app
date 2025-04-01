@@ -256,7 +256,7 @@ fun ScheduleScreen(
                                     onBookmark = { sessionId, isBookmarked ->
                                         viewModel.onBookmark(sessionId, isBookmarked)
                                     },
-                                    modifier = Modifier.fillMaxSize()
+                                    modifier = Modifier.fillMaxSize().clipToBounds()
                                 )
                             } else {
                                 MinorError(
