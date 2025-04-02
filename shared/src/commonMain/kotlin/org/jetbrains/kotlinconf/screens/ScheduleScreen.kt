@@ -610,10 +610,8 @@ private fun SessionCard(
         onSubmitFeedback = { emotion ->
             onSubmitFeedback(session.id, emotion)
         },
-        onRequestFeedbackWithComment = if (onRequestFeedbackWithComment != null) {
+        onRequestFeedbackWithComment = onRequestFeedbackWithComment?.let {
             { onRequestFeedbackWithComment(session.id) }
-        } else {
-            null
         },
         onSubmitFeedbackWithComment = { emotion, comment ->
             onSubmitFeedbackWithComment(session.id, emotion, comment)
