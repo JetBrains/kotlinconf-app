@@ -60,7 +60,7 @@ fun AboutAppScreen(
 
             PageMenuItem(
                 stringResource(Res.string.about_app_link_github),
-                drawableResource = Res.drawable.arrow_up_right_24,
+                drawableEnd = Res.drawable.arrow_up_right_24,
                 onClick = onGitHubRepo,
             )
 
@@ -68,7 +68,7 @@ fun AboutAppScreen(
             if (storeUrlAvailable) {
                 PageMenuItem(
                     stringResource(Res.string.about_app_link_rate),
-                    drawableResource = Res.drawable.arrow_up_right_24,
+                    drawableEnd = Res.drawable.arrow_up_right_24,
                     onClick = onRateApp,
                 )
             }

@@ -43,10 +43,13 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.arrow_left_24
+import kotlinconfapp.shared.generated.resources.arrow_up_right_24
 import kotlinconfapp.shared.generated.resources.down_24
 import kotlinconfapp.shared.generated.resources.navigate_back
+import kotlinconfapp.shared.generated.resources.play_video
 import kotlinconfapp.shared.generated.resources.session_screen_error
 import kotlinconfapp.shared.generated.resources.session_title
+import kotlinconfapp.shared.generated.resources.session_watch_video
 import kotlinconfapp.shared.generated.resources.session_your_feedback
 import kotlinconfapp.shared.generated.resources.up_24
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_talk
@@ -67,6 +70,7 @@ import org.jetbrains.kotlinconf.ui.components.FeedbackForm
 import org.jetbrains.kotlinconf.ui.components.KodeeIconLarge
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MajorError
+import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.components.PageTitle
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.StyledText
@@ -88,6 +92,7 @@ fun SessionScreen(
     onSpeaker: (SpeakerId) -> Unit,
     onPrivacyPolicyNeeded: () -> Unit,
     onNavigateToMap: (String) -> Unit,
+    onWatchVideo: (String) -> Unit,
     viewModel: SessionViewModel = koinViewModel { parametersOf(sessionId) }
 ) {
     val session = viewModel.session.collectAsState().value
@@ -147,15 +152,26 @@ fun SessionScreen(
                     contentPadding = bottomInsetPadding()
                 ) {
                     item {
-                        PageTitle(
-                            time = session.fullTimeline,
-                            title = session.title,
-                            lightning = session.isLightning,
-                            tags = session.tags,
-                            bookmarked = session.isFavorite,
-                            onBookmark = { viewModel.toggleFavorite(it) },
-                            modifier = Modifier.padding(vertical = 24.dp),
-                        )
+                        Column {
+                            PageTitle(
+                                time = session.fullTimeline,
+                                title = session.title,
+                                lightning = session.isLightning,
+                                tags = session.tags,
+                                bookmarked = session.isFavorite,
+                                onBookmark = { viewModel.toggleFavorite(it) },
+                                modifier = Modifier.padding(vertical = 24.dp),
+                            )
+                            if (session.videoUrl != null) {
+                                PageMenuItem(
+                                    label = stringResource(Res.string.session_watch_video),
+                                    onClick = { onWatchVideo(session.videoUrl) },
+                                    drawableStart = Res.drawable.play_video,
+                                    drawableEnd = Res.drawable.arrow_up_right_24,
+                                    modifier = Modifier.padding(bottom = 12.dp),
+                                )
+                            }
+                        }
                     }
 
                     item {
