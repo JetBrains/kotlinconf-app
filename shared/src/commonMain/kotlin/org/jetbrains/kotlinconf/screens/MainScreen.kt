@@ -1,7 +1,9 @@
 package org.jetbrains.kotlinconf.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
@@ -13,8 +15,6 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -116,6 +116,9 @@ fun MainScreen(
                 ScheduleScreen(
                     onSession = { rootNavController.navigate(SessionScreen(it)) },
                     onPrivacyPolicyNeeded = { rootNavController.navigate(PrivacyPolicyScreen) },
+                    onRequestFeedbackWithComment = { sessionId ->
+                        rootNavController.navigate(SessionScreen(sessionId, openedForFeedback = true))
+                    },
                 )
             }
             composable<MapScreen> {
@@ -124,26 +127,25 @@ fun MainScreen(
             }
         }
 
-        val keyboardVisible by keyboardAsState()
-        if (!keyboardVisible) {
+        AnimatedVisibility(!isKeyboardOpen(), enter = fadeIn(snap()), exit = fadeOut(snap())) {
             BottomNavigation(nestedNavController)
         }
     }
 }
 
 @Composable
-fun MainBackHandler() {
+private fun MainBackHandler() {
     if (!LocalFlags.current.enableBackOnMainScreens) {
         // Prevent back navigation with an empty handler
         @OptIn(ExperimentalComposeUiApi::class)
-        BackHandler(true) {  }
+        BackHandler(true) { }
     }
 }
 
 @Composable
-private fun keyboardAsState(): State<Boolean> {
-    val isImeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
-    return rememberUpdatedState(isImeVisible)
+private fun isKeyboardOpen(): Boolean {
+    val bottomInset = WindowInsets.ime.getBottom(LocalDensity.current)
+    return rememberUpdatedState(bottomInset > 300).value
 }
 
 @Composable

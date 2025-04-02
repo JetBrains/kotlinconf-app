@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -38,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -50,6 +52,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.action_bookmark
+import kotlinconfapp.ui_components.generated.resources.arrow_right_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24_fill
 import kotlinconfapp.ui_components.generated.resources.lightning_16_fill
@@ -109,6 +112,7 @@ fun TalkCard(
     status: TalkStatus,
     initialEmotion: Emotion? = null,
     onSubmitFeedback: (Emotion?) -> Unit,
+    onRequestFeedbackWithComment: (() -> Unit)?,
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     onClick: () -> Unit,
     feedbackEnabled: Boolean,
@@ -176,6 +180,7 @@ fun TalkCard(
                 initialEmotion = initialEmotion,
                 onSubmitFeedback = onSubmitFeedback,
                 onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
+                onRequestFeedbackWithComment = onRequestFeedbackWithComment,
                 isWorkshop = tags.contains("Workshop"),
             )
         }
@@ -310,10 +315,11 @@ private fun FeedbackBlock(
     userSignedIn: Boolean,
     initialEmotion: Emotion? = null,
     onSubmitFeedback: (Emotion?) -> Unit,
+    onRequestFeedbackWithComment: (() -> Unit)?,
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     isWorkshop: Boolean,
 ) {
-    var selectedEmotion by remember { mutableStateOf<Emotion?>(initialEmotion) }
+    var selectedEmotion by remember { mutableStateOf(initialEmotion) }
     var feedbackExpanded by remember { mutableStateOf(false) }
 
     Column(
@@ -342,15 +348,23 @@ private fun FeedbackBlock(
                 contentAlignment = Alignment.CenterStart,
             ) { emotionSelected ->
                 if (emotionSelected) {
-                    val iconRotation by animateFloatAsState(if (feedbackExpanded) 0f else 180f)
-                    Action(
-                        label = stringResource(Res.string.talk_card_your_feedback),
-                        icon = Res.drawable.up_24,
-                        size = ActionSize.Medium,
-                        enabled = true,
-                        onClick = { feedbackExpanded = !feedbackExpanded },
-                        iconRotation = iconRotation,
-                    )
+                    if (onRequestFeedbackWithComment != null) {
+                        Action(
+                            label = stringResource(Res.string.talk_card_your_feedback),
+                            icon = Res.drawable.arrow_right_24,
+                            size = ActionSize.Medium,
+                            onClick = onRequestFeedbackWithComment,
+                        )
+                    } else {
+                        val iconRotation by animateFloatAsState(if (feedbackExpanded) 0f else 180f)
+                        Action(
+                            label = stringResource(Res.string.talk_card_your_feedback),
+                            icon = Res.drawable.up_24,
+                            size = ActionSize.Medium,
+                            onClick = { feedbackExpanded = !feedbackExpanded },
+                            iconRotation = iconRotation,
+                        )
+                    }
                 } else {
                     StyledText(
                         text = stringResource(
@@ -377,8 +391,17 @@ private fun FeedbackBlock(
                                 if (userSignedIn) {
                                     hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
                                     selectedEmotion = if (emotion == selectedEmotion) null else emotion
-                                    feedbackExpanded = selectedEmotion != null
                                     onSubmitFeedback(selectedEmotion)
+
+                                    if (selectedEmotion != null) {
+                                        if (onRequestFeedbackWithComment != null) {
+                                            onRequestFeedbackWithComment()
+                                        } else {
+                                            feedbackExpanded = true
+                                        }
+                                    } else {
+                                        feedbackExpanded = false
+                                    }
                                 } else {
                                     hapticFeedback.performHapticFeedback(HapticFeedbackType.Reject)
                                     onSubmitFeedback(selectedEmotion)
@@ -395,7 +418,12 @@ private fun FeedbackBlock(
             exit = fadeOut() + shrinkVertically(clip = false, shrinkTowards = Alignment.Top),
         ) {
             val focusRequester = remember { FocusRequester() }
+            val bringIntoViewRequester = remember { BringIntoViewRequester() }
             val hapticFeedback = LocalHapticFeedback.current
+            LaunchedEffect(focusRequester) {
+                bringIntoViewRequester.bringIntoView()
+                focusRequester.requestFocus()
+            }
             FeedbackForm(
                 emotion = selectedEmotion,
                 onSubmit = { emotion, comment ->
@@ -438,6 +466,7 @@ internal fun TalkCardPreview() {
                 timeNote = null,
                 status = TalkStatus.Live,
                 initialEmotion = Emotion.Positive,
+                onRequestFeedbackWithComment = null,
                 onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
                 onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
                 onClick = { println("Clicked session") },
@@ -464,6 +493,7 @@ internal fun TalkCardPreview() {
                 timeNote = "In 10 min",
                 status = TalkStatus.Upcoming,
                 initialEmotion = null,
+                onRequestFeedbackWithComment = null,
                 onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
                 onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
                 onClick = { println("Clicked session") },

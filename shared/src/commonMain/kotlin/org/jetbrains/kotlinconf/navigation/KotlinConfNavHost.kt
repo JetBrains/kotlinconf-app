@@ -17,17 +17,21 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import kotlinx.coroutines.channels.Channel
+import org.jetbrains.kotlinconf.FlagsManager
 import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.LocalNotificationId
 import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.URLs
+import org.jetbrains.kotlinconf.isProd
+import org.koin.compose.koinInject
 import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
 import org.jetbrains.kotlinconf.screens.AppPrivacyPolicy
 import org.jetbrains.kotlinconf.screens.AppTermsOfUse
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
+import org.jetbrains.kotlinconf.screens.DeveloperMenuScreen
 import org.jetbrains.kotlinconf.screens.LicensesScreen
 import org.jetbrains.kotlinconf.screens.MainScreen
 import org.jetbrains.kotlinconf.screens.NestedMapScreen
@@ -138,6 +142,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             onPrivacyPolicy = { navController.navigate(AppPrivacyPolicyScreen) },
             onTermsOfUse = { navController.navigate(AppTermsOfUseScreen) },
             onLicenses = { navController.navigate(LicensesScreen) },
+            onDeveloperMenu = { navController.navigate(DeveloperMenuScreen) },
         )
     }
     composable<LicensesScreen> {
@@ -199,11 +204,15 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
         )
     }
     composable<SessionScreen>(typeMap = mapOf(typeOf<SessionId>() to SessionIdNavType)) {
+        val params = it.toRoute<SessionScreen>()
+        val urlHandler = LocalUriHandler.current
         SessionScreen(
-            sessionId = it.toRoute<SessionScreen>().sessionId,
+            sessionId = params.sessionId,
+            openedForFeedback = params.openedForFeedback,
             onBack = navController::navigateUp,
             onPrivacyPolicyNeeded = { navController.navigate(PrivacyPolicyScreen) },
             onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) },
+            onWatchVideo = { videoUrl -> urlHandler.openUri(videoUrl) },
             onNavigateToMap = { roomName ->
                 navController.navigate(NestedMapScreen(roomName))
             },
@@ -226,6 +235,12 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
     composable<NewsDetailScreen> {
         val newsId = it.toRoute<NewsDetailScreen>().newsId
         NewsDetailScreen(newsId, onBack = navController::navigateUp)
+    }
+
+    if (!isProd()) {
+        composable<DeveloperMenuScreen> {
+            DeveloperMenuScreen(onBack = navController::navigateUp)
+        }
     }
 
     composable<NestedMapScreen> {

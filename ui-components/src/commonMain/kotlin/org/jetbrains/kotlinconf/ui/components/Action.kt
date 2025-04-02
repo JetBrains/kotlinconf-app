@@ -33,9 +33,9 @@ fun Action(
     label: String,
     icon: DrawableResource,
     size: ActionSize,
-    enabled: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     iconRotation: Float = 0f,
 ) {
     val color by animateColorAsState(

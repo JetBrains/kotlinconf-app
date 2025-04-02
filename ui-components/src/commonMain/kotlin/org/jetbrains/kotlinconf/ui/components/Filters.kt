@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -210,7 +211,8 @@ internal fun FiltersPreview() {
             toggleItem = { item, value ->
                 val newItem = item.copy(isSelected = value)
                 tags.replace(item, newItem)
-            }
+            },
+            modifier = Modifier.height(300.dp),
         )
     }
 }

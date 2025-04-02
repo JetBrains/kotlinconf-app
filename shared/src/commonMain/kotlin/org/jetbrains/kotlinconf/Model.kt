@@ -42,7 +42,8 @@ class Session(
     val location: String,
     val startsAt: LocalDateTime,
     val endsAt: LocalDateTime,
-    val tags: List<String>? = null
+    val tags: List<String>? = null,
+    val videoUrl: String? = null,
 )
 
 @Serializable

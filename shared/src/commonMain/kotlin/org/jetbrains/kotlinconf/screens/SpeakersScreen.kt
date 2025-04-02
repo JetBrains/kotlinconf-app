@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,7 +19,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
@@ -30,6 +28,7 @@ import kotlinconfapp.shared.generated.resources.speakers_title
 import kotlinconfapp.ui_components.generated.resources.main_header_search_hint
 import kotlinconfapp.ui_components.generated.resources.search_24
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -111,6 +110,7 @@ fun SpeakersScreen(
                 is SpeakersUiState.Content -> {
                     val listState = rememberLazyListState()
                     ScrollToTopHandler(listState)
+                    HideKeyboardOnDragHandler(listState)
                     LazyColumn(
                         state = listState,
                         modifier = Modifier.fillMaxSize(),

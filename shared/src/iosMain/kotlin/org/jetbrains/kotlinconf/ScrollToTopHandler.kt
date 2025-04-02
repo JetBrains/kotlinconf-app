@@ -23,101 +23,88 @@ import platform.UIKit.UIScrollView
 import platform.UIKit.UIScrollViewDelegateProtocol
 import platform.darwin.NSObject
 
+// Prerequisites for the scroll-to-top gesture to work are (https://developer.apple.com/documentation/uikit/uiscrollview/scrollstotop):
+// * scrollsToTop property set to true
+// * scrollViewShouldScrollToTop should return true
+// * current position shouldn't be at 0
+
 @Composable
 actual fun ScrollToTopHandler(scrollState: ScrollState) {
     val coroutineScope = rememberCoroutineScope()
-    val scrollViewDelegate = remember {
-        object : NSObject(), UIScrollViewDelegateProtocol {
-            // Prerequisites for the scroll-to-top gesture to work are (https://developer.apple.com/documentation/uikit/uiscrollview/scrollstotop):
-            // * scrollsToTop property set to true
-            // * scrollViewShouldScrollToTop should return true
-            // * current position shouldn't be at 0
-            override fun scrollViewShouldScrollToTop(scrollView: UIScrollView): Boolean = true
-
-            // Sync from Native to Compose
-            override fun scrollViewDidScroll(scrollView: UIScrollView) {
-                val currentOffset = scrollView.contentOffset.useContents { y.toInt() }
-                if (currentOffset != scrollState.value) {
-                    coroutineScope.launch {
-                        scrollState.scrollTo(currentOffset)
-                    }
-                }
+    val scrollViewDelegate = remember(coroutineScope, scrollState) {
+        createDelegate {
+            coroutineScope.launch {
+                scrollState.animateScrollTo(0)
             }
         }
     }
-
-    UIScrollView(
-        scrollViewDelegate,
-        update = { scrollView ->
-            val currentOffset = scrollView.contentOffset.useContents { y.toInt() }
-            if (currentOffset != scrollState.value) {
-                scrollView.setContentOffset(CGPointMake(0.0, scrollState.value.toDouble()))
-            }
-        }
-    )
+    UIScrollView(scrollViewDelegate)
 }
 
 @Composable
 actual fun ScrollToTopHandler(listState: LazyListState) {
     val coroutineScope = rememberCoroutineScope()
-    val scrollViewDelegate = remember {
-        object : NSObject(), UIScrollViewDelegateProtocol {
-            // Prerequisites for the scroll-to-top gesture to work are (https://developer.apple.com/documentation/uikit/uiscrollview/scrollstotop):
-            // * scrollsToTop property set to true
-            // * scrollViewShouldScrollToTop should return true
-            // * current position shouldn't be at 0
-            override fun scrollViewShouldScrollToTop(scrollView: UIScrollView): Boolean = true
-
-            // Sync from Native to Compose
-            override fun scrollViewDidScroll(scrollView: UIScrollView) {
-                val currentOffset = scrollView.contentOffset.useContents { x.toInt() * FAKE_ITEM_SIZE + y.toInt() }
-                if (currentOffset != listState.firstVisibleItemIndex * FAKE_ITEM_SIZE + listState.firstVisibleItemScrollOffset) {
-                    coroutineScope.launch {
-                        listState.scrollToItem(currentOffset / FAKE_ITEM_SIZE, currentOffset % FAKE_ITEM_SIZE)
-                    }
-                }
+    val scrollViewDelegate = remember(coroutineScope, listState) {
+        createDelegate {
+            coroutineScope.launch {
+                listState.animateScrollToItem(0)
             }
         }
     }
+    UIScrollView(scrollViewDelegate)
+}
 
-    UIScrollView(
-        scrollViewDelegate,
-        update = { scrollView ->
-            val currentOffset = scrollView.contentOffset.useContents { x.toInt() * FAKE_ITEM_SIZE + y.toInt() }
-            if (currentOffset != listState.firstVisibleItemIndex * FAKE_ITEM_SIZE + listState.firstVisibleItemScrollOffset) {
-                scrollView.setContentOffset(
-                    CGPointMake(
-                        0.0,
-                        (listState.firstVisibleItemIndex * FAKE_ITEM_SIZE + listState.firstVisibleItemScrollOffset).toDouble()
-                    )
-                )
+private fun createDelegate(
+    onScrollToTop: () -> Unit,
+): UIScrollViewDelegateProtocol {
+    return object : NSObject(), UIScrollViewDelegateProtocol {
+        override fun scrollViewShouldScrollToTop(scrollView: UIScrollView): Boolean = true
+
+        override fun scrollViewDidScrollToTop(scrollView: UIScrollView) {
+            scrollView.setContentOffset(CGPointMake(0.0, 100.0))
+            scrollingToTop = false
+        }
+
+        private var scrollingToTop = false
+        private var lastKnownOffset = 1.0
+
+        // Sync from Native to Compose
+        override fun scrollViewDidScroll(scrollView: UIScrollView) {
+            if (scrollingToTop) {
+                return
+            }
+
+            val newOffset = scrollView.contentOffset.useContents { y }
+            val scrollingUp = newOffset < lastKnownOffset
+            lastKnownOffset = newOffset
+
+            if (scrollingUp) {
+                scrollingToTop = true
+                onScrollToTop()
             }
         }
-    )
+    }
 }
 
 @Composable
 private fun UIScrollView(
     scrollViewDelegate: UIScrollViewDelegateProtocol,
-    update: (UIScrollView) -> Unit,
 ) {
     UIKitView(
         factory = {
-            UIScrollView(CGRectMake(0.0, 0.0, 10000.0, 1.0)).apply {
+            UIScrollView(CGRectMake(0.0, 0.0, 100.0, 1.0)).apply {
                 scrollsToTop = true
                 delegate = scrollViewDelegate
                 // without setting content size, scroll to top wouldn't work
-                setContentSize(CGSizeMake(10000.0, 10000.0))
+                setContentSize(CGSizeMake(100.0, 10000.0))
                 showsVerticalScrollIndicator = false
                 showsHorizontalScrollIndicator = false
+                setContentOffset(CGPointMake(0.0, 100.0)) // Enable scroll-to-top
             }
         },
-        update = update,
         modifier = Modifier
             .alpha(0f)
             .height(1.dp)
             .fillMaxWidth()
     )
 }
-
-private const val FAKE_ITEM_SIZE = 1000

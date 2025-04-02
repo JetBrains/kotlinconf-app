@@ -21,15 +21,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,15 +43,21 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.arrow_left_24
+import kotlinconfapp.shared.generated.resources.arrow_up_right_24
 import kotlinconfapp.shared.generated.resources.down_24
 import kotlinconfapp.shared.generated.resources.navigate_back
+import kotlinconfapp.shared.generated.resources.play_video
 import kotlinconfapp.shared.generated.resources.session_screen_error
 import kotlinconfapp.shared.generated.resources.session_title
+import kotlinconfapp.shared.generated.resources.session_watch_video
 import kotlinconfapp.shared.generated.resources.session_your_feedback
 import kotlinconfapp.shared.generated.resources.up_24
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_talk
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_workshop
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.SpeakerId
@@ -63,6 +70,7 @@ import org.jetbrains.kotlinconf.ui.components.FeedbackForm
 import org.jetbrains.kotlinconf.ui.components.KodeeIconLarge
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MajorError
+import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.components.PageTitle
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.StyledText
@@ -79,10 +87,12 @@ import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 @Composable
 fun SessionScreen(
     sessionId: SessionId,
+    openedForFeedback: Boolean,
     onBack: () -> Unit,
     onSpeaker: (SpeakerId) -> Unit,
     onPrivacyPolicyNeeded: () -> Unit,
     onNavigateToMap: (String) -> Unit,
+    onWatchVideo: (String) -> Unit,
     viewModel: SessionViewModel = koinViewModel { parametersOf(sessionId) }
 ) {
     val session = viewModel.session.collectAsState().value
@@ -126,62 +136,98 @@ fun SessionScreen(
             transitionSpec = { FadingAnimationSpec }
         ) { hasState ->
             if (hasState && session != null) {
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 12.dp)
-                        .padding(bottomInsetPadding())
-                        .verticalScroll(rememberScrollState())
+                val listState = rememberLazyListState()
+
+                LaunchedEffect(openedForFeedback) {
+                    if (openedForFeedback) {
+                        listState.animateScrollToItem(1)
+                    }
+                }
+
+                ScrollToTopHandler(listState)
+
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                    contentPadding = bottomInsetPadding()
                 ) {
-                    PageTitle(
-                        time = session.fullTimeline,
-                        title = session.title,
-                        lightning = session.isLightning,
-                        tags = session.tags,
-                        bookmarked = session.isFavorite,
-                        onBookmark = { viewModel.toggleFavorite(it) },
-                        modifier = Modifier.padding(vertical = 24.dp),
-                    )
-
-                    if (session.state != SessionState.Upcoming) {
-                        FeedbackPanel(
-                            onFeedback = { emotion ->
-                                viewModel.submitFeedback(emotion)
-                            },
-                            onFeedbackWithComment = { emotion, comment ->
-                                viewModel.submitFeedbackWithComment(emotion, comment)
-                            },
-                            userSignedIn = userSignedIn,
-                            initialEmotion = session.vote?.toEmotion(),
-                            feedbackQuestion = stringResource(
-                                if (session.tags.contains("Workshop")) UiRes.string.talk_card_how_was_the_workshop
-                                else UiRes.string.talk_card_how_was_the_talk
-                            ),
-                            modifier = Modifier.padding(bottom = 20.dp),
-                        )
+                    item {
+                        Column {
+                            PageTitle(
+                                time = session.fullTimeline,
+                                title = session.title,
+                                lightning = session.isLightning,
+                                tags = session.tags,
+                                bookmarked = session.isFavorite,
+                                onBookmark = { viewModel.toggleFavorite(it) },
+                                modifier = Modifier.padding(vertical = 24.dp),
+                            )
+                            if (session.videoUrl != null) {
+                                PageMenuItem(
+                                    label = stringResource(Res.string.session_watch_video),
+                                    onClick = { onWatchVideo(session.videoUrl) },
+                                    drawableStart = Res.drawable.play_video,
+                                    drawableEnd = Res.drawable.arrow_up_right_24,
+                                    modifier = Modifier.padding(bottom = 12.dp),
+                                )
+                            }
+                        }
                     }
 
-                    speakers.forEach { speaker ->
-                        SpeakerCard(
-                            name = speaker.name,
-                            title = speaker.position,
-                            photoUrl = speaker.photoUrl,
-                            modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(),
-                            onClick = { onSpeaker(speaker.id) }
-                        )
+                    item {
+                        if (session.state != SessionState.Upcoming) {
+                            val scope = rememberCoroutineScope()
+                            FeedbackPanel(
+                                onFeedback = { emotion ->
+                                    viewModel.submitFeedback(emotion)
+                                },
+                                onFeedbackWithComment = { emotion, comment ->
+                                    viewModel.submitFeedbackWithComment(emotion, comment)
+                                },
+                                onFeedbackExpanded = {
+                                    scope.launch {
+                                        delay(100)
+                                        listState.animateScrollToItem(1)
+                                    }
+                                },
+                                userSignedIn = userSignedIn,
+                                startExpanded = openedForFeedback,
+                                initialEmotion = session.vote?.toEmotion(),
+                                feedbackQuestion = stringResource(
+                                    if (session.tags.contains("Workshop")) UiRes.string.talk_card_how_was_the_workshop
+                                    else UiRes.string.talk_card_how_was_the_talk
+                                ),
+                                modifier = Modifier.padding(bottom = 20.dp),
+                            )
+                        }
                     }
 
-                    RoomSection(
-                        roomName = session.locationLine,
-                        onNavigateToMap = onNavigateToMap
-                    )
+                    item {
+                        Column(Modifier.fillMaxWidth()) {
+                            speakers.forEach { speaker ->
+                                SpeakerCard(
+                                    name = speaker.name,
+                                    title = speaker.position,
+                                    photoUrl = speaker.photoUrl,
+                                    modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(),
+                                    onClick = { onSpeaker(speaker.id) }
+                                )
+                            }
 
-                    StyledText(
-                        text = session.description,
-                        style = KotlinConfTheme.typography.text1,
-                        selectable = true,
-                    )
+                            RoomSection(
+                                roomName = session.locationLine,
+                                onNavigateToMap = onNavigateToMap
+                            )
 
-                    Spacer(Modifier.height(24.dp))
+                            StyledText(
+                                text = session.description,
+                                style = KotlinConfTheme.typography.text1,
+                                selectable = true,
+                            )
+
+                            Spacer(Modifier.height(24.dp))
+                        }
+                    }
                 }
             } else {
                 MajorError(
@@ -197,13 +243,21 @@ fun SessionScreen(
 private fun FeedbackPanel(
     onFeedback: (Emotion?) -> Unit,
     onFeedbackWithComment: (Emotion, String) -> Unit,
+    onFeedbackExpanded: () -> Unit,
     userSignedIn: Boolean,
     modifier: Modifier = Modifier,
+    startExpanded: Boolean,
     initialEmotion: Emotion? = null,
     feedbackQuestion: String,
 ) {
     var selectedEmotion by remember { mutableStateOf<Emotion?>(initialEmotion) }
-    var feedbackExpanded by rememberSaveable { mutableStateOf(false) }
+    var feedbackExpanded by rememberSaveable { mutableStateOf(initialEmotion != null && startExpanded) }
+
+    LaunchedEffect(feedbackExpanded) {
+        if (feedbackExpanded) {
+            onFeedbackExpanded()
+        }
+    }
 
     Column(
         modifier = modifier

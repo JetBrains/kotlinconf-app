@@ -32,6 +32,7 @@ fun initApp() = initApp(
     flags = Flags(
         enableBackOnMainScreens = false,
         rippleEnabled = false,
+        hideKeyboardOnDrag = true,
     )
 )
 

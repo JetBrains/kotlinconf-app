@@ -64,7 +64,10 @@ data object LicensesScreen
 
 @Serializable
 @SerialName("License")
-data class SingleLicenseScreen(val licenseName: String, val licenseText: String)
+data class SingleLicenseScreen(
+    val licenseName: String,
+    val licenseText: String,
+)
 
 @Serializable
 @SerialName("Partners")
@@ -84,7 +87,10 @@ data object ScheduleScreen
 
 @Serializable
 @SerialName("Session")
-data class SessionScreen(val sessionId: SessionId)
+data class SessionScreen(
+    val sessionId: SessionId,
+    val openedForFeedback: Boolean = false,
+)
 
 @Serializable
 @SerialName("Speakers")
@@ -109,3 +115,7 @@ data object NewsListScreen
 @Serializable
 @SerialName("News")
 data class NewsDetailScreen(val newsId: String)
+
+@Serializable
+@SerialName("DeveloperMenu")
+data object DeveloperMenuScreen

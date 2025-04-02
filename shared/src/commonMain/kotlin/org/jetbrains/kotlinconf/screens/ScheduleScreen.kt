@@ -50,11 +50,15 @@ import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.DayValues
+import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
+import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
+import org.jetbrains.kotlinconf.TimeProvider
 import org.jetbrains.kotlinconf.isLive
+import org.jetbrains.kotlinconf.isProd
 import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -80,6 +84,7 @@ import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 
@@ -87,6 +92,7 @@ import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 fun ScheduleScreen(
     onSession: (SessionId) -> Unit,
     onPrivacyPolicyNeeded: () -> Unit,
+    onRequestFeedbackWithComment: (SessionId) -> Unit,
     viewModel: ScheduleViewModel = koinViewModel(),
 ) {
     val scope = rememberCoroutineScope()
@@ -245,10 +251,15 @@ fun ScheduleScreen(
                                     onSubmitFeedbackWithComment = { sessionId, emotion, comment ->
                                         viewModel.onSubmitFeedbackWithComment(sessionId, emotion, comment)
                                     },
+                                    onRequestFeedbackWithComment = if (LocalFlags.current.redirectFeedbackToSessionPage) {
+                                        onRequestFeedbackWithComment
+                                    } else {
+                                        null
+                                    },
                                     onBookmark = { sessionId, isBookmarked ->
                                         viewModel.onBookmark(sessionId, isBookmarked)
                                     },
-                                    modifier = Modifier.fillMaxSize()
+                                    modifier = Modifier.fillMaxSize().clipToBounds()
                                 )
                             } else {
                                 MinorError(
@@ -339,7 +350,12 @@ private fun Header(
         state = headerState,
         titleContent = {
             MainHeaderTitleBar(
-                title = stringResource(Res.string.nav_destination_schedule),
+                title = if (!isProd() && LocalFlags.current.useFakeTime) {
+                    val dateTime by koinInject<TimeProvider>().time.collectAsStateWithLifecycle()
+                    "Fake time: ${DateTimeFormatting.dateAndTime(dateTime)}"
+                } else {
+                    stringResource(Res.string.nav_destination_schedule)
+                },
                 startContent = startContent,
                 endContent = {
                     TopMenuButton(
@@ -381,7 +397,7 @@ private fun Header(
 }
 
 @Composable
-fun ScheduleList(
+private fun ScheduleList(
     scheduleItems: List<ScheduleListItem>,
     onSession: (SessionId) -> Unit,
     listState: LazyListState,
@@ -389,10 +405,13 @@ fun ScheduleList(
     userSignedIn: Boolean,
     onSubmitFeedback: (SessionId, Emotion?) -> Unit,
     onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
+    onRequestFeedbackWithComment: ((SessionId) -> Unit)?,
     onBookmark: (SessionId, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ScrollToTopHandler(listState)
+    HideKeyboardOnDragHandler(listState)
+
     LazyColumn(
         state = listState,
         modifier = modifier,
@@ -448,6 +467,7 @@ fun ScheduleList(
                                     onBookmark = onBookmark,
                                     onSubmitFeedback = onSubmitFeedback,
                                     onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
+                                    onRequestFeedbackWithComment = onRequestFeedbackWithComment,
                                     onSession = onSession,
                                     modifier = Modifier
                                         .padding(horizontal = 32.dp)
@@ -471,6 +491,7 @@ fun ScheduleList(
                                         onBookmark = onBookmark,
                                         onSubmitFeedback = onSubmitFeedback,
                                         onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
+                                        onRequestFeedbackWithComment = onRequestFeedbackWithComment,
                                         onSession = onSession,
                                         modifier = Modifier
                                             .padding(horizontal = 8.dp, vertical = 8.dp)
@@ -498,6 +519,7 @@ fun ScheduleList(
                             onBookmark = onBookmark,
                             onSubmitFeedback = onSubmitFeedback,
                             onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
+                            onRequestFeedbackWithComment = onRequestFeedbackWithComment,
                             onSession = onSession,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -554,6 +576,7 @@ private fun SessionCard(
     session: SessionCardView,
     onBookmark: (SessionId, Boolean) -> Unit,
     onSubmitFeedback: (SessionId, Emotion?) -> Unit,
+    onRequestFeedbackWithComment: ((SessionId) -> Unit)?,
     onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
     onSession: (SessionId) -> Unit,
     feedbackEnabled: Boolean,
@@ -586,6 +609,9 @@ private fun SessionCard(
         initialEmotion = session.vote?.toEmotion(),
         onSubmitFeedback = { emotion ->
             onSubmitFeedback(session.id, emotion)
+        },
+        onRequestFeedbackWithComment = onRequestFeedbackWithComment?.let {
+            { onRequestFeedbackWithComment(session.id) }
         },
         onSubmitFeedbackWithComment = { emotion, comment ->
             onSubmitFeedbackWithComment(session.id, emotion, comment)

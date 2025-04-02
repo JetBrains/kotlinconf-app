@@ -7,7 +7,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +30,7 @@ import kotlinconfapp.shared.generated.resources.app_version
 import kotlinconfapp.shared.generated.resources.arrow_up_right_24
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
+import org.jetbrains.kotlinconf.isProd
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.components.StyledText
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -41,6 +45,7 @@ fun AboutAppScreen(
     onPrivacyPolicy: () -> Unit,
     onTermsOfUse: () -> Unit,
     onLicenses: () -> Unit,
+    onDeveloperMenu: () -> Unit = {},
 ) {
     ScreenWithTitle(
         title = stringResource(Res.string.about_app_title),
@@ -55,7 +60,7 @@ fun AboutAppScreen(
 
             PageMenuItem(
                 stringResource(Res.string.about_app_link_github),
-                drawableResource = Res.drawable.arrow_up_right_24,
+                drawableEnd = Res.drawable.arrow_up_right_24,
                 onClick = onGitHubRepo,
             )
 
@@ -63,7 +68,7 @@ fun AboutAppScreen(
             if (storeUrlAvailable) {
                 PageMenuItem(
                     stringResource(Res.string.about_app_link_rate),
-                    drawableResource = Res.drawable.arrow_up_right_24,
+                    drawableEnd = Res.drawable.arrow_up_right_24,
                     onClick = onRateApp,
                 )
             }
@@ -75,6 +80,7 @@ fun AboutAppScreen(
 
             val clipboardManager = LocalClipboardManager.current
             val appVersion = stringResource(resource = Res.string.app_version)
+            var tapCount by remember { mutableStateOf(0) }
             StyledText(
                 text = appVersion,
                 style = KotlinConfTheme.typography.text2,
@@ -82,7 +88,17 @@ fun AboutAppScreen(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .clip(RoundedCornerShape(8.dp))
-                    .clickable { clipboardManager.setText(AnnotatedString(appVersion)) }
+                    .clickable { 
+                        clipboardManager.setText(AnnotatedString(appVersion))
+
+                        if (!isProd()) {
+                            tapCount++
+                            if (tapCount >= 5) {
+                                tapCount = 0
+                                onDeveloperMenu()
+                            }
+                        }
+                    }
                     .padding(16.dp)
             )
         }
