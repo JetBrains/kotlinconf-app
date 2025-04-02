@@ -20,6 +20,7 @@ plugins {
 kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
+        freeCompilerArgs.add("-Xindy-allow-annotated-lambdas=true")
     }
     androidTarget {
         compilerOptions {

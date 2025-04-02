@@ -13,6 +13,8 @@ plugins {
 }
 
 kotlin {
+    compilerOptions.freeCompilerArgs.add("-Xindy-allow-annotated-lambdas=true")
+
     applyDefaultHierarchyTemplate {
         common {
             group("nonAndroid") {

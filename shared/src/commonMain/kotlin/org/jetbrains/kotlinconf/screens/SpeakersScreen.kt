@@ -116,8 +116,12 @@ fun SpeakersScreen(
                     ScrollToTopHandler(listState)
                     HideKeyboardOnDragHandler(listState)
 
+//                    LazyColumn(
+//                        state = listState,
+//                        modifier = Modifier.fillMaxSize(),
+//                    ) {
                     LazyVerticalGrid(
-                        columns = GridCells.Fixed(1),
+                        columns = GridCells.Fixed(2),
                         modifier = Modifier.fillMaxSize(),
                     ) {
                         items(targetState.speakers, key = { it.speaker.id.id }) { speakerWithHighlights ->
