@@ -60,8 +60,7 @@ fun LicensesScreen(
     ) {
         val libraries by produceState<Libs?>(initialValue = null) {
             value = withContext(Dispatchers.Default) {
-                // To update licenses:
-                // gradlew :shared:exportLibraryDefinitions -PaboutLibraries.exportPath=src/commonMain/composeResources/files
+                // To update licenses: ./gradlew :shared:exportLibraryDefinitions
                 @OptIn(ExperimentalResourceApi::class)
                 val json = Res.readBytes("files/aboutlibraries.json").decodeToString()
                 Libs.Builder().withJson(json).build()

@@ -209,4 +209,5 @@ composeCompiler {
 aboutLibraries {
     duplicationMode = DuplicateMode.MERGE
     duplicationRule = DuplicateRule.SIMPLE
+    outputPath = "src/commonMain/composeResources/files"
 }
