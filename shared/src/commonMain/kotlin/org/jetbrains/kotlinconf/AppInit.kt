@@ -4,6 +4,9 @@ import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.NotifierManager.Listener
 import com.mmk.kmpnotifier.notification.PayloadData
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.jetbrains.kotlinconf.navigation.navigateToNews
 import org.jetbrains.kotlinconf.navigation.navigateToSession
 import org.jetbrains.kotlinconf.screens.AboutConferenceViewModel
@@ -59,7 +62,8 @@ private fun initKoin(
             }
             singleOf(::ConferenceService)
             single<Logger> { NoopProdLogger() }
-            single { FlagsManager(platformFlags, get()) }
+            single { FlagsManager(platformFlags, get(), get()) }
+            single { CoroutineScope(SupervisorJob() + Dispatchers.Default) }
         }
 
         val viewModelModule = module {
