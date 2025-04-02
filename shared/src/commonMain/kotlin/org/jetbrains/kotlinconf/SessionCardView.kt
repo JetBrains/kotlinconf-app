@@ -18,7 +18,7 @@ data class SessionCardView(
     val vote: Score?,
     val isFavorite: Boolean,
     val description: String,
-    val tags: List<String>,
+    val tags: Set<String>,
     val startsInMinutes: Int?,
     val videoUrl: String?,
 ) {

@@ -90,7 +90,7 @@ fun Session.asSessionCard(
         speakerIds = speakerIds,
         vote = vote?.score,
         description = description,
-        tags = tags ?: emptyList(),
+        tags = tags?.toSet() ?: emptySet(),
         startsInMinutes = (startsAt - now).inWholeMinutes.toInt().let { diff ->
             if (diff in 1..30) diff else null
         },

@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -43,8 +44,9 @@ fun StyledText(
     style: TextStyle = KotlinConfTheme.typography.text1,
     maxLines: Int = Int.MAX_VALUE,
     selectable: Boolean = false,
+    inlineContent: Map<String, InlineTextContent> = mapOf(),
 ) {
-    val content = @Composable{
+    val content = @Composable {
         BasicText(
             text = text,
             modifier = modifier,
@@ -52,6 +54,7 @@ fun StyledText(
             color = { color },
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
+            inlineContent = inlineContent,
         )
     }
 
