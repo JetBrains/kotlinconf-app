@@ -57,6 +57,7 @@ import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_wor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
@@ -145,6 +146,7 @@ fun SessionScreen(
                 }
 
                 ScrollToTopHandler(listState)
+                HideKeyboardOnDragHandler(listState)
 
                 LazyColumn(
                     state = listState,
