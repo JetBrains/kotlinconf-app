@@ -6,6 +6,7 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -77,6 +78,7 @@ fun MainScreen(
     Column(
         Modifier
             .fillMaxSize()
+            .background(color = KotlinConfTheme.colors.mainBackground)
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         val nestedNavController = rememberNavController()
