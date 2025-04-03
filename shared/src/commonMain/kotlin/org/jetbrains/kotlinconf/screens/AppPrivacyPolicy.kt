@@ -9,10 +9,18 @@ import org.jetbrains.kotlinconf.MarkdownScreenWithTitle
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun AppPrivacyPolicy(onBack: () -> Unit) {
+fun AppPrivacyPolicy(
+    onBack: () -> Unit,
+    onAppTermsOfUse: () -> Unit,
+) {
     MarkdownScreenWithTitle(
         title = stringResource(Res.string.app_privacy_policy_title),
         loadText = { Res.readBytes("files/app-privacy-policy.md") },
-        onBack = onBack
+        onBack = onBack,
+        onUriClick = { uri ->
+            if (uri == "app-terms.md") {
+                onAppTermsOfUse()
+            }
+        },
     )
 }

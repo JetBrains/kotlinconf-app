@@ -17,7 +17,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import kotlinx.coroutines.channels.Channel
-import org.jetbrains.kotlinconf.FlagsManager
 import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.LocalNotificationId
 import org.jetbrains.kotlinconf.PartnerId
@@ -25,7 +24,6 @@ import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.URLs
 import org.jetbrains.kotlinconf.isProd
-import org.koin.compose.koinInject
 import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
 import org.jetbrains.kotlinconf.screens.AppPrivacyPolicy
@@ -39,14 +37,14 @@ import org.jetbrains.kotlinconf.screens.NewsDetailScreen
 import org.jetbrains.kotlinconf.screens.NewsListScreen
 import org.jetbrains.kotlinconf.screens.PartnerDetailScreen
 import org.jetbrains.kotlinconf.screens.PartnersScreen
-import org.jetbrains.kotlinconf.screens.PrivacyPolicyForVisitors
-import org.jetbrains.kotlinconf.screens.PrivacyPolicyScreen
+import org.jetbrains.kotlinconf.screens.VisitorPrivacyPolicy
+import org.jetbrains.kotlinconf.screens.AppPrivacyPolicyPrompt
 import org.jetbrains.kotlinconf.screens.SessionScreen
 import org.jetbrains.kotlinconf.screens.SettingsScreen
 import org.jetbrains.kotlinconf.screens.SingleLicenseScreen
 import org.jetbrains.kotlinconf.screens.SpeakerDetailScreen
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
-import org.jetbrains.kotlinconf.screens.TermsOfUse
+import org.jetbrains.kotlinconf.screens.VisitorTermsOfUse
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import kotlin.jvm.JvmSuppressWildcards
 import kotlin.reflect.typeOf
@@ -164,7 +162,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
     composable<AboutConferenceScreen> {
         val urlHandler = LocalUriHandler.current
         AboutConference(
-            onPrivacyPolicy = { navController.navigate(PrivacyPolicyForVisitorsScreen) },
+            onPrivacyPolicy = { navController.navigate(VisitorPrivacyPolicyScreen) },
             onGeneralTerms = { navController.navigate(TermsOfUseScreen) },
             onWebsiteLink = { urlHandler.openUri(URLs.KOTLINCONF_HOMEPAGE) },
             onBack = navController::navigateUp,
@@ -177,17 +175,25 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
     composable<SettingsScreen> {
         SettingsScreen(onBack = navController::navigateUp)
     }
-    composable<PrivacyPolicyForVisitorsScreen> {
-        PrivacyPolicyForVisitors(onBack = navController::navigateUp)
+    composable<VisitorPrivacyPolicyScreen> {
+        VisitorPrivacyPolicy(onBack = navController::navigateUp)
     }
     composable<AppPrivacyPolicyScreen> {
-        AppPrivacyPolicy(onBack = navController::navigateUp)
+        AppPrivacyPolicy(
+            onBack = navController::navigateUp,
+            onAppTermsOfUse = { navController.navigate(AppTermsOfUseScreen) },
+        )
     }
     composable<TermsOfUseScreen> {
-        TermsOfUse(onBack = navController::navigateUp)
+        VisitorTermsOfUse(onBack = navController::navigateUp)
     }
     composable<AppTermsOfUseScreen> {
-        AppTermsOfUse(onBack = navController::navigateUp)
+        AppTermsOfUse(
+            onBack = navController::navigateUp,
+            onAppPrivacyPolicy = {
+                navController.navigate(AppPrivacyPolicyScreen)
+            },
+        )
     }
     composable<PartnersScreen> {
         PartnersScreen(
@@ -210,7 +216,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             sessionId = params.sessionId,
             openedForFeedback = params.openedForFeedback,
             onBack = navController::navigateUp,
-            onPrivacyPolicyNeeded = { navController.navigate(PrivacyPolicyScreen) },
+            onPrivacyPolicyNeeded = { navController.navigate(AppPrivacyPolicyPrompt) },
             onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) },
             onWatchVideo = { videoUrl -> urlHandler.openUri(videoUrl) },
             onNavigateToMap = { roomName ->
@@ -218,10 +224,11 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             },
         )
     }
-    composable<PrivacyPolicyScreen> {
-        PrivacyPolicyScreen(
+    composable<AppPrivacyPolicyPrompt> {
+        AppPrivacyPolicyPrompt(
             onRejectPolicy = navController::navigateUp,
             onAcceptPolicy = navController::navigateUp,
+            onAppTermsOfUse =  { navController.navigate(AppTermsOfUseScreen) },
             confirmationRequired = true,
         )
     }
@@ -260,7 +267,7 @@ fun NavGraphBuilder.startScreens(
     ) {
         composable<StartPrivacyPolicyScreen> {
             val skipNotifications = LocalFlags.current.supportsNotifications.not()
-            PrivacyPolicyScreen(
+            AppPrivacyPolicyPrompt(
                 onRejectPolicy = {
                     navController.navigate(if (skipNotifications) MainScreen else StartNotificationsScreen) {
                         popUpTo<StartScreens> { inclusive = skipNotifications }
@@ -271,6 +278,7 @@ fun NavGraphBuilder.startScreens(
                         popUpTo<StartScreens> { inclusive = skipNotifications }
                     }
                 },
+                onAppTermsOfUse =  { navController.navigate(AppTermsOfUseScreen) },
                 confirmationRequired = false,
             )
         }

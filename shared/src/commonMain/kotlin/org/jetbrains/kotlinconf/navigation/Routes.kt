@@ -35,16 +35,16 @@ data object StartPrivacyPolicyScreen
 data object StartNotificationsScreen
 
 @Serializable
-@SerialName("PrivacyPolicy")
-data object PrivacyPolicyScreen
+@SerialName("AppPrivacyPolicyPrompt")
+data object AppPrivacyPolicyPrompt
 
 @Serializable
 @SerialName("Settings")
 data object SettingsScreen
 
 @Serializable
-@SerialName("PrivacyPolicyForVisitors")
-data object PrivacyPolicyForVisitorsScreen
+@SerialName("VisitorPrivacyPolicy")
+data object VisitorPrivacyPolicyScreen
 
 @Serializable
 @SerialName("AppPrivacyPolicy")
