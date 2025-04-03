@@ -1,8 +1,6 @@
 package org.jetbrains.kotlinconf
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -13,8 +11,8 @@ import org.jetbrains.kotlinconf.storage.ApplicationStorage
 class FlagsManager(
     private val platformFlags: Flags,
     private val storage: ApplicationStorage,
+    private val scope: CoroutineScope,
 ) {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     val flags = storage.getFlags()
         .map { it ?: platformFlags }
