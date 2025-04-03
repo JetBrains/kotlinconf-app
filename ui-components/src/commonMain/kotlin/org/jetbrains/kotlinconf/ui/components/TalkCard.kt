@@ -29,6 +29,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,7 +41,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -47,9 +48,12 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.action_bookmark
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
@@ -57,12 +61,15 @@ import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24_fill
 import kotlinconfapp.ui_components.generated.resources.lightning_16_fill
 import kotlinconfapp.ui_components.generated.resources.lightning_talk
+import kotlinconfapp.ui_components.generated.resources.session_codelab
+import kotlinconfapp.ui_components.generated.resources.session_education
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_talk
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_workshop
 import kotlinconfapp.ui_components.generated.resources.talk_card_your_feedback
 import kotlinconfapp.ui_components.generated.resources.up_24
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.Brand
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -72,19 +79,23 @@ import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 internal fun buildHighlightedString(
     text: String,
     highlights: List<IntRange>,
-): AnnotatedString = buildAnnotatedString {
-    append(text)
-    highlights.forEach { range ->
-        // Ignore invalid ranges
-        if (!range.isEmpty()) {
-            addStyle(
-                style = SpanStyle(
-                    color = KotlinConfTheme.colors.primaryTextInverted,
-                    background = Brand.magenta100,
-                ),
-                start = range.first,
-                end = range.last + 1,
-            )
+): AnnotatedString = if (highlights.isEmpty()) {
+    AnnotatedString(text)
+} else {
+    buildAnnotatedString {
+        append(text)
+        highlights.forEach { range ->
+            // Ignore invalid ranges
+            if (!range.isEmpty()) {
+                addStyle(
+                    style = SpanStyle(
+                        color = KotlinConfTheme.colors.primaryTextInverted,
+                        background = Brand.magenta100,
+                    ),
+                    start = range.first,
+                    end = range.last + 1,
+                )
+            }
         }
     }
 }
@@ -101,7 +112,7 @@ fun TalkCard(
     titleHighlights: List<IntRange>,
     bookmarked: Boolean,
     onBookmark: (Boolean) -> Unit,
-    tags: List<String>,
+    tags: Set<String>,
     tagHighlights: List<String>,
     speakers: String,
     speakerHighlights: List<IntRange>,
@@ -151,6 +162,7 @@ fun TalkCard(
             selectedTags = tagHighlights,
             speakers = speakers,
             speakerHighlights = speakerHighlights,
+            status = status,
         )
         Spacer(Modifier.weight(1f))
         Divider(
@@ -195,22 +207,23 @@ private fun TopBlock(
     textColor: Color,
     bookmarked: Boolean,
     onBookmark: (Boolean) -> Unit,
-    tags: List<String>,
+    tags: Set<String>,
     selectedTags: List<String>,
     speakers: String,
     speakerHighlights: List<IntRange>,
+    status: TalkStatus,
 ) {
     Column(
         modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Row {
-            StyledText(
-                text = buildHighlightedString(title, titleHighlights),
-                style = KotlinConfTheme.typography.h3,
-                color = textColor,
-                maxLines = 2,
-                modifier = Modifier.weight(1f),
+            TalkTitle(
+                title = buildHighlightedString(title, titleHighlights),
+                tags = tags,
+                textColor = textColor,
+                status = status,
+                modifier = Modifier.weight(1f)
             )
 
             Spacer(Modifier.width(8.dp))
@@ -252,6 +265,81 @@ private fun TopBlock(
             maxLines = 1,
         )
     }
+}
+
+private const val iconId = "iconId'"
+private const val eduPlaceholder = "[e]"
+private const val codelabPlaceholder = "[c]"
+
+@Composable
+private fun TalkTitle(
+    title: AnnotatedString,
+    tags: Set<String>,
+    textColor: Color,
+    status: TalkStatus,
+    modifier: Modifier,
+) {
+    val isCodelab = "Codelab" in tags
+    val isEducation = "Education" in tags
+    val hasIcon = isCodelab || isEducation
+
+    StyledText(
+        text = if (hasIcon) {
+            buildAnnotatedString {
+                appendInlineContent(
+                    id = iconId,
+                    alternateText = when {
+                        isEducation -> eduPlaceholder
+                        isCodelab -> codelabPlaceholder
+                        else -> codelabPlaceholder // Should never happen
+                    },
+                )
+                append(title)
+            }
+        } else {
+            title
+        },
+        style = KotlinConfTheme.typography.h3,
+        color = textColor,
+        maxLines = 2,
+        inlineContent = if (hasIcon) talkCardTitleInlineContent(status) else emptyMap(),
+        modifier = modifier,
+    )
+}
+
+private val iconPlaceholder = Placeholder(
+    width = 1.8.em,
+    height = 1.5.em,
+    placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
+)
+
+@Composable
+private fun talkCardTitleInlineContent(status: TalkStatus): Map<String, InlineTextContent> {
+    return mapOf(
+        iconId to InlineTextContent(iconPlaceholder) { placeholder ->
+            InlineIconContent(status, placeholder)
+        },
+    )
+}
+
+@Composable
+private fun InlineIconContent(status: TalkStatus, placeholder: String) {
+    val textColor by animateColorAsState(
+        if (status == TalkStatus.Past) KotlinConfTheme.colors.secondaryText
+        else KotlinConfTheme.colors.accentText,
+        animationSpec = tween(1000),
+    )
+    Icon(
+        imageVector = vectorResource(
+            when (placeholder) {
+                eduPlaceholder -> Res.drawable.session_education
+                codelabPlaceholder -> Res.drawable.session_codelab
+                else -> Res.drawable.session_codelab // Shouldn't happen, but let's not throw
+            }
+        ),
+        contentDescription = null,
+        tint = textColor,
+    )
 }
 
 @Composable
@@ -451,7 +539,7 @@ internal fun TalkCardPreview() {
                 ),
                 bookmarked = bookmarked,
                 onBookmark = { bookmarked = it },
-                tags = listOf(
+                tags = setOf(
                     "Workshop", "Kotlin", "Coroutines", "Multiplatform",
                     "Label", "Label", "Label", "Label", "Label",
                 ),
@@ -480,7 +568,7 @@ internal fun TalkCardPreview() {
                 titleHighlights = emptyList(),
                 bookmarked = false,
                 onBookmark = { },
-                tags = listOf(
+                tags = setOf(
                     "Workshop", "Kotlin", "Coroutines", "Multiplatform",
                     "Label", "Label", "Label", "Label", "Label",
                 ),

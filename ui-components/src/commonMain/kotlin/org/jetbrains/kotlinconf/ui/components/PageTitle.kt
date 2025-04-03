@@ -38,7 +38,7 @@ import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 fun PageTitle(
     time: String,
     title: String,
-    tags: List<String>,
+    tags: Set<String>,
     lightning: Boolean,
     bookmarked: Boolean,
     onBookmark: (Boolean) -> Unit,
@@ -117,7 +117,7 @@ internal fun PageTitlePreview() {
         PageTitle(
             time = "May 23, 13:00 - 13:20",
             title = "My Incredible Talk About Kotlin Multiplatform",
-            tags = listOf("Lightning talk", "Intermediate", "Libraries"),
+            tags = setOf("Lightning talk", "Intermediate", "Libraries"),
             bookmarked = bookmarked1,
             lightning = true,
             onBookmark = { bookmarked1 = it },
@@ -127,7 +127,7 @@ internal fun PageTitlePreview() {
         PageTitle(
             time = "May 21, 9:00 - 9:40",
             title = "A Wonderful Server-side Kotlin Talk",
-            tags = listOf("Regular talk", "Beginner", "Server-side"),
+            tags = setOf("Regular talk", "Beginner", "Server-side"),
             bookmarked = bookmarked2,
             lightning = false,
             onBookmark = { bookmarked2 = it },
