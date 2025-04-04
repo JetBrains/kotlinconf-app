@@ -18,8 +18,6 @@ data class TimeSlot(
     val title: String = DateTimeFormatting.timeToTime(startsAt, endsAt)
 }
 
-val TimeSlot.isLive get() = state == SessionState.Live
-
 fun Conference.buildAgenda(
     favorites: Set<SessionId>,
     votes: List<VoteInfo>,
@@ -42,33 +40,43 @@ fun Conference.buildAgenda(
         .sortedBy { it.date }
 }
 
+private data class SlotTimes(
+    val startsAt: LocalDateTime,
+    val endsAt: LocalDateTime,
+)
+
 fun List<Session>.groupByTime(
     conference: Conference,
     now: LocalDateTime,
     favorites: Set<SessionId>,
     votes: Map<SessionId, VoteInfo>,
 ): List<TimeSlot> {
-    val slots = filterNot { it.isLightning }
-        .map { it.startsAt to it.endsAt }
-        .distinct()
-        .sortedBy { it.first }
+    val slots: List<SlotTimes> =
+        filterNot { it.isLightning }
+            .sortedBy { it.startsAt }
+            .map { SlotTimes(it.startsAt, it.endsAt) }
 
-    val handledSessionIds = mutableSetOf<SessionId>()
-    return slots.map { (start, end) ->
-        val cards: List<SessionCardView> =
-            filter { it.startsAt >= start && it.endsAt <= end && it.id !in handledSessionIds }
-                .map {
-                    it.asSessionCard(conference, now, favorites, votes[it.id])
-                }
+    val slotsToSessions: Map<SlotTimes, MutableList<SessionCardView>> =
+        slots.associateWith { mutableListOf() }
 
-        handledSessionIds += cards.map { it.id }
-
-        TimeSlot(
-            startsAt = start,
-            endsAt = end,
-            state = SessionState.from(start, end, now),
-            sessions = cards,
+    this.forEach { session ->
+        val slot = slots.find { (start, end) -> session.startsAt >= start && session.endsAt <= end } ?: return@forEach
+        slotsToSessions.getValue(slot).add(
+            session.asSessionCard(conference, now, favorites, votes[session.id])
         )
+    }
+
+    return slotsToSessions.mapNotNull { (slot, sessions) ->
+        if (sessions.isNotEmpty()) {
+            TimeSlot(
+                startsAt = slot.startsAt,
+                endsAt = slot.endsAt,
+                state = SessionState.from(slot.startsAt, slot.endsAt, now),
+                sessions = sessions.sortedBy { it.isLightning },
+            )
+        } else {
+            null
+        }
     }
 }
 
