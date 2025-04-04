@@ -1,5 +1,5 @@
 package org.jetbrains.kotlinconf
 
-import java.util.*
+actual fun getPlatformId(): String = "android"
 
-actual fun generateUserId(): String = "android-" + UUID.randomUUID().toString()
+

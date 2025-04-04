@@ -1,105 +1,147 @@
 <resources>
+    <!-- General resources -->
+
+    <string name="navigate_back">Back</string>
+
+    <string name="nav_destination_info">Info</string>
+    <string name="nav_destination_schedule">Schedule</string>
+    <string name="nav_destination_speakers">Speakers</string>
+    <string name="nav_destination_map">Map</string>
+
+    <!-- Screen resources -->
+
+    <string name="about_app_title">About the app</string>
+    <string name="about_app_description">The KotlinConf application is developed by the JetBrains team using Kotlin Multiplatform for shared logic and Compose Multiplatform for UI across Android, iOS, Desktop, and Web platforms.
+
+For the source code and more technical details, visit the GitHub repository.</string>
+    <string name="about_app_link_github">GitHub repository</string>
+    <string name="about_app_link_rate">Rate the app</string>
+    <string name="about_app_link_settings">Settings</string>
+    <string name="about_app_link_privacy_policy">App Privacy Policy</string>
+    <string name="about_app_link_terms_of_use">App Terms of Use</string>
+    <string name="about_app_link_licenses">Licenses</string>
+
+    <string name="info_title">Info</string>
+    <string name="info_link_about_conf">About the conference</string>
+    <string name="info_link_about_app">About the app</string>
+    <string name="info_link_partners">Our partners</string>
+    <string name="info_link_code_of_conduct">Code of Conduct</string>
+    <string name="info_link_news_feed">News feed</string>
+    <string name="info_link_description_twitter">Twitter</string>
+    <string name="info_link_description_slack">Slack</string>
+    <string name="info_link_description_bluesky">Bluesky</string>
+
+    <string name="about_conference_title">About the conference</string>
+    <string name="about_conference_header">KotlinConf 2025</string>
+    <string name="about_conference_description">May 21: Workshops
+May 22–23: Conference
+Bella Center, Copenhagen, Denmark
+
+KotlinConf is the official Kotlin conference by JetBrains. It is a place for the community to gather and discuss all things Kotlin.
+
+Social media hashtag: #KotlinConf</string>
+
+    <string name="about_conference_privacy_policy_link">Privacy policy for visitors</string>
+    <string name="about_conference_general_terms_link">General terms and conditions</string>
+    <string name="about_conference_website_link">kotlinconf.com</string>
+
+    <string name="about_conference_day1_title_line1">Opening</string>
+    <string name="about_conference_day1_title_line2">keynote</string>
+
+    <string name="about_conference_day2_title_line1">Second day</string>
+    <string name="about_conference_day2_title_line2">keynote</string>
+
+    <string name="about_conference_codelabs_title_line1">Code</string>
+    <string name="about_conference_codelabs_title_line2">Labs</string>
+
+    <string name="about_conference_party_line1"></string>
+    <string name="about_conference_party_line2">Party!</string>
+    <string name="about_conference_party_description">Have fun and mingle with the community at the biggest Kotlin party of the year!</string>
+
+    <string name="about_conference_closingpanel_title_line1">Closing</string>
+    <string name="about_conference_closingpanel_title_line2">panel</string>
+
+    <string name="kotlinconf_by_jetbrains_description">KotlinConf by JetBrains 2025</string>
+
     <string name="privacy_policy_title">Privacy policy</string>
-    <string name="privacy_note">For you to maximize the benefits of this app, we need your consent to access and use your device ID so you can provide and we can collect and track your feedback about talks.
+    <string name="privacy_policy_description">For you to maximize the benefits of this app, we need your consent to access and use your device ID so you can provide and we can collect and track your feedback about talks.
 
 We will process your data in accordance with the App Privacy Policy. You can adjust or withdraw your consent at any time by sending a request to privacy@jetbrains.com, but doing so may affect how this app functions.</string>
-    <string name="read_privacy">Read the app privacy policy</string>
-    <string name="privacy_policy_for_visitors_title">KotlinConf 2024 Privacy Policy for Visitors</string>
-    <string name="privacy_policy_for_visitors_version">Version 1.0 of May 1, 2024</string>
-    <string name="privacy_policy_for_app_title">KotlinConf app privacy policy</string>
-    <string name="privacy_policy_for_app_version">Version 1.1, effective from May 1, 2024</string>
-    <string name="notifications_title">Do you want reminders?</string>
-    <string name="notifications_body">Get reminders about talks that you don’t want to miss.
+    <string name="privacy_policy_read_action">Read the app privacy policy</string>
+    <string name="privacy_policy_reject">Reject</string>
+    <string name="privacy_policy_accept">Accept</string>
+    <string name="privacy_policy_back">Back</string>
 
-You will receive a message 5 minutes before the session begins so you have time to get ready.</string>
-    <string name="about_conf_description">KotlinConf is the official annual conference devoted to the Kotlin programming language. Organized by JetBrains, it is a place for the community to gather and discuss all things Kotlin.</string>
-    <string name="keynote_start_time">May 23, 9:00</string>
-    <string name="keynote_title">Opening Keynote</string>
-    <string name="second_day_keynote_time">May 24, 9:00</string>
-    <string name="second_day_keynote_title">Second day keynote</string>
-    <string name="code_labs_title">Code Labs</string>
-    <string name="code_labs_description">Explore Kotlin Multiplatform with Touchlab’s CodeLabs! Learn how to streamline your development process with KMP and build real-world multiplatform apps efficiently. Gain insights from experts who have years of experience guiding teams to successful KMP adoption.</string>
-    <string name="code_labs_time">May 23-24</string>
-    <string name="about_conf_footer">You can find more information about the conference on the official website:\n</string>
-    <string name="about_conf_schedule">May 22 — Workshops
-May 23–24 — Conference
-Bella Center Copenhagen, Denmark</string>
-    <string name="second_day_keynote_speaker">Daniel Terhorst-North</string>
-    <string name="social_media_hashtag_text">Social media hashtag: </string>
-    <string name="hashtag">#KotlinConf</string>
-    <string name="lightning_talks_title">28 Lightning talks!</string>
-    <string name="lightning_talks_description">Don't miss our new Lightning Talk track! Enjoy double the inspiration with two 15-minute talks in each time slot.</string>
-    <string name="closing_time">May 24, 17:15</string>
-    <string name="closing_title">Closing Panel</string>
-    <string name="closing_description">Come to Hall 1 and seize the opportunity to ask the KotlinConf speakers your questions in person.</string>
-    <string name="party_time">May 23, 18:00</string>
-    <string name="party_title">Party</string>
-    <string name="party_description">Have fun and mingle with the community at the biggest Kotlin party of the year!</string>
-    <string name="by_jetbrains">by\nJetBrains</string>
-    <string name="for_visitors">For visitors:</string>
-    <string name="privacy_policy">Privacy Policy</string>
+    <string name="notifications_title">Notifications</string>
+    <string name="notifications_description">Customize your preferences to ensure you receive only the notifications that matter to you, avoiding unnecessary disruptions.</string>
+    <string name="notifications_session_reminders_title">Session reminders</string>
+    <string name="notifications_session_reminders_description">Get reminders for sessions that you’ve bookmarked in the schedule to make sure you don’t miss them.</string>
+    <string name="notifications_schedule_update_title">Schedule updates</string>
+    <string name="notifications_schedule_update_description">Stay informed about crucial changes! Get an alert if there's a significant update to the event schedule.</string>
+    <string name="notifications_kotlinconf_news_title">KotlinConf News</string>
+    <string name="notifications_kotlinconf_news_description">Receive news in between KotlinConf events, including notifications about ticket sales, new videos, contests, schedule announcements, and more.</string>
+    <string name="notifications_jetbrains_news_title">JetBrains News</string>
+    <string name="notifications_jetbrains_news_description">Get news about JetBrains products.</string>
+    <string name="notifications_lets_get_started">Let’s get started!</string>
+
+    <string name="code_of_conduct">Code of Conduct</string>
+
     <string name="general_terms">General Terms and Conditions</string>
-    <string name="visitors_terms">KotlinConf 2024 General Terms and Conditions for Visitors</string>
+    <string name="visitors_terms_title">KotlinConf 2024 General Terms and Conditions for Visitors</string>
     <string name="visitors_terms_version">Version 1.0 of May 1, 2024</string>
-    <string name="mobile_app">’24 mobile app</string>
-    <string name="app_privacy_policy">KotlinConf app privacy policy</string>
-    <string name="app_terms">Application terms and conditions</string>
-    <string name="app_terms_of_use">KotlinConf app terms of use</string>
-    <string name="app_terms_of_use_version">Version 1.1, effective as of May 1, 2024</string>
-    <string name="code_of_conduct">Code of conduct</string>
-    <string name="menu">Menu</string>
-    <string name="search">Search</string>
-    <string name="about_conference">About the conference</string>
-    <string name="partners">Our partners</string>
-    <string name="X">X</string>
-    <string name="slack">Slack channel</string>
-    <string name="speakers">Speakers</string>
-    <string name="past">Past</string>
-    <string name="upcoming">Upcoming</string>
-    <string name="day_1">May 22</string>
-    <string name="day_2">May 23</string>
-    <string name="day_3">May 24</string>
-    <string name="floor_1">Ground floor</string>
-    <string name="floor_2">First floor</string>
-    <string name="talks">Talks</string>
-    <string name="partner_google">Google</string>
-    <string name="partner_google_description">Google's mission is to organize the world’s information and make it universally accessible and useful.</string>
-    <string name="partner_monta">Monta</string>
-    <string name="partner_monta_description">At Monta, we engineer the future of EV charging and tackle industry complexities with a reliable product suite. We connect the EV ecosystem with seamless experiences for a cleaner, healthier planet.</string>
-    <string name="partner_gradle">Gradle</string>
-    <string name="partner_gradle_description">Develocity is the leading software solution for improving developer productivity and the developer experience. It does this by leveraging advanced build and test performance acceleration technologies.</string>
-    <string name="partner_sentry">Sentry</string>
-    <string name="partner_sentry_description">From Error tracking to Performance monitoring, Sentry enables developers to see clearer, solve quicker, and learn continuously about their applications — from frontend to backend.</string>
-    <string name="partner_touchlab">Touchlab</string>
-    <string name="partner_touchlab_description">From startups to multinationals with tens of millions of MAU, Touchlab’s services accelerate and de-risk implementing KMP in production. They also build crucial open-source tools that are widely used.</string>
-    <string name="partner_cloud_inject">Cloud-Inject</string>
-    <string name="partner_cloud_inject_description">Cloud-Inject, a new platform developed by the creators of Koin, offers Android Application Architecture Observability for Koin users to manage technical debt, resolve complexity and keep apps scalable.</string>
-    <string name="partner_uber">Uber</string>
-    <string name="partner_uber_description"></string>
-    <string name="partner_kodein">KodeinKoders</string>
-    <string name="partner_kodein_description">Empowering Innovation with Kotlin everywhere: Kodein Koders delivers expert training and guidance,
-unlocking the full potential of Kotlin Multiplatform for Android, iOS, Desktop, and Web.</string>
-    <string name="partner_mercari">Mercari</string>
-    <string name="partner_mercari_description">Mercari is a C2C marketplace with more than 20 million users buying and selling items on a monthly basis.
-Mercari also offers mobile payment services via Merpay, and cryptoasset services via Mercoin.</string>
-    <string name="partner_worldline">Worldline</string>
-    <string name="partner_worldline_description">Company description: Worldline is a global payments technology company, with a tech community of over 7000 engineers. Our technology powers the growth of millions of businesses around the world; from your local coffee shop, to global e-commerce players and international banks.</string>
-    <string name="partner_express">American Express</string>
-    <string name="partner_express_description">American Express creates digital products and services that enhance the lives of our customers. Technology drives everything we do, and our diverse global work force is critical to our success.</string>
-    <string name="partner_android">Android</string>
-    <string name="partner_android_description">Android is the largest mobile platform, reaching people across over 3 billion devices.</string>
-    <string name="partner_pretix">Pretix</string>
-    <string name="partner_pretix_description">Our all-in-one ticketing software manages your entire ticket sales process. With a wide range of multilingual features and strong data security, Pretix is ideal for different types of events.</string>
-    <string name="partner_sticker_mule">Sticker Mule</string>
-    <string name="partner_sticker_mule_description">Sticker Mule is the easiest way to buy custom products online. Order in 60 seconds and we'll turn your designs into custom stickers, magnets, buttons, and much more. Free worldwide shipping!</string>
-    <string name="partner_kt_weekly">Kotlin Weekly</string>
-    <string name="partner_kt_weekly_description">Kotlin Weekly is a community project run by Enrique López-Mañas that collects and sends on a weekly basis news and projects in the Kotlin ecosystem. It has been running since 2016. Folks can see the history of all the issues on kotlinweekly.net.</string>
-    <string name="partner_academy">Kt Academy</string>
-    <string name="partner_academy_description">Kt. Academy led by Marcin Moskala, books author, speaker, and official JetBrains training partner; offers the highest quality Kotlin education at various advancement levels.</string>
-    <string name="partner_shape">Shape</string>
-    <string name="partner_shape_description">Shape is Denmark’s leading mobile app agency, specialising in native mobile apps with an emphasis on product experience and technical proficiency, delivering impactful solutions for ambitious brands.</string>
-    <string name="partner_foundation">Kotlin Foundation</string>
-    <string name="partner_foundation_description">The Kotlin Foundation is a non-profit company whose mission is to promote and advance the Kotlin ecosystem.</string>
-    <string name="partner_btsystems">BT Systems</string>
-    <string name="partner_btsystems_description">BT Systems LLC delivers innovative trade finance solutions aimed at enhancing profitability and fostering new business development, all while streamlining bank trade process flows. Our industry-leading solutions empower clients with distinct competitive advantages.</string>
+
+    <string name="privacy_policy_for_visitors">Privacy Policy</string>
+    <string name="privacy_policy_for_visitors_title">KotlinConf 2024 Privacy Policy for Visitors</string>
+    <string name="privacy_policy_for_visitors_version">Version 1.1 of February 28, 2024</string>
+
+    <string name="app_privacy_policy_title">Privacy Policy</string>
+
+    <string name="app_terms">Terms of Use</string>
+
+    <string name="licenses_title">Licenses</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_theme_title">Color theme</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+
+    <string name="schedule_action_filter_bookmarked">Filter bookmarked</string>
+    <string name="schedule_action_search">Search</string>
+    <string name="schedule_in_x_minutes">in %1$d min</string>
+    <string name="schedule_error_no_data">Please hold on, our schedule is stuck in traffic. We’re clearing the jam!
+    </string>
+    <string name="schedule_error_no_results">No results</string>
+    <string name="schedule_label_no_bookmarks">No bookmarks added here</string>
+
+    <string name="session_title">Schedule</string>
+    <string name="session_your_feedback">Your feedback</string>
+    <string name="session_screen_error">The details of this session are not available at the moment.</string>
+    <string name="session_watch_video">Watch the recording</string>
+
+    <string name="map_title">Map</string>
+    <string name="map_ground_floor">Ground floor</string>
+    <string name="map_first_floor">First floor</string>
+
+    <string name="news_feed_title">News</string>
+
+    <string name="speakers_title">Speakers</string>
+    <string name="speakers_error_no_results">No results</string>
+    <string name="speakers_error_no_data">Our speakers are playing hide and seek. Give us a moment to find them!</string>
+
+    <string name="speaker_detail_title">Speaker</string>
+    <string name="speaker_detail_error_not_found">Sorry, we can’t find the details for that speaker.</string>
+
+    <string name="partners_title">Partners</string>
+    <string name="partners_platinum">Platinum</string>
+    <string name="partners_gold">Gold</string>
+    <string name="partners_silver">Silver</string>
+    <string name="partners_bronze">Bronze</string>
+    <string name="partners_video">Video</string>
+    <string name="partners_codelab">Codelab</string>
+    <string name="partners_digital">Digital</string>
+    <string name="partners_media">Media</string>
+    <string name="partners_swag">Official KotlinConf swag</string>
+
+    <string name="partner_detail_title">Partner</string>
 </resources>

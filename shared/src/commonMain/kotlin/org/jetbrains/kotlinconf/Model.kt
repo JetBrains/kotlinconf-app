@@ -1,10 +1,17 @@
 package org.jetbrains.kotlinconf
 
-import io.ktor.util.date.*
-import kotlinx.serialization.*
-import org.jetbrains.kotlinconf.utils.*
+import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.DrawableResource
+import kotlin.jvm.JvmInline
 
-typealias GMTDateSerializable = @Serializable(GMTDateSerializer::class) GMTDate
+@Serializable
+@JvmInline
+value class SpeakerId(val id: String)
+
+@Serializable
+@JvmInline
+value class SessionId(val id: String)
 
 @Serializable
 class Conference(
@@ -19,7 +26,7 @@ class Votes(
 
 @Serializable
 class Speaker(
-    val id: String,
+    val id: SpeakerId,
     val name: String,
     val position: String,
     val description: String,
@@ -28,27 +35,26 @@ class Speaker(
 
 @Serializable
 class Session(
-    val id: String,
+    val id: SessionId,
     val title: String,
     val description: String,
-    val speakerIds: List<String>,
+    val speakerIds: List<SpeakerId>,
     val location: String,
-    val startsAt: GMTDateSerializable,
-    val endsAt: GMTDateSerializable,
-    val tags: List<String>? = null
-) {
-    val timeLine get() = startsAt.time() + " - " + endsAt.time()
-}
+    val startsAt: LocalDateTime,
+    val endsAt: LocalDateTime,
+    val tags: List<String>? = null,
+    val videoUrl: String? = null,
+)
 
 @Serializable
-class VoteInfo(
-    val sessionId: String,
-    val score: Score?
+data class VoteInfo(
+    val sessionId: SessionId,
+    val score: Score?,
 )
 
 @Serializable
 class FeedbackInfo(
-    val sessionId: String,
+    val sessionId: SessionId,
     val value: String
 )
 
@@ -66,4 +72,55 @@ enum class Score(val value: Int) {
             else -> null
         }
     }
+}
+
+@Serializable
+@JvmInline
+value class PartnerId(val id: String)
+
+class Partner(
+    val id: PartnerId,
+    val name: String,
+    val description: String,
+    val icon: DrawableResource,
+    val url: String,
+)
+
+@Serializable
+enum class Theme {
+    SYSTEM,
+    LIGHT,
+    DARK,
+}
+
+@Serializable
+class NewsItem(
+    val id: String,
+    val photoUrl: String?,
+    val title: String,
+    val publicationDate: LocalDateTime,
+    val content: String,
+)
+
+@Serializable
+data class NewsRequest(
+    val title: String,
+    val publicationDate: LocalDateTime,
+    val photoUrl: String,
+    val content: String,
+)
+
+@Serializable
+data class NewsListResponse(
+    val items: List<NewsItem>
+)
+
+@Serializable
+data class NotificationSettings(
+    val sessionReminders: Boolean,
+    val scheduleUpdates: Boolean,
+    val kotlinConfNews: Boolean,
+    val jetBrainsNews: Boolean,
+) {
+    fun hasAnyEnabled() = sessionReminders || scheduleUpdates || kotlinConfNews || jetBrainsNews
 }

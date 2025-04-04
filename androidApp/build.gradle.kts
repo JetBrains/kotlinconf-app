@@ -1,28 +1,26 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.androidApplication)
+    alias(libs.plugins.googleServices)
 }
 
 kotlin {
     androidTarget()
 
     sourceSets {
-        val androidMain by getting {
-            dependencies {
-                implementation(project(":shared"))
-
-                implementation(libs.compose.ui.tooling.preview)
-                implementation(libs.androidx.activity.compose)
-            }
+        androidMain.dependencies {
+            implementation(projects.shared)
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.core.splashscreen)
         }
 
-        val androidUnitTest by getting {
-            dependencies {
-                implementation(libs.junit)
-                implementation(libs.androidx.test.junit)
-                implementation(libs.androidx.espresso.core)
-            }
+        androidUnitTest.dependencies {
+            implementation(libs.junit)
+            implementation(libs.androidx.test.junit)
+            implementation(libs.androidx.espresso.core)
         }
     }
 }
@@ -31,14 +29,12 @@ android {
     namespace = "com.jetbrains.kotlinconf"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-
     defaultConfig {
         applicationId = "com.jetbrains.kotlinconf"
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
-        versionCode = 38
-        versionName = "38.0"
+        versionCode = 64
+        versionName = "39.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -61,21 +57,13 @@ android {
     kotlin {
         jvmToolchain(11)
     }
-
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    dependencies {
-        debugImplementation(libs.compose.ui.tooling)
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
-    }
-    buildFeatures {
-        compose = true
-    }
 }
 
-
+dependencies {
+    debugImplementation(libs.compose.ui.tooling)
+}

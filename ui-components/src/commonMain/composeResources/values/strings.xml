@@ -1,0 +1,27 @@
+<resources>
+    <!-- Common -->
+    <string name="lightning_talk">Lightning talk</string>
+    <string name="now">Now</string>
+    <string name="loading">Loading…</string>
+
+    <!-- Actions -->
+    <string name="action_bookmark">Bookmark</string>
+    <string name="action_error_reload">Reload</string>
+
+    <!-- Components -->
+    <string name="feedback_form_type_something">Type something</string>
+    <string name="feedback_form_send">Send</string>
+
+    <string name="filter_by_tags">Filter by tags</string>
+    <string name="filter_label_category">Category</string>
+    <string name="filter_label_level">Level</string>
+    <string name="filter_label_session_format">Session format</string>
+
+    <string name="main_header_back">Back</string>
+    <string name="main_header_search_hint">Type to search</string>
+    <string name="main_header_search_clear">Clear</string>
+
+    <string name="talk_card_your_feedback">Your feedback</string>
+    <string name="talk_card_how_was_the_talk">How was the talk?</string>
+    <string name="talk_card_how_was_the_workshop">How was the workshop?</string>
+</resources>

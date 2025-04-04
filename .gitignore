@@ -23,6 +23,7 @@ Pods/
 .settings
 .classpath
 .gradletasknamecache
+.kotlin
 
 *.db
 androidApp/src/main/res/values/strings.xml
@@ -39,3 +40,6 @@ captures
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 android-build
+
+shared/store.properties
+/tmp/
