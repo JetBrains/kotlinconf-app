@@ -72,7 +72,7 @@ fun List<Session>.groupByTime(
                 startsAt = slot.startsAt,
                 endsAt = slot.endsAt,
                 state = SessionState.from(slot.startsAt, slot.endsAt, now),
-                sessions = sessions,
+                sessions = sessions.sortedBy { it.isLightning },
             )
         } else {
             null
