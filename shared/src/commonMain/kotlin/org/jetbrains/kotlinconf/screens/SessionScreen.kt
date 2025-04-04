@@ -252,8 +252,9 @@ private fun FeedbackPanel(
     initialEmotion: Emotion? = null,
     feedbackQuestion: String,
 ) {
-    var selectedEmotion by remember { mutableStateOf<Emotion?>(initialEmotion) }
+    var selectedEmotion by rememberSaveable { mutableStateOf(initialEmotion) }
     var feedbackExpanded by rememberSaveable { mutableStateOf(initialEmotion != null && startExpanded) }
+    var feedbackText by rememberSaveable { mutableStateOf("") }
 
     LaunchedEffect(feedbackExpanded) {
         if (feedbackExpanded) {
@@ -341,6 +342,8 @@ private fun FeedbackPanel(
             }
             val hapticFeedback = LocalHapticFeedback.current
             FeedbackForm(
+                feedbackText = feedbackText,
+                onFeedbackTextChange = { feedbackText = it },
                 emotion = selectedEmotion,
                 onSubmit = { emotion, comment ->
                     hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
