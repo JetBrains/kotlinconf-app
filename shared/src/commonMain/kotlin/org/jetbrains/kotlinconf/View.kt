@@ -3,6 +3,8 @@ package org.jetbrains.kotlinconf
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
+import kotlin.collections.plus
+import kotlin.collections.plusAssign
 
 data class Day(
     val date: LocalDate,
@@ -42,33 +44,43 @@ fun Conference.buildAgenda(
         .sortedBy { it.date }
 }
 
+private data class SlotTimes(
+    val startsAt: LocalDateTime,
+    val endsAt: LocalDateTime,
+)
+
 fun List<Session>.groupByTime(
     conference: Conference,
     now: LocalDateTime,
     favorites: Set<SessionId>,
     votes: Map<SessionId, VoteInfo>,
 ): List<TimeSlot> {
-    val slots = filterNot { it.isLightning }
-        .map { it.startsAt to it.endsAt }
-        .distinct()
-        .sortedBy { it.first }
+    val slots: List<SlotTimes> =
+        filterNot { it.isLightning }
+            .sortedBy { it.startsAt }
+            .map { SlotTimes(it.startsAt, it.endsAt) }
 
-    val handledSessionIds = mutableSetOf<SessionId>()
-    return slots.map { (start, end) ->
-        val cards: List<SessionCardView> =
-            filter { it.startsAt >= start && it.endsAt <= end && it.id !in handledSessionIds }
-                .map {
-                    it.asSessionCard(conference, now, favorites, votes[it.id])
-                }
+    val slotsToSessions: Map<SlotTimes, MutableList<SessionCardView>> =
+        slots.associateWith { mutableListOf() }
 
-        handledSessionIds += cards.map { it.id }
-
-        TimeSlot(
-            startsAt = start,
-            endsAt = end,
-            state = SessionState.from(start, end, now),
-            sessions = cards,
+    this.forEach { session ->
+        val slot = slots.find { (start, end) -> session.startsAt >= start && session.endsAt <= end } ?: return@forEach
+        slotsToSessions.getValue(slot).add(
+            session.asSessionCard(conference, now, favorites, votes[session.id])
         )
+    }
+
+    return slotsToSessions.mapNotNull { (slot, sessions) ->
+        if (sessions.isNotEmpty()) {
+            TimeSlot(
+                startsAt = slot.startsAt,
+                endsAt = slot.endsAt,
+                state = SessionState.from(slot.startsAt, slot.endsAt, now),
+                sessions = sessions,
+            )
+        } else {
+            null
+        }
     }
 }
 

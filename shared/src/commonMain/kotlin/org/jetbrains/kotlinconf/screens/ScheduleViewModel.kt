@@ -233,13 +233,8 @@ class ScheduleViewModel(
                 }
 
                 if (last() is TimeSlotTitleItem) {
-                    if (isBookmarkedOnly && (allWorkshops.isNotEmpty() || allTalks.isNotEmpty())) {
-                        // If nothing was added to this slot, but there were workshops or talks,
-                        // they must have been filtered out because none of them are bookmarked
+                    if (isBookmarkedOnly) {
                         add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
-                    } else {
-                        // Otherwise we hide empty slots, probably service events that got grouped
-                        removeAt(lastIndex) // Don't use removeLast https://developer.android.com/about/versions/15/behavior-changes-15#openjdk-api-changes
                     }
                 }
             }
