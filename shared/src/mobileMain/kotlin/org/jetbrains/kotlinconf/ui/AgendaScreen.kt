@@ -172,14 +172,16 @@ private fun LazyListScope.SessionsList(
         if (slot.isLunch || slot.isBreak || slot.isParty) return@forEach
 
         items(slot.sessions, key = { it.key }) { session ->
-            AgendaItem(session.title,
-                session.speakerLine,
-                session.locationLine,
-                session.badgeTimeLine,
-                session.isFavorite,
-                session.isFinished,
-                session.isLightning,
-                session.vote,
+            AgendaItem(
+                title = session.title,
+                speakerLine = session.speakerLine,
+                locationLine = session.locationLine,
+                timeLine = session.badgeTimeLine,
+                isFavorite = session.isFavorite,
+                isFinished = session.isFinished,
+                isLightning = session.isLightning,
+                vote = session.vote,
+                tags = session.tags,
                 onSessionClick = {
                     controller.showSession(session.id)
                 },
@@ -188,10 +190,11 @@ private fun LazyListScope.SessionsList(
                 },
                 onVote = {
                     controller.vote(session.id, it)
+                },
+                onFeedback = {
+                    controller.sendFeedback(session.id, it)
                 }
-            ) {
-                controller.sendFeedback(session.id, it)
-            }
+            )
         }
     }
 }
