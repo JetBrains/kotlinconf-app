@@ -3,8 +3,6 @@ package org.jetbrains.kotlinconf
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
-import kotlin.collections.plus
-import kotlin.collections.plusAssign
 
 data class Day(
     val date: LocalDate,
@@ -19,8 +17,6 @@ data class TimeSlot(
 ) {
     val title: String = DateTimeFormatting.timeToTime(startsAt, endsAt)
 }
-
-val TimeSlot.isLive get() = state == SessionState.Live
 
 fun Conference.buildAgenda(
     favorites: Set<SessionId>,

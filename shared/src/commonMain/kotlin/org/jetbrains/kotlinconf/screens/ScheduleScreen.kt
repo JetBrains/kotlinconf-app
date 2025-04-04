@@ -128,8 +128,8 @@ fun ScheduleScreen(
     var firstScrollPerformed by rememberSaveable { mutableStateOf(false) }
     if (!firstScrollPerformed) {
         LaunchedEffect(state) {
-            if (state is ScheduleUiState.Content && state.firstLiveIndex != -1) {
-                listState.scrollToItem(state.firstLiveIndex)
+            if (state is ScheduleUiState.Content && state.firstActiveIndex != -1) {
+                listState.scrollToItem(state.firstActiveIndex)
                 firstScrollPerformed = true
             }
         }
@@ -290,15 +290,15 @@ private fun NowButtonContent(state: ScheduleUiState, listState: LazyListState) {
 
     val scope = rememberCoroutineScope()
 
-    val firstLiveIndex = state.firstLiveIndex
-    val lastLiveIndex = state.lastLiveIndex
+    val firstActiveIndex = state.firstActiveIndex
+    val lastActiveIndex = state.lastActiveIndex
     var nowScrolling by remember { mutableStateOf(false) }
 
     val nowButtonState = derivedStateOf {
         when {
             nowScrolling -> NowButtonState.Current
 
-            firstLiveIndex == -1 || lastLiveIndex == -1 -> null
+            firstActiveIndex == -1 || lastActiveIndex == -1 -> null
 
             else -> {
                 val firstMostlyVisible = listState.firstVisibleItemIndex +
@@ -306,8 +306,8 @@ private fun NowButtonContent(state: ScheduleUiState, listState: LazyListState) {
                 val lastFullyVisible = listState.lastVisibleItemIndex - 1
 
                 when {
-                    lastFullyVisible < firstLiveIndex -> NowButtonState.Before
-                    firstMostlyVisible > lastLiveIndex -> NowButtonState.After
+                    lastFullyVisible < firstActiveIndex -> NowButtonState.Before
+                    firstMostlyVisible > lastActiveIndex -> NowButtonState.After
                     else -> NowButtonState.Current
                 }
             }
@@ -321,7 +321,7 @@ private fun NowButtonContent(state: ScheduleUiState, listState: LazyListState) {
                 scope.launch {
                     nowScrolling = true
                     try {
-                        listState.animateScrollToItem(firstLiveIndex)
+                        listState.animateScrollToItem(firstActiveIndex)
                     } finally {
                         nowScrolling = false
                     }

@@ -12,14 +12,15 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.Day
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.TagValues
+import org.jetbrains.kotlinconf.TimeProvider
 import org.jetbrains.kotlinconf.TimeSlot
-import org.jetbrains.kotlinconf.isLive
 import org.jetbrains.kotlinconf.isServiceEvent
 import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.components.FilterItem
@@ -54,18 +55,6 @@ data class WorkshopItem(
     val workshops: List<SessionCardView>,
 ) : ScheduleListItem
 
-fun ScheduleListItem.isLive(): Boolean {
-    return when (this) {
-        is DayHeaderItem -> false
-        is ServiceEventGroupItem -> this.value.any { it.isLive }
-        is ServiceEventItem -> this.value.isLive
-        is SessionItem -> this.value.isLive
-        is TimeSlotTitleItem -> this.value.isLive
-        is WorkshopItem -> this.workshops.any { it.isLive }
-        is NoBookmarksItem -> false
-    }
-}
-
 data class ScheduleSearchParams(
     val searchQuery: String = "",
     val isSearch: Boolean = false,
@@ -80,14 +69,14 @@ sealed class ScheduleUiState {
         val days: List<Day>,
         val items: List<ScheduleListItem>,
         val userSignedIn: Boolean,
-    ) : ScheduleUiState() {
-        val firstLiveIndex: Int = items.indexOfFirst { it.isLive() }
-        val lastLiveIndex: Int = items.indexOfLast { it.isLive() }
-    }
+        val firstActiveIndex: Int = -1,
+        val lastActiveIndex: Int = -1,
+    ) : ScheduleUiState()
 }
 
 class ScheduleViewModel(
     private val service: ConferenceService,
+    private val timeProvider: TimeProvider,
 ) : ViewModel() {
     private val _navigateToPrivacyPolicy = MutableStateFlow(false)
     val navigateToPrivacyPolicy: StateFlow<Boolean> = _navigateToPrivacyPolicy.asStateFlow()
@@ -157,14 +146,21 @@ class ScheduleViewModel(
             }
 
             else -> {
-                val items = buildNonSearchItems(
+                val (items, firstActiveIndex, lastActiveIndex) = buildNonSearchItems(
+                    now = timeProvider.now(),
                     days = agenda,
                     isBookmarkedOnly = searchParams.isBookmarkedOnly,
                 )
                 if (items.isEmpty()) {
                     ScheduleUiState.Error
                 } else {
-                    ScheduleUiState.Content(agenda, items, userId != null)
+                    ScheduleUiState.Content(
+                        days = agenda,
+                        items = items,
+                        userSignedIn = userId != null,
+                        firstActiveIndex = firstActiveIndex,
+                        lastActiveIndex = lastActiveIndex,
+                    )
                 }
             }
         }
@@ -206,46 +202,81 @@ class ScheduleViewModel(
 
     private fun buildNonSearchItems(
         days: List<Day>,
+        now: LocalDateTime,
         isBookmarkedOnly: Boolean,
-    ): List<ScheduleListItem> = buildList {
-        days.forEach { day ->
-            add(DayHeaderItem(day))
+    ): Triple<List<ScheduleListItem>, Int, Int> {
+        var firstActiveIndex = -1
+        var lastActiveIndex = -1
+        var seenPastSlot = false
 
-            day.timeSlots.forEach { timeSlot ->
-                add(TimeSlotTitleItem(timeSlot))
+        val items = buildList {
+            days.forEach { day ->
+                add(DayHeaderItem(day))
 
-                val (allWorkshops, notWorkshops) = timeSlot.sessions.partition { it.tags.contains("Workshop") }
-                val validWorkshops = if (isBookmarkedOnly) allWorkshops.filter { it.isFavorite } else allWorkshops
-                if (validWorkshops.isNotEmpty()) {
-                    add(WorkshopItem(validWorkshops))
-                }
+                day.timeSlots.forEachIndexed { index, timeSlot ->
+                    var activeTimeSlot = false
 
-                val (serviceEvents, allTalks) = notWorkshops.partition { it.isServiceEvent }
-                if (serviceEvents.size == 1) {
-                    add(ServiceEventItem(serviceEvents.first()))
-                } else if (serviceEvents.size > 1) {
-                    add(ServiceEventGroupItem(serviceEvents))
-                }
+                    if (firstActiveIndex == -1) { // We didn't find the active slot yet
+                        if (index == 0 && // This is the first slot of the day AND
+                            ((seenPastSlot && now < timeSlot.startsAt) || // There was a slot in the past before and this one is still upcoming OR
+                                    (day.date == now.date && now < timeSlot.startsAt)) // This is today and the day didn't start yet
+                        ) {
+                            firstActiveIndex = lastIndex // We'll consider the DayHeader and this first slot active
+                            activeTimeSlot = true
+                        } else if (
+                            (seenPastSlot && now < timeSlot.startsAt) || // There was a slot in the past before and this one is still upcoming OR
+                            (now in timeSlot.startsAt..<timeSlot.endsAt) // We're in this slot right now
+                        ) {
+                            firstActiveIndex = lastIndex + 1 // This is the active slot, starting with its title
+                            activeTimeSlot = true
+                        }
+                    }
 
-                val validTalks = if (isBookmarkedOnly) allTalks.filter { it.isFavorite } else allTalks
-                validTalks.forEach { session ->
-                    add(SessionItem(session))
-                }
+                    add(TimeSlotTitleItem(timeSlot))
 
-                if (last() is TimeSlotTitleItem) {
-                    if (isBookmarkedOnly) {
+                    val (allWorkshops, notWorkshops) = timeSlot.sessions.partition { it.tags.contains("Workshop") }
+                    val validWorkshops = if (isBookmarkedOnly) allWorkshops.filter { it.isFavorite } else allWorkshops
+                    if (validWorkshops.isNotEmpty()) {
+                        add(WorkshopItem(validWorkshops))
+                    }
+
+                    val (serviceEvents, allTalks) = notWorkshops.partition { it.isServiceEvent }
+                    if (serviceEvents.size == 1) {
+                        add(ServiceEventItem(serviceEvents.first()))
+                    } else if (serviceEvents.size > 1) {
+                        add(ServiceEventGroupItem(serviceEvents))
+                    }
+
+                    val validTalks = if (isBookmarkedOnly) allTalks.filter { it.isFavorite } else allTalks
+                    validTalks.forEach { session ->
+                        add(SessionItem(session))
+                    }
+
+                    if (last() is TimeSlotTitleItem && isBookmarkedOnly) {
                         add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
+                    }
+
+                    if (activeTimeSlot) { // This was the active slot
+                        lastActiveIndex = lastIndex // Mark its end
+                    }
+
+                    if (!seenPastSlot) { // No slots were in the past yet
+                        if (timeSlot.endsAt < now) { // This slot is in the past!
+                            seenPastSlot = true
+                        }
                     }
                 }
             }
         }
+
+        return Triple(items, firstActiveIndex, lastActiveIndex)
     }
 
     private class MatchResult(
         val matched: Boolean,
-        val tagMatches: List<String> = emptyList<String>(),
-        val titleHighlights: List<IntRange> = emptyList<IntRange>(),
-        val speakerHighlights: List<IntRange> = emptyList<IntRange>(),
+        val tagMatches: List<String> = emptyList(),
+        val titleHighlights: List<IntRange> = emptyList(),
+        val speakerHighlights: List<IntRange> = emptyList(),
     )
 
     private fun match(
