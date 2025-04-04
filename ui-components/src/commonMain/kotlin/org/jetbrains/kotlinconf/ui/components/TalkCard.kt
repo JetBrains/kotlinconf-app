@@ -37,6 +37,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -407,8 +408,9 @@ private fun FeedbackBlock(
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     isWorkshop: Boolean,
 ) {
-    var selectedEmotion by remember { mutableStateOf(initialEmotion) }
-    var feedbackExpanded by remember { mutableStateOf(false) }
+    var selectedEmotion by rememberSaveable { mutableStateOf(initialEmotion) }
+    var feedbackExpanded by rememberSaveable { mutableStateOf(false) }
+    var feedbackText by rememberSaveable { mutableStateOf("") }
 
     Column(
         Modifier
@@ -513,6 +515,8 @@ private fun FeedbackBlock(
                 focusRequester.requestFocus()
             }
             FeedbackForm(
+                feedbackText = feedbackText,
+                onFeedbackTextChange = { feedbackText = it },
                 emotion = selectedEmotion,
                 onSubmit = { emotion, comment ->
                     hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
