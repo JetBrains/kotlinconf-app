@@ -3,6 +3,7 @@ package org.jetbrains.kotlinconf
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.partner_american_express
 import kotlinconfapp.shared.generated.resources.partner_android_weekly
+import kotlinconfapp.shared.generated.resources.partner_bloomberg
 import kotlinconfapp.shared.generated.resources.partner_gitar
 import kotlinconfapp.shared.generated.resources.partner_google
 import kotlinconfapp.shared.generated.resources.partner_gradle
@@ -77,6 +78,7 @@ internal val PARTNERS: Map<StringResource, List<Partner>> = mapOf(
         Partner(PartnerId("uber"), "Uber", "We reimagine the way the world moves for the better Movement is what we power.", Res.drawable.partner_uber, "https://www.uber.com/nl/en/"),
     ),
     Res.string.partners_bronze to listOf(
+        Partner(PartnerId("bloomberg"), "Bloomberg", "", Res.drawable.partner_bloomberg, "https://www.bloomberg.com/company/values/tech-at-bloomberg/"),
         Partner(PartnerId("gitar"), "Gitar", "Gitar simplifies code maintenance for developers with automated solutions for dead code cleanup, feature flag removal, and seamless app migrations. Boost efficiency and code quality effortlessly!", Res.drawable.partner_gitar, "www.gitar.ai"),
         Partner(PartnerId("sentry"), "Sentry", "For software teams, Sentry is essential for monitoring application code quality. From Error tracking to Performance monitoring, developers can see clearer, solve quicker, and learn continuously about their applications — from frontend to backend. Loved by nearly 4 million developers and 90,000 organizations worldwide, Sentry provides code-level observability to many of the world's best-known companies like Disney, Cloudflare, Eventbrite, Slack, Supercell, and Rockstar Games.", Res.drawable.partner_sentry, "https://sentry.io/welcome"),
     ),
