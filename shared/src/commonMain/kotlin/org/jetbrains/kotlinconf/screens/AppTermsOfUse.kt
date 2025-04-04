@@ -19,7 +19,7 @@ fun AppTermsOfUse(
             Res.readBytes("files/app-terms.md")
         },
         onBack = onBack,
-        onUriClick = { uri ->
+        onCustomUriClick = { uri ->
             if (uri == "app-privacy-policy.md") {
                 onAppPrivacyPolicy()
             }

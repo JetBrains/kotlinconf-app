@@ -17,7 +17,7 @@ fun AppPrivacyPolicy(
         title = stringResource(Res.string.app_privacy_policy_title),
         loadText = { Res.readBytes("files/app-privacy-policy.md") },
         onBack = onBack,
-        onUriClick = { uri ->
+        onCustomUriClick = { uri ->
             if (uri == "app-terms.md") {
                 onAppTermsOfUse()
             }

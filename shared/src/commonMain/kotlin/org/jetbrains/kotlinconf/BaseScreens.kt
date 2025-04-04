@@ -71,7 +71,7 @@ fun MarkdownScreenWithTitle(
     subheader: String = "",
     loadText: suspend () -> ByteArray,
     onBack: () -> Unit,
-    onUriClick: (String) -> Unit = {},
+    onCustomUriClick: (String) -> Unit = {},
     endContent: @Composable ColumnScope.() -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
@@ -89,7 +89,7 @@ fun MarkdownScreenWithTitle(
             )
         }
 
-        MarkdownView(loadText, modifier = Modifier.padding(vertical = 12.dp), onUriClick = onUriClick)
+        MarkdownView(loadText, modifier = Modifier.padding(vertical = 12.dp), onCustomUriClick = onCustomUriClick)
 
         endContent()
     }

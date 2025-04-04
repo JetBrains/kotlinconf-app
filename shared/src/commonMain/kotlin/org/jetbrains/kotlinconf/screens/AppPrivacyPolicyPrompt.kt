@@ -106,7 +106,7 @@ fun AppPrivacyPolicyPrompt(
                             AppRes.readBytes("files/app-privacy-policy.md")
                         },
                         modifier = Modifier.padding(horizontal = 12.dp).verticalScroll(scrollState),
-                        onUriClick = { uri ->
+                        onCustomUriClick = { uri ->
                             if (uri == "app-terms.md") {
                                 onAppTermsOfUse()
                             }

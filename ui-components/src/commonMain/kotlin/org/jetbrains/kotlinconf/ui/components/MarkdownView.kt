@@ -31,21 +31,21 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 fun MarkdownView(
     loadText: suspend () -> ByteArray,
     modifier: Modifier = Modifier,
-    onUriClick: (String) -> Unit = {},
+    onCustomUriClick: (String) -> Unit = {},
 ) {
     var text by remember { mutableStateOf("") }
     LaunchedEffect(loadText) {
         text = loadText().decodeToString()
     }
 
-    MarkdownView(text, modifier, onUriClick)
+    MarkdownView(text, modifier, onCustomUriClick)
 }
 
 @Composable
 fun MarkdownView(
     text: String,
     modifier: Modifier = Modifier,
-    onUriClick: (String) -> Unit = {},
+    onCustomUriClick: (String) -> Unit = {},
 ) {
     val regularUriHandler = LocalUriHandler.current
     val customUriHandler = object : UriHandler {
@@ -53,7 +53,7 @@ fun MarkdownView(
             if (uri.startsWith("http://") || uri.startsWith("https://")) {
                 regularUriHandler.openUri(uri)
             } else {
-                onUriClick(uri)
+                onCustomUriClick(uri)
             }
         }
     }
