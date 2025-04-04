@@ -11,7 +11,7 @@ import org.jetbrains.kotlinconf.MarkdownScreenWithTitle
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun PrivacyPolicyForVisitors(onBack: () -> Unit) {
+fun VisitorPrivacyPolicy(onBack: () -> Unit) {
     MarkdownScreenWithTitle(
         title = stringResource(Res.string.privacy_policy_for_visitors),
         header = stringResource(Res.string.privacy_policy_for_visitors_title),

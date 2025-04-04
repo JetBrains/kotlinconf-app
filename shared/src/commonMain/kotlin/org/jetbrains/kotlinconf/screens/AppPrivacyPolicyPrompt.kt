@@ -21,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,13 +55,14 @@ import kotlinconfapp.shared.generated.resources.Res as AppRes
 
 
 @Composable
-fun PrivacyPolicyScreen(
+fun AppPrivacyPolicyPrompt(
     onRejectPolicy: () -> Unit,
     onAcceptPolicy: () -> Unit,
+    onAppTermsOfUse: () -> Unit,
     confirmationRequired: Boolean,
     viewModel: PrivacyPolicyViewModel = koinViewModel(),
 ) {
-    var detailsVisible by remember { mutableStateOf(false) }
+    var detailsVisible by rememberSaveable { mutableStateOf(false) }
     val policyState by viewModel.policyState.collectAsState()
 
     LaunchedEffect(policyState) {
@@ -104,6 +106,11 @@ fun PrivacyPolicyScreen(
                             AppRes.readBytes("files/app-privacy-policy.md")
                         },
                         modifier = Modifier.padding(horizontal = 12.dp).verticalScroll(scrollState),
+                        onCustomUriClick = { uri ->
+                            if (uri == "app-terms.md") {
+                                onAppTermsOfUse()
+                            }
+                        },
                     )
                     Spacer(Modifier.weight(1f))
                     Divider(

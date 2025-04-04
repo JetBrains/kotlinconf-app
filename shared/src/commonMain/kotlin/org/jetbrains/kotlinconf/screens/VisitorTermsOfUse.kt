@@ -10,7 +10,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.MarkdownScreenWithTitle
 
 @Composable
-fun TermsOfUse(onBack: () -> Unit) {
+fun VisitorTermsOfUse(onBack: () -> Unit) {
     MarkdownScreenWithTitle(
         title = stringResource(Res.string.general_terms),
         header = stringResource(Res.string.visitors_terms_title),
