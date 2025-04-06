@@ -124,6 +124,7 @@ We will process your data in accordance with the App Privacy Policy. You can adj
     <string name="map_first_floor">First floor</string>
 
     <string name="news_feed_title">News</string>
+    <string name="news_feed_empty">No news… is good news?</string>
 
     <string name="speakers_title">Speakers</string>
     <string name="speakers_error_no_results">No results</string>
