@@ -22,7 +22,7 @@ import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MarkdownView
 import org.jetbrains.kotlinconf.ui.components.NetworkImage
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.topInsetPadding
@@ -76,7 +76,7 @@ fun NewsDetailScreen(
                         .fillMaxWidth()
                         .padding(vertical = 16.dp, horizontal = 12.dp)
                 ) {
-                    StyledText(text = state.title, style = KotlinConfTheme.typography.h2)
+                    Text(text = state.title, style = KotlinConfTheme.typography.h2)
                     Spacer(Modifier.height(12.dp))
                     MarkdownView(text = state.content)
                 }

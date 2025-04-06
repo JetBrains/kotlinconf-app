@@ -32,7 +32,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.ScrollToTopHandler
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
@@ -82,7 +82,7 @@ fun SingleLicenseScreen(
     onBack: () -> Unit,
 ) {
     ScreenWithTitle(title = licenseName, onBack = onBack) {
-        StyledText(
+        Text(
             licenseContent,
             style = KotlinConfTheme.typography.text2,
             color = KotlinConfTheme.colors.noteText,
@@ -142,13 +142,13 @@ private fun LibraryItem(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            StyledText(
+            Text(
                 text = library.name,
                 style = KotlinConfTheme.typography.h3,
                 color = KotlinConfTheme.colors.primaryText,
                 modifier = Modifier.weight(1f)
             )
-            StyledText(
+            Text(
                 text = library.artifactVersion ?: "",
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.secondaryText,
@@ -156,13 +156,13 @@ private fun LibraryItem(
             )
         }
         Spacer(modifier = Modifier.size(4.dp))
-        StyledText(
+        Text(
             text = library.author,
             style = KotlinConfTheme.typography.text2,
             color = KotlinConfTheme.colors.secondaryText,
         )
         Spacer(modifier = Modifier.size(4.dp))
-        StyledText(
+        Text(
             text = library.licenseName,
             style = KotlinConfTheme.typography.text2,
             color = KotlinConfTheme.colors.primaryText,

@@ -53,7 +53,7 @@ import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.Theme
 import org.jetbrains.kotlinconf.ui.components.Divider
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.viewmodel.koinViewModel
 import kotlinconfapp.shared.generated.resources.Res as AppRes
@@ -128,7 +128,7 @@ private fun SettingsScreenImpl(
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                StyledText(
+                Text(
                     text = stringResource(AppRes.string.settings_theme_title),
                     style = KotlinConfTheme.typography.h2
                 )
@@ -230,7 +230,7 @@ private fun ThemeBox(
             )
         }
         Spacer(Modifier.height(8.dp))
-        StyledText(
+        Text(
             text = stringResource(
                 when (theme) {
                     Theme.SYSTEM -> Res.string.settings_theme_system

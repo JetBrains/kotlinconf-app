@@ -1,9 +1,6 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring.DampingRatioNoBouncy
-import androidx.compose.animation.core.Spring.StiffnessMediumLow
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -55,7 +52,7 @@ fun Action(
                 role = Role.Button,
             )
     ) {
-        StyledText(
+        Text(
             text = label,
             color = color,
             style = when (size) {

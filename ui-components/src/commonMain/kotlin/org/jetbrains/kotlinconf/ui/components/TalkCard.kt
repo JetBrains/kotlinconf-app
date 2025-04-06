@@ -258,7 +258,7 @@ private fun TopBlock(
                 CardTag(label = tag, selected = tag in selectedTags)
             }
         }
-        StyledText(
+        Text(
             text = buildHighlightedString(speakers, speakerHighlights),
             color = KotlinConfTheme.colors.secondaryText,
             style = KotlinConfTheme.typography.text2,
@@ -283,7 +283,7 @@ private fun TalkTitle(
     val isEducation = "Education" in tags
     val hasIcon = isCodelab || isEducation
 
-    StyledText(
+    Text(
         text = if (hasIcon) {
             buildAnnotatedString {
                 appendInlineContent(
@@ -356,7 +356,7 @@ private fun TimeBlock(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.padding(16.dp)
     ) {
-        StyledText(
+        Text(
             text = location,
             style = KotlinConfTheme.typography.text2,
             color = textColor,
@@ -365,7 +365,7 @@ private fun TimeBlock(
         Spacer(Modifier.weight(1f))
 
         if (timeNote != null) {
-            StyledText(
+            Text(
                 text = timeNote,
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.noteText,
@@ -386,7 +386,7 @@ private fun TimeBlock(
             )
         }
 
-        StyledText(
+        Text(
             text = time,
             style = KotlinConfTheme.typography.text2,
             color = textColor,
@@ -454,7 +454,7 @@ private fun FeedbackBlock(
                         )
                     }
                 } else {
-                    StyledText(
+                    Text(
                         text = stringResource(
                             if (isWorkshop) Res.string.talk_card_how_was_the_workshop
                             else Res.string.talk_card_how_was_the_talk

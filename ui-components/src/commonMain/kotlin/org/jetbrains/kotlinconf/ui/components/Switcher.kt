@@ -61,7 +61,7 @@ private fun SwitcherItem(
             .padding(horizontal = 16.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center,
     ) {
-        StyledText(
+        Text(
             label,
             style = KotlinConfTheme.typography.text1,
             color = textColor,

@@ -13,7 +13,7 @@ fun ParagraphTitle(
     text: String,
     modifier: Modifier = Modifier,
 ) {
-    StyledText(
+    Text(
         text = text,
         style = KotlinConfTheme.typography.h2,
         modifier = modifier

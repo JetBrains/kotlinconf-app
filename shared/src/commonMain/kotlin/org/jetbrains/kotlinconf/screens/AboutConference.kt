@@ -42,7 +42,7 @@ import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -66,8 +66,8 @@ fun AboutConference(
             modifier = Modifier.padding(top = 24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            StyledText(text = stringResource(Res.string.about_conference_header), style = KotlinConfTheme.typography.h1)
-            StyledText(text = stringResource(Res.string.about_conference_description))
+            Text(text = stringResource(Res.string.about_conference_header), style = KotlinConfTheme.typography.h1)
+            Text(text = stringResource(Res.string.about_conference_description))
         }
 
         Spacer(modifier = Modifier.height(48.dp))
@@ -147,7 +147,7 @@ private fun EventCard(
         DayHeader(month, day, line1, line2, modifier = Modifier.fillMaxWidth(), day2 = day2)
 
         if (description.isNotEmpty()) {
-            StyledText(description, modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp))
+            Text(description, modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp))
         }
 
         if (speakers.isNotEmpty()) {
@@ -174,8 +174,8 @@ private fun EventCard(
                 modifier = Modifier.padding(16.dp).fillMaxSize(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                StyledText(location, style = KotlinConfTheme.typography.text2)
-                StyledText(time, style = KotlinConfTheme.typography.text2)
+                Text(location, style = KotlinConfTheme.typography.text2)
+                Text(time, style = KotlinConfTheme.typography.text2)
             }
         }
     }

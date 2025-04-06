@@ -60,7 +60,7 @@ fun Button(
             .padding(horizontal = 32.dp),
         contentAlignment = Alignment.Center,
     ) {
-        StyledText(
+        Text(
             label,
             style = KotlinConfTheme.typography.text1,
             color = textColor,

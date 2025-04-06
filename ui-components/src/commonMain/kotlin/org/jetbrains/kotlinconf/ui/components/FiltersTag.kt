@@ -1,9 +1,6 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring.DampingRatioNoBouncy
-import androidx.compose.animation.core.Spring.StiffnessMediumLow
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -63,7 +60,7 @@ fun FilterTag(
             .padding(horizontal = 12.dp, vertical = 10.dp),
         contentAlignment = Alignment.Center,
     ) {
-        StyledText(
+        Text(
             label,
             style = KotlinConfTheme.typography.text1,
             color = textColor,

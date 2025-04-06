@@ -44,13 +44,13 @@ fun NewsCard(
             )
         }
         Column(Modifier.fillMaxWidth().padding(16.dp)) {
-            StyledText(
+            Text(
                 text = date,
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.secondaryText,
             )
             Spacer(modifier = Modifier.size(4.dp))
-            StyledText(
+            Text(
                 text = title,
                 style = KotlinConfTheme.typography.h3,
                 color = KotlinConfTheme.colors.primaryText,

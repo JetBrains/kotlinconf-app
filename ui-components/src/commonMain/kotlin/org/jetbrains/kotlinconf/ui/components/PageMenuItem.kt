@@ -19,7 +19,6 @@ import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
@@ -50,7 +49,7 @@ fun PageMenuItem(
                 contentDescription = null,
             )
         }
-        StyledText(
+        Text(
             text = label,
             style = KotlinConfTheme.typography.h3,
         )

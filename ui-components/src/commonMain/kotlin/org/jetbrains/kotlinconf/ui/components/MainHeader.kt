@@ -95,7 +95,7 @@ fun MainHeaderSearchBar(
                 enter = fadeIn(tween(10)),
                 exit = fadeOut(tween(10)),
             ) {
-                StyledText(
+                Text(
                     text = stringResource(Res.string.main_header_search_hint),
                     style = KotlinConfTheme.typography.text1,
                     color = KotlinConfTheme.colors.placeholderText
@@ -138,7 +138,7 @@ fun MainHeaderTitleBar(
         Row(Modifier.align(Alignment.CenterStart)) {
             startContent()
         }
-        StyledText(
+        Text(
             text = title,
             modifier = Modifier.align(Alignment.Center),
             style = KotlinConfTheme.typography.h3,

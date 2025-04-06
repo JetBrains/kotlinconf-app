@@ -61,7 +61,7 @@ fun PageTitle(
                 )
             }
 
-            StyledText(
+            Text(
                 text = time,
                 style = KotlinConfTheme.typography.h3,
                 color = KotlinConfTheme.colors.primaryText
@@ -92,7 +92,7 @@ fun PageTitle(
                 tint = iconTint,
             )
         }
-        StyledText(
+        Text(
             text = title,
             style = KotlinConfTheme.typography.h1,
             color = KotlinConfTheme.colors.primaryText,

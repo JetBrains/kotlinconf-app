@@ -17,7 +17,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.PARTNERS
 import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.ScreenWithTitle
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 
 @Composable
@@ -44,14 +44,14 @@ fun PartnerDetailScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        StyledText(
+        Text(
             text = partner.name,
             style = KotlinConfTheme.typography.h1,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        StyledText(
+        Text(
             text = partner.description,
             color = KotlinConfTheme.colors.longText,
         )

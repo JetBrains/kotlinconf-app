@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -65,25 +64,25 @@ fun DayHeader(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy((-10).dp)
             ) {
-                StyledText(
+                Text(
                     month,
                     style = KotlinConfTheme.typography.text2,
                     color = white60,
                 )
-                StyledText(
+                Text(
                     day,
                     style = DayDateStyle,
                     color = KotlinConfTheme.colors.primaryTextInverted,
                     modifier = Modifier.widthIn(min = 72.dp),
                 )
-                StyledText(
+                Text(
                     "",
                     style = KotlinConfTheme.typography.text2,
                     color = Color.Transparent,
                 )
             }
             if (day2.isNotEmpty()) {
-                StyledText(
+                Text(
                     "-$day2",
                     style = DayDateStyle,
                     color = KotlinConfTheme.colors.primaryTextInverted,
@@ -92,12 +91,12 @@ fun DayHeader(
             }
         }
         Column {
-            StyledText(
+            Text(
                 line1,
                 style = DayHeaderStyle,
                 color = KotlinConfTheme.colors.primaryTextInverted,
             )
-            StyledText(
+            Text(
                 line2,
                 style = DayHeaderStyle,
                 color = KotlinConfTheme.colors.primaryTextInverted,

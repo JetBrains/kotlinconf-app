@@ -32,7 +32,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.isProd
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 
@@ -52,7 +52,7 @@ fun AboutAppScreen(
         onBack = onBack,
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            StyledText(
+            Text(
                 stringResource(Res.string.about_app_description),
                 color = KotlinConfTheme.colors.longText,
                 modifier = Modifier.padding(vertical = 24.dp),
@@ -81,7 +81,7 @@ fun AboutAppScreen(
             val clipboardManager = LocalClipboardManager.current
             val appVersion = stringResource(resource = Res.string.app_version)
             var tapCount by remember { mutableStateOf(0) }
-            StyledText(
+            Text(
                 text = appVersion,
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.secondaryText,

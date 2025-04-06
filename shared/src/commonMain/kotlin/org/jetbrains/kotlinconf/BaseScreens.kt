@@ -18,7 +18,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MarkdownView
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
@@ -78,11 +78,11 @@ fun MarkdownScreenWithTitle(
     ScrollToTopHandler(scrollState)
     ScreenWithTitle(title, onBack, contentScrollState = scrollState) {
         if (header.isNotEmpty()) {
-            StyledText(header, style = KotlinConfTheme.typography.h1, modifier = Modifier.padding(vertical = 12.dp))
+            Text(header, style = KotlinConfTheme.typography.h1, modifier = Modifier.padding(vertical = 12.dp))
         }
 
         if (subheader.isNotEmpty()) {
-            StyledText(
+            Text(
                 subheader,
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.noteText,

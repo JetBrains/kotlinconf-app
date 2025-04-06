@@ -125,7 +125,7 @@ fun FeedbackForm(
                         enter = fadeIn(tween(10)),
                         exit = fadeOut(tween(10)),
                     ) {
-                        StyledText(
+                        Text(
                             text = stringResource(Res.string.feedback_form_type_something),
                             style = KotlinConfTheme.typography.text1,
                             color = KotlinConfTheme.colors.placeholderText
