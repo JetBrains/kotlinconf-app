@@ -68,13 +68,3 @@ internal object UI {
     val greyLight = Color(0xFFA3A3A4)
     val greyDark = Color(0xFF757577)
 }
-
-// TODO review if needed
-internal object Text {
-    val textIconHard = Color(0xFF19191C)
-    val textIconAverage = Color(0x9919191C)
-    val textIconPale = Color(0x6619191C)
-    val textIconHardInverted = Color(0xFFFFFFFF)
-    val textIconAverageInverted = Color(0xB2FFFFFF)
-    val textIconPaleInverted = Color(0x80FFFFFF)
-}
