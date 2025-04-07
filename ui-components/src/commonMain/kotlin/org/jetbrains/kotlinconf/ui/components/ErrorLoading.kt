@@ -38,6 +38,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
@@ -64,7 +67,15 @@ fun MinorError(
     message: String,
     modifier: Modifier = Modifier,
 ) {
-    ErrorText(message, modifier.fillMaxWidth().padding(32.dp))
+    ErrorText(
+        message,
+        modifier
+            .fillMaxWidth()
+            .padding(32.dp)
+            .semantics {
+                liveRegion = LiveRegionMode.Assertive
+            }
+    )
 }
 
 @Composable
@@ -82,7 +93,12 @@ fun MajorError(
             contentDescription = null,
         )
         Spacer(Modifier.height(16.dp))
-        ErrorText(message)
+        ErrorText(
+            message = message,
+            modifier = Modifier.semantics {
+                liveRegion = LiveRegionMode.Assertive
+            }
+        )
     }
 }
 
