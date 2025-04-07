@@ -5,7 +5,6 @@ import androidx.compose.animation.core.EaseOutQuad
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +18,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -169,7 +170,7 @@ private fun ThemeSelector(
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier
+        modifier = modifier.selectableGroup()
     ) {
         themes.forEach { theme ->
             ThemeBox(
@@ -192,12 +193,13 @@ private fun ThemeBox(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .clickable(
+            .selectable(
+                selected = isSelected,
                 onClick = onClick,
+                role = Role.RadioButton,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
             )
-            .semantics(mergeDescendants = true) {},
     ) {
         Box(
             contentAlignment = Alignment.Center,

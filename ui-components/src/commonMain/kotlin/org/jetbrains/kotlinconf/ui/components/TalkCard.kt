@@ -27,6 +27,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
@@ -492,17 +494,24 @@ private fun FeedbackBlock(
                 }
             }
             Spacer(Modifier.weight(1f))
-            Row {
+            Row(
+                modifier = Modifier.selectableGroup()
+            ) {
                 val feedbackEmotions = remember {
                     listOf(Emotion.Negative, Emotion.Neutral, Emotion.Positive)
                 }
                 val hapticFeedback = LocalHapticFeedback.current
                 feedbackEmotions.forEach { emotion ->
+                    val selected = selectedEmotion == emotion
                     KodeeIconSmall(
                         emotion = emotion,
-                        selected = selectedEmotion == emotion,
+                        selected = selected,
                         modifier = Modifier
-                            .clickable(indication = null, interactionSource = null) {
+                            .selectable(
+                                selected = selected,
+                                indication = null,
+                                interactionSource = null
+                            ) {
                                 if (userSignedIn) {
                                     hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
                                     selectedEmotion = if (emotion == selectedEmotion) null else emotion

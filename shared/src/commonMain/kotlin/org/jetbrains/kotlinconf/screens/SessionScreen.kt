@@ -23,6 +23,8 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -290,7 +292,7 @@ private fun FeedbackPanel(
             )
             Spacer(Modifier.height(16.dp))
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().selectableGroup(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 val feedbackEmotions = remember {
@@ -298,10 +300,15 @@ private fun FeedbackPanel(
                 }
                 val hapticFeedback = LocalHapticFeedback.current
                 feedbackEmotions.forEach { emotion ->
+                    val selected = selectedEmotion == emotion
                     KodeeIconLarge(
                         emotion = emotion,
-                        selected = selectedEmotion == emotion,
-                        modifier = Modifier.clickable(indication = null, interactionSource = null) {
+                        selected = selected,
+                        modifier = Modifier.selectable(
+                            selected = selected,
+                            indication = null,
+                            interactionSource = null
+                        ) {
                             val newEmotion = if (emotion == selectedEmotion) null else emotion
                             if (userSignedIn) {
                                 hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)

@@ -66,11 +66,6 @@ fun Toggle(
         Box(
             Modifier.size(ToggleWidth, ToggleHeight)
                 .clip(ToggleBackgroundShape)
-                .clickable(
-                    onClick = { onToggle(!enabled) },
-                    interactionSource = interactionSource,
-                    indication = LocalIndication.current,
-                )
                 .background(toggleColor)
         )
         val xOffset by animateDpAsState(if (enabled) ToggleWidth / 4 else -ToggleWidth / 4)
@@ -83,11 +78,6 @@ fun Toggle(
                 .size(ThumbSize)
                 .clip(ToggleThumbShape)
                 .background(toggleColor)
-                .clickable(
-                    onClick = { onToggle(!enabled) },
-                    interactionSource = interactionSource,
-                    indication = LocalIndication.current,
-                )
                 .drawBehind {
                     drawCircle(color = thumbCenterColor, radius = (size.minDimension / 2) - 2.dp.toPx())
                 }
