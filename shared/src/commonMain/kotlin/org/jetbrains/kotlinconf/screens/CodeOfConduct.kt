@@ -25,7 +25,7 @@ fun CodeOfConduct(onBack: () -> Unit) {
     ) {
         Image(
             painter = painterResource(Res.drawable.kodee_code_of_conduct),
-            contentDescription = "",
+            contentDescription = null,
             modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 12.dp)
         )
     }
