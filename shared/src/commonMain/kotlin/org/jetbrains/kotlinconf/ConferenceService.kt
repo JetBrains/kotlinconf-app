@@ -137,11 +137,33 @@ class ConferenceService(
         storage.setConferenceCache(newData)
 
         if (oldData != null) {
-            val oldIds = oldData.sessions.map { it.id }
-            val newIds = newData.sessions.map { it.id }
-            val removedIds = oldIds - newIds
+            val oldSessions = oldData.sessions.associateBy { it.id }
+            val newSessions = newData.sessions.associateBy { it.id }
+
+            // Cancel notifications for removed sessions
+            val removedIds = oldSessions.keys - newSessions.keys
             removedIds.forEach { sessionId ->
                 cancelNotifications(sessionId)
+            }
+
+            // Remove removed sessions from favorites
+            val favorites = storage.getFavorites().first().toMutableSet()
+            favorites.removeAll { it in removedIds }
+            storage.setFavorites(favorites)
+
+            // Check if any favorite sessions were rescheduled
+            favorites.forEach { sessionId ->
+                val newSession = newSessions[sessionId] ?: return@forEach
+                val oldSession = oldSessions[sessionId] ?: return@forEach
+                if (oldSession.startsAt != newSession.startsAt || oldSession.endsAt != newSession.endsAt) {
+                    cancelNotifications(sessionId)
+                    scheduleNotification(
+                        start = newSession.startsAt,
+                        end = newSession.endsAt,
+                        sessionId = newSession.id,
+                        title = newSession.title,
+                    )
+                }
             }
         }
     }
@@ -276,7 +298,12 @@ class ConferenceService(
             if (favorite) {
                 val session = sessionByIdFlow(sessionId).first()
                 if (session != null) {
-                    scheduleNotification(session)
+                    scheduleNotification(
+                        start = session.startsAt,
+                        end = session.endsAt,
+                        sessionId = session.id,
+                        title = session.title,
+                    )
                 }
             } else {
                 cancelNotifications(sessionId)
@@ -284,9 +311,12 @@ class ConferenceService(
         }
     }
 
-    private fun scheduleNotification(session: SessionCardView) {
-        val start = session.startsAt
-        val end = session.endsAt
+    private fun scheduleNotification(
+        start: LocalDateTime,
+        end: LocalDateTime,
+        sessionId: SessionId,
+        title: String,
+    ) {
         val now = timeProvider.now()
 
         val reminderTime = start - 5.minutes
@@ -298,20 +328,20 @@ class ConferenceService(
         when {
             startsLater -> localNotificationService.post(
                 time = reminderTime,
-                localNotificationId = LocalNotificationId(Type.SessionStart, session.id.id),
-                title = session.title,
+                localNotificationId = LocalNotificationId(Type.SessionStart, sessionId.id),
+                title = title,
                 message = "Starts in 5 minutes",
             )
 
             startsSoon -> localNotificationService.post(
-                localNotificationId = LocalNotificationId(Type.SessionStart, session.id.id),
-                title = session.title,
+                localNotificationId = LocalNotificationId(Type.SessionStart, sessionId.id),
+                title = title,
                 message = "The session is about to start",
             )
 
             isLive -> localNotificationService.post(
-                localNotificationId = LocalNotificationId(Type.SessionStart, session.id.id),
-                title = session.title,
+                localNotificationId = LocalNotificationId(Type.SessionStart, sessionId.id),
+                title = title,
                 message = "Hurry up, the session has already started!",
             )
         }
@@ -320,8 +350,8 @@ class ConferenceService(
         if (end > now) {
             localNotificationService.post(
                 time = end,
-                localNotificationId = LocalNotificationId(Type.SessionEnd, session.id.id),
-                title = "${session.title} finished",
+                localNotificationId = LocalNotificationId(Type.SessionEnd, sessionId.id),
+                title = "$title finished",
                 message = "How was the talk?",
             )
         }
