@@ -42,8 +42,10 @@ object DateTimeFormatting {
 
     internal fun dateWithYear(dateTime: LocalDateTime): String = dateTime.format(dateWithYearFormat)
 
-    internal fun timeToTime(start: LocalDateTime, end: LocalDateTime): String = "${time(start)}-${time(end)}"
+    internal fun timeToTime(start: LocalDateTime, end: LocalDateTime): String = "${time(start)} – ${time(end)}"
 
     internal fun dateAndTime(dateTime: LocalDateTime): String = "${date(dateTime)}, ${time(dateTime)}"
+
+    internal fun dateAndTime(start: LocalDateTime, end: LocalDateTime): String = "${date(start)}, ${time(start)} – ${time(end)}"
 
 }
