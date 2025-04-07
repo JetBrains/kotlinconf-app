@@ -36,6 +36,7 @@ object TagValues {
         "Android",
         "Extensibility/Tooling",
         "Language and best practices",
+        "Education",
         "Other",
     )
     val levels = listOf(
