@@ -43,6 +43,8 @@ import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
 @Composable
 fun FeedbackForm(
+    feedbackText: String,
+    onFeedbackTextChange: (String) -> Unit,
     emotion: Emotion?,
     onSubmit: (emotion: Emotion, comment: String) -> Unit,
     past: Boolean,
@@ -67,10 +69,9 @@ fun FeedbackForm(
     )
 
     Box(modifier.fillMaxWidth().onKeyEvent { true }) {
-        var feedbackText by remember { mutableStateOf("") }
         BasicTextField(
             value = feedbackText,
-            onValueChange = { feedbackText = it },
+            onValueChange = onFeedbackTextChange,
             interactionSource = interactionSource,
             textStyle = KotlinConfTheme.typography.text1
                 .copy(color = KotlinConfTheme.colors.primaryText),
@@ -164,7 +165,10 @@ fun FeedbackForm(
 @Composable
 internal fun FeedbackFormPreview() {
     PreviewHelper {
-        FeedbackForm(Emotion.Positive, { emotion, text -> println("Feedback: $text") }, true)
-        FeedbackForm(Emotion.Negative, { emotion, text -> println("Feedback: $text") }, false)
+        var text by remember { mutableStateOf("") }
+        FeedbackForm(text, { text = it }, Emotion.Positive, { emotion, text -> println("Feedback: $text") }, true)
+
+        var text2 by remember { mutableStateOf("") }
+        FeedbackForm(text2, { text2 = it },Emotion.Negative, { emotion, text -> println("Feedback: $text") }, false)
     }
 }
