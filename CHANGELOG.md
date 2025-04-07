@@ -1,5 +1,53 @@
 # Changelog
 
+## Version 39.0.3 (17a90b1f)
+
+* [#413](https://github.com/JetBrains/kotlinconf-app/pull/413)
+  * Add empty state for News screen
+  * Update test news item contents
+
+* [#407](https://github.com/JetBrains/kotlinconf-app/pull/407)
+  * Update comment text
+  * Override navigationBarStyle for fixing nav button colors
+  * Reschedule notifications if a session's time is changed
+  * Handle JSON decode errors in settings storage
+  * Rename StyledText to Text
+  * Remove unused color values
+  * Review icon sizing
+  * Add contentDescription for Kodee icons
+  * Update README, add CONTRIBUTING.md
+  * Fix edge-to-edge on three-button nav bar
+  * Add Bloomberg to partners
+  * Always show lightning talks at the end of the time slot
+  * Add more accurate calculation of first/last active index, by tracking state during list building
+  * Rewrite timeslot grouping logic, handle each session once, remove empty slots
+  * Lift feedback text out of FeedbackForm
+
+* [#403](https://github.com/JetBrains/kotlinconf-app/pull/403)
+  * Remove config referencing the kotlinconf-2025 branch
+
+* [#397](https://github.com/JetBrains/kotlinconf-app/pull/397)
+  * Rename onUriClick to onCustomUriClick
+
+* [#400](https://github.com/JetBrains/kotlinconf-app/pull/400)
+  * feat(junie): added .junie workflow
+
+* [#398](https://github.com/JetBrains/kotlinconf-app/pull/398)
+  * feat(junie): added .devcontainer.json
+  * feat(junie): added .junie workflow
+  * Update app privacy policy and terms, add clickable links between the documents
+  * Update compose-hot-reload to version 1.0.0-alpha04
+
+* [#394](https://github.com/JetBrains/kotlinconf-app/pull/394)
+  * Enable scroll-to-dismiss on session screen
+  * Add missing background for MainScreen
+  * Add Education and Codelab icons to session cards
+  * Inject app-level CoroutineScope
+
+* [#392](https://github.com/JetBrains/kotlinconf-app/pull/392)
+  * Update Android weekly logos
+  * Prepare second test flight update
+
 ## Version 39.0.2 (b42f917)
 
 * [#386](https://github.com/JetBrains/kotlinconf-app/pull/386)
