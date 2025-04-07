@@ -35,6 +35,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinconfapp.shared.generated.resources.Res
@@ -443,6 +445,9 @@ private fun ScheduleList(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 8.dp)
+                                .semantics {
+                                    heading()
+                                }
                         )
                     }
 

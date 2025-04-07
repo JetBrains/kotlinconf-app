@@ -37,6 +37,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.filter_by_tags
@@ -169,6 +172,9 @@ private fun FilterItemGroup(
             text = title,
             style = KotlinConfTheme.typography.text2,
             color = KotlinConfTheme.colors.noteText,
+            modifier = Modifier.semantics {
+                heading()
+            }
         )
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),

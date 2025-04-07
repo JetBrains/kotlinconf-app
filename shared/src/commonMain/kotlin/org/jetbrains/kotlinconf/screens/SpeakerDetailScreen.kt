@@ -14,6 +14,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinconfapp.shared.generated.resources.Res
@@ -95,6 +97,9 @@ fun SpeakerDetailScreen(
                         style = KotlinConfTheme.typography.h2,
                         color = KotlinConfTheme.colors.primaryText,
                         selectable = true,
+                        modifier = Modifier.semantics {
+                            heading()
+                        }
                     )
 
                     Spacer(Modifier.height(4.dp))
