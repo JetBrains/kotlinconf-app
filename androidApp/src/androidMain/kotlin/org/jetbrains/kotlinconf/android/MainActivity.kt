@@ -34,12 +34,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             App(
                 onThemeChange = { isDarkMode ->
+                    val systemBarStyle = SystemBarStyle.auto(
+                        lightScrim = Color.TRANSPARENT,
+                        darkScrim = Color.TRANSPARENT,
+                        detectDarkMode = { isDarkMode }
+                    )
                     enableEdgeToEdge(
-                        statusBarStyle = SystemBarStyle.auto(
-                            lightScrim = Color.TRANSPARENT,
-                            darkScrim = Color.TRANSPARENT,
-                            detectDarkMode = { isDarkMode }
-                        )
+                        statusBarStyle = systemBarStyle,
+                        navigationBarStyle = systemBarStyle,
                     )
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         // Fix for three-button nav not properly going edge-to-edge.
