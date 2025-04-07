@@ -44,8 +44,7 @@ class MainActivity : ComponentActivity() {
                         navigationBarStyle = systemBarStyle,
                     )
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        // Fix for three-button nav not properly going edge-to-edge.
-                        // TODO: https://issuetracker.google.com/issues/298296168
+                        // Don't enforce scrim https://issuetracker.google.com/issues/298296168
                         window.isNavigationBarContrastEnforced = false
                     }
                 },
