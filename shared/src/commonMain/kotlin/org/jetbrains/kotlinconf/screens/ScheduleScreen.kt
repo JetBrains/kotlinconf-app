@@ -76,10 +76,10 @@ import org.jetbrains.kotlinconf.ui.components.ScrollIndicator
 import org.jetbrains.kotlinconf.ui.components.ServiceEvent
 import org.jetbrains.kotlinconf.ui.components.ServiceEventData
 import org.jetbrains.kotlinconf.ui.components.ServiceEvents
-import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.Switcher
 import org.jetbrains.kotlinconf.ui.components.TalkCard
 import org.jetbrains.kotlinconf.ui.components.TalkStatus
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
@@ -243,8 +243,8 @@ fun ScheduleScreen(
                                     scheduleItems = items,
                                     onSession = onSession,
                                     listState = listState,
-                                    feedbackEnabled = !isSearch,
                                     userSignedIn = targetState.userSignedIn,
+                                    isSearch = isSearch,
                                     onSubmitFeedback = { sessionId, emotion ->
                                         viewModel.onSubmitFeedback(sessionId, emotion)
                                     },
@@ -401,7 +401,7 @@ private fun ScheduleList(
     scheduleItems: List<ScheduleListItem>,
     onSession: (SessionId) -> Unit,
     listState: LazyListState,
-    feedbackEnabled: Boolean,
+    isSearch: Boolean,
     userSignedIn: Boolean,
     onSubmitFeedback: (SessionId, Emotion?) -> Unit,
     onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
@@ -462,7 +462,7 @@ private fun ScheduleList(
                             if (workshops.size == 1) {
                                 SessionCard(
                                     session = workshops[0],
-                                    feedbackEnabled = feedbackEnabled,
+                                    isSearch = isSearch,
                                     userSignedIn = userSignedIn,
                                     onBookmark = onBookmark,
                                     onSubmitFeedback = onSubmitFeedback,
@@ -486,7 +486,7 @@ private fun ScheduleList(
                                 ) { pageIndex ->
                                     SessionCard(
                                         session = workshops[pageIndex % workshops.size],
-                                        feedbackEnabled = feedbackEnabled,
+                                        isSearch = isSearch,
                                         userSignedIn = userSignedIn,
                                         onBookmark = onBookmark,
                                         onSubmitFeedback = onSubmitFeedback,
@@ -511,7 +511,7 @@ private fun ScheduleList(
                     is SessionItem -> {
                         SessionCard(
                             session = item.value,
-                            feedbackEnabled = feedbackEnabled,
+                            isSearch = isSearch,
                             userSignedIn = userSignedIn,
                             titleHighlights = item.titleHighlights,
                             tagHighlights = item.tagMatches,
@@ -579,7 +579,7 @@ private fun SessionCard(
     onRequestFeedbackWithComment: ((SessionId) -> Unit)?,
     onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
     onSession: (SessionId) -> Unit,
-    feedbackEnabled: Boolean,
+    isSearch: Boolean,
     userSignedIn: Boolean,
     modifier: Modifier = Modifier,
     titleHighlights: List<IntRange> = emptyList(),
@@ -597,7 +597,7 @@ private fun SessionCard(
         speakerHighlights = speakerHighlights,
         location = session.locationLine,
         lightning = session.isLightning,
-        time = session.shortTimeline,
+        time = if (isSearch) session.fullTimeline else session.shortTimeline,
         timeNote = session.startsInMinutes?.let { count ->
             stringResource(Res.string.schedule_in_x_minutes, count)
         },
@@ -618,7 +618,7 @@ private fun SessionCard(
         },
         onClick = { onSession(session.id) },
         modifier = modifier,
-        feedbackEnabled = feedbackEnabled && session.state != SessionState.Upcoming,
+        feedbackEnabled = !isSearch && session.state != SessionState.Upcoming,
         userSignedIn = userSignedIn,
     )
 }
