@@ -47,7 +47,7 @@ private fun initKoin(
     return startKoin {
         val appModule = module {
             single { APIClient(URLs.API_ENDPOINT, get()) }
-            single<ApplicationStorage> { MultiplatformSettingsStorage(get()) }
+            single<ApplicationStorage> { MultiplatformSettingsStorage(get(), get()) }
             single<TimeProvider> {
                 if (isProd()) {
                     ServerBasedTimeProvider(get())
