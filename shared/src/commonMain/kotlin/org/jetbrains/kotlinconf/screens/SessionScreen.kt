@@ -40,6 +40,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.arrow_left_24
@@ -47,6 +49,8 @@ import kotlinconfapp.shared.generated.resources.arrow_up_right_24
 import kotlinconfapp.shared.generated.resources.down_24
 import kotlinconfapp.shared.generated.resources.navigate_back
 import kotlinconfapp.shared.generated.resources.play_video
+import kotlinconfapp.shared.generated.resources.session_room_state_description_collapsed
+import kotlinconfapp.shared.generated.resources.session_room_state_description_expanded
 import kotlinconfapp.shared.generated.resources.session_screen_error
 import kotlinconfapp.shared.generated.resources.session_title
 import kotlinconfapp.shared.generated.resources.session_watch_video
@@ -375,6 +379,12 @@ private fun RoomSection(
                 style = KotlinConfTheme.typography.h3,
             )
         } else {
+            val stateDesc = stringResource(
+                resource = if (isExpanded)
+                    Res.string.session_room_state_description_expanded
+                else
+                    Res.string.session_room_state_description_collapsed
+            )
             Action(
                 label = roomName,
                 icon = Res.drawable.down_24,
@@ -382,7 +392,11 @@ private fun RoomSection(
                 enabled = true,
                 onClick = { isExpanded = !isExpanded },
                 iconRotation = iconRotation,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics {
+                        stateDescription = stateDesc
+                    }
             )
             AnimatedVisibility(
                 visible = isExpanded,

@@ -118,6 +118,8 @@ We will process your data in accordance with the App Privacy Policy. You can adj
     <string name="session_your_feedback">Your feedback</string>
     <string name="session_screen_error">The details of this session are not available at the moment.</string>
     <string name="session_watch_video">Watch the recording</string>
+    <string name="session_room_state_description_expanded">Expanded</string>
+    <string name="session_room_state_description_collapsed">Collapsed</string>
 
     <string name="map_title">Map</string>
     <string name="map_ground_floor">Ground floor</string>

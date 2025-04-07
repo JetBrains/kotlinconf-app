@@ -50,6 +50,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -58,7 +59,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import kotlinconfapp.ui_components.generated.resources.Res
-import kotlinconfapp.ui_components.generated.resources.action_bookmark
+import kotlinconfapp.ui_components.generated.resources.action_bookmark_talk
+import kotlinconfapp.ui_components.generated.resources.action_remove_talk_from_bookmarks
+import kotlinconfapp.ui_components.generated.resources.action_state_description_bookmarked
+import kotlinconfapp.ui_components.generated.resources.action_state_description_not_bookmarked
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24_fill
@@ -237,6 +241,12 @@ private fun TopBlock(
                 if (bookmarked) KotlinConfTheme.colors.orangeText
                 else KotlinConfTheme.colors.primaryText
             )
+            val stateDesc = stringResource(
+                resource =  if (bookmarked)
+                    Res.string.action_state_description_bookmarked
+                else
+                    Res.string.action_state_description_not_bookmarked
+            )
             Icon(
                 modifier = Modifier
                     .toggleable(
@@ -246,12 +256,19 @@ private fun TopBlock(
                         interactionSource = null,
                         indication = null,
                     )
-                    .size(24.dp),
+                    .size(24.dp)
+                    .semantics {
+                        stateDescription = stateDesc
+                    },
                 painter = painterResource(
                     if (bookmarked) Res.drawable.bookmark_24_fill
                     else Res.drawable.bookmark_24
                 ),
-                contentDescription = stringResource(Res.string.action_bookmark),
+                contentDescription = stringResource(
+                    if (bookmarked) Res.string.action_bookmark_talk
+                    else Res.string.action_remove_talk_from_bookmarks,
+                    title
+                ),
                 tint = iconColor,
             )
         }
@@ -342,7 +359,11 @@ private fun InlineIconContent(status: TalkStatus, placeholder: String) {
                 else -> Res.drawable.session_codelab // Shouldn't happen, but let's not throw
             }
         ),
-        contentDescription = null,
+        contentDescription = when (placeholder) {
+            eduPlaceholder -> "Education"
+            codelabPlaceholder -> "Codelab"
+            else -> null
+        },
         tint = textColor,
     )
 }
