@@ -11,7 +11,7 @@ fun SectionTitle(
     text: String,
     modifier: Modifier = Modifier,
 ) {
-    StyledText(
+    Text(
         text = text,
         modifier = modifier,
         style = KotlinConfTheme.typography.h2,

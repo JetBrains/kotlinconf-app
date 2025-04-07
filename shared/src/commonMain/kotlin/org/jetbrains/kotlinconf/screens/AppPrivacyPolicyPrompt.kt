@@ -20,7 +20,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -46,7 +45,7 @@ import org.jetbrains.kotlinconf.ui.components.Button
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MarkdownView
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
@@ -129,11 +128,11 @@ fun AppPrivacyPolicyPrompt(
                         modifier = Modifier.fillMaxWidth()
                             .size(160.dp)
                     )
-                    StyledText(
+                    Text(
                         stringResource(AppRes.string.privacy_policy_title),
                         style = KotlinConfTheme.typography.h1
                     )
-                    StyledText(
+                    Text(
                         stringResource(AppRes.string.privacy_policy_description),
                         color = KotlinConfTheme.colors.longText,
                     )

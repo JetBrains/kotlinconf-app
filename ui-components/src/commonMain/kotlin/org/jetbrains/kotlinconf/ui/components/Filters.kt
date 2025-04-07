@@ -112,7 +112,7 @@ fun Filters(
                             .background(KotlinConfTheme.colors.primaryBackground)
                     ) {
                         val count = remember(tags) { tags.count { it.isSelected } }
-                        StyledText(
+                        Text(
                             text = count.toString(),
                             color = KotlinConfTheme.colors.primaryTextInverted,
                             style = KotlinConfTheme.typography.text2,
@@ -165,7 +165,7 @@ private fun FilterItemGroup(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier,
     ) {
-        StyledText(
+        Text(
             text = title,
             style = KotlinConfTheme.typography.text2,
             color = KotlinConfTheme.colors.noteText,

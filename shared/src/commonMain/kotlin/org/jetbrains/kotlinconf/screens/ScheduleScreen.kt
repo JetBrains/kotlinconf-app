@@ -76,7 +76,7 @@ import org.jetbrains.kotlinconf.ui.components.ScrollIndicator
 import org.jetbrains.kotlinconf.ui.components.ServiceEvent
 import org.jetbrains.kotlinconf.ui.components.ServiceEventData
 import org.jetbrains.kotlinconf.ui.components.ServiceEvents
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.Switcher
 import org.jetbrains.kotlinconf.ui.components.TalkCard
 import org.jetbrains.kotlinconf.ui.components.TalkStatus
@@ -447,7 +447,7 @@ private fun ScheduleList(
                     }
 
                     is TimeSlotTitleItem -> {
-                        StyledText(
+                        Text(
                             text = item.value.title,
                             style = KotlinConfTheme.typography.h2,
                             modifier = Modifier
@@ -559,7 +559,7 @@ private fun ScheduleList(
                     }
 
                     is NoBookmarksItem -> {
-                        StyledText(
+                        Text(
                             stringResource(Res.string.schedule_label_no_bookmarks),
                             color = KotlinConfTheme.colors.noteText,
                             modifier = modifier.padding(12.dp),

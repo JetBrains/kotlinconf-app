@@ -74,7 +74,7 @@ import org.jetbrains.kotlinconf.ui.components.MajorError
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.components.PageTitle
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
@@ -221,7 +221,7 @@ fun SessionScreen(
                                 onNavigateToMap = onNavigateToMap
                             )
 
-                            StyledText(
+                            Text(
                                 text = session.description,
                                 style = KotlinConfTheme.typography.text1,
                                 selectable = true,
@@ -278,7 +278,7 @@ private fun FeedbackPanel(
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            StyledText(
+            Text(
                 text = feedbackQuestion,
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.primaryText,
@@ -367,7 +367,7 @@ private fun RoomSection(
 
     Column(modifier = modifier.padding(vertical = 16.dp)) {
         if (rooms[roomName] == null) {
-            StyledText(
+            Text(
                 text = roomName,
                 style = KotlinConfTheme.typography.h3,
             )

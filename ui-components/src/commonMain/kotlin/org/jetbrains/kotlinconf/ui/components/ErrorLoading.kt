@@ -138,7 +138,7 @@ private fun ErrorText(
     message: String,
     modifier: Modifier = Modifier,
 ) {
-    StyledText(
+    Text(
         message,
         color = KotlinConfTheme.colors.secondaryText,
         modifier = modifier.widthIn(max = 220.dp),

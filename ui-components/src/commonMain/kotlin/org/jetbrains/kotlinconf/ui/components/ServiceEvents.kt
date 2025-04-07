@@ -36,7 +36,7 @@ private fun ServiceEventItem(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier.padding(16.dp)
     ) {
-        StyledText(
+        Text(
             text = event.title,
             style = KotlinConfTheme.typography.h3,
             color = KotlinConfTheme.colors.primaryText,
@@ -49,7 +49,7 @@ private fun ServiceEventItem(
         }
 
         if (event.note != null) {
-            StyledText(
+            Text(
                 text = event.note,
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.noteText,
@@ -58,7 +58,7 @@ private fun ServiceEventItem(
         }
 
         if (event.time != null) {
-            StyledText(
+            Text(
                 text = event.time,
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.primaryText,

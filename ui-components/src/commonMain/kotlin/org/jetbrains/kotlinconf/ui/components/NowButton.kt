@@ -2,9 +2,6 @@ package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring.DampingRatioNoBouncy
-import androidx.compose.animation.core.Spring.StiffnessMediumLow
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -78,7 +75,7 @@ fun NowButton(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
-        StyledText(
+        Text(
             text = stringResource(Res.string.now),
             style = KotlinConfTheme.typography.text2,
             color = textColor,

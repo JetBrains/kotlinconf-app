@@ -57,12 +57,12 @@ fun SettingsItem(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier.weight(1f)
         ) {
-            StyledText(
+            Text(
                 text = title,
                 style = KotlinConfTheme.typography.h3,
             )
             if (note != null) {
-                StyledText(
+                Text(
                     text = note,
                     style = KotlinConfTheme.typography.text2,
                     color = KotlinConfTheme.colors.secondaryText,

@@ -24,7 +24,7 @@ import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PartnerCard
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
@@ -66,7 +66,7 @@ fun PartnersScreen(
         ) {
             for ((level, partners) in PARTNERS) {
                 stickyHeader {
-                    StyledText(
+                    Text(
                         text = stringResource(level),
                         style = KotlinConfTheme.typography.h1,
                         modifier = Modifier.fillMaxWidth().background(KotlinConfTheme.colors.mainBackground).padding(vertical = 12.dp)

@@ -31,7 +31,7 @@ import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MajorError
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TalkCard
 import org.jetbrains.kotlinconf.ui.components.TalkStatus
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
@@ -90,7 +90,7 @@ fun SpeakerDetailScreen(
                         .padding(bottomInsetPadding())
                         .verticalScroll(scrollState),
                 ) {
-                    StyledText(
+                    Text(
                         text = currentSpeaker.name,
                         style = KotlinConfTheme.typography.h2,
                         color = KotlinConfTheme.colors.primaryText,
@@ -99,7 +99,7 @@ fun SpeakerDetailScreen(
 
                     Spacer(Modifier.height(4.dp))
 
-                    StyledText(
+                    Text(
                         text = currentSpeaker.position,
                         style = KotlinConfTheme.typography.text2,
                         color = KotlinConfTheme.colors.secondaryText,
@@ -116,7 +116,7 @@ fun SpeakerDetailScreen(
 
                     Spacer(Modifier.height(24.dp))
 
-                    StyledText(
+                    Text(
                         text = currentSpeaker.description,
                         style = KotlinConfTheme.typography.text2,
                         color = KotlinConfTheme.colors.longText,

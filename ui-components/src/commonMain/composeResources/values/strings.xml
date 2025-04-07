@@ -8,6 +8,10 @@
     <string name="action_bookmark">Bookmark</string>
     <string name="action_error_reload">Reload</string>
 
+    <string name="action_rate_negative">Vote negative</string>
+    <string name="action_rate_neutral">Vote neutral</string>
+    <string name="action_rate_positive">Vote positive</string>
+
     <!-- Components -->
     <string name="feedback_form_type_something">Type something</string>
     <string name="feedback_form_send">Send</string>

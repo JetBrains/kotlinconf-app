@@ -47,13 +47,13 @@ fun SpeakerCard(
             modifier = Modifier.size(96.dp),
         )
         Column {
-            StyledText(
+            Text(
                 text = buildHighlightedString(name, nameHighlights),
                 style = KotlinConfTheme.typography.h3,
                 color = KotlinConfTheme.colors.primaryText,
             )
             Spacer(modifier = Modifier.size(6.dp))
-            StyledText(
+            Text(
                 text = buildHighlightedString(title, titleHighlights),
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.secondaryText,

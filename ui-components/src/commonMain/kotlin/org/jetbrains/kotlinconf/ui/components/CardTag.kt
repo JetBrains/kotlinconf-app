@@ -1,11 +1,7 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring.DampingRatioNoBouncy
-import androidx.compose.animation.core.Spring.StiffnessMediumLow
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -50,7 +46,7 @@ fun CardTag(
             .padding(horizontal = 4.dp),
         contentAlignment = Alignment.Center,
     ) {
-        StyledText(
+        Text(
             label,
             style = KotlinConfTheme.typography.text2,
             color = textColor,

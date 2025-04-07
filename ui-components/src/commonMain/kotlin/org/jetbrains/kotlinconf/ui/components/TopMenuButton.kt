@@ -39,7 +39,6 @@ private fun TopMenuButtonImpl(
     modifier: Modifier = Modifier,
 ) {
     Icon(
-        // TODO review icon sizing later, https://github.com/JetBrains/kotlinconf-app/issues/175
         modifier = modifier
             .padding(6.dp)
             .size(36.dp)

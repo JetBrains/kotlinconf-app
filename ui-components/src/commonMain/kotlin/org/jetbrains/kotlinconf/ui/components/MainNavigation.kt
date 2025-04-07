@@ -50,7 +50,6 @@ private fun MainNavigationButton(
         else KotlinConfTheme.colors.secondaryText
     )
     Icon(
-        // TODO review icon sizing later, https://github.com/JetBrains/kotlinconf-app/issues/175
         modifier = modifier
             .clip(MainNavigationButtonShape)
             .selectable(

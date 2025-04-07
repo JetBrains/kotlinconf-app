@@ -27,7 +27,7 @@ import kotlinconfapp.shared.generated.resources.notifications_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.ui.components.Button
-import org.jetbrains.kotlinconf.ui.components.StyledText
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.viewmodel.koinViewModel
 import kotlinconfapp.shared.generated.resources.Res as AppRes
@@ -64,11 +64,11 @@ fun StartNotificationsScreen(
                 modifier = Modifier.fillMaxWidth()
                     .size(160.dp)
             )
-            StyledText(
+            Text(
                 stringResource(AppRes.string.notifications_title),
                 style = KotlinConfTheme.typography.h1
             )
-            StyledText(
+            Text(
                 stringResource(AppRes.string.notifications_description),
                 color = KotlinConfTheme.colors.longText,
             )

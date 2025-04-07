@@ -31,7 +31,7 @@ fun NowLabel(modifier: Modifier = Modifier) {
                 .background(KotlinConfTheme.colors.accentText)
         )
         Spacer(Modifier.size(4.dp))
-        StyledText(
+        Text(
             text = stringResource(Res.string.now),
             color = KotlinConfTheme.colors.accentText,
             style = KotlinConfTheme.typography.text2,

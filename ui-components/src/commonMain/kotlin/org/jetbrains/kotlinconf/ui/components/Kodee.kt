@@ -9,6 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.action_rate_negative
+import kotlinconfapp.ui_components.generated.resources.action_rate_neutral
+import kotlinconfapp.ui_components.generated.resources.action_rate_positive
 import kotlinconfapp.ui_components.generated.resources.kodee_emotion_negative
 import kotlinconfapp.ui_components.generated.resources.kodee_emotion_neutral
 import kotlinconfapp.ui_components.generated.resources.kodee_emotion_positive
@@ -27,6 +30,7 @@ import kotlinconfapp.ui_components.generated.resources.kodee_small_neutral_fille
 import kotlinconfapp.ui_components.generated.resources.kodee_small_neutral_outline
 import kotlinconfapp.ui_components.generated.resources.kodee_small_positive_filled
 import kotlinconfapp.ui_components.generated.resources.kodee_small_positive_outline
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -37,10 +41,20 @@ enum class Emotion {
 }
 
 @Composable
+private fun ratingDescription(emotion: Emotion): String {
+    return when (emotion) {
+        Emotion.Negative -> stringResource(Res.string.action_rate_negative)
+        Emotion.Neutral -> stringResource(Res.string.action_rate_neutral)
+        Emotion.Positive -> stringResource(Res.string.action_rate_positive)
+    }
+}
+
+@Composable
 fun KodeeIconSmall(
     emotion: Emotion,
     selected: Boolean,
     modifier: Modifier = Modifier,
+    contentDescription: String? = ratingDescription(emotion),
 ) {
     val resource = if (selected) {
         when (emotion) {
@@ -58,7 +72,7 @@ fun KodeeIconSmall(
 
     Image(
         imageVector = vectorResource(resource),
-        contentDescription = null, // TODO review as part of https://github.com/JetBrains/kotlinconf-app/issues/193
+        contentDescription = contentDescription,
         modifier = modifier.size(24.dp),
     )
 }
@@ -68,6 +82,7 @@ fun KodeeIconLarge(
     emotion: Emotion,
     selected: Boolean,
     modifier: Modifier = Modifier,
+    contentDescription: String? = ratingDescription(emotion),
 ) {
     val resource = if (selected) {
         when (emotion) {
@@ -93,7 +108,7 @@ fun KodeeIconLarge(
 
     Image(
         imageVector = vectorResource(resource),
-        contentDescription = null, // TODO review as part of https://github.com/JetBrains/kotlinconf-app/issues/194
+        contentDescription = contentDescription,
         modifier = modifier.size(width = 64.dp, height = 55.dp)
     )
 }
