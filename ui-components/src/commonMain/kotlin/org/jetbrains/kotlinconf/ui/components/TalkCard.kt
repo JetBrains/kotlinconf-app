@@ -27,6 +27,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
@@ -48,6 +50,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -56,7 +61,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import kotlinconfapp.ui_components.generated.resources.Res
-import kotlinconfapp.ui_components.generated.resources.action_bookmark
+import kotlinconfapp.ui_components.generated.resources.action_bookmark_session
+import kotlinconfapp.ui_components.generated.resources.action_remove_session_from_bookmarks
+import kotlinconfapp.ui_components.generated.resources.action_state_description_bookmarked
+import kotlinconfapp.ui_components.generated.resources.action_state_description_not_bookmarked
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24_fill
@@ -66,6 +74,8 @@ import kotlinconfapp.ui_components.generated.resources.session_codelab
 import kotlinconfapp.ui_components.generated.resources.session_education
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_talk
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_workshop
+import kotlinconfapp.ui_components.generated.resources.talk_card_icon_desc_codelab
+import kotlinconfapp.ui_components.generated.resources.talk_card_icon_desc_education
 import kotlinconfapp.ui_components.generated.resources.talk_card_your_feedback
 import kotlinconfapp.ui_components.generated.resources.up_24
 import org.jetbrains.compose.resources.painterResource
@@ -224,7 +234,9 @@ private fun TopBlock(
                 tags = tags,
                 textColor = textColor,
                 status = status,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .semantics { heading() }
             )
 
             Spacer(Modifier.width(8.dp))
@@ -232,6 +244,12 @@ private fun TopBlock(
             val iconColor by animateColorAsState(
                 if (bookmarked) KotlinConfTheme.colors.orangeText
                 else KotlinConfTheme.colors.primaryText
+            )
+            val stateDesc = stringResource(
+                resource =  if (bookmarked)
+                    Res.string.action_state_description_bookmarked
+                else
+                    Res.string.action_state_description_not_bookmarked
             )
             Icon(
                 modifier = Modifier
@@ -242,12 +260,19 @@ private fun TopBlock(
                         interactionSource = null,
                         indication = null,
                     )
-                    .size(24.dp),
+                    .size(24.dp)
+                    .semantics {
+                        stateDescription = stateDesc
+                    },
                 painter = painterResource(
                     if (bookmarked) Res.drawable.bookmark_24_fill
                     else Res.drawable.bookmark_24
                 ),
-                contentDescription = stringResource(Res.string.action_bookmark),
+                contentDescription = stringResource(
+                    if (bookmarked) Res.string.action_bookmark_session
+                    else Res.string.action_remove_session_from_bookmarks,
+                    title
+                ),
                 tint = iconColor,
             )
         }
@@ -338,7 +363,11 @@ private fun InlineIconContent(status: TalkStatus, placeholder: String) {
                 else -> Res.drawable.session_codelab // Shouldn't happen, but let's not throw
             }
         ),
-        contentDescription = null,
+        contentDescription = when (placeholder) {
+            eduPlaceholder -> stringResource(Res.string.talk_card_icon_desc_education)
+            codelabPlaceholder -> stringResource(Res.string.talk_card_icon_desc_codelab)
+            else -> null
+        },
         tint = textColor,
     )
 }
@@ -417,16 +446,20 @@ private fun FeedbackBlock(
     var feedbackExpanded by rememberSaveable { mutableStateOf(false) }
     var feedbackText by rememberSaveable { mutableStateOf("") }
 
+    val interactionModifier = if (selectedEmotion != null) {
+        Modifier.clickable(
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() },
+        ) {
+            feedbackExpanded = !feedbackExpanded
+        }
+    } else {
+        Modifier
+    }
+
     Column(
         Modifier
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() },
-            ) {
-                if (selectedEmotion != null) {
-                    feedbackExpanded = !feedbackExpanded
-                }
-            },
+            .then(interactionModifier),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -472,17 +505,24 @@ private fun FeedbackBlock(
                 }
             }
             Spacer(Modifier.weight(1f))
-            Row {
+            Row(
+                modifier = Modifier.selectableGroup()
+            ) {
                 val feedbackEmotions = remember {
                     listOf(Emotion.Negative, Emotion.Neutral, Emotion.Positive)
                 }
                 val hapticFeedback = LocalHapticFeedback.current
                 feedbackEmotions.forEach { emotion ->
+                    val selected = selectedEmotion == emotion
                     KodeeIconSmall(
                         emotion = emotion,
-                        selected = selectedEmotion == emotion,
+                        selected = selected,
                         modifier = Modifier
-                            .clickable(indication = null, interactionSource = null) {
+                            .selectable(
+                                selected = selected,
+                                indication = null,
+                                interactionSource = null
+                            ) {
                                 if (userSignedIn) {
                                     hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
                                     selectedEmotion = if (emotion == selectedEmotion) null else emotion

@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,8 +38,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.action_state_description_collapsed
+import kotlinconfapp.ui_components.generated.resources.action_state_description_expanded
 import kotlinconfapp.ui_components.generated.resources.filter_by_tags
 import kotlinconfapp.ui_components.generated.resources.filter_label_category
 import kotlinconfapp.ui_components.generated.resources.filter_label_level
@@ -73,6 +79,10 @@ fun Filters(
             .background(KotlinConfTheme.colors.tileBackground)
             .verticalScroll(rememberScrollState()),
     ) {
+        val stateDesc = stringResource(
+            if (isExpanded) Res.string.action_state_description_expanded
+            else Res.string.action_state_description_collapsed
+        )
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -87,6 +97,9 @@ fun Filters(
                 .heightIn(min = 46.dp)
                 .padding(vertical = 11.dp)
                 .fillMaxWidth()
+                .semantics {
+                    stateDescription = stateDesc
+                }
         ) {
             val iconRotation by animateFloatAsState(if (isExpanded) 0f else 180f)
             Action(
@@ -169,8 +182,12 @@ private fun FilterItemGroup(
             text = title,
             style = KotlinConfTheme.typography.text2,
             color = KotlinConfTheme.colors.noteText,
+            modifier = Modifier.semantics {
+                heading()
+            }
         )
         FlowRow(
+            modifier = Modifier.selectableGroup(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {

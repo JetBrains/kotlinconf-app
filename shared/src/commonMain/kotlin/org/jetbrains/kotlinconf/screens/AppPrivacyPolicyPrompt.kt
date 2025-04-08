@@ -120,7 +120,9 @@ fun AppPrivacyPolicyPrompt(
             } else {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(24.dp),
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp, vertical = 16.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Image(
                         imageVector = vectorResource(AppRes.drawable.kodee_privacy),
