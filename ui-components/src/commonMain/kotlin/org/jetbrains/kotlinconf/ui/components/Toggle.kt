@@ -4,7 +4,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -24,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
@@ -66,6 +66,14 @@ fun Toggle(
         Box(
             Modifier.size(ToggleWidth, ToggleHeight)
                 .clip(ToggleBackgroundShape)
+                .focusProperties {
+                    canFocus = false
+                }
+                .clickable(
+                    onClick = { onToggle(!enabled) },
+                    interactionSource = interactionSource,
+                    indication = LocalIndication.current,
+                )
                 .background(toggleColor)
         )
         val xOffset by animateDpAsState(if (enabled) ToggleWidth / 4 else -ToggleWidth / 4)
@@ -78,6 +86,14 @@ fun Toggle(
                 .size(ThumbSize)
                 .clip(ToggleThumbShape)
                 .background(toggleColor)
+                .focusProperties {
+                    canFocus = false
+                }
+                .clickable(
+                    onClick = { onToggle(!enabled) },
+                    interactionSource = interactionSource,
+                    indication = LocalIndication.current,
+                )
                 .drawBehind {
                     drawCircle(color = thumbCenterColor, radius = (size.minDimension / 2) - 2.dp.toPx())
                 }

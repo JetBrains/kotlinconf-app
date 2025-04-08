@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.ui.components
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
@@ -41,15 +43,15 @@ fun SettingsItem(
             .fillMaxWidth()
             .clip(SettingsItemShape)
             .background(KotlinConfTheme.colors.tileBackground)
-            .padding(16.dp)
             .toggleable(
                 value = enabled,
                 enabled = true,
                 role = Role.Switch,
                 onValueChange = { onToggle(!enabled) },
                 interactionSource = interactionSource,
-                indication = null,
-            ),
+                indication = LocalIndication.current,
+            )
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -72,7 +74,9 @@ fun SettingsItem(
         Toggle(
             enabled = enabled,
             onToggle = onToggle,
-            modifier = Modifier.clearAndSetSemantics {},
+            modifier = Modifier
+                .focusProperties { canFocus = false }
+                .clearAndSetSemantics {},
             interactionSource = interactionSource,
         )
     }
