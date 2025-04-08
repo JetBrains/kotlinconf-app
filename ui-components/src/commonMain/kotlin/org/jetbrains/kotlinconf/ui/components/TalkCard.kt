@@ -387,12 +387,17 @@ private fun TimeBlock(
             )
         }
 
-        Text(
-            text = time,
-            style = KotlinConfTheme.typography.text2,
-            color = textColor,
-            maxLines = 1,
-        )
+        AnimatedContent(
+            targetState = time,
+            transitionSpec = { fadeIn() togetherWith fadeOut() }
+        ) {
+            Text(
+                text = it,
+                style = KotlinConfTheme.typography.text2,
+                color = textColor,
+                maxLines = 1,
+            )
+        }
     }
 }
 

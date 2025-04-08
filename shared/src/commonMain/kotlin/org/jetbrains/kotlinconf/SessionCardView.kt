@@ -22,7 +22,7 @@ data class SessionCardView(
     val startsInMinutes: Int?,
     val videoUrl: String?,
 ) {
-    val fullTimeline: String = DateTimeFormatting.dateAndTime(startsAt)
+    val fullTimeline: String = DateTimeFormatting.dateAndTime(startsAt, endsAt)
     val shortTimeline: String = DateTimeFormatting.timeToTime(startsAt, endsAt)
     val isLightning: Boolean = endsAt - startsAt <= LIGHTNING_TALK_LIMIT
 }
