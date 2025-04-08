@@ -105,6 +105,7 @@ We will process your data in accordance with the App Privacy Policy. You can adj
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_dark">Dark</string>
+    <string name="settings_notifications_title">Notifications</string>
 
     <string name="schedule_action_filter_bookmarked">Filter bookmarked</string>
     <string name="schedule_action_search">Search</string>

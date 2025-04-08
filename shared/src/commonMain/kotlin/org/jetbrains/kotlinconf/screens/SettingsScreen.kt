@@ -41,6 +41,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.settings_notifications_title
 import kotlinconfapp.shared.generated.resources.settings_theme_dark
 import kotlinconfapp.shared.generated.resources.settings_theme_light
 import kotlinconfapp.shared.generated.resources.settings_theme_system
@@ -55,7 +56,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.Theme
-import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.viewmodel.koinViewModel
@@ -124,40 +124,39 @@ private fun SettingsScreenImpl(
         onBack = onBack,
         modifier = modifier,
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-            modifier = Modifier.padding(vertical = 16.dp)
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = stringResource(AppRes.string.settings_theme_title),
-                    style = KotlinConfTheme.typography.h2,
-                    modifier = Modifier.semantics {
-                        heading()
-                    }
-                )
-                ThemeSelector(
-                    currentTheme = currentTheme,
-                    onThemeChange = onThemeChange,
-                )
-            }
+        Column {
+            SectionHeading(stringResource(AppRes.string.settings_theme_title))
+            ThemeSelector(currentTheme, onThemeChange)
+
+            Spacer(Modifier.height(24.dp))
 
             if (LocalFlags.current.supportsNotifications) {
-                Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
-
                 val notificationSettings = viewModel.notificationSettings.collectAsStateWithLifecycle().value
-                if (notificationSettings != null)
+                if (notificationSettings != null) {
+                    SectionHeading(stringResource(AppRes.string.settings_notifications_title))
                     NotificationSettings(
                         notificationSettings = notificationSettings,
                         onChangeSettings = { newSettings ->
                             viewModel.setNotificationSettings(newSettings)
                         }
                     )
+                }
             }
         }
     }
+}
+
+@Composable
+private fun SectionHeading(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        text = text,
+        style = KotlinConfTheme.typography.h2,
+        modifier = modifier.semantics { heading() }
+            .padding(top = 16.dp, bottom = 12.dp)
+    )
 }
 
 private val themes = listOf(Theme.SYSTEM, Theme.DARK, Theme.LIGHT)
