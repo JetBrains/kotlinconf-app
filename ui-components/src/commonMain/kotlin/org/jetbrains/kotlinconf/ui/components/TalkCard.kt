@@ -439,16 +439,20 @@ private fun FeedbackBlock(
     var feedbackExpanded by rememberSaveable { mutableStateOf(false) }
     var feedbackText by rememberSaveable { mutableStateOf("") }
 
+    val interactionModifier = if (selectedEmotion != null) {
+        Modifier.clickable(
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() },
+        ) {
+            feedbackExpanded = !feedbackExpanded
+        }
+    } else {
+        Modifier
+    }
+
     Column(
         Modifier
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() },
-            ) {
-                if (selectedEmotion != null) {
-                    feedbackExpanded = !feedbackExpanded
-                }
-            },
+            .then(interactionModifier),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
