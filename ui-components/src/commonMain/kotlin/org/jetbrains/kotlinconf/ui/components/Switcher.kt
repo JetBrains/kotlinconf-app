@@ -3,14 +3,14 @@ package org.jetbrains.kotlinconf.ui.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -58,9 +58,9 @@ private fun SwitcherItem(
                 color = strokeColor,
                 shape = SwitcherItemShape,
             )
-            .toggleable(
-                value = selected,
-                onValueChange = { onClick() },
+            .selectable(
+                selected = selected,
+                onClick = { onClick() },
                 role = Role.Tab
             )
             .background(backgroundColor)
@@ -92,8 +92,9 @@ fun Switcher(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+        modifier = modifier.selectableGroup(),
+        horizontalArrangement = Arrangement
+            .spacedBy(4.dp)
     ) {
         items.forEachIndexed { index, label ->
             SwitcherItem(
