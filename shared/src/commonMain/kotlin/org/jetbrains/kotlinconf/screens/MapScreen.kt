@@ -72,6 +72,7 @@ enum class Floor(
 val rooms = mapOf(
     "Room #173" to LocationInfo(Floor.FIRST, Offset(0.30f, 0.65f)),
     "Hall D3" to LocationInfo(Floor.GROUND, Offset(0.42f, 0.82f)),
+    "Keynote room" to LocationInfo(Floor.GROUND, Offset(0.42f, 0.82f)),
     "Hall D2" to LocationInfo(Floor.GROUND, Offset(0.34f, 0.78f)),
     "Auditorium 15" to LocationInfo(Floor.GROUND, Offset(0.48f, 0.59f)),
     "Auditorium 11+12" to LocationInfo(Floor.FIRST, Offset(0.37f, 0.66f)),
