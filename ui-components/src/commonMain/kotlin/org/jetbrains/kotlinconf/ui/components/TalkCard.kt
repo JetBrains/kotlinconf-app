@@ -61,8 +61,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import kotlinconfapp.ui_components.generated.resources.Res
-import kotlinconfapp.ui_components.generated.resources.action_bookmark_talk
-import kotlinconfapp.ui_components.generated.resources.action_remove_talk_from_bookmarks
+import kotlinconfapp.ui_components.generated.resources.action_bookmark_session
+import kotlinconfapp.ui_components.generated.resources.action_remove_session_from_bookmarks
 import kotlinconfapp.ui_components.generated.resources.action_state_description_bookmarked
 import kotlinconfapp.ui_components.generated.resources.action_state_description_not_bookmarked
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
@@ -74,6 +74,8 @@ import kotlinconfapp.ui_components.generated.resources.session_codelab
 import kotlinconfapp.ui_components.generated.resources.session_education
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_talk
 import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_workshop
+import kotlinconfapp.ui_components.generated.resources.talk_card_icon_desc_codelab
+import kotlinconfapp.ui_components.generated.resources.talk_card_icon_desc_education
 import kotlinconfapp.ui_components.generated.resources.talk_card_your_feedback
 import kotlinconfapp.ui_components.generated.resources.up_24
 import org.jetbrains.compose.resources.painterResource
@@ -267,8 +269,8 @@ private fun TopBlock(
                     else Res.drawable.bookmark_24
                 ),
                 contentDescription = stringResource(
-                    if (bookmarked) Res.string.action_bookmark_talk
-                    else Res.string.action_remove_talk_from_bookmarks,
+                    if (bookmarked) Res.string.action_bookmark_session
+                    else Res.string.action_remove_session_from_bookmarks,
                     title
                 ),
                 tint = iconColor,
@@ -362,8 +364,8 @@ private fun InlineIconContent(status: TalkStatus, placeholder: String) {
             }
         ),
         contentDescription = when (placeholder) {
-            eduPlaceholder -> "Education"
-            codelabPlaceholder -> "Codelab"
+            eduPlaceholder -> stringResource(Res.string.talk_card_icon_desc_education)
+            codelabPlaceholder -> stringResource(Res.string.talk_card_icon_desc_codelab)
             else -> null
         },
         tint = textColor,

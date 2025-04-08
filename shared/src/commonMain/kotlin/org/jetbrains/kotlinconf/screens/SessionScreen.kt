@@ -387,10 +387,8 @@ private fun RoomSection(
             )
         } else {
             val stateDesc = stringResource(
-                resource = if (isExpanded)
-                    Res.string.session_room_state_description_expanded
-                else
-                    Res.string.session_room_state_description_collapsed
+                if (isExpanded) Res.string.session_room_state_description_expanded
+                else Res.string.session_room_state_description_collapsed
             )
             Action(
                 label = roomName,

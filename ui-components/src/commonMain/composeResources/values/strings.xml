@@ -6,8 +6,8 @@
 
     <!-- Actions -->
     <string name="action_bookmark">Bookmark</string>
-    <string name="action_bookmark_talk">Bookmark %1$s</string>
-    <string name="action_remove_talk_from_bookmarks">Remove %1$s from bookmarks</string>
+    <string name="action_bookmark_session">Bookmark %1$s</string>
+    <string name="action_remove_session_from_bookmarks">Remove %1$s from bookmarks</string>
 
     <string name="action_error_reload">Reload</string>
 
@@ -36,4 +36,6 @@
     <string name="talk_card_your_feedback">Your feedback</string>
     <string name="talk_card_how_was_the_talk">How was the talk?</string>
     <string name="talk_card_how_was_the_workshop">How was the workshop?</string>
+    <string name="talk_card_icon_desc_education">Education</string>
+    <string name="talk_card_icon_desc_codelab">Codelab</string>
 </resources>

@@ -80,10 +80,8 @@ fun Filters(
             .verticalScroll(rememberScrollState()),
     ) {
         val stateDesc = stringResource(
-            resource =  if (isExpanded) 
-                Res.string.action_state_description_expanded
-            else
-                Res.string.action_state_description_collapsed
+            if (isExpanded) Res.string.action_state_description_expanded
+            else Res.string.action_state_description_collapsed
         )
         Row(
             horizontalArrangement = Arrangement.Center,
