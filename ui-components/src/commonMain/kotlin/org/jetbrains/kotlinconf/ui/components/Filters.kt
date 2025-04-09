@@ -111,8 +111,9 @@ fun Filters(
                 iconRotation = iconRotation,
             )
 
+            val count = remember(tags) { tags.count { it.isSelected } }
             AnimatedVisibility(
-                visible = !isExpanded,
+                visible = !isExpanded && count > 0,
                 enter = fadeIn() + expandHorizontally(clip = false, expandFrom = Alignment.Start),
                 exit = fadeOut() + shrinkHorizontally(clip = false, shrinkTowards = Alignment.Start),
             ) {
@@ -124,7 +125,6 @@ fun Filters(
                             .clip(CircleShape)
                             .background(KotlinConfTheme.colors.primaryBackground)
                     ) {
-                        val count = remember(tags) { tags.count { it.isSelected } }
                         Text(
                             text = count.toString(),
                             color = KotlinConfTheme.colors.primaryTextInverted,
