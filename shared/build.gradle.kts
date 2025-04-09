@@ -36,6 +36,8 @@ kotlin {
     wasmJs {
         binaries.executable()
         browser {
+            val projectDir = project.projectDir.path
+            val rootDir = project.rootDir.path
             commonWebpackConfig {
                 outputFileName = "kotlin-app-wasm-js.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
@@ -48,8 +50,8 @@ kotlin {
 
                     static = (static ?: mutableListOf()).apply {
                         // Serve sources to debug inside a browser
-                        add(project.projectDir.path)
-                        add(project.rootDir.path)
+                        add(projectDir)
+                        add(rootDir)
                     }
                 }
             }
