@@ -203,14 +203,13 @@ fun ScheduleScreen(
                                 // Day switcher selection state calculated from the scroll state
                                 val conferenceDates = days.map { it.date }
                                 val computedDayIndex by derivedStateOf {
-                                    val i = items.asSequence()
+                                    items.asSequence()
                                         .take(listState.firstVisibleItemIndex + 1)
                                         .findLast { it is DayHeaderItem }
                                         ?.let {
                                             val visibleDate = (it as DayHeaderItem).value.date
                                             conferenceDates.indexOf(visibleDate)
                                         } ?: 0
-                                    i
                                 }
                                 // Override for the day switcher selection
                                 var targetDayIndex by remember { mutableStateOf<Int?>(null) }
