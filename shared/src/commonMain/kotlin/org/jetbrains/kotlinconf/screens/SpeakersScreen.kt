@@ -7,6 +7,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -108,11 +112,13 @@ fun SpeakersScreen(
         ) { targetState ->
             when (targetState) {
                 is SpeakersUiState.Content -> {
-                    val listState = rememberLazyListState()
+                    val listState = rememberLazyGridState()
                     ScrollToTopHandler(listState)
                     HideKeyboardOnDragHandler(listState)
-                    LazyColumn(
+
+                    LazyVerticalGrid(
                         state = listState,
+                        columns = GridCells.Adaptive(300.dp),
                         modifier = Modifier.fillMaxSize(),
                     ) {
                         items(targetState.speakers, key = { it.speaker.id.id }) { speakerWithHighlights ->

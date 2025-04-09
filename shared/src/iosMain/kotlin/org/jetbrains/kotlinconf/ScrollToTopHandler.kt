@@ -6,6 +6,7 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -48,6 +49,19 @@ actual fun ScrollToTopHandler(listState: LazyListState) {
         createDelegate {
             coroutineScope.launch {
                 listState.animateScrollToItem(0)
+            }
+        }
+    }
+    UIScrollView(scrollViewDelegate)
+}
+
+@Composable
+actual fun ScrollToTopHandler(gridState: LazyGridState) {
+    val coroutineScope = rememberCoroutineScope()
+    val scrollViewDelegate = remember(coroutineScope, gridState) {
+        createDelegate {
+            coroutineScope.launch {
+                gridState.animateScrollToItem(0)
             }
         }
     }
