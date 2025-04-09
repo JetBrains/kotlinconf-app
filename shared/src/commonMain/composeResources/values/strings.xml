@@ -116,6 +116,10 @@ We will process your data in accordance with the App Privacy Policy. You can adj
     </string>
     <string name="schedule_error_no_results">No results</string>
     <string name="schedule_label_no_bookmarks">No bookmarks added here</string>
+    <plurals name="schedule_number_of_results">
+        <item quantity="one">%1$d session found</item>
+        <item quantity="other">%1$d sessions found</item>
+    </plurals>
 
     <string name="session_title">Schedule</string>
     <string name="session_your_feedback">Your feedback</string>
