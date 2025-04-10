@@ -38,6 +38,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -82,6 +84,8 @@ fun Filters(
             if (isExpanded) Res.string.action_state_description_expanded
             else Res.string.action_state_description_collapsed
         )
+        val filterByTagsText = stringResource(Res.string.filter_by_tags)
+
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -98,10 +102,12 @@ fun Filters(
                 .fillMaxWidth()
                 .semantics {
                     stateDescription = stateDesc
+                    contentDescription = filterByTagsText
                 }
         ) {
             val iconRotation by animateFloatAsState(if (isExpanded) 0f else 180f)
             Action(
+                modifier = Modifier.clearAndSetSemantics {},
                 label = stringResource(Res.string.filter_by_tags),
                 icon = Res.drawable.up_24,
                 size = ActionSize.Medium,
