@@ -67,7 +67,7 @@ fun ScreenWithTitle(
 @Composable
 fun MarkdownScreenWithTitle(
     title: String,
-    header: String = "",
+    header: String,
     subheader: String = "",
     loadText: suspend () -> ByteArray,
     onBack: () -> Unit,
@@ -78,7 +78,7 @@ fun MarkdownScreenWithTitle(
     ScrollToTopHandler(scrollState)
     ScreenWithTitle(title, onBack, contentScrollState = scrollState) {
         if (header.isNotEmpty()) {
-            Text(header, style = KotlinConfTheme.typography.h1, modifier = Modifier.padding(vertical = 12.dp))
+            Text(header, style = KotlinConfTheme.typography.h1, modifier = Modifier.padding(top = 24.dp, bottom = 12.dp))
         }
 
         if (subheader.isNotEmpty()) {
