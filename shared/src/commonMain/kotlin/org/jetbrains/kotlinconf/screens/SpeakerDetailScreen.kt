@@ -88,9 +88,9 @@ fun SpeakerDetailScreen(
                 ScrollToTopHandler(scrollState)
                 Column(
                     modifier = Modifier
+                        .verticalScroll(scrollState)
                         .padding(vertical = 16.dp, horizontal = 12.dp)
-                        .padding(bottomInsetPadding())
-                        .verticalScroll(scrollState),
+                        .padding(bottomInsetPadding()),
                 ) {
                     Text(
                         text = currentSpeaker.name,
