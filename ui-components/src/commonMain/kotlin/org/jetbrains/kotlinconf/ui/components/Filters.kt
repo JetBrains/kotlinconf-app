@@ -48,6 +48,7 @@ import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.action_state_description_collapsed
 import kotlinconfapp.ui_components.generated.resources.action_state_description_expanded
 import kotlinconfapp.ui_components.generated.resources.filter_by_tags
+import kotlinconfapp.ui_components.generated.resources.filter_by_tags_tag_count
 import kotlinconfapp.ui_components.generated.resources.filter_label_category
 import kotlinconfapp.ui_components.generated.resources.filter_label_level
 import kotlinconfapp.ui_components.generated.resources.filter_label_session_format
@@ -130,10 +131,14 @@ fun Filters(
                             .clip(CircleShape)
                             .background(KotlinConfTheme.colors.primaryBackground)
                     ) {
+                        val tagCountContentDescription = stringResource(Res.string.filter_by_tags_tag_count, count)
                         Text(
                             text = count.toString(),
                             color = KotlinConfTheme.colors.primaryTextInverted,
                             style = KotlinConfTheme.typography.text2,
+                            modifier = Modifier.semantics {
+                                contentDescription = tagCountContentDescription
+                            }
                         )
                     }
                 }
