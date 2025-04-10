@@ -2,15 +2,21 @@ package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,17 +28,65 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.action_bookmark
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24_fill
 import kotlinconfapp.ui_components.generated.resources.lightning_16_fill
+import kotlinconfapp.ui_components.generated.resources.session_codelab
+import kotlinconfapp.ui_components.generated.resources.session_education
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+
+private const val iconId = "iconId'"
+private const val eduPlaceholder = "[e]"
+private const val codelabPlaceholder = "[c]"
+
+private val iconPlaceholder = Placeholder(
+    width = 1.1.em,
+    height = 1.em,
+    placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
+)
+
+@Composable
+private fun pageTitleInlineContent(): Map<String, InlineTextContent> {
+    return mapOf(
+        iconId to InlineTextContent(iconPlaceholder) { placeholder ->
+            InlineIconContent(placeholder)
+        },
+    )
+}
+
+@Composable
+private fun InlineIconContent(placeholder: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.CenterStart,
+    ) {
+        Icon(
+            imageVector = vectorResource(
+                when (placeholder) {
+                    eduPlaceholder -> Res.drawable.session_education
+                    codelabPlaceholder -> Res.drawable.session_codelab
+                    else -> Res.drawable.session_codelab // Shouldn't happen, but let's not throw
+                }
+            ),
+            contentDescription = null,
+            tint = KotlinConfTheme.colors.accentText,
+            modifier = Modifier.fillMaxHeight(0.9f).aspectRatio(1f),
+        )
+    }
+}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -93,11 +147,30 @@ fun PageTitle(
                 tint = iconTint,
             )
         }
+        val isCodelab = "Codelab" in tags
+        val isEducation = "Education" in tags
+        val hasIcon = isCodelab || isEducation
+
         Text(
-            text = title,
+            text = if (hasIcon) {
+                buildAnnotatedString {
+                    appendInlineContent(
+                        id = iconId,
+                        alternateText = when {
+                            isEducation -> eduPlaceholder
+                            isCodelab -> codelabPlaceholder
+                            else -> codelabPlaceholder // Should never happen
+                        },
+                    )
+                    append(title)
+                }
+            } else {
+                AnnotatedString(title)
+            },
             style = KotlinConfTheme.typography.h1,
             color = KotlinConfTheme.colors.primaryText,
             selectable = true,
+            inlineContent = if (hasIcon) pageTitleInlineContent() else emptyMap(),
             modifier = Modifier.semantics { heading() }
         )
         FlowRow(
