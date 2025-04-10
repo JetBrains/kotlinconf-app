@@ -25,6 +25,7 @@
     <string name="feedback_form_send">Send</string>
 
     <string name="filter_by_tags">Filter by tags</string>
+    <string name="filter_by_tags_tag_count">%1$d tags selected</string>
     <string name="filter_label_category">Category</string>
     <string name="filter_label_level">Level</string>
     <string name="filter_label_session_format">Session format</string>
