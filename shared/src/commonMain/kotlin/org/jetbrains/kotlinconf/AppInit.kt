@@ -46,18 +46,22 @@ private fun initKoin(
 ): Koin {
     return startKoin {
         val appModule = module {
-            single { APIClient(URLs.API_ENDPOINT, get()) }
             single<ApplicationStorage> { MultiplatformSettingsStorage(get(), get()) }
-            single<TimeProvider> {
-                if (isProd()) {
-                    ServerBasedTimeProvider(get())
+            single {
+                val flags = get<ApplicationStorage>().getFlagsBlocking()
+                val endpoint = if (flags != null && flags.useFakeTime) {
+                    URLs.STAGING_URL
                 } else {
-                    val flags = get<ApplicationStorage>().getFlagsBlocking()
-                    if (flags != null && flags.useFakeTime) {
-                        FakeTimeProvider(get())
-                    } else {
-                        ServerBasedTimeProvider(get())
-                    }
+                    URLs.PRODUCTION_URL
+                }
+                APIClient(endpoint, get())
+            }
+            single<TimeProvider> {
+                val flags = get<ApplicationStorage>().getFlagsBlocking()
+                if (flags != null && flags.useFakeTime) {
+                    FakeTimeProvider(get())
+                } else {
+                    ServerBasedTimeProvider(get())
                 }
             }
             singleOf(::ConferenceService)

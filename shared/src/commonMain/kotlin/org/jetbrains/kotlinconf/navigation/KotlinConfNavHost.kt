@@ -23,7 +23,6 @@ import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.URLs
-import org.jetbrains.kotlinconf.isProd
 import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
 import org.jetbrains.kotlinconf.screens.AppPrivacyPolicy
@@ -244,10 +243,8 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
         NewsDetailScreen(newsId, onBack = navController::navigateUp)
     }
 
-    if (!isProd()) {
-        composable<DeveloperMenuScreen> {
-            DeveloperMenuScreen(onBack = navController::navigateUp)
-        }
+    composable<DeveloperMenuScreen> {
+        DeveloperMenuScreen(onBack = navController::navigateUp)
     }
 
     composable<NestedMapScreen> {

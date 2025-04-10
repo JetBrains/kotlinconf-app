@@ -5,7 +5,6 @@ object URLs {
     const val STAGING_URL = "https://kotlin-conf-staging.labs.jb.gg/"
     const val PRODUCTION_URL = "https://kotlinconf-app-prod.labs.jb.gg"
     const val LOCAL_URL = "http://10.0.2.2:8080"
-    const val API_ENDPOINT = PRODUCTION_URL
 
     // kotlinconf.com
     const val KOTLINCONF_HOMEPAGE = "https://kotlinconf.com/"
