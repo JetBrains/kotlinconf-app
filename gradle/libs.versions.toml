@@ -21,7 +21,7 @@ compose-hot-reload = "1.0.0-alpha04"
 
 coroutines = "1.10.1"
 coil = "3.1.0"
-koin = "4.1.0-Beta5"
+koin = "4.1.0-Beta7"
 exposed = "0.59.0"
 h2 = "2.2.224"
 hikaricp = "5.1.0"
