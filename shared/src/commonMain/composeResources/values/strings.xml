@@ -136,6 +136,10 @@ We will process your data in accordance with the App Privacy Notice. You can adj
     <string name="speakers_title">Speakers</string>
     <string name="speakers_error_no_results">No results</string>
     <string name="speakers_error_no_data">Our speakers are playing hide and seek. Give us a moment to find them!</string>
+    <plurals name="speakers_number_of_results">
+        <item quantity="one">%1$d speaker found</item>
+        <item quantity="other">%1$d speakers found</item>
+    </plurals>
 
     <string name="speaker_detail_title">Speaker</string>
     <string name="speaker_detail_error_not_found">Sorry, we can’t find the details for that speaker.</string>
