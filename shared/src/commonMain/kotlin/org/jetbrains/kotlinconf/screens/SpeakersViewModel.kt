@@ -25,7 +25,6 @@ sealed class SpeakersUiState {
     data object Loading : SpeakersUiState()
     data object Error : SpeakersUiState()
     data class Content(val speakers: List<SpeakerWithHighlights>) : SpeakersUiState()
-    data object NoSearchResults : SpeakersUiState()
 }
 
 class SpeakersViewModel(
@@ -81,11 +80,7 @@ class SpeakersViewModel(
                         null
                     }
                 }
-                if (searchResults.isNotEmpty()) {
-                    SpeakersUiState.Content(searchResults)
-                } else {
-                    SpeakersUiState.NoSearchResults
-                }
+                SpeakersUiState.Content(searchResults)
             }
         }
     }
