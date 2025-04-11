@@ -82,7 +82,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.kotlinconf.ui.theme.Brand
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
@@ -101,7 +100,7 @@ internal fun buildHighlightedString(
                 addStyle(
                     style = SpanStyle(
                         color = KotlinConfTheme.colors.primaryTextInverted,
-                        background = Brand.magenta100,
+                        background = KotlinConfTheme.colors.primaryBackground,
                     ),
                     start = range.first,
                     end = range.last + 1,

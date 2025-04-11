@@ -101,6 +101,10 @@ We will process your data in accordance with the App Privacy Policy. You can adj
     <string name="app_terms_header">KotlinConf App Terms of Use</string>
 
     <string name="licenses_title">Licenses</string>
+    <plurals name="licenses_number_of_results">
+        <item quantity="one">%1$d library found</item>
+        <item quantity="other">%1$d libraries found</item>
+    </plurals>
 
     <string name="settings_title">Settings</string>
     <string name="settings_theme_title">Color theme</string>

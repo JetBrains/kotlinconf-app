@@ -10,6 +10,7 @@ import kotlinx.coroutines.SupervisorJob
 import org.jetbrains.kotlinconf.navigation.navigateToNews
 import org.jetbrains.kotlinconf.navigation.navigateToSession
 import org.jetbrains.kotlinconf.screens.AboutConferenceViewModel
+import org.jetbrains.kotlinconf.screens.LicensesViewModel
 import org.jetbrains.kotlinconf.screens.NewsDetailViewModel
 import org.jetbrains.kotlinconf.screens.NewsListViewModel
 import org.jetbrains.kotlinconf.screens.PrivacyPolicyViewModel
@@ -72,6 +73,7 @@ private fun initKoin(
 
         val viewModelModule = module {
             viewModelOf(::AboutConferenceViewModel)
+            viewModelOf(::LicensesViewModel)
             viewModelOf(::NewsDetailViewModel)
             viewModelOf(::NewsListViewModel)
             viewModelOf(::PrivacyPolicyViewModel)
