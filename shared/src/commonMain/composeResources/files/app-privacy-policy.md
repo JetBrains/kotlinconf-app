@@ -1,5 +1,3 @@
-# **KotlinConf App Privacy Notice**  
-
 **Version 1.2, effective from January 23, 2025**
 
 In this KotlinConf App Privacy Notice (“Privacy Notice”), we describe the types of data, including Personal Data (collectively, "data"), that we and our associated companies collect from you when you use the KotlinConf app and the functionalities and services it offers (collectively, the "App"), how we and our associated companies use and disclose that data, and your options to access or update your data.

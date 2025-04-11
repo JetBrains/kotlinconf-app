@@ -30,7 +30,6 @@ import kotlinconfapp.shared.generated.resources.app_version
 import kotlinconfapp.shared.generated.resources.arrow_up_right_24
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
-import org.jetbrains.kotlinconf.isProd
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -88,15 +87,13 @@ fun AboutAppScreen(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .clip(RoundedCornerShape(8.dp))
-                    .clickable { 
+                    .clickable {
                         clipboardManager.setText(AnnotatedString(appVersion))
 
-                        if (!isProd()) {
-                            tapCount++
-                            if (tapCount >= 5) {
-                                tapCount = 0
-                                onDeveloperMenu()
-                            }
+                        tapCount++
+                        if (tapCount >= 5) {
+                            tapCount = 0
+                            onDeveloperMenu()
                         }
                     }
                     .padding(16.dp)

@@ -60,7 +60,6 @@ import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.TimeProvider
 import org.jetbrains.kotlinconf.isLive
-import org.jetbrains.kotlinconf.isProd
 import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -352,7 +351,7 @@ private fun Header(
         state = headerState,
         titleContent = {
             MainHeaderTitleBar(
-                title = if (!isProd() && LocalFlags.current.useFakeTime) {
+                title = if ( LocalFlags.current.useFakeTime) {
                     val dateTime by koinInject<TimeProvider>().time.collectAsStateWithLifecycle()
                     "Fake time: ${DateTimeFormatting.dateAndTime(dateTime)}"
                 } else {

@@ -76,6 +76,7 @@ val rooms = mapOf(
     "Hall D2" to LocationInfo(Floor.GROUND, Offset(0.34f, 0.78f)),
     "Auditorium 15" to LocationInfo(Floor.GROUND, Offset(0.48f, 0.59f)),
     "Auditorium 11+12" to LocationInfo(Floor.FIRST, Offset(0.37f, 0.66f)),
+    "Auditorium 10" to LocationInfo(Floor.FIRST, Offset(0.33f, 0.65f)),
     "Auditorium 10 (Lightning talks)" to LocationInfo(Floor.FIRST, Offset(0.33f, 0.65f)),
 )
 private val venue = LocationInfo(Floor.GROUND, Offset(0.4f, 0.69f))

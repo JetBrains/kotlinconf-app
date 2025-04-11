@@ -82,7 +82,7 @@ class SessionizeService(
                 it.displayTitle,
                 it.descriptionText ?: "",
                 it.speakers,
-                it.roomId?.let { findRoom(it) } ?: "unknown",
+                (it.roomId?.let<Int, String> { findRoom(it) } ?: "unknown").removeSuffix(" (Lightning talks)"),
                 startsAt.toLocalDateTime(EVENT_TIME_ZONE),
                 endsAt.toLocalDateTime(EVENT_TIME_ZONE),
                 tags

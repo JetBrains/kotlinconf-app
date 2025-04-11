@@ -16,5 +16,3 @@ data class Flags(
 val LocalFlags = compositionLocalOf<Flags> {
     error("LocalFlags must be part of the call hierarchy to provide configuration")
 }
-
-fun isProd() = URLs.API_ENDPOINT == URLs.PRODUCTION_URL

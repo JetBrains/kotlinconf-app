@@ -151,14 +151,15 @@ fun TalkCard(
         else KotlinConfTheme.colors.primaryText,
         animationSpec = tween(1000),
     )
+    val borderColor by animateColorAsState(
+        if (bookmarked) KotlinConfTheme.colors.strokeHalf
+        else KotlinConfTheme.colors.strokePale,
+        animationSpec = tween(1000),
+    )
 
     Column(
         modifier
-            .border(
-                width = 1.dp,
-                color = KotlinConfTheme.colors.strokePale,
-                shape = CardTalkShape,
-            )
+            .border(width = 1.dp, color = borderColor, shape = CardTalkShape)
             .clip(CardTalkShape)
             .clickable(onClick = onClick)
             .background(backgroundColor)

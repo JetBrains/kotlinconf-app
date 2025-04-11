@@ -1,5 +1,3 @@
-# **KotlinConf App Terms of Use**
-
 **Version 1.2, effective as of January 23, 2025**
 
 IMPORTANT\! READ CAREFULLY:
