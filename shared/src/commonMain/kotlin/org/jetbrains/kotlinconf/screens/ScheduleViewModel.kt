@@ -140,7 +140,7 @@ class ScheduleViewModel(
                 val searchItems = buildSearchItems(
                     days = agenda,
                     searchQuery = searchParams.searchQuery,
-                    tagValues = tags.filter { it.isSelected }.map { it.value },
+                    selectedTags = tags.filter { it.isSelected }.map { it.value },
                 )
                 ScheduleUiState.Content(agenda, searchItems, userId != null)
             }
@@ -175,15 +175,16 @@ class ScheduleViewModel(
     private fun buildSearchItems(
         days: List<Day>,
         searchQuery: String,
-        tagValues: List<String>,
+        selectedTags: List<String>,
     ): List<ScheduleListItem> = buildList {
-        days.forEach { day ->
-            day.timeSlots.forEach { timeSlot ->
-                timeSlot.sessions.forEach { session ->
+        for (day in days) {
+            for (timeSlot in day.timeSlots) {
+                for (session in timeSlot.sessions) {
                     val result = match(
                         session = session,
-                        searchQuery = searchQuery,
-                        tags = tagValues,
+                        searchRegex = searchQuery.toRegex(RegexOption.IGNORE_CASE),
+                        diacriticsSearch = searchQuery.containsDiacritics(),
+                        tags = selectedTags,
                     )
                     if (result.matched) {
                         add(
@@ -281,44 +282,31 @@ class ScheduleViewModel(
 
     private fun match(
         session: SessionCardView,
-        searchQuery: String,
+        searchRegex: Regex,
+        diacriticsSearch: Boolean,
         tags: List<String>,
     ): MatchResult {
         if (session.isServiceEvent) {
             return MatchResult(matched = false)
         }
 
-        // Result variables
-        val tagMatches = mutableListOf<String>()
-        val titleHighlights = mutableListOf<IntRange>()
-        val speakerHighlights = mutableListOf<IntRange>()
-
-        if (tags.isNotEmpty()) {
-            if (session.tags.containsAll(tags)) {
-                tagMatches.addAll(tags)
-            } else {
-                return MatchResult(matched = false)
-            }
+        if (!session.tags.containsAll(tags)) {
+            return MatchResult(matched = false)
         }
 
         // Look for exact matches if diacritics are present, ignore all diacritics otherwise
-        val diacriticsSearch = searchQuery.containsDiacritics()
-        val targetTitle =
-            if (diacriticsSearch) session.title
-            else session.title.removeDiacritics()
-        val targetSpeakers =
-            if (diacriticsSearch) session.speakerLine
-            else session.speakerLine.removeDiacritics()
+        val title = session.title
+        val targetTitle = if (diacriticsSearch) title else title.removeDiacritics()
 
-        titleHighlights.addAll(
-            searchQuery.toRegex(RegexOption.IGNORE_CASE).findAll(targetTitle).map { it.range })
+        val speakerLine = session.speakerLine
+        val targetSpeakers = if (diacriticsSearch) speakerLine else speakerLine.removeDiacritics()
 
-        speakerHighlights.addAll(
-            searchQuery.toRegex(RegexOption.IGNORE_CASE).findAll(targetSpeakers).map { it.range })
+        val titleHighlights = searchRegex.findAll(targetTitle).map { it.range }.toList()
+        val speakerHighlights = searchRegex.findAll(targetSpeakers).map { it.range }.toList()
 
         return MatchResult(
             matched = titleHighlights.isNotEmpty() || speakerHighlights.isNotEmpty(),
-            tagMatches = tagMatches,
+            tagMatches = tags,
             titleHighlights = titleHighlights,
             speakerHighlights = speakerHighlights,
         )
