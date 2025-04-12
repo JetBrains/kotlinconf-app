@@ -68,7 +68,7 @@ fun MainHeaderSearchBar(
             contentDescription = stringResource(Res.string.main_header_back),
         )
 
-        var focusRequested by rememberSaveable {mutableStateOf(false)}
+        var focusRequested by rememberSaveable { mutableStateOf(false) }
         val focusRequester = remember { FocusRequester() }
         if (!focusRequested) {
             LaunchedEffect(Unit) {

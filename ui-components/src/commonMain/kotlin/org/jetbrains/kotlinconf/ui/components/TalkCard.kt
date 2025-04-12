@@ -555,11 +555,17 @@ private fun FeedbackBlock(
         ) {
             val focusRequester = remember { FocusRequester() }
             val bringIntoViewRequester = remember { BringIntoViewRequester() }
-            val hapticFeedback = LocalHapticFeedback.current
-            LaunchedEffect(focusRequester) {
-                bringIntoViewRequester.bringIntoView()
-                focusRequester.requestFocus()
+            var focusRequested by rememberSaveable { mutableStateOf(false) }
+
+            if (!focusRequested) {
+                LaunchedEffect(Unit) {
+                    bringIntoViewRequester.bringIntoView()
+                    focusRequester.requestFocus()
+                    focusRequested = true
+                }
             }
+
+            val hapticFeedback = LocalHapticFeedback.current
             FeedbackForm(
                 feedbackText = feedbackText,
                 onFeedbackTextChange = { feedbackText = it },
