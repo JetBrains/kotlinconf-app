@@ -53,6 +53,7 @@ import kotlinconfapp.ui_components.generated.resources.filter_label_category
 import kotlinconfapp.ui_components.generated.resources.filter_label_level
 import kotlinconfapp.ui_components.generated.resources.filter_label_session_format
 import kotlinconfapp.ui_components.generated.resources.up_24
+import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -131,7 +132,7 @@ fun Filters(
                             .clip(CircleShape)
                             .background(KotlinConfTheme.colors.primaryBackground)
                     ) {
-                        val tagCountContentDescription = stringResource(Res.string.filter_by_tags_tag_count, count)
+                        val tagCountContentDescription = pluralStringResource(Res.plurals.filter_by_tags_tag_count, count, count)
                         Text(
                             text = count.toString(),
                             color = KotlinConfTheme.colors.primaryTextInverted,
