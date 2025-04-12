@@ -5,8 +5,6 @@ import androidx.preference.PreferenceManager
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.SharedPreferencesSettings
-import org.jetbrains.kotlinconf.utils.AndroidLogger
-import org.jetbrains.kotlinconf.utils.Logger
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -27,7 +25,6 @@ fun platformModule(
                 logger = get(),
             )
         }
-        single<Logger> { AndroidLogger() }
         single<NotificationPlatformConfiguration> { notificationConfig}
     }
 }

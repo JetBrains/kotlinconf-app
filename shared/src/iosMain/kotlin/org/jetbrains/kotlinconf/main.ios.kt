@@ -5,9 +5,9 @@ import androidx.compose.ui.window.ComposeUIViewController
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.ObservableSettings
-import org.jetbrains.kotlinconf.utils.IOSLogger
 import org.jetbrains.kotlinconf.utils.Logger
 import org.koin.dsl.module
+import platform.Foundation.NSLog
 import platform.Foundation.NSUserDefaults
 import platform.UIKit.UIViewController
 
@@ -16,7 +16,6 @@ private val platformModule = module {
     single<ObservableSettings> {
         NSUserDefaultsSettings(NSUserDefaults.standardUserDefaults)
     }
-    single<Logger> { IOSLogger() }
     single<NotificationPlatformConfiguration> {
         NotificationPlatformConfiguration.Ios(
             showPushNotification = true,
@@ -28,6 +27,7 @@ private val platformModule = module {
 
 @Suppress("unused") // Called from Swift
 fun initApp() = initApp(
+    platformLogger = IOSLogger(),
     platformModule = platformModule,
     flags = Flags(
         enableBackOnMainScreens = false,
@@ -36,9 +36,15 @@ fun initApp() = initApp(
     )
 )
 
+class IOSLogger : Logger {
+    override fun log(tag: String, lazyMessage: () -> String) {
+        NSLog("[$tag] ${lazyMessage()}")
+    }
+}
+
 @Suppress("unused") // Called from Swift
 fun MainViewController(): UIViewController = ComposeUIViewController(
-    configure = { this.onFocusBehavior = OnFocusBehavior.DoNothing },
+    configure = { onFocusBehavior = OnFocusBehavior.DoNothing },
 ) {
     App()
 }

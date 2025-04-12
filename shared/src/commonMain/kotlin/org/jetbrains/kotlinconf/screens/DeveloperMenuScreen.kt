@@ -25,6 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.Res
@@ -43,6 +45,8 @@ import org.jetbrains.kotlinconf.ui.components.SettingsItem
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.DebugLogger
+import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
@@ -88,6 +92,11 @@ fun DeveloperMenuScreen(
                         .padding(12.dp)
                         .weight(1f)
                 ) {
+                    Text(
+                        "Modifying any of these settings will move you from the production backend to the staging backend automatically.",
+                        color = KotlinConfTheme.colors.primaryText,
+                    )
+
                     SettingsItem(
                         title = "Enable back on main screens",
                         note = "Allow users to use back navigation between the top-level destinations on the Main screen",
@@ -124,10 +133,30 @@ fun DeveloperMenuScreen(
                     )
 
                     SettingsItem(
-                        title = "Use fake time (requires app restart)",
+                        title = "Use fake time (requires restart)",
                         note = "Simulate a date and time in the middle of the conference. Useful for testing voting and feedback features which are only available for sessions that already started. Fake time passes at 20x speed, so you'll see how the schedule changes and receive reminder notifications much quicker. Fake time restarts from the same point on every app start.",
                         enabled = flags.useFakeTime,
                         onToggle = { flags = flags.copy(useFakeTime = it) }
+                    )
+
+                    SettingsItem(
+                        title = "Enable debug logging (requires restart)",
+                        note = "Store logs in memory for debugging purposes. Logs can be copied to clipboard.",
+                        enabled = flags.debugLogging,
+                        onToggle = { flags = flags.copy(debugLogging = it) }
+                    )
+                    val debugLogger = koinInject<Logger>() as? DebugLogger
+                    val clipboardManager = LocalClipboardManager.current
+                    Button(
+                        label = "Copy logs to clipboard",
+                        onClick = {
+                            debugLogger?.getAllLogs()?.let {
+                                clipboardManager.setText(AnnotatedString(it))
+                            }
+                        },
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        primary = true,
+                        enabled = flags.debugLogging && debugLogger != null,
                     )
                 }
 
