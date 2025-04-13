@@ -18,6 +18,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinconfapp.shared.generated.resources.kodee_notifications
@@ -66,7 +68,10 @@ fun StartNotificationsScreen(
             )
             Text(
                 stringResource(AppRes.string.notifications_title),
-                style = KotlinConfTheme.typography.h1
+                style = KotlinConfTheme.typography.h1,
+                modifier = Modifier.semantics {
+                    heading()
+                }
             )
             Text(
                 stringResource(AppRes.string.notifications_description),

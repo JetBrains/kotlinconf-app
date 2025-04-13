@@ -457,6 +457,9 @@ private fun ScheduleList(
                             modifier = Modifier
                                 .padding(horizontal = 12.dp)
                                 .padding(top = 24.dp, bottom = 8.dp)
+                                .semantics {
+                                    heading()
+                                }
                         )
                     }
 
