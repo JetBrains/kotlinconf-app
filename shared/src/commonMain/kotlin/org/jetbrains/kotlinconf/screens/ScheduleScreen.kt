@@ -35,7 +35,13 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.semantics.CollectionInfo
+import androidx.compose.ui.semantics.CollectionItemInfo
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.collectionInfo
+import androidx.compose.ui.semantics.collectionItemInfo
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -487,12 +493,20 @@ private fun ScheduleList(
                                 )
                                 HorizontalPager(
                                     state = pagerState,
-                                    modifier = Modifier.fillMaxWidth(),
+                                    modifier = Modifier.fillMaxWidth()
+                                        .semantics {
+                                            role = Role.Carousel
+                                            collectionInfo = CollectionInfo(
+                                                rowCount = 1,
+                                                columnCount = workshops.size
+                                            )
+                                    },
                                     beyondViewportPageCount = 1,
                                     contentPadding = PaddingValues(horizontal = 24.dp),
                                 ) { pageIndex ->
+                                    val workshopIndex = pageIndex % workshops.size
                                     SessionCard(
-                                        session = workshops[pageIndex % workshops.size],
+                                        session = workshops[workshopIndex],
                                         isSearch = isSearch,
                                         userSignedIn = userSignedIn,
                                         onBookmark = onBookmark,
@@ -502,6 +516,14 @@ private fun ScheduleList(
                                         onSession = onSession,
                                         modifier = Modifier
                                             .padding(horizontal = 8.dp, vertical = 8.dp)
+                                            .semantics {
+                                                collectionItemInfo = CollectionItemInfo(
+                                                    rowIndex = 1,
+                                                    columnIndex = workshopIndex,
+                                                    columnSpan = 1,
+                                                    rowSpan = 1
+                                                )
+                                            }
                                     )
                                 }
                                 ScrollIndicator(
