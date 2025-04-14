@@ -8,7 +8,6 @@ import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfig
 import com.russhwolf.settings.ObservableSettings
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.app_name
-import org.jetbrains.compose.reload.DevelopmentEntryPoint
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.storage.createSettings
 import org.jetbrains.kotlinconf.utils.JvmLogger
@@ -37,9 +36,7 @@ fun main() {
             alwaysOnTop = true,
             state = rememberWindowState(width = 600.dp, height = 800.dp),
         ) {
-            DevelopmentEntryPoint {
-                App()
-            }
+            App()
         }
     }
 }
