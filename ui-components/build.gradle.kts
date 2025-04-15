@@ -95,3 +95,8 @@ composeCompiler {
 compose.resources {
     publicResClass = true
 }
+
+// Android preview support
+dependencies {
+    debugImplementation(compose.uiTooling)
+}
