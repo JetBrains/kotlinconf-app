@@ -10,7 +10,11 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.MarkdownScreenWithTitle
 
 @Composable
-fun VisitorTermsOfUse(onBack: () -> Unit) {
+fun VisitorTermsOfUse(
+    onBack: () -> Unit,
+    onCodeOfConduct: () -> Unit,
+    onVisitorPrivacyNotice: () -> Unit,
+) {
     MarkdownScreenWithTitle(
         title = stringResource(Res.string.general_terms),
         header = stringResource(Res.string.visitors_terms_title),
@@ -19,6 +23,12 @@ fun VisitorTermsOfUse(onBack: () -> Unit) {
             @OptIn(ExperimentalResourceApi::class)
             Res.readBytes("files/visitors-terms.md")
         },
-        onBack = onBack
+        onBack = onBack,
+        onCustomUriClick = { uri ->
+            when (uri) {
+                "code-of-conduct.md" -> onCodeOfConduct()
+                "visitors-privacy-notice.md" -> onVisitorPrivacyNotice()
+            }
+        },
     )
 }

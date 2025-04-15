@@ -184,7 +184,11 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
         )
     }
     composable<TermsOfUseScreen> {
-        VisitorTermsOfUse(onBack = navController::navigateUp)
+        VisitorTermsOfUse(
+            onBack = navController::navigateUp,
+            onCodeOfConduct = { navController.navigate(CodeOfConductScreen) },
+            onVisitorPrivacyNotice = { navController.navigate(VisitorPrivacyNoticeScreen) },
+        )
     }
     composable<AppTermsOfUseScreen> {
         AppTermsOfUse(
