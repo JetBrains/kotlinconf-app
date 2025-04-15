@@ -98,7 +98,7 @@ import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 @Composable
 fun ScheduleScreen(
     onSession: (SessionId) -> Unit,
-    onPrivacyPolicyNeeded: () -> Unit,
+    onPrivacyNoticeNeeded: () -> Unit,
     onRequestFeedbackWithComment: (SessionId) -> Unit,
     viewModel: ScheduleViewModel = koinViewModel(),
 ) {
@@ -108,12 +108,12 @@ fun ScheduleScreen(
     val listState = rememberLazyListState()
 
     val state = viewModel.uiState.collectAsStateWithLifecycle().value
-    val shouldNavigateToPrivacyPolicy by viewModel.navigateToPrivacyPolicy.collectAsStateWithLifecycle()
+    val shouldNavigateToPrivacyNotice by viewModel.navigateToPrivacyNotice.collectAsStateWithLifecycle()
 
-    LaunchedEffect(shouldNavigateToPrivacyPolicy) {
-        if (shouldNavigateToPrivacyPolicy) {
-            onPrivacyPolicyNeeded()
-            viewModel.onNavigatedToPrivacyPolicy()
+    LaunchedEffect(shouldNavigateToPrivacyNotice) {
+        if (shouldNavigateToPrivacyNotice) {
+            onPrivacyNoticeNeeded()
+            viewModel.onNavigatedToPrivacyNotice()
         }
     }
 

@@ -21,7 +21,7 @@ import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.about_app_description
 import kotlinconfapp.shared.generated.resources.about_app_link_github
 import kotlinconfapp.shared.generated.resources.about_app_link_licenses
-import kotlinconfapp.shared.generated.resources.about_app_link_privacy_policy
+import kotlinconfapp.shared.generated.resources.about_app_link_privacy_notice
 import kotlinconfapp.shared.generated.resources.about_app_link_rate
 import kotlinconfapp.shared.generated.resources.about_app_link_settings
 import kotlinconfapp.shared.generated.resources.about_app_link_terms_of_use
@@ -41,7 +41,7 @@ fun AboutAppScreen(
     onGitHubRepo: () -> Unit,
     onRateApp: () -> Unit,
     onSettings: () -> Unit,
-    onPrivacyPolicy: () -> Unit,
+    onPrivacyNotice: () -> Unit,
     onTermsOfUse: () -> Unit,
     onLicenses: () -> Unit,
     onDeveloperMenu: () -> Unit = {},
@@ -73,7 +73,7 @@ fun AboutAppScreen(
             }
 
             PageMenuItem(stringResource(Res.string.about_app_link_settings), onClick = onSettings)
-            PageMenuItem(stringResource(Res.string.about_app_link_privacy_policy), onClick = onPrivacyPolicy)
+            PageMenuItem(stringResource(Res.string.about_app_link_privacy_notice), onClick = onPrivacyNotice)
             PageMenuItem(stringResource(Res.string.about_app_link_terms_of_use), onClick = onTermsOfUse)
             PageMenuItem(stringResource(Res.string.about_app_link_licenses), onClick = onLicenses)
 

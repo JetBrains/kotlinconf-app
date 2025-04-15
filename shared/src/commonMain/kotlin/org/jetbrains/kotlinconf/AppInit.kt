@@ -12,7 +12,7 @@ import org.jetbrains.kotlinconf.navigation.navigateToSession
 import org.jetbrains.kotlinconf.screens.AboutConferenceViewModel
 import org.jetbrains.kotlinconf.screens.NewsDetailViewModel
 import org.jetbrains.kotlinconf.screens.NewsListViewModel
-import org.jetbrains.kotlinconf.screens.PrivacyPolicyViewModel
+import org.jetbrains.kotlinconf.screens.PrivacyNoticeViewModel
 import org.jetbrains.kotlinconf.screens.ScheduleViewModel
 import org.jetbrains.kotlinconf.screens.SessionViewModel
 import org.jetbrains.kotlinconf.screens.SettingsViewModel
@@ -74,7 +74,7 @@ private fun initKoin(
             viewModelOf(::AboutConferenceViewModel)
             viewModelOf(::NewsDetailViewModel)
             viewModelOf(::NewsListViewModel)
-            viewModelOf(::PrivacyPolicyViewModel)
+            viewModelOf(::PrivacyNoticeViewModel)
             viewModelOf(::ScheduleViewModel)
             viewModelOf(::SessionViewModel)
             viewModelOf(::SettingsViewModel)

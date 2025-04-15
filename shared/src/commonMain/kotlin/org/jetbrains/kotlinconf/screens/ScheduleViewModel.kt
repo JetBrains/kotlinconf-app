@@ -78,8 +78,8 @@ class ScheduleViewModel(
     private val service: ConferenceService,
     private val timeProvider: TimeProvider,
 ) : ViewModel() {
-    private val _navigateToPrivacyPolicy = MutableStateFlow(false)
-    val navigateToPrivacyPolicy: StateFlow<Boolean> = _navigateToPrivacyPolicy.asStateFlow()
+    private val _navigateToPrivacyNotice = MutableStateFlow(false)
+    val navigateToPrivacyNotice: StateFlow<Boolean> = _navigateToPrivacyNotice.asStateFlow()
 
     private val searchParams = MutableStateFlow(ScheduleSearchParams())
 
@@ -335,7 +335,7 @@ class ScheduleViewModel(
             if (service.canVote()) {
                 service.vote(sessionId, score)
             } else {
-                _navigateToPrivacyPolicy.value = true
+                _navigateToPrivacyNotice.value = true
             }
         }
     }
@@ -351,13 +351,13 @@ class ScheduleViewModel(
                 service.vote(sessionId, score)
                 service.sendFeedback(sessionId, comment)
             } else {
-                _navigateToPrivacyPolicy.value = true
+                _navigateToPrivacyNotice.value = true
             }
         }
     }
 
-    fun onNavigatedToPrivacyPolicy() {
-        _navigateToPrivacyPolicy.value = false
+    fun onNavigatedToPrivacyNotice() {
+        _navigateToPrivacyNotice.value = false
     }
 
     fun onBookmark(sessionId: SessionId, bookmarked: Boolean) {
