@@ -11,7 +11,7 @@ object URLs {
 
     // Social Media URLs
     const val TWITTER = "https://x.com/kotlinconf"
-    const val SLACK = "https://kotlinlang.slack.com/messages/kotlinconf/"
+    const val SLACK = "https://slack-chats.kotlinlang.org/c/kotlinconf"
     const val BLUESKY = "https://bsky.app/profile/kotlinconf.com"
 
     // Repository URL
