@@ -1,12 +1,15 @@
+@file:Suppress("UnusedImport")
+
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,16 +39,17 @@ fun SpeakerCard(
     titleHighlights: List<IntRange> = emptyList(),
 ) {
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
-            .clickable(onClick = onClick),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalAlignment = Alignment.CenterVertically,
+            .clickable(onClick = onClick)
+            .background(KotlinConfTheme.colors.tileBackground)
     ) {
         SpeakerAvatar(
             photoUrl = photoUrl,
-            modifier = Modifier.size(96.dp),
+            modifier = Modifier.size(48.dp),
         )
+        Spacer(Modifier.size(16.dp))
         Column {
             Text(
                 text = buildHighlightedString(name, nameHighlights),
@@ -74,7 +78,7 @@ fun SpeakerAvatar(
             .build(),
         contentDescription = null,
         modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(CircleShape)
             .background(KotlinConfTheme.colors.tileBackground),
         contentScale = ContentScale.Crop,
         error = painterResource(Res.drawable.kodee_emotion_neutral),

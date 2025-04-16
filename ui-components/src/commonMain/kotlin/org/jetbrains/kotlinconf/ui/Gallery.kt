@@ -25,7 +25,7 @@ fun GalleryApp() {
                 ActionPreview()
                 ButtonPreview()
                 CardTagPreview()
-                DayHeaderPreview()
+//                DayHeaderPreview()
                 FeedbackFormPreview()
                 FilterTagPreview()
                 FiltersPreview()

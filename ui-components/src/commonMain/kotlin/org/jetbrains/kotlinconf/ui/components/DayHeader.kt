@@ -110,10 +110,98 @@ fun DayHeader(
 
 @Preview
 @Composable
-internal fun DayHeaderPreview() {
+internal fun TestDayHeaderPreview() {
     PreviewHelper {
         DayHeader("TEST", "1", "Test", "Data")
+    }
+}
+
+@Preview
+@Composable
+internal fun WorkshopDayHeaderPreview() {
+    PreviewHelper {
         DayHeader("MAY", "21", "Workshop", "Day")
+    }
+}
+
+@Preview
+@Composable
+internal fun CodeLabsDayHeaderPreview() {
+    PreviewHelper {
         DayHeader("MAY", "22", "Code", "Labs", day2 = "23")
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
