@@ -39,13 +39,13 @@ fun SpeakerCard(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         SpeakerAvatar(
             photoUrl = photoUrl,
-            modifier = Modifier.size(96.dp),
+            modifier = Modifier.size(48.dp),
         )
+        Spacer(Modifier.size(16.dp))
         Column {
             Text(
                 text = buildHighlightedString(name, nameHighlights),
