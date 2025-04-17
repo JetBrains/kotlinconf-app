@@ -347,9 +347,13 @@ private fun FeedbackPanel(
         }
 
         AnimatedVisibility(visible = feedbackExpanded) {
+            var focusRequested by rememberSaveable { mutableStateOf(false) }
             val focusRequester = remember { FocusRequester() }
-            LaunchedEffect(Unit) {
-                focusRequester.requestFocus()
+            if (!focusRequested) {
+                LaunchedEffect(Unit) {
+                    focusRequester.requestFocus()
+                    focusRequested = true
+                }
             }
             val hapticFeedback = LocalHapticFeedback.current
             FeedbackForm(
