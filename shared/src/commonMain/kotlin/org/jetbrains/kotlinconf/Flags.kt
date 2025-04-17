@@ -11,6 +11,7 @@ data class Flags(
     val redirectFeedbackToSessionPage: Boolean = false,
     val hideKeyboardOnDrag: Boolean = false,
     val useFakeTime:  Boolean = false,
+    val debugLogging: Boolean = false,
 )
 
 val LocalFlags = compositionLocalOf<Flags> {

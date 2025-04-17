@@ -10,14 +10,12 @@ import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.app_name
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.storage.createSettings
-import org.jetbrains.kotlinconf.utils.JvmLogger
 import org.jetbrains.kotlinconf.utils.Logger
 import org.koin.dsl.module
 
 private val platformModule = module {
     single<ObservableSettings> { createSettings() }
     single<LocalNotificationService> { EmptyLocalNotificationService() }
-    single<Logger> { JvmLogger() }
     single<NotificationPlatformConfiguration> {
         NotificationPlatformConfiguration.Desktop(
             showPushNotification = false,
@@ -26,8 +24,14 @@ private val platformModule = module {
     }
 }
 
+class JvmLogger : Logger {
+    override fun log(tag: String, lazyMessage: () -> String) {
+        println("[$tag] ${lazyMessage()}")
+    }
+}
+
 fun main() {
-    initApp(platformModule, Flags(supportsNotifications = false))
+    initApp(JvmLogger(), platformModule, Flags(supportsNotifications = false))
 
     application {
         Window(

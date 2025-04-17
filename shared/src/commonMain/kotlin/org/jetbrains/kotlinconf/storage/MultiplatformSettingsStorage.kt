@@ -16,12 +16,10 @@ import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Theme
 import org.jetbrains.kotlinconf.VoteInfo
-import org.jetbrains.kotlinconf.utils.Logger
 
 @OptIn(ExperimentalSettingsApi::class)
 class MultiplatformSettingsStorage(
     private val settings: ObservableSettings,
-    private val logger: Logger,
 ) : ApplicationStorage {
     private val json = Json {
         ignoreUnknownKeys = true
@@ -33,7 +31,6 @@ class MultiplatformSettingsStorage(
         return try {
             json.decodeFromString<T>(this)
         } catch (_: SerializationException) {
-            logger.log("MultiplatformSettingsStorage") { "Failed to deserialize a ${T::class} from value: $this" }
             null
         }
     }

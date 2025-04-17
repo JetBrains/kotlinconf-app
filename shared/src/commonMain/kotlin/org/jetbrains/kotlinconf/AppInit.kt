@@ -21,6 +21,7 @@ import org.jetbrains.kotlinconf.screens.SpeakersViewModel
 import org.jetbrains.kotlinconf.screens.StartNotificationsViewModel
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.storage.MultiplatformSettingsStorage
+import org.jetbrains.kotlinconf.utils.DebugLogger
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.NoopProdLogger
 import org.jetbrains.kotlinconf.utils.TaggedLogger
@@ -33,41 +34,47 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 fun initApp(
+    platformLogger: Logger,
     platformModule: Module,
     flags: Flags = Flags(),
 ) {
-    val koin = initKoin(platformModule, flags)
+    val koin = initKoin(platformLogger, platformModule, flags)
     initNotifier(configuration = koin.get(), logger = koin.get())
 }
 
 private fun initKoin(
+    platformLogger: Logger,
     platformModule: Module,
     platformFlags: Flags,
 ): Koin {
     return startKoin {
         val appModule = module {
-            single<ApplicationStorage> { MultiplatformSettingsStorage(get(), get()) }
+            single<ApplicationStorage> { MultiplatformSettingsStorage(get()) }
             single {
                 val flags = get<ApplicationStorage>().getFlagsBlocking()
-                val endpoint = if (flags != null && flags.useFakeTime) {
-                    URLs.STAGING_URL
-                } else {
-                    URLs.PRODUCTION_URL
+                val endpoint = when {
+                    flags != null && (flags != platformFlags) -> URLs.STAGING_URL
+                    else -> URLs.PRODUCTION_URL
                 }
                 APIClient(endpoint, get())
             }
             single<TimeProvider> {
                 val flags = get<ApplicationStorage>().getFlagsBlocking()
-                if (flags != null && flags.useFakeTime) {
-                    FakeTimeProvider(get())
-                } else {
-                    ServerBasedTimeProvider(get())
+                when {
+                    flags != null && flags.useFakeTime -> FakeTimeProvider(get())
+                    else -> ServerBasedTimeProvider(get())
                 }
             }
-            singleOf(::ConferenceService)
-            single<Logger> { NoopProdLogger() }
+            single<Logger> {
+                val flags = get<ApplicationStorage>().getFlagsBlocking()
+                when {
+                    flags != null && flags.debugLogging -> DebugLogger(platformLogger)
+                    else -> NoopProdLogger()
+                }
+            }
             single { FlagsManager(platformFlags, get(), get()) }
             single { CoroutineScope(SupervisorJob() + Dispatchers.Default) }
+            singleOf(::ConferenceService)
         }
 
         val viewModelModule = module {
