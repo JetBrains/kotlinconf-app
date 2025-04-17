@@ -79,11 +79,16 @@ private fun createDelegate(
             scrollingToTop = false
         }
 
+        private var firstScroll = true
         private var scrollingToTop = false
         private var lastKnownOffset = 1.0
 
         // Sync from Native to Compose
         override fun scrollViewDidScroll(scrollView: UIScrollView) {
+            if (firstScroll) {
+                firstScroll = false
+                return
+            }
             if (scrollingToTop) {
                 return
             }
