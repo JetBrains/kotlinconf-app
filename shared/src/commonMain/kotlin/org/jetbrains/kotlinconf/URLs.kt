@@ -20,4 +20,8 @@ object URLs {
     // App stores
     const val PLAY_STORE = "https://play.google.com/store/apps/details?id=com.jetbrains.kotlinconf"
     const val APP_STORE = "https://apps.apple.com/us/app/kotlinconf/id1299196584"
+
+    // Other
+    const val JUNIE_LANDING_PAGE = "https://www.jetbrains.com/junie/"
+
 }

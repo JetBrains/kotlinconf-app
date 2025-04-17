@@ -20,6 +20,7 @@ For the source code and more technical details, visit the GitHub repository.</st
     <string name="about_app_link_privacy_notice">App Privacy Notice</string>
     <string name="about_app_link_terms_of_use">App Terms of Use</string>
     <string name="about_app_link_licenses">Licenses</string>
+    <string name="about_app_made_with_junie">Made with Junie</string>
 
     <string name="info_title">Info</string>
     <string name="info_link_about_conf">About the conference</string>
