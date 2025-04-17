@@ -55,7 +55,7 @@ import org.jetbrains.kotlinconf.navigation.InfoScreen
 import org.jetbrains.kotlinconf.navigation.MapScreen
 import org.jetbrains.kotlinconf.navigation.NewsListScreen
 import org.jetbrains.kotlinconf.navigation.PartnersScreen
-import org.jetbrains.kotlinconf.navigation.AppPrivacyPolicyPrompt
+import org.jetbrains.kotlinconf.navigation.AppPrivacyNoticePrompt
 import org.jetbrains.kotlinconf.navigation.ScheduleScreen
 import org.jetbrains.kotlinconf.navigation.SessionScreen
 import org.jetbrains.kotlinconf.navigation.SpeakerDetailScreen
@@ -117,7 +117,7 @@ fun MainScreen(
                 MainBackHandler()
                 ScheduleScreen(
                     onSession = { rootNavController.navigate(SessionScreen(it)) },
-                    onPrivacyPolicyNeeded = { rootNavController.navigate(AppPrivacyPolicyPrompt) },
+                    onPrivacyNoticeNeeded = { rootNavController.navigate(AppPrivacyNoticePrompt) },
                     onRequestFeedbackWithComment = { sessionId ->
                         rootNavController.navigate(SessionScreen(sessionId, openedForFeedback = true))
                     },

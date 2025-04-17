@@ -92,7 +92,7 @@ JetBrains reserves the right to suspend Your access to KotlinConf App if Your us
 
 10.8. **Dispute Resolution**. Should the Parties to this Agreement fail to settle a Dispute amicably, You and we both agree that any Dispute-related litigation may only be brought in, and shall be subject to the jurisdiction of, any competent court of the Netherlands, unless provided otherwise by applicable consumer law. Any disputes between JetBrains and an individual consumer, who is an EU resident, can be settled out of court through alternative dispute resolution (ADR). This can be done through the ODR platform accessible through: [http://ec.europa.eu/consumers/odr/](http://ec.europa.eu/consumers/odr/). 
 
-13.12. **Data Privacy**. By accepting this Agreement, You acknowledge that JetBrains will process personal data in accordance with the [KotlinConf App Privacy Notice](app-privacy-policy.md).
+13.12. **Data Privacy**. By accepting this Agreement, You acknowledge that JetBrains will process personal data in accordance with the [KotlinConf App Privacy Notice](app-privacy-notice.md).
 
 13.13. **Force Majeure**. Neither Party shall be in breach of this Agreement, or otherwise liable to the other, by reason of any delay in performance, or non-performance of any of its obligations under this Agreement (except payment obligations), arising directly from an act of God, fire, flood, natural disaster, act of terrorism, strike, lock-out, labour dispute, public health emergency, civil commotion, riot, or act of war.
 

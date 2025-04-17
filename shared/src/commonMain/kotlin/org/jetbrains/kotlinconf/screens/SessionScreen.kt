@@ -97,7 +97,7 @@ fun SessionScreen(
     openedForFeedback: Boolean,
     onBack: () -> Unit,
     onSpeaker: (SpeakerId) -> Unit,
-    onPrivacyPolicyNeeded: () -> Unit,
+    onPrivacyNoticeNeeded: () -> Unit,
     onNavigateToMap: (String) -> Unit,
     onWatchVideo: (String) -> Unit,
     viewModel: SessionViewModel = koinViewModel { parametersOf(sessionId) }
@@ -105,12 +105,12 @@ fun SessionScreen(
     val session = viewModel.session.collectAsState().value
     val speakers = viewModel.speakers.collectAsState().value
     val userSignedIn by viewModel.userSignedIn.collectAsState()
-    val shouldNavigateToPrivacyPolicy by viewModel.navigateToPrivacyPolicy.collectAsState()
+    val shouldNavigateToPrivacyNotice by viewModel.navigateToPrivacyNotice.collectAsState()
 
-    LaunchedEffect(shouldNavigateToPrivacyPolicy) {
-        if (shouldNavigateToPrivacyPolicy) {
-            onPrivacyPolicyNeeded()
-            viewModel.onNavigatedToPrivacyPolicy()
+    LaunchedEffect(shouldNavigateToPrivacyNotice) {
+        if (shouldNavigateToPrivacyNotice) {
+            onPrivacyNoticeNeeded()
+            viewModel.onNavigatedToPrivacyNotice()
         }
     }
 

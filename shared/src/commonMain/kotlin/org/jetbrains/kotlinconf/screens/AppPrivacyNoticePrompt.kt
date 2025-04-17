@@ -26,12 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.shared.generated.resources.kodee_privacy
-import kotlinconfapp.shared.generated.resources.privacy_policy_accept
-import kotlinconfapp.shared.generated.resources.privacy_policy_back
-import kotlinconfapp.shared.generated.resources.privacy_policy_description
-import kotlinconfapp.shared.generated.resources.privacy_policy_read_action
-import kotlinconfapp.shared.generated.resources.privacy_policy_reject
-import kotlinconfapp.shared.generated.resources.privacy_policy_title
+import kotlinconfapp.shared.generated.resources.privacy_notice_accept
+import kotlinconfapp.shared.generated.resources.privacy_notice_back
+import kotlinconfapp.shared.generated.resources.privacy_notice_description
+import kotlinconfapp.shared.generated.resources.privacy_notice_read_action
+import kotlinconfapp.shared.generated.resources.privacy_notice_reject
+import kotlinconfapp.shared.generated.resources.privacy_notice_title
 import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.arrow_left_24
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
@@ -54,19 +54,19 @@ import kotlinconfapp.shared.generated.resources.Res as AppRes
 
 
 @Composable
-fun AppPrivacyPolicyPrompt(
-    onRejectPolicy: () -> Unit,
-    onAcceptPolicy: () -> Unit,
+fun AppPrivacyNoticePrompt(
+    onRejectNotice: () -> Unit,
+    onAcceptNotice: () -> Unit,
     onAppTermsOfUse: () -> Unit,
     confirmationRequired: Boolean,
-    viewModel: PrivacyPolicyViewModel = koinViewModel(),
+    viewModel: PrivacyNoticeViewModel = koinViewModel(),
 ) {
     var detailsVisible by rememberSaveable { mutableStateOf(false) }
-    val policyState by viewModel.policyState.collectAsState()
+    val noticeState by viewModel.state.collectAsState()
 
-    LaunchedEffect(policyState) {
-        if (policyState is PrivacyPolicyState.Done) {
-            onAcceptPolicy()
+    LaunchedEffect(noticeState) {
+        if (noticeState is PrivacyNoticeState.Done) {
+            onAcceptNotice()
         }
     }
 
@@ -84,11 +84,11 @@ fun AppPrivacyPolicyPrompt(
             if (detailsVis) {
                 Column {
                     MainHeaderTitleBar(
-                        stringResource(AppRes.string.privacy_policy_title),
+                        stringResource(AppRes.string.privacy_notice_title),
                         startContent = {
                             TopMenuButton(
                                 icon = Res.drawable.arrow_left_24,
-                                contentDescription = stringResource(AppRes.string.privacy_policy_back),
+                                contentDescription = stringResource(AppRes.string.privacy_notice_back),
                                 onClick = { detailsVisible = false },
                             )
                         }
@@ -102,7 +102,7 @@ fun AppPrivacyPolicyPrompt(
                     MarkdownView(
                         loadText = {
                             @OptIn(ExperimentalResourceApi::class)
-                            AppRes.readBytes("files/app-privacy-policy.md")
+                            AppRes.readBytes("files/app-privacy-notice.md")
                         },
                         modifier = Modifier.padding(horizontal = 12.dp).verticalScroll(scrollState),
                         onCustomUriClick = { uri ->
@@ -131,15 +131,15 @@ fun AppPrivacyPolicyPrompt(
                             .size(160.dp)
                     )
                     Text(
-                        stringResource(AppRes.string.privacy_policy_title),
+                        stringResource(AppRes.string.privacy_notice_title),
                         style = KotlinConfTheme.typography.h1
                     )
                     Text(
-                        stringResource(AppRes.string.privacy_policy_description),
+                        stringResource(AppRes.string.privacy_notice_description),
                         color = KotlinConfTheme.colors.longText,
                     )
                     Action(
-                        stringResource(AppRes.string.privacy_policy_read_action),
+                        stringResource(AppRes.string.privacy_notice_read_action),
                         icon = Res.drawable.arrow_right_24,
                         size = ActionSize.Large,
                         enabled = true,
@@ -155,16 +155,16 @@ fun AppPrivacyPolicyPrompt(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
         ) {
             Button(
-                label = stringResource(AppRes.string.privacy_policy_reject),
-                onClick = { onRejectPolicy() },
-                enabled = policyState !is PrivacyPolicyState.Loading,
+                label = stringResource(AppRes.string.privacy_notice_reject),
+                onClick = { onRejectNotice() },
+                enabled = noticeState !is PrivacyNoticeState.Loading,
             )
             Button(
-                label = stringResource(AppRes.string.privacy_policy_accept),
-                onClick = { viewModel.acceptPrivacyPolicy(confirmationRequired) },
+                label = stringResource(AppRes.string.privacy_notice_accept),
+                onClick = { viewModel.acceptPrivacyNotice(confirmationRequired) },
                 modifier = Modifier.weight(1f),
                 primary = true,
-                enabled = policyState !is PrivacyPolicyState.Loading,
+                enabled = noticeState !is PrivacyNoticeState.Loading,
             )
         }
     }

@@ -11,7 +11,7 @@ import org.jetbrains.kotlinconf.MarkdownScreenWithTitle
 @Composable
 fun AppTermsOfUse(
     onBack: () -> Unit,
-    onAppPrivacyPolicy: () -> Unit,
+    onAppPrivacyNotice: () -> Unit,
 ) {
     MarkdownScreenWithTitle(
         title = stringResource(Res.string.app_terms),
@@ -22,8 +22,8 @@ fun AppTermsOfUse(
         },
         onBack = onBack,
         onCustomUriClick = { uri ->
-            if (uri == "app-privacy-policy.md") {
-                onAppPrivacyPolicy()
+            if (uri == "app-privacy-notice.md") {
+                onAppPrivacyNotice()
             }
         }
     )

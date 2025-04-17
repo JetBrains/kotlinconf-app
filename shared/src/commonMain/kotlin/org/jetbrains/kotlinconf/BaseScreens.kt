@@ -68,7 +68,6 @@ fun ScreenWithTitle(
 fun MarkdownScreenWithTitle(
     title: String,
     header: String,
-    subheader: String = "",
     loadText: suspend () -> ByteArray,
     onBack: () -> Unit,
     onCustomUriClick: (String) -> Unit = {},
@@ -79,14 +78,6 @@ fun MarkdownScreenWithTitle(
     ScreenWithTitle(title, onBack, contentScrollState = scrollState) {
         if (header.isNotEmpty()) {
             Text(header, style = KotlinConfTheme.typography.h1, modifier = Modifier.padding(top = 24.dp, bottom = 12.dp))
-        }
-
-        if (subheader.isNotEmpty()) {
-            Text(
-                subheader,
-                style = KotlinConfTheme.typography.text2,
-                color = KotlinConfTheme.colors.noteText,
-            )
         }
 
         MarkdownView(loadText, modifier = Modifier.padding(vertical = 12.dp), onCustomUriClick = onCustomUriClick)

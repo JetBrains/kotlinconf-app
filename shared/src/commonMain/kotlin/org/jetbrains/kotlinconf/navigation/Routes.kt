@@ -27,28 +27,28 @@ data object InfoScreen
 data object StartScreens
 
 @Serializable
-@SerialName("WelcomePrivacyPolicy")
-data object StartPrivacyPolicyScreen
+@SerialName("WelcomePrivacyNotice")
+data object StartPrivacyNoticeScreen
 
 @Serializable
 @SerialName("WelcomeSetupNotifications")
 data object StartNotificationsScreen
 
 @Serializable
-@SerialName("AppPrivacyPolicyPrompt")
-data object AppPrivacyPolicyPrompt
+@SerialName("AppPrivacyNoticePrompt")
+data object AppPrivacyNoticePrompt
 
 @Serializable
 @SerialName("Settings")
 data object SettingsScreen
 
 @Serializable
-@SerialName("VisitorPrivacyPolicy")
-data object VisitorPrivacyPolicyScreen
+@SerialName("VisitorPrivacyNotice")
+data object VisitorPrivacyNoticeScreen
 
 @Serializable
-@SerialName("AppPrivacyPolicy")
-data object AppPrivacyPolicyScreen
+@SerialName("AppPrivacyNotice")
+data object AppPrivacyNoticeScreen
 
 @Serializable
 @SerialName("TermsOfUse")

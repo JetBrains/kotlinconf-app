@@ -266,7 +266,7 @@ internal fun MainHeaderPreview() {
 
         // Example with back action
         MainHeaderTitleBar(
-            title = "Privacy policy",
+            title = "Privacy notice",
             startContent = {
                 TopMenuButton(
                     icon = Res.drawable.arrow_left_24,

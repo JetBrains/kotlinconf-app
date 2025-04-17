@@ -176,7 +176,7 @@ class ConferenceService(
         storage.setOnboardingComplete(true)
     }
 
-    suspend fun acceptPrivacyPolicy(): Boolean {
+    suspend fun acceptPrivacyNotice(): Boolean {
         val userId = storage.getUserId().first()
         if (userId != null) return true
 
@@ -185,9 +185,9 @@ class ConferenceService(
         return registerUser(generatedUserId)
     }
 
-    fun acceptPrivacyPolicyAsync() {
+    fun acceptPrivacyNoticeAsync() {
         scope.launch {
-            acceptPrivacyPolicy()
+            acceptPrivacyNotice()
         }
     }
 

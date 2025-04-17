@@ -21,8 +21,8 @@ class SessionViewModel(
     private val sessionId: SessionId,
 ) : ViewModel() {
 
-    private val _navigateToPrivacyPolicy = MutableStateFlow(false)
-    val navigateToPrivacyPolicy: StateFlow<Boolean> = _navigateToPrivacyPolicy.asStateFlow()
+    private val _navigateToPrivacyNotice = MutableStateFlow(false)
+    val navigateToPrivacyNotice: StateFlow<Boolean> = _navigateToPrivacyNotice.asStateFlow()
 
     val session: StateFlow<SessionCardView?> = service.sessionByIdFlow(sessionId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
@@ -45,7 +45,7 @@ class SessionViewModel(
             if (service.canVote()) {
                 service.vote(sessionId, emotion?.toScore())
             } else {
-                _navigateToPrivacyPolicy.value = true
+                _navigateToPrivacyNotice.value = true
             }
         }
     }
@@ -56,13 +56,13 @@ class SessionViewModel(
                 service.vote(sessionId, emotion.toScore())
                 service.sendFeedback(sessionId, comment)
             } else {
-                _navigateToPrivacyPolicy.value = true
+                _navigateToPrivacyNotice.value = true
             }
         }
     }
 
-    fun onNavigatedToPrivacyPolicy() {
-        _navigateToPrivacyPolicy.value = false
+    fun onNavigatedToPrivacyNotice() {
+        _navigateToPrivacyNotice.value = false
     }
 
     private fun Emotion.toScore() = when (this) {

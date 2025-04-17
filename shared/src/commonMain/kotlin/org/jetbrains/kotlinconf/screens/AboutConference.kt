@@ -28,7 +28,7 @@ import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.about_conference_description
 import kotlinconfapp.shared.generated.resources.about_conference_general_terms_link
 import kotlinconfapp.shared.generated.resources.about_conference_header
-import kotlinconfapp.shared.generated.resources.about_conference_privacy_policy_link
+import kotlinconfapp.shared.generated.resources.about_conference_privacy_notice_link
 import kotlinconfapp.shared.generated.resources.about_conference_title
 import kotlinconfapp.shared.generated.resources.about_conference_website_link
 import kotlinconfapp.shared.generated.resources.arrow_up_right_24
@@ -50,7 +50,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AboutConference(
-    onPrivacyPolicy: () -> Unit,
+    onPrivacyNotice: () -> Unit,
     onGeneralTerms: () -> Unit,
     onWebsiteLink: () -> Unit,
     onBack: () -> Unit,
@@ -110,8 +110,8 @@ fun AboutConference(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             PageMenuItem(
-                label = stringResource(Res.string.about_conference_privacy_policy_link),
-                onClick = onPrivacyPolicy,
+                label = stringResource(Res.string.about_conference_privacy_notice_link),
+                onClick = onPrivacyNotice,
             )
             PageMenuItem(
                 label = stringResource(Res.string.about_conference_general_terms_link),
