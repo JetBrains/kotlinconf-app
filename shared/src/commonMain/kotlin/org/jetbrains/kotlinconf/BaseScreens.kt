@@ -37,7 +37,7 @@ fun ScreenWithTitle(
         modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding() + bottomInsetPadding())
+            .padding(topInsetPadding())
     ) {
         MainHeaderTitleBar(
             title = title,
@@ -58,6 +58,7 @@ fun ScreenWithTitle(
                 .background(color = KotlinConfTheme.colors.mainBackground)
                 .padding(horizontal = 12.dp)
                 .verticalScroll(contentScrollState)
+                .padding(bottomInsetPadding())
         ) {
             content()
         }
