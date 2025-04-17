@@ -139,6 +139,7 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             onPrivacyPolicy = { navController.navigate(AppPrivacyPolicyScreen) },
             onTermsOfUse = { navController.navigate(AppTermsOfUseScreen) },
             onLicenses = { navController.navigate(LicensesScreen) },
+            onJunie = { uriHandler.openUri(URLs.JUNIE_LANDING_PAGE) },
             onDeveloperMenu = { navController.navigate(DeveloperMenuScreen) },
         )
     }

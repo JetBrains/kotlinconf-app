@@ -51,6 +51,7 @@ fun AboutAppScreen(
     onPrivacyPolicy: () -> Unit,
     onTermsOfUse: () -> Unit,
     onLicenses: () -> Unit,
+    onJunie: () -> Unit,
     onDeveloperMenu: () -> Unit = {},
 ) {
     ScreenWithTitle(
@@ -112,6 +113,9 @@ fun AboutAppScreen(
                 imageVector = vectorResource(Res.drawable.made_with_junie),
                 contentDescription = stringResource(Res.string.about_app_made_with_junie),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable { onJunie() }
+                    .padding(8.dp)
             )
         }
     }
