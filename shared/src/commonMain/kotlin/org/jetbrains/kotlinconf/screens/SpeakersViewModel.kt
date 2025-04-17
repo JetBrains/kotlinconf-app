@@ -12,20 +12,18 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.Speaker
-import org.jetbrains.kotlinconf.utils.containsDiacritics
-import org.jetbrains.kotlinconf.utils.removeDiacritics
+import org.jetbrains.kotlinconf.utils.performSearch
 
 data class SpeakerWithHighlights(
     val speaker: Speaker,
-    val nameHighlights: List<IntRange>,
-    val titleHighlights: List<IntRange>,
+    val nameHighlights: List<IntRange> = emptyList(),
+    val titleHighlights: List<IntRange> = emptyList(),
 )
 
 sealed class SpeakersUiState {
     data object Loading : SpeakersUiState()
     data object Error : SpeakersUiState()
     data class Content(val speakers: List<SpeakerWithHighlights>) : SpeakersUiState()
-    data object NoSearchResults : SpeakersUiState()
 }
 
 class SpeakersViewModel(
@@ -56,7 +54,7 @@ class SpeakersViewModel(
             loading -> SpeakersUiState.Loading
 
             searchText.isBlank() -> {
-                val allSpeakers = speakers.map { SpeakerWithHighlights(it, emptyList(), emptyList()) }
+                val allSpeakers = speakers.map { SpeakerWithHighlights(it) }
                 if (allSpeakers.isNotEmpty()) {
                     SpeakersUiState.Content(allSpeakers)
                 } else {
@@ -65,27 +63,14 @@ class SpeakersViewModel(
             }
 
             else -> {
-                val searchResults = speakers.mapNotNull {
-                    // Look for exact matches if diacritics are present, ignore all diacritics otherwise
-                    val diacriticsSearch = searchText.containsDiacritics()
-                    val targetName = if (diacriticsSearch) it.name else it.name.removeDiacritics()
-                    val targetPosition = if (diacriticsSearch) it.position else it.position.removeDiacritics()
-                    val searchPattern = searchText.toRegex(RegexOption.IGNORE_CASE)
-
-                    val nameMatches = searchPattern.findAll(targetName).map { it.range }.toList()
-                    val titleMatches = searchPattern.findAll(targetPosition).map { it.range }.toList()
-
-                    if (nameMatches.isNotEmpty() || titleMatches.isNotEmpty()) {
-                        SpeakerWithHighlights(it, nameMatches, titleMatches)
-                    } else {
-                        null
-                    }
-                }
-                if (searchResults.isNotEmpty()) {
-                    SpeakersUiState.Content(searchResults)
-                } else {
-                    SpeakersUiState.NoSearchResults
-                }
+                val searchResults = speakers.performSearch(
+                    searchText = searchText,
+                    produceResult = { speaker, (nameMatches, titleMatches) ->
+                        SpeakerWithHighlights(speaker, nameMatches, titleMatches)
+                    },
+                    selectors = listOf({ it.name }, { it.position }),
+                )
+                SpeakersUiState.Content(searchResults)
             }
         }
     }

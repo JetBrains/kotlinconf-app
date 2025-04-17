@@ -2,10 +2,7 @@ package org.jetbrains.kotlinconf.screens
 
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,10 +34,12 @@ import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.semantics.CollectionInfo
 import androidx.compose.ui.semantics.CollectionItemInfo
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.collectionInfo
 import androidx.compose.ui.semantics.collectionItemInfo
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -50,12 +49,13 @@ import kotlinconfapp.shared.generated.resources.nav_destination_schedule
 import kotlinconfapp.shared.generated.resources.schedule_action_filter_bookmarked
 import kotlinconfapp.shared.generated.resources.schedule_action_search
 import kotlinconfapp.shared.generated.resources.schedule_error_no_data
-import kotlinconfapp.shared.generated.resources.schedule_error_no_results
 import kotlinconfapp.shared.generated.resources.schedule_in_x_minutes
 import kotlinconfapp.shared.generated.resources.schedule_label_no_bookmarks
+import kotlinconfapp.shared.generated.resources.schedule_number_of_results
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.DayValues
 import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
@@ -70,12 +70,12 @@ import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.Emotion
+import org.jetbrains.kotlinconf.ui.components.FilterItem
 import org.jetbrains.kotlinconf.ui.components.Filters
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
-import org.jetbrains.kotlinconf.ui.components.MinorError
 import org.jetbrains.kotlinconf.ui.components.NormalErrorWithLoading
 import org.jetbrains.kotlinconf.ui.components.NowButton
 import org.jetbrains.kotlinconf.ui.components.NowButtonState
@@ -118,8 +118,14 @@ fun ScheduleScreen(
     }
 
     var headerState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
-    val isSearch = remember(headerState) {
-        headerState == MainHeaderContainerState.Search
+    val isSearch = rememberSaveable(headerState) { headerState == MainHeaderContainerState.Search }
+
+    LaunchedEffect(headerState, searchQuery) {
+        if (listState.firstVisibleItemIndex > 1) {
+            listState.scrollToItem(0)
+        } else {
+            listState.animateScrollToItem(0)
+        }
     }
 
     val params = ScheduleSearchParams(
@@ -181,100 +187,69 @@ fun ScheduleScreen(
                     val items = targetState.items
 
                     Column(Modifier.fillMaxSize()) {
-                        AnimatedContent(
-                            isSearch,
-                            transitionSpec = {
-                                fadeIn(
-                                    animationSpec = tween(
-                                        90,
-                                        delayMillis = 40
-                                    )
-                                ).togetherWith(fadeOut(animationSpec = tween(40)))
+                        AnimatedVisibility(!isSearch) {
+                            // Day switcher selection state calculated from the scroll state
+                            val conferenceDates = days.map { it.date }
+                            val computedDayIndex by derivedStateOf {
+                                items.asSequence()
+                                    .take(listState.firstVisibleItemIndex + 1)
+                                    .findLast { it is DayHeaderItem }
+                                    ?.let {
+                                        val visibleDate = (it as DayHeaderItem).value.date
+                                        conferenceDates.indexOf(visibleDate)
+                                    } ?: 0
+                            }
+                            // Override for the day switcher selection
+                            var targetDayIndex by remember { mutableStateOf<Int?>(null) }
+                            val selectedDayIndex = targetDayIndex ?: computedDayIndex
+
+                            Switcher(
+                                items = remember(conferenceDates) {
+                                    conferenceDates.map { DateTimeFormatting.date(it) }
+                                },
+                                selectedIndex = selectedDayIndex,
+                                onSelect = { index ->
+                                    scope.launch {
+                                        val dayItemIndex = items.indexOf(DayHeaderItem(days[index]))
+                                        // Temporarily override the scroll state based selection
+                                        targetDayIndex = index
+                                        // Scroll to the item
+                                        listState.animateScrollToItem(dayItemIndex)
+                                        // Remove override, let scroll state determine the selection
+                                        targetDayIndex = null
+                                    }
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                            )
+                        }
+
+                        val tags by viewModel.filterItems.collectAsState()
+                        ScheduleList(
+                            scheduleItems = items,
+                            onSession = onSession,
+                            listState = listState,
+                            userSignedIn = targetState.userSignedIn,
+                            isSearch = isSearch,
+                            onSubmitFeedback = { sessionId, emotion ->
+                                viewModel.onSubmitFeedback(sessionId, emotion)
                             },
-                        ) { isSearch ->
-                            if (isSearch) {
-                                val tags by viewModel.filterItems.collectAsState()
-                                Filters(
-                                    tags = tags,
-                                    toggleItem = { item, selected -> viewModel.toggleFilter(item, selected) },
-                                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 12.dp),
-                                )
+                            onSubmitFeedbackWithComment = { sessionId, emotion, comment ->
+                                viewModel.onSubmitFeedbackWithComment(sessionId, emotion, comment)
+                            },
+                            onRequestFeedbackWithComment = if (LocalFlags.current.redirectFeedbackToSessionPage) {
+                                onRequestFeedbackWithComment
                             } else {
-                                // Day switcher selection state calculated from the scroll state
-                                val conferenceDates = days.map { it.date }
-                                val computedDayIndex by derivedStateOf {
-                                    val i = items.asSequence()
-                                        .take(listState.firstVisibleItemIndex + 1)
-                                        .findLast { it is DayHeaderItem }
-                                        ?.let {
-                                            val visibleDate = (it as DayHeaderItem).value.date
-                                            conferenceDates.indexOf(visibleDate)
-                                        } ?: 0
-                                    i
-                                }
-                                // Override for the day switcher selection
-                                var targetDayIndex by remember { mutableStateOf<Int?>(null) }
-                                val selectedDayIndex = targetDayIndex ?: computedDayIndex
-
-                                Switcher(
-                                    items = remember(conferenceDates) {
-                                        conferenceDates.map { DateTimeFormatting.date(it) }
-                                    },
-                                    selectedIndex = selectedDayIndex,
-                                    onSelect = { index ->
-                                        scope.launch {
-                                            val dayItemIndex = items.indexOf(DayHeaderItem(days[index]))
-                                            // Temporarily override the scroll state based selection
-                                            targetDayIndex = index
-                                            // Scroll to the item
-                                            listState.animateScrollToItem(dayItemIndex)
-                                            // Remove override, let scroll state determine the selection
-                                            targetDayIndex = null
-                                        }
-                                    },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 12.dp, vertical = 8.dp)
-                                )
-                            }
-                        }
-
-                        AnimatedContent(
-                            targetState = items.isNotEmpty(),
-                            transitionSpec = { FadingAnimationSpec },
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier.weight(1f),
-                        ) { hasItems ->
-                            if (hasItems) {
-                                ScheduleList(
-                                    scheduleItems = items,
-                                    onSession = onSession,
-                                    listState = listState,
-                                    userSignedIn = targetState.userSignedIn,
-                                    isSearch = isSearch,
-                                    onSubmitFeedback = { sessionId, emotion ->
-                                        viewModel.onSubmitFeedback(sessionId, emotion)
-                                    },
-                                    onSubmitFeedbackWithComment = { sessionId, emotion, comment ->
-                                        viewModel.onSubmitFeedbackWithComment(sessionId, emotion, comment)
-                                    },
-                                    onRequestFeedbackWithComment = if (LocalFlags.current.redirectFeedbackToSessionPage) {
-                                        onRequestFeedbackWithComment
-                                    } else {
-                                        null
-                                    },
-                                    onBookmark = { sessionId, isBookmarked ->
-                                        viewModel.onBookmark(sessionId, isBookmarked)
-                                    },
-                                    modifier = Modifier.fillMaxSize().clipToBounds()
-                                )
-                            } else {
-                                MinorError(
-                                    message = stringResource(Res.string.schedule_error_no_results),
-                                    modifier = Modifier.fillMaxSize(),
-                                )
-                            }
-                        }
+                                null
+                            },
+                            onBookmark = { sessionId, isBookmarked ->
+                                viewModel.onBookmark(sessionId, isBookmarked)
+                            },
+                            filterItems = tags,
+                            onToggleFilter = { item, selected -> viewModel.toggleFilter(item, selected) },
+                            modifier = Modifier.fillMaxSize().clipToBounds()
+                        )
                     }
                 }
 
@@ -414,6 +389,8 @@ private fun ScheduleList(
     onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
     onRequestFeedbackWithComment: ((SessionId) -> Unit)?,
     onBookmark: (SessionId, Boolean) -> Unit,
+    filterItems: List<FilterItem> = emptyList(),
+    onToggleFilter: (FilterItem, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier,
 ) {
     ScrollToTopHandler(listState)
@@ -423,6 +400,32 @@ private fun ScheduleList(
         state = listState,
         modifier = modifier,
     ) {
+        if (isSearch) {
+            item(key = "filters") {
+                Filters(
+                    tags = filterItems,
+                    toggleItem = onToggleFilter,
+                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 12.dp),
+                )
+            }
+            item(key = "item-count") {
+                Text(
+                    text = pluralStringResource(
+                        Res.plurals.schedule_number_of_results,
+                        scheduleItems.size,
+                        scheduleItems.size
+                    ),
+                    color = KotlinConfTheme.colors.secondaryText,
+                    style = KotlinConfTheme.typography.text2,
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp)
+                        .padding(bottom = 4.dp)
+                        .semantics { liveRegion = LiveRegionMode.Polite }
+                        .animateItem()
+                )
+            }
+        }
+
         items(
             scheduleItems,
             key = {
@@ -450,9 +453,7 @@ private fun ScheduleList(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 8.dp)
-                                .semantics {
-                                    heading()
-                                }
+                                .semantics { heading() }
                         )
                     }
 

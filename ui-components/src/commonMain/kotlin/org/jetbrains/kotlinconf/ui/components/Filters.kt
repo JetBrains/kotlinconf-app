@@ -1,9 +1,10 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
@@ -23,21 +24,22 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -46,10 +48,12 @@ import kotlinconfapp.ui_components.generated.resources.Res
 import kotlinconfapp.ui_components.generated.resources.action_state_description_collapsed
 import kotlinconfapp.ui_components.generated.resources.action_state_description_expanded
 import kotlinconfapp.ui_components.generated.resources.filter_by_tags
+import kotlinconfapp.ui_components.generated.resources.filter_by_tags_tag_count
 import kotlinconfapp.ui_components.generated.resources.filter_label_category
 import kotlinconfapp.ui_components.generated.resources.filter_label_level
 import kotlinconfapp.ui_components.generated.resources.filter_label_session_format
 import kotlinconfapp.ui_components.generated.resources.up_24
+import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -71,18 +75,19 @@ fun Filters(
     toggleItem: (FilterItem, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
-            .background(KotlinConfTheme.colors.tileBackground)
-            .verticalScroll(rememberScrollState()),
+            .background(KotlinConfTheme.colors.tileBackground),
     ) {
         val stateDesc = stringResource(
             if (isExpanded) Res.string.action_state_description_expanded
             else Res.string.action_state_description_collapsed
         )
+        val filterByTagsText = stringResource(Res.string.filter_by_tags)
+
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -99,10 +104,12 @@ fun Filters(
                 .fillMaxWidth()
                 .semantics {
                     stateDescription = stateDesc
+                    contentDescription = filterByTagsText
                 }
         ) {
             val iconRotation by animateFloatAsState(if (isExpanded) 0f else 180f)
             Action(
+                modifier = Modifier.clearAndSetSemantics {},
                 label = stringResource(Res.string.filter_by_tags),
                 icon = Res.drawable.up_24,
                 size = ActionSize.Medium,
@@ -111,8 +118,9 @@ fun Filters(
                 iconRotation = iconRotation,
             )
 
+            val count = remember(tags) { tags.count { it.isSelected } }
             AnimatedVisibility(
-                visible = !isExpanded,
+                visible = !isExpanded && count > 0,
                 enter = fadeIn() + expandHorizontally(clip = false, expandFrom = Alignment.Start),
                 exit = fadeOut() + shrinkHorizontally(clip = false, shrinkTowards = Alignment.Start),
             ) {
@@ -124,11 +132,14 @@ fun Filters(
                             .clip(CircleShape)
                             .background(KotlinConfTheme.colors.primaryBackground)
                     ) {
-                        val count = remember(tags) { tags.count { it.isSelected } }
+                        val tagCountContentDescription = pluralStringResource(Res.plurals.filter_by_tags_tag_count, count, count)
                         Text(
                             text = count.toString(),
                             color = KotlinConfTheme.colors.primaryTextInverted,
                             style = KotlinConfTheme.typography.text2,
+                            modifier = Modifier.semantics {
+                                contentDescription = tagCountContentDescription
+                            }
                         )
                     }
                 }
@@ -137,7 +148,7 @@ fun Filters(
 
         AnimatedVisibility(
             visible = isExpanded,
-            enter = fadeIn() + expandVertically(clip = false, expandFrom = Alignment.Top),
+            enter = fadeIn(spring(stiffness = Spring.StiffnessLow)),
             exit = fadeOut() + shrinkVertically(clip = false, shrinkTowards = Alignment.Top),
         ) {
             Column(
@@ -149,13 +160,11 @@ fun Filters(
                     items = remember(tags) { tags.filter { it.type == FilterItemType.Category } },
                     toggle = toggleItem,
                 )
-
                 FilterItemGroup(
                     title = stringResource(Res.string.filter_label_level),
                     items = remember(tags) { tags.filter { it.type == FilterItemType.Level } },
                     toggle = toggleItem,
                 )
-
                 FilterItemGroup(
                     title = stringResource(Res.string.filter_label_session_format),
                     items = remember(tags) { tags.filter { it.type == FilterItemType.Format } },
