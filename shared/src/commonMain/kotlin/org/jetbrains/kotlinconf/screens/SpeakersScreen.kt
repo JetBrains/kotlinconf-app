@@ -1,9 +1,11 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.EaseInOutQuad
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -59,11 +61,22 @@ import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
+import org.jetbrains.kotlinconf.ui.components.KodeeIconLarge
+import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.absoluteValue
+import kotlin.math.sin
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateListOf
 import kotlinconfapp.ui_components.generated.resources.Res as UiRes
+import kotlin.random.Random
 
 @Composable
 fun SpeakersScreen(
@@ -128,7 +141,10 @@ fun SpeakersScreen(
         ) { targetState ->
             when (targetState) {
                 is SpeakersUiState.Content -> {
-                    SpeakerGrid(targetState, onSpeaker)
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        SpeakerCarousel(targetState, onSpeaker)
+//                        KodeeRain()
+                    }
                 }
 
                 SpeakersUiState.Error, SpeakersUiState.Loading -> {
@@ -178,7 +194,6 @@ private fun SpeakerGrid(
         }
     }
 }
-
 
 @Composable
 private fun SpeakerCarousel(
@@ -292,5 +307,93 @@ internal fun buildHighlightedString(
                 )
             }
         }
+    }
+}
+
+
+// Data class to represent a falling Kodee icon
+private data class KodeeDroplet(
+    val id: Int,
+    val initialX: Float,
+    val speed: Float,
+    val size: Float,
+    val emotion: Emotion,
+    val selected: Boolean,
+    val rotationDirection: Float, // Direction and intensity of rotation
+    val rotationSpeed: Float, // Speed of rotation
+    val phaseOffset: Float // Phase offset for continuous falling (0.0f to 1.0f)
+)
+
+@Composable
+private fun KodeeRain() {
+    // Create a list of falling Kodee icons
+    val kodeeDroplets = remember {
+        mutableStateListOf<KodeeDroplet>().apply {
+            // Create 12 Kodee icons with random properties for better distribution
+            repeat(40) { index ->
+                add(
+                    KodeeDroplet(
+                        id = index,
+                        // Better distribution across the screen width
+                        initialX = (Random.nextFloat() * 400f - 200f), // Random X position between -200 and 200
+                        // More varied speeds for natural falling effect
+                        speed = Random.nextFloat() * 3f + 0.7f, // Random speed between 0.7 and 3.7
+                        // More varied sizes for visual interest
+                        size = Random.nextFloat() * 50f + 50f, // Random size between 50 and 100
+                        // Mostly positive emotions with some variety
+                        emotion = when (Random.nextInt(5)) {
+                            0 -> Emotion.Neutral
+                            1 -> Emotion.Negative
+                            else -> Emotion.Positive
+                        },
+                        // Mostly selected (colored) Kodees
+                        selected = Random.nextFloat() > 0.3f, // 70% chance of being selected
+                        // Random rotation direction (-20 to 20 degrees)
+                        rotationDirection = Random.nextFloat() * 40f - 20f,
+                        // Random rotation speed (0.5 to 1.5)
+                        rotationSpeed = Random.nextFloat() + 0.5f,
+                        // Random phase offset (0.0f to 1.0f) for continuous falling
+                        phaseOffset = Random.nextFloat()
+                    )
+                )
+            }
+        }
+    }
+
+    // Create an infinite animation for vertical movement (falling)
+    val infiniteTransition = rememberInfiniteTransition()
+
+    // Vertical falling animation - slower for more gentle falling effect
+    val verticalOffset = infiniteTransition.animateFloat(
+        initialValue = -300f, // Start higher above the screen
+        targetValue = 1200f, // Move further beyond the screen height
+        animationSpec = infiniteRepeatable(
+            animation = tween(15000, easing = EaseInOutQuad), // 15 seconds to fall for a gentler effect
+            repeatMode = RepeatMode.Restart
+        )
+    )
+
+    // Overlay multiple falling Kodee icons on top of the list
+    kodeeDroplets.forEach { kodee ->
+        KodeeIconLarge(
+            emotion = kodee.emotion,
+            selected = kodee.selected,
+            modifier = Modifier
+                .fillMaxWidth()
+                .graphicsLayer {
+                    // Calculate the adjusted vertical position based on phase offset
+                    // This creates a continuous stream of falling Kodees
+                    val animationRange = 1500f // Total animation range (from -300 to 1200)
+                    val adjustedVerticalPosition =
+                        (verticalOffset.value + animationRange * kodee.phaseOffset) % animationRange - 300f
+
+                    translationX = kodee.initialX
+                    translationY = adjustedVerticalPosition * kodee.speed
+                    scaleX = kodee.size / 100f
+                    scaleY = kodee.size / 100f
+                    // Apply rotation based on vertical position for a natural swinging effect
+                    rotationZ = kodee.rotationDirection * sin(adjustedVerticalPosition * 0.01f * kodee.rotationSpeed)
+                }
+        )
     }
 }
