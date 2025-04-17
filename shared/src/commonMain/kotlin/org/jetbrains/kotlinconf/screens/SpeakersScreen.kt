@@ -72,6 +72,8 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.StartOffset
+import androidx.compose.animation.core.StartOffsetType
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateListOf
@@ -142,8 +144,7 @@ fun SpeakersScreen(
             when (targetState) {
                 is SpeakersUiState.Content -> {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        SpeakerCarousel(targetState, onSpeaker)
-//                        KodeeRain()
+                        SpeakerGrid(targetState, onSpeaker)
                     }
                 }
 
@@ -200,7 +201,7 @@ private fun SpeakerCarousel(
     targetState: SpeakersUiState.Content,
     onSpeaker: (SpeakerId) -> Unit
 ) {
-    val pagerState = rememberPagerState(0, pageCount = { targetState.speakers.size })
+    val pagerState = rememberPagerState(27, pageCount = { targetState.speakers.size })
     HorizontalPager(
         state = pagerState,
         modifier = Modifier
@@ -369,7 +370,8 @@ private fun KodeeRain() {
         targetValue = 1200f, // Move further beyond the screen height
         animationSpec = infiniteRepeatable(
             animation = tween(15000, easing = EaseInOutQuad), // 15 seconds to fall for a gentler effect
-            repeatMode = RepeatMode.Restart
+            repeatMode = RepeatMode.Restart,
+            initialStartOffset = StartOffset(2000, offsetType = StartOffsetType.FastForward)
         )
     )
 

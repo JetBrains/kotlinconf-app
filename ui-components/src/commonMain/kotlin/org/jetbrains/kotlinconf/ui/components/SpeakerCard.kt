@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -74,7 +75,7 @@ fun SpeakerAvatar(
             .build(),
         contentDescription = null,
         modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(CircleShape)
             .background(KotlinConfTheme.colors.tileBackground),
         contentScale = ContentScale.Crop,
         error = painterResource(Res.drawable.kodee_emotion_neutral),
