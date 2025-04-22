@@ -271,30 +271,8 @@ private fun NowButtonContent(state: ScheduleUiState, listState: LazyListState) {
     if (state !is ScheduleUiState.Content) return
 
     val scope = rememberCoroutineScope()
-
-    val firstActiveIndex = state.firstActiveIndex
-    val lastActiveIndex = state.lastActiveIndex
     var nowScrolling by remember { mutableStateOf(false) }
-
-    val nowButtonState = derivedStateOf {
-        when {
-            nowScrolling -> NowButtonState.Current
-
-            firstActiveIndex == -1 || lastActiveIndex == -1 -> null
-
-            else -> {
-                val firstMostlyVisible = listState.firstVisibleItemIndex +
-                        (if (listState.firstVisibleItemScrollOffset > 50) 1 else 0)
-                val lastFullyVisible = listState.lastVisibleItemIndex - 1
-
-                when {
-                    lastFullyVisible < firstActiveIndex -> NowButtonState.Before
-                    firstMostlyVisible > lastActiveIndex -> NowButtonState.After
-                    else -> NowButtonState.Current
-                }
-            }
-        }
-    }.value
+    val nowButtonState = derivedStateOf { computeNowButtonState(state, listState, nowScrolling) }.value
 
     if (nowButtonState != null) {
         NowButton(
@@ -303,7 +281,7 @@ private fun NowButtonContent(state: ScheduleUiState, listState: LazyListState) {
                 scope.launch {
                     nowScrolling = true
                     try {
-                        listState.animateScrollToItem(firstActiveIndex)
+                        listState.animateScrollToItem(state.firstActiveIndex)
                     } finally {
                         nowScrolling = false
                     }
@@ -311,6 +289,36 @@ private fun NowButtonContent(state: ScheduleUiState, listState: LazyListState) {
             }
         )
     }
+}
+
+private fun computeNowButtonState(
+    state: ScheduleUiState.Content,
+    listState: LazyListState,
+    nowScrolling: Boolean,
+): NowButtonState? {
+    if (nowScrolling) return NowButtonState.Current
+
+    val firstActiveIndex = state.firstActiveIndex
+    val lastActiveIndex = state.lastActiveIndex
+
+    if (firstActiveIndex == -1 || lastActiveIndex == -1) return null
+
+    val firstVisible = listState.firstVisibleItemIndex
+    val lastVisible = listState.lastVisibleItemIndex
+
+    if (firstVisible == -1 || lastVisible == -1) return null
+
+    val lastFullyVisible = lastVisible - 1
+    if (lastFullyVisible < firstActiveIndex) {
+        return NowButtonState.Before
+    }
+
+    val firstMostlyVisible = firstVisible + (if (listState.firstVisibleItemScrollOffset > 50) 1 else 0)
+    if (firstMostlyVisible > lastActiveIndex) {
+        return NowButtonState.After
+    }
+
+    return NowButtonState.Current
 }
 
 private val LazyListState.lastVisibleItemIndex
@@ -332,7 +340,7 @@ private fun Header(
         state = headerState,
         titleContent = {
             MainHeaderTitleBar(
-                title = if ( LocalFlags.current.useFakeTime) {
+                title = if (LocalFlags.current.useFakeTime) {
                     val dateTime by koinInject<TimeProvider>().time.collectAsStateWithLifecycle()
                     "Fake time: ${DateTimeFormatting.dateAndTime(dateTime)}"
                 } else {
@@ -501,7 +509,7 @@ private fun ScheduleList(
                                                 rowCount = 1,
                                                 columnCount = workshops.size
                                             )
-                                    },
+                                        },
                                     beyondViewportPageCount = 1,
                                     contentPadding = PaddingValues(horizontal = 24.dp),
                                 ) { pageIndex ->
