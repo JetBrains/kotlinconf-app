@@ -120,11 +120,25 @@ fun ScheduleScreen(
     var headerState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
     val isSearch = rememberSaveable(headerState) { headerState == MainHeaderContainerState.Search }
 
-    LaunchedEffect(headerState, searchQuery) {
-        if (listState.firstVisibleItemIndex > 1) {
-            listState.scrollToItem(0)
+    var firstScrollPerformed by rememberSaveable(isSearch, searchQuery) { mutableStateOf(false) }
+
+    if (!firstScrollPerformed) {
+        if (isSearch) {
+            LaunchedEffect(searchQuery) {
+                if (listState.firstVisibleItemIndex > 1) {
+                    listState.scrollToItem(0)
+                } else {
+                    listState.animateScrollToItem(0)
+                }
+                firstScrollPerformed = true
+            }
         } else {
-            listState.animateScrollToItem(0)
+            LaunchedEffect(state) {
+                if (state is ScheduleUiState.Content && state.firstActiveIndex != -1) {
+                    listState.scrollToItem(state.firstActiveIndex)
+                    firstScrollPerformed = true
+                }
+            }
         }
     }
 
@@ -135,17 +149,6 @@ fun ScheduleScreen(
     )
     LaunchedEffect(params) {
         viewModel.setSearchParams(params)
-    }
-
-    // Scroll to first live event on first content load
-    var firstScrollPerformed by rememberSaveable { mutableStateOf(false) }
-    if (!firstScrollPerformed) {
-        LaunchedEffect(state) {
-            if (state is ScheduleUiState.Content && state.firstActiveIndex != -1) {
-                listState.scrollToItem(state.firstActiveIndex)
-                firstScrollPerformed = true
-            }
-        }
     }
 
     Column(
