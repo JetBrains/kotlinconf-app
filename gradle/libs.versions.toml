@@ -9,14 +9,15 @@ androidx-activityCompose = "1.10.1"
 androidx-core-ktx = "1.15.0"
 androidx-core-splashscreen = "1.0.1"
 androidx-espresso-core = "3.6.1"
-androidx-navigation = "2.9.0-alpha16"
+androidx-navigation = "2.9.0-alpha17"
+androidx-lifecycle = "2.9.0-alpha07"
 androidx-preference = "1.2.1"
 androidx-test-junit = "1.2.1"
 androidx-work-runtime = "2.10.0"
 coil = "3.1.0"
-compose-android = "1.8.0-rc02"
+compose-android = "1.8.0"
 compose-hot-reload = "1.0.0-alpha07"
-compose-multiplatform = "1.8.0-beta02"
+compose-multiplatform = "1.8.0-rc01"
 coroutines = "1.10.1"
 doistx-normalize = "1.2.0"
 exposed = "0.59.0"
@@ -43,6 +44,8 @@ androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-core-splashscreen" }
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-espresso-core" }
 androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
+androidx-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-preference = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preference" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }
 androidx-work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work-runtime" }
