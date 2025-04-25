@@ -170,6 +170,9 @@ private fun SpeakerGrid(
         state = listState,
         columns = GridCells.Fixed(1),
         modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(12.dp)
     ) {
         items(targetState.speakers, key = { it.speaker.id.id }) { speakerWithHighlights ->
             val speaker = speakerWithHighlights.speaker
