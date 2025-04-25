@@ -143,7 +143,8 @@ fun SpeakersScreen(
             when (targetState) {
                 is SpeakersUiState.Content -> {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        SpeakerGrid(targetState, onSpeaker)
+                        SpeakerCarousel(targetState, onSpeaker)
+                        KodeeRain()
                     }
                 }
 
@@ -331,7 +332,7 @@ private fun KodeeRain() {
                     KodeeDroplet(
                         id = index,
                         // Better distribution across the screen width
-                        initialX = (Random.nextFloat() * 400f - 200f), // Random X position between -200 and 200
+                        initialX = (Random.nextFloat() * 1000f - 500f), // Random X position between -200 and 200
                         // More varied speeds for natural falling effect
                         speed = Random.nextFloat() * 3f + 0.7f, // Random speed between 0.7 and 3.7
                         // More varied sizes for visual interest
