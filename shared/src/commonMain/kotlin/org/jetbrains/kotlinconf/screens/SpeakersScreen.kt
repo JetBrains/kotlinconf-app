@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "DuplicatedCode")
 
 package org.jetbrains.kotlinconf.screens
 
@@ -55,7 +55,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.speakers_error_no_data
-import kotlinconfapp.shared.generated.resources.speakers_error_no_results
 import kotlinconfapp.shared.generated.resources.speakers_title
 import kotlinconfapp.ui_components.generated.resources.main_header_search_hint
 import kotlinconfapp.ui_components.generated.resources.search_24
@@ -68,7 +67,6 @@ import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
-import org.jetbrains.kotlinconf.ui.components.MinorError
 import org.jetbrains.kotlinconf.ui.components.NormalErrorWithLoading
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
