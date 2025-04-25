@@ -1,7 +1,16 @@
+@file:Suppress("unused")
+
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.EaseInOutQuad
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.StartOffset
+import androidx.compose.animation.core.StartOffsetType
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +34,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,6 +62,8 @@ import kotlinconfapp.ui_components.generated.resources.search_24
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.Emotion
+import org.jetbrains.kotlinconf.ui.components.KodeeIconLarge
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
@@ -61,24 +74,13 @@ import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
-import org.jetbrains.kotlinconf.ui.components.KodeeIconLarge
-import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.absoluteValue
 import kotlin.math.sin
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.StartOffset
-import androidx.compose.animation.core.StartOffsetType
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateListOf
-import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 import kotlin.random.Random
+import kotlinconfapp.ui_components.generated.resources.Res as UiRes
 
 @Composable
 fun SpeakersScreen(
@@ -136,7 +138,6 @@ fun SpeakersScreen(
                 when (uiState) {
                     is SpeakersUiState.Content -> 1
                     SpeakersUiState.Error, SpeakersUiState.Loading -> 2
-                    SpeakersUiState.NoSearchResults -> 3
                 }
             },
             transitionSpec = { FadingAnimationSpec }
@@ -154,13 +155,6 @@ fun SpeakersScreen(
                         isLoading = uiState is SpeakersUiState.Loading,
                         modifier = Modifier.fillMaxSize(),
                         onRetry = { viewModel.refresh() },
-                    )
-                }
-
-                SpeakersUiState.NoSearchResults -> {
-                    MinorError(
-                        message = stringResource(Res.string.speakers_error_no_results),
-                        modifier = Modifier.fillMaxSize(),
                     )
                 }
             }
