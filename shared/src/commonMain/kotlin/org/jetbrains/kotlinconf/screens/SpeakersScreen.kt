@@ -143,8 +143,7 @@ fun SpeakersScreen(
             when (targetState) {
                 is SpeakersUiState.Content -> {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        SpeakerCarousel(targetState, onSpeaker)
-                        KodeeRain()
+                        SpeakerGrid(targetState, onSpeaker)
                     }
                 }
 
