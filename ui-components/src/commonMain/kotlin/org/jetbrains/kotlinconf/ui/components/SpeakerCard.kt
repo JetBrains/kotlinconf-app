@@ -47,7 +47,7 @@ fun SpeakerCard(
     ) {
         SpeakerAvatar(
             photoUrl = photoUrl,
-            modifier = Modifier.size(96.dp),
+            modifier = Modifier.size(48.dp),
         )
         Spacer(Modifier.size(16.dp))
         Column {
