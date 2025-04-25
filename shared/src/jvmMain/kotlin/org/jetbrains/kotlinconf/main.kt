@@ -2,6 +2,8 @@ package org.jetbrains.kotlinconf
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowDecoration
+import androidx.compose.ui.window.WindowDecorationDefaults
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
@@ -32,6 +34,9 @@ class JvmLogger : Logger {
 
 fun main() {
     initApp(JvmLogger(), platformModule, Flags(supportsNotifications = false))
+
+    // Set macOS titlebar to react to theme
+    System.setProperty("apple.awt.application.appearance", "system")
 
     application {
         Window(
