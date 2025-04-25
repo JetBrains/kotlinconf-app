@@ -362,7 +362,7 @@ private fun KodeeRain() {
     // Vertical falling animation - slower for more gentle falling effect
     val verticalOffset = infiniteTransition.animateFloat(
         initialValue = -300f, // Start higher above the screen
-        targetValue = 1200f, // Move further beyond the screen height
+        targetValue = 1700f, // Move further beyond the screen height
         animationSpec = infiniteRepeatable(
             animation = tween(15000, easing = EaseInOutQuad), // 15 seconds to fall for a gentler effect
             repeatMode = RepeatMode.Restart,
