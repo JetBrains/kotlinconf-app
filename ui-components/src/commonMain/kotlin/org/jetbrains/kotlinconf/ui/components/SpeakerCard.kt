@@ -43,7 +43,7 @@ fun SpeakerCard(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
-            .padding(16.dp)
+            .background(KotlinConfTheme.colors.tileBackground)
     ) {
         SpeakerAvatar(
             photoUrl = photoUrl,
