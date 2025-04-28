@@ -26,6 +26,6 @@ To build the project locally:
 3. Run the desired platform
    * Android: use the `androidApp` run configuration
    * iOS: use `KotlinConfAppScheme`
-   * Desktop: `./gradlew :shared:jvmRun -DmainClass=org.jetbrains.kotlinconf.MainKt`
+   * Desktop: `./gradlew :shared:jvmRunHot -DmainClass=org.jetbrains.kotlinconf.MainKt`
    * Web: `./gradlew :shared:wasmJsBrowserDevelopmentRun `
    * Backend: `./gradlew :backend:run`
