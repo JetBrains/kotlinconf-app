@@ -90,8 +90,8 @@ fun MainScreen(
                 .weight(1f),
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None },
-            popEnterTransition = { fadeIn() },
-            popExitTransition = { fadeOut() },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None },
         ) {
             composable<InfoScreen> {
                 MainBackHandler()
