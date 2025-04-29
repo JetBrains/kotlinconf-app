@@ -2,7 +2,7 @@ package org.jetbrains.kotlinconf
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -20,7 +20,7 @@ class FlagsManager(
 
     init {
         scope.launch {
-            val storedFlags = storage.getFlags().first()
+            val storedFlags = storage.getFlags().firstOrNull()
             if (storedFlags == null) {
                 storage.setFlags(platformFlags)
             }
