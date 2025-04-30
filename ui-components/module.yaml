@@ -1,0 +1,52 @@
+product:
+  type: lib
+  platforms:
+    - jvm
+    - android
+    - iosArm64
+    - iosSimulatorArm64
+
+aliases:
+  - nonAndroid:
+      - jvm
+      - iosArm64
+      - iosSimulatorArm64
+
+settings:
+  android:
+    compileSdk: 35
+    minSdk: 26
+  compose:
+    version: 1.8.0-rc01
+    enabled: true
+    resources:
+      packageName: kotlinconfapp.ui_components.generated.resources
+      exposedAccessors: true
+  kotlin:
+    freeCompilerArgs:
+      - -Xexpect-actual-classes
+
+dependencies:
+  - $compose.runtime
+  - $compose.foundation
+  - $compose.animation
+  - $compose.material3
+  - $compose.components.resources
+  - $libs.components.ui.tooling.preview
+
+  - $libs.coil.compose
+  - $libs.coil.network.ktor3
+  - $libs.androidx.lifecycle.runtime.compose
+  - $libs.androidx.lifecycle.viewmodel.compose
+  - $libs.androidx.navigation.compose
+
+  - $libs.multiplatform.markdown.renderer
+
+dependencies@android:
+  - $libs.ktor.client.okhttp
+
+dependencies@jvm:
+  - $libs.ktor.client.okhttp
+
+dependencies@ios:
+  - $libs.ktor.client.darwin

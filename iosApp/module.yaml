@@ -1,0 +1,13 @@
+product:
+  type: ios/app
+  platforms:
+    - iosArm64
+    - iosSimulatorArm64
+
+dependencies:
+  - ../shared
+
+settings:
+  compose:
+    enabled: true
+    version: 1.8.0-rc01

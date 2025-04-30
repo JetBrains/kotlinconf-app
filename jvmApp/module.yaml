@@ -1,0 +1,9 @@
+product: jvm/app
+
+dependencies:
+  - ../shared
+
+
+settings:
+  jvm:
+    mainClass: org.jetbrains.kotlinconf.MainKt

@@ -1,0 +1,6 @@
+modules:
+  - ui-components
+  - shared
+  - androidApp
+  - jvmApp
+  - iosApp
