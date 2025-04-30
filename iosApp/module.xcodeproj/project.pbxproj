@@ -109,7 +109,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7555FFA5242A565B00829871 /* Build configuration list for PBXNativeTarget "iosApp" */;
 			buildPhases = (
-				7555FFB5242A651A00829871 /* Compile Kotlin */,
+				7555FFB5242A651A00829871 /* Build Kotlin with Amper */,
 				7555FF77242A565900829871 /* Sources */,
 				7555FF78242A565900829871 /* Frameworks */,
 				7555FF79242A565900829871 /* Resources */,
@@ -139,7 +139,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7555FF76242A565900829871 /* Build configuration list for PBXProject "KotlinConf" */;
+			buildConfigurationList = 7555FF76242A565900829871 /* Build configuration list for PBXProject "module" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -175,8 +175,9 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7555FFB5242A651A00829871 /* Compile Kotlin */ = {
+		7555FFB5242A651A00829871 /* Build Kotlin with Amper */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -184,14 +185,14 @@
 			);
 			inputPaths = (
 			);
-			name = "Compile Kotlin";
+			name = "Build Kotlin with Amper";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/..\"\n./gradlew :shared:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "# !AMPER KMP INTEGRATION STEP!\n# This script is managed by Amper, do not edit manually!\n\"${AMPER_WRAPPER_PATH}\" tool xcode-integration\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -340,8 +341,8 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2ZEFAR8TH3;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)\n",
-					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)\n",
+					"$(inherited)",
+					"$(TARGET_BUILD_DIR)/$(FRAMEWORKS_FOLDER_PATH)",
 				);
 				INFOPLIST_FILE = iosApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "KotlinConf 2024";
@@ -351,13 +352,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 39.0.4;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-framework",
-					"shared\n$(inherited)",
-					"-framework",
-					"shared\n",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kotlinconf.iosapp;
 				PRODUCT_NAME = KotlinConf;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -384,8 +379,8 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2ZEFAR8TH3;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)\n",
-					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)\n",
+					"$(inherited)",
+					"$(TARGET_BUILD_DIR)/$(FRAMEWORKS_FOLDER_PATH)",
 				);
 				INFOPLIST_FILE = iosApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "KotlinConf 2024";
@@ -395,13 +390,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 39.0.4;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-framework",
-					"shared\n$(inherited)",
-					"-framework",
-					"shared\n",
-				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kotlinconf.iosapp;
 				PRODUCT_NAME = KotlinConf;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -417,7 +406,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7555FF76242A565900829871 /* Build configuration list for PBXProject "KotlinConf" */ = {
+		7555FF76242A565900829871 /* Build configuration list for PBXProject "module" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7555FFA3242A565B00829871 /* Debug */,

@@ -1,7 +1,7 @@
 import FirebaseCore
 import FirebaseMessaging
 import SwiftUI
-import shared
+import KotlinModules
 
 @main
 struct iOSApp: App {
@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         _ application: UIApplication,
         didReceiveRemoteNotification userInfo: [AnyHashable: Any]
     ) async -> UIBackgroundFetchResult {
-        NotifierManager.shared.onApplicationDidReceiveRemoteNotification(userInfo: userInfo)
+        // NotifierManager.KotlinModules.onApplicationDidReceiveRemoteNotification(userInfo: userInfo)
         return UIBackgroundFetchResult.newData
     }
 
