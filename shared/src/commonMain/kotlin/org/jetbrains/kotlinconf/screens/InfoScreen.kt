@@ -63,8 +63,7 @@ fun InfoScreen(
             Modifier
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
-                .padding(horizontal = 12.dp)
-                .padding(bottom = 12.dp),
+                .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
