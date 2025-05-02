@@ -45,7 +45,6 @@ fun AboutAppScreen(
     onBack: () -> Unit,
     onGitHubRepo: () -> Unit,
     onRateApp: () -> Unit,
-    onSettings: () -> Unit,
     onPrivacyNotice: () -> Unit,
     onTermsOfUse: () -> Unit,
     onLicenses: () -> Unit,
