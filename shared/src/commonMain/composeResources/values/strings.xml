@@ -16,8 +16,8 @@
 For the source code and more technical details, visit the GitHub repository.</string>
     <string name="about_app_link_github">GitHub repository</string>
     <string name="about_app_link_rate">Rate the app</string>
-    <string name="about_app_link_privacy_notice">App Privacy Notice</string>
-    <string name="about_app_link_terms_of_use">App Terms of Use</string>
+    <string name="about_app_link_privacy_notice">App privacy notice</string>
+    <string name="about_app_link_terms_of_use">App terms of use</string>
     <string name="about_app_link_licenses">Licenses</string>
     <string name="about_app_made_with_junie">Made with Junie</string>
 
@@ -25,7 +25,7 @@ For the source code and more technical details, visit the GitHub repository.</st
     <string name="info_link_about_conf">About the conference</string>
     <string name="info_link_about_app">About the app</string>
     <string name="info_link_partners">Our partners</string>
-    <string name="info_link_code_of_conduct">Code of Conduct</string>
+    <string name="info_link_code_of_conduct">Code of conduct</string>
     <string name="info_link_news_feed">News feed</string>
     <string name="info_link_settings">Settings</string>
     <string name="info_link_description_twitter">Twitter</string>
