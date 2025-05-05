@@ -342,7 +342,7 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(TARGET_BUILD_DIR)/$(FRAMEWORKS_FOLDER_PATH)",
+					"$(TARGET_BUILD_DIR)/AmperFrameworks/",
 				);
 				INFOPLIST_FILE = iosApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "KotlinConf 2024";
@@ -380,7 +380,7 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(TARGET_BUILD_DIR)/$(FRAMEWORKS_FOLDER_PATH)",
+					"$(TARGET_BUILD_DIR)/AmperFrameworks/",
 				);
 				INFOPLIST_FILE = iosApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "KotlinConf 2024";
