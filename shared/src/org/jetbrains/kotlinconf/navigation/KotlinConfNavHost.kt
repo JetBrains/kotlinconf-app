@@ -135,7 +135,6 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             onBack = navController::navigateUp,
             onGitHubRepo = { uriHandler.openUri(URLs.GITHUB_REPO) },
             onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
-            onSettings = { navController.navigate(SettingsScreen) },
             onPrivacyNotice = { navController.navigate(AppPrivacyNoticeScreen) },
             onTermsOfUse = { navController.navigate(AppTermsOfUseScreen) },
             onLicenses = { navController.navigate(LicensesScreen) },

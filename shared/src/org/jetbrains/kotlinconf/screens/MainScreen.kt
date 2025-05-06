@@ -58,6 +58,7 @@ import org.jetbrains.kotlinconf.navigation.PartnersScreen
 import org.jetbrains.kotlinconf.navigation.AppPrivacyNoticePrompt
 import org.jetbrains.kotlinconf.navigation.ScheduleScreen
 import org.jetbrains.kotlinconf.navigation.SessionScreen
+import org.jetbrains.kotlinconf.navigation.SettingsScreen
 import org.jetbrains.kotlinconf.navigation.SpeakerDetailScreen
 import org.jetbrains.kotlinconf.navigation.SpeakersScreen
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -105,6 +106,7 @@ fun MainScreen(
                     onTwitter = { uriHandler.openUri(URLs.TWITTER) },
                     onSlack = { uriHandler.openUri(URLs.SLACK) },
                     onBluesky = { uriHandler.openUri(URLs.BLUESKY) },
+                    onSettings = { rootNavController.navigate(SettingsScreen) },
                 )
             }
             composable<SpeakersScreen> {

@@ -34,6 +34,7 @@ import kotlinconfapp.shared.generated.resources.info_title
 import kotlinconfapp.shared.generated.resources.kotlinconf_by_jetbrains
 import kotlinconfapp.shared.generated.resources.slack
 import kotlinconfapp.shared.generated.resources.twitter
+import kotlinconfapp.shared.generated.resources.info_link_settings
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.ui.components.Divider
@@ -52,6 +53,7 @@ fun InfoScreen(
     onTwitter: () -> Unit,
     onSlack: () -> Unit,
     onBluesky: () -> Unit,
+    onSettings: () -> Unit,
 ) {
     Column(Modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
         MainHeaderTitleBar(stringResource(Res.string.info_title))
@@ -61,8 +63,7 @@ fun InfoScreen(
             Modifier
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
-                .padding(horizontal = 12.dp)
-                .padding(bottom = 12.dp),
+                .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -75,6 +76,7 @@ fun InfoScreen(
             )
             PageMenuItem(stringResource(Res.string.info_link_about_conf), onClick = onAboutConf)
             PageMenuItem(stringResource(Res.string.info_link_about_app), onClick = onAboutApp)
+            PageMenuItem(stringResource(Res.string.info_link_settings), onClick = onSettings)
             PageMenuItem(stringResource(Res.string.info_link_news_feed), onClick = onNewsFeed)
             PageMenuItem(stringResource(Res.string.info_link_partners), onClick = onOurPartners)
             PageMenuItem(stringResource(Res.string.info_link_code_of_conduct), onClick = onCodeOfConduct)
