@@ -26,13 +26,11 @@ import kotlinconfapp.shared.generated.resources.about_app_link_github
 import kotlinconfapp.shared.generated.resources.about_app_link_licenses
 import kotlinconfapp.shared.generated.resources.about_app_link_privacy_notice
 import kotlinconfapp.shared.generated.resources.about_app_link_rate
-import kotlinconfapp.shared.generated.resources.about_app_link_settings
 import kotlinconfapp.shared.generated.resources.about_app_link_terms_of_use
 import kotlinconfapp.shared.generated.resources.about_app_made_with_junie
 import kotlinconfapp.shared.generated.resources.about_app_title
 import kotlinconfapp.shared.generated.resources.app_version
 import kotlinconfapp.shared.generated.resources.arrow_up_right_24
-import kotlinconfapp.shared.generated.resources.kodee_privacy
 import kotlinconfapp.shared.generated.resources.made_with_junie
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -47,7 +45,6 @@ fun AboutAppScreen(
     onBack: () -> Unit,
     onGitHubRepo: () -> Unit,
     onRateApp: () -> Unit,
-    onSettings: () -> Unit,
     onPrivacyNotice: () -> Unit,
     onTermsOfUse: () -> Unit,
     onLicenses: () -> Unit,
@@ -80,7 +77,6 @@ fun AboutAppScreen(
                 )
             }
 
-            PageMenuItem(stringResource(Res.string.about_app_link_settings), onClick = onSettings)
             PageMenuItem(stringResource(Res.string.about_app_link_privacy_notice), onClick = onPrivacyNotice)
             PageMenuItem(stringResource(Res.string.about_app_link_terms_of_use), onClick = onTermsOfUse)
             PageMenuItem(stringResource(Res.string.about_app_link_licenses), onClick = onLicenses)
