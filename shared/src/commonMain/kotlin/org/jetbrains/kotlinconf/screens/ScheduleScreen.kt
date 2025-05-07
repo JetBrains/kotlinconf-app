@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -441,6 +443,7 @@ private fun ScheduleList(
             scheduleItems,
             key = {
                 when (it) {
+                    is DaySeparatorItem -> it.id
                     is DayHeaderItem -> it.value.date.toString()
                     is ServiceEventGroupItem -> it.value.map { it.id.id }
                     is ServiceEventItem -> it.value.id.id
@@ -453,6 +456,10 @@ private fun ScheduleList(
         ) { item ->
             Box(Modifier.animateItem()) {
                 when (item) {
+                    is DaySeparatorItem -> {
+                        Spacer(modifier = Modifier.height(48.dp))
+                    }
+
                     is DayHeaderItem -> {
                         val date = item.value.date
                         val dayValues = DayValues.map[date]
@@ -463,7 +470,7 @@ private fun ScheduleList(
                             line2 = dayValues?.line2 ?: "",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 8.dp)
+                                .padding(vertical = 16.dp)
                                 .semantics { heading() }
                         )
                     }
@@ -475,9 +482,7 @@ private fun ScheduleList(
                             modifier = Modifier
                                 .padding(horizontal = 12.dp)
                                 .padding(top = 24.dp, bottom = 8.dp)
-                                .semantics {
-                                    heading()
-                                }
+                                .semantics { heading() }
                         )
                     }
 

@@ -18,6 +18,7 @@ import org.jetbrains.kotlinconf.Day
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
+import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.TagValues
 import org.jetbrains.kotlinconf.TimeProvider
 import org.jetbrains.kotlinconf.TimeSlot
@@ -29,6 +30,8 @@ import org.jetbrains.kotlinconf.utils.containsDiacritics
 import org.jetbrains.kotlinconf.utils.removeDiacritics
 
 sealed interface ScheduleListItem
+
+data class DaySeparatorItem(val id: String) : ScheduleListItem
 
 data class DayHeaderItem(val value: Day) : ScheduleListItem
 
@@ -176,7 +179,7 @@ class ScheduleViewModel(
         days: List<Day>,
         searchQuery: String,
         selectedTags: List<String>,
-    ): List<ScheduleListItem> = buildList {
+    ): List<SessionItem> = buildList {
         for (day in days) {
             for (timeSlot in day.timeSlots) {
                 for (session in timeSlot.sessions) {
@@ -211,7 +214,10 @@ class ScheduleViewModel(
         var seenPastSlot = false
 
         val items = buildList {
-            days.forEach { day ->
+            days.forEachIndexed { index, day ->
+                if (index > 0) {
+                    add(DaySeparatorItem("day-separator-$index"))
+                }
                 add(DayHeaderItem(day))
 
                 day.timeSlots.forEachIndexed { index, timeSlot ->
