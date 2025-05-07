@@ -199,7 +199,7 @@ class ScheduleViewModel(
                 }
             }
         }
-    }
+    }.sortedBy { it.value.state == SessionState.Past }
 
     private fun buildNonSearchItems(
         days: List<Day>,
