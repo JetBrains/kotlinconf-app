@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -206,7 +207,9 @@ fun DeveloperMenuScreen(
                     Image(
                         painter = painterResource(Res.drawable.kodee_frightened),
                         contentDescription = null,
-                        modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 12.dp)
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                            .padding(bottom = 12.dp)
+                            .sizeIn(maxWidth = 300.dp, maxHeight = 300.dp)
                     )
                     Spacer(Modifier.height(24.dp))
                     Text(
