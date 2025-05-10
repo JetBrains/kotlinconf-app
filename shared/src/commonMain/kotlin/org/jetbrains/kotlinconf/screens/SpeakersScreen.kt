@@ -364,7 +364,7 @@ private fun KodeeRain() {
         initialValue = -300f, // Start higher above the screen
         targetValue = 1700f, // Move further beyond the screen height
         animationSpec = infiniteRepeatable(
-            animation = tween(15000, easing = EaseInOutQuad), // 15 seconds to fall for a gentler effect
+            animation = tween(45000, easing = EaseInOutQuad), // 15 seconds to fall for a gentler effect
             repeatMode = RepeatMode.Restart,
             initialStartOffset = StartOffset(2000, offsetType = StartOffsetType.FastForward)
         )
