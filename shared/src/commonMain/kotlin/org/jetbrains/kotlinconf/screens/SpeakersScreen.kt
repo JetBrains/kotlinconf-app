@@ -326,7 +326,7 @@ private fun KodeeRain() {
     val kodeeDroplets = remember {
         mutableStateListOf<KodeeDroplet>().apply {
             // Create 12 Kodee icons with random properties for better distribution
-            repeat(40) { index ->
+            repeat(25) { index ->
                 add(
                     KodeeDroplet(
                         id = index,
@@ -380,7 +380,7 @@ private fun KodeeRain() {
                 .graphicsLayer {
                     // Calculate the adjusted vertical position based on phase offset
                     // This creates a continuous stream of falling Kodees
-                    val animationRange = 2000f // Total animation range (from -300 to 1200)
+                    val animationRange = 1500f // Total animation range (from -300 to 1200)
                     val adjustedVerticalPosition =
                         (verticalOffset.value + animationRange * kodee.phaseOffset) % animationRange - 300f
 
