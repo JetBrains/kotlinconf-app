@@ -338,7 +338,7 @@ private fun KodeeRain() {
                         size = Random.nextFloat() * 50f + 50f, // Random size between 50 and 100
                         // Mostly positive emotions with some variety
                         emotion = when (Random.nextInt(5)) {
-                            0 -> Emotion.Neutral
+                            0, 1 -> Emotion.Neutral
                             1 -> Emotion.Negative
                             else -> Emotion.Positive
                         },
