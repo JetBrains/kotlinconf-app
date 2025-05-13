@@ -82,7 +82,11 @@ dependencies {
     debugImplementation(compose.uiTooling)
 }
 
-// Hot reload support
 composeCompiler {
+    // Hot reload support
     featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
+    reportsDestination = layout.buildDirectory.dir("compose_build_reports")
+    stabilityConfigurationFiles.addAll(
+        rootProject.layout.projectDirectory.file("compose-stability.conf"),
+    )
 }
