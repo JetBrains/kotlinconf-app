@@ -124,7 +124,7 @@ We will process your data in accordance with the App Privacy Notice. You can adj
         <item quantity="other">%1$d sessions found</item>
     </plurals>
 
-    <string name="session_title">Schedule</string>
+    <string name="session_title">Session</string>
     <string name="session_your_feedback">Your feedback</string>
     <string name="session_screen_error">The details of this session are not available at the moment.</string>
     <string name="session_watch_video">Watch the recording</string>

@@ -76,7 +76,10 @@ class SessionizeService(
         val sessions = sessions.mapNotNull { it ->
             val startsAt = it.startsAt ?: return@mapNotNull null
             val endsAt = it.endsAt ?: return@mapNotNull null
-            val tags = it.categoryItems.mapNotNull { tags[it]?.name }
+            val tags: List<String> = it.categoryItems.mapNotNull { tags[it]?.name }
+
+            if ("Interview" in tags) return@mapNotNull null
+
             Session(
                 it.id,
                 it.displayTitle,

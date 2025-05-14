@@ -9,15 +9,15 @@ androidx-activityCompose = "1.10.1"
 androidx-core-ktx = "1.15.0"
 androidx-core-splashscreen = "1.0.1"
 androidx-espresso-core = "3.6.1"
-androidx-navigation = "2.9.0-alpha17"
-androidx-lifecycle = "2.9.0-alpha07"
+androidx-navigation = "2.9.0-beta01"
+androidx-lifecycle = "2.9.0-beta01"
 androidx-preference = "1.2.1"
 androidx-test-junit = "1.2.1"
 androidx-work-runtime = "2.10.0"
 coil = "3.2.0-rc02"
 compose-android = "1.8.0"
 compose-hot-reload = "1.0.0-alpha09"
-compose-multiplatform = "1.8.0-rc01"
+compose-multiplatform = "1.8.0"
 coroutines = "1.10.1"
 doistx-normalize = "1.2.0"
 exposed = "0.59.0"
@@ -27,7 +27,7 @@ hikaricp = "5.1.0"
 jib = "3.4.4"
 junit = "4.13.2"
 kmpnotifier = "1.5.1"
-koin = "4.1.0-Beta8"
+koin = "4.1.0-Beta11"
 kotlin = "2.1.20"
 kotlinx-datetime = "0.6.2"
 ktor = "3.1.1"
@@ -65,7 +65,7 @@ junit = { module = "junit:junit", version.ref = "junit" }
 kmpnotifier = { module = "io.github.mirzemehdi:kmpnotifier", version.ref = "kmpnotifier" }
 koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
-koin-ktor = { module = "io.insert-koin:koin-ktor3", version.ref = "koin" }
+koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 koin-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
