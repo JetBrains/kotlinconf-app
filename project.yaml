@@ -5,3 +5,5 @@ modules:
   - jvmApp
   - iosApp
   - backend
+  - ui-components-gallery/jvm-gallery-app
+  - ui-components-gallery/android-gallery-app

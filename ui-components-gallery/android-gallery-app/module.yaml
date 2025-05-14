@@ -1,0 +1,24 @@
+product: android/app
+
+settings:
+  compose:
+    enabled: true
+    version: 1.8.0-rc01
+  android:
+    namespace: "com.jetbrains.kotlinconf.uicomponents.gallery"
+    targetSdk: 35
+    compileSdk: 35
+    minSdk: 26
+    versionCode: 1
+    versionName: "1.0"
+
+dependencies:
+  - ../../ui-components
+  - $compose.runtime
+  - $compose.foundation
+  - $compose.animation
+  - $compose.material3
+  - $compose.components.resources
+
+  - $libs.compose.ui.tooling.preview
+  - $libs.androidx.activity.compose
