@@ -16,9 +16,9 @@
 setlocal
 
 @rem The version of the Amper distribution to provision and use
-set amper_version=1.0-SNAPSHOT
+set amper_version=0.7.0-dev-2808
 @rem Establish chain of trust from here by specifying exact checksum of Amper distribution to be run
-set amper_sha256=a793b44e82b7ed5046f90c2a2e3fa859848fa0e6ed76221d0397e1f3f72e94f7
+set amper_sha256=0afdcda1ac9de4d25a9d6eec7cd0f8f9d7358da2c597a4a647592c5e49578920
 
 if not defined AMPER_DOWNLOAD_ROOT set AMPER_DOWNLOAD_ROOT=https://packages.jetbrains.team/maven/p/amper/amper
 if not defined AMPER_JRE_DOWNLOAD_ROOT set AMPER_JRE_DOWNLOAD_ROOT=https:/
@@ -141,7 +141,7 @@ if "%PROCESSOR_ARCHITECTURE%"=="ARM64" (
 )
 
 REM !! DO NOT REMOVE !!
-REM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  exit /b %ERRORLEVEL%
+REM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                exit /b %ERRORLEVEL%
 REM
 REM The above comment is strategically placed to compensate for a bug in the update command in Amper 0.5.0.
 REM During the update, the wrapper script is overwritten in-place while running. The problem is that cmd.exe doesn't
