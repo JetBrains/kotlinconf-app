@@ -67,7 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				B3F038E12BD95889001AAD76 /* PrivacyInfo.xcprivacy */,
-				7555FF7D242A565900829871 /* iosApp */,
+				7555FF7D242A565900829871 /* src */,
 				7555FF7C242A565900829871 /* Products */,
 				7555FFB0242A642200829871 /* Frameworks */,
 			);
@@ -81,7 +81,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7555FF7D242A565900829871 /* iosApp */ = {
+		7555FF7D242A565900829871 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				9A81F7ED29C861B20021B05B /* iosApp.entitlements */,
@@ -92,7 +92,7 @@
 				9A06F9FF2A556EB7005FAD4A /* ContentView.swift */,
 				EB91AB972D81C55000301AE3 /* GoogleService-Info.plist */,
 			);
-			path = iosApp;
+			path = src;
 			sourceTree = "<group>";
 		};
 		7555FFB0242A642200829871 /* Frameworks */ = {
@@ -212,8 +212,8 @@
 		7555FFA3242A565B00829871 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-                AMPER_WRAPPER_PATH = "../amper";
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				AMPER_WRAPPER_PATH = ../amper;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -275,8 +275,8 @@
 		7555FFA4242A565B00829871 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-                AMPER_WRAPPER_PATH = "../amper";
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				AMPER_WRAPPER_PATH = ../amper;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -333,12 +333,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = src/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 67;
-				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"src/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2ZEFAR8TH3;
 				ENABLE_PREVIEWS = YES;
@@ -346,7 +346,7 @@
 					"$(inherited)",
 					"$(TARGET_BUILD_DIR)/AmperFrameworks/",
 				);
-				INFOPLIST_FILE = iosApp/Info.plist;
+				INFOPLIST_FILE = src/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "KotlinConf 2024";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -371,12 +371,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = src/iosApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 67;
-				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"src/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2ZEFAR8TH3;
 				ENABLE_PREVIEWS = YES;
@@ -384,7 +384,7 @@
 					"$(inherited)",
 					"$(TARGET_BUILD_DIR)/AmperFrameworks/",
 				);
-				INFOPLIST_FILE = iosApp/Info.plist;
+				INFOPLIST_FILE = src/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "KotlinConf 2024";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
