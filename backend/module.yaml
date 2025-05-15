@@ -7,7 +7,9 @@ settings:
   ktor:
     enabled: true
   kotlin:
-    serialization: enabled
+    serialization:
+      enabled: true
+      version: 1.8.1
 
 dependencies:
   - ../shared

@@ -6,6 +6,10 @@ product:
     - iosArm64
     - iosSimulatorArm64
 
+apply:
+  - ../compose.module-template.yaml
+  - ../android.module-template.yaml
+
 aliases:
   - nonAndroid:
       - jvm
@@ -14,19 +18,16 @@ aliases:
 
 settings:
   compose:
-    version: 1.8.0-rc01
-    enabled: true
     resources:
       packageName: kotlinconfapp.shared.generated.resources
   kotlin:
     freeCompilerArgs:
       - -Xexpect-actual-classes
     serialization:
-      enabled: true # TODO: investigate DR stackoverflow
+      enabled: true
+      version: 1.8.1
   android:
     namespace: org.jetbrains.kotlinconf
-    compileSdk: 35
-    minSdk: 26
     parcelize:
       enabled: true
       additionalAnnotations:

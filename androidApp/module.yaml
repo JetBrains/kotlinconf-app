@@ -1,15 +1,12 @@
 product: android/app
 
+apply:
+  - ../compose.module-template.yaml
+  - ../android.module-template.yaml
+
 settings:
-  compose:
-    version: 1.8.0-rc01
-    enabled: true
   android:
     namespace: com.jetbrains.kotlinconf
-    applicationId: com.jetbrains.kotlinconf
-    compileSdk: 35
-    targetSdk: 35
-    minSdk: 26
     versionCode: 66
     versionName: "39.0.4"
 
