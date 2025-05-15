@@ -1,7 +1,6 @@
 # KotlinConf App (Amper)
 
-This is a fork of the official [KotlinConf App](https://github.com/JetBrains/kotlinconf-app)
-built by [Amper](https://github.com/JetBrains/amper).
+This branch contains a version of the app built by [Amper](https://github.com/JetBrains/amper), an experimental build tool by JetBrains.
 
 ## Building the project
 
