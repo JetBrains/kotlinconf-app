@@ -33,6 +33,8 @@ class JvmLogger : Logger {
 fun main() {
     initApp(JvmLogger(), platformModule, Flags(supportsNotifications = false))
 
+    System.setProperty("apple.awt.application.appearance", "system")
+
     application {
         Window(
             onCloseRequest = ::exitApplication,
