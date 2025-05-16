@@ -1,0 +1,21 @@
+product: android/app
+
+apply:
+  - ../../compose.module-template.yaml
+  - ../../android.module-template.yaml
+
+settings:
+  android:
+    namespace: "com.jetbrains.kotlinconf.uicomponents.gallery"
+    versionName: "1.0"
+
+dependencies:
+  - ../../ui-components
+  - $compose.runtime
+  - $compose.foundation
+  - $compose.animation
+  - $compose.material3
+  - $compose.components.resources
+
+  - $libs.compose.ui.tooling.preview
+  - $libs.androidx.activity.compose

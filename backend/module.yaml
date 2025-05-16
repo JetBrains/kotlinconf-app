@@ -1,0 +1,49 @@
+product:
+  type: jvm/app
+
+settings:
+  jvm:
+    mainClass: "io.ktor.server.netty.EngineMain"
+  ktor:
+    enabled: true
+  kotlin:
+    serialization:
+      enabled: true
+      version: 1.8.1
+
+dependencies:
+  - ../shared
+
+  - $libs.ktor.server.netty
+  - $libs.ktor.server.auth
+  - $libs.ktor.serialization.kotlinx.json
+  - $libs.ktor.client.cio
+  - $libs.ktor.client.content.negotiation
+  - $libs.ktor.server.status.pages
+  - $libs.ktor.server.default.headers
+  - $libs.ktor.server.cors
+  - $libs.ktor.server.content.negotiation
+  - $libs.ktor.server.call.logging
+  - $libs.ktor.server.conditional.headers
+  - $libs.ktor.server.compression
+  - $libs.ktor.server.partial.content
+  - $libs.ktor.server.auto.head.response
+  - $libs.ktor.server.forwarded.header
+  - $libs.ktor.server.config.yaml
+  - $libs.ktor.server.swagger
+
+  - $libs.exposed.core
+  - $libs.exposed.dao
+  - $libs.exposed.jdbc
+  - $libs.h2
+  - $libs.postgresql
+
+  - $libs.koin.ktor
+  - $libs.koin.core
+  - $libs.koin.slf4j
+
+  - $libs.hikaricp
+  - $libs.logback.classic
+
+test-dependencies:
+  - $libs.ktor.server.test.host

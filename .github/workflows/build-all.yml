@@ -3,7 +3,7 @@ on:
   pull_request:
   push:
     branches:
-      - main
+      - amper
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
@@ -16,13 +16,8 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
       - name: Assemble desktop jar
-        run: ./gradlew :shared:jvmJar
+        run: ./amper build -m jvmApp
 
   build-android:
     name: Build Android
@@ -30,13 +25,8 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
       - name: Android debug build
-        run: ./gradlew :androidApp:assembleDebug --stacktrace
+        run: ./amper build -m androidApp
 
   build-ios:
     name: Build iOS
@@ -44,29 +34,10 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
       - name: Set Xcode version
         run: sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
       - name: iOS debug build
-        run: cd iosApp && xcodebuild -target "iosApp" -configuration Debug -scheme KotlinConfAppScheme -destination 'platform=iOS Simulator,OS=latest,name=iPhone 16' CODE_SIGNING_ALLOWED='NO'
-
-  build-web:
-    name: Build web
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
-      - name: Build web app
-        run: ./gradlew buildWebApp
+        run: ./amper build -m iosApp -p iosArm64
 
   build-backend:
     name: Build backend
@@ -74,10 +45,5 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
       - name: Build backend jar
-        run: ./gradlew :backend:jar
+        run: ./amper build -m backend

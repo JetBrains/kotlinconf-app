@@ -1,0 +1,87 @@
+product:
+  type: lib
+  platforms:
+    - android
+    - jvm
+    - iosArm64
+    - iosSimulatorArm64
+
+apply:
+  - ../compose.module-template.yaml
+  - ../android.module-template.yaml
+
+aliases:
+  - nonAndroid:
+      - jvm
+      - iosArm64
+      - iosSimulatorArm64
+
+settings:
+  compose:
+    resources:
+      packageName: kotlinconfapp.shared.generated.resources
+  kotlin:
+    freeCompilerArgs:
+      - -Xexpect-actual-classes
+    serialization:
+      enabled: true
+      version: 1.8.1
+  android:
+    namespace: org.jetbrains.kotlinconf
+    parcelize:
+      enabled: true
+      additionalAnnotations:
+        - org.jetbrains.kotlinconf.zoomable.internal.AndroidParcelize
+
+dependencies:
+  - ../ui-components
+
+  - $compose.runtime: exported
+  - $compose.foundation: exported
+  - $compose.animation: exported
+  - $compose.components.resources: exported
+
+  - $libs.components.ui.tooling.preview: exported
+  - $libs.koin.compose.viewmodel.navigation: exported
+
+  - $libs.ktor.client.logging: exported
+  - $libs.ktor.serialization.kotlinx.json: exported
+  - $libs.ktor.client.content.negotiation: exported
+  - $libs.ktor.utils: exported
+
+  - $libs.kotlinx.datetime
+
+  - $libs.androidx.lifecycle.runtime.compose
+  - $libs.androidx.navigation.compose
+  - $libs.compose.ui.backhandler
+  - $libs.ktor.client.core
+
+  - $libs.aboutlibraries.core
+
+  # Multiplatform Settings
+  - $libs.settings
+  - $libs.settings.serialization
+  - $libs.settings.observable
+  - $libs.settings.coroutines
+
+  - $libs.kmpnotifier: exported
+
+  - $libs.doistx.normalize
+
+dependencies@android:
+  - $libs.android.svg
+  - $libs.androidx.core.ktx
+  - $libs.androidx.work.runtime
+  - $libs.androidx.preference
+  - $libs.compose.ui.tooling.preview
+  - $libs.ktor.client.okhttp
+
+dependencies@ios:
+  - $libs.kotlinx.coroutines.core
+  - $libs.ktor.client.darwin
+
+dependencies@jvm:
+  - $compose.desktop.currentOs
+  - $libs.android.svg
+  - $libs.ktor.client.okhttp
+  - $libs.kotlinx.coroutines.swing

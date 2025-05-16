@@ -1,0 +1,9 @@
+modules:
+  - ui-components
+  - shared
+  - androidApp
+  - jvmApp
+  - iosApp
+  - backend
+  - ui-components-gallery/jvm-gallery-app
+  - ui-components-gallery/android-gallery-app

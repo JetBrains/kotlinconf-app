@@ -1,0 +1,16 @@
+product:
+  type: jvm/app
+
+apply:
+  - ../../compose.module-template.yaml
+
+dependencies:
+  - ../../ui-components
+  - $compose.runtime
+  - $compose.foundation
+  - $compose.animation
+  - $compose.material3
+  - $compose.components.resources
+
+  - $compose.desktop.currentOs
+  - $libs.logback.classic

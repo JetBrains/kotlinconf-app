@@ -1,0 +1,11 @@
+product:
+  type: ios/app
+  platforms:
+    - iosArm64
+    - iosSimulatorArm64
+
+apply:
+  - ../compose.module-template.yaml
+
+dependencies:
+  - ../shared

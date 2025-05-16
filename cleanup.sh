@@ -1,6 +1,6 @@
 #!/bin/sh
 rm -rf .idea
-./gradlew clean
+./amper clean
 rm -rf .gradle
 rm -rf build
 rm -rf */build
