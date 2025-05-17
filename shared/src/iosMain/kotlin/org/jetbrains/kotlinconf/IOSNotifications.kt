@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf
 
+import com.mmk.kmpnotifier.extensions.onApplicationDidReceiveRemoteNotification
 import com.mmk.kmpnotifier.extensions.onNotificationClicked
 import com.mmk.kmpnotifier.notification.NotifierManager
 import org.jetbrains.kotlinconf.navigation.navigateByLocalNotificationId
@@ -18,4 +19,9 @@ fun handleNotificationResponse(response: UNNotificationResponse) {
 
     // Process push notifications
     NotifierManager.onNotificationClicked(content)
+}
+
+@Suppress("unused") // Called from Swift
+fun handleRemoteNotification(userInfo: Map<Any?, *>) {
+    NotifierManager.onApplicationDidReceiveRemoteNotification(userInfo)
 }
