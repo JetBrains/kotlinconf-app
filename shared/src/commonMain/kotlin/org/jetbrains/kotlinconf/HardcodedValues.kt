@@ -74,7 +74,7 @@ internal val PARTNERS: Map<StringResource, List<Partner>> = mapOf(
     ),
     Res.string.partners_silver to listOf(
         Partner(PartnerId("gradle"), "Gradle", "Develocity is the leading software solution for improving developer productivity & the developer experience. It does this by leveraging advanced build and test performance acceleration technologies.", Res.drawable.partner_gradle, "http://www.gradle.com/"),
-        Partner(PartnerId("kotlinfoundation"), "Kotlin Foundation", "The Kotlin Foundation is a non-profit company whose mission is to promote and advance the Kotlin ecosystem.", Res.drawable.partner_kotlin_foundation, "https://kotlinfoundation.org/"),
+        Partner(PartnerId("kotlinfoundation"), "Kotlin Foundation", "The Kotlin Foundation is dedicated to promoting Kotlin as a multiplatform language, helping grow the ecosystem, as well as increasing adoption of Kotlin in Education. In addition, it safeguards the Kotlin trademark, and oversees backwards incompatible changes to the language.", Res.drawable.partner_kotlin_foundation, "https://kotlinfoundation.org/"),
         Partner(PartnerId("kotzilla"), "Kotzilla", "Creators of Koin, the popular Kotlin dependency injection framework, Kotzilla provides debugging tools for Kotlin devs to resolve complex app issues, empowering them to develop safer, faster apps.", Res.drawable.partner_kotzilla, "https://kotzilla.io/"),
         Partner(PartnerId("uber"), "Uber", "We reimagine the way the world moves for the better Movement is what we power.", Res.drawable.partner_uber, "https://www.uber.com/nl/en/"),
     ),
