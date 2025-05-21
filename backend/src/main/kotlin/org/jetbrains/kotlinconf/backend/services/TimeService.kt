@@ -2,7 +2,9 @@ package org.jetbrains.kotlinconf.backend.services
 
 import io.ktor.util.date.*
 
-private val GMT_TIME_OFFSET = 2 * 60 * 60 * 1000
+// we don't need offset right now, the app expects time in GMT
+//private val GMT_TIME_OFFSET = 2 * 60 * 60 * 1000
+private val GMT_TIME_OFFSET = 0
 
 class TimeService {
 
