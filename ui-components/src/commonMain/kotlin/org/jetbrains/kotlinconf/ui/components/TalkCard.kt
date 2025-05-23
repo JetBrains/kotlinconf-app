@@ -442,7 +442,7 @@ private fun FeedbackBlock(
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     isWorkshop: Boolean,
 ) {
-    var selectedEmotion by rememberSaveable { mutableStateOf(initialEmotion) }
+    var selectedEmotion by remember { mutableStateOf(initialEmotion) }
     var feedbackExpanded by rememberSaveable { mutableStateOf(false) }
     var feedbackText by rememberSaveable { mutableStateOf("") }
 
