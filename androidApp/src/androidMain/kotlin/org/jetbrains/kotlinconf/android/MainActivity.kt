@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
                         statusBarStyle = systemBarStyle,
                         navigationBarStyle = systemBarStyle,
                     )
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         // Don't enforce scrim https://issuetracker.google.com/issues/298296168
                         window.isNavigationBarContrastEnforced = false
                     }
