@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -31,7 +31,7 @@ fun PageMenuItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     drawableStart: DrawableResource? = null,
-    drawableEnd: DrawableResource = Res.drawable.arrow_right_24,
+    drawableEnd: DrawableResource = UiRes.drawable.arrow_right_24,
 ) {
     Row(
         modifier

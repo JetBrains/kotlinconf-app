@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.kodee_large_positive_light
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -48,6 +48,6 @@ fun PartnerCard(
 @Composable
 internal fun PartnerCardPreview() {
     PreviewHelper {
-        PartnerCard("Kodee", Res.drawable.kodee_large_positive_light, {})
+        PartnerCard("Kodee", UiRes.drawable.kodee_large_positive_light, {})
     }
 }

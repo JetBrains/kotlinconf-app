@@ -32,7 +32,7 @@ import kotlinconfapp.shared.generated.resources.privacy_notice_description
 import kotlinconfapp.shared.generated.resources.privacy_notice_read_action
 import kotlinconfapp.shared.generated.resources.privacy_notice_reject
 import kotlinconfapp.shared.generated.resources.privacy_notice_title
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.arrow_left_24
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -87,7 +87,7 @@ fun AppPrivacyNoticePrompt(
                         stringResource(AppRes.string.privacy_notice_title),
                         startContent = {
                             TopMenuButton(
-                                icon = Res.drawable.arrow_left_24,
+                                icon = UiRes.drawable.arrow_left_24,
                                 contentDescription = stringResource(AppRes.string.privacy_notice_back),
                                 onClick = { detailsVisible = false },
                             )
@@ -140,7 +140,7 @@ fun AppPrivacyNoticePrompt(
                     )
                     Action(
                         stringResource(AppRes.string.privacy_notice_read_action),
-                        icon = Res.drawable.arrow_right_24,
+                        icon = UiRes.drawable.arrow_right_24,
                         size = ActionSize.Large,
                         enabled = true,
                         onClick = { detailsVisible = true }

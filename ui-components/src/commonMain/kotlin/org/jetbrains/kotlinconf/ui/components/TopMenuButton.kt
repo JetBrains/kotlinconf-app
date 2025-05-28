@@ -19,7 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.close_24
 import kotlinconfapp.ui_components.generated.resources.search_24
@@ -113,13 +113,13 @@ internal fun TopMenuButtonPreview() {
     PreviewHelper {
         Row {
             var state1 by remember { mutableStateOf(false) }
-            TopMenuButton(Res.drawable.bookmark_24, state1, { state1 = it }, "Bookmark")
+            TopMenuButton(UiRes.drawable.bookmark_24, state1, { state1 = it }, "Bookmark")
 
             var state2 by remember { mutableStateOf(true) }
-            TopMenuButton(Res.drawable.bookmark_24, state2, { state2 = it }, "Bookmark")
+            TopMenuButton(UiRes.drawable.bookmark_24, state2, { state2 = it }, "Bookmark")
 
-            TopMenuButton(Res.drawable.close_24, {}, "Bookmark")
-            TopMenuButton(Res.drawable.search_24, {}, "Bookmark")
+            TopMenuButton(UiRes.drawable.close_24, {}, "Bookmark")
+            TopMenuButton(UiRes.drawable.search_24, {}, "Bookmark")
         }
     }
 }

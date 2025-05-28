@@ -97,6 +97,7 @@ composeCompiler {
 
 compose.resources {
     publicResClass = true
+    nameOfResClass = "UiRes"
 }
 
 // Android preview support

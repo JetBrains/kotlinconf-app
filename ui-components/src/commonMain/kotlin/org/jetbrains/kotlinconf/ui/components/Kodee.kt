@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.action_rate_negative
 import kotlinconfapp.ui_components.generated.resources.action_rate_neutral
 import kotlinconfapp.ui_components.generated.resources.action_rate_positive
@@ -43,9 +43,9 @@ enum class Emotion {
 @Composable
 private fun ratingDescription(emotion: Emotion): String {
     return when (emotion) {
-        Emotion.Negative -> stringResource(Res.string.action_rate_negative)
-        Emotion.Neutral -> stringResource(Res.string.action_rate_neutral)
-        Emotion.Positive -> stringResource(Res.string.action_rate_positive)
+        Emotion.Negative -> stringResource(UiRes.string.action_rate_negative)
+        Emotion.Neutral -> stringResource(UiRes.string.action_rate_neutral)
+        Emotion.Positive -> stringResource(UiRes.string.action_rate_positive)
     }
 }
 
@@ -58,15 +58,15 @@ fun KodeeIconSmall(
 ) {
     val resource = if (selected) {
         when (emotion) {
-            Emotion.Negative -> Res.drawable.kodee_small_negative_filled
-            Emotion.Neutral -> Res.drawable.kodee_small_neutral_filled
-            Emotion.Positive -> Res.drawable.kodee_small_positive_filled
+            Emotion.Negative -> UiRes.drawable.kodee_small_negative_filled
+            Emotion.Neutral -> UiRes.drawable.kodee_small_neutral_filled
+            Emotion.Positive -> UiRes.drawable.kodee_small_positive_filled
         }
     } else {
         when (emotion) {
-            Emotion.Negative -> Res.drawable.kodee_small_negative_outline
-            Emotion.Neutral -> Res.drawable.kodee_small_neutral_outline
-            Emotion.Positive -> Res.drawable.kodee_small_positive_outline
+            Emotion.Negative -> UiRes.drawable.kodee_small_negative_outline
+            Emotion.Neutral -> UiRes.drawable.kodee_small_neutral_outline
+            Emotion.Positive -> UiRes.drawable.kodee_small_positive_outline
         }
     }
 
@@ -86,22 +86,22 @@ fun KodeeIconLarge(
 ) {
     val resource = if (selected) {
         when (emotion) {
-            Emotion.Negative -> Res.drawable.kodee_large_negative_selected
-            Emotion.Neutral -> Res.drawable.kodee_large_neutral_selected
-            Emotion.Positive -> Res.drawable.kodee_large_positive_selected
+            Emotion.Negative -> UiRes.drawable.kodee_large_negative_selected
+            Emotion.Neutral -> UiRes.drawable.kodee_large_neutral_selected
+            Emotion.Positive -> UiRes.drawable.kodee_large_positive_selected
         }
     } else {
         if (KotlinConfTheme.colors.isDark) {
             when (emotion) {
-                Emotion.Negative -> Res.drawable.kodee_large_negative_dark
-                Emotion.Neutral -> Res.drawable.kodee_large_neutral_dark
-                Emotion.Positive -> Res.drawable.kodee_large_positive_dark
+                Emotion.Negative -> UiRes.drawable.kodee_large_negative_dark
+                Emotion.Neutral -> UiRes.drawable.kodee_large_neutral_dark
+                Emotion.Positive -> UiRes.drawable.kodee_large_positive_dark
             }
         } else {
             when (emotion) {
-                Emotion.Negative -> Res.drawable.kodee_large_negative_light
-                Emotion.Neutral -> Res.drawable.kodee_large_neutral_light
-                Emotion.Positive -> Res.drawable.kodee_large_positive_light
+                Emotion.Negative -> UiRes.drawable.kodee_large_negative_light
+                Emotion.Neutral -> UiRes.drawable.kodee_large_neutral_light
+                Emotion.Positive -> UiRes.drawable.kodee_large_positive_light
             }
         }
     }
@@ -120,9 +120,9 @@ fun KodeeEmotion(
 ) {
     AnimatedContent(emotion) { targetEmotion ->
         val resource = when (targetEmotion) {
-            Emotion.Negative -> Res.drawable.kodee_emotion_negative
-            Emotion.Neutral -> Res.drawable.kodee_emotion_neutral
-            Emotion.Positive -> Res.drawable.kodee_emotion_positive
+            Emotion.Negative -> UiRes.drawable.kodee_emotion_negative
+            Emotion.Neutral -> UiRes.drawable.kodee_emotion_neutral
+            Emotion.Positive -> UiRes.drawable.kodee_emotion_positive
         }
         Image(
             imageVector = vectorResource(resource),

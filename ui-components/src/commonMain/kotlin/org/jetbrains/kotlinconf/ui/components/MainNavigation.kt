@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.clock_28
 import kotlinconfapp.ui_components.generated.resources.clock_28_fill
 import kotlinconfapp.ui_components.generated.resources.info_28
@@ -105,8 +105,8 @@ internal fun MainNavigationPreview() {
         var currentDestination by remember {
             mutableStateOf(MainNavDestination(
                 label = "Schedule",
-                icon = Res.drawable.clock_28,
-                iconSelected = Res.drawable.clock_28_fill,
+                icon = UiRes.drawable.clock_28,
+                iconSelected = UiRes.drawable.clock_28_fill,
                 route = "Schedule"
             ))
         }
@@ -115,26 +115,26 @@ internal fun MainNavigationPreview() {
             destinations = listOf(
                 MainNavDestination(
                     label = "Info",
-                    icon = Res.drawable.info_28,
-                    iconSelected = Res.drawable.info_28_fill,
+                    icon = UiRes.drawable.info_28,
+                    iconSelected = UiRes.drawable.info_28_fill,
                     route = "Info"
                 ),
                 MainNavDestination(
                     label = "Schedule",
-                    icon = Res.drawable.clock_28,
-                    iconSelected = Res.drawable.clock_28_fill,
+                    icon = UiRes.drawable.clock_28,
+                    iconSelected = UiRes.drawable.clock_28_fill,
                     route = "Schedule"
                 ),
                 MainNavDestination(
                     label = "Speakers",
-                    icon = Res.drawable.team_28,
-                    iconSelected = Res.drawable.team_28_fill,
+                    icon = UiRes.drawable.team_28,
+                    iconSelected = UiRes.drawable.team_28_fill,
                     route = "Speakers"
                 ),
                 MainNavDestination(
                     label = "Map",
-                    icon = Res.drawable.location_28,
-                    iconSelected = Res.drawable.location_28_fill,
+                    icon = UiRes.drawable.location_28,
+                    iconSelected = UiRes.drawable.location_28_fill,
                     route = "Map"
                 ),
             ),

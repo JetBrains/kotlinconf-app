@@ -53,7 +53,7 @@ import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 import org.koin.compose.koinInject
 import kotlin.time.Duration.Companion.seconds
-import kotlinconfapp.ui_components.generated.resources.Res as UiRes
+import kotlinconfapp.ui_components.generated.resources.UiRes
 
 @Composable
 fun DeveloperMenuScreen(

@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.now
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -32,7 +32,7 @@ fun NowLabel(modifier: Modifier = Modifier) {
         )
         Spacer(Modifier.size(4.dp))
         Text(
-            text = stringResource(Res.string.now),
+            text = stringResource(UiRes.string.now),
             color = KotlinConfTheme.colors.accentText,
             style = KotlinConfTheme.typography.text2,
             maxLines = 1,

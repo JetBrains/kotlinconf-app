@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.arrow_down_16
 import kotlinconfapp.ui_components.generated.resources.now
 import org.jetbrains.compose.resources.painterResource
@@ -76,7 +76,7 @@ fun NowButton(
         horizontalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = stringResource(Res.string.now),
+            text = stringResource(UiRes.string.now),
             style = KotlinConfTheme.typography.text2,
             color = textColor,
         )
@@ -92,7 +92,7 @@ fun NowButton(
             if (targetTime == Current) return@AnimatedContent
             Spacer(Modifier.width(2.dp))
             Icon(
-                painter = painterResource(Res.drawable.arrow_down_16),
+                painter = painterResource(UiRes.drawable.arrow_down_16),
                 contentDescription = null,
                 modifier = Modifier
                     .size(16.dp)

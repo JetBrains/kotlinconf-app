@@ -60,7 +60,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.action_bookmark_session
 import kotlinconfapp.ui_components.generated.resources.action_remove_session_from_bookmarks
 import kotlinconfapp.ui_components.generated.resources.action_state_description_bookmarked
@@ -247,9 +247,9 @@ private fun TopBlock(
             )
             val stateDesc = stringResource(
                 resource =  if (bookmarked)
-                    Res.string.action_state_description_bookmarked
+                    UiRes.string.action_state_description_bookmarked
                 else
-                    Res.string.action_state_description_not_bookmarked
+                    UiRes.string.action_state_description_not_bookmarked
             )
             Icon(
                 modifier = Modifier
@@ -265,12 +265,12 @@ private fun TopBlock(
                         stateDescription = stateDesc
                     },
                 painter = painterResource(
-                    if (bookmarked) Res.drawable.bookmark_24_fill
-                    else Res.drawable.bookmark_24
+                    if (bookmarked) UiRes.drawable.bookmark_24_fill
+                    else UiRes.drawable.bookmark_24
                 ),
                 contentDescription = stringResource(
-                    if (bookmarked) Res.string.action_bookmark_session
-                    else Res.string.action_remove_session_from_bookmarks,
+                    if (bookmarked) UiRes.string.action_bookmark_session
+                    else UiRes.string.action_remove_session_from_bookmarks,
                     title
                 ),
                 tint = iconColor,
@@ -358,14 +358,14 @@ private fun InlineIconContent(status: TalkStatus, placeholder: String) {
     Icon(
         imageVector = vectorResource(
             when (placeholder) {
-                eduPlaceholder -> Res.drawable.session_education
-                codelabPlaceholder -> Res.drawable.session_codelab
-                else -> Res.drawable.session_codelab // Shouldn't happen, but let's not throw
+                eduPlaceholder -> UiRes.drawable.session_education
+                codelabPlaceholder -> UiRes.drawable.session_codelab
+                else -> UiRes.drawable.session_codelab // Shouldn't happen, but let's not throw
             }
         ),
         contentDescription = when (placeholder) {
-            eduPlaceholder -> stringResource(Res.string.talk_card_icon_desc_education)
-            codelabPlaceholder -> stringResource(Res.string.talk_card_icon_desc_codelab)
+            eduPlaceholder -> stringResource(UiRes.string.talk_card_icon_desc_education)
+            codelabPlaceholder -> stringResource(UiRes.string.talk_card_icon_desc_codelab)
             else -> null
         },
         tint = textColor,
@@ -410,8 +410,8 @@ private fun TimeBlock(
         if (lightning) {
             Icon(
                 modifier = Modifier.size(16.dp),
-                painter = painterResource(Res.drawable.lightning_16_fill),
-                contentDescription = stringResource(Res.string.lightning_talk),
+                painter = painterResource(UiRes.drawable.lightning_16_fill),
+                contentDescription = stringResource(UiRes.string.lightning_talk),
                 tint = KotlinConfTheme.colors.orangeText,
             )
         }
@@ -478,16 +478,16 @@ private fun FeedbackBlock(
                 if (emotionSelected) {
                     if (onRequestFeedbackWithComment != null) {
                         Action(
-                            label = stringResource(Res.string.talk_card_your_feedback),
-                            icon = Res.drawable.arrow_right_24,
+                            label = stringResource(UiRes.string.talk_card_your_feedback),
+                            icon = UiRes.drawable.arrow_right_24,
                             size = ActionSize.Medium,
                             onClick = onRequestFeedbackWithComment,
                         )
                     } else {
                         val iconRotation by animateFloatAsState(if (feedbackExpanded) 0f else 180f)
                         Action(
-                            label = stringResource(Res.string.talk_card_your_feedback),
-                            icon = Res.drawable.up_24,
+                            label = stringResource(UiRes.string.talk_card_your_feedback),
+                            icon = UiRes.drawable.up_24,
                             size = ActionSize.Medium,
                             onClick = { feedbackExpanded = !feedbackExpanded },
                             iconRotation = iconRotation,
@@ -496,8 +496,8 @@ private fun FeedbackBlock(
                 } else {
                     Text(
                         text = stringResource(
-                            if (isWorkshop) Res.string.talk_card_how_was_the_workshop
-                            else Res.string.talk_card_how_was_the_talk
+                            if (isWorkshop) UiRes.string.talk_card_how_was_the_workshop
+                            else UiRes.string.talk_card_how_was_the_talk
                         ),
                         style = KotlinConfTheme.typography.text2,
                         color = KotlinConfTheme.colors.primaryText,

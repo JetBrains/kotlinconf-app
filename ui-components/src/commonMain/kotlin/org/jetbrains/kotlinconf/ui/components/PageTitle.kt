@@ -34,7 +34,7 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.action_bookmark
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24_fill
@@ -76,9 +76,9 @@ private fun InlineIconContent(placeholder: String) {
         Icon(
             imageVector = vectorResource(
                 when (placeholder) {
-                    eduPlaceholder -> Res.drawable.session_education
-                    codelabPlaceholder -> Res.drawable.session_codelab
-                    else -> Res.drawable.session_codelab // Shouldn't happen, but let's not throw
+                    eduPlaceholder -> UiRes.drawable.session_education
+                    codelabPlaceholder -> UiRes.drawable.session_codelab
+                    else -> UiRes.drawable.session_codelab // Shouldn't happen, but let's not throw
                 }
             ),
             contentDescription = null,
@@ -110,7 +110,7 @@ fun PageTitle(
             if (lightning) {
                 Icon(
                     modifier = Modifier.size(16.dp),
-                    painter = painterResource(Res.drawable.lightning_16_fill),
+                    painter = painterResource(UiRes.drawable.lightning_16_fill),
                     contentDescription = null,
                     tint = KotlinConfTheme.colors.orangeText,
                 )
@@ -141,9 +141,9 @@ fun PageTitle(
                     )
                     .padding(12.dp),
                 painter = painterResource(
-                    if (bookmarked) Res.drawable.bookmark_24_fill else Res.drawable.bookmark_24
+                    if (bookmarked) UiRes.drawable.bookmark_24_fill else UiRes.drawable.bookmark_24
                 ),
-                contentDescription = stringResource(Res.string.action_bookmark),
+                contentDescription = stringResource(UiRes.string.action_bookmark),
                 tint = iconTint,
             )
         }
