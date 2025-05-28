@@ -472,7 +472,7 @@ private fun FeedbackBlock(
                     fadeIn(tween(FeedbackAnimationDuration)) togetherWith
                             fadeOut(tween(FeedbackAnimationDuration))
                 },
-                modifier = Modifier.fillMaxHeight(),
+                modifier = Modifier.fillMaxHeight().weight(1f),
                 contentAlignment = Alignment.CenterStart,
             ) { emotionSelected ->
                 if (emotionSelected) {
@@ -501,10 +501,10 @@ private fun FeedbackBlock(
                         ),
                         style = KotlinConfTheme.typography.text2,
                         color = KotlinConfTheme.colors.primaryText,
+                        maxLines = 1,
                     )
                 }
             }
-            Spacer(Modifier.weight(1f))
             Row(
                 modifier = Modifier.selectableGroup()
             ) {

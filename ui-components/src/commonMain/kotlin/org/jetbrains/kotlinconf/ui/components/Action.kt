@@ -58,7 +58,9 @@ fun Action(
             style = when (size) {
                 ActionSize.Medium -> KotlinConfTheme.typography.h4
                 ActionSize.Large -> KotlinConfTheme.typography.h3
-            }
+            },
+            maxLines = 1,
+            modifier = Modifier.weight(1f)
         )
         Icon(
             modifier = Modifier
