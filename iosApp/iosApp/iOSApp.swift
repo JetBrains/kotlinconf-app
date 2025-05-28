@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         _ application: UIApplication,
         didReceiveRemoteNotification userInfo: [AnyHashable: Any]
     ) async -> UIBackgroundFetchResult {
-        NotifierManager.shared.onApplicationDidReceiveRemoteNotification(userInfo: userInfo)
+        IOSNotificationsKt.handleRemoteNotification(userInfo: userInfo)
         return UIBackgroundFetchResult.newData
     }
 
