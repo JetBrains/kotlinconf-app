@@ -1,7 +1,6 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -132,8 +131,8 @@ fun SpeakersScreen(
                         columns = GridCells.Adaptive(300.dp),
                         modifier = Modifier.fillMaxSize(),
                     ) {
-                        item(span = { GridItemSpan(maxLineSpan) }) {
-                            AnimatedVisibility(searchState == MainHeaderContainerState.Search, Modifier.animateItem()) {
+                        if (searchState == MainHeaderContainerState.Search) {
+                            item(span = { GridItemSpan(maxLineSpan) }, key = "number-of-speakers") {
                                 Text(
                                     text = pluralStringResource(
                                         Res.plurals.speakers_number_of_results,
@@ -143,6 +142,7 @@ fun SpeakersScreen(
                                     color = KotlinConfTheme.colors.secondaryText,
                                     style = KotlinConfTheme.typography.text2,
                                     modifier = Modifier
+                                        .animateItem()
                                         .padding(horizontal = 12.dp)
                                         .padding(top = 12.dp, bottom = 4.dp)
                                         .semantics { liveRegion = LiveRegionMode.Polite }
