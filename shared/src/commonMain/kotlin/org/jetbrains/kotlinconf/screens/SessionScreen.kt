@@ -88,7 +88,7 @@ import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import kotlinconfapp.ui_components.generated.resources.Res as UiRes
+import kotlinconfapp.ui_components.generated.resources.UiRes
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

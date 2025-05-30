@@ -18,7 +18,7 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.kodee_emotion_neutral
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -77,7 +77,7 @@ fun SpeakerAvatar(
             .clip(RoundedCornerShape(8.dp))
             .background(KotlinConfTheme.colors.tileBackground),
         contentScale = ContentScale.Crop,
-        error = painterResource(Res.drawable.kodee_emotion_neutral),
+        error = painterResource(UiRes.drawable.kodee_emotion_neutral),
     )
 }
 

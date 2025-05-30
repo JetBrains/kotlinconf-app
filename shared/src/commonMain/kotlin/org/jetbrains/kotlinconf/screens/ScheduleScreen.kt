@@ -95,7 +95,7 @@ import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import kotlinconfapp.ui_components.generated.resources.Res as UiRes
+import kotlinconfapp.ui_components.generated.resources.UiRes
 
 @Composable
 fun ScheduleScreen(

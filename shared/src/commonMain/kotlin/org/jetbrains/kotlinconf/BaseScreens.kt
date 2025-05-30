@@ -11,7 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.arrow_left_24
 import kotlinconfapp.ui_components.generated.resources.main_header_back
 import org.jetbrains.compose.resources.stringResource
@@ -43,8 +43,8 @@ fun ScreenWithTitle(
             title = title,
             startContent = {
                 TopMenuButton(
-                    icon = Res.drawable.arrow_left_24,
-                    contentDescription = stringResource(Res.string.main_header_back),
+                    icon = UiRes.drawable.arrow_left_24,
+                    contentDescription = stringResource(UiRes.string.main_header_back),
                     onClick = onBack,
                 )
             }

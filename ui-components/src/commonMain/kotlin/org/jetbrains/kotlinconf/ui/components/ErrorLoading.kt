@@ -43,7 +43,7 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.action_error_reload
 import kotlinconfapp.ui_components.generated.resources.kodee_error_loading_anim_bg
 import kotlinconfapp.ui_components.generated.resources.kodee_error_lost
@@ -89,7 +89,7 @@ fun MajorError(
         verticalArrangement = Arrangement.Center,
     ) {
         Image(
-            imageVector = vectorResource(Res.drawable.kodee_error_lost),
+            imageVector = vectorResource(UiRes.drawable.kodee_error_lost),
             contentDescription = null,
         )
         Spacer(Modifier.height(16.dp))
@@ -107,8 +107,8 @@ fun NormalErrorWithLoading(
     message: String,
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
-    loadingText: String = stringResource(Res.string.loading),
-    retryText: String = stringResource(Res.string.action_error_reload),
+    loadingText: String = stringResource(UiRes.string.loading),
+    retryText: String = stringResource(UiRes.string.action_error_reload),
     onRetry: (() -> Unit)? = null,
 ) {
     Column(
@@ -171,7 +171,7 @@ fun Loading(
 ) {
     Box(modifier = modifier.size(95.dp, 80.dp)) {
         val kodeeLoadingPainter = rememberVectorPainter(
-            vectorResource(Res.drawable.kodee_error_loading_anim_bg)
+            vectorResource(UiRes.drawable.kodee_error_loading_anim_bg)
         )
 
         var lastValue by remember { mutableStateOf(0f) }

@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.jetbrains_sans_bold
 import kotlinconfapp.ui_components.generated.resources.jetbrains_sans_regular
 import kotlinconfapp.ui_components.generated.resources.jetbrains_sans_semibold
@@ -65,7 +65,7 @@ internal val KotlinConfTypography: Typography
 internal val JetBrainsSans: FontFamily
     @Composable
     get() = FontFamily(
-        Font(Res.font.jetbrains_sans_bold, FontWeight.Bold, FontStyle.Normal),
-        Font(Res.font.jetbrains_sans_semibold, FontWeight.SemiBold, FontStyle.Normal),
-        Font(Res.font.jetbrains_sans_regular, FontWeight.Normal, FontStyle.Normal),
+        Font(UiRes.font.jetbrains_sans_bold, FontWeight.Bold, FontStyle.Normal),
+        Font(UiRes.font.jetbrains_sans_semibold, FontWeight.SemiBold, FontStyle.Normal),
+        Font(UiRes.font.jetbrains_sans_regular, FontWeight.Normal, FontStyle.Normal),
     )

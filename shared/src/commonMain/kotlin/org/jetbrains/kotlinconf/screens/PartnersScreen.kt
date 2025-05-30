@@ -30,7 +30,7 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
-import kotlinconfapp.ui_components.generated.resources.Res as UiRes
+import kotlinconfapp.ui_components.generated.resources.UiRes
 
 
 @Composable

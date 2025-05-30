@@ -30,7 +30,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.arrow_left_24
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.close_24
@@ -60,12 +60,12 @@ fun MainHeaderSearchBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TopMenuButton(
-            icon = Res.drawable.arrow_left_24,
+            icon = UiRes.drawable.arrow_left_24,
             onClick = {
                 onClose()
                 onSearchValueChange("")
             },
-            contentDescription = stringResource(Res.string.main_header_back),
+            contentDescription = stringResource(UiRes.string.main_header_back),
         )
 
         var focusRequested by rememberSaveable { mutableStateOf(false) }
@@ -98,7 +98,7 @@ fun MainHeaderSearchBar(
                 exit = fadeOut(tween(10)),
             ) {
                 Text(
-                    text = stringResource(Res.string.main_header_search_hint),
+                    text = stringResource(UiRes.string.main_header_search_hint),
                     style = KotlinConfTheme.typography.text1,
                     color = KotlinConfTheme.colors.placeholderText
                 )
@@ -111,13 +111,13 @@ fun MainHeaderSearchBar(
             exit = fadeOut(tween(100)),
         ) {
             TopMenuButton(
-                icon = Res.drawable.close_24,
+                icon = UiRes.drawable.close_24,
                 onClick = {
                     onSearchValueChange("")
                     onClear()
                     focusRequester.requestFocus()
                 },
-                contentDescription = stringResource(Res.string.main_header_search_clear),
+                contentDescription = stringResource(UiRes.string.main_header_search_clear),
             )
         }
     }
@@ -212,13 +212,13 @@ internal fun MainHeaderPreview() {
                     },
                     endContent = {
                         TopMenuButton(
-                            icon = Res.drawable.bookmark_24,
+                            icon = UiRes.drawable.bookmark_24,
                             selected = bookmarkFilter1,
                             onToggle = { bookmarkFilter1 = it },
                             contentDescription = "Bookmark filter",
                         )
                         TopMenuButton(
-                            icon = Res.drawable.search_24,
+                            icon = UiRes.drawable.search_24,
                             onClick = { state1 = MainHeaderContainerState.Search },
                             contentDescription = "Search",
                         )
@@ -246,7 +246,7 @@ internal fun MainHeaderPreview() {
                     title = "Speaker",
                     endContent = {
                         TopMenuButton(
-                            icon = Res.drawable.search_24,
+                            icon = UiRes.drawable.search_24,
                             onClick = { state2 = MainHeaderContainerState.Search },
                             contentDescription = "Search",
                         )
@@ -269,7 +269,7 @@ internal fun MainHeaderPreview() {
             title = "Privacy notice",
             startContent = {
                 TopMenuButton(
-                    icon = Res.drawable.arrow_left_24,
+                    icon = UiRes.drawable.arrow_left_24,
                     contentDescription = "Back",
                     onClick = {},
                 )

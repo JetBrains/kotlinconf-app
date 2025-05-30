@@ -58,7 +58,7 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.koin.compose.viewmodel.koinViewModel
-import kotlinconfapp.ui_components.generated.resources.Res as UiRes
+import kotlinconfapp.ui_components.generated.resources.UiRes
 
 private val Library.licenseName: String
     get() = licenses.firstOrNull()?.name ?: "Unknown license"

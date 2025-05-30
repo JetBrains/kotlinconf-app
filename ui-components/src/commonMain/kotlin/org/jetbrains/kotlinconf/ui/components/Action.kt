@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -84,28 +84,28 @@ internal fun ActionPreview() {
     PreviewHelper {
         Action(
             label = "Action",
-            icon = Res.drawable.arrow_right_24,
+            icon = UiRes.drawable.arrow_right_24,
             size = ActionSize.Medium,
             onClick = {},
             enabled = true,
         )
         Action(
             label = "Action",
-            icon = Res.drawable.arrow_right_24,
+            icon = UiRes.drawable.arrow_right_24,
             size = ActionSize.Medium,
             onClick = {},
             enabled = false,
         )
         Action(
             label = "Action",
-            icon = Res.drawable.arrow_right_24,
+            icon = UiRes.drawable.arrow_right_24,
             size = ActionSize.Large,
             onClick = {},
             enabled = true,
         )
         Action(
             label = "Action",
-            icon = Res.drawable.arrow_right_24,
+            icon = UiRes.drawable.arrow_right_24,
             size = ActionSize.Large,
             onClick = {},
             enabled = false,

@@ -32,7 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
 import kotlinconfapp.ui_components.generated.resources.feedback_form_send
 import kotlinconfapp.ui_components.generated.resources.feedback_form_type_something
@@ -127,7 +127,7 @@ fun FeedbackForm(
                         exit = fadeOut(tween(10)),
                     ) {
                         Text(
-                            text = stringResource(Res.string.feedback_form_type_something),
+                            text = stringResource(UiRes.string.feedback_form_type_something),
                             style = KotlinConfTheme.typography.text1,
                             color = KotlinConfTheme.colors.placeholderText
                         )
@@ -147,8 +147,8 @@ fun FeedbackForm(
             }
             Spacer(Modifier.weight(1f))
             Action(
-                label = stringResource(Res.string.feedback_form_send),
-                icon = Res.drawable.arrow_right_24,
+                label = stringResource(UiRes.string.feedback_form_send),
+                icon = UiRes.drawable.arrow_right_24,
                 size = ActionSize.Large,
                 enabled = feedbackText.isNotEmpty(),
                 onClick = {

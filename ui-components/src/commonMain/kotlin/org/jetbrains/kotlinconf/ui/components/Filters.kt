@@ -44,7 +44,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.Res
+import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.action_state_description_collapsed
 import kotlinconfapp.ui_components.generated.resources.action_state_description_expanded
 import kotlinconfapp.ui_components.generated.resources.filter_by_tags
@@ -83,10 +83,10 @@ fun Filters(
             .background(KotlinConfTheme.colors.tileBackground),
     ) {
         val stateDesc = stringResource(
-            if (isExpanded) Res.string.action_state_description_expanded
-            else Res.string.action_state_description_collapsed
+            if (isExpanded) UiRes.string.action_state_description_expanded
+            else UiRes.string.action_state_description_collapsed
         )
-        val filterByTagsText = stringResource(Res.string.filter_by_tags)
+        val filterByTagsText = stringResource(UiRes.string.filter_by_tags)
 
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -110,8 +110,8 @@ fun Filters(
             val iconRotation by animateFloatAsState(if (isExpanded) 0f else 180f)
             Action(
                 modifier = Modifier.clearAndSetSemantics {},
-                label = stringResource(Res.string.filter_by_tags),
-                icon = Res.drawable.up_24,
+                label = stringResource(UiRes.string.filter_by_tags),
+                icon = UiRes.drawable.up_24,
                 size = ActionSize.Medium,
                 enabled = true,
                 onClick = { isExpanded = !isExpanded },
@@ -132,7 +132,7 @@ fun Filters(
                             .clip(CircleShape)
                             .background(KotlinConfTheme.colors.primaryBackground)
                     ) {
-                        val tagCountContentDescription = pluralStringResource(Res.plurals.filter_by_tags_tag_count, count, count)
+                        val tagCountContentDescription = pluralStringResource(UiRes.plurals.filter_by_tags_tag_count, count, count)
                         Text(
                             text = count.toString(),
                             color = KotlinConfTheme.colors.primaryTextInverted,
@@ -156,17 +156,17 @@ fun Filters(
                 modifier = Modifier.padding(12.dp),
             ) {
                 FilterItemGroup(
-                    title = stringResource(Res.string.filter_label_category),
+                    title = stringResource(UiRes.string.filter_label_category),
                     items = remember(tags) { tags.filter { it.type == FilterItemType.Category } },
                     toggle = toggleItem,
                 )
                 FilterItemGroup(
-                    title = stringResource(Res.string.filter_label_level),
+                    title = stringResource(UiRes.string.filter_label_level),
                     items = remember(tags) { tags.filter { it.type == FilterItemType.Level } },
                     toggle = toggleItem,
                 )
                 FilterItemGroup(
-                    title = stringResource(Res.string.filter_label_session_format),
+                    title = stringResource(UiRes.string.filter_label_session_format),
                     items = remember(tags) { tags.filter { it.type == FilterItemType.Format } },
                     toggle = toggleItem,
                 )
