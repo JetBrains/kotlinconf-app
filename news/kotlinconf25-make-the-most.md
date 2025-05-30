@@ -1,6 +1,6 @@
 ---
 id: kotlinconf25-app-available
-title: "The new KotlinConf app is now available!"
+title: The new KotlinConf app is now available!
 publicationDate: 2025-05-04T00:00:00
 ---
 
