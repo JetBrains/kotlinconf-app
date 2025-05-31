@@ -8,7 +8,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +34,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopMenuButtonImpl(
     icon: DrawableResource,
@@ -38,18 +44,24 @@ private fun TopMenuButtonImpl(
     iconColor: Color,
     modifier: Modifier = Modifier,
 ) {
-    Icon(
-        modifier = modifier
-            .padding(6.dp)
-            .size(36.dp)
-            .clip(CircleShape)
-            .then(interactionModifier)
-            .background(backgroundColor)
-            .padding(6.dp),
-        painter = painterResource(icon),
-        contentDescription = contentDescription,
-        tint = iconColor,
-    )
+    TooltipBox(
+        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+        tooltip = { PlainTooltip { Text(contentDescription) } },
+        state = rememberTooltipState()
+    ) {
+        Icon(
+            modifier = modifier
+                .padding(6.dp)
+                .size(36.dp)
+                .clip(CircleShape)
+                .then(interactionModifier)
+                .background(backgroundColor)
+                .padding(6.dp),
+            painter = painterResource(icon),
+            contentDescription = contentDescription,
+            tint = iconColor,
+        )
+    }
 }
 
 /**
