@@ -68,14 +68,18 @@ class MainActivity : ComponentActivity() {
     private fun processIntent(intent: Intent?) {
         if (intent == null) return
 
-        val notificationId = intent.getStringExtra(EXTRA_LOCAL_NOTIFICATION_ID)
-        if (notificationId != null) {
-            // Local notification clicked
-            navigateByLocalNotificationId(notificationId)
+        try {
+            val notificationId = intent.getStringExtra(EXTRA_LOCAL_NOTIFICATION_ID)
+            if (notificationId != null) {
+                // Local notification clicked
+                navigateByLocalNotificationId(notificationId)
+                return
+            }
+
+            // Process push notifications
+            NotifierManager.onCreateOrOnNewIntent(intent)
+        } catch (e: Exception) {
             return
         }
-
-        // Process push notifications
-        NotifierManager.onCreateOrOnNewIntent(intent)
     }
 }
