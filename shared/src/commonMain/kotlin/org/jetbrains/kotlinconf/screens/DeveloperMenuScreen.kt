@@ -106,10 +106,17 @@ fun DeveloperMenuScreen(
                     )
 
                     SettingsItem(
-                        title = "Supports notifications",
-                        note = "Whether this device should display notification settings",
-                        enabled = flags.supportsNotifications,
-                        onToggle = { flags = flags.copy(supportsNotifications = it) }
+                        title = "Supports local notifications",
+                        note = "Whether this device should display local notification settings (session reminders, schedule updates)",
+                        enabled = flags.supportsLocalNotifications,
+                        onToggle = { flags = flags.copy(supportsLocalNotifications = it) }
+                    )
+
+                    SettingsItem(
+                        title = "Supports remote notifications",
+                        note = "Whether this device should display remote notification settings (KotlinConf news, JetBrains news)",
+                        enabled = flags.supportsRemoteNotifications,
+                        onToggle = { flags = flags.copy(supportsRemoteNotifications = it) }
                     )
 
                     SettingsItem(

@@ -130,14 +130,24 @@ private fun SettingsScreenImpl(
 
             Spacer(Modifier.height(24.dp))
 
-            if (LocalFlags.current.supportsNotifications) {
+            val flags = LocalFlags.current
+            if (flags.supportsLocalNotifications || flags.supportsRemoteNotifications) {
                 val notificationSettings = viewModel.notificationSettings.collectAsStateWithLifecycle().value
                 if (notificationSettings != null) {
                     SectionHeading(stringResource(AppRes.string.settings_notifications_title))
                     NotificationSettings(
                         notificationSettings = notificationSettings,
                         onChangeSettings = { newSettings ->
-                            viewModel.setNotificationSettings(newSettings)
+                            // Only update settings that are supported by enabled flags
+                            val updatedSettings = notificationSettings.copy(
+                                // Local notifications
+                                sessionReminders = if (flags.supportsLocalNotifications) newSettings.sessionReminders else notificationSettings.sessionReminders,
+                                scheduleUpdates = if (flags.supportsLocalNotifications) newSettings.scheduleUpdates else notificationSettings.scheduleUpdates,
+                                // Remote notifications
+                                kotlinConfNews = if (flags.supportsRemoteNotifications) newSettings.kotlinConfNews else notificationSettings.kotlinConfNews,
+                                jetBrainsNews = if (flags.supportsRemoteNotifications) newSettings.jetBrainsNews else notificationSettings.jetBrainsNews
+                            )
+                            viewModel.setNotificationSettings(updatedSettings)
                         }
                     )
                 }

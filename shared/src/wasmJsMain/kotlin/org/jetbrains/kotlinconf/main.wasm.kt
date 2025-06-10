@@ -25,7 +25,8 @@ fun main() {
         },
         platformModule = platformModule,
         flags = Flags(
-            supportsNotifications = supportsNotifications
+            supportsLocalNotifications = supportsNotifications,
+            supportsRemoteNotifications = supportsNotifications
         ),
     )
 
