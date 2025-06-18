@@ -3,25 +3,20 @@ package org.jetbrains.kotlinconf.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
-import androidx.navigation.toRoute
+import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
 import kotlinx.coroutines.channels.Channel
-import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.LocalNotificationId
-import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.SessionId
-import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.URLs
 import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
@@ -43,8 +38,6 @@ import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 import org.jetbrains.kotlinconf.screens.VisitorPrivacyNotice
 import org.jetbrains.kotlinconf.screens.VisitorTermsOfUse
 import org.jetbrains.kotlinconf.utils.getStoreUrl
-import kotlin.jvm.JvmSuppressWildcards
-import kotlin.reflect.typeOf
 
 fun navigateByLocalNotificationId(notificationId: String) {
     LocalNotificationId.parse(notificationId)?.let {
@@ -77,202 +70,210 @@ internal fun KotlinConfNavHost(
     popEnterTransition: @JvmSuppressWildcards (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition)?,
     popExitTransition: @JvmSuppressWildcards (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition)?,
 ) {
-    val navController = rememberNavController()
+//    val navController = rememberNavController()
 
-    NotificationHandler(navController)
-    PlatformNavHandler(navController)
+//    NotificationHandler(navController)
+//    PlatformNavHandler(navController)
 
-    val startDestination = if (isOnboardingComplete) MainScreen else StartScreens
-    if (popEnterTransition != null && popExitTransition != null) {
-        NavHost(
-            navController = navController,
-            startDestination = startDestination,
-            modifier = Modifier.fillMaxSize(),
-            popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition,
-        ) {
-            screens(navController)
+    val backStack = remember { mutableStateListOf<Any>(MainScreen) }
+    NavDisplay(
+        backStack = backStack,
+        entryProvider = entryProvider {
+            screens(backStack)
         }
-    } else {
-        NavHost(
-            navController = navController,
-            startDestination = startDestination,
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            screens(navController)
-        }
-    }
+    )
+
+//    val startDestination = if (isOnboardingComplete) MainScreen else StartScreens
+//    if (popEnterTransition != null && popExitTransition != null) {
+//        NavHost(
+//            navController = navController,
+//            startDestination = startDestination,
+//            modifier = Modifier.fillMaxSize(),
+//            popEnterTransition = popEnterTransition,
+//            popExitTransition = popExitTransition,
+//        ) {
+//            screens(navController)
+//        }
+//    } else {
+//        NavHost(
+//            navController = navController,
+//            startDestination = startDestination,
+//            modifier = Modifier.fillMaxSize(),
+//        ) {
+//            screens(navController)
+//        }
+//    }
 }
 
 
-fun NavGraphBuilder.screens(navController: NavHostController) {
-    startScreens(
-        navController = navController,
-    )
-
-    composable<MainScreen> {
-        MainScreen(
-            rootNavController = navController,
-        )
+fun EntryProviderBuilder<Any>.screens(backStack: SnapshotStateList<Any>) {
+    fun popBackStack() {
+        backStack.removeAt(backStack.lastIndex)
     }
 
-    composable<SpeakerDetailScreen>(typeMap = mapOf(typeOf<SpeakerId>() to SpeakerIdNavType)) {
+//    startScreens(
+//        navController = navController,
+//    )
+
+    entry<MainScreen> {
+        MainScreen(onNavigate = { backStack.add(it) })
+    }
+    entry<SpeakerDetailScreen> {
         SpeakerDetailScreen(
-            speakerId = it.toRoute<SpeakerDetailScreen>().speakerId,
-            onBack = navController::navigateUp,
-            onSession = { navController.navigate(SessionScreen(it)) },
+            speakerId = it.speakerId,
+            onBack = { popBackStack() },
+            onSession = { backStack.add(SessionScreen(it)) },
         )
     }
-    composable<AboutAppScreen> {
+    entry<SessionScreen> {
+        val urlHandler = LocalUriHandler.current
+        SessionScreen(
+            sessionId = it.sessionId,
+            openedForFeedback = it.openedForFeedback,
+            onBack = { popBackStack() },
+            onPrivacyNoticeNeeded = { backStack.add(AppPrivacyNoticePrompt) },
+            onSpeaker = { speakerId -> backStack.add(SpeakerDetailScreen(speakerId)) },
+            onWatchVideo = { videoUrl -> urlHandler.openUri(videoUrl) },
+            onNavigateToMap = { roomName ->
+                backStack.add(NestedMapScreen(roomName))
+            },
+        )
+    }
+
+    entry<AboutAppScreen> {
         val uriHandler = LocalUriHandler.current
         AboutAppScreen(
-            onBack = navController::navigateUp,
+            onBack = { popBackStack() },
             onGitHubRepo = { uriHandler.openUri(URLs.GITHUB_REPO) },
             onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
-            onPrivacyNotice = { navController.navigate(AppPrivacyNoticeScreen) },
-            onTermsOfUse = { navController.navigate(AppTermsOfUseScreen) },
-            onLicenses = { navController.navigate(LicensesScreen) },
+            onPrivacyNotice = { backStack.add(AppPrivacyNoticeScreen) },
+            onTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
+            onLicenses = { backStack.add(LicensesScreen) },
             onJunie = { uriHandler.openUri(URLs.JUNIE_LANDING_PAGE) },
-            onDeveloperMenu = { navController.navigate(DeveloperMenuScreen) },
+            onDeveloperMenu = { backStack.add(DeveloperMenuScreen) },
         )
     }
-    composable<LicensesScreen> {
+    entry<LicensesScreen> {
         LicensesScreen(
             onLicenseClick = { licenseName, licenseText ->
-                navController.navigate(SingleLicenseScreen(licenseName, licenseText))
+                backStack.add(SingleLicenseScreen(licenseName, licenseText))
             },
-            onBack = navController::navigateUp,
+            onBack = { popBackStack() },
         )
     }
-    composable<SingleLicenseScreen> {
-        val params = it.toRoute<SingleLicenseScreen>()
+    entry<SingleLicenseScreen> {
         SingleLicenseScreen(
-            licenseName = params.licenseName,
-            licenseContent = params.licenseText,
-            onBack = navController::navigateUp,
+            licenseName = it.licenseName,
+            licenseContent = it.licenseText,
+            onBack = { popBackStack() },
         )
     }
-    composable<AboutConferenceScreen> {
+    entry<AboutConferenceScreen> {
         val urlHandler = LocalUriHandler.current
         AboutConference(
-            onPrivacyNotice = { navController.navigate(VisitorPrivacyNoticeScreen) },
-            onGeneralTerms = { navController.navigate(TermsOfUseScreen) },
+            onPrivacyNotice = { backStack.add(VisitorPrivacyNoticeScreen) },
+            onGeneralTerms = { backStack.add(TermsOfUseScreen) },
             onWebsiteLink = { urlHandler.openUri(URLs.KOTLINCONF_HOMEPAGE) },
-            onBack = navController::navigateUp,
-            onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) },
+            onBack = { popBackStack() },
+            onSpeaker = { speakerId -> backStack.add(SpeakerDetailScreen(speakerId)) },
         )
     }
-    composable<CodeOfConductScreen> {
-        CodeOfConduct(onBack = navController::navigateUp)
+    entry<CodeOfConductScreen> {
+        CodeOfConduct(onBack = { popBackStack() })
     }
-    composable<SettingsScreen> {
-        SettingsScreen(onBack = navController::navigateUp)
+    entry<SettingsScreen> {
+        SettingsScreen(onBack = { popBackStack() })
     }
-    composable<VisitorPrivacyNoticeScreen> {
-        VisitorPrivacyNotice(onBack = navController::navigateUp)
+    entry<VisitorPrivacyNoticeScreen> {
+        VisitorPrivacyNotice(onBack = { popBackStack() })
     }
-    composable<AppPrivacyNoticeScreen> {
+    entry<AppPrivacyNoticeScreen> {
         AppPrivacyNotice(
-            onBack = navController::navigateUp,
-            onAppTermsOfUse = { navController.navigate(AppTermsOfUseScreen) },
+            onBack = { popBackStack() },
+            onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
         )
     }
-    composable<TermsOfUseScreen> {
+    entry<TermsOfUseScreen> {
         VisitorTermsOfUse(
-            onBack = navController::navigateUp,
-            onCodeOfConduct = { navController.navigate(CodeOfConductScreen) },
-            onVisitorPrivacyNotice = { navController.navigate(VisitorPrivacyNoticeScreen) },
+            onBack = { popBackStack() },
+            onCodeOfConduct = { backStack.add(CodeOfConductScreen) },
+            onVisitorPrivacyNotice = { backStack.add(VisitorPrivacyNoticeScreen) },
         )
     }
-    composable<AppTermsOfUseScreen> {
+    entry<AppTermsOfUseScreen> {
         AppTermsOfUse(
-            onBack = navController::navigateUp,
+            onBack = { popBackStack() },
             onAppPrivacyNotice = {
-                navController.navigate(AppPrivacyNoticeScreen)
+                backStack.add(AppPrivacyNoticeScreen)
             },
         )
     }
-    composable<PartnersScreen> {
+    entry<PartnersScreen> {
         PartnersScreen(
-            onBack = navController::navigateUp,
+            onBack = { popBackStack() },
             onPartnerDetail = { partnerId ->
-                navController.navigate(PartnerDetailScreen(partnerId))
+                backStack.add(PartnerDetailScreen(partnerId))
             }
         )
     }
-    composable<PartnerDetailScreen>(typeMap = mapOf(typeOf<PartnerId>() to PartnerIdNavType)) {
+    entry<PartnerDetailScreen> {
         PartnerDetailScreen(
-            partnerId = it.toRoute<PartnerDetailScreen>().partnerId,
-            onBack = navController::navigateUp,
+            partnerId = it.partnerId,
+            onBack = { popBackStack() },
         )
     }
-    composable<SessionScreen>(typeMap = mapOf(typeOf<SessionId>() to SessionIdNavType)) {
-        val params = it.toRoute<SessionScreen>()
-        val urlHandler = LocalUriHandler.current
-        SessionScreen(
-            sessionId = params.sessionId,
-            openedForFeedback = params.openedForFeedback,
-            onBack = navController::navigateUp,
-            onPrivacyNoticeNeeded = { navController.navigate(AppPrivacyNoticePrompt) },
-            onSpeaker = { speakerId -> navController.navigate(SpeakerDetailScreen(speakerId)) },
-            onWatchVideo = { videoUrl -> urlHandler.openUri(videoUrl) },
-            onNavigateToMap = { roomName ->
-                navController.navigate(NestedMapScreen(roomName))
-            },
-        )
-    }
-    composable<AppPrivacyNoticePrompt> {
+
+    entry<AppPrivacyNoticePrompt> {
         AppPrivacyNoticePrompt(
-            onRejectNotice = navController::navigateUp,
-            onAcceptNotice = navController::navigateUp,
-            onAppTermsOfUse =  { navController.navigate(AppTermsOfUseScreen) },
+            onRejectNotice = { popBackStack() },
+            onAcceptNotice = { popBackStack() },
+            onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
             confirmationRequired = true,
         )
     }
 
-    composable<DeveloperMenuScreen> {
-        DeveloperMenuScreen(onBack = navController::navigateUp)
+    entry<DeveloperMenuScreen> {
+        DeveloperMenuScreen(onBack = { popBackStack() })
     }
 
-    composable<NestedMapScreen> {
-        val nestedMapParam = it.toRoute<NestedMapScreen>()
+    entry<NestedMapScreen> {
         NestedMapScreen(
-            roomName = nestedMapParam.roomName,
-            onBack = navController::navigateUp,
+            roomName = it.roomName,
+            onBack = { popBackStack() },
         )
     }
 }
 
-fun NavGraphBuilder.startScreens(
-    navController: NavHostController,
-) {
-    navigation<StartScreens>(
-        startDestination = StartPrivacyNoticeScreen
-    ) {
-        composable<StartPrivacyNoticeScreen> {
-            val skipNotifications = LocalFlags.current.supportsNotifications.not()
-            AppPrivacyNoticePrompt(
-                onRejectNotice = {
-                    navController.navigate(if (skipNotifications) MainScreen else StartNotificationsScreen) {
-                        popUpTo<StartScreens> { inclusive = skipNotifications }
-                    }
-                },
-                onAcceptNotice = {
-                    navController.navigate(if (skipNotifications) MainScreen else StartNotificationsScreen) {
-                        popUpTo<StartScreens> { inclusive = skipNotifications }
-                    }
-                },
-                onAppTermsOfUse =  { navController.navigate(AppTermsOfUseScreen) },
-                confirmationRequired = false,
-            )
-        }
-        composable<StartNotificationsScreen> {
-            StartNotificationsScreen(
-                onDone = {
-                    navController.navigate(MainScreen) {
-                        popUpTo<StartScreens> { inclusive = true }
-                    }
-                })
-        }
-    }
-}
+//fun NavGraphBuilder.startScreens(
+//    navController: NavHostController,
+//) {
+//    navigation<StartScreens>(
+//        startDestination = StartPrivacyNoticeScreen
+//    ) {
+//        composable<StartPrivacyNoticeScreen> {
+//            val skipNotifications = LocalFlags.current.supportsNotifications.not()
+//            AppPrivacyNoticePrompt(
+//                onRejectNotice = {
+//                    navController.navigate(if (skipNotifications) MainScreen else StartNotificationsScreen) {
+//                        popUpTo<StartScreens> { inclusive = skipNotifications }
+//                    }
+//                },
+//                onAcceptNotice = {
+//                    navController.navigate(if (skipNotifications) MainScreen else StartNotificationsScreen) {
+//                        popUpTo<StartScreens> { inclusive = skipNotifications }
+//                    }
+//                },
+//                onAppTermsOfUse =  { navController.navigate(AppTermsOfUseScreen) },
+//                confirmationRequired = false,
+//            )
+//        }
+//        composable<StartNotificationsScreen> {
+//            StartNotificationsScreen(
+//                onDone = {
+//                    navController.navigate(MainScreen) {
+//                        popUpTo<StartScreens> { inclusive = true }
+//                    }
+//                })
+//        }
+//    }
+//}
