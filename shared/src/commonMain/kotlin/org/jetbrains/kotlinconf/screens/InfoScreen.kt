@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,6 +41,7 @@ import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 
 
@@ -81,7 +83,7 @@ fun InfoScreen(
             PageMenuItem(stringResource(Res.string.info_link_partners), onClick = onOurPartners)
             PageMenuItem(stringResource(Res.string.info_link_code_of_conduct), onClick = onCodeOfConduct)
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(36.dp)
             ) {
                 SocialSquare(
                     image = vectorResource(Res.drawable.twitter),
@@ -113,15 +115,21 @@ private fun SocialSquare(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Image(
-        imageVector = image,
-        contentDescription = description,
+    Column(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .background(KotlinConfTheme.colors.tileBackground)
             .padding(vertical = 32.dp)
-            .size(64.dp),
-        colorFilter = ColorFilter.tint(KotlinConfTheme.colors.primaryText),
-    )
+            .size(96.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            imageVector = image,
+            contentDescription = description,
+            colorFilter = ColorFilter.tint(KotlinConfTheme.colors.primaryText),
+        )
+        Spacer(Modifier.size(16.dp))
+        Text(description)
+    }
 }

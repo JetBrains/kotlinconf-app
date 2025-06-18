@@ -6,16 +6,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -56,21 +60,14 @@ fun SpeakersScreen(
     onSpeaker: (SpeakerId) -> Unit,
     viewModel: SpeakersViewModel = koinViewModel(),
 ) {
-    var searchState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
-    var searchText by rememberSaveable { mutableStateOf("") }
+    var searchState by remember { mutableStateOf(MainHeaderContainerState.Title) }
+    var searchText by remember { mutableStateOf("") }
 
     val uiState = viewModel.speakers.collectAsState().value
 
     val gridState = rememberLazyGridState()
 
     LaunchedEffect(searchState, searchText) {
-        if (searchState == MainHeaderContainerState.Search) {
-            if (gridState.firstVisibleItemIndex > 1) {
-                gridState.scrollToItem(0)
-            } else {
-                gridState.animateScrollToItem(0)
-            }
-        }
         viewModel.setSearchText(searchText)
     }
 
@@ -128,27 +125,9 @@ fun SpeakersScreen(
                     val speakers = targetState.speakers
                     LazyVerticalGrid(
                         state = gridState,
-                        columns = GridCells.Adaptive(300.dp),
+                        columns = GridCells.Fixed(2),
                         modifier = Modifier.fillMaxSize(),
                     ) {
-                        if (searchState == MainHeaderContainerState.Search) {
-                            item(span = { GridItemSpan(maxLineSpan) }, key = "number-of-speakers") {
-                                Text(
-                                    text = pluralStringResource(
-                                        Res.plurals.speakers_number_of_results,
-                                        speakers.size,
-                                        speakers.size
-                                    ),
-                                    color = KotlinConfTheme.colors.secondaryText,
-                                    style = KotlinConfTheme.typography.text2,
-                                    modifier = Modifier
-                                        .animateItem()
-                                        .padding(horizontal = 12.dp)
-                                        .padding(top = 12.dp, bottom = 4.dp)
-                                        .semantics { liveRegion = LiveRegionMode.Polite }
-                                )
-                            }
-                        }
                         items(speakers, key = { it.speaker.id.id }) { speakerWithHighlights ->
                             val speaker = speakerWithHighlights.speaker
                             SpeakerCard(

@@ -37,7 +37,7 @@ data class DayHeaderItem(val value: Day) : ScheduleListItem
 
 data class TimeSlotTitleItem(val value: TimeSlot) : ScheduleListItem
 
-data class NoBookmarksItem(val id: String) : ScheduleListItem
+//data class NoBookmarksItem(val id: String) : ScheduleListItem
 
 data class SessionItem(
     val value: SessionCardView,
@@ -259,9 +259,9 @@ class ScheduleViewModel(
                         add(SessionItem(session))
                     }
 
-                    if (last() is TimeSlotTitleItem && isBookmarkedOnly) {
-                        add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
-                    }
+//                    if (last() is TimeSlotTitleItem && isBookmarkedOnly) {
+//                        add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
+//                    }
 
                     if (activeTimeSlot) { // This was the active slot
                         lastActiveIndex = lastIndex // Mark its end
