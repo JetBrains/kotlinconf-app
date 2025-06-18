@@ -30,17 +30,17 @@ kotlin {
 
     androidTarget()
 
-    jvm()
-
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs()
-    js {
-        browser()
-    }
+//    jvm()
+//
+//    iosX64()
+//    iosArm64()
+//    iosSimulatorArm64()
+//
+//    @OptIn(ExperimentalWasmDsl::class)
+//    wasmJs()
+//    js {
+//        browser()
+//    }
 
     sourceSets {
         commonMain.dependencies {
@@ -63,15 +63,15 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
         }
-        jvmMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
-        }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-        }
-        jsMain.dependencies {
-            implementation(libs.ktor.client.js)
-        }
+//        jvmMain.dependencies {
+//            implementation(libs.ktor.client.okhttp)
+//        }
+//        iosMain.dependencies {
+//            implementation(libs.ktor.client.darwin)
+//        }
+//        jsMain.dependencies {
+//            implementation(libs.ktor.client.js)
+//        }
     }
 }
 
