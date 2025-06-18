@@ -30,53 +30,53 @@ kotlin {
         }
     }
 
-    jvm()
-
-    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
-    wasmJs {
-        binaries.executable()
-        browser {
-            val projectDir = project.projectDir.path
-            val rootDir = project.rootDir.path
-            commonWebpackConfig {
-                outputFileName = "kotlin-app-wasm-js.js"
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    // Uncomment and configure this if you want to open a browser different from the system default 
-                    // open = mapOf(
-                    //     "app" to mapOf(
-                    //         "name" to "google chrome"
-                    //     )
-                    // )
-
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside a browser
-                        add(projectDir)
-                        add(rootDir)
-                    }
-                }
-            }
-        }
-    }
-
-    js {
-        binaries.executable()
-        browser {
-            commonWebpackConfig {
-                outputFileName = "kotlin-app-js.js"
-            }
-        }
-    }
-
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
-            isStatic = true
-        }
-    }
+//    jvm()
+//
+//    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+//    wasmJs {
+//        binaries.executable()
+//        browser {
+//            val projectDir = project.projectDir.path
+//            val rootDir = project.rootDir.path
+//            commonWebpackConfig {
+//                outputFileName = "kotlin-app-wasm-js.js"
+//                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+//                    // Uncomment and configure this if you want to open a browser different from the system default
+//                    // open = mapOf(
+//                    //     "app" to mapOf(
+//                    //         "name" to "google chrome"
+//                    //     )
+//                    // )
+//
+//                    static = (static ?: mutableListOf()).apply {
+//                        // Serve sources to debug inside a browser
+//                        add(projectDir)
+//                        add(rootDir)
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    js {
+//        binaries.executable()
+//        browser {
+//            commonWebpackConfig {
+//                outputFileName = "kotlin-app-js.js"
+//            }
+//        }
+//    }
+//
+//    listOf(
+//        iosX64(),
+//        iosArm64(),
+//        iosSimulatorArm64()
+//    ).forEach {
+//        it.binaries.framework {
+//            baseName = "shared"
+//            isStatic = true
+//        }
+//    }
 
     applyDefaultHierarchyTemplate {
         common {
@@ -113,7 +113,9 @@ kotlin {
             implementation(libs.kotlinx.datetime)
 
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.androidx.navigation.compose)
+            implementation(libs.androidx.navigation3.runtime)
+            implementation(libs.androidx.navigation3.ui)
+            implementation(libs.androidx.lifecycle.viewmodel.navigation3)
             implementation(libs.compose.ui.backhandler)
             implementation(libs.ktor.client.core)
 
@@ -143,22 +145,22 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
         }
 
-        iosMain.dependencies {
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.ktor.client.darwin)
-        }
-
-        jvmMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
-            implementation(compose.desktop.currentOs)
-            implementation(libs.android.svg)
-            implementation(libs.kotlinx.coroutines.swing)
-        }
-
-        get("webMain").dependencies {
-            implementation(libs.ktor.client.js)
-            implementation(npm("@js-joda/timezone", "2.3.0"))
-        }
+//        iosMain.dependencies {
+//            implementation(libs.kotlinx.coroutines.core)
+//            implementation(libs.ktor.client.darwin)
+//        }
+//
+//        jvmMain.dependencies {
+//            implementation(libs.ktor.client.okhttp)
+//            implementation(compose.desktop.currentOs)
+//            implementation(libs.android.svg)
+//            implementation(libs.kotlinx.coroutines.swing)
+//        }
+//
+//        get("webMain").dependencies {
+//            implementation(libs.ktor.client.js)
+//            implementation(npm("@js-joda/timezone", "2.3.0"))
+//        }
     }
 }
 
@@ -189,19 +191,19 @@ compose.desktop {
     }
 }
 
-val buildWebApp by tasks.creating(Copy::class) {
-    val wasmDist = "wasmJsBrowserDistribution"
-    val jsDist = "jsBrowserDistribution"
-
-    dependsOn(wasmDist, jsDist)
-
-    from(tasks.named(jsDist).get().outputs.files)
-    from(tasks.named(wasmDist).get().outputs.files)
-
-    into(layout.buildDirectory.dir("webApp"))
-
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
+//val buildWebApp by tasks.creating(Copy::class) {
+//    val wasmDist = "wasmJsBrowserDistribution"
+//    val jsDist = "jsBrowserDistribution"
+//
+//    dependsOn(wasmDist, jsDist)
+//
+//    from(tasks.named(jsDist).get().outputs.files)
+//    from(tasks.named(wasmDist).get().outputs.files)
+//
+//    into(layout.buildDirectory.dir("webApp"))
+//
+//    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+//}
 
 // Hot reload support
 composeCompiler {

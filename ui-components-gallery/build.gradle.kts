@@ -12,24 +12,24 @@ plugins {
 kotlin {
     androidTarget()
 
-    jvm()
-
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        binaries.executable()
-        browser {
-            commonWebpackConfig {
-                outputFileName = "kotlinconf-app-gallery.js"
-            }
-        }
-    }
-    js {
-        browser()
-    }
+//    jvm()
+//
+//    iosX64()
+//    iosArm64()
+//    iosSimulatorArm64()
+//
+//    @OptIn(ExperimentalWasmDsl::class)
+//    wasmJs {
+//        binaries.executable()
+//        browser {
+//            commonWebpackConfig {
+//                outputFileName = "kotlinconf-app-gallery.js"
+//            }
+//        }
+//    }
+//    js {
+//        browser()
+//    }
 
     sourceSets {
         commonMain.dependencies {
@@ -48,11 +48,11 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
 
-        // For hot-reload
-        jvmMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.logback.classic)
-        }
+//        // For hot-reload
+//        jvmMain.dependencies {
+//            implementation(compose.desktop.currentOs)
+//            implementation(libs.logback.classic)
+//        }
     }
 }
 
