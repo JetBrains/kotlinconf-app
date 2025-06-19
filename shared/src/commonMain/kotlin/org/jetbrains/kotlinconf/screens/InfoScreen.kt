@@ -83,7 +83,7 @@ fun InfoScreen(
             PageMenuItem(stringResource(Res.string.info_link_partners), onClick = onOurPartners)
             PageMenuItem(stringResource(Res.string.info_link_code_of_conduct), onClick = onCodeOfConduct)
             Row(
-                horizontalArrangement = Arrangement.spacedBy(36.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 SocialSquare(
                     image = vectorResource(Res.drawable.twitter),
@@ -115,21 +115,15 @@ private fun SocialSquare(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    Image(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .background(KotlinConfTheme.colors.tileBackground)
             .padding(vertical = 32.dp)
-            .size(96.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            imageVector = image,
-            contentDescription = description,
-            colorFilter = ColorFilter.tint(KotlinConfTheme.colors.primaryText),
-        )
-        Spacer(Modifier.size(16.dp))
-        Text(description)
-    }
+            .size(64.dp),
+        imageVector = image,
+        contentDescription = description,
+        colorFilter = ColorFilter.tint(KotlinConfTheme.colors.primaryText),
+    )
 }

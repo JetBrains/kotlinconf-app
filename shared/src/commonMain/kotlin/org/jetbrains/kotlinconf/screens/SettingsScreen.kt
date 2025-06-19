@@ -1,7 +1,7 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.EaseOutQuad
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -81,7 +81,7 @@ fun SettingsScreen(
                 scope.launch {
                     bitmap = graphicsLayer.toImageBitmap()
                     bitmapVisibility.snapTo(1f)
-                    bitmapVisibility.animateTo(0f, tween(500, easing = EaseOutQuad))
+                    bitmapVisibility.animateTo(0f, tween(500, easing = LinearEasing))
                     bitmap = null
                 }
                 viewModel.setTheme(theme)
