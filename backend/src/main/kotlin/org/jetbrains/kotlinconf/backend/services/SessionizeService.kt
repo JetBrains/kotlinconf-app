@@ -14,6 +14,7 @@ import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.kotlinconf.Conference
 import org.jetbrains.kotlinconf.EVENT_TIME_ZONE
 import org.jetbrains.kotlinconf.Session
+import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.backend.model.CategoryItemData
 import org.jetbrains.kotlinconf.backend.model.SessionizeData
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit
 
 class SessionizeService(
     private val client: HttpClient,
+    private val videoUrlService: VideoUrlService,
     config: ConferenceConfig
 ): Closeable {
     private val conference = MutableSharedFlow<Conference>(replay = 1)
@@ -50,9 +52,10 @@ class SessionizeService(
     suspend fun synchronizeWithSessionize(
         sessionizeUrl: String,
     ) {
-        val updatedValue = client.get(sessionizeUrl)
-            .body<SessionizeData>()
-            .toConference()
+        val sessionizeData = client.get(sessionizeUrl).body<SessionizeData>()
+        val videoUrls = videoUrlService.getVideoUrls()
+
+        val updatedValue = sessionizeData.toConference(videoUrls)
 
         conference.emit(updatedValue)
     }
@@ -66,7 +69,7 @@ class SessionizeService(
 
     suspend fun getConferenceData(): Conference = conference.first()
 
-    private fun SessionizeData.toConference(): Conference {
+    private fun SessionizeData.toConference(videoUrls: Map<SessionId, String>): Conference {
         val tags: Map<Int, CategoryItemData> = categories
             .flatMap { it.items }
             .associateBy { it.id }
@@ -88,7 +91,8 @@ class SessionizeService(
                 (it.roomId?.let<Int, String> { findRoom(it) } ?: "unknown").removeSuffix(" (Lightning talks)"),
                 startsAt.toLocalDateTime(EVENT_TIME_ZONE),
                 endsAt.toLocalDateTime(EVENT_TIME_ZONE),
-                tags
+                tags,
+                videoUrls[it.id]
             )
         }.mergeWorkshops()
 
@@ -124,7 +128,8 @@ class SessionizeService(
                 first.location,
                 startTime,
                 endTime,
-                first.tags
+                first.tags,
+                first.videoUrl
             )
         }
 
