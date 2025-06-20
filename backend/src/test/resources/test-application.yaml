@@ -14,10 +14,11 @@ sessionize:
     imagesUrl: "https://sessionize.com/image/"
     interval: 60
 
-news:
+data:
     repo: "JetBrains/kotlinconf-app"
-    branch: "e5l/news"
-    folder: "news"
+    branch: "backend-video-urls"
+    newsFolder: "data/news"
+    videosFolder: "data/videos"
 
 database:
     host: "$DB0_HOST:"

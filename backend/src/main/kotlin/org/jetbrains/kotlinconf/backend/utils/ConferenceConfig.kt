@@ -9,7 +9,8 @@ class ConferenceConfig(config: ApplicationConfig) {
 
     val adminSecret: String = config.property("service.secret").getString()
 
-    val newsRepo: String = config.property("news.repo").getString()
-    val newsBranch: String = config.property("news.branch").getString()
-    val newsFolder: String = config.property("news.folder").getString()
+    val dataRepo: String = config.property("data.repo").getString()
+    val dataBranch: String = config.property("data.branch").getString()
+    val newsFolder: String = config.property("data.newsFolder").getString()
+    val videosFolder: String = config.property("data.videosFolder").getString()
 }
