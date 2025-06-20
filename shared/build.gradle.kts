@@ -160,6 +160,8 @@ kotlin {
             implementation(npm("@js-joda/timezone", "2.3.0"))
         }
     }
+
+    jvmToolchain(21)
 }
 
 android {
@@ -172,9 +174,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlin {
-        jvmToolchain(11)
     }
 }
 

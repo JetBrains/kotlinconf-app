@@ -54,6 +54,8 @@ kotlin {
             implementation(libs.logback.classic)
         }
     }
+
+    jvmToolchain(21)
 }
 
 android {
@@ -71,9 +73,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlin {
-        jvmToolchain(11)
     }
 }
 
