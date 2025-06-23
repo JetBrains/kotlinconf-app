@@ -92,6 +92,10 @@ android {
 // Hot reload support
 composeCompiler {
     featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
+    reportsDestination = layout.buildDirectory.dir("compose_build_reports")
+    stabilityConfigurationFiles.addAll(
+        rootProject.layout.projectDirectory.file("compose-stability.conf"),
+    )
 }
 
 compose.resources {
