@@ -32,12 +32,12 @@ val `Custom Color Divider` by story {
 }
 
 val `Divider with Parameters` by story {
-    val thickness by parameter(2.dp)
+    val thickness by parameter(2)
     val useCustomColor by parameter(false)
     
     KotlinConfTheme {
         Divider(
-            thickness = thickness,
+            thickness = thickness.dp,
             color = if (useCustomColor) KotlinConfTheme.colors.primaryBackground else KotlinConfTheme.colors.strokeHalf
         )
     }
