@@ -3,6 +3,7 @@ package org.jetbrains.kotlinconf.backend.services
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
 import io.ktor.utils.io.core.Closeable
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -81,14 +82,15 @@ class SessionizeService(
             if ("Interview" in tags) return@mapNotNull null
 
             Session(
-                it.id,
-                it.displayTitle,
-                it.descriptionText ?: "",
-                it.speakers,
-                (it.roomId?.let<Int, String> { findRoom(it) } ?: "unknown").removeSuffix(" (Lightning talks)"),
-                startsAt.toLocalDateTime(EVENT_TIME_ZONE),
-                endsAt.toLocalDateTime(EVENT_TIME_ZONE),
-                tags
+                id = it.id,
+                title = it.displayTitle,
+                description = it.descriptionText ?: "",
+                speakerIds = it.speakers,
+                location = (it.roomId?.let<Int, String> { findRoom(it) } ?: "unknown").removeSuffix(" (Lightning talks)"),
+                startsAt = startsAt.toLocalDateTime(EVENT_TIME_ZONE),
+                endsAt = endsAt.toLocalDateTime(EVENT_TIME_ZONE),
+                tags = tags,
+                videoUrl = it.recordingUrl
             )
         }.mergeWorkshops()
 

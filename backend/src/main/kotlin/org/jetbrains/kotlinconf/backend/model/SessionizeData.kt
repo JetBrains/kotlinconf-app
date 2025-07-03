@@ -1,7 +1,6 @@
 package org.jetbrains.kotlinconf.backend.model
 
 import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.kotlinconf.SessionId
@@ -30,7 +29,9 @@ data class SessionData(
     val title: String,
     val roomId: Int?,
     val questionAnswers: List<QuestionAnswerData> = emptyList(),
-    val categoryItems: List<Int> = emptyList()
+    val categoryItems: List<Int> = emptyList(),
+    val liveUrl: String? = null,
+    val recordingUrl: String? = null,
 ) {
     val displayTitle: String = title.trim()
 
