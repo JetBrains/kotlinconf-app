@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package org.jetbrains.kotlinconf.backend.services
 
 import io.ktor.client.HttpClient
@@ -21,6 +23,7 @@ import org.jetbrains.kotlinconf.backend.model.SessionizeData
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
+import kotlin.time.ExperimentalTime
 
 class SessionizeService(
     private val client: HttpClient,
