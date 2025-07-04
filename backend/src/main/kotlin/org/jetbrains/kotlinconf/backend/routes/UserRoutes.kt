@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package org.jetbrains.kotlinconf.backend.routes
 
 import io.ktor.http.HttpStatusCode
@@ -5,12 +7,12 @@ import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.kotlinconf.backend.repositories.KotlinConfRepository
 import org.koin.ktor.ext.inject
-import kotlin.getValue
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 /*
 POST http://localhost:8080/sign

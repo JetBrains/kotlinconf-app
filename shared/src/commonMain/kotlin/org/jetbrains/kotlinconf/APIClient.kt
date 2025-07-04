@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package org.jetbrains.kotlinconf
 
 import io.ktor.client.HttpClient
@@ -23,8 +25,9 @@ import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.core.Closeable
 import kotlinx.coroutines.CancellationException
-import kotlinx.datetime.Instant
 import org.jetbrains.kotlinconf.utils.Logger
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 import io.ktor.client.plugins.logging.Logger as KtorLogger
 
 /**

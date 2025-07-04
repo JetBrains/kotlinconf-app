@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package org.jetbrains.kotlinconf
 
 import kotlinx.coroutines.awaitCancellation
@@ -6,15 +8,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.kotlinconf.utils.Logger
+import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.ExperimentalTime
 
 interface TimeProvider {
     fun now(): LocalDateTime

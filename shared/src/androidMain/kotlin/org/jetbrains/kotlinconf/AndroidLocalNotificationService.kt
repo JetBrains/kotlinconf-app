@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package org.jetbrains.kotlinconf
 
 import android.Manifest
@@ -18,6 +20,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
 import org.jetbrains.kotlinconf.utils.Logger
 import org.koin.mp.KoinPlatform
+import kotlin.time.ExperimentalTime
 
 const val EXTRA_LOCAL_NOTIFICATION_ID = "localNotificationId"
 private const val EXTRA_TITLE = "title"
