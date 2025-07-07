@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory
 
 class NewsService(private val client: HttpClient, config: ConferenceConfig): Closeable {
     private val log = LoggerFactory.getLogger("NewsService")
-    private val repo: String = config.dataRepo
-    private val branch: String = config.dataBranch
+    private val repo: String = config.newsRepo
+    private val branch: String = config.newsBranch
     private val folder: String = config.newsFolder
     private val updateInterval = config.sessionizeInterval
 

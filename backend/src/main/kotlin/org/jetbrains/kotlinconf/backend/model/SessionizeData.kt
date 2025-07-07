@@ -32,7 +32,9 @@ data class SessionData(
     val title: String,
     val roomId: Int?,
     val questionAnswers: List<QuestionAnswerData> = emptyList(),
-    val categoryItems: List<Int> = emptyList()
+    val categoryItems: List<Int> = emptyList(),
+    val liveUrl: String? = null,
+    val recordingUrl: String? = null,
 ) {
     val displayTitle: String = title.trim()
 
