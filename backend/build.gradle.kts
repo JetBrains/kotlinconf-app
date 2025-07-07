@@ -37,6 +37,10 @@ dependencies {
     implementation(libs.ktor.server.config.yaml)
     implementation(libs.ktor.server.swagger)
 
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
+
     implementation(libs.exposed.core)
     implementation(libs.exposed.dao)
     implementation(libs.exposed.jdbc)
