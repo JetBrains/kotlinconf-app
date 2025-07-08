@@ -1,10 +1,12 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
+import com.android.build.api.dsl.androidLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinMultiplatform)
@@ -13,7 +15,19 @@ plugins {
 kotlin {
     applyDefaultHierarchyTemplate()
 
-    androidTarget()
+    androidLibrary {
+        namespace = "com.jetbrains.kotlinconf.ui"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+
+        compilations.configureEach {
+            compilerOptions.configure {
+                jvmTarget = JvmTarget.JVM_11
+            }
+        }
+
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
+    }
 
     jvm()
 
@@ -56,6 +70,9 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
+
+            // TODO should be debugImplementation https://issuetracker.google.com/issues/453706861
+            implementation(libs.compose.ui.tooling.preview)
         }
         jvmMain.dependencies {
             implementation(libs.ktor.client.okhttp)
@@ -75,25 +92,8 @@ kotlin {
     }
 }
 
-android {
-    namespace = "com.jetbrains.kotlinconf.ui"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
 compose.resources {
     publicResClass = true
     nameOfResClass = "UiRes"
     packageOfResClass = "org.jetbrains.kotlinconf.ui.generated.resources"
-}
-
-// Android preview support
-dependencies {
-    debugImplementation(libs.compose.ui.tooling)
 }
