@@ -1,0 +1,46 @@
+<resources>
+    <!-- Common -->
+    <string name="lightning_talk">Kurzvortrag</string>
+    <string name="now">Jetzt</string>
+    <string name="loading">Wird geladen…</string>
+
+    <!-- Actions -->
+    <string name="action_bookmark">Lesezeichen</string>
+    <string name="action_bookmark_session">%1$s als Lesezeichen speichern</string>
+    <string name="action_remove_session_from_bookmarks">%1$s aus Lesezeichen entfernen</string>
+
+    <string name="action_error_reload">Neu laden</string>
+
+    <string name="action_rate_negative">Negativ bewerten</string>
+    <string name="action_rate_neutral">Neutral bewerten</string>
+    <string name="action_rate_positive">Positiv bewerten</string>
+
+    <string name="action_state_description_expanded">Erweitert</string>
+    <string name="action_state_description_collapsed">Eingeklappt</string>
+    <string name="action_state_description_bookmarked">Als Lesezeichen gespeichert</string>
+    <string name="action_state_description_not_bookmarked">Nicht als Lesezeichen gespeichert</string>
+
+    <!-- Components -->
+    <string name="feedback_form_type_something">Schreiben Sie etwas</string>
+    <string name="feedback_form_send">Senden</string>
+
+    <string name="filter_by_tags">Nach Tags filtern</string>
+    <plurals name="filter_by_tags_tag_count">
+        <item quantity="one">%1$d Tag ausgewählt</item>
+        <item quantity="other">%1$d Tags ausgewählt</item>
+    </plurals>
+
+    <string name="filter_label_category">Kategorie</string>
+    <string name="filter_label_level">Niveau</string>
+    <string name="filter_label_session_format">Sitzungsformat</string>
+
+    <string name="main_header_back">Zurück</string>
+    <string name="main_header_search_hint">Tippen zum Suchen</string>
+    <string name="main_header_search_clear">Löschen</string>
+
+    <string name="talk_card_your_feedback">Ihr Feedback</string>
+    <string name="talk_card_how_was_the_talk">Wie war der Vortrag?</string>
+    <string name="talk_card_how_was_the_workshop">Wie war der Workshop?</string>
+    <string name="talk_card_icon_desc_education">Bildung</string>
+    <string name="talk_card_icon_desc_codelab">Codelab</string>
+</resources>
