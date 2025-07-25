@@ -59,6 +59,7 @@ import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.koin.compose.viewmodel.koinViewModel
 import kotlinconfapp.ui_components.generated.resources.UiRes
+import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 private val Library.licenseName: String
     get() = licenses.firstOrNull()?.name ?: "Unknown license"
@@ -99,6 +100,7 @@ fun LicensesScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
+            .padding(topInsetPadding())
     ) {
         MainHeaderContainer(
             state = searchState,
@@ -150,7 +152,7 @@ fun LicensesScreen(
             listState = listState,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 12.dp)
+                .padding(PaddingValues(horizontal = 12.dp))
                 .clipToBounds(),
         )
     }
@@ -166,7 +168,7 @@ fun SingleLicenseScreen(
         Text(
             licenseContent,
             style = KotlinConfTheme.typography.text2,
-            color = KotlinConfTheme.colors.noteText,
+            color = KotlinConfTheme.colors.secondaryText,
             modifier = Modifier.padding(PaddingValues(vertical = 12.dp) + bottomInsetPadding()),
         )
     }
@@ -185,7 +187,7 @@ private fun LibraryList(
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = 16.dp),
+        contentPadding = PaddingValues(vertical = 12.dp) + bottomInsetPadding(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         state = listState,
     ) {
