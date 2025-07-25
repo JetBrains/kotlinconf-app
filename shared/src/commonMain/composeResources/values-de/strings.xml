@@ -4,7 +4,7 @@
     <string name="navigate_back">Zurück</string>
 
     <string name="nav_destination_info">Info</string>
-    <string name="nav_destination_schedule">Zeitplan</string>
+    <string name="nav_destination_schedule">Programm</string>
     <string name="nav_destination_speakers">Sprecher</string>
     <string name="nav_destination_map">Karte</string>
 
