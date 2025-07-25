@@ -11,7 +11,7 @@
     <!-- Screen resources -->
 
     <string name="about_app_title">Über die App</string>
-    <string name="about_app_description">Die KotlinConf-Anwendung wird vom JetBrains-Team mit Kotlin Multiplatform für gemeinsame Logik und Compose Multiplatform für die Benutzeroberfläche auf Android-, iOS-, Desktop- und Web-Plattformen entwickelt.
+    <string name="about_app_description">Die KotlinConf-Anwendung wird vom JetBrains-Team mit Kotlin Multiplatform für geteilte Logik und Compose Multiplatform für die Benutzeroberfläche auf Android-, iOS-, Desktop- und Web-Plattformen entwickelt.
 
 Für den Quellcode und weitere technische Details besuchen Sie das GitHub-Repository.</string>
     <string name="about_app_link_github">GitHub-Repository</string>
@@ -106,7 +106,7 @@ Wir verarbeiten Ihre Daten gemäß dem Datenschutzhinweis der App. Sie können I
     </plurals>
 
     <string name="settings_title">Einstellungen</string>
-    <string name="settings_theme_title">Farbthema</string>
+    <string name="settings_theme_title">Farbschema</string>
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_light">Hell</string>
     <string name="settings_theme_dark">Dunkel</string>
