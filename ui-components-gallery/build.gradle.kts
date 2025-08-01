@@ -80,8 +80,3 @@ android {
 dependencies {
     debugImplementation(compose.uiTooling)
 }
-
-// Hot reload support
-composeCompiler {
-    featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
-}

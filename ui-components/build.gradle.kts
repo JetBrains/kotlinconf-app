@@ -16,12 +16,10 @@ kotlin {
     applyDefaultHierarchyTemplate {
         common {
             group("nonAndroid") {
-                group("ios")
-                group("web")
                 withJvm()
-            }
+                withIos()
 
-            group("web") {
+                // replace with withWeb once available
                 withJs()
                 withWasmJs()
             }
@@ -77,6 +75,10 @@ kotlin {
     }
 
     jvmToolchain(21)
+
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
 }
 
 android {
@@ -89,11 +91,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-}
-
-// Hot reload support
-composeCompiler {
-    featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
 }
 
 compose.resources {
