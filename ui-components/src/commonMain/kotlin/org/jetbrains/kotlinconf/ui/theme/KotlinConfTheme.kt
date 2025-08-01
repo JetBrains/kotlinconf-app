@@ -16,10 +16,11 @@ import androidx.compose.ui.node.DelegatableNode
 import androidx.compose.ui.node.DrawModifierNode
 
 private object NoIndication : IndicationNodeFactory {
-    private val node = object: DelegatableNode, DrawModifierNode, Modifier.Node() {
-        override fun ContentDrawScope.draw() { /* Draw nothing */ }
+    override fun create(interactionSource: InteractionSource): DelegatableNode = object: DelegatableNode, DrawModifierNode, Modifier.Node() {
+        override fun ContentDrawScope.draw() {
+            drawContent()
+        }
     }
-    override fun create(interactionSource: InteractionSource): DelegatableNode = node
     override fun equals(other: Any?): Boolean = other === NoIndication
     override fun hashCode(): Int = 0
 }
