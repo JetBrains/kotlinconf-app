@@ -80,15 +80,13 @@ kotlin {
 
     applyDefaultHierarchyTemplate {
         common {
-            group("web") {
+            group("nonAndroid") {
+                withJvm()
+                withIos()
+
+                // replace with withWeb once available
                 withJs()
                 withWasmJs()
-            }
-
-            group("nonAndroid") {
-                group("ios")
-                group("web")
-                withJvm()
             }
         }
     }
@@ -137,7 +135,6 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.android.svg)
             implementation(libs.androidx.core.ktx)
-            implementation(libs.androidx.work.runtime)
             implementation(libs.androidx.preference)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.ktor.client.okhttp)
@@ -155,7 +152,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
         }
 
-        get("webMain").dependencies {
+        webMain.dependencies {
             implementation(libs.ktor.client.js)
             implementation(npm("@js-joda/timezone", "2.3.0"))
         }
@@ -202,13 +199,8 @@ val buildWebApp by tasks.creating(Copy::class) {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
-// Hot reload support
-composeCompiler {
-    featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
-}
-
 aboutLibraries {
-    duplicationMode = DuplicateMode.MERGE
-    duplicationRule = DuplicateRule.SIMPLE
-    outputPath = "src/commonMain/composeResources/files"
+    library.duplicationMode = DuplicateMode.MERGE
+    library.duplicationRule = DuplicateRule.SIMPLE
+    export.outputFile = File("src/commonMain/composeResources/files")
 }

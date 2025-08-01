@@ -17,7 +17,7 @@ object DateTimeFormatting {
     private val dateFormat = LocalDate.Format {
         monthName(MonthNames.ENGLISH_FULL)
         char(' ')
-        dayOfMonth()
+        day(padding = Padding.ZERO)
     }
 
     private val monthFormat = LocalDate.Format {
@@ -27,7 +27,7 @@ object DateTimeFormatting {
     private val dateWithYearFormat = LocalDateTime.Format {
         monthName(MonthNames.ENGLISH_FULL)
         char(' ')
-        dayOfMonth()
+        day(padding = Padding.ZERO)
         chars(", ")
         year()
     }

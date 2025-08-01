@@ -19,8 +19,6 @@ kotlin {
 
         androidUnitTest.dependencies {
             implementation(libs.junit)
-            implementation(libs.androidx.test.junit)
-            implementation(libs.androidx.espresso.core)
         }
     }
 
