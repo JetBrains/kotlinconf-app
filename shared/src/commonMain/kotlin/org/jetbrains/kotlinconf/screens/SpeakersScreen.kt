@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -59,7 +60,7 @@ fun SpeakersScreen(
     var searchState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
     var searchText by rememberSaveable { mutableStateOf("") }
 
-    val uiState = viewModel.speakers.collectAsState().value
+    val uiState = viewModel.speakers.collectAsStateWithLifecycle().value
 
     val gridState = rememberLazyGridState()
 

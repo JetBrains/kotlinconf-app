@@ -16,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -81,7 +82,7 @@ fun AboutConference(
         Column(
             verticalArrangement = Arrangement.spacedBy(48.dp),
         ) {
-            val events by viewModel.events.collectAsState()
+            val events by viewModel.events.collectAsStateWithLifecycle()
             for (event in events) {
                 EventCard(
                     month = event.month,

@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -82,7 +83,7 @@ fun LicensesScreen(
     var searchState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
     var searchText by rememberSaveable { mutableStateOf("") }
 
-    val libraries = viewModel.licensesState.collectAsState().value
+    val libraries = viewModel.licensesState.collectAsStateWithLifecycle().value
     val listState = rememberLazyListState()
 
     LaunchedEffect(searchState, searchText) {

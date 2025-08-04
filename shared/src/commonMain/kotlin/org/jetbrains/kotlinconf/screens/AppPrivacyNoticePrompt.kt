@@ -18,6 +18,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -62,7 +63,7 @@ fun AppPrivacyNoticePrompt(
     viewModel: PrivacyNoticeViewModel = koinViewModel(),
 ) {
     var detailsVisible by rememberSaveable { mutableStateOf(false) }
-    val noticeState by viewModel.state.collectAsState()
+    val noticeState by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(noticeState) {
         if (noticeState is PrivacyNoticeState.Done) {

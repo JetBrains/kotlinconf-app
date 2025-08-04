@@ -29,6 +29,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -102,10 +103,10 @@ fun SessionScreen(
     onWatchVideo: (String) -> Unit,
     viewModel: SessionViewModel = koinViewModel { parametersOf(sessionId) }
 ) {
-    val session = viewModel.session.collectAsState().value
-    val speakers = viewModel.speakers.collectAsState().value
-    val userSignedIn by viewModel.userSignedIn.collectAsState()
-    val shouldNavigateToPrivacyNotice by viewModel.navigateToPrivacyNotice.collectAsState()
+    val session = viewModel.session.collectAsStateWithLifecycle().value
+    val speakers = viewModel.speakers.collectAsStateWithLifecycle().value
+    val userSignedIn by viewModel.userSignedIn.collectAsStateWithLifecycle()
+    val shouldNavigateToPrivacyNotice by viewModel.navigateToPrivacyNotice.collectAsStateWithLifecycle()
 
     LaunchedEffect(shouldNavigateToPrivacyNotice) {
         if (shouldNavigateToPrivacyNotice) {

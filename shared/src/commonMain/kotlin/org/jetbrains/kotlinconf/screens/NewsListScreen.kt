@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +36,7 @@ fun NewsListScreen(
         title = stringResource(Res.string.news_feed_title),
         onBack = onBack,
     ) {
-        val news by viewModel.news.collectAsState()
+        val news by viewModel.news.collectAsStateWithLifecycle()
 
         if (news.isNotEmpty()) {
             val listState = rememberLazyListState()
