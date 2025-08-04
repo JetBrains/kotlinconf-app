@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.googleServices)
+    alias(libs.plugins.androidx.baselineprofile)
 }
 
 kotlin {
@@ -49,6 +50,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            baselineProfile {}
         }
     }
 
