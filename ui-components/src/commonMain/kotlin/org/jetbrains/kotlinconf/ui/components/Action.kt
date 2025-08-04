@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.arrow_right_24
@@ -59,8 +60,7 @@ fun Action(
                 ActionSize.Medium -> KotlinConfTheme.typography.h4
                 ActionSize.Large -> KotlinConfTheme.typography.h3
             },
-            maxLines = 1,
-            modifier = Modifier.weight(1f)
+            maxLines = 1
         )
         Icon(
             modifier = Modifier
