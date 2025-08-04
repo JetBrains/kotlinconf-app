@@ -78,18 +78,7 @@ kotlin {
         }
     }
 
-    applyDefaultHierarchyTemplate {
-        common {
-            group("nonAndroid") {
-                withJvm()
-                withIos()
-
-                // replace with withWeb once available
-                withJs()
-                withWasmJs()
-            }
-        }
-    }
+    applyDefaultHierarchyTemplate()
 
     sourceSets {
         commonMain.dependencies {
@@ -130,6 +119,13 @@ kotlin {
 
         commonTest.dependencies {
             implementation(kotlin("test"))
+        }
+
+        val nonAndroidMain by creating {
+            dependsOn(commonMain.get())
+        }
+        configure(listOf(iosMain, jvmMain, webMain)) {
+            get().dependsOn(nonAndroidMain)
         }
 
         androidMain.dependencies {

@@ -13,18 +13,7 @@ plugins {
 }
 
 kotlin {
-    applyDefaultHierarchyTemplate {
-        common {
-            group("nonAndroid") {
-                withJvm()
-                withIos()
-
-                // replace with withWeb once available
-                withJs()
-                withWasmJs()
-            }
-        }
-    }
+    applyDefaultHierarchyTemplate()
 
     androidTarget()
 
@@ -58,6 +47,13 @@ kotlin {
             implementation(libs.androidx.navigation.compose)
 
             implementation(libs.multiplatform.markdown.renderer)
+        }
+
+        val nonAndroidMain by creating {
+            dependsOn(commonMain.get())
+        }
+        configure(listOf(iosMain, jvmMain, webMain)) {
+            get().dependsOn(nonAndroidMain)
         }
 
         androidMain.dependencies {
