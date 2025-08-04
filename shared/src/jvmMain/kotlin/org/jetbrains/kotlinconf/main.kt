@@ -31,7 +31,14 @@ class JvmLogger : Logger {
 }
 
 fun main() {
-    initApp(JvmLogger(), platformModule, Flags(supportsNotifications = false))
+    initApp(
+        platformLogger = JvmLogger(),
+        platformModule = platformModule,
+        flags = Flags(
+            supportsLocalNotifications = true,
+            supportsRemoteNotifications = true,
+        )
+    )
 
     System.setProperty("apple.awt.application.appearance", "system")
 

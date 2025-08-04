@@ -16,7 +16,7 @@ private val jsJodaTz = JsJodaTimeZoneModule
 fun main() {
     initCoil()
 
-    val supportsNotifications = window["supportsNotifications"] as? Boolean ?: false
+    val supportsLocalNotifications = window["supportsNotifications"] as? Boolean ?: false
     initApp(
         platformLogger = object : Logger {
             override fun log(tag: String, lazyMessage: () -> String) {
@@ -25,7 +25,8 @@ fun main() {
         },
         platformModule = platformModule,
         flags = Flags(
-            supportsNotifications = supportsNotifications
+            supportsLocalNotifications = supportsLocalNotifications,
+            supportsRemoteNotifications = false,
         ),
     )
 
