@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.arrow_left_24
 import kotlinconfapp.shared.generated.resources.navigate_back
@@ -35,7 +35,7 @@ fun NewsDetailScreen(
     onBack: () -> Unit,
     viewModel: NewsDetailViewModel = koinViewModel { parametersOf(newsId) }
 ) {
-    val state = viewModel.newsItem.collectAsState().value
+    val state = viewModel.newsItem.collectAsStateWithLifecycle().value
 
     Column(
         Modifier

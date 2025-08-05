@@ -21,7 +21,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -230,7 +229,7 @@ fun ScheduleScreen(
                             )
                         }
 
-                        val tags by viewModel.filterItems.collectAsState()
+                        val tags by viewModel.filterItems.collectAsStateWithLifecycle()
                         ScheduleList(
                             scheduleItems = items,
                             onSession = onSession,
@@ -373,7 +372,7 @@ private fun Header(
                 onHeaderStateChange(MainHeaderContainerState.Title)
                 onSearchQueryChange("")
             }
-            val filterItems by viewModel.filterItems.collectAsState()
+            val filterItems by viewModel.filterItems.collectAsStateWithLifecycle()
 
             MainHeaderSearchBar(
                 searchValue = searchQuery,

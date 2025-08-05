@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.about_conference_description
 import kotlinconfapp.shared.generated.resources.about_conference_general_terms_link
@@ -81,7 +81,7 @@ fun AboutConference(
         Column(
             verticalArrangement = Arrangement.spacedBy(48.dp),
         ) {
-            val events by viewModel.events.collectAsState()
+            val events by viewModel.events.collectAsStateWithLifecycle()
             for (event in events) {
                 EventCard(
                     month = event.month,
