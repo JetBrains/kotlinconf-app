@@ -60,7 +60,7 @@ fun Action(
                 ActionSize.Large -> KotlinConfTheme.typography.h3
             },
             maxLines = 1,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f, fill = false),
         )
         Icon(
             modifier = Modifier
