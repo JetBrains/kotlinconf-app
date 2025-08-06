@@ -267,7 +267,8 @@ fun NavGraphBuilder.startScreens(
         startDestination = StartPrivacyNoticeScreen
     ) {
         composable<StartPrivacyNoticeScreen> {
-            val skipNotifications = LocalFlags.current.supportsNotifications.not()
+            val skipNotifications =
+                !(LocalFlags.current.supportsLocalNotifications || LocalFlags.current.supportsRemoteNotifications)
             AppPrivacyNoticePrompt(
                 onRejectNotice = {
                     navController.navigate(if (skipNotifications) MainScreen else StartNotificationsScreen) {

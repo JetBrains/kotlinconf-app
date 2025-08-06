@@ -14,6 +14,8 @@ import kotlinconfapp.shared.generated.resources.notifications_schedule_update_ti
 import kotlinconfapp.shared.generated.resources.notifications_session_reminders_description
 import kotlinconfapp.shared.generated.resources.notifications_session_reminders_title
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.Flags
+import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.ui.components.SettingsItem
 
@@ -26,29 +28,34 @@ fun NotificationSettings(
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        SettingsItem(
-            title = stringResource(Res.string.notifications_session_reminders_title),
-            enabled = notificationSettings.sessionReminders,
-            onToggle = { enabled -> onChangeSettings(notificationSettings.copy(sessionReminders = enabled)) },
-            note = stringResource(Res.string.notifications_session_reminders_description),
-        )
-        SettingsItem(
-            title = stringResource(Res.string.notifications_schedule_update_title),
-            enabled = notificationSettings.scheduleUpdates,
-            onToggle = { enabled -> onChangeSettings(notificationSettings.copy(scheduleUpdates = enabled)) },
-            note = stringResource(Res.string.notifications_schedule_update_description),
-        )
-        SettingsItem(
-            title = stringResource(Res.string.notifications_kotlinconf_news_title),
-            enabled = notificationSettings.kotlinConfNews,
-            onToggle = { enabled -> onChangeSettings(notificationSettings.copy(kotlinConfNews = enabled)) },
-            note = stringResource(Res.string.notifications_kotlinconf_news_description),
-        )
-        SettingsItem(
-            title = stringResource(Res.string.notifications_jetbrains_news_title),
-            enabled = notificationSettings.jetBrainsNews,
-            onToggle = { enabled -> onChangeSettings(notificationSettings.copy(jetBrainsNews = enabled)) },
-            note = stringResource(Res.string.notifications_jetbrains_news_description),
-        )
+        if (LocalFlags.current.supportsLocalNotifications) {
+            SettingsItem(
+                title = stringResource(Res.string.notifications_session_reminders_title),
+                enabled = notificationSettings.sessionReminders,
+                onToggle = { enabled -> onChangeSettings(notificationSettings.copy(sessionReminders = enabled)) },
+                note = stringResource(Res.string.notifications_session_reminders_description),
+            )
+            SettingsItem(
+                title = stringResource(Res.string.notifications_schedule_update_title),
+                enabled = notificationSettings.scheduleUpdates,
+                onToggle = { enabled -> onChangeSettings(notificationSettings.copy(scheduleUpdates = enabled)) },
+                note = stringResource(Res.string.notifications_schedule_update_description),
+            )
+        }
+        
+        if (LocalFlags.current.supportsRemoteNotifications) {
+            SettingsItem(
+                title = stringResource(Res.string.notifications_kotlinconf_news_title),
+                enabled = notificationSettings.kotlinConfNews,
+                onToggle = { enabled -> onChangeSettings(notificationSettings.copy(kotlinConfNews = enabled)) },
+                note = stringResource(Res.string.notifications_kotlinconf_news_description),
+            )
+            SettingsItem(
+                title = stringResource(Res.string.notifications_jetbrains_news_title),
+                enabled = notificationSettings.jetBrainsNews,
+                onToggle = { enabled -> onChangeSettings(notificationSettings.copy(jetBrainsNews = enabled)) },
+                note = stringResource(Res.string.notifications_jetbrains_news_description),
+            )
+        }
     }
 }
