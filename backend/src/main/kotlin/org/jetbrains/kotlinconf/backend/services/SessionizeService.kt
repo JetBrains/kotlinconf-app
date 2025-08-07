@@ -5,10 +5,7 @@ package org.jetbrains.kotlinconf.backend.services
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
-import io.ktor.utils.io.core.Closeable
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
@@ -27,27 +24,29 @@ import kotlin.time.ExperimentalTime
 
 class SessionizeService(
     private val client: HttpClient,
+    scope: CoroutineScope,
     config: ConferenceConfig
-): Closeable {
+) {
     private val conference = MutableSharedFlow<Conference>(replay = 1)
 
     private val sessionizeUrl: String = config.sessionizeUrl
     private val sessionizeInterval: Long = config.sessionizeInterval
     private val log = LoggerFactory.getLogger("SessionizeService")
 
-    @OptIn(DelicateCoroutinesApi::class)
-    private val syncJob = GlobalScope.launch {
-        log.info("Synchronizing each $sessionizeInterval minutes with $sessionizeUrl")
-        while (true) {
-            log.trace("Synchronizing to Sessionize…")
-            runCatching {
-                synchronizeWithSessionize(sessionizeUrl)
-            }.onFailure { cause ->
-                log.error("Failed to synchronize to Sessionize: ${cause.message}", cause)
-            }
+    init {
+        scope.launch {
+            log.info("Synchronizing each $sessionizeInterval minutes with $sessionizeUrl")
+            while (true) {
+                log.trace("Synchronizing to Sessionize…")
+                runCatching {
+                    synchronizeWithSessionize(sessionizeUrl)
+                }.onFailure { cause ->
+                    log.error("Failed to synchronize to Sessionize: ${cause.message}", cause)
+                }
 
-            log.trace("Finished loading data from Sessionize.")
-            delay(TimeUnit.MINUTES.toMillis(sessionizeInterval))
+                log.trace("Finished loading data from Sessionize.")
+                delay(TimeUnit.MINUTES.toMillis(sessionizeInterval))
+            }
         }
     }
 
@@ -134,9 +133,5 @@ class SessionizeService(
         }
 
         return nonWorkshop + workshops
-    }
-
-    override fun close() {
-        syncJob.cancel()
     }
 }
