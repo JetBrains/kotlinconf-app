@@ -1,7 +1,8 @@
 package org.jetbrains.kotlinconf.ui.theme
 
-import androidx.compose.foundation.Indication
+import androidx.compose.foundation.IndicationNodeFactory
 import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -9,8 +10,20 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.drawscope.ContentDrawScope
+import androidx.compose.ui.node.DelegatableNode
+import androidx.compose.ui.node.DrawModifierNode
 
-private object NoIndication : Indication
+private object NoIndication : IndicationNodeFactory {
+    override fun create(interactionSource: InteractionSource): DelegatableNode = object: DelegatableNode, DrawModifierNode, Modifier.Node() {
+        override fun ContentDrawScope.draw() {
+            drawContent()
+        }
+    }
+    override fun equals(other: Any?): Boolean = other === NoIndication
+    override fun hashCode(): Int = 0
+}
 
 val LocalColors = compositionLocalOf<Colors> {
     error("KotlinConfTheme must be part of the call hierarchy to provide colors")

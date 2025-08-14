@@ -13,20 +13,7 @@ plugins {
 }
 
 kotlin {
-    applyDefaultHierarchyTemplate {
-        common {
-            group("nonAndroid") {
-                group("ios")
-                group("web")
-                withJvm()
-            }
-
-            group("web") {
-                withJs()
-                withWasmJs()
-            }
-        }
-    }
+    applyDefaultHierarchyTemplate()
 
     androidTarget()
 
@@ -62,6 +49,13 @@ kotlin {
             implementation(libs.multiplatform.markdown.renderer)
         }
 
+        val nonAndroidMain by creating {
+            dependsOn(commonMain.get())
+        }
+        configure(listOf(iosMain, jvmMain, webMain)) {
+            get().dependsOn(nonAndroidMain)
+        }
+
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
         }
@@ -77,6 +71,10 @@ kotlin {
     }
 
     jvmToolchain(21)
+
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
 }
 
 android {
@@ -89,11 +87,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-}
-
-// Hot reload support
-composeCompiler {
-    featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
 }
 
 compose.resources {
