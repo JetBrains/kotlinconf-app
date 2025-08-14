@@ -153,6 +153,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.android.svg)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.slf4j.nop)
         }
 
         get("webMain").dependencies {
