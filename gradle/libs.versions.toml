@@ -1,5 +1,6 @@
 [versions]
 aboutlibraries = "12.2.3"
+storytale = "0.0.4-alpha01+dev18"
 agp = "8.7.3"
 android-compileSdk = "35"
 android-minSdk = "26"
@@ -109,6 +110,7 @@ slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4jNop" }
 
 [plugins]
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlibraries" }
+storytale = { id = "org.jetbrains.compose.storytale", version.ref = "storytale" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
