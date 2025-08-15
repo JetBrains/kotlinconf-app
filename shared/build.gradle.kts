@@ -1,16 +1,17 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
+import com.android.build.api.dsl.androidLibrary
 import com.mikepenz.aboutlibraries.plugin.DuplicateMode
 import com.mikepenz.aboutlibraries.plugin.DuplicateRule
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.aboutLibraries)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.kotlinParcelize)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
@@ -21,13 +22,18 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
-    androidTarget {
-        compilerOptions {
-            freeCompilerArgs.addAll(
-                "-P",
-                "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=org.jetbrains.kotlinconf.zoomable.internal.AndroidParcelize"
-            )
+    androidLibrary {
+        namespace = "org.jetbrains.kotlinconf"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+
+        compilations.configureEach {
+            compilerOptions.configure {
+                jvmTarget = JvmTarget.JVM_11
+            }
         }
+
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
     }
 
     jvm()
@@ -165,23 +171,10 @@ kotlin {
     jvmToolchain(21)
 }
 
-android {
-    namespace = "org.jetbrains.kotlinconf"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
 // Android preview support
-dependencies {
-    debugImplementation(compose.uiTooling)
-}
+//dependencies {
+//    debugImplementation(compose.uiTooling)
+//}
 
 compose.desktop {
     application {
