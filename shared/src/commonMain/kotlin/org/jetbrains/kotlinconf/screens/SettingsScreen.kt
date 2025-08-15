@@ -130,7 +130,7 @@ private fun SettingsScreenImpl(
 
             Spacer(Modifier.height(24.dp))
 
-            if (LocalFlags.current.supportsNotifications) {
+            if (LocalFlags.current.supportsLocalNotifications || LocalFlags.current.supportsRemoteNotifications) {
                 val notificationSettings = viewModel.notificationSettings.collectAsStateWithLifecycle().value
                 if (notificationSettings != null) {
                     SectionHeading(stringResource(AppRes.string.settings_notifications_title))
@@ -138,7 +138,7 @@ private fun SettingsScreenImpl(
                         notificationSettings = notificationSettings,
                         onChangeSettings = { newSettings ->
                             viewModel.setNotificationSettings(newSettings)
-                        }
+                        },
                     )
                 }
             }
