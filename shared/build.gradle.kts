@@ -39,7 +39,7 @@ kotlin {
             val projectDir = project.projectDir.path
             val rootDir = project.rootDir.path
             commonWebpackConfig {
-                outputFileName = "kotlin-app-wasm-js.js"
+                outputFileName = "kotlinconf-app.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
                     // Uncomment and configure this if you want to open a browser different from the system default 
                     // open = mapOf(
@@ -62,7 +62,7 @@ kotlin {
         binaries.executable()
         browser {
             commonWebpackConfig {
-                outputFileName = "kotlin-app-js.js"
+                outputFileName = "kotlinconf-app.js"
             }
         }
     }
@@ -180,20 +180,6 @@ compose.desktop {
     application {
         mainClass = "org.jetbrains.kotlinconf.MainKt"
     }
-}
-
-val buildWebApp by tasks.creating(Copy::class) {
-    val wasmDist = "wasmJsBrowserDistribution"
-    val jsDist = "jsBrowserDistribution"
-
-    dependsOn(wasmDist, jsDist)
-
-    from(tasks.named(jsDist).get().outputs.files)
-    from(tasks.named(wasmDist).get().outputs.files)
-
-    into(layout.buildDirectory.dir("webApp"))
-
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 aboutLibraries {
