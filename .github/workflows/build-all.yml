@@ -66,7 +66,7 @@ jobs:
           distribution: 'zulu'
           java-version: 21
       - name: Build web app
-        run: ./gradlew buildWebApp
+        run: ./gradlew composeCompatibilityBrowserDistribution
 
   build-backend:
     name: Build backend
