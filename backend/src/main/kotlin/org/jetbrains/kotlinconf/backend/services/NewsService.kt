@@ -4,8 +4,9 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.utils.io.core.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -15,7 +16,11 @@ import org.jetbrains.kotlinconf.backend.model.GitHubItem
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.slf4j.LoggerFactory
 
-class NewsService(private val client: HttpClient, config: ConferenceConfig): Closeable {
+class NewsService(
+    private val client: HttpClient,
+    scope: CoroutineScope,
+    config: ConferenceConfig
+) {
     private val log = LoggerFactory.getLogger("NewsService")
     private val repo: String = config.newsRepo
     private val branch: String = config.newsBranch
@@ -24,13 +29,15 @@ class NewsService(private val client: HttpClient, config: ConferenceConfig): Clo
 
     private val news = MutableSharedFlow<List<NewsItem>>(replay = 1)
 
-    val syncJob = GlobalScope.launch(Dispatchers.IO) {
-        while (true) {
-            runCatching { updateNews() }.onFailure {
-                log.error("Failed to update news", it)
-            }
+    init {
+        scope.launch(Dispatchers.IO) {
+            while (true) {
+                runCatching { updateNews() }.onFailure {
+                    log.error("Failed to update news", it)
+                }
 
-            kotlinx.coroutines.delay(updateInterval * 1000)
+                delay(updateInterval * 1000)
+            }
         }
     }
 
@@ -126,10 +133,5 @@ class NewsService(private val client: HttpClient, config: ConferenceConfig): Clo
             publicationDate = publicationDate,
             content = bodyContent
         )
-    }
-
-
-    override fun close() {
-        syncJob.cancel()
     }
 }
