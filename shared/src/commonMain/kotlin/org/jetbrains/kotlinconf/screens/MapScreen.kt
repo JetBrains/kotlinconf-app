@@ -203,7 +203,7 @@ private fun Map(
 
     val scope = rememberCoroutineScope()
 
-    val validOffsetX = (-svg.width * 0.5f)..(svg.height * 0.5f)
+    val validOffsetX = (-svg.width * 0.5f)..(svg.width * 0.5f)
     val validOffsetY = (-svg.height * 0.5f)..(svg.height * 0.5f)
 
     val interactiveModifiers = if (!interactive) {

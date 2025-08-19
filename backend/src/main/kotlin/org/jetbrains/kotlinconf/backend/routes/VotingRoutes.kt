@@ -49,7 +49,7 @@ fun Route.votingRoutes() {
 
             val session = sessionize.getConferenceData().sessions.firstOrNull { it.id == sessionId }
                 ?: throw NotFound()
-2
+
             val nowTime = timeService.now()
 
             val startVotesAt = session.startsAt.toInstant(EVENT_TIME_ZONE)

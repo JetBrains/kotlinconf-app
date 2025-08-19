@@ -50,7 +50,7 @@ jobs:
           distribution: 'zulu'
           java-version: 21
       - name: Set Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+        run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
       - name: iOS debug build
         run: cd iosApp && xcodebuild -target "iosApp" -configuration Debug -scheme KotlinConfAppScheme -destination 'platform=iOS Simulator,OS=latest,name=iPhone 16' CODE_SIGNING_ALLOWED='NO'
 
