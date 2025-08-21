@@ -106,10 +106,17 @@ fun DeveloperMenuScreen(
                     )
 
                     SettingsItem(
-                        title = "Supports notifications",
-                        note = "Whether this device should display notification settings",
-                        enabled = flags.supportsNotifications,
-                        onToggle = { flags = flags.copy(supportsNotifications = it) }
+                        title = "Supports local notifications",
+                        note = "Whether this device can display local notification settings (such as sessions)",
+                        enabled = flags.supportsLocalNotifications,
+                        onToggle = { flags = flags.copy(supportsLocalNotifications = it) }
+                    )
+
+                    SettingsItem(
+                        title = "Supports remote notifications",
+                        note = "Whether this device can display remote notification settings (such as news)",
+                        enabled = flags.supportsRemoteNotifications,
+                        onToggle = { flags = flags.copy(supportsRemoteNotifications = it) }
                     )
 
                     SettingsItem(
