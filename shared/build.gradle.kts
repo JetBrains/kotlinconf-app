@@ -39,7 +39,7 @@ kotlin {
             val projectDir = project.projectDir.path
             val rootDir = project.rootDir.path
             commonWebpackConfig {
-                outputFileName = "kotlin-app-wasm-js.js"
+                outputFileName = "kotlinconf-app.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
                     // Uncomment and configure this if you want to open a browser different from the system default 
                     // open = mapOf(
@@ -62,7 +62,7 @@ kotlin {
         binaries.executable()
         browser {
             commonWebpackConfig {
-                outputFileName = "kotlin-app-js.js"
+                outputFileName = "kotlinconf-app.js"
             }
         }
     }
@@ -78,20 +78,7 @@ kotlin {
         }
     }
 
-    applyDefaultHierarchyTemplate {
-        common {
-            group("web") {
-                withJs()
-                withWasmJs()
-            }
-
-            group("nonAndroid") {
-                group("ios")
-                group("web")
-                withJvm()
-            }
-        }
-    }
+    applyDefaultHierarchyTemplate()
 
     sourceSets {
         commonMain.dependencies {
@@ -134,10 +121,16 @@ kotlin {
             implementation(kotlin("test"))
         }
 
+        val nonAndroidMain by creating {
+            dependsOn(commonMain.get())
+        }
+        configure(listOf(iosMain, jvmMain, webMain)) {
+            get().dependsOn(nonAndroidMain)
+        }
+
         androidMain.dependencies {
             implementation(libs.android.svg)
             implementation(libs.androidx.core.ktx)
-            implementation(libs.androidx.work.runtime)
             implementation(libs.androidx.preference)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.ktor.client.okhttp)
@@ -156,7 +149,7 @@ kotlin {
             implementation(libs.slf4j.nop)
         }
 
-        get("webMain").dependencies {
+        webMain.dependencies {
             implementation(libs.ktor.client.js)
             implementation(npm("@js-joda/timezone", "2.3.0"))
         }
@@ -189,27 +182,8 @@ compose.desktop {
     }
 }
 
-val buildWebApp by tasks.creating(Copy::class) {
-    val wasmDist = "wasmJsBrowserDistribution"
-    val jsDist = "jsBrowserDistribution"
-
-    dependsOn(wasmDist, jsDist)
-
-    from(tasks.named(jsDist).get().outputs.files)
-    from(tasks.named(wasmDist).get().outputs.files)
-
-    into(layout.buildDirectory.dir("webApp"))
-
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
-
-// Hot reload support
-composeCompiler {
-    featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
-}
-
 aboutLibraries {
-    duplicationMode = DuplicateMode.MERGE
-    duplicationRule = DuplicateRule.SIMPLE
-    outputPath = "src/commonMain/composeResources/files"
+    library.duplicationMode = DuplicateMode.MERGE
+    library.duplicationRule = DuplicateRule.SIMPLE
+    export.outputFile = File("src/commonMain/composeResources/files")
 }

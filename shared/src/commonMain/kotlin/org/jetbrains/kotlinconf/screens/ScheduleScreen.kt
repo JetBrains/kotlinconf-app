@@ -464,7 +464,7 @@ private fun ScheduleList(
                         val dayValues = DayValues.map[date]
                         DayHeader(
                             month = DateTimeFormatting.month(date).uppercase(),
-                            day = date.dayOfMonth.toString(),
+                            day = date.day.toString(),
                             line1 = dayValues?.line1 ?: "",
                             line2 = dayValues?.line2 ?: "",
                             modifier = Modifier
