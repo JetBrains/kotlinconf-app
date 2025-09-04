@@ -4,9 +4,6 @@
 # Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 #
 
-# TODO gradlew also tries to set ulimit -n (max files), probably we should too
-# TODO Script could be run in parallel for the first time, so download/extract code should not fail in that case
-
 # Possible environment variables:
 #   AMPER_DOWNLOAD_ROOT        Maven repository to download Amper dist from.
 #                              default: https://packages.jetbrains.team/maven/p/amper/amper
@@ -19,9 +16,9 @@
 set -e -u
 
 # The version of the Amper distribution to provision and use
-amper_version=0.8.0-dev-2846
+amper_version=0.8.0-dev-3163
 # Establish chain of trust from here by specifying exact checksum of Amper distribution to be run
-amper_sha256=45782b2326234e2e0aefb5a0eeacc35f4d16bf77bba1db62ae2b06a9746436e8
+amper_sha256=2fbed40db009c7c33854886d58a25bf650b6ba32932a20b395b600267270f959
 
 AMPER_DOWNLOAD_ROOT="${AMPER_DOWNLOAD_ROOT:-https://packages.jetbrains.team/maven/p/amper/amper}"
 AMPER_JRE_DOWNLOAD_ROOT="${AMPER_JRE_DOWNLOAD_ROOT:-https:/}"
@@ -92,10 +89,10 @@ download_and_extract() {
   if command -v curl >/dev/null 2>&1; then
     if [ -t 1 ]; then CURL_PROGRESS="--progress-bar"; else CURL_PROGRESS="--silent --show-error"; fi
     # shellcheck disable=SC2086
-    curl $CURL_PROGRESS -L --fail --retry 5 --connect-timeout 30 --output "${temp_file}" "$file_url" 2>&1
+    curl $CURL_PROGRESS -L --fail --retry 5 --connect-timeout 30 --output "${temp_file}" "$file_url"
   elif command -v wget >/dev/null 2>&1; then
     if [ -t 1 ]; then WGET_PROGRESS=""; else WGET_PROGRESS="-nv"; fi
-    wget $WGET_PROGRESS --tries=5 --connect-timeout=30 --read-timeout=120 -O "${temp_file}" "$file_url" 2>&1
+    wget $WGET_PROGRESS --tries=5 --connect-timeout=30 --read-timeout=120 -O "${temp_file}" "$file_url"
   else
     die "ERROR: Please install 'wget' or 'curl', as Amper needs one of them to download $moniker"
   fi
@@ -165,12 +162,12 @@ case "$kernelName" in
   Darwin* )
     simpleOs="macos"
     jbr_os="osx"
-    default_amper_cache_dir="$HOME/Library/Caches/Amper"
+    default_amper_cache_dir="$HOME/Library/Caches/JetBrains/Amper"
     ;;
   Linux* )
     simpleOs="linux"
     jbr_os="linux"
-    default_amper_cache_dir="$HOME/.cache/Amper"
+    default_amper_cache_dir="$HOME/.cache/JetBrains/Amper"
     # If linux runs in 32-bit mode, we want the "fake" 32-bit architecture, not the real hardware,
     # because in this mode linux cannot run 64-bit binaries.
     # shellcheck disable=SC2046
@@ -180,7 +177,7 @@ case "$kernelName" in
     simpleOs="windows"
     jbr_os="windows"
     if command -v cygpath >/dev/null 2>&1; then
-      default_amper_cache_dir=$(cygpath -u "$LOCALAPPDATA\Amper")
+      default_amper_cache_dir=$(cygpath -u "$LOCALAPPDATA\JetBrains\Amper")
     else
       die "The 'cypath' command is not available, but Amper needs it. Use amper.bat instead, or try a Cygwin or MSYS environment."
     fi
@@ -190,7 +187,6 @@ case "$kernelName" in
     ;;
 esac
 
-# TODO should we respect --shared-caches-root instead of (or in addition to) this env var?
 amper_cache_dir="${AMPER_BOOTSTRAP_CACHE_DIR:-$default_amper_cache_dir}"
 
 # ********** Provision Amper distribution **********
@@ -209,8 +205,8 @@ if [ "x${AMPER_JAVA_HOME:-}" = "x" ]; then
   esac
 
   # Auto-updated from syncVersions.main.kts, do not modify directly here
-  jbr_version=21.0.6
-  jbr_build=b895.97
+  jbr_version=21.0.8
+  jbr_build=b1038.68
 
   # URL for JBR (vanilla) - see https://github.com/JetBrains/JetBrainsRuntime/releases
   jbr_url="$AMPER_JRE_DOWNLOAD_ROOT/cache-redirector.jetbrains.com/intellij-jbr/jbr-$jbr_version-$jbr_os-$jbr_arch-$jbr_build.tar.gz"
@@ -218,12 +214,12 @@ if [ "x${AMPER_JAVA_HOME:-}" = "x" ]; then
 
   platform="$jbr_os $jbr_arch"
   case $platform in
-    "osx x64")         jbr_sha512=eeef2a2f82c16d7a0bebb1771b0e122aeb78c2bb1414d48767ea4b2d52086152f149bb5a076c9f98ef1f56dee7b40da1118fa01ba32a53576fffc4d1145044fd ;;
-    "osx aarch64")     jbr_sha512=00afc547ff9e5e408446ece3c8eabef2d0b29909a8be4774c8bd3e296f823e1a902717f5f44313f1a634e22b093c80de8d8ac760869d61fb4647a73711793e0f ;;
-    "linux x64")       jbr_sha512=7f0693316c8ac9a6c323d19682effeb33d5a69da8b79c86253d02e206dd0d2afe2ca49be86c58cc8115ad8626e70ec11ee9008282886d7102aa328722e8f032e ;;
-    "linux aarch64")   jbr_sha512=62c2c1a241278951523bace44742a23bb4b48c713e53c1aaad4204af1f4057cca186a17a840a523b440c739b44af4815e7f388c4a6c167a4e7023da4295f6207 ;;
-    "windows x64")     jbr_sha512=7e71a463327a92e6974b3d1013efde00f9d852660d5a18eae5765534b6d3cf0de471f72fd30d3caae910253b8b0df7202e2a76f0435e84ad80d13fb298a84c48 ;;
-    "windows aarch64") jbr_sha512=188bb92c35bc31b8ec9596701b498797c6578fb8513f1a854a2c8501ff3d2883a1fc74d24c45322526cdaaeb86940fffaf9729f39ba8dd52dd0f2b6f63da35fe ;;
+    "osx x64")         jbr_sha512=40b57086c22a8feaea30b541a5e45b4c5ceb6ac2df11a7caae81f272e713be401a0a0e0241db271041e995805b68f2684f0deccc3a044a4b7d4c7562d74e9839 ;;
+    "osx aarch64")     jbr_sha512=e1212681d12d7b75a6fec39180d54b94d5cd63949c433f7552821c90783b0388f3a27eda712a6339fd2c21a25cc0b8a0846c5808ba7901e97e5c8a543dc6a55f ;;
+    "linux x64")       jbr_sha512=796337b4ff95e91fa0812d62d68f6952fcb19e2f62174756d33ebcbbade08137bd92169a96688f02f4131831baa0132210a4289d8e216757cb895f44ea9b2cd7 ;;
+    "linux aarch64")   jbr_sha512=cb047bf912395dd843c306e90ce4b4600c88f9bcb7742341d809d67d762bbb4e4edc936bc2be2589f7e5b050ad0513ba1a8deb6e0b481009d31e14aab9c2fe3b ;;
+    "windows x64")     jbr_sha512=b59b6c9dd5194c93c3b8512e788fea08cef97e6c1b9108591f72ecdddc6fdbd95999db1e44b382cb5c74202b5ae016da5aa1c21883cefe50c23f8d2d0f3f7434 ;;
+    "windows aarch64") jbr_sha512=fb784bf1c0842ff788479e05d65e7d6e7c92545d006a753a158e3f00d17a52fe0f8e4b0aa6081fabe0443219682ec03f726daacd7bf2ea28ddd31bd3ae7b7f22 ;;
     *) die "Unsupported platform $platform" ;;
   esac
 
@@ -260,13 +256,12 @@ wrapper_path=$(realpath "$0")
 
 # 1. Prepend basic launch arguments
 if [ "$simpleOs" = "windows" ]; then
-  # Can't cygpath the '*' so it has to be outside
-  classpath="$(cygpath -w "$amper_target_dir")\lib\*"
+  libDirSlash="$(cygpath -w "$amper_target_dir")\lib\\"
 else
-  classpath="$amper_target_dir/lib/*"
+  libDirSlash="$amper_target_dir/lib/"
 fi
 
-set -- -cp "$classpath" org.jetbrains.amper.cli.MainKt "$@"
+set -- -cp "$libDirSlash*" "-javaagent:${libDirSlash}kotlinx-coroutines-debug-1.10.1.jar" org.jetbrains.amper.cli.MainKt "$@"
 
 # 2. Prepend user JVM args from AMPER_JAVA_OPTS
 #
@@ -300,6 +295,7 @@ set -- \
     "-ea" \
     "-XX:+EnableDynamicAgentLoading" \
     "-Damper.wrapper.dist.sha256=$amper_sha256" \
+    "-Damper.dist.path=$amper_target_dir" \
     "-Damper.wrapper.path=$wrapper_path" \
     "$@"
 
