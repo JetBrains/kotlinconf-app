@@ -40,20 +40,6 @@ kotlin {
             val rootDir = project.rootDir.path
             commonWebpackConfig {
                 outputFileName = "kotlinconf-app.js"
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    // Uncomment and configure this if you want to open a browser different from the system default 
-                    // open = mapOf(
-                    //     "app" to mapOf(
-                    //         "name" to "google chrome"
-                    //     )
-                    // )
-
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside a browser
-                        add(projectDir)
-                        add(rootDir)
-                    }
-                }
             }
         }
     }
