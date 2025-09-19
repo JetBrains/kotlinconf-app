@@ -1,11 +1,13 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
+import com.android.build.api.dsl.androidLibrary
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinMultiplatform)
@@ -15,7 +17,13 @@ plugins {
 kotlin {
     applyDefaultHierarchyTemplate()
 
-    androidTarget()
+    androidLibrary {
+        namespace = "com.jetbrains.kotlinconf.uicomponents"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        compilerOptions.jvmTarget = JvmTarget.JVM_11
+        androidResources.enable = true
+    }
 
     jvm()
 
@@ -77,24 +85,12 @@ kotlin {
     }
 }
 
-android {
-    namespace = "com.jetbrains.kotlinconf.uicomponents"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
 compose.resources {
     publicResClass = true
     nameOfResClass = "UiRes"
 }
 
 // Android preview support
-dependencies {
-    debugImplementation(compose.uiTooling)
-}
+//dependencies {
+//    debugImplementation(compose.uiTooling)
+//}
