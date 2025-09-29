@@ -94,13 +94,9 @@ private fun MarkdownImpl(
             state = state,
             colors = DefaultMarkdownColors(
                 text = KotlinConfTheme.colors.longText,
-                codeText = KotlinConfTheme.colors.secondaryText,
-                linkText = KotlinConfTheme.colors.purpleText,
                 codeBackground = KotlinConfTheme.colors.mainBackground,
-                inlineCodeText = KotlinConfTheme.colors.secondaryText,
                 inlineCodeBackground = KotlinConfTheme.colors.mainBackground,
                 dividerColor = KotlinConfTheme.colors.strokePale,
-                tableText = KotlinConfTheme.colors.longText,
                 tableBackground = KotlinConfTheme.colors.mainBackground,
             ),
             typography = DefaultMarkdownTypography(
@@ -117,7 +113,6 @@ private fun MarkdownImpl(
                 ordered = KotlinConfTheme.typography.text1,
                 bullet = KotlinConfTheme.typography.text1,
                 list = KotlinConfTheme.typography.text1,
-                link = KotlinConfTheme.typography.text1,
                 inlineCode = KotlinConfTheme.typography.text1,
                 table = KotlinConfTheme.typography.text1,
                 textLink = TextLinkStyles(
