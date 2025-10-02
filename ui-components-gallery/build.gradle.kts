@@ -10,24 +10,24 @@ plugins {
 kotlin {
     androidTarget()
 
-    jvm()
-
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        binaries.executable()
-        browser {
-            commonWebpackConfig {
-                outputFileName = "kotlinconf-app-gallery.js"
-            }
-        }
-    }
-    js {
-        browser()
-    }
+//    jvm()
+//
+//    iosX64()
+//    iosArm64()
+//    iosSimulatorArm64()
+//
+//    @OptIn(ExperimentalWasmDsl::class)
+//    wasmJs {
+//        binaries.executable()
+//        browser {
+//            commonWebpackConfig {
+//                outputFileName = "kotlinconf-app-gallery.js"
+//            }
+//        }
+//    }
+//    js {
+//        browser()
+//    }
 
     sourceSets {
         commonMain.dependencies {

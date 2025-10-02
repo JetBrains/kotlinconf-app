@@ -27,39 +27,39 @@ kotlin {
         }
     }
 
-    jvm()
-
-    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
-    wasmJs {
-        binaries.executable()
-        browser {
-            val projectDir = project.projectDir.path
-            val rootDir = project.rootDir.path
-            commonWebpackConfig {
-                outputFileName = "kotlinconf-app.js"
-            }
-        }
-    }
-
-    js {
-        binaries.executable()
-        browser {
-            commonWebpackConfig {
-                outputFileName = "kotlinconf-app.js"
-            }
-        }
-    }
-
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
-            isStatic = true
-        }
-    }
+//    jvm()
+//
+//    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+//    wasmJs {
+//        binaries.executable()
+//        browser {
+//            val projectDir = project.projectDir.path
+//            val rootDir = project.rootDir.path
+//            commonWebpackConfig {
+//                outputFileName = "kotlinconf-app.js"
+//            }
+//        }
+//    }
+//
+//    js {
+//        binaries.executable()
+//        browser {
+//            commonWebpackConfig {
+//                outputFileName = "kotlinconf-app.js"
+//            }
+//        }
+//    }
+//
+//    listOf(
+//        iosX64(),
+//        iosArm64(),
+//        iosSimulatorArm64()
+//    ).forEach {
+//        it.binaries.framework {
+//            baseName = "shared"
+//            isStatic = true
+//        }
+//    }
 
     applyDefaultHierarchyTemplate()
 
