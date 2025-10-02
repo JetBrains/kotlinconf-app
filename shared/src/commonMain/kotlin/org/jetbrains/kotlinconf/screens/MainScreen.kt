@@ -25,6 +25,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
+import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.clock_28
@@ -113,6 +115,11 @@ fun MainScreen(
             transitionSpec = { NoContentTransition },
             popTransitionSpec = { NoContentTransition },
             predictivePopTransitionSpec = { NoContentTransition },
+            entryDecorators = listOf(
+                rememberSceneSetupNavEntryDecorator(),
+                rememberSavedStateNavEntryDecorator(),
+                // rememberViewModelStoreNavEntryDecorator(), // TODO
+            ),
             entryProvider = entryProvider {
                 entry<InfoScreen> {
                     MainBackHandler()

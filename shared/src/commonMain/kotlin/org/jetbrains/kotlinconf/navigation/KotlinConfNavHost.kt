@@ -7,7 +7,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.scene.Scene
+import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.defaultPopTransitionSpec
 import kotlinx.coroutines.channels.Channel
@@ -78,6 +80,11 @@ internal fun KotlinConfNavHost(
         entryProvider = entryProvider {
             screens(appBackStack)
         },
+        entryDecorators = listOf(
+            rememberSceneSetupNavEntryDecorator(),
+            rememberSavedStateNavEntryDecorator(),
+            // rememberViewModelStoreNavEntryDecorator(), // TODO
+        ),
         popTransitionSpec = popTransactionSpec ?: defaultPopTransitionSpec(),
     )
 }
