@@ -8,6 +8,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -48,14 +50,13 @@ class MainActivity : ComponentActivity() {
                         window.isNavigationBarContrastEnforced = false
                     }
                 },
-                popEnterTransition = {
-                    scaleIn(initialScale = 1.05f) +
-                            fadeIn(animationSpec = tween(50))
-                },
-                popExitTransition = {
-                    scaleOut(targetScale = 0.9f, animationSpec = tween(50)) +
-                            fadeOut(animationSpec = tween(50, delayMillis = 50))
-                },
+                popTransactionSpec = {
+                    // TODO: review these magic numbers from Androidify
+                    ContentTransform(
+                        fadeIn(spring(dampingRatio = 1.0f, stiffness = 1600f)),
+                        scaleOut(targetScale = 0.7f),
+                    )
+                }
             )
         }
     }

@@ -1,7 +1,9 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -69,6 +71,7 @@ import org.jetbrains.kotlinconf.navigation.AboutConferenceScreen
 import org.jetbrains.kotlinconf.navigation.AppPrivacyNoticePrompt
 import org.jetbrains.kotlinconf.navigation.CodeOfConductScreen
 import org.jetbrains.kotlinconf.navigation.InfoScreen
+import org.jetbrains.kotlinconf.navigation.MainScreenMarker
 import org.jetbrains.kotlinconf.navigation.MapScreen
 import org.jetbrains.kotlinconf.navigation.NewsListScreen
 import org.jetbrains.kotlinconf.navigation.PartnersScreen
@@ -98,12 +101,19 @@ fun MainScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
-        val localBackStack = remember { mutableStateListOf<Any>(ScheduleScreen) }
+        val localBackStack = remember { mutableStateListOf<MainScreenMarker>(ScheduleScreen) }
         NavDisplay(
             backStack = localBackStack,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
+            predictivePopTransitionSpec = {
+                // TODO choose specs
+                ContentTransform(
+                    fadeIn(animationSpec = tween(700)),
+                    fadeOut(animationSpec = tween(700)),
+                )
+            },
             entryProvider = entryProvider {
                 entry<InfoScreen> {
                     MainBackHandler()
@@ -165,7 +175,7 @@ private fun isKeyboardOpen(): Boolean {
 }
 
 @Composable
-private fun BottomNavigation(localBackStack: SnapshotStateList<Any>) {
+private fun BottomNavigation(localBackStack: SnapshotStateList<MainScreenMarker>) {
     val bottomNavDestinations: List<MainNavDestination> =
         listOf(
             MainNavDestination(
@@ -208,15 +218,17 @@ private fun BottomNavigation(localBackStack: SnapshotStateList<Any>) {
         currentDestination = currentBottomNavDestination,
         destinations = bottomNavDestinations,
         onSelect = {
-            localBackStack.add(it.route)
-            //{
-//                // Avoid stacking multiple copies of the main screens
-//                popUpTo(localBackStack.graph.findStartDestination().route!!) {
-//                    saveState = true
-//                }
-//                launchSingleTop = true
-//                restoreState = true
-//            }
+            val target = it.route as MainScreenMarker // TODO avoid this cast
+            if (localBackStack.last() == target) {
+                return@MainNavigation
+            }
+
+            localBackStack.add(target)
+
+            if (localBackStack.size > 2) {
+                // Remove everything but the first and last entry
+                localBackStack.removeRange(1, localBackStack.lastIndex)
+            }
         },
     )
 }

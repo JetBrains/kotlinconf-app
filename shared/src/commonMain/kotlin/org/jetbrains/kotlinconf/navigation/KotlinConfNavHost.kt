@@ -1,8 +1,10 @@
 package org.jetbrains.kotlinconf.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -10,11 +12,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.scene.Scene
 import androidx.navigation3.ui.NavDisplay
 import kotlinx.coroutines.channels.Channel
+import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.LocalNotificationId
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.URLs
@@ -55,11 +58,11 @@ fun navigateToSession(sessionId: SessionId) {
 private val notificationNavRequests = Channel<Any>(capacity = 1)
 
 @Composable
-private fun NotificationHandler(navController: NavHostController) {
+private fun NotificationHandler(backStack: SnapshotStateList<Any>) {
     LaunchedEffect(Unit) {
         while (true) {
             val destination = notificationNavRequests.receive()
-            navController.navigate(destination)
+            backStack.add(destination)
         }
     }
 }
@@ -67,42 +70,24 @@ private fun NotificationHandler(navController: NavHostController) {
 @Composable
 internal fun KotlinConfNavHost(
     isOnboardingComplete: Boolean,
-    popEnterTransition: @JvmSuppressWildcards (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition)?,
-    popExitTransition: @JvmSuppressWildcards (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition)?,
+    popTransactionSpec: AnimatedContentTransitionScope<Scene<Any>>.() -> ContentTransform,
 ) {
-//    val navController = rememberNavController()
+    // TODO: make this saveable!
+    val backStack: SnapshotStateList<Any> = remember {
+        val startDestination = if (isOnboardingComplete) MainScreen else StartPrivacyNoticeScreen
+        mutableStateListOf(startDestination)
+    }
 
-//    NotificationHandler(navController)
-//    PlatformNavHandler(navController)
+    NotificationHandler(backStack)
+    //PlatformNavHandler(navController)
 
-    val backStack = remember { mutableStateListOf<Any>(MainScreen) }
     NavDisplay(
         backStack = backStack,
         entryProvider = entryProvider {
             screens(backStack)
-        }
+        },
+        popTransitionSpec = popTransactionSpec,
     )
-
-//    val startDestination = if (isOnboardingComplete) MainScreen else StartScreens
-//    if (popEnterTransition != null && popExitTransition != null) {
-//        NavHost(
-//            navController = navController,
-//            startDestination = startDestination,
-//            modifier = Modifier.fillMaxSize(),
-//            popEnterTransition = popEnterTransition,
-//            popExitTransition = popExitTransition,
-//        ) {
-//            screens(navController)
-//        }
-//    } else {
-//        NavHost(
-//            navController = navController,
-//            startDestination = startDestination,
-//            modifier = Modifier.fillMaxSize(),
-//        ) {
-//            screens(navController)
-//        }
-//    }
 }
 
 
@@ -111,9 +96,7 @@ fun EntryProviderBuilder<Any>.screens(backStack: SnapshotStateList<Any>) {
         backStack.removeAt(backStack.lastIndex)
     }
 
-//    startScreens(
-//        navController = navController,
-//    )
+    startScreens(backStack)
 
     entry<MainScreen> {
         MainScreen(onNavigate = { backStack.add(it) })
@@ -244,36 +227,37 @@ fun EntryProviderBuilder<Any>.screens(backStack: SnapshotStateList<Any>) {
     }
 }
 
-//fun NavGraphBuilder.startScreens(
-//    navController: NavHostController,
-//) {
-//    navigation<StartScreens>(
-//        startDestination = StartPrivacyNoticeScreen
-//    ) {
-//        composable<StartPrivacyNoticeScreen> {
-//            val skipNotifications = LocalFlags.current.supportsNotifications.not()
-//            AppPrivacyNoticePrompt(
-//                onRejectNotice = {
-//                    navController.navigate(if (skipNotifications) MainScreen else StartNotificationsScreen) {
-//                        popUpTo<StartScreens> { inclusive = skipNotifications }
-//                    }
-//                },
-//                onAcceptNotice = {
-//                    navController.navigate(if (skipNotifications) MainScreen else StartNotificationsScreen) {
-//                        popUpTo<StartScreens> { inclusive = skipNotifications }
-//                    }
-//                },
-//                onAppTermsOfUse =  { navController.navigate(AppTermsOfUseScreen) },
-//                confirmationRequired = false,
-//            )
-//        }
-//        composable<StartNotificationsScreen> {
-//            StartNotificationsScreen(
-//                onDone = {
-//                    navController.navigate(MainScreen) {
-//                        popUpTo<StartScreens> { inclusive = true }
-//                    }
-//                })
-//        }
-//    }
-//}
+fun EntryProviderBuilder<Any>.startScreens(backStack: SnapshotStateList<Any>) {
+    entry<StartPrivacyNoticeScreen> {
+        val skipNotifications = LocalFlags.current.supportsNotifications.not()
+        AppPrivacyNoticePrompt(
+            onRejectNotice = {
+                if (skipNotifications) {
+                    backStack.add(MainScreen)
+                    backStack.removeAll { it !is MainScreen }
+                } else {
+                    backStack.add(StartNotificationsScreen)
+                }
+            },
+            onAcceptNotice = {
+                if (skipNotifications) {
+                    backStack.add(MainScreen)
+                    backStack.removeAll { it !is MainScreen }
+                } else {
+                    backStack.add(StartNotificationsScreen)
+                }
+            },
+            onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
+            confirmationRequired = false,
+        )
+    }
+
+    entry<StartNotificationsScreen> {
+        StartNotificationsScreen(
+            onDone = {
+                backStack.add(MainScreen)
+                backStack.removeAll { it !is MainScreen }
+            }
+        )
+    }
+}

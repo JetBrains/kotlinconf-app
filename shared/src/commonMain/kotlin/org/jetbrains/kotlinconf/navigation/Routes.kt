@@ -20,11 +20,7 @@ data object AboutAppScreen
 
 @Serializable
 @SerialName("Info")
-data object InfoScreen
-
-@Serializable
-@SerialName("Welcome")
-data object StartScreens
+data object InfoScreen: MainScreenMarker
 
 @Serializable
 @SerialName("WelcomePrivacyNotice")
@@ -81,9 +77,11 @@ data class PartnerDetailScreen(val partnerId: PartnerId)
 @SerialName("Main")
 data object MainScreen
 
+sealed interface MainScreenMarker
+
 @Serializable
 @SerialName("Schedule")
-data object ScheduleScreen
+data object ScheduleScreen : MainScreenMarker
 
 @Serializable
 @SerialName("Session")
@@ -94,7 +92,7 @@ data class SessionScreen(
 
 @Serializable
 @SerialName("Speakers")
-data object SpeakersScreen
+data object SpeakersScreen: MainScreenMarker
 
 @Serializable
 @SerialName("Speaker")
@@ -102,7 +100,7 @@ data class SpeakerDetailScreen(val speakerId: SpeakerId)
 
 @Serializable
 @SerialName("Map")
-data object MapScreen
+data object MapScreen: MainScreenMarker
 
 @Serializable
 @SerialName("MapDetail")
