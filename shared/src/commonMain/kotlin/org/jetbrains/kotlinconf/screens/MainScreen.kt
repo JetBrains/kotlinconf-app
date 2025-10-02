@@ -2,8 +2,9 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -65,6 +66,8 @@ import org.jetbrains.kotlinconf.ui.components.MainNavigation
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.koinInject
 
+private val NoContentTransition = ContentTransform(EnterTransition.None, ExitTransition.None)
+
 @Composable
 fun MainScreen(
     onNavigate: (Any) -> Unit,
@@ -86,13 +89,9 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            predictivePopTransitionSpec = {
-                // TODO choose specs
-                ContentTransform(
-                    fadeIn(animationSpec = tween(700)),
-                    fadeOut(animationSpec = tween(700)),
-                )
-            },
+            transitionSpec = { NoContentTransition },
+            popTransitionSpec = { NoContentTransition },
+            predictivePopTransitionSpec = { NoContentTransition },
             entryProvider = entryProvider {
                 entry<InfoScreen> {
                     MainBackHandler()
