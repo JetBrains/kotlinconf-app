@@ -176,7 +176,7 @@ private fun isKeyboardOpen(): Boolean {
 
 @Composable
 private fun BottomNavigation(localBackStack: SnapshotStateList<MainScreenMarker>) {
-    val bottomNavDestinations: List<MainNavDestination> =
+    val bottomNavDestinations: List<MainNavDestination<MainScreenMarker>> =
         listOf(
             MainNavDestination(
                 label = stringResource(Res.string.nav_destination_schedule),
@@ -218,7 +218,7 @@ private fun BottomNavigation(localBackStack: SnapshotStateList<MainScreenMarker>
         currentDestination = currentBottomNavDestination,
         destinations = bottomNavDestinations,
         onSelect = {
-            val target = it.route as MainScreenMarker // TODO avoid this cast
+            val target = it.route
             if (localBackStack.last() == target) {
                 return@MainNavigation
             }

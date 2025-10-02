@@ -65,19 +65,19 @@ private fun MainNavigationButton(
     )
 }
 
-data class MainNavDestination(
+data class MainNavDestination<T : Any>(
     val label: String,
     val icon: DrawableResource,
-    val route: Any,
+    val route: T,
     val iconSelected: DrawableResource = icon,
     val routeClass: KClass<*>? = null,
 )
 
 @Composable
-fun MainNavigation(
-    currentDestination: MainNavDestination?,
-    destinations: List<MainNavDestination>,
-    onSelect: (MainNavDestination) -> Unit,
+fun <T : Any> MainNavigation(
+    currentDestination: MainNavDestination<T>?,
+    destinations: List<MainNavDestination<T>>,
+    onSelect: (MainNavDestination<T>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
