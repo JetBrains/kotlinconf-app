@@ -27,39 +27,39 @@ kotlin {
         }
     }
 
-//    jvm()
-//
-//    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
-//    wasmJs {
-//        binaries.executable()
-//        browser {
-//            val projectDir = project.projectDir.path
-//            val rootDir = project.rootDir.path
-//            commonWebpackConfig {
-//                outputFileName = "kotlinconf-app.js"
-//            }
-//        }
-//    }
-//
-//    js {
-//        binaries.executable()
-//        browser {
-//            commonWebpackConfig {
-//                outputFileName = "kotlinconf-app.js"
-//            }
-//        }
-//    }
-//
-//    listOf(
-//        iosX64(),
-//        iosArm64(),
-//        iosSimulatorArm64()
-//    ).forEach {
-//        it.binaries.framework {
-//            baseName = "shared"
-//            isStatic = true
-//        }
-//    }
+    jvm()
+
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+    wasmJs {
+        binaries.executable()
+        browser {
+            val projectDir = project.projectDir.path
+            val rootDir = project.rootDir.path
+            commonWebpackConfig {
+                outputFileName = "kotlinconf-app.js"
+            }
+        }
+    }
+
+    js {
+        binaries.executable()
+        browser {
+            commonWebpackConfig {
+                outputFileName = "kotlinconf-app.js"
+            }
+        }
+    }
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "shared"
+            isStatic = true
+        }
+    }
 
     applyDefaultHierarchyTemplate()
 
@@ -83,9 +83,8 @@ kotlin {
             implementation(libs.kotlinx.datetime)
 
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.androidx.navigation3.runtime)
             implementation(libs.androidx.navigation3.ui)
-            implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+//            implementation(libs.androidx.lifecycle.viewmodel.navigation3)
             implementation(libs.compose.ui.backhandler)
             implementation(libs.ktor.client.core)
 
