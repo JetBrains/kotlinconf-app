@@ -17,10 +17,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
@@ -70,6 +67,7 @@ import org.jetbrains.kotlinconf.generated.resources.team_28_fill
 import org.jetbrains.kotlinconf.navigation.AboutAppScreen
 import org.jetbrains.kotlinconf.navigation.AboutConferenceScreen
 import org.jetbrains.kotlinconf.navigation.AppPrivacyNoticePrompt
+import org.jetbrains.kotlinconf.navigation.BackStack
 import org.jetbrains.kotlinconf.navigation.CodeOfConductScreen
 import org.jetbrains.kotlinconf.navigation.InfoScreen
 import org.jetbrains.kotlinconf.navigation.MainScreenMarker
@@ -81,6 +79,7 @@ import org.jetbrains.kotlinconf.navigation.SessionScreen
 import org.jetbrains.kotlinconf.navigation.SettingsScreen
 import org.jetbrains.kotlinconf.navigation.SpeakerDetailScreen
 import org.jetbrains.kotlinconf.navigation.SpeakersScreen
+import org.jetbrains.kotlinconf.navigation.rememberBackstack
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainNavDestination
 import org.jetbrains.kotlinconf.ui.components.MainNavigation
@@ -104,9 +103,9 @@ fun MainScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
-        val localBackStack = remember { mutableStateListOf<MainScreenMarker>(ScheduleScreen) }
+        val localBackStack = rememberBackstack<MainScreenMarker>(ScheduleScreen)
         NavDisplay(
-            backStack = localBackStack,
+            backStack = localBackStack.backStack,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
@@ -160,6 +159,7 @@ fun MainScreen(
 
 @Composable
 private fun MainBackHandler() {
+    // TODO try simplifying this once Nav3 runs on iOS too
     if (!LocalFlags.current.enableBackOnMainScreens) {
         // Prevent back navigation with an empty handler
         @OptIn(ExperimentalComposeUiApi::class)
@@ -174,7 +174,7 @@ private fun isKeyboardOpen(): Boolean {
 }
 
 @Composable
-private fun BottomNavigation(localBackStack: SnapshotStateList<MainScreenMarker>) {
+private fun BottomNavigation(localBackStack: BackStack<MainScreenMarker>) {
     val bottomNavDestinations: List<MainNavDestination<MainScreenMarker>> =
         listOf(
             MainNavDestination(
@@ -207,7 +207,8 @@ private fun BottomNavigation(localBackStack: SnapshotStateList<MainScreenMarker>
             ),
         )
 
-    val currentDestination = localBackStack.last()
+    // TODO check if we can simplify this
+    val currentDestination = localBackStack.backStack.last()
     val currentBottomNavDestination = bottomNavDestinations.find { dest ->
         currentDestination == dest.route
     }
@@ -217,16 +218,18 @@ private fun BottomNavigation(localBackStack: SnapshotStateList<MainScreenMarker>
         currentDestination = currentBottomNavDestination,
         destinations = bottomNavDestinations,
         onSelect = {
-            val target = it.route
-            if (localBackStack.last() == target) {
-                return@MainNavigation
-            }
+            localBackStack.edit {
+                val target = it.route
+                if (last() == target) {
+                    return@edit
+                }
 
-            localBackStack.add(target)
+                add(target)
 
-            if (localBackStack.size > 2) {
-                // Remove everything but the first and last entry
-                localBackStack.removeRange(1, localBackStack.lastIndex)
+                if (size > 2) {
+                    // Remove everything but the first and last entry
+                    subList(1, lastIndex).clear()
+                }
             }
         },
     )

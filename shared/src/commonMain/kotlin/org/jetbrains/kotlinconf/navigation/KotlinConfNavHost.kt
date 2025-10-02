@@ -2,16 +2,9 @@ package org.jetbrains.kotlinconf.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.scene.Scene
@@ -58,7 +51,7 @@ fun navigateToSession(sessionId: SessionId) {
 private val notificationNavRequests = Channel<Any>(capacity = 1)
 
 @Composable
-private fun NotificationHandler(backStack: SnapshotStateList<Any>) {
+private fun NotificationHandler(backStack: BackStack<Any>) {
     LaunchedEffect(Unit) {
         while (true) {
             val destination = notificationNavRequests.receive()
@@ -73,30 +66,24 @@ internal fun KotlinConfNavHost(
     popTransactionSpec: AnimatedContentTransitionScope<Scene<Any>>.() -> ContentTransform,
 ) {
     // TODO: make this saveable!
-    val backStack: SnapshotStateList<Any> = remember {
-        val startDestination = if (isOnboardingComplete) MainScreen else StartPrivacyNoticeScreen
-        mutableStateListOf(startDestination)
-    }
+    val startDestination = if (isOnboardingComplete) MainScreen else StartPrivacyNoticeScreen
+    val appBackStack= rememberBackstack(startDestination)
 
-    NotificationHandler(backStack)
+    NotificationHandler(appBackStack)
     //PlatformNavHandler(navController)
 
     NavDisplay(
-        backStack = backStack,
+        backStack = appBackStack.backStack,
         entryProvider = entryProvider {
-            screens(backStack)
+            screens(appBackStack)
         },
         popTransitionSpec = popTransactionSpec,
     )
 }
 
 
-fun EntryProviderBuilder<Any>.screens(backStack: SnapshotStateList<Any>) {
-    fun popBackStack() {
-        backStack.removeAt(backStack.lastIndex)
-    }
-
-    startScreens(backStack)
+fun EntryProviderBuilder<Any>.screens(backStack: BackStack<Any>) {
+    startScreens(backStack) // TODO inline these later
 
     entry<MainScreen> {
         MainScreen(onNavigate = { backStack.add(it) })
@@ -104,7 +91,7 @@ fun EntryProviderBuilder<Any>.screens(backStack: SnapshotStateList<Any>) {
     entry<SpeakerDetailScreen> {
         SpeakerDetailScreen(
             speakerId = it.speakerId,
-            onBack = { popBackStack() },
+            onBack = backStack::pop,
             onSession = { backStack.add(SessionScreen(it)) },
         )
     }
@@ -113,7 +100,7 @@ fun EntryProviderBuilder<Any>.screens(backStack: SnapshotStateList<Any>) {
         SessionScreen(
             sessionId = it.sessionId,
             openedForFeedback = it.openedForFeedback,
-            onBack = { popBackStack() },
+            onBack = backStack::pop,
             onPrivacyNoticeNeeded = { backStack.add(AppPrivacyNoticePrompt) },
             onSpeaker = { speakerId -> backStack.add(SpeakerDetailScreen(speakerId)) },
             onWatchVideo = { videoUrl -> urlHandler.openUri(videoUrl) },
@@ -126,7 +113,7 @@ fun EntryProviderBuilder<Any>.screens(backStack: SnapshotStateList<Any>) {
     entry<AboutAppScreen> {
         val uriHandler = LocalUriHandler.current
         AboutAppScreen(
-            onBack = { popBackStack() },
+            onBack = backStack::pop,
             onGitHubRepo = { uriHandler.openUri(URLs.GITHUB_REPO) },
             onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
             onPrivacyNotice = { backStack.add(AppPrivacyNoticeScreen) },
@@ -141,14 +128,14 @@ fun EntryProviderBuilder<Any>.screens(backStack: SnapshotStateList<Any>) {
             onLicenseClick = { licenseName, licenseText ->
                 backStack.add(SingleLicenseScreen(licenseName, licenseText))
             },
-            onBack = { popBackStack() },
+            onBack = backStack::pop,
         )
     }
     entry<SingleLicenseScreen> {
         SingleLicenseScreen(
             licenseName = it.licenseName,
             licenseContent = it.licenseText,
-            onBack = { popBackStack() },
+            onBack = backStack::pop,
         )
     }
     entry<AboutConferenceScreen> {
@@ -157,35 +144,35 @@ fun EntryProviderBuilder<Any>.screens(backStack: SnapshotStateList<Any>) {
             onPrivacyNotice = { backStack.add(VisitorPrivacyNoticeScreen) },
             onGeneralTerms = { backStack.add(TermsOfUseScreen) },
             onWebsiteLink = { urlHandler.openUri(URLs.KOTLINCONF_HOMEPAGE) },
-            onBack = { popBackStack() },
+            onBack = backStack::pop,
             onSpeaker = { speakerId -> backStack.add(SpeakerDetailScreen(speakerId)) },
         )
     }
     entry<CodeOfConductScreen> {
-        CodeOfConduct(onBack = { popBackStack() })
+        CodeOfConduct(onBack = backStack::pop)
     }
     entry<SettingsScreen> {
-        SettingsScreen(onBack = { popBackStack() })
+        SettingsScreen(onBack = backStack::pop)
     }
     entry<VisitorPrivacyNoticeScreen> {
-        VisitorPrivacyNotice(onBack = { popBackStack() })
+        VisitorPrivacyNotice(onBack = backStack::pop)
     }
     entry<AppPrivacyNoticeScreen> {
         AppPrivacyNotice(
-            onBack = { popBackStack() },
+            onBack = backStack::pop,
             onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
         )
     }
     entry<TermsOfUseScreen> {
         VisitorTermsOfUse(
-            onBack = { popBackStack() },
+            onBack = backStack::pop,
             onCodeOfConduct = { backStack.add(CodeOfConductScreen) },
             onVisitorPrivacyNotice = { backStack.add(VisitorPrivacyNoticeScreen) },
         )
     }
     entry<AppTermsOfUseScreen> {
         AppTermsOfUse(
-            onBack = { popBackStack() },
+            onBack = backStack::pop,
             onAppPrivacyNotice = {
                 backStack.add(AppPrivacyNoticeScreen)
             },
@@ -193,7 +180,7 @@ fun EntryProviderBuilder<Any>.screens(backStack: SnapshotStateList<Any>) {
     }
     entry<PartnersScreen> {
         PartnersScreen(
-            onBack = { popBackStack() },
+            onBack = backStack::pop,
             onPartnerDetail = { partnerId ->
                 backStack.add(PartnerDetailScreen(partnerId))
             }
@@ -202,47 +189,45 @@ fun EntryProviderBuilder<Any>.screens(backStack: SnapshotStateList<Any>) {
     entry<PartnerDetailScreen> {
         PartnerDetailScreen(
             partnerId = it.partnerId,
-            onBack = { popBackStack() },
+            onBack = backStack::pop,
         )
     }
 
     entry<AppPrivacyNoticePrompt> {
         AppPrivacyNoticePrompt(
-            onRejectNotice = { popBackStack() },
-            onAcceptNotice = { popBackStack() },
+            onRejectNotice = backStack::pop,
+            onAcceptNotice = backStack::pop,
             onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
             confirmationRequired = true,
         )
     }
 
     entry<DeveloperMenuScreen> {
-        DeveloperMenuScreen(onBack = { popBackStack() })
+        DeveloperMenuScreen(onBack = backStack::pop)
     }
 
     entry<NestedMapScreen> {
         NestedMapScreen(
             roomName = it.roomName,
-            onBack = { popBackStack() },
+            onBack = backStack::pop,
         )
     }
 }
 
-fun EntryProviderBuilder<Any>.startScreens(backStack: SnapshotStateList<Any>) {
+fun EntryProviderBuilder<Any>.startScreens(backStack: BackStack<Any>) {
     entry<StartPrivacyNoticeScreen> {
         val skipNotifications = LocalFlags.current.supportsNotifications.not()
         AppPrivacyNoticePrompt(
             onRejectNotice = {
                 if (skipNotifications) {
-                    backStack.add(MainScreen)
-                    backStack.removeAll { it !is MainScreen }
+                    backStack.add(MainScreen, clearOthers = true)
                 } else {
                     backStack.add(StartNotificationsScreen)
                 }
             },
             onAcceptNotice = {
                 if (skipNotifications) {
-                    backStack.add(MainScreen)
-                    backStack.removeAll { it !is MainScreen }
+                    backStack.add(MainScreen, clearOthers = true)
                 } else {
                     backStack.add(StartNotificationsScreen)
                 }
@@ -255,8 +240,7 @@ fun EntryProviderBuilder<Any>.startScreens(backStack: SnapshotStateList<Any>) {
     entry<StartNotificationsScreen> {
         StartNotificationsScreen(
             onDone = {
-                backStack.add(MainScreen)
-                backStack.removeAll { it !is MainScreen }
+                backStack.add(MainScreen, clearOthers = true)
             }
         )
     }
