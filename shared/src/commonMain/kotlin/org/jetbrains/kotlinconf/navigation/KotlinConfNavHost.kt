@@ -9,6 +9,7 @@ import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.scene.Scene
 import androidx.navigation3.ui.NavDisplay
+import androidx.navigation3.ui.defaultPopTransitionSpec
 import kotlinx.coroutines.channels.Channel
 import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.LocalNotificationId
@@ -63,11 +64,11 @@ private fun NotificationHandler(backStack: BackStack<Any>) {
 @Composable
 internal fun KotlinConfNavHost(
     isOnboardingComplete: Boolean,
-    popTransactionSpec: AnimatedContentTransitionScope<Scene<Any>>.() -> ContentTransform,
+    popTransactionSpec: (AnimatedContentTransitionScope<Scene<Any>>.() -> ContentTransform)?,
 ) {
     // TODO: make this saveable!
     val startDestination = if (isOnboardingComplete) MainScreen else StartPrivacyNoticeScreen
-    val appBackStack= rememberBackstack(startDestination)
+    val appBackStack: BackStack<Any> = rememberBackstack(startDestination)
 
     NotificationHandler(appBackStack)
     //PlatformNavHandler(navController)
@@ -77,7 +78,7 @@ internal fun KotlinConfNavHost(
         entryProvider = entryProvider {
             screens(appBackStack)
         },
-        popTransitionSpec = popTransactionSpec,
+        popTransitionSpec = popTransactionSpec ?: defaultPopTransitionSpec(),
     )
 }
 

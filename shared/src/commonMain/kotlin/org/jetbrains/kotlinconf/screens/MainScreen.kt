@@ -103,6 +103,7 @@ fun MainScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
+        // TODO: make this saveable!
         val localBackStack = rememberBackstack<MainScreenMarker>(ScheduleScreen)
         NavDisplay(
             backStack = localBackStack.backStack,

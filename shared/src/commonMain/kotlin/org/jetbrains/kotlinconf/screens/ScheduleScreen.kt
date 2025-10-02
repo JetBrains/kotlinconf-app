@@ -367,6 +367,7 @@ private fun Header(
             )
         },
         searchContent = {
+            // TODO update to new APIs
             @OptIn(ExperimentalComposeUiApi::class)
             BackHandler(true) {
                 onHeaderStateChange(MainHeaderContainerState.Title)
