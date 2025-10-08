@@ -21,7 +21,7 @@ import coil3.request.crossfade
 import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.kodee_emotion_neutral
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 

@@ -16,9 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.kotlinconf.ui.theme.KotlinConfPreview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
 data class ServiceEventData(
     val title: String,
@@ -99,10 +98,10 @@ fun ServiceEvents(
     }
 }
 
-@Preview
+@KotlinConfPreview
 @Composable
-internal fun ServiceEventsPreview() {
-    PreviewHelper {
+internal fun ServiceEventPreview() {
+    KotlinConfTheme {
         ServiceEvent(
             ServiceEventData(
                 title = "Breakfast",
@@ -110,6 +109,13 @@ internal fun ServiceEventsPreview() {
                 time = "9:00 – 10:00",
             )
         )
+    }
+}
+
+@KotlinConfPreview
+@Composable
+internal fun ServiceEventsPreview() {
+    KotlinConfTheme {
         ServiceEvents(
             listOf(
                 ServiceEventData(

@@ -2,7 +2,9 @@ package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -32,7 +34,8 @@ import kotlinconfapp.ui_components.generated.resources.kodee_small_positive_fill
 import kotlinconfapp.ui_components.generated.resources.kodee_small_positive_outline
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
@@ -132,32 +135,34 @@ fun KodeeEmotion(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 internal fun KodeeIconsPreview() {
-    PreviewHelper {
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            KodeeIconSmall(Emotion.Negative, false)
-            KodeeIconSmall(Emotion.Neutral, false)
-            KodeeIconSmall(Emotion.Positive, false)
+    KotlinConfTheme(isSystemInDarkTheme()) {
+        Column {
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                KodeeIconSmall(Emotion.Negative, false)
+                KodeeIconSmall(Emotion.Neutral, false)
+                KodeeIconSmall(Emotion.Positive, false)
 
-            KodeeIconSmall(Emotion.Negative, true)
-            KodeeIconSmall(Emotion.Neutral, true)
-            KodeeIconSmall(Emotion.Positive, true)
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            KodeeIconLarge(Emotion.Negative, false)
-            KodeeIconLarge(Emotion.Neutral, false)
-            KodeeIconLarge(Emotion.Positive, false)
+                KodeeIconSmall(Emotion.Negative, true)
+                KodeeIconSmall(Emotion.Neutral, true)
+                KodeeIconSmall(Emotion.Positive, true)
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                KodeeIconLarge(Emotion.Negative, false)
+                KodeeIconLarge(Emotion.Neutral, false)
+                KodeeIconLarge(Emotion.Positive, false)
 
-            KodeeIconLarge(Emotion.Negative, true)
-            KodeeIconLarge(Emotion.Neutral, true)
-            KodeeIconLarge(Emotion.Positive, true)
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            KodeeEmotion(Emotion.Negative)
-            KodeeEmotion(Emotion.Neutral)
-            KodeeEmotion(Emotion.Positive)
+                KodeeIconLarge(Emotion.Negative, true)
+                KodeeIconLarge(Emotion.Neutral, true)
+                KodeeIconLarge(Emotion.Positive, true)
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                KodeeEmotion(Emotion.Negative)
+                KodeeEmotion(Emotion.Neutral)
+                KodeeEmotion(Emotion.Positive)
+            }
         }
     }
 }

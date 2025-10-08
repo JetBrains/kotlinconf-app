@@ -23,7 +23,7 @@ fun GalleryApp() {
         CompositionLocalProvider(LocalDensity provides Density(densityFloat)) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 ActionPreview()
-                ButtonPreview()
+//                ButtonPreview()
                 CardTagPreview()
                 DayHeaderPreview()
                 FeedbackFormPreview()

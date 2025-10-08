@@ -39,6 +39,7 @@ kotlin {
             implementation(compose.material3)
             api(compose.components.resources)
             api(compose.components.uiToolingPreview)
+            api("org.jetbrains.compose.ui:ui-tooling-preview:1.10.0-alpha02")
 
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor3)

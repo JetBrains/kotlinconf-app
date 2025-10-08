@@ -55,7 +55,7 @@ import kotlinconfapp.ui_components.generated.resources.filter_label_session_form
 import kotlinconfapp.ui_components.generated.resources.up_24
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 

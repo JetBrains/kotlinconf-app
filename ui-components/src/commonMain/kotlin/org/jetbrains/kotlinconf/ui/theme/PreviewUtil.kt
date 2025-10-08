@@ -31,7 +31,7 @@ private fun PreviewColumn(
 ) {
     Column(
         modifier = Modifier
-            .background(KotlinConfTheme.colors.mainBackground)
+//            .background(KotlinConfTheme.colors.mainBackground)
             .padding(
                 if (paddingEnabled) 8.dp else 0.dp,
             ),
