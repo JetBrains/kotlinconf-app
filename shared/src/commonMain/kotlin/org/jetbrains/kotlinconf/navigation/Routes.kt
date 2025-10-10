@@ -108,13 +108,6 @@ data object MapScreen
 @SerialName("MapDetail")
 data class NestedMapScreen(val roomName: String)
 
-@Serializable
-@SerialName("News")
-data object NewsListScreen
-
-@Serializable
-@SerialName("News")
-data class NewsDetailScreen(val newsId: String)
 
 @Serializable
 @SerialName("DeveloperMenu")

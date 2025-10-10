@@ -26,7 +26,6 @@ For the source code and more technical details, visit the GitHub repository.</st
     <string name="info_link_about_app">About the app</string>
     <string name="info_link_partners">Our partners</string>
     <string name="info_link_code_of_conduct">Code of conduct</string>
-    <string name="info_link_news_feed">News feed</string>
     <string name="info_link_settings">Settings</string>
     <string name="info_link_description_twitter">Twitter</string>
     <string name="info_link_description_slack">Slack</string>
@@ -79,10 +78,6 @@ We will process your data in accordance with the App Privacy Notice. You can adj
     <string name="notifications_session_reminders_description">Get reminders for sessions that you’ve bookmarked in the schedule to make sure you don’t miss them.</string>
     <string name="notifications_schedule_update_title">Schedule updates</string>
     <string name="notifications_schedule_update_description">Stay informed about crucial changes! Get an alert if there's a significant update to the event schedule.</string>
-    <string name="notifications_kotlinconf_news_title">KotlinConf News</string>
-    <string name="notifications_kotlinconf_news_description">Receive news in between KotlinConf events, including notifications about ticket sales, new videos, contests, schedule announcements, and more.</string>
-    <string name="notifications_jetbrains_news_title">JetBrains News</string>
-    <string name="notifications_jetbrains_news_description">Get news about JetBrains products.</string>
     <string name="notifications_lets_get_started">Let’s get started!</string>
 
     <string name="code_of_conduct">Code of Conduct</string>
@@ -134,9 +129,6 @@ We will process your data in accordance with the App Privacy Notice. You can adj
     <string name="map_title">Map</string>
     <string name="map_ground_floor">Ground floor</string>
     <string name="map_first_floor">First floor</string>
-
-    <string name="news_feed_title">News</string>
-    <string name="news_feed_empty">No news… is good news?</string>
 
     <string name="speakers_title">Speakers</string>
     <string name="speakers_error_no_results">No results</string>
