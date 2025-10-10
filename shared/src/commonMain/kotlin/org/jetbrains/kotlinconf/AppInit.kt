@@ -7,12 +7,9 @@ import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import org.jetbrains.kotlinconf.navigation.navigateToNews
 import org.jetbrains.kotlinconf.navigation.navigateToSession
 import org.jetbrains.kotlinconf.screens.AboutConferenceViewModel
 import org.jetbrains.kotlinconf.screens.LicensesViewModel
-import org.jetbrains.kotlinconf.screens.NewsDetailViewModel
-import org.jetbrains.kotlinconf.screens.NewsListViewModel
 import org.jetbrains.kotlinconf.screens.PrivacyNoticeViewModel
 import org.jetbrains.kotlinconf.screens.ScheduleViewModel
 import org.jetbrains.kotlinconf.screens.SessionViewModel
@@ -81,8 +78,6 @@ private fun initKoin(
         val viewModelModule = module {
             viewModelOf(::AboutConferenceViewModel)
             viewModelOf(::LicensesViewModel)
-            viewModelOf(::NewsDetailViewModel)
-            viewModelOf(::NewsListViewModel)
             viewModelOf(::PrivacyNoticeViewModel)
             viewModelOf(::ScheduleViewModel)
             viewModelOf(::SessionViewModel)
@@ -104,31 +99,24 @@ private fun initNotifier(
 ) {
     NotifierManager.initialize(configuration)
     NotifierManager.addListener(object : Listener {
-        var taggedLogger: TaggedLogger? = logger.tagged("KMPNotifier")
+        var taggedLogger: TaggedLogger = logger.tagged("KMPNotifier")
 
         override fun onNotificationClicked(data: PayloadData) {
             super.onNotificationClicked(data)
-            taggedLogger?.log { "Notification clicked with $data" }
-
-            val newsId = data[PushNotificationConstants.KEY_NEWS_ID] as? String
-            if (newsId != null) {
-                taggedLogger?.log { "Navigating to news: $newsId" }
-                navigateToNews(newsId)
-                return
-            }
+            taggedLogger.log { "Notification clicked with $data" }
 
             val sessionId = data[PushNotificationConstants.KEY_SESSION_ID] as? String
             if (sessionId != null) {
-                taggedLogger?.log { "Navigating to session: $sessionId" }
+                taggedLogger.log { "Navigating to session: $sessionId" }
                 navigateToSession(SessionId(sessionId))
                 return
             }
 
-            taggedLogger?.log { "No data to navigate with, ignoring notification" }
+            taggedLogger.log { "No data to navigate with, ignoring notification" }
         }
 
         override fun onNewToken(token: String) {
-            taggedLogger?.log { "New token received: $token" }
+            taggedLogger.log { "New token received: $token" }
         }
     })
 }

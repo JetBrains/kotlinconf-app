@@ -54,9 +54,6 @@ class ConferenceService(
             // Download fresh conference data
             loadConferenceData()
 
-            // Load fresh news items
-            loadNews()
-
             // Wait for user ID to be loaded
             userIdLoaded.await()
 
@@ -76,8 +73,6 @@ class ConferenceService(
                     val notifier = NotifierManager.getPushNotifier()
                     listOf(
                         settings.scheduleUpdates to PushNotificationConstants.TOPIC_SCHEDULE_UPDATES,
-                        settings.kotlinConfNews to PushNotificationConstants.TOPIC_KOTLINCONF_NEWS,
-                        settings.jetBrainsNews to PushNotificationConstants.TOPIC_JETBRAINS_NEWS,
                     ).forEach { (enabled, topic) ->
                         if (enabled) notifier.subscribeToTopic(topic)
                         else notifier.unSubscribeFromTopic(topic)
@@ -86,12 +81,6 @@ class ConferenceService(
         }
     }
 
-    val news: Flow<List<NewsDisplayItem>> = storage.getNews()
-        .map { newsItems ->
-            val now = timeProvider.now()
-            newsItems.map { newsItem -> mapNewsItemToDisplayItem(newsItem, now) }
-        }
-        .flowOn(Dispatchers.Default)
 
     val agenda: StateFlow<List<Day>> =
         combine(
@@ -235,8 +224,6 @@ class ConferenceService(
             it ?: NotificationSettings(
                 sessionReminders = true,
                 scheduleUpdates = true,
-                kotlinConfNews = true,
-                jetBrainsNews = true,
             )
         }
 
@@ -284,10 +271,6 @@ class ConferenceService(
     fun sessionsForSpeakerFlow(id: SpeakerId): Flow<List<SessionCardView>> =
         sessionCards.map { sessions -> sessions.filter { id in it.speakerIds } }
 
-    fun newsById(newsId: String): Flow<NewsDisplayItem?> =
-        news.map { allNews ->
-            allNews.find { it.id == newsId }
-        }
 
     fun setFavorite(sessionId: SessionId, favorite: Boolean) {
         scope.launch {
@@ -362,32 +345,6 @@ class ConferenceService(
         localNotificationService.cancel(LocalNotificationId(Type.SessionEnd, sessionId.id))
     }
 
-    private fun mapNewsItemToDisplayItem(
-        item: NewsItem,
-        now: LocalDateTime,
-    ): NewsDisplayItem {
-        return NewsDisplayItem(
-            id = item.id,
-            photoUrl = item.photoUrl,
-            date = item.publicationDate.toNewsDisplayTime(now),
-            title = item.title,
-            content = item.content,
-        )
-    }
-
-    private fun LocalDateTime.toNewsDisplayTime(now: LocalDateTime): String {
-        val isToday = year == now.year && dayOfYear == now.dayOfYear
-        return when {
-            isToday -> DateTimeFormatting.time(this)
-            year == now.year -> DateTimeFormatting.date(this)
-            else -> DateTimeFormatting.dateWithYear(this)
-        }
-    }
-
-    suspend fun loadNews() {
-        val news = client.getNews() ?: return
-        storage.setNews(news)
-    }
 
     private suspend fun syncVotes() {
         if (!checkUserId()) return

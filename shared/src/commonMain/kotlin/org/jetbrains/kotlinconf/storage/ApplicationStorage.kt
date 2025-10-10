@@ -3,7 +3,6 @@ package org.jetbrains.kotlinconf.storage
 import kotlinx.coroutines.flow.Flow
 import org.jetbrains.kotlinconf.Conference
 import org.jetbrains.kotlinconf.Flags
-import org.jetbrains.kotlinconf.NewsItem
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Theme
@@ -27,9 +26,6 @@ interface ApplicationStorage {
 
     fun getFavorites(): Flow<Set<SessionId>>
     suspend fun setFavorites(value: Set<SessionId>)
-
-    fun getNews(): Flow<List<NewsItem>>
-    suspend fun setNews(value: List<NewsItem>)
 
     fun getNotificationSettings(): Flow<NotificationSettings?>
     suspend fun setNotificationSettings(value: NotificationSettings)

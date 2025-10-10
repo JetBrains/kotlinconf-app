@@ -142,9 +142,6 @@ class APIClient(
         }
     }
 
-    suspend fun getNews(): List<NewsItem>? {
-        return safeApiCall { client.get("news").body<NewsListResponse>().items }
-    }
 
     /**
      * Runs the [call], returning its result or `null` if exceptions occurred.

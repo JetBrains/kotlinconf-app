@@ -26,7 +26,6 @@ Für den Quellcode und weitere technische Details besuchen Sie das GitHub-Reposi
     <string name="info_link_about_app">Über die App</string>
     <string name="info_link_partners">Unsere Partner</string>
     <string name="info_link_code_of_conduct">Verhaltenskodex</string>
-    <string name="info_link_news_feed">Newsfeed</string>
     <string name="info_link_settings">Einstellungen</string>
     <string name="info_link_description_twitter">Twitter</string>
     <string name="info_link_description_slack">Slack</string>
@@ -79,10 +78,6 @@ Wir verarbeiten Ihre Daten gemäß dem Datenschutzhinweis der App. Sie können I
     <string name="notifications_session_reminders_description">Erhalten Sie Erinnerungen für Sitzungen, die Sie im Zeitplan mit einem Lesezeichen versehen haben, damit Sie sie nicht verpassen.</string>
     <string name="notifications_schedule_update_title">Zeitplan-Updates</string>
     <string name="notifications_schedule_update_description">Bleiben Sie über wichtige Änderungen informiert! Erhalten Sie eine Benachrichtigung, wenn es eine bedeutende Aktualisierung des Veranstaltungszeitplans gibt.</string>
-    <string name="notifications_kotlinconf_news_title">KotlinConf-Neuigkeiten</string>
-    <string name="notifications_kotlinconf_news_description">Erhalten Sie Neuigkeiten zwischen KotlinConf-Veranstaltungen, einschließlich Benachrichtigungen über Ticketverkäufe, neue Videos, Wettbewerbe, Zeitplanankündigungen und mehr.</string>
-    <string name="notifications_jetbrains_news_title">JetBrains-Neuigkeiten</string>
-    <string name="notifications_jetbrains_news_description">Erhalten Sie Neuigkeiten über JetBrains-Produkte.</string>
     <string name="notifications_lets_get_started">Lass uns anfangen!</string>
 
     <string name="code_of_conduct">Verhaltenskodex</string>
@@ -134,9 +129,6 @@ Wir verarbeiten Ihre Daten gemäß dem Datenschutzhinweis der App. Sie können I
     <string name="map_title">Karte</string>
     <string name="map_ground_floor">Erdgeschoss</string>
     <string name="map_first_floor">Erster Stock</string>
-
-    <string name="news_feed_title">Neuigkeiten</string>
-    <string name="news_feed_empty">Keine Neuigkeiten... ist das eine gute Nachricht?</string>
 
     <string name="speakers_title">Sprecher</string>
     <string name="speakers_error_no_results">Keine Ergebnisse</string>
