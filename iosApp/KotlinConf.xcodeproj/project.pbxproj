@@ -10,6 +10,7 @@
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
+		67BC00EF2EA288B00073676F /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 67BC00EE2EA288B00073676F /* AppIcon.icon */; };
 		9A06FA002A556EB7005FAD4A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A06F9FF2A556EB7005FAD4A /* ContentView.swift */; };
 		B3F038E22BD95889001AAD76 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B3F038E12BD95889001AAD76 /* PrivacyInfo.xcprivacy */; };
 		EB0C463F2D7B1B6A008B2EB1 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = EB0C463E2D7B1B6A008B2EB1 /* FirebaseCore */; };
@@ -34,6 +35,7 @@
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
+		67BC00EE2EA288B00073676F /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* KotlinConf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KotlinConf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9A06F9FF2A556EB7005FAD4A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				67BC00EE2EA288B00073676F /* AppIcon.icon */,
 				9A81F7ED29C861B20021B05B /* iosApp.entitlements */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF8C242A565B00829871 /* Info.plist */,
@@ -168,6 +171,7 @@
 				B3F038E22BD95889001AAD76 /* PrivacyInfo.xcprivacy in Resources */,
 				EB91AB982D81C55000301AE3 /* GoogleService-Info.plist in Resources */,
 				058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */,
+				67BC00EF2EA288B00073676F /* AppIcon.icon in Resources */,
 				058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
