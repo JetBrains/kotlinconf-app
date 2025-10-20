@@ -5,11 +5,11 @@ import androidx.compose.animation.ContentTransform
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.scene.Scene
-import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.defaultPopTransitionSpec
 import kotlinx.coroutines.channels.Channel
@@ -81,16 +81,15 @@ internal fun KotlinConfNavHost(
             screens(appBackStack)
         },
         entryDecorators = listOf(
-            rememberSceneSetupNavEntryDecorator(),
-            rememberSavedStateNavEntryDecorator(),
-            // rememberViewModelStoreNavEntryDecorator(), // TODO
+            rememberSaveableStateHolderNavEntryDecorator(),
+            rememberViewModelStoreNavEntryDecorator(),
         ),
         popTransitionSpec = popTransactionSpec ?: defaultPopTransitionSpec(),
     )
 }
 
 
-fun EntryProviderBuilder<Any>.screens(backStack: BackStack<Any>) {
+fun EntryProviderScope<Any>.screens(backStack: BackStack<Any>) {
     startScreens(backStack) // TODO inline these later
 
     entry<MainScreen> {
@@ -222,7 +221,7 @@ fun EntryProviderBuilder<Any>.screens(backStack: BackStack<Any>) {
     }
 }
 
-fun EntryProviderBuilder<Any>.startScreens(backStack: BackStack<Any>) {
+fun EntryProviderScope<Any>.startScreens(backStack: BackStack<Any>) {
     entry<StartPrivacyNoticeScreen> {
         val skipNotifications = LocalFlags.current.supportsNotifications.not()
         AppPrivacyNoticePrompt(
