@@ -142,7 +142,7 @@ class MultiplatformSettingsStorage(
         },
     )
 
-    private companion object {
+    companion object {
         const val V2025 = 2025_000
         const val V2026 = 2026_000
         const val CURRENT_STORAGE_VERSION: Int = V2026

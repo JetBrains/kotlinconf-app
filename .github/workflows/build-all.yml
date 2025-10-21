@@ -23,6 +23,8 @@ jobs:
           java-version: 21
       - name: Assemble desktop jar
         run: ./gradlew :shared:jvmJar
+      - name: Run JVM tests
+        run: ./gradlew jvmTest
 
   build-android:
     name: Build Android
