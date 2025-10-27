@@ -30,6 +30,7 @@ class ConferenceService(
     private val storage: ApplicationStorage,
     private val localNotificationService: LocalNotificationService,
     private val scope: CoroutineScope,
+    private val flags: Flags,
     logger: Logger,
 ) {
     companion object {
@@ -317,6 +318,11 @@ class ConferenceService(
         sessionId: SessionId,
         title: String,
     ) {
+        if (!flags.supportsLocalNotifications) {
+            taggedLogger.log { "Local notifications are disabled, skipping schedule" }
+            return
+        }
+
         val now = timeProvider.now()
 
         val reminderTime = start - 5.minutes
