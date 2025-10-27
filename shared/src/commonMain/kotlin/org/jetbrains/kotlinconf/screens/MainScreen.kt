@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.snap
@@ -23,14 +24,11 @@ import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.clock_28
 import kotlinconfapp.shared.generated.resources.clock_28_fill
@@ -50,26 +48,31 @@ import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.URLs
 import org.jetbrains.kotlinconf.navigation.AboutAppScreen
 import org.jetbrains.kotlinconf.navigation.AboutConferenceScreen
+import org.jetbrains.kotlinconf.navigation.AppPrivacyNoticePrompt
+import org.jetbrains.kotlinconf.navigation.AppRoute
 import org.jetbrains.kotlinconf.navigation.CodeOfConductScreen
 import org.jetbrains.kotlinconf.navigation.InfoScreen
+import org.jetbrains.kotlinconf.navigation.MainRoute
 import org.jetbrains.kotlinconf.navigation.MapScreen
 import org.jetbrains.kotlinconf.navigation.NewsListScreen
 import org.jetbrains.kotlinconf.navigation.PartnersScreen
-import org.jetbrains.kotlinconf.navigation.AppPrivacyNoticePrompt
 import org.jetbrains.kotlinconf.navigation.ScheduleScreen
 import org.jetbrains.kotlinconf.navigation.SessionScreen
 import org.jetbrains.kotlinconf.navigation.SettingsScreen
 import org.jetbrains.kotlinconf.navigation.SpeakerDetailScreen
 import org.jetbrains.kotlinconf.navigation.SpeakersScreen
+import org.jetbrains.kotlinconf.navigation.rememberNavBackStack
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainNavDestination
 import org.jetbrains.kotlinconf.ui.components.MainNavigation
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.koinInject
 
+private val NoContentTransition = ContentTransform(EnterTransition.None, ExitTransition.None)
+
 @Composable
 fun MainScreen(
-    rootNavController: NavController,
+    onNavigate: (AppRoute) -> Unit,
     service: ConferenceService = koinInject(),
 ) {
     LaunchedEffect(Unit) {
@@ -82,63 +85,69 @@ fun MainScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
-        val nestedNavController = rememberNavController()
-        NavHost(
-            nestedNavController,
-            startDestination = ScheduleScreen,
+        // TODO: make this saveable!
+        val localBackStack = rememberNavBackStack<MainRoute>(ScheduleScreen)
+
+        NavDisplay(
+            backStack = localBackStack,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None },
-            popEnterTransition = { EnterTransition.None },
-            popExitTransition = { ExitTransition.None },
-        ) {
-            composable<InfoScreen> {
-                MainBackHandler()
-                val uriHandler = LocalUriHandler.current
-                InfoScreen(
-                    onAboutConf = { rootNavController.navigate(AboutConferenceScreen) },
-                    onAboutApp = { rootNavController.navigate(AboutAppScreen) },
-                    onNewsFeed = { rootNavController.navigate(NewsListScreen) },
-                    onOurPartners = { rootNavController.navigate(PartnersScreen) },
-                    onCodeOfConduct = { rootNavController.navigate(CodeOfConductScreen) },
-                    onTwitter = { uriHandler.openUri(URLs.TWITTER) },
-                    onSlack = { uriHandler.openUri(URLs.SLACK) },
-                    onBluesky = { uriHandler.openUri(URLs.BLUESKY) },
-                    onSettings = { rootNavController.navigate(SettingsScreen) },
-                )
+            transitionSpec = { NoContentTransition },
+            popTransitionSpec = { NoContentTransition },
+            predictivePopTransitionSpec = { NoContentTransition },
+            entryDecorators = listOf(
+                rememberSaveableStateHolderNavEntryDecorator(),
+                rememberViewModelStoreNavEntryDecorator(),
+            ),
+            entryProvider = entryProvider {
+                entry<InfoScreen> {
+                    MainBackHandler()
+                    val uriHandler = LocalUriHandler.current
+                    InfoScreen(
+                        onAboutConf = { onNavigate(AboutConferenceScreen) },
+                        onAboutApp = { onNavigate(AboutAppScreen) },
+                        onNewsFeed = { onNavigate(NewsListScreen) },
+                        onOurPartners = { onNavigate(PartnersScreen) },
+                        onCodeOfConduct = { onNavigate(CodeOfConductScreen) },
+                        onTwitter = { uriHandler.openUri(URLs.TWITTER) },
+                        onSlack = { uriHandler.openUri(URLs.SLACK) },
+                        onBluesky = { uriHandler.openUri(URLs.BLUESKY) },
+                        onSettings = { onNavigate(SettingsScreen) },
+                    )
+                }
+                entry<SpeakersScreen> {
+                    MainBackHandler()
+                    SpeakersScreen(
+                        onSpeaker = { onNavigate(SpeakerDetailScreen(it)) }
+                    )
+                }
+                entry<ScheduleScreen> {
+                    MainBackHandler()
+                    ScheduleScreen(
+                        onSession = { onNavigate(SessionScreen(it)) },
+                        onPrivacyNoticeNeeded = { onNavigate(AppPrivacyNoticePrompt) },
+                        onRequestFeedbackWithComment = { sessionId ->
+                            onNavigate(SessionScreen(sessionId, openedForFeedback = true))
+                        },
+                    )
+                }
+                entry<MapScreen> {
+                    MainBackHandler()
+                    MapScreen()
+                }
             }
-            composable<SpeakersScreen> {
-                MainBackHandler()
-                SpeakersScreen(
-                    onSpeaker = { rootNavController.navigate(SpeakerDetailScreen(it)) }
-                )
-            }
-            composable<ScheduleScreen> {
-                MainBackHandler()
-                ScheduleScreen(
-                    onSession = { rootNavController.navigate(SessionScreen(it)) },
-                    onPrivacyNoticeNeeded = { rootNavController.navigate(AppPrivacyNoticePrompt) },
-                    onRequestFeedbackWithComment = { sessionId ->
-                        rootNavController.navigate(SessionScreen(sessionId, openedForFeedback = true))
-                    },
-                )
-            }
-            composable<MapScreen> {
-                MainBackHandler()
-                MapScreen()
-            }
-        }
+        )
 
         AnimatedVisibility(!isKeyboardOpen(), enter = fadeIn(snap()), exit = fadeOut(snap())) {
-            BottomNavigation(nestedNavController)
+            BottomNavigation(localBackStack)
         }
     }
 }
 
 @Composable
 private fun MainBackHandler() {
+    // TODO try simplifying this once Nav3 runs on iOS too
     if (!LocalFlags.current.enableBackOnMainScreens) {
         // Prevent back navigation with an empty handler
         @OptIn(ExperimentalComposeUiApi::class)
@@ -153,8 +162,8 @@ private fun isKeyboardOpen(): Boolean {
 }
 
 @Composable
-private fun BottomNavigation(nestedNavController: NavHostController) {
-    val bottomNavDestinations: List<MainNavDestination> =
+private fun BottomNavigation(localBackStack: NavBackStack<MainRoute>) {
+    val bottomNavDestinations: List<MainNavDestination<MainRoute>> =
         listOf(
             MainNavDestination(
                 label = stringResource(Res.string.nav_destination_schedule),
@@ -186,12 +195,10 @@ private fun BottomNavigation(nestedNavController: NavHostController) {
             ),
         )
 
-    val currentDestination = nestedNavController.currentBackStackEntryAsState().value?.destination
-    val currentBottomNavDestination = currentDestination?.let {
-        bottomNavDestinations.find { dest ->
-            val routeClass = dest.routeClass
-            routeClass != null && currentDestination.hasRoute(routeClass)
-        }
+    // TODO check if we can simplify this
+    val currentDestination = localBackStack.last()
+    val currentBottomNavDestination = bottomNavDestinations.find { dest ->
+        currentDestination == dest.route
     }
 
     Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
@@ -199,13 +206,18 @@ private fun BottomNavigation(nestedNavController: NavHostController) {
         currentDestination = currentBottomNavDestination,
         destinations = bottomNavDestinations,
         onSelect = {
-            nestedNavController.navigate(it.route) {
-                // Avoid stacking multiple copies of the main screens
-                popUpTo(nestedNavController.graph.findStartDestination().route!!) {
-                    saveState = true
+            localBackStack.apply {
+                val target = it.route
+                if (last() == target) {
+                    return@apply
                 }
-                launchSingleTop = true
-                restoreState = true
+
+                add(target)
+
+                if (size > 2) {
+                    // Remove everything but the first and last entry
+                    subList(1, lastIndex).clear()
+                }
             }
         },
     )
