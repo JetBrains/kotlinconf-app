@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
@@ -69,10 +70,10 @@ import org.jetbrains.kotlinconf.generated.resources.team_28_fill
 import org.jetbrains.kotlinconf.navigation.AboutAppScreen
 import org.jetbrains.kotlinconf.navigation.AboutConferenceScreen
 import org.jetbrains.kotlinconf.navigation.AppPrivacyNoticePrompt
-import org.jetbrains.kotlinconf.navigation.BackStack
+import org.jetbrains.kotlinconf.navigation.AppRoute
 import org.jetbrains.kotlinconf.navigation.CodeOfConductScreen
 import org.jetbrains.kotlinconf.navigation.InfoScreen
-import org.jetbrains.kotlinconf.navigation.MainScreenMarker
+import org.jetbrains.kotlinconf.navigation.MainRoute
 import org.jetbrains.kotlinconf.navigation.MapScreen
 import org.jetbrains.kotlinconf.navigation.NewsListScreen
 import org.jetbrains.kotlinconf.navigation.PartnersScreen
@@ -81,7 +82,7 @@ import org.jetbrains.kotlinconf.navigation.SessionScreen
 import org.jetbrains.kotlinconf.navigation.SettingsScreen
 import org.jetbrains.kotlinconf.navigation.SpeakerDetailScreen
 import org.jetbrains.kotlinconf.navigation.SpeakersScreen
-import org.jetbrains.kotlinconf.navigation.rememberBackstack
+import org.jetbrains.kotlinconf.navigation.rememberNavBackStack
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainNavDestination
 import org.jetbrains.kotlinconf.ui.components.MainNavigation
@@ -92,7 +93,7 @@ private val NoContentTransition = ContentTransform(EnterTransition.None, ExitTra
 
 @Composable
 fun MainScreen(
-    onNavigate: (Any) -> Unit,
+    onNavigate: (AppRoute) -> Unit,
     service: ConferenceService = koinInject(),
 ) {
     LaunchedEffect(Unit) {
@@ -106,9 +107,10 @@ fun MainScreen(
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         // TODO: make this saveable!
-        val localBackStack = rememberBackstack<MainScreenMarker>(ScheduleScreen)
+        val localBackStack = rememberNavBackStack<MainRoute>(ScheduleScreen)
+
         NavDisplay(
-            backStack = localBackStack.backStack,
+            backStack = localBackStack,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
@@ -181,8 +183,8 @@ private fun isKeyboardOpen(): Boolean {
 }
 
 @Composable
-private fun BottomNavigation(localBackStack: BackStack<MainScreenMarker>) {
-    val bottomNavDestinations: List<MainNavDestination<MainScreenMarker>> =
+private fun BottomNavigation(localBackStack: NavBackStack<MainRoute>) {
+    val bottomNavDestinations: List<MainNavDestination<MainRoute>> =
         listOf(
             MainNavDestination(
                 label = stringResource(Res.string.nav_destination_schedule),
@@ -215,7 +217,7 @@ private fun BottomNavigation(localBackStack: BackStack<MainScreenMarker>) {
         )
 
     // TODO check if we can simplify this
-    val currentDestination = localBackStack.backStack.last()
+    val currentDestination = localBackStack.last()
     val currentBottomNavDestination = bottomNavDestinations.find { dest ->
         currentDestination == dest.route
     }
@@ -225,10 +227,10 @@ private fun BottomNavigation(localBackStack: BackStack<MainScreenMarker>) {
         currentDestination = currentBottomNavDestination,
         destinations = bottomNavDestinations,
         onSelect = {
-            localBackStack.edit {
+            localBackStack.apply {
                 val target = it.route
                 if (last() == target) {
-                    return@edit
+                    return@apply
                 }
 
                 add(target)
