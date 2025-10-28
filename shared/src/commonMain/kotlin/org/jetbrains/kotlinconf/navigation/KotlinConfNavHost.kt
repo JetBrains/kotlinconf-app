@@ -32,8 +32,6 @@ import org.jetbrains.kotlinconf.screens.DeveloperMenuScreen
 import org.jetbrains.kotlinconf.screens.LicensesScreen
 import org.jetbrains.kotlinconf.screens.MainScreen
 import org.jetbrains.kotlinconf.screens.NestedMapScreen
-import org.jetbrains.kotlinconf.screens.NewsDetailScreen
-import org.jetbrains.kotlinconf.screens.NewsListScreen
 import org.jetbrains.kotlinconf.screens.PartnerDetailScreen
 import org.jetbrains.kotlinconf.screens.PartnersScreen
 import org.jetbrains.kotlinconf.screens.VisitorPrivacyNotice
@@ -59,10 +57,6 @@ fun navigateByLocalNotificationId(notificationId: String) {
 
 fun navigateToSession(sessionId: SessionId) {
     notificationNavRequests.trySend(SessionScreen(sessionId))
-}
-
-fun navigateToNews(newsId: String) {
-    notificationNavRequests.trySend(NewsDetailScreen(newsId = newsId))
 }
 
 private val notificationNavRequests = Channel<Any>(capacity = 1)
@@ -234,17 +228,6 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             onAppTermsOfUse =  { navController.navigate(AppTermsOfUseScreen) },
             confirmationRequired = true,
         )
-    }
-
-    composable<NewsListScreen> {
-        NewsListScreen(
-            onNewsClick = { newsId -> navController.navigate(NewsDetailScreen(newsId)) },
-            onBack = navController::navigateUp,
-        )
-    }
-    composable<NewsDetailScreen> {
-        val newsId = it.toRoute<NewsDetailScreen>().newsId
-        NewsDetailScreen(newsId, onBack = navController::navigateUp)
     }
 
     composable<DeveloperMenuScreen> {

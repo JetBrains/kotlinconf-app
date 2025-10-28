@@ -11,19 +11,24 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinconf.Conference
 import org.jetbrains.kotlinconf.Flags
-import org.jetbrains.kotlinconf.NewsItem
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Theme
 import org.jetbrains.kotlinconf.VoteInfo
+import org.jetbrains.kotlinconf.utils.Logger
+import org.jetbrains.kotlinconf.utils.TaggedLogger
+import org.jetbrains.kotlinconf.utils.tagged
 
 @OptIn(ExperimentalSettingsApi::class)
 class MultiplatformSettingsStorage(
     private val settings: ObservableSettings,
+    logger: Logger? = null, // TODO inject a logger here https://github.com/JetBrains/kotlinconf-app/issues/544
 ) : ApplicationStorage {
     private val json = Json {
         ignoreUnknownKeys = true
     }
+
+    private var taggedLogger: TaggedLogger? = logger?.tagged("MultiplatformSettingsStorage")
 
     private inline fun <reified T> String?.decodeOrNull(): T? {
         if (this == null) return null
@@ -62,12 +67,6 @@ class MultiplatformSettingsStorage(
     override suspend fun setFavorites(value: Set<SessionId>) = settings
         .set(Keys.FAVORITES, json.encodeToString(value))
 
-    override fun getNews(): Flow<List<NewsItem>> = settings.getStringOrNullFlow(Keys.NEWS_CACHE)
-        .map { it.decodeOrNull<List<NewsItem>>() ?: emptyList() }
-
-    override suspend fun setNews(value: List<NewsItem>) = settings
-        .set(Keys.NEWS_CACHE, json.encodeToString(value))
-
     override fun getNotificationSettings(): Flow<NotificationSettings?> =
         settings.getStringOrNullFlow(Keys.NOTIFICATION_SETTINGS)
             .map { it.decodeOrNull<NotificationSettings>() }
@@ -91,16 +90,62 @@ class MultiplatformSettingsStorage(
         .set(Keys.FLAGS, json.encodeToString(value))
 
     override fun ensureCurrentVersion() {
-        val version = settings.getInt(Keys.STORAGE_VERSION, 0)
-        if (version < CURRENT_STORAGE_VERSION) {
-            // Fully destructive migration on version mismatch
-            settings.clear()
-            settings.set(Keys.STORAGE_VERSION, CURRENT_STORAGE_VERSION)
+        var version = settings.getInt(Keys.STORAGE_VERSION, 0)
+
+        taggedLogger?.log { "Storage version is $version" }
+
+        if (version == 0) {
+            // Fully destructive migration on unknown previous version
+            destructiveUpgrade()
+            return
+        }
+
+        while (version < CURRENT_STORAGE_VERSION) {
+            taggedLogger?.log { "Finding migrations from $version to $CURRENT_STORAGE_VERSION..." }
+
+            // Find a migration from the current version that takes us as far forward as possible
+            val nextMigration = migrations.filter { it.from == version }.maxByOrNull { it.to }
+            if (nextMigration == null) {
+                taggedLogger?.log { "No matching migrations found" }
+
+                // Failed to find a migration path to latest, fall back to destructive
+                destructiveUpgrade()
+                return
+            }
+
+            taggedLogger?.log { "Running migration from ${nextMigration.from} to ${nextMigration.to}" }
+
+            nextMigration.migrate()
+            version = nextMigration.to
+            settings.set(Keys.STORAGE_VERSION, version)
+
+            taggedLogger?.log { "Successfully migrated to $version" }
         }
     }
 
-    private companion object {
-        const val CURRENT_STORAGE_VERSION: Int = 2025_000
+    private fun destructiveUpgrade() {
+        taggedLogger?.log { "Performing destructive upgrade to $CURRENT_STORAGE_VERSION" }
+        settings.clear()
+        settings.set(Keys.STORAGE_VERSION, CURRENT_STORAGE_VERSION)
+    }
+
+    private data class Migration(val from: Int, val to: Int, val migrate: () -> Unit)
+
+    private val migrations = listOf(
+        Migration(V2025, V2026) {
+            // News were removed
+            settings.remove(Keys.NEWS_CACHE)
+            // We removed news fields from NotificationSettings, read/write it once to update
+            settings.getStringOrNull(Keys.NOTIFICATION_SETTINGS)
+                ?.decodeOrNull<NotificationSettings>()
+                ?.let { settings.set(Keys.NOTIFICATION_SETTINGS, json.encodeToString(it)) }
+        },
+    )
+
+    companion object {
+        const val V2025 = 2025_000
+        const val V2026 = 2026_000
+        const val CURRENT_STORAGE_VERSION: Int = V2026
     }
 
     private object Keys {
