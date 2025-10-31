@@ -241,7 +241,6 @@ fun EntryProviderScope<Any>.startScreens(backStack: MutableList<AppRoute>) {
         AppPrivacyNoticePrompt(
             onRejectNotice = {
                 if (skipNotifications) {
-                    // TODO do this in a safer way to avoid a potentially empty stack for a moment
                     backStack.clear()
                     backStack.add(MainScreen)
                 } else {
@@ -250,7 +249,6 @@ fun EntryProviderScope<Any>.startScreens(backStack: MutableList<AppRoute>) {
             },
             onAcceptNotice = {
                 if (skipNotifications) {
-                    // TODO do this in a safer way to avoid a potentially empty stack for a moment
                     backStack.clear()
                     backStack.add(MainScreen)
                 } else {
@@ -265,6 +263,7 @@ fun EntryProviderScope<Any>.startScreens(backStack: MutableList<AppRoute>) {
     entry<StartNotificationsScreen> {
         StartNotificationsScreen(
             onDone = {
+                backStack.clear()
                 backStack.add(MainScreen)
             }
         )
