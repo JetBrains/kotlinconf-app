@@ -25,7 +25,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
@@ -106,7 +105,6 @@ fun MainScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
-        // TODO: make this saveable!
         val localBackStack = rememberNavBackStack<MainRoute>(ScheduleScreen)
 
         NavDisplay(
@@ -183,7 +181,7 @@ private fun isKeyboardOpen(): Boolean {
 }
 
 @Composable
-private fun BottomNavigation(localBackStack: NavBackStack<MainRoute>) {
+private fun BottomNavigation(localBackStack: MutableList<MainRoute>) {
     val bottomNavDestinations: List<MainNavDestination<MainRoute>> =
         listOf(
             MainNavDestination(

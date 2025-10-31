@@ -7,7 +7,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.EntryProviderScope
-import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.scene.Scene
@@ -55,7 +54,7 @@ fun navigateToSession(sessionId: SessionId) {
 private val notificationNavRequests = Channel<Any>(capacity = 1)
 
 @Composable
-private fun NotificationHandler(backStack: NavBackStack<AppRoute>) {
+private fun NotificationHandler(backStack: MutableList<AppRoute>) {
     LaunchedEffect(Unit) {
         while (true) {
             val destination: Any = notificationNavRequests.receive()
@@ -69,7 +68,6 @@ internal fun KotlinConfNavHost(
     isOnboardingComplete: Boolean,
     popTransactionSpec: (AnimatedContentTransitionScope<Scene<Any>>.() -> ContentTransform)?,
 ) {
-    // TODO: make this saveable!
     val startDestination = if (isOnboardingComplete) MainScreen else StartPrivacyNoticeScreen
     val appBackStack = rememberNavBackStack<AppRoute>(startDestination)
 
@@ -89,7 +87,7 @@ internal fun KotlinConfNavHost(
     )
 }
 
-fun EntryProviderScope<Any>.screens(backStack: NavBackStack<AppRoute>) {
+fun EntryProviderScope<Any>.screens(backStack: MutableList<AppRoute>) {
     startScreens(backStack) // TODO inline these later
 
     entry<MainScreen> {
@@ -221,7 +219,7 @@ fun EntryProviderScope<Any>.screens(backStack: NavBackStack<AppRoute>) {
     }
 }
 
-fun EntryProviderScope<Any>.startScreens(backStack: NavBackStack<AppRoute>) {
+fun EntryProviderScope<Any>.startScreens(backStack: MutableList<AppRoute>) {
     entry<StartPrivacyNoticeScreen> {
         val skipNotifications = LocalFlags.current.supportsNotifications.not()
         AppPrivacyNoticePrompt(
