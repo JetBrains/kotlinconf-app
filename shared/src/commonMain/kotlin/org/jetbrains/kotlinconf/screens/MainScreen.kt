@@ -74,7 +74,6 @@ import org.jetbrains.kotlinconf.navigation.CodeOfConductScreen
 import org.jetbrains.kotlinconf.navigation.InfoScreen
 import org.jetbrains.kotlinconf.navigation.MainRoute
 import org.jetbrains.kotlinconf.navigation.MapScreen
-import org.jetbrains.kotlinconf.navigation.NewsListScreen
 import org.jetbrains.kotlinconf.navigation.PartnersScreen
 import org.jetbrains.kotlinconf.navigation.ScheduleScreen
 import org.jetbrains.kotlinconf.navigation.SessionScreen
@@ -126,7 +125,6 @@ fun MainScreen(
                     InfoScreen(
                         onAboutConf = { onNavigate(AboutConferenceScreen) },
                         onAboutApp = { onNavigate(AboutAppScreen) },
-                        onNewsFeed = { onNavigate(NewsListScreen) },
                         onOurPartners = { onNavigate(PartnersScreen) },
                         onCodeOfConduct = { onNavigate(CodeOfConductScreen) },
                         onTwitter = { uriHandler.openUri(URLs.TWITTER) },
