@@ -6,12 +6,6 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
     repositories {
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev") {
-            mavenContent {
-                includeGroupAndSubgroups("org.jetbrains.compose")
-                includeGroupAndSubgroups("org.jetbrains.androidx")
-            }
-        }
         google {
             mavenContent {
                 includeGroupAndSubgroups("android")
@@ -28,12 +22,6 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev") {
-            mavenContent {
-                includeGroupAndSubgroups("org.jetbrains.compose")
-                includeGroupAndSubgroups("org.jetbrains.androidx")
-            }
-        }
         google {
             mavenContent {
                 includeGroupAndSubgroups("android")

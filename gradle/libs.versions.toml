@@ -8,13 +8,12 @@ android-targetSdk = "36"
 androidx-activityCompose = "1.11.0"
 androidx-core-ktx = "1.17.0"
 androidx-core-splashscreen = "1.0.1"
-androidx-lifecycle = "2.10.0-alpha02"
-androidx-navigation = "2.9.0"
+androidx-lifecycle = "2.10.0-alpha04"
+androidx-navigation = "2.9.1"
 androidx-preference = "1.2.1"
 coil = "3.3.0"
-compose-android = "1.10.0-alpha04"
-compose-hot-reload = "1.0.0-rc01"
-compose-multiplatform = "1.10.0-alpha02"
+compose-android = "1.10.0-beta01"
+compose-multiplatform = "1.10.0-beta01"
 coroutines = "1.10.2"
 doistx-normalize = "1.2.0"
 exposed = "0.61.0"
@@ -106,7 +105,6 @@ aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "abo
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "compose-hot-reload" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }
 jib = { id = "com.google.cloud.tools.jib", version.ref = "jib" }
