@@ -60,7 +60,7 @@ private fun initKoin(
 ): Koin {
     return startKoin {
         val appModule = module {
-            single { BufferedDelegatingLogger() }
+            single { BufferedDelegatingLogger(get()) }
             single<Logger> { get<BufferedDelegatingLogger>() }
 
             single<ApplicationStorage> { MultiplatformSettingsStorage(get(), get()) }
