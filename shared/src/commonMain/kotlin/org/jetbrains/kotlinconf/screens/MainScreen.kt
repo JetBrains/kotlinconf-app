@@ -18,9 +18,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
@@ -28,6 +26,9 @@ import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDe
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import kotlinconfapp.shared.generated.resources.Res
 import kotlinconfapp.shared.generated.resources.clock_28
 import kotlinconfapp.shared.generated.resources.clock_28_fill
@@ -164,11 +165,13 @@ fun MainScreen(
 
 @Composable
 private fun MainBackHandler() {
-    // TODO try simplifying this once Nav3 runs on iOS too
     if (!LocalFlags.current.enableBackOnMainScreens) {
-        // Prevent back navigation with an empty handler
-        @OptIn(ExperimentalComposeUiApi::class)
-        BackHandler(true) { }
+        // Prevent back navigation
+        NavigationBackHandler(
+            state = rememberNavigationEventState(NavigationEventInfo.None),
+            isBackEnabled = true,
+            onBackCompleted = { /* Do nothing */ },
+        )
     }
 }
 

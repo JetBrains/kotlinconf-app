@@ -17,15 +17,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
+import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.speakers_error_no_data
+import kotlinconfapp.shared.generated.resources.speakers_number_of_results
+import kotlinconfapp.shared.generated.resources.speakers_title
+import kotlinconfapp.ui_components.generated.resources.main_header_search_hint
+import kotlinconfapp.ui_components.generated.resources.search_24
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
@@ -90,12 +97,15 @@ fun SpeakersScreen(
                 )
             },
             searchContent = {
-                // TODO update to new APIs
-                @OptIn(ExperimentalComposeUiApi::class)
-                BackHandler(true) {
-                    searchState = MainHeaderContainerState.Title
-                    searchText = ""
-                }
+                NavigationBackHandler(
+                    state = rememberNavigationEventState(NavigationEventInfo.None),
+                    isBackEnabled = true,
+                    onBackCompleted = {
+                        searchState = MainHeaderContainerState.Title
+                        searchText = ""
+                    },
+                )
+
                 MainHeaderSearchBar(
                     searchValue = searchText,
                     onSearchValueChange = { searchText = it },

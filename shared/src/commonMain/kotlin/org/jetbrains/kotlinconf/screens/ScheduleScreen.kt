@@ -31,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.semantics.CollectionInfo
 import androidx.compose.ui.semantics.CollectionItemInfo
@@ -45,6 +44,19 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
+import kotlinconfapp.shared.generated.resources.Res
+import kotlinconfapp.shared.generated.resources.nav_destination_schedule
+import kotlinconfapp.shared.generated.resources.schedule_action_filter_bookmarked
+import kotlinconfapp.shared.generated.resources.schedule_action_search
+import kotlinconfapp.shared.generated.resources.schedule_error_no_data
+import kotlinconfapp.shared.generated.resources.schedule_in_x_minutes
+import kotlinconfapp.shared.generated.resources.schedule_label_no_bookmarks
+import kotlinconfapp.shared.generated.resources.schedule_number_of_results
+import kotlinconfapp.ui_components.generated.resources.bookmark_24
+import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
@@ -367,12 +379,15 @@ private fun Header(
             )
         },
         searchContent = {
-            // TODO update to new APIs
-            @OptIn(ExperimentalComposeUiApi::class)
-            BackHandler(true) {
-                onHeaderStateChange(MainHeaderContainerState.Title)
-                onSearchQueryChange("")
-            }
+            NavigationBackHandler(
+                state = rememberNavigationEventState(NavigationEventInfo.None),
+                isBackEnabled = true,
+                onBackCompleted = {
+                    onHeaderStateChange(MainHeaderContainerState.Title)
+                    onSearchQueryChange("")
+                },
+            )
+
             val filterItems by viewModel.filterItems.collectAsStateWithLifecycle()
 
             MainHeaderSearchBar(
