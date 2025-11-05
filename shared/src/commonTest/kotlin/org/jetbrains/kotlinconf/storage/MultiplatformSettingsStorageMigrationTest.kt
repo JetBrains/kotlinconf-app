@@ -7,6 +7,7 @@ import com.russhwolf.settings.observable.makeObservable
 import com.russhwolf.settings.set
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -16,6 +17,10 @@ class MultiplatformSettingsStorageMigrationTest {
 
     @OptIn(ExperimentalSettingsApi::class)
     private fun inMemorySettings(): ObservableSettings = MapSettings().makeObservable()
+
+    private fun emptyLogger() = object : Logger {
+        override fun log(tag: String, lazyMessage: () -> String) {}
+    }
 
     /**
      * Creates a storage object with data matching the older, 2025 storage version.
@@ -36,7 +41,7 @@ class MultiplatformSettingsStorageMigrationTest {
     @Test
     fun migration_2025_to_2026_updates_version() {
         val settings = get2025Settings()
-        val storage = MultiplatformSettingsStorage(settings)
+        val storage = MultiplatformSettingsStorage(settings, emptyLogger())
 
         // Run migrations
         storage.ensureCurrentVersion()
@@ -48,7 +53,7 @@ class MultiplatformSettingsStorageMigrationTest {
     @Test
     fun migration_2026_to_2026_removes_news_cache() {
         val settings = get2025Settings()
-        val storage = MultiplatformSettingsStorage(settings)
+        val storage = MultiplatformSettingsStorage(settings, emptyLogger())
 
         // Run migrations
         storage.ensureCurrentVersion()
@@ -60,7 +65,7 @@ class MultiplatformSettingsStorageMigrationTest {
     @Test
     fun migration_2026_to_2026_migrates_notification_settings() = runTest {
         val settings = get2025Settings()
-        val storage = MultiplatformSettingsStorage(settings)
+        val storage = MultiplatformSettingsStorage(settings, emptyLogger())
 
         // Run migrations
         storage.ensureCurrentVersion()
@@ -76,7 +81,7 @@ class MultiplatformSettingsStorageMigrationTest {
         settings["userId2025"] = "user-123"
         settings["newsCache"] = "legacy-data"
         settings["notificationSettings"] = "{\"sessionReminders\":false,\"scheduleUpdates\":true}"
-        val storage = MultiplatformSettingsStorage(settings)
+        val storage = MultiplatformSettingsStorage(settings, emptyLogger())
 
         // Run migrations
         storage.ensureCurrentVersion()
@@ -91,7 +96,7 @@ class MultiplatformSettingsStorageMigrationTest {
         val settings = inMemorySettings()
         settings["storageVersion"] = 2024_000 // A version we don't have a migration for
         settings["favorites"] = "[\"S1\",\"S2\"]"
-        val storage = MultiplatformSettingsStorage(settings)
+        val storage = MultiplatformSettingsStorage(settings, emptyLogger())
 
         // Run migrations
         storage.ensureCurrentVersion()
