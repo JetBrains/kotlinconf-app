@@ -30,7 +30,7 @@ import kotlinconfapp.ui_components.generated.resources.arrow_down_16
 import kotlinconfapp.ui_components.generated.resources.now
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.components.NowButtonState.After
 import org.jetbrains.kotlinconf.ui.components.NowButtonState.Before
 import org.jetbrains.kotlinconf.ui.components.NowButtonState.Current
