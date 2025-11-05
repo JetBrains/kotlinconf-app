@@ -7,6 +7,8 @@ import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.navigation.navigateToSession
 import org.jetbrains.kotlinconf.screens.AboutConferenceViewModel
 import org.jetbrains.kotlinconf.screens.LicensesViewModel
@@ -19,6 +21,7 @@ import org.jetbrains.kotlinconf.screens.SpeakersViewModel
 import org.jetbrains.kotlinconf.screens.StartNotificationsViewModel
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.storage.MultiplatformSettingsStorage
+import org.jetbrains.kotlinconf.utils.BufferedDelegatingLogger
 import org.jetbrains.kotlinconf.utils.DebugLogger
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.NoopProdLogger
@@ -36,18 +39,31 @@ fun initApp(
     platformModule: Module,
     flags: Flags = Flags(),
 ) {
-    val koin = initKoin(platformLogger, platformModule, flags)
-    initNotifier(configuration = koin.get(), logger = koin.get())
+    val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    val koin = initKoin(appScope, platformModule, flags)
+    initLogging(
+        appScope = appScope,
+        platformLogger = platformLogger,
+        bufferedDelegatingLogger = koin.get(),
+        applicationStorage = koin.get(),
+    )
+    initNotifier(
+        configuration = koin.get(),
+        logger = koin.get(),
+    )
 }
 
 private fun initKoin(
-    platformLogger: Logger,
+    appScope: CoroutineScope,
     platformModule: Module,
     platformFlags: Flags,
 ): Koin {
     return startKoin {
         val appModule = module {
-            single<ApplicationStorage> { MultiplatformSettingsStorage(get()) }
+            single { BufferedDelegatingLogger() }
+            single<Logger> { get<BufferedDelegatingLogger>() }
+
+            single<ApplicationStorage> { MultiplatformSettingsStorage(get(), get()) }
             single {
                 val flags = get<ApplicationStorage>().getFlagsBlocking()
                 val endpoint = when {
@@ -63,15 +79,8 @@ private fun initKoin(
                     else -> ServerBasedTimeProvider(get())
                 }
             }
-            single<Logger> {
-                val flags = get<ApplicationStorage>().getFlagsBlocking()
-                when {
-                    flags != null && flags.debugLogging -> DebugLogger(platformLogger)
-                    else -> NoopProdLogger()
-                }
-            }
             single { FlagsManager(platformFlags, get(), get()) }
-            single { CoroutineScope(SupervisorJob() + Dispatchers.Default) }
+            single { appScope }
             singleOf(::ConferenceService)
         }
 
@@ -91,6 +100,23 @@ private fun initKoin(
         // modules can override dependencies from earlier modules
         modules(platformModule, appModule, viewModelModule)
     }.koin
+}
+
+private fun initLogging(
+    appScope: CoroutineScope,
+    platformLogger: Logger,
+    bufferedDelegatingLogger: BufferedDelegatingLogger,
+    applicationStorage: ApplicationStorage,
+) {
+    appScope.launch {
+        val flags = applicationStorage.getFlags().first()
+        bufferedDelegatingLogger.attach(
+            when {
+                flags != null && flags.debugLogging -> DebugLogger(platformLogger)
+                else -> NoopProdLogger()
+            }
+        )
+    }
 }
 
 private fun initNotifier(
