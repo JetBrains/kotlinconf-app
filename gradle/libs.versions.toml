@@ -8,13 +8,12 @@ android-targetSdk = "36"
 androidx-activityCompose = "1.11.0"
 androidx-core-ktx = "1.17.0"
 androidx-core-splashscreen = "1.0.1"
-androidx-lifecycle = "2.9.4"
-androidx-navigation = "2.9.0"
+androidx-lifecycle = "2.10.0-alpha04"
+androidx-navigation = "2.9.1"
 androidx-preference = "1.2.1"
 coil = "3.3.0"
-compose-android = "1.9.0"
-compose-hot-reload = "1.0.0-beta09"
-compose-multiplatform = "1.9.0"
+compose-multiplatform = "1.10.0-beta01"
+compose-multiplatform-material3 = "1.9.0-beta03"
 coroutines = "1.10.2"
 doistx-normalize = "1.2.0"
 exposed = "0.61.0"
@@ -47,10 +46,14 @@ androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navi
 androidx-preference = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preference" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
-components-ui-tooling-preview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "compose-multiplatform" }
+compose-animation = { module = "org.jetbrains.compose.animation:animation", version.ref = "compose-multiplatform" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-multiplatform" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-multiplatform-material3" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-multiplatform" }
 compose-ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "compose-multiplatform" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-android" }
-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-android" }
+compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose-multiplatform" }
+compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose-multiplatform" }
 doistx-normalize = { module = "com.doist.x:normalize", version.ref = "doistx-normalize" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
@@ -108,7 +111,6 @@ aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "abo
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "compose-hot-reload" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }
 jib = { id = "com.google.cloud.tools.jib", version.ref = "jib" }

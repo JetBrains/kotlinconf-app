@@ -2,9 +2,7 @@
 
 import com.mikepenz.aboutlibraries.plugin.DuplicateMode
 import com.mikepenz.aboutlibraries.plugin.DuplicateRule
-import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.aboutLibraries)
@@ -14,7 +12,6 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
-    alias(libs.plugins.composeHotReload)
 }
 
 kotlin {
@@ -70,12 +67,11 @@ kotlin {
         commonMain.dependencies {
             api(projects.uiComponents)
 
-            api(compose.runtime)
-            api(compose.foundation)
-            api(compose.animation)
-            api(compose.components.resources)
+            api(libs.compose.runtime)
+            api(libs.compose.foundation)
+            api(libs.compose.animation)
+            api(libs.compose.components.resources)
 
-            api(libs.components.ui.tooling.preview)
             api(libs.koin.compose.viewmodel.navigation)
 
             api(libs.ktor.client.logging)
@@ -161,7 +157,7 @@ android {
 
 // Android preview support
 dependencies {
-    debugImplementation(compose.uiTooling)
+    debugImplementation(libs.compose.ui.tooling)
 }
 
 compose.desktop {
