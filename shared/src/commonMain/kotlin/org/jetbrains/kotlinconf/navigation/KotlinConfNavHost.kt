@@ -65,7 +65,6 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
     val appBackStack = rememberNavBackStack<AppRoute>(startDestination)
 
     NotificationHandler(appBackStack)
-    //PlatformNavHandler(navController)
 
     NavDisplay(
         backStack = appBackStack,
