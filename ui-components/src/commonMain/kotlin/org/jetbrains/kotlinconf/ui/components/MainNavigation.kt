@@ -19,7 +19,10 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.clock_28
 import org.jetbrains.kotlinconf.ui.generated.resources.clock_28_fill
@@ -31,7 +34,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.team_28
 import org.jetbrains.kotlinconf.ui.generated.resources.team_28_fill
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import kotlin.reflect.KClass
 
 private val MainNavigationButtonShape = RoundedCornerShape(8.dp)
 
@@ -39,7 +41,7 @@ private val MainNavigationButtonShape = RoundedCornerShape(8.dp)
 private fun MainNavigationButton(
     iconResource: DrawableResource,
     iconFilledResource: DrawableResource,
-    contentDescription: String,
+    contentDescription: String?,
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -66,11 +68,10 @@ private fun MainNavigationButton(
 }
 
 data class MainNavDestination<T : Any>(
-    val label: String,
+    val label: StringResource?,
     val icon: DrawableResource,
     val route: T,
     val iconSelected: DrawableResource = icon,
-    val routeClass: KClass<*>? = null,
 )
 
 @Composable
@@ -88,7 +89,7 @@ fun <T : Any> MainNavigation(
             MainNavigationButton(
                 iconResource = destination.icon,
                 iconFilledResource = destination.iconSelected,
-                contentDescription = destination.label,
+                contentDescription = destination.label?.let { stringResource(it) },
                 selected = destination == currentDestination,
                 onClick = { onSelect(destination) },
                 modifier = Modifier.weight(1f),
@@ -102,36 +103,38 @@ fun <T : Any> MainNavigation(
 internal fun MainNavigationPreview() {
     PreviewHelper {
         var currentDestination by remember {
-            mutableStateOf(MainNavDestination(
-                label = "Schedule",
-                icon = UiRes.drawable.clock_28,
-                iconSelected = UiRes.drawable.clock_28_fill,
-                route = "Schedule"
-            ))
+            mutableStateOf(
+                MainNavDestination(
+                    label = null,
+                    icon = UiRes.drawable.clock_28,
+                    iconSelected = UiRes.drawable.clock_28_fill,
+                    route = "Schedule"
+                )
+            )
         }
         MainNavigation(
             currentDestination = currentDestination,
             destinations = listOf(
                 MainNavDestination(
-                    label = "Info",
+                    label = null,
                     icon = UiRes.drawable.info_28,
                     iconSelected = UiRes.drawable.info_28_fill,
                     route = "Info"
                 ),
                 MainNavDestination(
-                    label = "Schedule",
+                    label = null,
                     icon = UiRes.drawable.clock_28,
                     iconSelected = UiRes.drawable.clock_28_fill,
                     route = "Schedule"
                 ),
                 MainNavDestination(
-                    label = "Speakers",
+                    label = null,
                     icon = UiRes.drawable.team_28,
                     iconSelected = UiRes.drawable.team_28_fill,
                     route = "Speakers"
                 ),
                 MainNavDestination(
-                    label = "Map",
+                    label = null,
                     icon = UiRes.drawable.location_28,
                     iconSelected = UiRes.drawable.location_28_fill,
                     route = "Map"

@@ -181,41 +181,35 @@ private fun isKeyboardOpen(): Boolean {
     return rememberUpdatedState(bottomInset > 300).value
 }
 
+private val bottomNavDestinations: List<MainNavDestination<MainRoute>> = listOf(
+    MainNavDestination(
+        label = Res.string.nav_destination_schedule,
+        icon = Res.drawable.clock_28,
+        iconSelected = Res.drawable.clock_28_fill,
+        route = ScheduleScreen,
+    ),
+    MainNavDestination(
+        label = Res.string.nav_destination_speakers,
+        icon = Res.drawable.team_28,
+        iconSelected = Res.drawable.team_28_fill,
+        route = SpeakersScreen,
+    ),
+    MainNavDestination(
+        label = Res.string.nav_destination_map,
+        icon = Res.drawable.location_28,
+        iconSelected = Res.drawable.location_28_fill,
+        route = MapScreen,
+    ),
+    MainNavDestination(
+        label = Res.string.nav_destination_info,
+        icon = Res.drawable.info_28,
+        iconSelected = Res.drawable.info_28_fill,
+        route = InfoScreen,
+    ),
+)
+
 @Composable
 private fun BottomNavigation(localBackStack: MutableList<MainRoute>) {
-    val bottomNavDestinations: List<MainNavDestination<MainRoute>> =
-        listOf(
-            MainNavDestination(
-                label = stringResource(Res.string.nav_destination_schedule),
-                icon = Res.drawable.clock_28,
-                iconSelected = Res.drawable.clock_28_fill,
-                route = ScheduleScreen,
-                routeClass = ScheduleScreen::class
-            ),
-            MainNavDestination(
-                label = stringResource(Res.string.nav_destination_speakers),
-                icon = Res.drawable.team_28,
-                iconSelected = Res.drawable.team_28_fill,
-                route = SpeakersScreen,
-                routeClass = SpeakersScreen::class
-            ),
-            MainNavDestination(
-                label = stringResource(Res.string.nav_destination_map),
-                icon = Res.drawable.location_28,
-                iconSelected = Res.drawable.location_28_fill,
-                route = MapScreen,
-                routeClass = MapScreen::class
-            ),
-            MainNavDestination(
-                label = stringResource(Res.string.nav_destination_info),
-                icon = Res.drawable.info_28,
-                iconSelected = Res.drawable.info_28_fill,
-                route = InfoScreen,
-                routeClass = InfoScreen::class
-            ),
-        )
-
-    // TODO check if we can simplify this
     val currentDestination = localBackStack.last()
     val currentBottomNavDestination = bottomNavDestinations.find { dest ->
         currentDestination == dest.route
@@ -225,19 +219,18 @@ private fun BottomNavigation(localBackStack: MutableList<MainRoute>) {
     MainNavigation(
         currentDestination = currentBottomNavDestination,
         destinations = bottomNavDestinations,
-        onSelect = {
-            localBackStack.apply {
-                val target = it.route
-                if (last() == target) {
-                    return@apply
-                }
+        onSelect = { selectedDestination ->
+            // This screen is already selected, ignore it
+            if (localBackStack.last() == selectedDestination.route) {
+                return@MainNavigation
+            }
 
-                add(target)
+            // Add the new screen
+            localBackStack.add(selectedDestination.route)
 
-                if (size > 2) {
-                    // Remove everything but the first and last entry
-                    subList(1, lastIndex).clear()
-                }
+            // Keep only the first and last entry
+            if (localBackStack.size > 2) {
+                localBackStack.subList(1, localBackStack.lastIndex).clear()
             }
         },
     )
