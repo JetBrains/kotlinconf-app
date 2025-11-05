@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.navigation
 
-import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.kotlinconf.PartnerId
@@ -8,7 +7,7 @@ import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
 
 @Serializable
-sealed interface AppRoute : NavKey
+sealed interface AppRoute
 
 @Serializable
 @SerialName("AboutConference")

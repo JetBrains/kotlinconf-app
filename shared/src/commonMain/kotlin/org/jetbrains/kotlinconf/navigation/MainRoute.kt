@@ -1,11 +1,10 @@
 package org.jetbrains.kotlinconf.navigation
 
-import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface MainRoute : NavKey
+sealed interface MainRoute
 
 @Serializable
 data object ScheduleScreen : MainRoute
