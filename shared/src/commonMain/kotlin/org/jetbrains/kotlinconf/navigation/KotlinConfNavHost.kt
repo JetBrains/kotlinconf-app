@@ -1,7 +1,5 @@
 package org.jetbrains.kotlinconf.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.ContentTransform
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalUriHandler
@@ -9,9 +7,7 @@ import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDe
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
-import androidx.navigation3.scene.Scene
 import androidx.navigation3.ui.NavDisplay
-import androidx.navigation3.ui.defaultPopTransitionSpec
 import kotlinx.coroutines.channels.Channel
 import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.LocalNotificationId
@@ -64,10 +60,7 @@ private fun NotificationHandler(backStack: MutableList<AppRoute>) {
 }
 
 @Composable
-internal fun KotlinConfNavHost(
-    isOnboardingComplete: Boolean,
-    popTransactionSpec: (AnimatedContentTransitionScope<Scene<Any>>.() -> ContentTransform)?,
-) {
+internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
     val startDestination = if (isOnboardingComplete) MainScreen else StartPrivacyNoticeScreen
     val appBackStack = rememberNavBackStack<AppRoute>(startDestination)
 
@@ -83,11 +76,10 @@ internal fun KotlinConfNavHost(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator(),
         ),
-        popTransitionSpec = popTransactionSpec ?: defaultPopTransitionSpec(),
     )
 }
 
-fun EntryProviderScope<Any>.screens(backStack: MutableList<AppRoute>) {
+fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute>) {
     startScreens(backStack) // TODO inline these later
 
     entry<MainScreen> {
@@ -219,7 +211,7 @@ fun EntryProviderScope<Any>.screens(backStack: MutableList<AppRoute>) {
     }
 }
 
-fun EntryProviderScope<Any>.startScreens(backStack: MutableList<AppRoute>) {
+fun EntryProviderScope<AppRoute>.startScreens(backStack: MutableList<AppRoute>) {
     entry<StartPrivacyNoticeScreen> {
         val skipNotifications = LocalFlags.current.supportsNotifications.not()
         AppPrivacyNoticePrompt(

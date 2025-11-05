@@ -8,13 +8,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
 import com.mmk.kmpnotifier.notification.NotifierManager
@@ -50,13 +43,6 @@ class MainActivity : ComponentActivity() {
                         window.isNavigationBarContrastEnforced = false
                     }
                 },
-                popTransactionSpec = {
-                    // TODO: review these magic numbers from Androidify
-                    ContentTransform(
-                        fadeIn(spring(dampingRatio = 1.0f, stiffness = 1600f)),
-                        scaleOut(targetScale = 0.7f),
-                    )
-                }
             )
         }
     }
