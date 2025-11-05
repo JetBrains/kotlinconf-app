@@ -79,8 +79,38 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
     )
 }
 
-fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute>) {
-    startScreens(backStack) // TODO inline these later
+private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute>) {
+    entry<StartPrivacyNoticeScreen> {
+        val skipNotifications = LocalFlags.current.supportsNotifications.not()
+        AppPrivacyNoticePrompt(
+            onRejectNotice = {
+                if (skipNotifications) {
+                    backStack.clear()
+                    backStack.add(MainScreen)
+                } else {
+                    backStack.add(StartNotificationsScreen)
+                }
+            },
+            onAcceptNotice = {
+                if (skipNotifications) {
+                    backStack.clear()
+                    backStack.add(MainScreen)
+                } else {
+                    backStack.add(StartNotificationsScreen)
+                }
+            },
+            onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
+            confirmationRequired = false,
+        )
+    }
+    entry<StartNotificationsScreen> {
+        StartNotificationsScreen(
+            onDone = {
+                backStack.clear()
+                backStack.add(MainScreen)
+            }
+        )
+    }
 
     entry<MainScreen> {
         MainScreen(onNavigate = { backStack.add(it) })
@@ -207,41 +237,6 @@ fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute>) {
         NestedMapScreen(
             roomName = it.roomName,
             onBack = backStack::removeLastOrNull,
-        )
-    }
-}
-
-fun EntryProviderScope<AppRoute>.startScreens(backStack: MutableList<AppRoute>) {
-    entry<StartPrivacyNoticeScreen> {
-        val skipNotifications = LocalFlags.current.supportsNotifications.not()
-        AppPrivacyNoticePrompt(
-            onRejectNotice = {
-                if (skipNotifications) {
-                    backStack.clear()
-                    backStack.add(MainScreen)
-                } else {
-                    backStack.add(StartNotificationsScreen)
-                }
-            },
-            onAcceptNotice = {
-                if (skipNotifications) {
-                    backStack.clear()
-                    backStack.add(MainScreen)
-                } else {
-                    backStack.add(StartNotificationsScreen)
-                }
-            },
-            onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
-            confirmationRequired = false,
-        )
-    }
-
-    entry<StartNotificationsScreen> {
-        StartNotificationsScreen(
-            onDone = {
-                backStack.clear()
-                backStack.add(MainScreen)
-            }
         )
     }
 }
