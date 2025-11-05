@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
@@ -32,12 +31,12 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api(compose.runtime)
-            api(compose.foundation)
-            api(compose.animation)
-            implementation(compose.material3)
-            api(compose.components.resources)
-            api(compose.components.uiToolingPreview)
+            api(libs.compose.runtime)
+            api(libs.compose.foundation)
+            api(libs.compose.animation)
+            implementation(libs.compose.material3)
+            api(libs.compose.components.resources)
+            api(libs.compose.ui.tooling.preview)
 
             implementation(projects.uiComponents)
         }
@@ -77,5 +76,5 @@ android {
 
 // Android preview support
 dependencies {
-    debugImplementation(compose.uiTooling)
+    debugImplementation(libs.compose.ui.tooling)
 }
