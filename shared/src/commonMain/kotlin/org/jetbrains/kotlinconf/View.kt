@@ -110,11 +110,3 @@ fun Session.speakerLine(conference: Conference): String {
     val speakers = conference.speakers.filter { it.id in speakerIds }
     return speakers.joinToString { it.name }
 }
-
-data class NewsDisplayItem(
-    val id: String,
-    val photoUrl: String?,
-    val date: String,
-    val title: String,
-    val content: String,
-)

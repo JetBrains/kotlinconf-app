@@ -8,8 +8,4 @@ class ConferenceConfig(config: ApplicationConfig) {
     val sessionizeInterval = config.property("sessionize.interval").getString().toLong()
 
     val adminSecret: String = config.property("service.secret").getString()
-
-    val newsRepo: String = config.property("news.repo").getString()
-    val newsBranch: String = config.property("news.branch").getString()
-    val newsFolder: String = config.property("news.folder").getString()
 }
