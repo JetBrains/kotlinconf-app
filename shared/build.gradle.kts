@@ -71,6 +71,7 @@ kotlin {
             api(libs.compose.foundation)
             api(libs.compose.animation)
             api(libs.compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
 
             api(libs.koin.compose.viewmodel.navigation)
 
