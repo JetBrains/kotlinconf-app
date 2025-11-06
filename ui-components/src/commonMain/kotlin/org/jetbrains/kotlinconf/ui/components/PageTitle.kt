@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
