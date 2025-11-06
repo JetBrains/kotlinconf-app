@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.Brand.colorGradient
 import org.jetbrains.kotlinconf.ui.theme.JetBrainsSans
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme

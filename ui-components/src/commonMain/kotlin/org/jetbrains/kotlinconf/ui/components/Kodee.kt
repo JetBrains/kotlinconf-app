@@ -32,7 +32,7 @@ import kotlinconfapp.ui_components.generated.resources.kodee_small_positive_fill
 import kotlinconfapp.ui_components.generated.resources.kodee_small_positive_outline
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 

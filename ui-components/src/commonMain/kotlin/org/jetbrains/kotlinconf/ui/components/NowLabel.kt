@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.now
 import org.jetbrains.compose.resources.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
