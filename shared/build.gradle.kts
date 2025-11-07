@@ -100,7 +100,7 @@ kotlin {
         }
 
         commonTest.dependencies {
-            implementation(kotlin("test"))
+            implementation(libs.kotlin.test)
             implementation(libs.settings.test)
             implementation(libs.kotlinx.coroutines.test)
         }

@@ -83,3 +83,5 @@ jobs:
           java-version: 21
       - name: Build backend jar
         run: ./gradlew :backend:jar
+      - name: Run backend tests
+        run: ./gradlew :backend:test
