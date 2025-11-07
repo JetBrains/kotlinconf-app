@@ -4,7 +4,6 @@ import androidx.compose.foundation.IndicationNodeFactory
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidedValue
@@ -61,7 +60,7 @@ fun KotlinConfTheme(
     CompositionLocalProvider(
         LocalColors provides if (darkTheme) KotlinConfDarkColors else KotlinConfLightColors,
         LocalTypography provides KotlinConfTypography,
-        LocalIndication provides if (rippleEnabled) ripple() else NoIndication,
+        LocalIndication provides if (rippleEnabled) rememberRippleIndication() else NoIndication,
         LocalAppTheme provides darkTheme,
     ) {
         content()

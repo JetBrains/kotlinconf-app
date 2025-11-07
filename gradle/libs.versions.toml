@@ -13,7 +13,6 @@ androidx-navigation = "2.9.1"
 androidx-preference = "1.2.1"
 coil = "3.3.0"
 compose-multiplatform = "1.10.0-beta01"
-compose-multiplatform-material3 = "1.9.0-beta03"
 coroutines = "1.10.2"
 doistx-normalize = "1.2.0"
 exposed = "0.61.0"
@@ -49,7 +48,7 @@ coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.r
 compose-animation = { module = "org.jetbrains.compose.animation:animation", version.ref = "compose-multiplatform" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
 compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-multiplatform" }
-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-multiplatform-material3" }
+compose-material-ripple = { module = "org.jetbrains.compose.material:material-ripple", version.ref = "compose-multiplatform" }
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-multiplatform" }
 compose-ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "compose-multiplatform" }
 compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose-multiplatform" }
