@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.kotlinconf.EVENT_TIME_ZONE
 import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.time.Clock
 import kotlin.time.Duration
@@ -27,8 +27,6 @@ interface TimeProvider {
     fun getNotificationTime(notificationTime: LocalDateTime): LocalDateTime = notificationTime
     fun getNotificationDelay(notificationTime: LocalDateTime): Duration = notificationTime - now()
 }
-
-val EVENT_TIME_ZONE = TimeZone.of("Europe/Copenhagen")
 
 operator fun LocalDateTime.minus(other: LocalDateTime): Duration =
     toInstant(EVENT_TIME_ZONE) - other.toInstant(EVENT_TIME_ZONE)

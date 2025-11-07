@@ -18,7 +18,7 @@ jib {
 }
 
 dependencies {
-    implementation(projects.shared)
+    implementation(projects.core)
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.serialization.kotlinx.json)
@@ -37,7 +37,6 @@ dependencies {
     implementation(libs.ktor.server.config.yaml)
     implementation(libs.ktor.server.swagger)
 
-    implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
 
