@@ -47,7 +47,16 @@ private fun TopMenuButtonImpl(
 ) {
     TooltipBox(
         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Below),
-        tooltip = { PlainTooltip { Text(contentDescription) } },
+        tooltip = {
+            PlainTooltip (
+                containerColor = KotlinConfTheme.colors.tooltipBackground,
+            ) {
+                Text(
+                    text = contentDescription,
+                    color = KotlinConfTheme.colors.primaryTextInverted,
+                )
+            }
+        },
         state = rememberTooltipState()
     ) {
         Icon(

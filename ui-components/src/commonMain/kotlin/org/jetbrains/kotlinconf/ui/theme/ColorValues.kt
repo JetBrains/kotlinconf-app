@@ -67,4 +67,8 @@ internal object UI {
 
     val greyLight = Color(0xFFA3A3A4)
     val greyDark = Color(0xFF757577)
+
+    val blueGrey = Color(0xFF121318)
+
+    val offWhite = Color(0xFFFAF8FF)
 }

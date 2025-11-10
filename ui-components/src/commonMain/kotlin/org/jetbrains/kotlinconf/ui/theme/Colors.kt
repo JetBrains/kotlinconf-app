@@ -16,8 +16,10 @@ import org.jetbrains.kotlinconf.ui.theme.UI.black40
 import org.jetbrains.kotlinconf.ui.theme.UI.black60
 import org.jetbrains.kotlinconf.ui.theme.UI.black70
 import org.jetbrains.kotlinconf.ui.theme.UI.black80
+import org.jetbrains.kotlinconf.ui.theme.UI.blueGrey
 import org.jetbrains.kotlinconf.ui.theme.UI.greyDark
 import org.jetbrains.kotlinconf.ui.theme.UI.greyLight
+import org.jetbrains.kotlinconf.ui.theme.UI.offWhite
 import org.jetbrains.kotlinconf.ui.theme.UI.white05
 import org.jetbrains.kotlinconf.ui.theme.UI.white10
 import org.jetbrains.kotlinconf.ui.theme.UI.white100
@@ -55,6 +57,8 @@ class Colors(
 
     val toggleOn: Color,
     val toggleOff: Color,
+
+    val tooltipBackground: Color,
 )
 
 val KotlinConfLightColors = Colors(
@@ -85,6 +89,8 @@ val KotlinConfLightColors = Colors(
 
     toggleOff = greyLight,
     toggleOn = magenta100,
+
+    tooltipBackground = blueGrey,
 )
 
 val KotlinConfDarkColors = Colors(
@@ -109,10 +115,12 @@ val KotlinConfDarkColors = Colors(
     orangeText = orange,
     placeholderText = white30,
     primaryText = white100,
-    primaryTextInverted = white100,
+    primaryTextInverted = black100,
     purpleText = purpleTextDark,
     secondaryText = white70,
 
     toggleOff = greyDark,
     toggleOn = magentaTextDark,
+
+    tooltipBackground = offWhite,
 )
