@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf
 
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.number
 import kotlinx.datetime.toNSTimeZone
 import org.jetbrains.kotlinconf.utils.Logger
 import platform.Foundation.NSCalendar
@@ -51,8 +52,8 @@ class IOSLocalNotificationService(
             UNCalendarNotificationTrigger.triggerWithDateMatchingComponents(
                 dateComponents = NSDateComponents().apply {
                     year = adjustedTime.year.toLong()
-                    month = adjustedTime.monthNumber.toLong()
-                    day = adjustedTime.dayOfMonth.toLong()
+                    month = adjustedTime.month.number.toLong()
+                    day = adjustedTime.day.toLong()
                     hour = adjustedTime.hour.toLong()
                     minute = adjustedTime.minute.toLong()
                     second = adjustedTime.second.toLong()
