@@ -6,9 +6,9 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import com.russhwolf.settings.ObservableSettings
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.app_name
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.app_name
 import org.jetbrains.kotlinconf.storage.createSettings
 import org.jetbrains.kotlinconf.utils.Logger
 import org.koin.dsl.module

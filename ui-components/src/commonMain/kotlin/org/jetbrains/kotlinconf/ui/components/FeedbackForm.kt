@@ -31,13 +31,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.UiRes
-import kotlinconfapp.ui_components.generated.resources.arrow_right_24
-import kotlinconfapp.ui_components.generated.resources.feedback_form_send
-import kotlinconfapp.ui_components.generated.resources.feedback_form_type_something
-import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
+import org.jetbrains.kotlinconf.ui.generated.resources.arrow_right_24
+import org.jetbrains.kotlinconf.ui.generated.resources.feedback_form_send
+import org.jetbrains.kotlinconf.ui.generated.resources.feedback_form_type_something
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 

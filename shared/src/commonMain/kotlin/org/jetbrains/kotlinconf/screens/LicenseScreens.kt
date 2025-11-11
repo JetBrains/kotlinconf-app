@@ -35,18 +35,14 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mikepenz.aboutlibraries.entity.Library
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.licenses_number_of_results
-import kotlinconfapp.shared.generated.resources.licenses_title
-import kotlinconfapp.ui_components.generated.resources.arrow_left_24
-import kotlinconfapp.ui_components.generated.resources.main_header_back
-import kotlinconfapp.ui_components.generated.resources.main_header_search_hint
-import kotlinconfapp.ui_components.generated.resources.search_24
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.ScrollToTopHandler
+import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.licenses_number_of_results
+import org.jetbrains.kotlinconf.generated.resources.licenses_title
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
@@ -54,12 +50,16 @@ import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
+import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
+import org.jetbrains.kotlinconf.ui.generated.resources.arrow_left_24
+import org.jetbrains.kotlinconf.ui.generated.resources.main_header_back
+import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_hint
+import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
-import org.koin.compose.viewmodel.koinViewModel
-import kotlinconfapp.ui_components.generated.resources.UiRes
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.koin.compose.viewmodel.koinViewModel
 
 private val Library.licenseName: String
     get() = licenses.firstOrNull()?.name ?: "Unknown license"

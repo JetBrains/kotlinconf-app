@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import org.jetbrains.kotlinconf.navigation.KotlinConfNavHost
-import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.koinInject
 import kotlin.jvm.JvmSuppressWildcards

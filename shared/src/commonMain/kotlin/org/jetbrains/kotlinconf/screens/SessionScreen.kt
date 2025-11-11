@@ -45,21 +45,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.arrow_left_24
-import kotlinconfapp.shared.generated.resources.arrow_up_right_24
-import kotlinconfapp.shared.generated.resources.down_24
-import kotlinconfapp.shared.generated.resources.navigate_back
-import kotlinconfapp.shared.generated.resources.play_video
-import kotlinconfapp.shared.generated.resources.session_room_state_description_collapsed
-import kotlinconfapp.shared.generated.resources.session_room_state_description_expanded
-import kotlinconfapp.shared.generated.resources.session_screen_error
-import kotlinconfapp.shared.generated.resources.session_title
-import kotlinconfapp.shared.generated.resources.session_watch_video
-import kotlinconfapp.shared.generated.resources.session_your_feedback
-import kotlinconfapp.shared.generated.resources.up_24
-import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_talk
-import kotlinconfapp.ui_components.generated.resources.talk_card_how_was_the_workshop
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -68,6 +53,19 @@ import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.SpeakerId
+import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.arrow_left_24
+import org.jetbrains.kotlinconf.generated.resources.arrow_up_right_24
+import org.jetbrains.kotlinconf.generated.resources.down_24
+import org.jetbrains.kotlinconf.generated.resources.navigate_back
+import org.jetbrains.kotlinconf.generated.resources.play_video
+import org.jetbrains.kotlinconf.generated.resources.session_room_state_description_collapsed
+import org.jetbrains.kotlinconf.generated.resources.session_room_state_description_expanded
+import org.jetbrains.kotlinconf.generated.resources.session_screen_error
+import org.jetbrains.kotlinconf.generated.resources.session_title
+import org.jetbrains.kotlinconf.generated.resources.session_watch_video
+import org.jetbrains.kotlinconf.generated.resources.session_your_feedback
+import org.jetbrains.kotlinconf.generated.resources.up_24
 import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
@@ -82,13 +80,15 @@ import org.jetbrains.kotlinconf.ui.components.PageTitle
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
+import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
+import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_how_was_the_talk
+import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_how_was_the_workshop
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import kotlinconfapp.ui_components.generated.resources.UiRes
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

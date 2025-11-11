@@ -1,12 +1,12 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.runtime.Composable
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.app_privacy_notice_header
-import kotlinconfapp.shared.generated.resources.app_privacy_notice_title
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.MarkdownScreenWithTitle
+import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.app_privacy_notice_header
+import org.jetbrains.kotlinconf.generated.resources.app_privacy_notice_title
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
