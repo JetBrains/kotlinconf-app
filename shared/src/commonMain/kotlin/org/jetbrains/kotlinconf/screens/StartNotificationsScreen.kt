@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
+import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.kodee_notifications
 import org.jetbrains.kotlinconf.generated.resources.notifications_description
 import org.jetbrains.kotlinconf.generated.resources.notifications_lets_get_started
@@ -32,7 +33,6 @@ import org.jetbrains.kotlinconf.ui.components.Button
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.viewmodel.koinViewModel
-import org.jetbrains.kotlinconf.generated.resources.Res as AppRes
 
 @Composable
 fun StartNotificationsScreen(
@@ -61,20 +61,20 @@ fun StartNotificationsScreen(
                 .weight(1f)
         ) {
             Image(
-                imageVector = vectorResource(AppRes.drawable.kodee_notifications),
+                imageVector = vectorResource(Res.drawable.kodee_notifications),
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth()
                     .size(160.dp)
             )
             Text(
-                stringResource(AppRes.string.notifications_title),
+                stringResource(Res.string.notifications_title),
                 style = KotlinConfTheme.typography.h1,
                 modifier = Modifier.semantics {
                     heading()
                 }
             )
             Text(
-                stringResource(AppRes.string.notifications_description),
+                stringResource(Res.string.notifications_description),
                 color = KotlinConfTheme.colors.longText,
             )
             if (notificationSettings != null) {
@@ -90,7 +90,7 @@ fun StartNotificationsScreen(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
         ) {
             Button(
-                label = stringResource(AppRes.string.notifications_lets_get_started),
+                label = stringResource(Res.string.notifications_lets_get_started),
                 onClick = {
                     viewModel.requestNotificationPermissions()
                 },

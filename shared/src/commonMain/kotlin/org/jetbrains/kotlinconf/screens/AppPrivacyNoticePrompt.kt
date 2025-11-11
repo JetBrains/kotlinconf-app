@@ -29,6 +29,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.ScrollToTopHandler
+import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.kodee_privacy
 import org.jetbrains.kotlinconf.generated.resources.privacy_notice_accept
 import org.jetbrains.kotlinconf.generated.resources.privacy_notice_back
@@ -50,8 +51,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.arrow_right_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
 import org.koin.compose.viewmodel.koinViewModel
-import org.jetbrains.kotlinconf.generated.resources.Res as AppRes
-
 
 @Composable
 fun AppPrivacyNoticePrompt(
@@ -84,11 +83,11 @@ fun AppPrivacyNoticePrompt(
             if (detailsVis) {
                 Column {
                     MainHeaderTitleBar(
-                        stringResource(AppRes.string.privacy_notice_title),
+                        stringResource(Res.string.privacy_notice_title),
                         startContent = {
                             TopMenuButton(
                                 icon = UiRes.drawable.arrow_left_24,
-                                contentDescription = stringResource(AppRes.string.privacy_notice_back),
+                                contentDescription = stringResource(Res.string.privacy_notice_back),
                                 onClick = { detailsVisible = false },
                             )
                         }
@@ -102,7 +101,7 @@ fun AppPrivacyNoticePrompt(
                     MarkdownView(
                         loadText = {
                             @OptIn(ExperimentalResourceApi::class)
-                            AppRes.readBytes("files/app-privacy-notice.md")
+                            Res.readBytes("files/app-privacy-notice.md")
                         },
                         modifier = Modifier.padding(horizontal = 12.dp).verticalScroll(scrollState),
                         onCustomUriClick = { uri ->
@@ -125,21 +124,21 @@ fun AppPrivacyNoticePrompt(
                         .verticalScroll(rememberScrollState())
                 ) {
                     Image(
-                        imageVector = vectorResource(AppRes.drawable.kodee_privacy),
+                        imageVector = vectorResource(Res.drawable.kodee_privacy),
                         contentDescription = null,
                         modifier = Modifier.fillMaxWidth()
                             .size(160.dp)
                     )
                     Text(
-                        stringResource(AppRes.string.privacy_notice_title),
+                        stringResource(Res.string.privacy_notice_title),
                         style = KotlinConfTheme.typography.h1
                     )
                     Text(
-                        stringResource(AppRes.string.privacy_notice_description),
+                        stringResource(Res.string.privacy_notice_description),
                         color = KotlinConfTheme.colors.longText,
                     )
                     Action(
-                        stringResource(AppRes.string.privacy_notice_read_action),
+                        stringResource(Res.string.privacy_notice_read_action),
                         icon = UiRes.drawable.arrow_right_24,
                         size = ActionSize.Large,
                         enabled = true,
@@ -155,12 +154,12 @@ fun AppPrivacyNoticePrompt(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
         ) {
             Button(
-                label = stringResource(AppRes.string.privacy_notice_reject),
+                label = stringResource(Res.string.privacy_notice_reject),
                 onClick = { onRejectNotice() },
                 enabled = noticeState !is PrivacyNoticeState.Loading,
             )
             Button(
-                label = stringResource(AppRes.string.privacy_notice_accept),
+                label = stringResource(Res.string.privacy_notice_accept),
                 onClick = { viewModel.acceptPrivacyNotice(confirmationRequired) },
                 modifier = Modifier.weight(1f),
                 primary = true,

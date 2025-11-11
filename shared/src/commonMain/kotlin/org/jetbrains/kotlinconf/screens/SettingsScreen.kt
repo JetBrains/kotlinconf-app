@@ -59,7 +59,6 @@ import org.jetbrains.kotlinconf.generated.resources.theme_system
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.viewmodel.koinViewModel
-import org.jetbrains.kotlinconf.generated.resources.Res as AppRes
 
 @Composable
 fun SettingsScreen(
@@ -120,12 +119,12 @@ private fun SettingsScreenImpl(
     modifier: Modifier = Modifier,
 ) {
     ScreenWithTitle(
-        title = stringResource(AppRes.string.settings_title),
+        title = stringResource(Res.string.settings_title),
         onBack = onBack,
         modifier = modifier,
     ) {
         Column {
-            SectionHeading(stringResource(AppRes.string.settings_theme_title))
+            SectionHeading(stringResource(Res.string.settings_theme_title))
             ThemeSelector(currentTheme, onThemeChange)
 
             Spacer(Modifier.height(24.dp))
@@ -133,7 +132,7 @@ private fun SettingsScreenImpl(
             if (LocalFlags.current.supportsNotifications) {
                 val notificationSettings = viewModel.notificationSettings.collectAsStateWithLifecycle().value
                 if (notificationSettings != null) {
-                    SectionHeading(stringResource(AppRes.string.settings_notifications_title))
+                    SectionHeading(stringResource(Res.string.settings_notifications_title))
                     NotificationSettings(
                         notificationSettings = notificationSettings,
                         onChangeSettings = { newSettings ->
