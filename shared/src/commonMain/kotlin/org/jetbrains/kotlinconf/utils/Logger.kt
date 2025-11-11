@@ -20,3 +20,5 @@ class NoopProdLogger : Logger {
         // No logging in prod
     }
 }
+
+internal const val MAX_LOG_MESSAGES_IN_MEMORY = 200
