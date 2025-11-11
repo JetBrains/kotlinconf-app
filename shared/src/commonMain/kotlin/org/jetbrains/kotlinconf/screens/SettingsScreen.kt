@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -31,10 +29,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -68,7 +76,8 @@ fun SettingsScreen(
     val graphicsLayer = rememberGraphicsLayer()
     val scope = rememberCoroutineScope()
     var bitmap by remember { mutableStateOf<ImageBitmap?>(null) }
-    var bitmapVisibility = remember { Animatable(1f) }
+    var animationProgress = remember { Animatable(0f) }
+    var animationCenter by remember { mutableStateOf(Offset.Zero) }
 
     val currentTheme by viewModel.theme.collectAsStateWithLifecycle()
 
@@ -76,11 +85,12 @@ fun SettingsScreen(
         SettingsScreenImpl(
             onBack = onBack,
             currentTheme = currentTheme,
-            onThemeChange = { theme ->
+            onThemeChange = { theme, center ->
                 scope.launch {
                     bitmap = graphicsLayer.toImageBitmap()
-                    bitmapVisibility.snapTo(1f)
-                    bitmapVisibility.animateTo(0f, tween(500, easing = EaseOutQuad))
+                    animationCenter = center
+                    animationProgress.snapTo(0f)
+                    animationProgress.animateTo(1f, tween(5000, easing = EaseOutQuad))
                     bitmap = null
                 }
                 viewModel.setTheme(theme)
@@ -100,11 +110,21 @@ fun SettingsScreen(
                 bitmap = bitmap,
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxHeight(fraction = bitmapVisibility.value)
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter),
-                contentScale = ContentScale.Crop,
-                alignment = Alignment.BottomCenter
+                    .fillMaxSize()
+                    .drawWithContent {
+                        val path = Path()
+                        // Draw a circle path
+                        path.addOval(
+                            Rect(
+                                center = animationCenter,
+                                radius = size.maxDimension * animationProgress.value
+                            )
+                        )
+                        clipPath(path, clipOp = ClipOp.Difference) {
+                            this@drawWithContent.drawContent()
+                        }
+                    },
+                contentScale = ContentScale.Crop
             )
         }
     }
@@ -114,7 +134,7 @@ fun SettingsScreen(
 private fun SettingsScreenImpl(
     onBack: () -> Unit,
     currentTheme: Theme,
-    onThemeChange: (Theme) -> Unit,
+    onThemeChange: (Theme, Offset) -> Unit,
     viewModel: SettingsViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -163,7 +183,7 @@ private val themes = listOf(Theme.SYSTEM, Theme.DARK, Theme.LIGHT)
 @Composable
 private fun ThemeSelector(
     currentTheme: Theme,
-    onThemeChange: (Theme) -> Unit,
+    onThemeChange: (Theme, Offset) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -174,7 +194,7 @@ private fun ThemeSelector(
             ThemeBox(
                 theme = theme,
                 isSelected = currentTheme == theme,
-                onClick = { onThemeChange(theme) },
+                onClick = { position -> onThemeChange(theme, position) },
                 modifier = Modifier.weight(1f),
             )
         }
@@ -185,15 +205,38 @@ private fun ThemeSelector(
 private fun ThemeBox(
     theme: Theme,
     isSelected: Boolean,
-    onClick: () -> Unit,
+    onClick: (Offset) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var boxPosition by remember { mutableStateOf(Offset.Zero) }
+    var clickPosition by remember { mutableStateOf(Offset.Zero) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
+            .onGloballyPositioned { coordinates ->
+                boxPosition = coordinates.positionInRoot()
+            }
+            .pointerInput(Unit) {
+
+                awaitPointerEventScope {
+                    while (true) {
+                        val eventOnInitialPass = awaitPointerEvent(PointerEventPass.Initial)
+                        val firstRelevantChange: PointerInputChange? =
+                            eventOnInitialPass.changes.firstOrNull { it.pressed }
+                        if (firstRelevantChange != null) {
+                            println("Setting click pos to $clickPosition (based on ${firstRelevantChange.position})")
+                            clickPosition = boxPosition + firstRelevantChange.position
+                        }
+                    }
+                }
+            }
             .selectable(
                 selected = isSelected,
-                onClick = onClick,
+                onClick = {
+                    println("onClick triggered with $clickPosition")
+                    onClick(clickPosition)
+                },
                 role = Role.RadioButton,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
