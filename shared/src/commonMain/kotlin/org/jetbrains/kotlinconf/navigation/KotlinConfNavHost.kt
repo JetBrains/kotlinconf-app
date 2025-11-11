@@ -47,14 +47,13 @@ fun navigateToSession(sessionId: SessionId) {
     notificationNavRequests.trySend(SessionScreen(sessionId))
 }
 
-private val notificationNavRequests = Channel<Any>(capacity = 1)
+private val notificationNavRequests = Channel<AppRoute>(capacity = 1)
 
 @Composable
 private fun NotificationHandler(backStack: MutableList<AppRoute>) {
     LaunchedEffect(Unit) {
         while (true) {
-            val destination: Any = notificationNavRequests.receive()
-            backStack.add(destination as AppRoute)
+            backStack.add(notificationNavRequests.receive())
         }
     }
 }
