@@ -22,17 +22,17 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinconfapp.shared.generated.resources.kodee_notifications
-import kotlinconfapp.shared.generated.resources.notifications_description
-import kotlinconfapp.shared.generated.resources.notifications_lets_get_started
-import kotlinconfapp.shared.generated.resources.notifications_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
+import org.jetbrains.kotlinconf.generated.resources.kodee_notifications
+import org.jetbrains.kotlinconf.generated.resources.notifications_description
+import org.jetbrains.kotlinconf.generated.resources.notifications_lets_get_started
+import org.jetbrains.kotlinconf.generated.resources.notifications_title
 import org.jetbrains.kotlinconf.ui.components.Button
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.viewmodel.koinViewModel
-import kotlinconfapp.shared.generated.resources.Res as AppRes
+import org.jetbrains.kotlinconf.generated.resources.Res as AppRes
 
 @Composable
 fun StartNotificationsScreen(

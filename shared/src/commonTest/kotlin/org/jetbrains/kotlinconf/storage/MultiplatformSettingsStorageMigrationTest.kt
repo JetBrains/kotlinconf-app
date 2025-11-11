@@ -7,8 +7,6 @@ import com.russhwolf.settings.observable.makeObservable
 import com.russhwolf.settings.set
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
-import org.jetbrains.kotlinconf.NotificationSettings
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

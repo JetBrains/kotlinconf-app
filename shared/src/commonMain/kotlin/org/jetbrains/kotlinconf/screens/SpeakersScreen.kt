@@ -26,17 +26,15 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.speakers_error_no_data
-import kotlinconfapp.shared.generated.resources.speakers_number_of_results
-import kotlinconfapp.shared.generated.resources.speakers_title
-import kotlinconfapp.ui_components.generated.resources.main_header_search_hint
-import kotlinconfapp.ui_components.generated.resources.search_24
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SpeakerId
+import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.speakers_error_no_data
+import org.jetbrains.kotlinconf.generated.resources.speakers_number_of_results
+import org.jetbrains.kotlinconf.generated.resources.speakers_title
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
@@ -46,10 +44,12 @@ import org.jetbrains.kotlinconf.ui.components.NormalErrorWithLoading
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
+import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
+import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_hint
+import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
 import org.koin.compose.viewmodel.koinViewModel
-import kotlinconfapp.ui_components.generated.resources.UiRes
 
 @Composable
 fun SpeakersScreen(

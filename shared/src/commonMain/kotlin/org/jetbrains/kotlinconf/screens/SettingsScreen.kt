@@ -40,26 +40,26 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.settings_notifications_title
-import kotlinconfapp.shared.generated.resources.settings_theme_dark
-import kotlinconfapp.shared.generated.resources.settings_theme_light
-import kotlinconfapp.shared.generated.resources.settings_theme_system
-import kotlinconfapp.shared.generated.resources.settings_theme_title
-import kotlinconfapp.shared.generated.resources.settings_title
-import kotlinconfapp.shared.generated.resources.theme_dark
-import kotlinconfapp.shared.generated.resources.theme_light
-import kotlinconfapp.shared.generated.resources.theme_system
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.Theme
+import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.settings_notifications_title
+import org.jetbrains.kotlinconf.generated.resources.settings_theme_dark
+import org.jetbrains.kotlinconf.generated.resources.settings_theme_light
+import org.jetbrains.kotlinconf.generated.resources.settings_theme_system
+import org.jetbrains.kotlinconf.generated.resources.settings_theme_title
+import org.jetbrains.kotlinconf.generated.resources.settings_title
+import org.jetbrains.kotlinconf.generated.resources.theme_dark
+import org.jetbrains.kotlinconf.generated.resources.theme_light
+import org.jetbrains.kotlinconf.generated.resources.theme_system
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.koin.compose.viewmodel.koinViewModel
-import kotlinconfapp.shared.generated.resources.Res as AppRes
+import org.jetbrains.kotlinconf.generated.resources.Res as AppRes
 
 @Composable
 fun SettingsScreen(

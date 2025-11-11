@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.kotlinconf.EVENT_TIME_ZONE
 import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.time.Clock
 import kotlin.time.Duration

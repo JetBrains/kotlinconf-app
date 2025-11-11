@@ -13,24 +13,24 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.partners_title
-import kotlinconfapp.ui_components.generated.resources.arrow_left_24
-import kotlinconfapp.ui_components.generated.resources.main_header_back
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.PARTNERS
 import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.ScrollToTopHandler
+import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.partners_title
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PartnerCard
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
+import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
+import org.jetbrains.kotlinconf.ui.generated.resources.arrow_left_24
+import org.jetbrains.kotlinconf.ui.generated.resources.main_header_back
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
-import kotlinconfapp.ui_components.generated.resources.UiRes
 
 
 @Composable

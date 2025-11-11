@@ -31,19 +31,19 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import kotlinconfapp.ui_components.generated.resources.UiRes
-import kotlinconfapp.ui_components.generated.resources.action_bookmark
-import kotlinconfapp.ui_components.generated.resources.bookmark_24
-import kotlinconfapp.ui_components.generated.resources.bookmark_24_fill
-import kotlinconfapp.ui_components.generated.resources.lightning_16_fill
-import kotlinconfapp.ui_components.generated.resources.session_codelab
-import kotlinconfapp.ui_components.generated.resources.session_education
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
+import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
+import org.jetbrains.kotlinconf.ui.generated.resources.action_bookmark
+import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
+import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24_fill
+import org.jetbrains.kotlinconf.ui.generated.resources.lightning_16_fill
+import org.jetbrains.kotlinconf.ui.generated.resources.session_codelab
+import org.jetbrains.kotlinconf.ui.generated.resources.session_education
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 

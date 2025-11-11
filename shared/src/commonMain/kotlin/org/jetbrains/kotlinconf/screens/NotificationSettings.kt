@@ -4,13 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.notifications_schedule_update_description
-import kotlinconfapp.shared.generated.resources.notifications_schedule_update_title
-import kotlinconfapp.shared.generated.resources.notifications_session_reminders_description
-import kotlinconfapp.shared.generated.resources.notifications_session_reminders_title
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.NotificationSettings
+import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.notifications_schedule_update_description
+import org.jetbrains.kotlinconf.generated.resources.notifications_schedule_update_title
+import org.jetbrains.kotlinconf.generated.resources.notifications_session_reminders_description
+import org.jetbrains.kotlinconf.generated.resources.notifications_session_reminders_title
 import org.jetbrains.kotlinconf.ui.components.SettingsItem
 
 

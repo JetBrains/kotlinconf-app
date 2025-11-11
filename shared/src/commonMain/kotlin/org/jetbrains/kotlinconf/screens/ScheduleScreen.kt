@@ -45,16 +45,6 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.nav_destination_schedule
-import kotlinconfapp.shared.generated.resources.schedule_action_filter_bookmarked
-import kotlinconfapp.shared.generated.resources.schedule_action_search
-import kotlinconfapp.shared.generated.resources.schedule_error_no_data
-import kotlinconfapp.shared.generated.resources.schedule_in_x_minutes
-import kotlinconfapp.shared.generated.resources.schedule_label_no_bookmarks
-import kotlinconfapp.shared.generated.resources.schedule_number_of_results
-import kotlinconfapp.ui_components.generated.resources.bookmark_24
-import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
@@ -66,6 +56,14 @@ import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.TimeProvider
+import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.nav_destination_schedule
+import org.jetbrains.kotlinconf.generated.resources.schedule_action_filter_bookmarked
+import org.jetbrains.kotlinconf.generated.resources.schedule_action_search
+import org.jetbrains.kotlinconf.generated.resources.schedule_error_no_data
+import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
+import org.jetbrains.kotlinconf.generated.resources.schedule_label_no_bookmarks
+import org.jetbrains.kotlinconf.generated.resources.schedule_number_of_results
 import org.jetbrains.kotlinconf.isLive
 import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.DayHeader
@@ -89,12 +87,14 @@ import org.jetbrains.kotlinconf.ui.components.TalkCard
 import org.jetbrains.kotlinconf.ui.components.TalkStatus
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
+import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
+import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
+import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import kotlinconfapp.ui_components.generated.resources.UiRes
 
 @Composable
 fun ScheduleScreen(

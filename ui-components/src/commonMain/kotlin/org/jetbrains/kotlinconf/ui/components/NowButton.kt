@@ -23,16 +23,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.UiRes
-import kotlinconfapp.ui_components.generated.resources.arrow_down_16
-import kotlinconfapp.ui_components.generated.resources.now
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.components.NowButtonState.After
 import org.jetbrains.kotlinconf.ui.components.NowButtonState.Before
 import org.jetbrains.kotlinconf.ui.components.NowButtonState.Current
+import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
+import org.jetbrains.kotlinconf.ui.generated.resources.arrow_down_16
+import org.jetbrains.kotlinconf.ui.generated.resources.now
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
