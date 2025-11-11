@@ -59,6 +59,7 @@ class Colors(
     val toggleOff: Color,
 
     val tooltipBackground: Color,
+    val tooltipText: Color,
 )
 
 val KotlinConfLightColors = Colors(
@@ -91,6 +92,7 @@ val KotlinConfLightColors = Colors(
     toggleOn = magenta100,
 
     tooltipBackground = blueGrey,
+    tooltipText = white100,
 )
 
 val KotlinConfDarkColors = Colors(
@@ -115,7 +117,7 @@ val KotlinConfDarkColors = Colors(
     orangeText = orange,
     placeholderText = white30,
     primaryText = white100,
-    primaryTextInverted = black100,
+    primaryTextInverted = white100,
     purpleText = purpleTextDark,
     secondaryText = white70,
 
@@ -123,4 +125,5 @@ val KotlinConfDarkColors = Colors(
     toggleOn = magentaTextDark,
 
     tooltipBackground = offWhite,
+    tooltipText = black100,
 )
