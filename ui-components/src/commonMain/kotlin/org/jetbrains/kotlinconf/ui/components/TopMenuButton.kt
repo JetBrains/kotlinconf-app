@@ -1,20 +1,17 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.BasicTooltipBox
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberBasicTooltipState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.PlainTooltip
-import androidx.compose.material3.TooltipAnchorPosition
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
-import androidx.compose.material3.rememberTooltipState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,9 +20,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntRect
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupPositionProvider
 import kotlinconfapp.ui_components.generated.resources.UiRes
 import kotlinconfapp.ui_components.generated.resources.bookmark_24
 import kotlinconfapp.ui_components.generated.resources.close_24
@@ -35,7 +38,28 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
-@OptIn(ExperimentalMaterial3Api::class)
+
+@Composable
+private fun rememberPositionProvider(): PopupPositionProvider {
+    val tooltipAnchorSpacing = with(LocalDensity.current) { 4.dp.roundToPx() }
+    return remember(tooltipAnchorSpacing) {
+        object : PopupPositionProvider {
+            override fun calculatePosition(
+                anchorBounds: IntRect,
+                windowSize: IntSize,
+                layoutDirection: LayoutDirection,
+                popupContentSize: IntSize,
+            ): IntOffset {
+                val x = anchorBounds.left + (anchorBounds.width - popupContentSize.width) / 2
+                var y = anchorBounds.bottom - tooltipAnchorSpacing
+                if (y < 0) y = anchorBounds.bottom + tooltipAnchorSpacing
+                return IntOffset(x, y)
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TopMenuButtonImpl(
     icon: DrawableResource,
@@ -45,19 +69,19 @@ private fun TopMenuButtonImpl(
     iconColor: Color,
     modifier: Modifier = Modifier,
 ) {
-    TooltipBox(
-        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Below),
+    BasicTooltipBox(
+        positionProvider = rememberPositionProvider(),
         tooltip = {
-            PlainTooltip (
-                containerColor = KotlinConfTheme.colors.tooltipBackground,
-            ) {
-                Text(
-                    text = contentDescription,
-                    color = KotlinConfTheme.colors.primaryTextInverted,
-                )
-            }
+            Text(
+                text = contentDescription,
+                color = KotlinConfTheme.colors.mainBackground, // TODO update per design
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(KotlinConfTheme.colors.primaryText) // TODO update per design
+                    .padding(4.dp)
+            )
         },
-        state = rememberTooltipState()
+        state = rememberBasicTooltipState()
     ) {
         Icon(
             modifier = modifier
