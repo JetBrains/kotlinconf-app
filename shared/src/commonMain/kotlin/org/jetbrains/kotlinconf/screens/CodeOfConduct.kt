@@ -6,13 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.code_of_conduct
-import kotlinconfapp.shared.generated.resources.kodee_code_of_conduct
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.MarkdownScreenWithTitle
+import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.code_of_conduct
+import org.jetbrains.kotlinconf.generated.resources.kodee_code_of_conduct
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

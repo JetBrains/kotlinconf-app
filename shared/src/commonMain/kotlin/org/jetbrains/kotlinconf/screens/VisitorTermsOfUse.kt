@@ -1,12 +1,12 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.runtime.Composable
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.general_terms
-import kotlinconfapp.shared.generated.resources.visitors_terms_title
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.MarkdownScreenWithTitle
+import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.general_terms
+import org.jetbrains.kotlinconf.generated.resources.visitors_terms_title
 
 @Composable
 fun VisitorTermsOfUse(

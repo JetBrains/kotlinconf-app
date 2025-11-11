@@ -26,6 +26,7 @@ import org.jetbrains.kotlinconf.URLs
 import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
 import org.jetbrains.kotlinconf.screens.AppPrivacyNotice
+import org.jetbrains.kotlinconf.screens.AppPrivacyNoticePrompt
 import org.jetbrains.kotlinconf.screens.AppTermsOfUse
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
 import org.jetbrains.kotlinconf.screens.DeveloperMenuScreen
@@ -34,13 +35,12 @@ import org.jetbrains.kotlinconf.screens.MainScreen
 import org.jetbrains.kotlinconf.screens.NestedMapScreen
 import org.jetbrains.kotlinconf.screens.PartnerDetailScreen
 import org.jetbrains.kotlinconf.screens.PartnersScreen
-import org.jetbrains.kotlinconf.screens.VisitorPrivacyNotice
-import org.jetbrains.kotlinconf.screens.AppPrivacyNoticePrompt
 import org.jetbrains.kotlinconf.screens.SessionScreen
 import org.jetbrains.kotlinconf.screens.SettingsScreen
 import org.jetbrains.kotlinconf.screens.SingleLicenseScreen
 import org.jetbrains.kotlinconf.screens.SpeakerDetailScreen
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
+import org.jetbrains.kotlinconf.screens.VisitorPrivacyNotice
 import org.jetbrains.kotlinconf.screens.VisitorTermsOfUse
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import kotlin.jvm.JvmSuppressWildcards

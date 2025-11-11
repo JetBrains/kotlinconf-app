@@ -10,11 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.UiRes
-import kotlinconfapp.ui_components.generated.resources.now
-import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
+import org.jetbrains.kotlinconf.ui.generated.resources.now
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 

@@ -167,6 +167,10 @@ compose.desktop {
     }
 }
 
+compose.resources {
+    packageOfResClass = "org.jetbrains.kotlinconf.generated.resources"
+}
+
 aboutLibraries {
     library.duplicationMode = DuplicateMode.MERGE
     library.duplicationRule = DuplicateRule.SIMPLE

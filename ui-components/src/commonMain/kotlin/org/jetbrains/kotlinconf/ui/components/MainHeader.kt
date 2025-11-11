@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -10,7 +11,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,17 +29,17 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
-import kotlinconfapp.ui_components.generated.resources.UiRes
-import kotlinconfapp.ui_components.generated.resources.arrow_left_24
-import kotlinconfapp.ui_components.generated.resources.bookmark_24
-import kotlinconfapp.ui_components.generated.resources.close_24
-import kotlinconfapp.ui_components.generated.resources.main_header_back
-import kotlinconfapp.ui_components.generated.resources.main_header_search_clear
-import kotlinconfapp.ui_components.generated.resources.main_header_search_hint
-import kotlinconfapp.ui_components.generated.resources.search_24
-import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
+import org.jetbrains.kotlinconf.ui.generated.resources.arrow_left_24
+import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
+import org.jetbrains.kotlinconf.ui.generated.resources.close_24
+import org.jetbrains.kotlinconf.ui.generated.resources.main_header_back
+import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_clear
+import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_hint
+import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 

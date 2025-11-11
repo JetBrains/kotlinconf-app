@@ -76,7 +76,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.jetbrains.kotlinconf.uicomponents"
+    namespace = "com.jetbrains.kotlinconf.ui"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -90,6 +90,7 @@ android {
 compose.resources {
     publicResClass = true
     nameOfResClass = "UiRes"
+    packageOfResClass = "org.jetbrains.kotlinconf.ui.generated.resources"
 }
 
 // Android preview support
