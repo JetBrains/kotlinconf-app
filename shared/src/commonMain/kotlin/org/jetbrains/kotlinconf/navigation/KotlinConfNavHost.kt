@@ -64,6 +64,8 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
     val startDestination = if (isOnboardingComplete) MainScreen else StartPrivacyNoticeScreen
     val appBackStack = rememberNavBackStack<AppRoute>(startDestination)
 
+    // TODO Integrate with browser navigation here https://github.com/JetBrains/kotlinconf-app/issues/557
+
     NotificationHandler(appBackStack)
 
     NavDisplay(
