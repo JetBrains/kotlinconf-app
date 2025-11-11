@@ -36,14 +36,6 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import com.mikepenz.aboutlibraries.entity.Library
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.licenses_number_of_results
-import kotlinconfapp.shared.generated.resources.licenses_title
-import kotlinconfapp.ui_components.generated.resources.UiRes
-import kotlinconfapp.ui_components.generated.resources.arrow_left_24
-import kotlinconfapp.ui_components.generated.resources.main_header_back
-import kotlinconfapp.ui_components.generated.resources.main_header_search_hint
-import kotlinconfapp.ui_components.generated.resources.search_24
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler

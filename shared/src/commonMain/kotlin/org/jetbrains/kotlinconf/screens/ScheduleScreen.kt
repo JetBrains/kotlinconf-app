@@ -47,16 +47,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.nav_destination_schedule
-import kotlinconfapp.shared.generated.resources.schedule_action_filter_bookmarked
-import kotlinconfapp.shared.generated.resources.schedule_action_search
-import kotlinconfapp.shared.generated.resources.schedule_error_no_data
-import kotlinconfapp.shared.generated.resources.schedule_in_x_minutes
-import kotlinconfapp.shared.generated.resources.schedule_label_no_bookmarks
-import kotlinconfapp.shared.generated.resources.schedule_number_of_results
-import kotlinconfapp.ui_components.generated.resources.bookmark_24
-import kotlinconfapp.ui_components.generated.resources.search_24
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource

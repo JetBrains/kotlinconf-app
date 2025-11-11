@@ -27,12 +27,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
-import kotlinconfapp.shared.generated.resources.Res
-import kotlinconfapp.shared.generated.resources.speakers_error_no_data
-import kotlinconfapp.shared.generated.resources.speakers_number_of_results
-import kotlinconfapp.shared.generated.resources.speakers_title
-import kotlinconfapp.ui_components.generated.resources.main_header_search_hint
-import kotlinconfapp.ui_components.generated.resources.search_24
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
