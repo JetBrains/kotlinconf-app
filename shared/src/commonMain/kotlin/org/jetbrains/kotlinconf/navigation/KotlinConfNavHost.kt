@@ -2,12 +2,15 @@ package org.jetbrains.kotlinconf.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import androidx.savedstate.compose.serialization.serializers.SnapshotStateListSerializer
 import kotlinx.coroutines.channels.Channel
 import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.LocalNotificationId
@@ -60,8 +63,10 @@ private fun NotificationHandler(backStack: MutableList<AppRoute>) {
 
 @Composable
 internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
-    val startDestination = if (isOnboardingComplete) MainScreen else StartPrivacyNoticeScreen
-    val appBackStack = rememberNavBackStack<AppRoute>(startDestination)
+    val appBackStack = rememberSerializable(serializer = SnapshotStateListSerializer()) {
+        val startDestination = if (isOnboardingComplete) MainScreen else StartPrivacyNoticeScreen
+        mutableStateListOf(startDestination)
+    }
 
     // TODO Integrate with browser navigation here https://github.com/JetBrains/kotlinconf-app/issues/557
 

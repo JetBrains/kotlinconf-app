@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.screens
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
@@ -17,15 +18,17 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.SaveableStateHolder
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
-import androidx.navigation3.ui.NavDisplay
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
@@ -59,7 +62,6 @@ import org.jetbrains.kotlinconf.navigation.SessionScreen
 import org.jetbrains.kotlinconf.navigation.SettingsScreen
 import org.jetbrains.kotlinconf.navigation.SpeakerDetailScreen
 import org.jetbrains.kotlinconf.navigation.SpeakersScreen
-import org.jetbrains.kotlinconf.navigation.rememberNavBackStack
 import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainNavDestination
 import org.jetbrains.kotlinconf.ui.components.MainNavigation
@@ -83,73 +85,75 @@ fun MainScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
-        val localBackStack = rememberNavBackStack<MainRoute>(ScheduleScreen)
+        var currentIndex by rememberSaveable { mutableIntStateOf(0) }
 
-        NavDisplay(
-            backStack = localBackStack,
+        val saveableStateHolder: SaveableStateHolder = rememberSaveableStateHolder()
+
+        if (currentIndex > 0 && LocalFlags.current.enableBackOnMainScreens) {
+            NavigationBackHandler(
+                state = rememberNavigationEventState(NavigationEventInfo.None),
+                isBackEnabled = true,
+                onBackCompleted = { currentIndex = 0 },
+            )
+        }
+
+        AnimatedContent(
+            targetState = currentIndex,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
             transitionSpec = { NoContentTransition },
-            popTransitionSpec = { NoContentTransition },
-            predictivePopTransitionSpec = { NoContentTransition },
-            entryDecorators = listOf(
-                rememberSaveableStateHolderNavEntryDecorator(),
-                rememberViewModelStoreNavEntryDecorator(),
-            ),
-            entryProvider = entryProvider {
-                entry<InfoScreen> {
-                    MainBackHandler()
-                    val uriHandler = LocalUriHandler.current
-                    InfoScreen(
-                        onAboutConf = { onNavigate(AboutConferenceScreen) },
-                        onAboutApp = { onNavigate(AboutAppScreen) },
-                        onOurPartners = { onNavigate(PartnersScreen) },
-                        onCodeOfConduct = { onNavigate(CodeOfConductScreen) },
-                        onTwitter = { uriHandler.openUri(URLs.TWITTER) },
-                        onSlack = { uriHandler.openUri(URLs.SLACK) },
-                        onBluesky = { uriHandler.openUri(URLs.BLUESKY) },
-                        onSettings = { onNavigate(SettingsScreen) },
-                    )
-                }
-                entry<SpeakersScreen> {
-                    MainBackHandler()
-                    SpeakersScreen(
-                        onSpeaker = { onNavigate(SpeakerDetailScreen(it)) }
-                    )
-                }
-                entry<ScheduleScreen> {
-                    MainBackHandler()
-                    ScheduleScreen(
-                        onSession = { onNavigate(SessionScreen(it)) },
-                        onPrivacyNoticeNeeded = { onNavigate(AppPrivacyNoticePrompt) },
-                        onRequestFeedbackWithComment = { sessionId ->
-                            onNavigate(SessionScreen(sessionId, openedForFeedback = true))
-                        },
-                    )
-                }
-                entry<MapScreen> {
-                    MainBackHandler()
-                    MapScreen()
-                }
+        ) { index ->
+            saveableStateHolder.SaveableStateProvider(index) {
+                MainScreenContent(bottomNavDestinations[index].route, onNavigate)
             }
-        )
+        }
 
         AnimatedVisibility(!isKeyboardOpen(), enter = fadeIn(snap()), exit = fadeOut(snap())) {
-            BottomNavigation(localBackStack)
+            BottomNavigation(
+                currentIndex = currentIndex,
+                onSelect = { selected -> currentIndex = selected }
+            )
         }
     }
 }
 
 @Composable
-private fun MainBackHandler() {
-    if (!LocalFlags.current.enableBackOnMainScreens) {
-        // Prevent back navigation
-        NavigationBackHandler(
-            state = rememberNavigationEventState(NavigationEventInfo.None),
-            isBackEnabled = true,
-            onBackCompleted = { /* Do nothing */ },
-        )
+private fun MainScreenContent(route: MainRoute, onNavigate: (AppRoute) -> Unit) {
+    when (route) {
+        ScheduleScreen -> {
+            ScheduleScreen(
+                onSession = { onNavigate(SessionScreen(it)) },
+                onPrivacyNoticeNeeded = { onNavigate(AppPrivacyNoticePrompt) },
+                onRequestFeedbackWithComment = { sessionId ->
+                    onNavigate(SessionScreen(sessionId, openedForFeedback = true))
+                },
+            )
+        }
+
+        SpeakersScreen -> {
+            SpeakersScreen(
+                onSpeaker = { onNavigate(SpeakerDetailScreen(it)) }
+            )
+        }
+
+        MapScreen -> {
+            MapScreen()
+        }
+
+        InfoScreen -> {
+            val uriHandler = LocalUriHandler.current
+            InfoScreen(
+                onAboutConf = { onNavigate(AboutConferenceScreen) },
+                onAboutApp = { onNavigate(AboutAppScreen) },
+                onOurPartners = { onNavigate(PartnersScreen) },
+                onCodeOfConduct = { onNavigate(CodeOfConductScreen) },
+                onTwitter = { uriHandler.openUri(URLs.TWITTER) },
+                onSlack = { uriHandler.openUri(URLs.SLACK) },
+                onBluesky = { uriHandler.openUri(URLs.BLUESKY) },
+                onSettings = { onNavigate(SettingsScreen) },
+            )
+        }
     }
 }
 
@@ -187,29 +191,16 @@ private val bottomNavDestinations: List<MainNavDestination<MainRoute>> = listOf(
 )
 
 @Composable
-private fun BottomNavigation(localBackStack: MutableList<MainRoute>) {
-    val currentDestination = localBackStack.last()
-    val currentBottomNavDestination = bottomNavDestinations.find { dest ->
-        currentDestination == dest.route
-    }
-
+private fun BottomNavigation(
+    currentIndex: Int,
+    onSelect: (Int) -> Unit,
+) {
     Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
     MainNavigation(
-        currentDestination = currentBottomNavDestination,
+        currentDestination = bottomNavDestinations[currentIndex],
         destinations = bottomNavDestinations,
         onSelect = { selectedDestination ->
-            // This screen is already selected, ignore it
-            if (localBackStack.last() == selectedDestination.route) {
-                return@MainNavigation
-            }
-
-            // Add the new screen
-            localBackStack.add(selectedDestination.route)
-
-            // Keep only the first and last entry
-            if (localBackStack.size > 2) {
-                localBackStack.subList(1, localBackStack.lastIndex).clear()
-            }
+            onSelect(bottomNavDestinations.indexOf(selectedDestination))
         },
     )
 }
