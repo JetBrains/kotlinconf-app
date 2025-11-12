@@ -63,19 +63,20 @@ private fun NotificationHandler(backStack: MutableList<AppRoute>) {
 
 @Composable
 internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
-    val appBackStack = rememberSerializable(serializer = SnapshotStateListSerializer()) {
-        val startDestination = if (isOnboardingComplete) MainScreen else StartPrivacyNoticeScreen
-        mutableStateListOf(startDestination)
-    }
+    val backstack: MutableList<AppRoute> =
+        rememberSerializable(serializer = SnapshotStateListSerializer()) {
+            val startDestination = if (isOnboardingComplete) MainScreen else StartPrivacyNoticeScreen
+            mutableStateListOf(startDestination)
+        }
 
     // TODO Integrate with browser navigation here https://github.com/JetBrains/kotlinconf-app/issues/557
 
-    NotificationHandler(appBackStack)
+    NotificationHandler(backstack)
 
     NavDisplay(
-        backStack = appBackStack,
+        backStack = backstack,
         entryProvider = entryProvider {
-            screens(appBackStack)
+            screens(backstack)
         },
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
