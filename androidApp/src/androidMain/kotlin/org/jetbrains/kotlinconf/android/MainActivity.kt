@@ -8,11 +8,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
 import com.mmk.kmpnotifier.notification.NotifierManager
@@ -47,14 +42,6 @@ class MainActivity : ComponentActivity() {
                         // Don't enforce scrim https://issuetracker.google.com/issues/298296168
                         window.isNavigationBarContrastEnforced = false
                     }
-                },
-                popEnterTransition = {
-                    scaleIn(initialScale = 1.05f) +
-                            fadeIn(animationSpec = tween(50))
-                },
-                popExitTransition = {
-                    scaleOut(targetScale = 0.9f, animationSpec = tween(50)) +
-                            fadeOut(animationSpec = tween(50, delayMillis = 50))
                 },
             )
         }
