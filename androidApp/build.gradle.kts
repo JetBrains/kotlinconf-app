@@ -1,28 +1,17 @@
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.googleServices)
 }
 
-kotlin {
-    androidTarget()
+dependencies {
+    implementation(projects.shared)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core.splashscreen)
 
-    sourceSets {
-        androidMain.dependencies {
-            implementation(projects.shared)
-            implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.androidx.core.splashscreen)
-        }
-
-        androidUnitTest.dependencies {
-            implementation(libs.junit)
-        }
-    }
-
-    jvmToolchain(21)
+    testImplementation(libs.junit)
 }
 
 android {
@@ -59,6 +48,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 dependencies {
