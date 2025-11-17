@@ -119,9 +119,6 @@ kotlin {
             implementation(libs.androidx.preference)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.ktor.client.okhttp)
-
-            // TODO should be debugImplementation https://issuetracker.google.com/issues/453706861
-            implementation(libs.compose.ui.tooling)
         }
 
         iosMain.dependencies {
@@ -144,6 +141,10 @@ kotlin {
     }
 
     jvmToolchain(21)
+}
+
+dependencies {
+    "androidRuntimeClasspath"(libs.compose.ui.tooling.preview)
 }
 
 compose.desktop {

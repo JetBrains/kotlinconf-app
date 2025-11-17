@@ -63,9 +63,6 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
-
-            // TODO should be debugImplementation https://issuetracker.google.com/issues/453706861
-            implementation(libs.compose.ui.tooling.preview)
         }
         jvmMain.dependencies {
             implementation(libs.ktor.client.okhttp)
@@ -83,6 +80,10 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
+}
+
+dependencies {
+    "androidRuntimeClasspath"(libs.compose.ui.tooling.preview)
 }
 
 compose.resources {
