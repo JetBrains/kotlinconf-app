@@ -6,6 +6,9 @@ import org.jetbrains.kotlinconf.ui.theme.Brand.magenta20
 import org.jetbrains.kotlinconf.ui.theme.Brand.magenta50
 import org.jetbrains.kotlinconf.ui.theme.Brand.magentaTextDark
 import org.jetbrains.kotlinconf.ui.theme.Brand.orange
+import org.jetbrains.kotlinconf.ui.theme.Brand.orangeTextDark
+import org.jetbrains.kotlinconf.ui.theme.Brand.pink100
+import org.jetbrains.kotlinconf.ui.theme.Brand.pinkTextDark
 import org.jetbrains.kotlinconf.ui.theme.Brand.purple100
 import org.jetbrains.kotlinconf.ui.theme.Brand.purpleTextDark
 import org.jetbrains.kotlinconf.ui.theme.UI.black05
@@ -49,13 +52,16 @@ class Colors(
     val accentText: Color,
     val longText: Color,
     val noteText: Color,
-    val orangeText: Color,
     val placeholderText: Color,
     val primaryText: Color,
     val primaryTextInverted: Color,
     val primaryTextWhiteFixed: Color,
-    val purpleText: Color,
     val secondaryText: Color,
+
+    val purpleText: Color,
+    val magentaText: Color,
+    val pinkText: Color,
+    val orangeText: Color,
 
     val toggleOn: Color,
     val toggleOff: Color,
@@ -81,13 +87,16 @@ val KotlinConfLightColors = Colors(
     accentText = magenta100,
     longText = black70,
     noteText = black40,
-    orangeText = orange,
     placeholderText = black20,
     primaryText = black100,
     primaryTextInverted = white100,
     primaryTextWhiteFixed = white100,
-    purpleText = purple100,
     secondaryText = black60,
+
+    purpleText = purple100,
+    magentaText = magenta100,
+    pinkText = pink100,
+    orangeText = orange,
 
     toggleOff = greyLight,
     toggleOn = magenta100,
@@ -113,13 +122,16 @@ val KotlinConfDarkColors = Colors(
     accentText = magentaTextDark,
     longText = white70,
     noteText = white50,
-    orangeText = orange,
     placeholderText = white30,
     primaryText = white100,
     primaryTextInverted = black100,
     primaryTextWhiteFixed = white100,
-    purpleText = purpleTextDark,
     secondaryText = white70,
+
+    purpleText = purpleTextDark,
+    magentaText = magentaTextDark,
+    pinkText = pinkTextDark,
+    orangeText = orangeTextDark,
 
     toggleOff = greyDark,
     toggleOn = magentaTextDark,
