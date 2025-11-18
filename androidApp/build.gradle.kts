@@ -15,6 +15,7 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.core.splashscreen)
+            implementation(libs.androidx.navigation3.ui)
         }
 
         androidUnitTest.dependencies {

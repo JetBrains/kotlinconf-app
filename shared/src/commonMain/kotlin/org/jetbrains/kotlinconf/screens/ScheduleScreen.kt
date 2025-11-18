@@ -31,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.semantics.CollectionInfo
 import androidx.compose.ui.semantics.CollectionItemInfo
@@ -45,6 +44,9 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
@@ -367,11 +369,15 @@ private fun Header(
             )
         },
         searchContent = {
-            @OptIn(ExperimentalComposeUiApi::class)
-            BackHandler(true) {
-                onHeaderStateChange(MainHeaderContainerState.Title)
-                onSearchQueryChange("")
-            }
+            NavigationBackHandler(
+                state = rememberNavigationEventState(NavigationEventInfo.None),
+                isBackEnabled = true,
+                onBackCompleted = {
+                    onHeaderStateChange(MainHeaderContainerState.Title)
+                    onSearchQueryChange("")
+                },
+            )
+
             val filterItems by viewModel.filterItems.collectAsStateWithLifecycle()
 
             MainHeaderSearchBar(

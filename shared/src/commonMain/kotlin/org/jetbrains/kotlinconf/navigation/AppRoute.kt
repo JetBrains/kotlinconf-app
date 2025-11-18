@@ -7,108 +7,90 @@ import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
 
 @Serializable
+sealed interface AppRoute
+
+@Serializable
 @SerialName("AboutConference")
-data object AboutConferenceScreen
+data object AboutConferenceScreen : AppRoute
 
 @Serializable
 @SerialName("CodeOfConduct")
-data object CodeOfConductScreen
+data object CodeOfConductScreen : AppRoute
 
 @Serializable
 @SerialName("AboutApp")
-data object AboutAppScreen
-
-@Serializable
-@SerialName("Info")
-data object InfoScreen
-
-@Serializable
-@SerialName("Welcome")
-data object StartScreens
+data object AboutAppScreen : AppRoute
 
 @Serializable
 @SerialName("WelcomePrivacyNotice")
-data object StartPrivacyNoticeScreen
+data object StartPrivacyNoticeScreen : AppRoute
 
 @Serializable
 @SerialName("WelcomeSetupNotifications")
-data object StartNotificationsScreen
+data object StartNotificationsScreen : AppRoute
 
 @Serializable
 @SerialName("AppPrivacyNoticePrompt")
-data object AppPrivacyNoticePrompt
+data object AppPrivacyNoticePrompt : AppRoute
 
 @Serializable
 @SerialName("Settings")
-data object SettingsScreen
+data object SettingsScreen : AppRoute
 
 @Serializable
 @SerialName("VisitorPrivacyNotice")
-data object VisitorPrivacyNoticeScreen
+data object VisitorPrivacyNoticeScreen : AppRoute
 
 @Serializable
 @SerialName("AppPrivacyNotice")
-data object AppPrivacyNoticeScreen
+data object AppPrivacyNoticeScreen : AppRoute
 
 @Serializable
 @SerialName("TermsOfUse")
-data object TermsOfUseScreen
+data object TermsOfUseScreen : AppRoute
 
 @Serializable
 @SerialName("AppTermsOfUse")
-data object AppTermsOfUseScreen
+data object AppTermsOfUseScreen : AppRoute
 
 @Serializable
 @SerialName("Licenses")
-data object LicensesScreen
+data object LicensesScreen : AppRoute
 
 @Serializable
 @SerialName("License")
 data class SingleLicenseScreen(
     val licenseName: String,
     val licenseText: String,
-)
+) : AppRoute
 
 @Serializable
 @SerialName("Partners")
-data object PartnersScreen
+data object PartnersScreen : AppRoute
 
 @Serializable
 @SerialName("Partner")
-data class PartnerDetailScreen(val partnerId: PartnerId)
+data class PartnerDetailScreen(val partnerId: PartnerId) : AppRoute
 
 @Serializable
 @SerialName("Main")
-data object MainScreen
-
-@Serializable
-@SerialName("Schedule")
-data object ScheduleScreen
+data object MainScreen : AppRoute
 
 @Serializable
 @SerialName("Session")
 data class SessionScreen(
     val sessionId: SessionId,
     val openedForFeedback: Boolean = false,
-)
-
-@Serializable
-@SerialName("Speakers")
-data object SpeakersScreen
+) : AppRoute
 
 @Serializable
 @SerialName("Speaker")
-data class SpeakerDetailScreen(val speakerId: SpeakerId)
-
-@Serializable
-@SerialName("Map")
-data object MapScreen
+data class SpeakerDetailScreen(val speakerId: SpeakerId) : AppRoute
 
 @Serializable
 @SerialName("MapDetail")
-data class NestedMapScreen(val roomName: String)
-
+data class NestedMapScreen(val roomName: String) : AppRoute
 
 @Serializable
 @SerialName("DeveloperMenu")
-data object DeveloperMenuScreen
+data object DeveloperMenuScreen : AppRoute
