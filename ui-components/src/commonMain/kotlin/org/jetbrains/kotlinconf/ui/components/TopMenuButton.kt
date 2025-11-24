@@ -71,16 +71,7 @@ private fun TopMenuButtonImpl(
 ) {
     BasicTooltipBox(
         positionProvider = rememberPositionProvider(),
-        tooltip = {
-            Text(
-                text = contentDescription,
-                color = KotlinConfTheme.colors.mainBackground, // TODO update per design
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(KotlinConfTheme.colors.primaryText) // TODO update per design
-                    .padding(4.dp)
-            )
-        },
+        tooltip = { Tooltip(contentDescription) },
         state = rememberBasicTooltipState()
     ) {
         Icon(
@@ -95,6 +86,29 @@ private fun TopMenuButtonImpl(
             contentDescription = contentDescription,
             tint = iconColor,
         )
+    }
+}
+
+@Composable
+fun Tooltip(
+    text: String,
+) {
+    Text(
+        text = text,
+        style = KotlinConfTheme.typography.text2,
+        color = KotlinConfTheme.colors.primaryTextInverted,
+        modifier = Modifier
+            .clip(RoundedCornerShape(4.dp))
+            .background(KotlinConfTheme.colors.tooltipBackground)
+            .padding(vertical = 4.dp, horizontal = 8.dp)
+    )
+}
+
+@Preview
+@Composable
+fun TooltipPreview() {
+    PreviewHelper {
+        Tooltip("Tooltip")
     }
 }
 
@@ -114,7 +128,7 @@ fun TopMenuButton(
         else Color.Transparent
     )
     val iconColor by animateColorAsState(
-        if (selected) KotlinConfTheme.colors.primaryTextInverted
+        if (selected) KotlinConfTheme.colors.primaryTextWhiteFixed
         else KotlinConfTheme.colors.primaryText
     )
 

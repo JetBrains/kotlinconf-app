@@ -98,7 +98,7 @@ internal fun buildHighlightedString(
             if (!range.isEmpty()) {
                 addStyle(
                     style = SpanStyle(
-                        color = KotlinConfTheme.colors.primaryTextInverted,
+                        color = KotlinConfTheme.colors.primaryTextWhiteFixed,
                         background = KotlinConfTheme.colors.primaryBackground,
                     ),
                     start = range.first,

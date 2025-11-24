@@ -33,7 +33,7 @@ fun CardTag(
         ColorSpringSpec,
     )
     val textColor by animateColorAsState(
-        if (selected) KotlinConfTheme.colors.primaryTextInverted
+        if (selected) KotlinConfTheme.colors.primaryTextWhiteFixed
         else KotlinConfTheme.colors.secondaryText,
         ColorSpringSpec,
     )

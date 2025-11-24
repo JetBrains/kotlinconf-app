@@ -75,7 +75,7 @@ fun DayHeader(
                 Text(
                     day,
                     style = DayDateStyle,
-                    color = KotlinConfTheme.colors.primaryTextInverted,
+                    color = KotlinConfTheme.colors.primaryTextWhiteFixed,
                     modifier = Modifier.widthIn(min = 72.dp),
                 )
                 Text(
@@ -88,7 +88,7 @@ fun DayHeader(
                 Text(
                     "-$day2",
                     style = DayDateStyle,
-                    color = KotlinConfTheme.colors.primaryTextInverted,
+                    color = KotlinConfTheme.colors.primaryTextWhiteFixed,
                     modifier = Modifier.widthIn(min = 72.dp),
                 )
             }
@@ -97,12 +97,12 @@ fun DayHeader(
             Text(
                 line1,
                 style = DayHeaderStyle,
-                color = KotlinConfTheme.colors.primaryTextInverted,
+                color = KotlinConfTheme.colors.primaryTextWhiteFixed,
             )
             Text(
                 line2,
                 style = DayHeaderStyle,
-                color = KotlinConfTheme.colors.primaryTextInverted,
+                color = KotlinConfTheme.colors.primaryTextWhiteFixed,
             )
         }
     }

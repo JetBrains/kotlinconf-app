@@ -287,7 +287,7 @@ private fun highlightText(text: String, highlights: List<IntRange>): AnnotatedSt
             if (!range.isEmpty()) {
                 addStyle(
                     style = SpanStyle(
-                        color = KotlinConfTheme.colors.primaryTextInverted,
+                        color = KotlinConfTheme.colors.primaryTextWhiteFixed,
                         background = KotlinConfTheme.colors.primaryBackground,
                     ),
                     start = range.first,
