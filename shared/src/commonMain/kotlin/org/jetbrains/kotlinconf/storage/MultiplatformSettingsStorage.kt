@@ -16,19 +16,18 @@ import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Theme
 import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.utils.Logger
-import org.jetbrains.kotlinconf.utils.TaggedLogger
 import org.jetbrains.kotlinconf.utils.tagged
 
 @OptIn(ExperimentalSettingsApi::class)
 class MultiplatformSettingsStorage(
     private val settings: ObservableSettings,
-    logger: Logger? = null, // TODO inject a logger here https://github.com/JetBrains/kotlinconf-app/issues/544
+    logger: Logger,
 ) : ApplicationStorage {
     private val json = Json {
         ignoreUnknownKeys = true
     }
 
-    private var taggedLogger: TaggedLogger? = logger?.tagged("MultiplatformSettingsStorage")
+    private var taggedLogger = logger.tagged("MultiplatformSettingsStorage")
 
     private inline fun <reified T> String?.decodeOrNull(): T? {
         if (this == null) return null
@@ -92,39 +91,50 @@ class MultiplatformSettingsStorage(
     override fun ensureCurrentVersion() {
         var version = settings.getInt(Keys.STORAGE_VERSION, 0)
 
-        taggedLogger?.log { "Storage version is $version" }
+        taggedLogger.log { "Storage version is $version" }
 
         if (version == 0) {
-            // Fully destructive migration on unknown previous version
+            taggedLogger.log { "Unknown previous storage version, performing destructive migration" }
             destructiveUpgrade()
             return
         }
 
+        if (version > CURRENT_STORAGE_VERSION) {
+            taggedLogger.log { "Storage version not recognized, performing destructive migration" }
+            destructiveUpgrade()
+            return
+        }
+
+        if (version == CURRENT_STORAGE_VERSION) {
+            taggedLogger.log { "Storage version matches expected version, no need to migrate" }
+            return
+        }
+
         while (version < CURRENT_STORAGE_VERSION) {
-            taggedLogger?.log { "Finding migrations from $version to $CURRENT_STORAGE_VERSION..." }
+            taggedLogger.log { "Finding migrations from $version to $CURRENT_STORAGE_VERSION..." }
 
             // Find a migration from the current version that takes us as far forward as possible
             val nextMigration = migrations.filter { it.from == version }.maxByOrNull { it.to }
             if (nextMigration == null) {
-                taggedLogger?.log { "No matching migrations found" }
+                taggedLogger.log { "No matching migrations found" }
 
                 // Failed to find a migration path to latest, fall back to destructive
                 destructiveUpgrade()
                 return
             }
 
-            taggedLogger?.log { "Running migration from ${nextMigration.from} to ${nextMigration.to}" }
+            taggedLogger.log { "Running migration from ${nextMigration.from} to ${nextMigration.to}" }
 
             nextMigration.migrate()
             version = nextMigration.to
             settings.set(Keys.STORAGE_VERSION, version)
 
-            taggedLogger?.log { "Successfully migrated to $version" }
+            taggedLogger.log { "Successfully migrated to $version" }
         }
     }
 
     private fun destructiveUpgrade() {
-        taggedLogger?.log { "Performing destructive upgrade to $CURRENT_STORAGE_VERSION" }
+        taggedLogger.log { "Performing destructive upgrade to $CURRENT_STORAGE_VERSION" }
         settings.clear()
         settings.set(Keys.STORAGE_VERSION, CURRENT_STORAGE_VERSION)
     }
