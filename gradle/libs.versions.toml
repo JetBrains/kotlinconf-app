@@ -32,6 +32,7 @@ markdown = "0.37.0"
 multiplatform-settings = "1.3.0"
 postgresql = "42.7.7"
 slf4jNop = "2.0.17"
+nav3-browser = "0.2.0"
 
 [libraries]
 aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlibraries" }
@@ -105,6 +106,7 @@ settings-observable = { module = "com.russhwolf:multiplatform-settings-make-obse
 settings-serialization = { module = "com.russhwolf:multiplatform-settings-serialization", version.ref = "multiplatform-settings" }
 settings-test = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatform-settings" }
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4jNop" }
+nav3-browser = { module = "com.github.terrakok:navigation3-browser", version.ref = "nav3-browser" }
 
 [plugins]
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlibraries" }
