@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,8 +33,8 @@ fun IconButton(
     icon: DrawableResource,
     enabled: Boolean,
     onClick: () -> Unit,
-    contentDescription: String,
     modifier: Modifier = Modifier,
+    contentDescription: String? = null,
 ) {
     val strokeColor by animateColorAsState(
         if (enabled) KotlinConfTheme.colors.strokeHalf
@@ -46,18 +47,17 @@ fun IconButton(
 
     Box(
         modifier
-            .then(if (enabled) Modifier.clickable(onClick = onClick) else Modifier)
-            .semantics { this.contentDescription = contentDescription }
             .size(48.dp)
             .aspectRatio(1f)
-            .border(1.dp, strokeColor, CircleShape)
             .clip(CircleShape)
+            .border(1.dp, strokeColor, CircleShape)
+            .clickable(enabled = enabled, onClick = onClick, role = Role.Button)
             .background(KotlinConfTheme.colors.mainBackground),
         contentAlignment = Alignment.Center,
     ) {
         Icon(
             painter = painterResource(icon),
-            contentDescription = null,
+            contentDescription = contentDescription,
             tint = iconColor,
             modifier = Modifier.size(24.dp)
         )
@@ -72,7 +72,7 @@ fun IconButtonPreviewEnabled() {
             icon = UiRes.drawable.bookmark_24,
             enabled = true,
             onClick = {},
-            contentDescription = "",
+            contentDescription = "Bookmark",
         )
     }
 }
@@ -85,7 +85,7 @@ fun IconButtonPreviewDisabled() {
             icon = UiRes.drawable.bookmark_24,
             enabled = false,
             onClick = {},
-            contentDescription = "",
+            contentDescription = "Bookmark",
         )
     }
 }

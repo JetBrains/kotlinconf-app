@@ -11,6 +11,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -24,6 +26,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
@@ -40,11 +43,17 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.arrow_left_24
+import org.jetbrains.kotlinconf.generated.resources.bookmark_24
 import org.jetbrains.kotlinconf.generated.resources.map_first_floor
 import org.jetbrains.kotlinconf.generated.resources.map_ground_floor
 import org.jetbrains.kotlinconf.generated.resources.map_title
+import org.jetbrains.kotlinconf.generated.resources.map_zoom_in
+import org.jetbrains.kotlinconf.generated.resources.map_zoom_out
+import org.jetbrains.kotlinconf.generated.resources.minus_24
 import org.jetbrains.kotlinconf.generated.resources.navigate_back
+import org.jetbrains.kotlinconf.generated.resources.plus_24
 import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.IconButton
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.Switcher
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
@@ -206,6 +215,8 @@ private fun Map(
     val validOffsetX = (-svg.width * 0.5f)..(svg.width * 0.5f)
     val validOffsetY = (-svg.height * 0.5f)..(svg.height * 0.5f)
 
+    val spec = tween<Float>(500, easing = EaseOutCubic)
+
     val interactiveModifiers = if (!interactive) {
         Modifier
     } else {
@@ -224,8 +235,6 @@ private fun Map(
 
                 detectTapGestures(
                     onDoubleTap = { tapOffset ->
-                        val spec = tween<Float>(500, easing = EaseOutCubic)
-
                         if (scale.value >= zoomRange.endInclusive - 0.1f) {
                             scope.launch { scale.animateTo(initialZoom, spec) }
                         } else {
@@ -247,22 +256,57 @@ private fun Map(
             }
     }
 
-    Canvas(
-        modifier
-            .clipToBounds()
-            .fillMaxSize()
-            .then(interactiveModifiers)
-    ) {
-        translate(
-            left = offsetX.value + (size.width - svg.width) / 2,
-            top = offsetY.value + (size.height - svg.height) / 2,
+    Box(Modifier.fillMaxSize()) {
+        Canvas(
+            modifier
+                .clipToBounds()
+                .fillMaxSize()
+                .then(interactiveModifiers)
         ) {
-            scale(
-                scale = scale.value,
-                pivot = Offset(svg.width / 2 - offsetX.value, svg.height / 2 - offsetY.value),
+            translate(
+                left = offsetX.value + (size.width - svg.width) / 2,
+                top = offsetY.value + (size.height - svg.height) / 2,
             ) {
-                svg.renderTo(this)
+                scale(
+                    scale = scale.value,
+                    pivot = Offset(svg.width / 2 - offsetX.value, svg.height / 2 - offsetY.value),
+                ) {
+                    svg.renderTo(this)
+                }
             }
+        }
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 24.dp, end = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            IconButton(
+                icon = Res.drawable.plus_24,
+                enabled = scale.targetValue < zoomRange.endInclusive,
+                onClick = {
+                    scope.launch {
+                        scale.animateTo(
+                            targetValue = (scale.value * 2f).coerceIn(zoomRange),
+                            animationSpec = spec,
+                        )
+                    }
+                },
+                contentDescription = stringResource(Res.string.map_zoom_in),
+            )
+            IconButton(
+                icon = Res.drawable.minus_24,
+                enabled = scale.targetValue > zoomRange.start,
+                onClick = {
+                    scope.launch {
+                        scale.animateTo(
+                            targetValue = (scale.value / 2f).coerceIn(zoomRange),
+                            animationSpec = spec,
+                        )
+                    }
+                },
+                contentDescription = stringResource(Res.string.map_zoom_out),
+            )
         }
     }
 }

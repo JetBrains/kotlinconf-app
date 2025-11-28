@@ -129,6 +129,8 @@ Wir verarbeiten Ihre Daten gemäß dem Datenschutzhinweis der App. Sie können I
     <string name="map_title">Karte</string>
     <string name="map_ground_floor">Erdgeschoss</string>
     <string name="map_first_floor">Erster Stock</string>
+    <string name="map_zoom_in">Hineinzoomen</string>
+    <string name="map_zoom_out">Herauszoomen</string>
 
     <string name="speakers_title">Sprecher</string>
     <string name="speakers_error_no_results">Keine Ergebnisse</string>
