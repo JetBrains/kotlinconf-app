@@ -124,7 +124,7 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
     entry<SpeakerDetailScreen> {
         SpeakerDetailScreen(
             speakerId = it.speakerId,
-            onBack = backStack::removeLastOrNull,
+            onBack = { backStack.removeLastOrNull() },
             onSession = { backStack.add(SessionScreen(it)) },
         )
     }
@@ -133,7 +133,7 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
         SessionScreen(
             sessionId = it.sessionId,
             openedForFeedback = it.openedForFeedback,
-            onBack = backStack::removeLastOrNull,
+            onBack = { backStack.removeLastOrNull() },
             onPrivacyNoticeNeeded = { backStack.add(AppPrivacyNoticePrompt) },
             onSpeaker = { speakerId -> backStack.add(SpeakerDetailScreen(speakerId)) },
             onWatchVideo = { videoUrl -> urlHandler.openUri(videoUrl) },
@@ -146,7 +146,7 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
     entry<AboutAppScreen> {
         val uriHandler = LocalUriHandler.current
         AboutAppScreen(
-            onBack = backStack::removeLastOrNull,
+            onBack = { backStack.removeLastOrNull() },
             onGitHubRepo = { uriHandler.openUri(URLs.GITHUB_REPO) },
             onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
             onPrivacyNotice = { backStack.add(AppPrivacyNoticeScreen) },
@@ -161,14 +161,14 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
             onLicenseClick = { licenseName, licenseText ->
                 backStack.add(SingleLicenseScreen(licenseName, licenseText))
             },
-            onBack = backStack::removeLastOrNull,
+            onBack = { backStack.removeLastOrNull() },
         )
     }
     entry<SingleLicenseScreen> {
         SingleLicenseScreen(
             licenseName = it.licenseName,
             licenseContent = it.licenseText,
-            onBack = backStack::removeLastOrNull,
+            onBack = { backStack.removeLastOrNull() },
         )
     }
     entry<AboutConferenceScreen> {
@@ -177,35 +177,35 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
             onPrivacyNotice = { backStack.add(VisitorPrivacyNoticeScreen) },
             onGeneralTerms = { backStack.add(TermsOfUseScreen) },
             onWebsiteLink = { urlHandler.openUri(URLs.KOTLINCONF_HOMEPAGE) },
-            onBack = backStack::removeLastOrNull,
+            onBack = { backStack.removeLastOrNull() },
             onSpeaker = { speakerId -> backStack.add(SpeakerDetailScreen(speakerId)) },
         )
     }
     entry<CodeOfConductScreen> {
-        CodeOfConduct(onBack = backStack::removeLastOrNull)
+        CodeOfConduct(onBack = { backStack.removeLastOrNull() })
     }
     entry<SettingsScreen> {
-        SettingsScreen(onBack = backStack::removeLastOrNull)
+        SettingsScreen(onBack = { backStack.removeLastOrNull() })
     }
     entry<VisitorPrivacyNoticeScreen> {
-        VisitorPrivacyNotice(onBack = backStack::removeLastOrNull)
+        VisitorPrivacyNotice(onBack = { backStack.removeLastOrNull() })
     }
     entry<AppPrivacyNoticeScreen> {
         AppPrivacyNotice(
-            onBack = backStack::removeLastOrNull,
+            onBack = { backStack.removeLastOrNull() },
             onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
         )
     }
     entry<TermsOfUseScreen> {
         VisitorTermsOfUse(
-            onBack = backStack::removeLastOrNull,
+            onBack = { backStack.removeLastOrNull() },
             onCodeOfConduct = { backStack.add(CodeOfConductScreen) },
             onVisitorPrivacyNotice = { backStack.add(VisitorPrivacyNoticeScreen) },
         )
     }
     entry<AppTermsOfUseScreen> {
         AppTermsOfUse(
-            onBack = backStack::removeLastOrNull,
+            onBack = { backStack.removeLastOrNull() },
             onAppPrivacyNotice = {
                 backStack.add(AppPrivacyNoticeScreen)
             },
@@ -213,7 +213,7 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
     }
     entry<PartnersScreen> {
         PartnersScreen(
-            onBack = backStack::removeLastOrNull,
+            onBack = { backStack.removeLastOrNull() },
             onPartnerDetail = { partnerId ->
                 backStack.add(PartnerDetailScreen(partnerId))
             }
@@ -222,27 +222,27 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
     entry<PartnerDetailScreen> {
         PartnerDetailScreen(
             partnerId = it.partnerId,
-            onBack = backStack::removeLastOrNull,
+            onBack = { backStack.removeLastOrNull() },
         )
     }
 
     entry<AppPrivacyNoticePrompt> {
         AppPrivacyNoticePrompt(
-            onRejectNotice = backStack::removeLastOrNull,
-            onAcceptNotice = backStack::removeLastOrNull,
+            onRejectNotice = { backStack.removeLastOrNull() },
+            onAcceptNotice = { backStack.removeLastOrNull() },
             onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
             confirmationRequired = true,
         )
     }
 
     entry<DeveloperMenuScreen> {
-        DeveloperMenuScreen(onBack = backStack::removeLastOrNull)
+        DeveloperMenuScreen(onBack = { backStack.removeLastOrNull() })
     }
 
     entry<NestedMapScreen> {
         NestedMapScreen(
             roomName = it.roomName,
-            onBack = backStack::removeLastOrNull,
+            onBack = { backStack.removeLastOrNull() },
         )
     }
 }
