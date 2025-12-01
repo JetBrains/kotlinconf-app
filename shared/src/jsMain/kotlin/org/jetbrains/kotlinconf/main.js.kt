@@ -8,11 +8,6 @@ import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.skiko.wasm.onWasmReady
 import org.w3c.dom.get
 
-@JsModule("@js-joda/timezone")
-external object JsJodaTimeZoneModule
-
-private val jsJodaTz = JsJodaTimeZoneModule
-
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     initCoil()
