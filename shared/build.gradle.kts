@@ -98,6 +98,8 @@ kotlin {
             api(libs.kmpnotifier)
 
             implementation(libs.doistx.normalize)
+
+            implementation("me.saket.telephoto:zoomable:0.16.0-SNAPSHOT")
         }
 
         commonTest.dependencies {

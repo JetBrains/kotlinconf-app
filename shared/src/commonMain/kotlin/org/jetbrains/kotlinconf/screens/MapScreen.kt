@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
@@ -35,6 +36,8 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import me.saket.telephoto.zoomable.rememberZoomableState
+import me.saket.telephoto.zoomable.zoomable
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -206,64 +209,70 @@ private fun Map(
     val validOffsetX = (-svg.width * 0.5f)..(svg.width * 0.5f)
     val validOffsetY = (-svg.height * 0.5f)..(svg.height * 0.5f)
 
+    val zoomableState = rememberZoomableState().apply {
+        contentAlignment = Alignment.Center
+    }
+//    zoomableState.contentAlignment =
+
     val interactiveModifiers = if (!interactive) {
         Modifier
     } else {
         Modifier
-            .transformable(rememberTransformableState { zoomChange, panChange, _ ->
-                if (!interactive) return@rememberTransformableState
-
-                scope.launch {
-                    scale.snapTo((scale.value * zoomChange).coerceIn(zoomRange))
-                    offsetX.snapTo((offsetX.value + panChange.x / scale.value).coerceIn(validOffsetX))
-                    offsetY.snapTo((offsetY.value + panChange.y / scale.value).coerceIn(validOffsetY))
-                }
-            })
-            .pointerInput(Unit) {
-                if (!interactive) return@pointerInput
-
-                detectTapGestures(
-                    onDoubleTap = { tapOffset ->
-                        val spec = tween<Float>(500, easing = EaseOutCubic)
-
-                        if (scale.value >= zoomRange.endInclusive - 0.1f) {
-                            scope.launch { scale.animateTo(initialZoom, spec) }
-                        } else {
-                            val newScale = (scale.value * 2f).coerceIn(zoomRange)
-
-                            val newOffsetX = (offsetX.value + (size.width / 2 - tapOffset.x) / 2 / scale.value)
-                                .coerceIn(validOffsetX)
-                            val newOffsetY = (offsetY.value + (size.height / 2 - tapOffset.y) / 2 / scale.value)
-                                .coerceIn(validOffsetY)
-
-                            scope.launch {
-                                async { scale.animateTo(newScale, spec) }
-                                async { offsetX.animateTo(newOffsetX, spec) }
-                                async { offsetY.animateTo(newOffsetY, spec) }
-                            }
-                        }
-                    }
-                )
-            }
+//            .transformable(rememberTransformableState { zoomChange, panChange, _ ->
+//                if (!interactive) return@rememberTransformableState
+//
+//                scope.launch {
+//                    scale.snapTo((scale.value * zoomChange).coerceIn(zoomRange))
+//                    offsetX.snapTo((offsetX.value + panChange.x / scale.value).coerceIn(validOffsetX))
+//                    offsetY.snapTo((offsetY.value + panChange.y / scale.value).coerceIn(validOffsetY))
+//                }
+//            })
+//            .pointerInput(Unit) {
+//                if (!interactive) return@pointerInput
+//
+//                detectTapGestures(
+//                    onDoubleTap = { tapOffset ->
+//                        val spec = tween<Float>(500, easing = EaseOutCubic)
+//
+//                        if (scale.value >= zoomRange.endInclusive - 0.1f) {
+//                            scope.launch { scale.animateTo(initialZoom, spec) }
+//                        } else {
+//                            val newScale = (scale.value * 2f).coerceIn(zoomRange)
+//
+//                            val newOffsetX = (offsetX.value + (size.width / 2 - tapOffset.x) / 2 / scale.value)
+//                                .coerceIn(validOffsetX)
+//                            val newOffsetY = (offsetY.value + (size.height / 2 - tapOffset.y) / 2 / scale.value)
+//                                .coerceIn(validOffsetY)
+//
+//                            scope.launch {
+//                                async { scale.animateTo(newScale, spec) }
+//                                async { offsetX.animateTo(newOffsetX, spec) }
+//                                async { offsetY.animateTo(newOffsetY, spec) }
+//                            }
+//                        }
+//                    }
+//                )
+//            }
     }
 
     Canvas(
         modifier
             .clipToBounds()
             .fillMaxSize()
+            .zoomable(zoomableState)
             .then(interactiveModifiers)
     ) {
-        translate(
-            left = offsetX.value + (size.width - svg.width) / 2,
-            top = offsetY.value + (size.height - svg.height) / 2,
-        ) {
-            scale(
-                scale = scale.value,
-                pivot = Offset(svg.width / 2 - offsetX.value, svg.height / 2 - offsetY.value),
-            ) {
+//        translate(
+//            left = offsetX.value + (size.width - svg.width) / 2,
+//            top = offsetY.value + (size.height - svg.height) / 2,
+//        ) {
+//            scale(
+//                scale = scale.value,
+//                pivot = Offset(svg.width / 2 - offsetX.value, svg.height / 2 - offsetY.value),
+//            ) {
                 svg.renderTo(this)
-            }
-        }
+//            }
+//        }
     }
 }
 
