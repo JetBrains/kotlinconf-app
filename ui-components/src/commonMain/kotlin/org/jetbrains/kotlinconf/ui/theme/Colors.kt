@@ -45,6 +45,7 @@ class Colors(
     val scrollIndicatorFill: Color,
 
     val strokeFull: Color,
+    val strokeAccent: Color,
     val strokeInputFocus: Color,
     val strokeHalf: Color,
     val strokePale: Color,
@@ -80,6 +81,7 @@ val KotlinConfLightColors = Colors(
     scrollIndicatorFill = black15,
 
     strokeFull = black100,
+    strokeAccent = purple100,
     strokeInputFocus = black80,
     strokeHalf = black40,
     strokePale = black15,
@@ -115,6 +117,7 @@ val KotlinConfDarkColors = Colors(
     scrollIndicatorFill = white30,
 
     strokeFull = white100,
+    strokeAccent = purpleTextDark,
     strokeInputFocus = white80,
     strokeHalf = white50,
     strokePale = white20,
