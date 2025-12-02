@@ -35,7 +35,6 @@ import org.jetbrains.kotlinconf.ui.theme.UI.white80
 class Colors(
     val isDark: Boolean,
 
-    val activeBackground: Color,
     val mainBackground: Color,
     val primaryBackground: Color,
     val tileBackground: Color,
@@ -71,7 +70,6 @@ class Colors(
 val KotlinConfLightColors = Colors(
     isDark = false,
 
-    activeBackground = magenta20,
     mainBackground = white100,
     primaryBackground = magenta100,
     tileBackground = black05,
@@ -107,7 +105,6 @@ val KotlinConfLightColors = Colors(
 val KotlinConfDarkColors = Colors(
     isDark = true,
 
-    activeBackground = magenta50,
     mainBackground = black100,
     primaryBackground = magenta100,
     tileBackground = white10,
