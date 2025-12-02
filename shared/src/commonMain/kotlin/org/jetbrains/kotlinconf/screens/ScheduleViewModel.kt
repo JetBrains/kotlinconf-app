@@ -54,10 +54,6 @@ data class ServiceEventGroupItem(
     val value: List<SessionCardView>,
 ) : ScheduleListItem
 
-data class WorkshopItem(
-    val workshops: List<SessionCardView>,
-) : ScheduleListItem
-
 data class ScheduleSearchParams(
     val searchQuery: String = "",
     val isSearch: Boolean = false,
@@ -241,13 +237,7 @@ class ScheduleViewModel(
 
                     add(TimeSlotTitleItem(timeSlot))
 
-                    val (allWorkshops, notWorkshops) = timeSlot.sessions.partition { it.tags.contains("Workshop") }
-                    val validWorkshops = if (isBookmarkedOnly) allWorkshops.filter { it.isFavorite } else allWorkshops
-                    if (validWorkshops.isNotEmpty()) {
-                        add(WorkshopItem(validWorkshops))
-                    }
-
-                    val (serviceEvents, allTalks) = notWorkshops.partition { it.isServiceEvent }
+                    val (serviceEvents, allTalks) = timeSlot.sessions.partition { it.isServiceEvent }
                     if (serviceEvents.size == 1) {
                         add(ServiceEventItem(serviceEvents.first()))
                     } else if (serviceEvents.size > 1) {
