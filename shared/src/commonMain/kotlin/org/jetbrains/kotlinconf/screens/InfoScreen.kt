@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -114,7 +113,7 @@ private fun SocialSquare(
         imageVector = image,
         contentDescription = description,
         modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .clickable(onClick = onClick)
             .background(KotlinConfTheme.colors.tileBackground)
             .padding(vertical = 32.dp)

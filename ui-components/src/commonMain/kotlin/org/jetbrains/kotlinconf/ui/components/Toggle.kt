@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
-private val ToggleBackgroundShape = RoundedCornerShape(size = 100.dp)
+private val ToggleBackgroundShape = RoundedCornerShape(percent = 100)
 private val ToggleThumbShape = CircleShape
 
 private val ToggleWidth = 28.dp

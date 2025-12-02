@@ -37,7 +37,7 @@ fun SpeakerCard(
 ) {
     Row(
         modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .clickable(onClick = onClick),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -74,7 +74,7 @@ fun SpeakerAvatar(
             .build(),
         contentDescription = null,
         modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .background(KotlinConfTheme.colors.tileBackground),
         contentScale = ContentScale.Crop,
         error = painterResource(UiRes.drawable.kodee_emotion_neutral),

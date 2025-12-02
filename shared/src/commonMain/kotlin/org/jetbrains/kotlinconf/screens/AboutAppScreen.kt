@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -92,7 +91,7 @@ fun AboutAppScreen(
                 color = KotlinConfTheme.colors.primaryText,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(KotlinConfTheme.shapes.roundedCornerMd)
                     .clickable {
                         clipboardManager.setText(AnnotatedString(appVersion))
 
@@ -109,7 +108,7 @@ fun AboutAppScreen(
                 imageVector = vectorResource(Res.drawable.made_with_junie),
                 contentDescription = stringResource(Res.string.about_app_made_with_junie),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(KotlinConfTheme.shapes.roundedCornerMd)
                     .clickable { onJunie() }
                     .padding(8.dp)
             )

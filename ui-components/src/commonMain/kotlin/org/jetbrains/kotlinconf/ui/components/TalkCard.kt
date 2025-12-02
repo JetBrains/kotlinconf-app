@@ -113,8 +113,6 @@ enum class TalkStatus {
     Past, Live, Upcoming,
 }
 
-private val CardTalkShape = RoundedCornerShape(8.dp)
-
 @Composable
 fun TalkCard(
     title: String,
@@ -157,8 +155,8 @@ fun TalkCard(
 
     Column(
         modifier
-            .border(width = 1.dp, color = borderColor, shape = CardTalkShape)
-            .clip(CardTalkShape)
+            .border(width = 1.dp, color = borderColor, shape = KotlinConfTheme.shapes.roundedCornerMd)
+            .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .clickable(onClick = onClick)
             .background(backgroundColor)
     ) {

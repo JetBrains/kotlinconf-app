@@ -26,8 +26,6 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
-private val SettingsItemShape = RoundedCornerShape(8.dp)
-
 @Composable
 fun SettingsItem(
     title: String,
@@ -41,7 +39,7 @@ fun SettingsItem(
     Row(
         modifier
             .fillMaxWidth()
-            .clip(SettingsItemShape)
+            .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .background(KotlinConfTheme.colors.tileBackground)
             .toggleable(
                 value = enabled,

@@ -28,6 +28,10 @@ val LocalColors = compositionLocalOf<Colors> {
     error("KotlinConfTheme must be part of the call hierarchy to provide colors")
 }
 
+val LocalShapes = compositionLocalOf<Shapes> {
+    error("KotlinConfTheme must be part of the call hierarchy to provide dimensions")
+}
+
 val LocalTypography = compositionLocalOf<Typography> {
     error("KotlinConfTheme must be part of the call hierarchy to provide typography")
 }
@@ -37,6 +41,11 @@ object KotlinConfTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalColors.current
+
+    val shapes: Shapes
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalShapes.current
 
     val typography: Typography
         @Composable
@@ -59,6 +68,7 @@ fun KotlinConfTheme(
 ) {
     CompositionLocalProvider(
         LocalColors provides if (darkTheme) KotlinConfDarkColors else KotlinConfLightColors,
+        LocalShapes provides KotlinConfShapes,
         LocalTypography provides KotlinConfTypography,
         LocalIndication provides if (rippleEnabled) rememberRippleIndication() else NoIndication,
         LocalAppTheme provides darkTheme,

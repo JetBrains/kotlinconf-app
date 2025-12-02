@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
-private val ButtonShape = RoundedCornerShape(size = 100.dp)
+private val ButtonShape = RoundedCornerShape(percent = 100)
 
 @Composable
 fun Button(
