@@ -80,7 +80,6 @@ import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.NormalErrorWithLoading
 import org.jetbrains.kotlinconf.ui.components.NowButton
 import org.jetbrains.kotlinconf.ui.components.NowButtonState
-import org.jetbrains.kotlinconf.ui.components.ScrollIndicator
 import org.jetbrains.kotlinconf.ui.components.ServiceEvent
 import org.jetbrains.kotlinconf.ui.components.ServiceEventData
 import org.jetbrains.kotlinconf.ui.components.ServiceEvents
@@ -454,7 +453,6 @@ private fun ScheduleList(
                     is ServiceEventItem -> it.value.id.id
                     is SessionItem -> it.value.id.id
                     is TimeSlotTitleItem -> it.value.startsAt.toString()
-                    is WorkshopItem -> "workshops"
                     is NoBookmarksItem -> it.id
                 }
             },
@@ -489,74 +487,6 @@ private fun ScheduleList(
                                 .padding(top = 24.dp, bottom = 8.dp)
                                 .semantics { heading() }
                         )
-                    }
-
-                    is WorkshopItem -> {
-                        val workshops = item.workshops
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            if (workshops.size == 1) {
-                                SessionCard(
-                                    session = workshops[0],
-                                    isSearch = isSearch,
-                                    userSignedIn = userSignedIn,
-                                    onBookmark = onBookmark,
-                                    onSubmitFeedback = onSubmitFeedback,
-                                    onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
-                                    onRequestFeedbackWithComment = onRequestFeedbackWithComment,
-                                    onSession = onSession,
-                                    modifier = Modifier
-                                        .padding(horizontal = 32.dp)
-                                        .padding(top = 16.dp, bottom = 16.dp)
-                                )
-                            } else {
-                                val pagerState = rememberPagerState(
-                                    pageCount = { Int.MAX_VALUE }, // Pretend we have "infinite" pages
-                                    initialPage = Int.MAX_VALUE / 2, // Start from the middle
-                                )
-                                HorizontalPager(
-                                    state = pagerState,
-                                    modifier = Modifier.fillMaxWidth()
-                                        .semantics {
-                                            role = Role.Carousel
-                                            collectionInfo = CollectionInfo(
-                                                rowCount = 1,
-                                                columnCount = workshops.size
-                                            )
-                                        },
-                                    beyondViewportPageCount = 1,
-                                    contentPadding = PaddingValues(horizontal = 24.dp),
-                                ) { pageIndex ->
-                                    val workshopIndex = pageIndex % workshops.size
-                                    SessionCard(
-                                        session = workshops[workshopIndex],
-                                        isSearch = isSearch,
-                                        userSignedIn = userSignedIn,
-                                        onBookmark = onBookmark,
-                                        onSubmitFeedback = onSubmitFeedback,
-                                        onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
-                                        onRequestFeedbackWithComment = onRequestFeedbackWithComment,
-                                        onSession = onSession,
-                                        modifier = Modifier
-                                            .padding(horizontal = 8.dp, vertical = 8.dp)
-                                            .semantics {
-                                                collectionItemInfo = CollectionItemInfo(
-                                                    rowIndex = 1,
-                                                    columnIndex = workshopIndex,
-                                                    columnSpan = 1,
-                                                    rowSpan = 1
-                                                )
-                                            }
-                                    )
-                                }
-                                ScrollIndicator(
-                                    pageCount = workshops.size,
-                                    selectedPage = pagerState.currentPage % workshops.size,
-                                    modifier = Modifier
-                                        .align(Alignment.CenterHorizontally)
-                                        .padding(vertical = 8.dp),
-                                )
-                            }
-                        }
                     }
 
                     is SessionItem -> {
