@@ -1,11 +1,3 @@
-//
-//  ContentView.swift
-//  iosApp
-//
-//  Created by Leonid.Stashevsky on 05.07.2023.
-//  Copyright © 2023 orgName. All rights reserved.
-//
-
 import SwiftUI
 import shared
 
