@@ -54,7 +54,7 @@ fun NowButton(
 ) {
     val active = time != Current
     val textColor by animateColorAsState(
-        if (active) KotlinConfTheme.colors.primaryTextInverted
+        if (active) KotlinConfTheme.colors.primaryTextWhiteFixed
         else KotlinConfTheme.colors.noteText,
         ColorSpringSpec,
     )

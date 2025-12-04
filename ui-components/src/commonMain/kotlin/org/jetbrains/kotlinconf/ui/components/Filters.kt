@@ -135,7 +135,7 @@ fun Filters(
                         val tagCountContentDescription = pluralStringResource(UiRes.plurals.filter_by_tags_tag_count, count, count)
                         Text(
                             text = count.toString(),
-                            color = KotlinConfTheme.colors.primaryTextInverted,
+                            color = KotlinConfTheme.colors.primaryTextWhiteFixed,
                             style = KotlinConfTheme.typography.text2,
                             modifier = Modifier.semantics {
                                 contentDescription = tagCountContentDescription

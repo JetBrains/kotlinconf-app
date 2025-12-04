@@ -43,7 +43,7 @@ fun Button(
         else KotlinConfTheme.colors.strokeHalf
     )
     val textColor by animateColorAsState(
-        if (primary) KotlinConfTheme.colors.primaryTextInverted
+        if (primary) KotlinConfTheme.colors.primaryTextWhiteFixed
         else KotlinConfTheme.colors.primaryText
     )
     val alpha by animateFloatAsState(if (enabled) 1f else 0.5f)

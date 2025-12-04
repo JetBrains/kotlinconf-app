@@ -16,6 +16,8 @@ import org.jetbrains.kotlinconf.ui.theme.UI.black40
 import org.jetbrains.kotlinconf.ui.theme.UI.black60
 import org.jetbrains.kotlinconf.ui.theme.UI.black70
 import org.jetbrains.kotlinconf.ui.theme.UI.black80
+import org.jetbrains.kotlinconf.ui.theme.UI.grey100
+import org.jetbrains.kotlinconf.ui.theme.UI.grey900
 import org.jetbrains.kotlinconf.ui.theme.UI.greyDark
 import org.jetbrains.kotlinconf.ui.theme.UI.greyLight
 import org.jetbrains.kotlinconf.ui.theme.UI.white05
@@ -34,6 +36,7 @@ class Colors(
     val mainBackground: Color,
     val primaryBackground: Color,
     val tileBackground: Color,
+    val tooltipBackground: Color,
 
     val cardBackgroundPast: Color,
     val scrollIndicatorFill: Color,
@@ -50,6 +53,7 @@ class Colors(
     val placeholderText: Color,
     val primaryText: Color,
     val primaryTextInverted: Color,
+    val primaryTextWhiteFixed: Color,
     val purpleText: Color,
     val secondaryText: Color,
 
@@ -64,6 +68,7 @@ val KotlinConfLightColors = Colors(
     mainBackground = white100,
     primaryBackground = magenta100,
     tileBackground = black05,
+    tooltipBackground = grey900,
 
     cardBackgroundPast = black05,
     scrollIndicatorFill = black15,
@@ -80,6 +85,7 @@ val KotlinConfLightColors = Colors(
     placeholderText = black20,
     primaryText = black100,
     primaryTextInverted = white100,
+    primaryTextWhiteFixed = white100,
     purpleText = purple100,
     secondaryText = black60,
 
@@ -94,6 +100,7 @@ val KotlinConfDarkColors = Colors(
     mainBackground = black100,
     primaryBackground = magenta100,
     tileBackground = white10,
+    tooltipBackground = grey100,
 
     cardBackgroundPast = white05,
     scrollIndicatorFill = white30,
@@ -109,7 +116,8 @@ val KotlinConfDarkColors = Colors(
     orangeText = orange,
     placeholderText = white30,
     primaryText = white100,
-    primaryTextInverted = white100,
+    primaryTextInverted = black100,
+    primaryTextWhiteFixed = white100,
     purpleText = purpleTextDark,
     secondaryText = white70,
 

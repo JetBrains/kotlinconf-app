@@ -1,13 +1,17 @@
 package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.BasicTooltipBox
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberBasicTooltipState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,9 +20,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntRect
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupPositionProvider
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
@@ -28,6 +38,28 @@ import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
+
+@Composable
+private fun rememberPositionProvider(): PopupPositionProvider {
+    val tooltipAnchorSpacing = with(LocalDensity.current) { 4.dp.roundToPx() }
+    return remember(tooltipAnchorSpacing) {
+        object : PopupPositionProvider {
+            override fun calculatePosition(
+                anchorBounds: IntRect,
+                windowSize: IntSize,
+                layoutDirection: LayoutDirection,
+                popupContentSize: IntSize,
+            ): IntOffset {
+                val x = anchorBounds.left + (anchorBounds.width - popupContentSize.width) / 2
+                var y = anchorBounds.bottom - tooltipAnchorSpacing
+                if (y < 0) y = anchorBounds.bottom + tooltipAnchorSpacing
+                return IntOffset(x, y)
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TopMenuButtonImpl(
     icon: DrawableResource,
@@ -37,18 +69,47 @@ private fun TopMenuButtonImpl(
     iconColor: Color,
     modifier: Modifier = Modifier,
 ) {
-    Icon(
-        modifier = modifier
-            .padding(6.dp)
-            .size(36.dp)
-            .clip(CircleShape)
-            .then(interactionModifier)
-            .background(backgroundColor)
-            .padding(6.dp),
-        painter = painterResource(icon),
-        contentDescription = contentDescription,
-        tint = iconColor,
+    BasicTooltipBox(
+        positionProvider = rememberPositionProvider(),
+        tooltip = { Tooltip(contentDescription) },
+        state = rememberBasicTooltipState()
+    ) {
+        Icon(
+            modifier = modifier
+                .padding(6.dp)
+                .size(36.dp)
+                .clip(CircleShape)
+                .then(interactionModifier)
+                .background(backgroundColor)
+                .padding(6.dp),
+            painter = painterResource(icon),
+            contentDescription = contentDescription,
+            tint = iconColor,
+        )
+    }
+}
+
+@Composable
+fun Tooltip(
+    text: String,
+) {
+    Text(
+        text = text,
+        style = KotlinConfTheme.typography.text2,
+        color = KotlinConfTheme.colors.primaryTextInverted,
+        modifier = Modifier
+            .clip(RoundedCornerShape(4.dp))
+            .background(KotlinConfTheme.colors.tooltipBackground)
+            .padding(vertical = 4.dp, horizontal = 8.dp)
     )
+}
+
+@Preview
+@Composable
+fun TooltipPreview() {
+    PreviewHelper {
+        Tooltip("Tooltip")
+    }
 }
 
 /**
@@ -67,7 +128,7 @@ fun TopMenuButton(
         else Color.Transparent
     )
     val iconColor by animateColorAsState(
-        if (selected) KotlinConfTheme.colors.primaryTextInverted
+        if (selected) KotlinConfTheme.colors.primaryTextWhiteFixed
         else KotlinConfTheme.colors.primaryText
     )
 
