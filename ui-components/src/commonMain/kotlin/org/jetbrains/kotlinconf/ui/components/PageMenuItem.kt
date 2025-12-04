@@ -22,8 +22,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.arrow_right_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
-private val PageMenuItemShape = RoundedCornerShape(8.dp)
-
 @Composable
 fun PageMenuItem(
     label: String,
@@ -35,7 +33,7 @@ fun PageMenuItem(
     Row(
         modifier
             .fillMaxWidth()
-            .clip(PageMenuItemShape)
+            .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .clickable(onClick = onClick)
             .background(KotlinConfTheme.colors.tileBackground)
             .padding(16.dp),

@@ -87,7 +87,7 @@ fun ServiceEvents(
 ) {
     Column(
         modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .background(KotlinConfTheme.colors.tileBackground)
     ) {
         events.forEachIndexed { index, event ->

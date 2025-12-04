@@ -245,7 +245,7 @@ private fun LibraryItem(
             .fillMaxWidth()
             .background(
                 color = KotlinConfTheme.colors.tileBackground,
-                shape = RoundedCornerShape(8.dp)
+                shape = KotlinConfTheme.shapes.roundedCornerMd,
             )
             .clickable(onClick = onLicenseClick)
             .padding(12.dp),

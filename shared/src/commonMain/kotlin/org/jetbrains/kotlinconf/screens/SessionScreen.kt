@@ -275,9 +275,9 @@ private fun FeedbackPanel(
             .border(
                 width = 1.dp,
                 color = KotlinConfTheme.colors.strokePale,
-                shape = RoundedCornerShape(8.dp),
+                shape = KotlinConfTheme.shapes.roundedCornerMd,
             )
-            .clip(RoundedCornerShape(8.dp))
+            .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .background(KotlinConfTheme.colors.cardBackgroundPast),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -417,7 +417,7 @@ private fun RoomSection(
                     roomName = roomName,
                     modifier = Modifier
                         .padding(top = 8.dp)
-                        .clip(RoundedCornerShape(8.dp))
+                        .clip(KotlinConfTheme.shapes.roundedCornerMd)
                         .clickable {
                             onNavigateToMap(roomName)
                         }

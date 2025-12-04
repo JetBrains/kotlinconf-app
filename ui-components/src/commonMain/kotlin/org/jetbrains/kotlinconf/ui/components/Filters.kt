@@ -79,7 +79,7 @@ fun Filters(
 
     Column(
         modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .background(KotlinConfTheme.colors.tileBackground),
     ) {
         val stateDesc = stringResource(

@@ -34,8 +34,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.team_28_fill
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
-private val MainNavigationButtonShape = RoundedCornerShape(8.dp)
-
 @Composable
 private fun MainNavigationButton(
     iconResource: DrawableResource,
@@ -51,7 +49,7 @@ private fun MainNavigationButton(
     )
     Icon(
         modifier = modifier
-            .clip(MainNavigationButtonShape)
+            .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .selectable(
                 selected = selected,
                 enabled = true,

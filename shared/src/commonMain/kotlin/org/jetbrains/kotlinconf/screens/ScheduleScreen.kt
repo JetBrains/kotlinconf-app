@@ -518,7 +518,7 @@ private fun ScheduleList(
                                     stringResource(Res.string.schedule_in_x_minutes, count)
                                 },
                             ),
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                         )
                     }
 
@@ -535,7 +535,7 @@ private fun ScheduleList(
                                     },
                                 )
                             },
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                         )
                     }
 

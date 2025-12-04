@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -140,15 +139,15 @@ private fun EventCard(
     onSpeaker: (SpeakerId) -> Unit,
     backgroundColor: Color = KotlinConfTheme.colors.mainBackground,
 ) {
-    val roundedCornerShape = RoundedCornerShape(8.dp)
     Column(
         modifier = Modifier
             .background(backgroundColor)
             .border(
                 width = 1.dp,
                 color = KotlinConfTheme.colors.strokePale,
-                shape = roundedCornerShape,
-            ).clip(roundedCornerShape),
+                shape = KotlinConfTheme.shapes.roundedCornerMd,
+            )
+            .clip(KotlinConfTheme.shapes.roundedCornerMd),
     ) {
         DayHeader(month, day, line1, line2, modifier = Modifier.fillMaxWidth(), day2 = day2)
 

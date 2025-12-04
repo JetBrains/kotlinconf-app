@@ -208,7 +208,7 @@ private fun ThemeBox(
                             .border(
                                 width = 2.dp,
                                 color = KotlinConfTheme.colors.primaryBackground,
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(20.dp)
                             )
                     } else Modifier
                 )
@@ -216,9 +216,9 @@ private fun ThemeBox(
                 .border(
                     width = 2.dp,
                     color = KotlinConfTheme.colors.strokePale,
-                    shape = RoundedCornerShape(8.dp)
+                    shape = KotlinConfTheme.shapes.roundedCornerMd
                 )
-                .clip(RoundedCornerShape(8.dp))
+                .clip(KotlinConfTheme.shapes.roundedCornerMd)
                 .heightIn(max = 112.dp)
                 .aspectRatio(1f)
         ) {
