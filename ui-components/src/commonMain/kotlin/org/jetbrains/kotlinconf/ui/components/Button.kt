@@ -54,8 +54,7 @@ fun Button(
             .heightIn(min = 56.dp)
             .border(width = 1.dp, color = borderColor, shape = ButtonShape)
             .clip(ButtonShape)
-            .then(if (enabled) Modifier.clickable(onClick = onClick) else Modifier)
-            .semantics { role = Role.Button }
+            .clickable(enabled = enabled, onClick = onClick, role = Role.Button)
             .background(backgroundColor)
             .padding(horizontal = 32.dp),
         contentAlignment = Alignment.Center,

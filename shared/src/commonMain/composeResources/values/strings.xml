@@ -129,6 +129,8 @@ We will process your data in accordance with the App Privacy Notice. You can adj
     <string name="map_title">Map</string>
     <string name="map_ground_floor">Ground floor</string>
     <string name="map_first_floor">First floor</string>
+    <string name="map_zoom_in">Zoom in</string>
+    <string name="map_zoom_out">Zoom out</string>
 
     <string name="speakers_title">Speakers</string>
     <string name="speakers_error_no_results">No results</string>
