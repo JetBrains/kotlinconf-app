@@ -1,29 +1,27 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.androidApplication)
     alias(libs.plugins.googleServices)
 }
 
 kotlin {
-    androidTarget()
-
-    sourceSets {
-        androidMain.dependencies {
-            implementation(projects.shared)
-            implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.androidx.core.splashscreen)
-            implementation(libs.androidx.navigation3.ui)
-        }
-
-        androidUnitTest.dependencies {
-            implementation(libs.junit)
-        }
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_11
     }
+}
 
-    jvmToolchain(21)
+dependencies {
+    implementation(projects.shared)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.navigation3.ui)
+    debugImplementation(libs.compose.ui.tooling)
+
+    testImplementation(libs.junit)
 }
 
 android {
@@ -51,17 +49,9 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-}
-
-dependencies {
-    debugImplementation(libs.compose.ui.tooling)
 }
