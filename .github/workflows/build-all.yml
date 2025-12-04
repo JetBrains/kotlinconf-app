@@ -22,7 +22,7 @@ jobs:
           distribution: 'zulu'
           java-version: 21
       - name: Assemble desktop jar
-        run: ./gradlew :desktopApp:jar
+        run: ./gradlew :app:desktopApp:jar
       - name: Run JVM tests
         run: ./gradlew jvmTest
 
@@ -38,7 +38,7 @@ jobs:
           distribution: 'zulu'
           java-version: 21
       - name: Android debug build
-        run: ./gradlew :androidApp:assembleDebug --stacktrace
+        run: ./gradlew :app:androidApp:assembleDebug --stacktrace
 
   build-ios:
     name: Build iOS
@@ -54,7 +54,7 @@ jobs:
       - name: Set Xcode version
         run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
       - name: iOS debug build
-        run: cd iosApp && xcodebuild -target "iosApp" -configuration Debug -scheme KotlinConfAppScheme -destination 'platform=iOS Simulator,OS=latest,name=iPhone 16' CODE_SIGNING_ALLOWED='NO'
+        run: cd app/iosApp && xcodebuild -target "iosApp" -configuration Debug -scheme KotlinConfAppScheme -destination 'platform=iOS Simulator,OS=latest,name=iPhone 16' CODE_SIGNING_ALLOWED='NO'
 
   build-web:
     name: Build web
@@ -68,7 +68,7 @@ jobs:
           distribution: 'zulu'
           java-version: 21
       - name: Build web app
-        run: ./gradlew composeCompatibilityBrowserDistribution
+        run: ./gradlew :app:webApp:composeCompatibilityBrowserDistribution
 
   build-backend:
     name: Build backend
