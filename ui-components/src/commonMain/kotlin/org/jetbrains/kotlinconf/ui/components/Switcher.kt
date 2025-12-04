@@ -45,7 +45,7 @@ private fun SwitcherItem(
         else KotlinConfTheme.colors.secondaryText,
     )
     val strokeColor by animateColorAsState(
-        if (selected) KotlinConfTheme.colors.strokeFull
+        if (selected) KotlinConfTheme.colors.strokeAccent
         else Color.Transparent,
     )
 
