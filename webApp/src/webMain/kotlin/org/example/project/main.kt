@@ -1,17 +1,27 @@
-package org.jetbrains.kotlinconf
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
+package org.example.project
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
-import kotlinx.browser.window
+import org.jetbrains.kotlinconf.App
+import org.jetbrains.kotlinconf.Flags
+import org.jetbrains.kotlinconf.initApp
+import org.jetbrains.kotlinconf.platformModule
 import org.jetbrains.kotlinconf.ui.initCoil
 import org.jetbrains.kotlinconf.utils.Logger
-import org.w3c.dom.get
+import kotlin.js.ExperimentalWasmJsInterop
+
+external object Window {
+    val supportsNotifications: Boolean?
+}
+
+external val window: Window
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     initCoil()
 
-    val supportsNotifications = window["supportsNotifications"] as? Boolean ?: false
     initApp(
         platformLogger = object : Logger {
             override fun log(tag: String, lazyMessage: () -> String) {
@@ -20,11 +30,10 @@ fun main() {
         },
         platformModule = platformModule,
         flags = Flags(
-            supportsNotifications = supportsNotifications
+            supportsNotifications = window.supportsNotifications ?: false
         ),
     )
-
-    ComposeViewport("ComposeApp") {
+    ComposeViewport {
         App()
     }
 }
