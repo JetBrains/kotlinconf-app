@@ -1,6 +1,6 @@
 [versions]
 aboutlibraries = "12.2.4"
-agp = "8.11.2"
+agp = "9.0.0-beta03"
 android-compileSdk = "36"
 android-minSdk = "26"
 android-svg = "1.4"
@@ -109,7 +109,7 @@ slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4jNop" }
 [plugins]
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlibraries" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
-androidLibrary = { id = "com.android.library", version.ref = "agp" }
+androidMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }

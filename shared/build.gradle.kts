@@ -3,12 +3,12 @@
 import com.mikepenz.aboutlibraries.plugin.DuplicateMode
 import com.mikepenz.aboutlibraries.plugin.DuplicateRule
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.aboutLibraries)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.kotlinParcelize)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
@@ -18,13 +18,13 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
-    androidTarget {
-        compilerOptions {
-            freeCompilerArgs.addAll(
-                "-P",
-                "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=org.jetbrains.kotlinconf.zoomable.internal.AndroidParcelize"
-            )
-        }
+
+    androidLibrary {
+        namespace = "org.jetbrains.kotlinconf"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        compilerOptions.jvmTarget = JvmTarget.JVM_11
+        androidResources.enable = true
     }
 
     jvm()
@@ -72,6 +72,7 @@ kotlin {
             api(libs.compose.foundation)
             api(libs.compose.animation)
             api(libs.compose.components.resources)
+            implementation(libs.compose.ui.tooling.preview)
 
             api(libs.koin.compose.viewmodel.navigation)
 
@@ -117,7 +118,6 @@ kotlin {
             implementation(libs.android.svg)
             implementation(libs.androidx.core.ktx)
             implementation(libs.androidx.preference)
-            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.ktor.client.okhttp)
         }
 
@@ -143,22 +143,9 @@ kotlin {
     jvmToolchain(21)
 }
 
-android {
-    namespace = "org.jetbrains.kotlinconf"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
-// Android preview support
+// Android-based preview support
 dependencies {
-    debugImplementation(libs.compose.ui.tooling)
+    "androidRuntimeClasspath"(libs.compose.ui.tooling)
 }
 
 compose.desktop {
