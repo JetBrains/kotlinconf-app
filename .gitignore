@@ -26,8 +26,6 @@ Pods/
 .kotlin
 
 *.db
-androidApp/src/main/res/values/strings.xml
-androidApp/release
 **/build/
 xcuserdata
 !src/**/build/
@@ -41,5 +39,5 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 android-build
 
-shared/store.properties
+app/shared/store.properties
 /tmp/
