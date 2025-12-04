@@ -4,25 +4,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
-import com.russhwolf.settings.ObservableSettings
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.generated.resources.Res
-import org.jetbrains.kotlinconf.generated.resources.app_name
-import org.jetbrains.kotlinconf.storage.createSettings
+import org.jetbrains.kotlinconf.generated.resources.desktop.Res
+import org.jetbrains.kotlinconf.generated.resources.desktop.app_name
 import org.jetbrains.kotlinconf.utils.Logger
-import org.koin.dsl.module
-
-private val platformModule = module {
-    single<ObservableSettings> { createSettings() }
-    single<LocalNotificationService> { EmptyLocalNotificationService() }
-    single<NotificationPlatformConfiguration> {
-        NotificationPlatformConfiguration.Desktop(
-            showPushNotification = false,
-            notificationIconPath = null,
-        )
-    }
-}
 
 class JvmLogger : Logger {
     override fun log(tag: String, lazyMessage: () -> String) {
