@@ -128,9 +128,7 @@ kotlin {
 
         jvmMain.dependencies {
             implementation(libs.ktor.client.okhttp)
-            implementation(compose.desktop.currentOs)
             implementation(libs.android.svg)
-            implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.slf4j.nop)
         }
 
@@ -146,12 +144,6 @@ kotlin {
 // Android-based preview support
 dependencies {
     "androidRuntimeClasspath"(libs.compose.ui.tooling)
-}
-
-compose.desktop {
-    application {
-        mainClass = "org.jetbrains.kotlinconf.MainKt"
-    }
 }
 
 compose.resources {

@@ -22,7 +22,7 @@ jobs:
           distribution: 'zulu'
           java-version: 21
       - name: Assemble desktop jar
-        run: ./gradlew :shared:jvmJar
+        run: ./gradlew :desktopApp:jar
       - name: Run JVM tests
         run: ./gradlew jvmTest
 
