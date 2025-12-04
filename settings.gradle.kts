@@ -40,5 +40,6 @@ include(":ui-components")
 
 include(":androidApp")
 include(":desktopApp")
+include(":webApp")
 
 include(":backend")
