@@ -25,7 +25,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,6 +44,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -87,8 +87,6 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
-import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -100,7 +98,8 @@ fun SessionScreen(
     onPrivacyNoticeNeeded: () -> Unit,
     onNavigateToMap: (String) -> Unit,
     onWatchVideo: (String) -> Unit,
-    viewModel: SessionViewModel = koinViewModel { parametersOf(sessionId) }
+    viewModel: SessionViewModel =
+        assistedMetroViewModel<SessionViewModel, SessionViewModel.Factory> { create(sessionId) }
 ) {
     val session = viewModel.session.collectAsStateWithLifecycle().value
     val speakers = viewModel.speakers.collectAsStateWithLifecycle().value
@@ -328,7 +327,10 @@ private fun FeedbackPanel(
         AnimatedVisibility(
             selectedEmotion != null,
             enter = fadeIn() + expandVertically(clip = false, expandFrom = Alignment.Top),
-            exit = fadeOut(animationSpec = tween(100)) + shrinkVertically(clip = false, shrinkTowards = Alignment.Top),
+            exit = fadeOut(animationSpec = tween(100)) + shrinkVertically(
+                clip = false,
+                shrinkTowards = Alignment.Top
+            ),
         ) {
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)

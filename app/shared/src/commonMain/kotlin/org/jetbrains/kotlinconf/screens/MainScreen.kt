@@ -33,6 +33,7 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import org.jetbrains.kotlinconf.ConferenceService
+import org.jetbrains.kotlinconf.LocalAppGraph
 import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.URLs
 import org.jetbrains.kotlinconf.generated.resources.Res
@@ -66,14 +67,13 @@ import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.MainNavDestination
 import org.jetbrains.kotlinconf.ui.components.MainNavigation
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.koin.compose.koinInject
 
 private val NoContentTransition = ContentTransform(EnterTransition.None, ExitTransition.None)
 
 @Composable
 fun MainScreen(
     onNavigate: (AppRoute) -> Unit,
-    service: ConferenceService = koinInject(),
+    service: ConferenceService = LocalAppGraph.current.conferenceService,
 ) {
     LaunchedEffect(Unit) {
         service.completeOnboarding()

@@ -1,11 +1,16 @@
 package org.jetbrains.kotlinconf
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.utils.GRANTED_PERMISSION
 import org.jetbrains.kotlinconf.utils.Notification
 import kotlin.coroutines.resume
 
+@Inject
+@ContributesBinding(AppScope::class)
 class ServiceWorkerLocalNotificationService(
     private val timeProvider: TimeProvider,
 ) : LocalNotificationService {

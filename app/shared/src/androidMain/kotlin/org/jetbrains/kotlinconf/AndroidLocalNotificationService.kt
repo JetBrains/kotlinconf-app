@@ -16,10 +16,13 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
 import org.jetbrains.kotlinconf.utils.Logger
-import org.koin.mp.KoinPlatform
 import kotlin.time.ExperimentalTime
 
 const val EXTRA_LOCAL_NOTIFICATION_ID = "localNotificationId"
@@ -28,6 +31,8 @@ private const val EXTRA_MESSAGE = "message"
 private const val NOTIFICATION_CHANNEL_ID = "channel_all_notifications"
 private const val ACTION_SHOW_NOTIFICATION = "org.jetbrains.kotlinconf.SHOW_NOTIFICATION"
 
+@Inject
+@ContributesBinding(AppScope::class)
 class AndroidLocalNotificationService(
     private val timeProvider: TimeProvider,
     private val context: Context,
@@ -62,8 +67,10 @@ class AndroidLocalNotificationService(
 
         val permissions = listOfNotNull(Manifest.permission.POST_NOTIFICATIONS, getRelevantAlarmPermission())
 
-        val permissionHandler = KoinPlatform.getKoin().getOrNull<PermissionHandler>()
-        return permissionHandler?.requestPermissions(permissions.toTypedArray()) ?: false
+        // TODO invoke PermissionHandler
+//        val permissionHandler = KoinPlatform.getKoin().getOrNull<PermissionHandler>()
+//        return permissionHandler?.requestPermissions(permissions.toTypedArray()) ?: false
+        return false
     }
 
     override fun post(
@@ -191,11 +198,12 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         val message = intent.getStringExtra(EXTRA_MESSAGE) ?: return
         val notificationId = intent.getStringExtra(EXTRA_LOCAL_NOTIFICATION_ID) ?: return
 
-        val localNotificationService = KoinPlatform.getKoin().get<LocalNotificationService>()
-        localNotificationService.post(
-            title = title,
-            message = message,
-            localNotificationId = LocalNotificationId.parse(notificationId) ?: return,
-        )
+        // TODO get LocalNotificationService
+//        val localNotificationService = KoinPlatform.getKoin().get<LocalNotificationService>()
+//        localNotificationService.post(
+//            title = title,
+//            message = message,
+//            localNotificationId = LocalNotificationId.parse(notificationId) ?: return,
+//        )
     }
 }

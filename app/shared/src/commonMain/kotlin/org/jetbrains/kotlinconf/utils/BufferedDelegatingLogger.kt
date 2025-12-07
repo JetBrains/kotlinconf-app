@@ -1,5 +1,8 @@
 package org.jetbrains.kotlinconf.utils
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -11,6 +14,8 @@ import kotlinx.coroutines.sync.withLock
  * it forwards the buffered entries to the attached logger in order, and from
  * that point on it delegates all calls directly.
  */
+@Inject
+@SingleIn(AppScope::class)
 class BufferedDelegatingLogger(
     private val scope: CoroutineScope,
 ) : Logger {
