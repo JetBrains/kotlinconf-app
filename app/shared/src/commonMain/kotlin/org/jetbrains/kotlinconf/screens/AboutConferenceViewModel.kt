@@ -2,6 +2,10 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -21,6 +25,9 @@ data class AboutConferenceEvent(
     val description: String?,
 )
 
+@Inject
+@ContributesIntoMap(AppScope::class)
+@ViewModelKey(AboutConferenceViewModel::class)
 class AboutConferenceViewModel(
     service: ConferenceService,
 ) : ViewModel() {

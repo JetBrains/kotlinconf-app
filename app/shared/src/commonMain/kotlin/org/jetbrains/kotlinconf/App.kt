@@ -7,18 +7,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
+import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
+import org.jetbrains.kotlinconf.di.AppGraph
 import org.jetbrains.kotlinconf.navigation.KotlinConfNavHost
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.koin.compose.koinInject
 
 @Composable
 fun App(
+    appGraph: AppGraph,
     onThemeChange: ((isDarkTheme: Boolean) -> Unit)? = null,
 ) {
-    val service = koinInject<ConferenceService>()
+    val service = appGraph.conferenceService
     val currentTheme by service.getTheme().collectAsStateWithLifecycle(initialValue = Theme.SYSTEM)
     val isDarkTheme = when (currentTheme) {
         Theme.SYSTEM -> isSystemInDarkTheme()
@@ -34,8 +39,12 @@ fun App(
         .collectAsStateWithLifecycle(initialValue = null)
         .value
 
-    val flags by koinInject<FlagsManager>().flags.collectAsStateWithLifecycle()
-    CompositionLocalProvider(LocalFlags provides flags) {
+    val flags by appGraph.flagsManager.flags.collectAsStateWithLifecycle()
+    CompositionLocalProvider(
+        LocalFlags provides flags,
+        LocalAppGraph provides appGraph,
+        LocalMetroViewModelFactory provides appGraph.metroViewModelFactory,
+    ) {
         KotlinConfTheme(
             darkTheme = isDarkTheme,
             rippleEnabled = LocalFlags.current.rippleEnabled,
@@ -52,3 +61,8 @@ fun App(
         }
     }
 }
+
+public val LocalAppGraph: ProvidableCompositionLocal<AppGraph> =
+    staticCompositionLocalOf {
+        error("No AppGraph registered")
+    }

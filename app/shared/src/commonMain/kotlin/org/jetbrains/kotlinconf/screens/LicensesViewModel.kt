@@ -4,6 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.entity.Library
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,6 +26,9 @@ data class LibraryWithHighlights(
     val licenseHighlights: List<IntRange> = emptyList(),
 )
 
+@Inject
+@ContributesIntoMap(AppScope::class)
+@ViewModelKey(LicensesViewModel::class)
 class LicensesViewModel : ViewModel() {
     private var searchText = MutableStateFlow("")
     private val libraries = flow {

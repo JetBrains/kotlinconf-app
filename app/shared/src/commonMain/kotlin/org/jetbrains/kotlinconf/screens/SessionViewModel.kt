@@ -2,6 +2,13 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -16,9 +23,10 @@ import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.ui.components.Emotion
 
+@AssistedInject
 class SessionViewModel(
     private val service: ConferenceService,
-    private val sessionId: SessionId,
+    @Assisted private val sessionId: SessionId,
 ) : ViewModel() {
 
     private val _navigateToPrivacyNotice = MutableStateFlow(false)
@@ -69,5 +77,12 @@ class SessionViewModel(
         Emotion.Positive -> Score.GOOD
         Emotion.Neutral -> Score.OK
         Emotion.Negative -> Score.BAD
+    }
+
+    @AssistedFactory
+    @ManualViewModelAssistedFactoryKey(Factory::class)
+    @ContributesIntoMap(AppScope::class)
+    fun interface Factory : ManualViewModelAssistedFactory {
+        fun create(sessionId: SessionId): SessionViewModel
     }
 }

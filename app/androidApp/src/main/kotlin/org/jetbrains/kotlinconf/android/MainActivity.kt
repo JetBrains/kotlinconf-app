@@ -13,9 +13,7 @@ import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
 import com.mmk.kmpnotifier.notification.NotifierManager
 import org.jetbrains.kotlinconf.App
 import org.jetbrains.kotlinconf.EXTRA_LOCAL_NOTIFICATION_ID
-import org.jetbrains.kotlinconf.PermissionHandler
 import org.jetbrains.kotlinconf.navigation.navigateByLocalNotificationId
-import org.koin.mp.KoinPlatform
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,10 +22,12 @@ class MainActivity : ComponentActivity() {
 
         processIntent(intent)
 
-        KoinPlatform.getKoin().declare(PermissionHandler(activity = this))
+        // TODO fix permission handler
+//        KoinPlatform.getKoin().declare(PermissionHandler(activity = this))
 
         setContent {
             App(
+                appGraph = (application as KotlinConfApplication).appGraph,
                 onThemeChange = { isDarkMode ->
                     val systemBarStyle = SystemBarStyle.auto(
                         lightScrim = Color.TRANSPARENT,

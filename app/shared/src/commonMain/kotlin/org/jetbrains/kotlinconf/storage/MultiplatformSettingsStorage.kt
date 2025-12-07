@@ -5,6 +5,9 @@ import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.coroutines.getBooleanFlow
 import com.russhwolf.settings.coroutines.getStringOrNullFlow
 import com.russhwolf.settings.set
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerializationException
@@ -18,6 +21,8 @@ import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
 
+@Inject
+@ContributesBinding(AppScope::class)
 @OptIn(ExperimentalSettingsApi::class)
 class MultiplatformSettingsStorage(
     private val settings: ObservableSettings,
