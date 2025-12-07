@@ -2,6 +2,10 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -73,6 +77,9 @@ sealed class ScheduleUiState {
     ) : ScheduleUiState()
 }
 
+@Inject
+@ContributesIntoMap(AppScope::class)
+@ViewModelKey(ScheduleViewModel::class)
 class ScheduleViewModel(
     private val service: ConferenceService,
     private val timeProvider: TimeProvider,

@@ -1,6 +1,9 @@
 package org.jetbrains.kotlinconf
 
 import com.mmk.kmpnotifier.notification.NotifierManager
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +24,8 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
+@Inject
+@SingleIn(AppScope::class)
 class ConferenceService(
     private val client: APIClient,
     private val timeProvider: TimeProvider,
