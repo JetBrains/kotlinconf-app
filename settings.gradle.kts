@@ -34,8 +34,12 @@ dependencyResolutionManagement {
     }
 }
 
-include(":androidApp")
-include(":ui-components")
-include(":shared")
-include(":backend")
 include(":core")
+
+include(":backend")
+
+include(":app:shared")
+include(":app:ui-components")
+include(":app:androidApp")
+include(":app:desktopApp")
+include(":app:webApp")
