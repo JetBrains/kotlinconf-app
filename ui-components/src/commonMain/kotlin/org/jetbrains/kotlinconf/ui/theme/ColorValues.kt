@@ -81,12 +81,6 @@ internal object UI {
     val white10 = Color(0x1AFFFFFF)
     val white05 = Color(0x0DFFFFFF)
 
-    val backgroundMain = Color(0xFFFFFFFF)
-    val backgroundMainInverted = Color(0xFF19191C)
-
-    val greyLight = Color(0xFFA3A3A4)
-    val greyDark = Color(0xFF757577)
-
     val grey100 = Color(0xFFE8E8E8)
     val grey400 = Color(0xFFA3A3A4)
     val grey500 = Color(0xFF757577)

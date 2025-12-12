@@ -2,8 +2,6 @@ package org.jetbrains.kotlinconf.ui.theme
 
 import androidx.compose.ui.graphics.Color
 import org.jetbrains.kotlinconf.ui.theme.Brand.magenta100
-import org.jetbrains.kotlinconf.ui.theme.Brand.magenta20
-import org.jetbrains.kotlinconf.ui.theme.Brand.magenta50
 import org.jetbrains.kotlinconf.ui.theme.Brand.magentaTextDark
 import org.jetbrains.kotlinconf.ui.theme.Brand.orange
 import org.jetbrains.kotlinconf.ui.theme.Brand.orangeTextDark
@@ -14,20 +12,20 @@ import org.jetbrains.kotlinconf.ui.theme.Brand.purpleTextDark
 import org.jetbrains.kotlinconf.ui.theme.UI.black05
 import org.jetbrains.kotlinconf.ui.theme.UI.black100
 import org.jetbrains.kotlinconf.ui.theme.UI.black15
-import org.jetbrains.kotlinconf.ui.theme.UI.black20
+import org.jetbrains.kotlinconf.ui.theme.UI.black30
 import org.jetbrains.kotlinconf.ui.theme.UI.black40
 import org.jetbrains.kotlinconf.ui.theme.UI.black60
 import org.jetbrains.kotlinconf.ui.theme.UI.black70
 import org.jetbrains.kotlinconf.ui.theme.UI.black80
 import org.jetbrains.kotlinconf.ui.theme.UI.grey100
+import org.jetbrains.kotlinconf.ui.theme.UI.grey400
+import org.jetbrains.kotlinconf.ui.theme.UI.grey500
 import org.jetbrains.kotlinconf.ui.theme.UI.grey900
-import org.jetbrains.kotlinconf.ui.theme.UI.greyDark
-import org.jetbrains.kotlinconf.ui.theme.UI.greyLight
 import org.jetbrains.kotlinconf.ui.theme.UI.white05
 import org.jetbrains.kotlinconf.ui.theme.UI.white10
 import org.jetbrains.kotlinconf.ui.theme.UI.white100
 import org.jetbrains.kotlinconf.ui.theme.UI.white20
-import org.jetbrains.kotlinconf.ui.theme.UI.white30
+import org.jetbrains.kotlinconf.ui.theme.UI.white40
 import org.jetbrains.kotlinconf.ui.theme.UI.white50
 import org.jetbrains.kotlinconf.ui.theme.UI.white70
 import org.jetbrains.kotlinconf.ui.theme.UI.white80
@@ -41,7 +39,6 @@ class Colors(
     val tooltipBackground: Color,
 
     val cardBackgroundPast: Color,
-    val scrollIndicatorFill: Color,
 
     val strokeFull: Color,
     val strokeAccent: Color,
@@ -76,7 +73,6 @@ val KotlinConfLightColors = Colors(
     tooltipBackground = grey900,
 
     cardBackgroundPast = black05,
-    scrollIndicatorFill = black15,
 
     strokeFull = black100,
     strokeAccent = purple100,
@@ -87,7 +83,7 @@ val KotlinConfLightColors = Colors(
     accentText = magenta100,
     longText = black70,
     noteText = black40,
-    placeholderText = black20,
+    placeholderText = black30,
     primaryText = black100,
     primaryTextInverted = white100,
     primaryTextWhiteFixed = white100,
@@ -98,8 +94,8 @@ val KotlinConfLightColors = Colors(
     pinkText = pink100,
     orangeText = orange,
 
-    toggleOff = greyLight,
-    toggleOn = magenta100,
+    toggleOff = grey400,
+    toggleOn = purple100,
 )
 
 val KotlinConfDarkColors = Colors(
@@ -111,7 +107,6 @@ val KotlinConfDarkColors = Colors(
     tooltipBackground = grey100,
 
     cardBackgroundPast = white05,
-    scrollIndicatorFill = white30,
 
     strokeFull = white100,
     strokeAccent = purpleTextDark,
@@ -122,7 +117,7 @@ val KotlinConfDarkColors = Colors(
     accentText = magentaTextDark,
     longText = white70,
     noteText = white50,
-    placeholderText = white30,
+    placeholderText = white40,
     primaryText = white100,
     primaryTextInverted = black100,
     primaryTextWhiteFixed = white100,
@@ -133,6 +128,6 @@ val KotlinConfDarkColors = Colors(
     pinkText = pinkTextDark,
     orangeText = orangeTextDark,
 
-    toggleOff = greyDark,
-    toggleOn = magentaTextDark,
+    toggleOff = grey500,
+    toggleOn = purpleTextDark,
 )
