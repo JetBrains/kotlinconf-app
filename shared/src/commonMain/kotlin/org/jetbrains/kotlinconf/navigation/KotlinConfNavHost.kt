@@ -73,10 +73,15 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
 
     NotificationHandler(backstack)
 
+    val onBack = {
+        if (backstack.size > 1) backstack.removeLastOrNull()
+    }
+
     NavDisplay(
         backStack = backstack,
+        onBack = onBack,
         entryProvider = entryProvider {
-            screens(backstack)
+            screens(backstack, onBack)
         },
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
@@ -85,7 +90,10 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
     )
 }
 
-private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute>) {
+private fun EntryProviderScope<AppRoute>.screens(
+    backStack: MutableList<AppRoute>,
+    onBack: () -> Unit,
+) {
     entry<StartPrivacyNoticeScreen> {
         val skipNotifications = LocalFlags.current.supportsNotifications.not()
         AppPrivacyNoticePrompt(
@@ -124,7 +132,7 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
     entry<SpeakerDetailScreen> {
         SpeakerDetailScreen(
             speakerId = it.speakerId,
-            onBack = backStack::removeLastOrNull,
+            onBack = onBack,
             onSession = { backStack.add(SessionScreen(it)) },
         )
     }
@@ -133,7 +141,7 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
         SessionScreen(
             sessionId = it.sessionId,
             openedForFeedback = it.openedForFeedback,
-            onBack = backStack::removeLastOrNull,
+            onBack = onBack,
             onPrivacyNoticeNeeded = { backStack.add(AppPrivacyNoticePrompt) },
             onSpeaker = { speakerId -> backStack.add(SpeakerDetailScreen(speakerId)) },
             onWatchVideo = { videoUrl -> urlHandler.openUri(videoUrl) },
@@ -146,7 +154,7 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
     entry<AboutAppScreen> {
         val uriHandler = LocalUriHandler.current
         AboutAppScreen(
-            onBack = backStack::removeLastOrNull,
+            onBack = onBack,
             onGitHubRepo = { uriHandler.openUri(URLs.GITHUB_REPO) },
             onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
             onPrivacyNotice = { backStack.add(AppPrivacyNoticeScreen) },
@@ -161,14 +169,14 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
             onLicenseClick = { licenseName, licenseText ->
                 backStack.add(SingleLicenseScreen(licenseName, licenseText))
             },
-            onBack = backStack::removeLastOrNull,
+            onBack = onBack,
         )
     }
     entry<SingleLicenseScreen> {
         SingleLicenseScreen(
             licenseName = it.licenseName,
             licenseContent = it.licenseText,
-            onBack = backStack::removeLastOrNull,
+            onBack = onBack,
         )
     }
     entry<AboutConferenceScreen> {
@@ -177,35 +185,35 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
             onPrivacyNotice = { backStack.add(VisitorPrivacyNoticeScreen) },
             onGeneralTerms = { backStack.add(TermsOfUseScreen) },
             onWebsiteLink = { urlHandler.openUri(URLs.KOTLINCONF_HOMEPAGE) },
-            onBack = backStack::removeLastOrNull,
+            onBack = onBack,
             onSpeaker = { speakerId -> backStack.add(SpeakerDetailScreen(speakerId)) },
         )
     }
     entry<CodeOfConductScreen> {
-        CodeOfConduct(onBack = backStack::removeLastOrNull)
+        CodeOfConduct(onBack = onBack)
     }
     entry<SettingsScreen> {
-        SettingsScreen(onBack = backStack::removeLastOrNull)
+        SettingsScreen(onBack = onBack)
     }
     entry<VisitorPrivacyNoticeScreen> {
-        VisitorPrivacyNotice(onBack = backStack::removeLastOrNull)
+        VisitorPrivacyNotice(onBack = onBack)
     }
     entry<AppPrivacyNoticeScreen> {
         AppPrivacyNotice(
-            onBack = backStack::removeLastOrNull,
+            onBack = onBack,
             onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
         )
     }
     entry<TermsOfUseScreen> {
         VisitorTermsOfUse(
-            onBack = backStack::removeLastOrNull,
+            onBack = onBack,
             onCodeOfConduct = { backStack.add(CodeOfConductScreen) },
             onVisitorPrivacyNotice = { backStack.add(VisitorPrivacyNoticeScreen) },
         )
     }
     entry<AppTermsOfUseScreen> {
         AppTermsOfUse(
-            onBack = backStack::removeLastOrNull,
+            onBack = onBack,
             onAppPrivacyNotice = {
                 backStack.add(AppPrivacyNoticeScreen)
             },
@@ -213,7 +221,7 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
     }
     entry<PartnersScreen> {
         PartnersScreen(
-            onBack = backStack::removeLastOrNull,
+            onBack = onBack,
             onPartnerDetail = { partnerId ->
                 backStack.add(PartnerDetailScreen(partnerId))
             }
@@ -222,27 +230,27 @@ private fun EntryProviderScope<AppRoute>.screens(backStack: MutableList<AppRoute
     entry<PartnerDetailScreen> {
         PartnerDetailScreen(
             partnerId = it.partnerId,
-            onBack = backStack::removeLastOrNull,
+            onBack = onBack,
         )
     }
 
     entry<AppPrivacyNoticePrompt> {
         AppPrivacyNoticePrompt(
-            onRejectNotice = backStack::removeLastOrNull,
-            onAcceptNotice = backStack::removeLastOrNull,
+            onRejectNotice = onBack,
+            onAcceptNotice = onBack,
             onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
             confirmationRequired = true,
         )
     }
 
     entry<DeveloperMenuScreen> {
-        DeveloperMenuScreen(onBack = backStack::removeLastOrNull)
+        DeveloperMenuScreen(onBack = onBack)
     }
 
     entry<NestedMapScreen> {
         NestedMapScreen(
             roomName = it.roomName,
-            onBack = backStack::removeLastOrNull,
+            onBack = onBack,
         )
     }
 }
