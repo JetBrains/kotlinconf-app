@@ -137,5 +137,5 @@ compose.resources {
 aboutLibraries {
     library.duplicationMode = DuplicateMode.MERGE
     library.duplicationRule = DuplicateRule.SIMPLE
-    export.outputFile = File("src/commonMain/composeResources/files")
+    export.outputFile = File("src/commonMain/composeResources/files/aboutlibraries.json")
 }
