@@ -25,7 +25,9 @@ tasks.register("prepareRelease") {
     group = "releases"
     description = "Bumps versions and prepares release notes"
 
-    dependsOn("updateVersion", ":shared:exportLibraryDefinitions")
+    dependsOn("updateVersion", ":app:shared:exportLibraryDefinitions")
+
+    notCompatibleWithConfigurationCache("for unknown reasons")
 }
 
 tasks.register("updateVersion") {
@@ -38,13 +40,13 @@ tasks.register("updateVersion") {
         val versionNames = mutableListOf<String?>()
 
         // Android version
-        val androidBuildGradle = file("androidApp/build.gradle.kts")
+        val androidBuildGradle = file("app/androidApp/build.gradle.kts")
         val androidBuildGradleContent = androidBuildGradle.readText()
         versionCodes.add("""versionCode\s*=\s*(\d+)""".toRegex().find(androidBuildGradleContent)?.groupValues?.get(1)?.toIntOrNull())
         versionNames.add("""versionName\s*=\s*"([^"]+)"""".toRegex().find(androidBuildGradleContent)?.groupValues?.get(1))
 
         // iOS versions from project file
-        val iosProjectFile = file("iosApp/KotlinConf.xcodeproj/project.pbxproj")
+        val iosProjectFile = file("app/iosApp/KotlinConf.xcodeproj/project.pbxproj")
         val iosProjectContent = iosProjectFile.readText()
         versionCodes.addAll("""CURRENT_PROJECT_VERSION\s*=\s*(\d+)""".toRegex().findAll(iosProjectContent)
             .map { it.groupValues[1].toIntOrNull() }.toList())
@@ -52,7 +54,7 @@ tasks.register("updateVersion") {
             .map { it.groupValues[1].trim() }.toList())
 
         // iOS versions from Info.plist
-        val iosInfoPlist = file("iosApp/iosApp/Info.plist")
+        val iosInfoPlist = file("app/iosApp/iosApp/Info.plist")
         val iosInfoPlistContent = iosInfoPlist.readText()
         versionCodes.add("""<key>CFBundleVersion</key>\s*<string>(\d+)</string>""".toRegex()
             .find(iosInfoPlistContent)?.groupValues?.get(1)?.toIntOrNull())
@@ -60,7 +62,7 @@ tasks.register("updateVersion") {
             .find(iosInfoPlistContent)?.groupValues?.get(1))
 
         // Shared version
-        val sharedVersionXml = file("shared/src/commonMain/composeResources/values/version.xml")
+        val sharedVersionXml = file("app/shared/src/commonMain/composeResources/values/version.xml")
         val sharedVersionXmlContent = sharedVersionXml.readText()
         val sharedVersionMatch = APP_VERSION_REGEX.find(sharedVersionXmlContent)
         versionCodes.add(sharedVersionMatch?.groupValues?.get(2)?.toIntOrNull())
