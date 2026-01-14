@@ -127,7 +127,7 @@ kotlin {
 
 // Android-based preview support
 dependencies {
-    "androidRuntimeClasspath"(libs.compose.ui.tooling)
+    androidRuntimeClasspath(libs.compose.ui.tooling)
 }
 
 compose.resources {
