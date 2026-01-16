@@ -1,6 +1,6 @@
 [versions]
 aboutlibraries = "13.2.1"
-agp = "9.0.0-rc03"
+agp = "9.0.0"
 android-compileSdk = "36"
 android-minSdk = "26"
 android-svg = "1.4"
