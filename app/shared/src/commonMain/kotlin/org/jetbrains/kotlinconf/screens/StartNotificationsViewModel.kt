@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.NotificationSettings
 
-@Inject
 @ContributesIntoMap(AppScope::class)
 @ViewModelKey(StartNotificationsViewModel::class)
 class StartNotificationsViewModel(

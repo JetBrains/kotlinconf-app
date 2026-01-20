@@ -31,7 +31,6 @@ private const val EXTRA_MESSAGE = "message"
 private const val NOTIFICATION_CHANNEL_ID = "channel_all_notifications"
 private const val ACTION_SHOW_NOTIFICATION = "org.jetbrains.kotlinconf.SHOW_NOTIFICATION"
 
-@Inject
 @ContributesBinding(AppScope::class)
 class AndroidLocalNotificationService(
     private val timeProvider: TimeProvider,

@@ -25,7 +25,6 @@ data class AboutConferenceEvent(
     val description: String?,
 )
 
-@Inject
 @ContributesIntoMap(AppScope::class)
 @ViewModelKey(AboutConferenceViewModel::class)
 class AboutConferenceViewModel(

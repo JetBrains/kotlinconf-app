@@ -77,7 +77,6 @@ sealed class ScheduleUiState {
     ) : ScheduleUiState()
 }
 
-@Inject
 @ContributesIntoMap(AppScope::class)
 @ViewModelKey(ScheduleViewModel::class)
 class ScheduleViewModel(

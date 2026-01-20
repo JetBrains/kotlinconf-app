@@ -18,7 +18,6 @@ sealed class PrivacyNoticeState {
     object Done : PrivacyNoticeState()
 }
 
-@Inject
 @ContributesIntoMap(AppScope::class)
 @ViewModelKey(PrivacyNoticeViewModel::class)
 class PrivacyNoticeViewModel(

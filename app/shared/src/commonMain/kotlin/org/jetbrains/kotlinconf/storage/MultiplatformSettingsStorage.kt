@@ -21,7 +21,6 @@ import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
 
-@Inject
 @ContributesBinding(AppScope::class)
 @OptIn(ExperimentalSettingsApi::class)
 class MultiplatformSettingsStorage(

@@ -9,7 +9,6 @@ import org.jetbrains.kotlinconf.utils.GRANTED_PERMISSION
 import org.jetbrains.kotlinconf.utils.Notification
 import kotlin.coroutines.resume
 
-@Inject
 @ContributesBinding(AppScope::class)
 class ServiceWorkerLocalNotificationService(
     private val timeProvider: TimeProvider,

@@ -26,7 +26,6 @@ data class LibraryWithHighlights(
     val licenseHighlights: List<IntRange> = emptyList(),
 )
 
-@Inject
 @ContributesIntoMap(AppScope::class)
 @ViewModelKey(LicensesViewModel::class)
 class LicensesViewModel : ViewModel() {

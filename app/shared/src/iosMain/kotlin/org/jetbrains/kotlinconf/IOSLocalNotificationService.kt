@@ -18,7 +18,6 @@ import platform.UserNotifications.UNNotificationRequest
 import platform.UserNotifications.UNUserNotificationCenter
 import kotlin.coroutines.resume
 
-@Inject
 @ContributesBinding(AppScope::class)
 class IOSLocalNotificationService(
     private val timeProvider: TimeProvider,

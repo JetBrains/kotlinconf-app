@@ -30,7 +30,6 @@ sealed class SpeakersUiState {
     data class Content(val speakers: List<SpeakerWithHighlights>) : SpeakersUiState()
 }
 
-@Inject
 @ContributesIntoMap(AppScope::class)
 @ViewModelKey(SpeakersViewModel::class)
 class SpeakersViewModel(
