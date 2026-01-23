@@ -3,6 +3,7 @@
 package org.jetbrains.kotlinconf
 
 import android.Manifest
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager.IMPORTANCE_HIGH
@@ -18,7 +19,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.BroadcastReceiverKey
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
 import org.jetbrains.kotlinconf.di.NotificationIcon
@@ -187,6 +191,8 @@ class AndroidLocalNotificationService(
 }
 
 @Inject
+@BroadcastReceiverKey(AlarmBroadcastReceiver::class)
+@ContributesIntoMap(AppScope::class, binding = binding<BroadcastReceiver>())
 class AlarmBroadcastReceiver(
     private val localNotificationService: LocalNotificationService
 ) : BroadcastReceiver() {
