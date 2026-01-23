@@ -21,6 +21,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.binding
 import dev.zacsweers.metrox.android.BroadcastReceiverKey
 import kotlinx.datetime.LocalDateTime
@@ -35,6 +36,7 @@ private const val EXTRA_MESSAGE = "message"
 private const val NOTIFICATION_CHANNEL_ID = "channel_all_notifications"
 private const val ACTION_SHOW_NOTIFICATION = "org.jetbrains.kotlinconf.SHOW_NOTIFICATION"
 
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class AndroidLocalNotificationService(
     private val timeProvider: TimeProvider,
