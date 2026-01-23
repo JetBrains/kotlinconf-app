@@ -4,6 +4,8 @@
 
 This repository contains the source code of the official application for [KotlinConf](https://kotlinconf.com/).
 
+> KotlinConf 2026 tickets are currently on sale! Visit the [Registration](https://kotlinconf.com/registration/) page of the website to grab yours.
+
 ![The KotlinConf official application](docs/header.png)
 
 The application is written in Kotlin, sharing code between all of its platforms using [Kotlin Multiplatform](https://www.jetbrains.com/kotlin-multiplatform/).
