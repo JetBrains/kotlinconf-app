@@ -23,6 +23,7 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.metrox.android)
+    implementation(libs.metrox.viewmodel.compose)
 
     testImplementation(libs.junit)
 }

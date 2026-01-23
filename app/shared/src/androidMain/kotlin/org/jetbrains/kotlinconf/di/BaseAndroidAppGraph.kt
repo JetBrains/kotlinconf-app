@@ -7,15 +7,12 @@ import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfig
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.SharedPreferencesSettings
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.Qualifier
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metrox.android.MetroAppComponentProviders
-import org.jetbrains.kotlinconf.Flags
 
-@DependencyGraph(AppScope::class)
-interface AndroidAppGraph : AppGraph, MetroAppComponentProviders {
+interface BaseAndroidAppGraph : AppGraph, MetroAppComponentProviders {
 
     @Provides
     @SingleIn(AppScope::class)
@@ -35,15 +32,6 @@ interface AndroidAppGraph : AppGraph, MetroAppComponentProviders {
             notificationIconResId = iconRes,
             showPushNotification = true,
         )
-
-    @DependencyGraph.Factory
-    interface Factory {
-        fun create(
-            @Provides application: Application,
-            @Provides @NotificationIcon iconRes: Int,
-            @Provides platformFlags: Flags = Flags(),
-        ): AndroidAppGraph
-    }
 }
 
 @Qualifier
