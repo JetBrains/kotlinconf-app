@@ -14,7 +14,6 @@ import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
 import com.mmk.kmpnotifier.notification.NotifierManager
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import dev.zacsweers.metrox.android.ActivityKey
 import org.jetbrains.kotlinconf.App
@@ -22,7 +21,6 @@ import org.jetbrains.kotlinconf.EXTRA_LOCAL_NOTIFICATION_ID
 import org.jetbrains.kotlinconf.PermissionHandler
 import org.jetbrains.kotlinconf.navigation.navigateByLocalNotificationId
 
-@Inject
 @ActivityKey(MainActivity::class)
 @ContributesIntoMap(AppScope::class, binding = binding<Activity>())
 class MainActivity(
