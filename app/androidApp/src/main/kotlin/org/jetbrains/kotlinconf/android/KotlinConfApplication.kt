@@ -10,7 +10,7 @@ import org.jetbrains.kotlinconf.utils.AndroidLogger
 
 class KotlinConfApplication : Application(), MetroApplication {
 
-    val appGraph: AndroidAppGraph by lazy {
+    private val appGraph: AndroidAppGraph by lazy {
         createGraphFactory<AndroidAppGraph.Factory>().create(
             application = this,
             iconRes = R.drawable.kotlinconf_notification_icon,
