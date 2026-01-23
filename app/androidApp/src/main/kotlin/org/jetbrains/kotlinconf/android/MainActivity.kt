@@ -24,6 +24,7 @@ import org.jetbrains.kotlinconf.navigation.navigateByLocalNotificationId
 @ActivityKey(MainActivity::class)
 @ContributesIntoMap(AppScope::class, binding = binding<Activity>())
 class MainActivity(
+    private val appGraph: AndroidAppGraph,
     private val permissionHandler: PermissionHandler,
 ) : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +37,7 @@ class MainActivity(
 
         setContent {
             App(
-                appGraph = (application as KotlinConfApplication).appGraph,
+                appGraph = appGraph,
                 onThemeChange = { isDarkMode ->
                     val systemBarStyle = SystemBarStyle.auto(
                         lightScrim = Color.TRANSPARENT,
