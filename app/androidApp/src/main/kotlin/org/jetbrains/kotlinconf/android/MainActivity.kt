@@ -13,9 +13,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
 import com.mmk.kmpnotifier.notification.NotifierManager
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.binding
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
 import dev.zacsweers.metrox.android.ActivityKey
 import org.jetbrains.kotlinconf.App
 import org.jetbrains.kotlinconf.EXTRA_LOCAL_NOTIFICATION_ID
@@ -32,7 +32,7 @@ class MainActivity(
         super.onCreate(savedInstanceState)
         installSplashScreen()
 
-        permissionHandler.activity = this
+        permissionHandler.initialize(this)
 
         processIntent(intent)
 
