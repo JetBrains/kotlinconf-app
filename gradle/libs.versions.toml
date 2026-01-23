@@ -2,7 +2,7 @@
 aboutlibraries = "13.2.1"
 agp = "9.0.0"
 android-compileSdk = "36"
-android-minSdk = "26"
+android-minSdk = "28"
 android-svg = "1.4"
 android-targetSdk = "36"
 androidx-activityCompose = "1.12.2"
@@ -97,6 +97,7 @@ ktor-server-swagger = { module = "io.ktor:ktor-server-swagger", version.ref = "k
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 ktor-utils = { module = "io.ktor:ktor-utils", version.ref = "ktor" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logbackClassic" }
+metrox-android = { module = "dev.zacsweers.metro:metrox-android", version.ref = "metro" }
 metrox-viewmodel-compose = { module = "dev.zacsweers.metro:metrox-viewmodel-compose", version.ref = "metro" }
 multiplatform-markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "markdown" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }

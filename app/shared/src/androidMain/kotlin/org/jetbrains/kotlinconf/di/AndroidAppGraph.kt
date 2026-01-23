@@ -9,13 +9,16 @@ import com.russhwolf.settings.SharedPreferencesSettings
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.Qualifier
 import dev.zacsweers.metro.SingleIn
+import dev.zacsweers.metrox.android.MetroAppComponentProviders
 import org.jetbrains.kotlinconf.Flags
 
 @DependencyGraph(AppScope::class)
-interface AndroidAppGraph : AppGraph {
+interface AndroidAppGraph : AppGraph, MetroAppComponentProviders {
 
     @Provides
+    @SingleIn(AppScope::class)
     fun provideApplicationContext(application: Application): Context = application
 
     @Provides
@@ -26,10 +29,10 @@ interface AndroidAppGraph : AppGraph {
     @Provides
     @SingleIn(AppScope::class)
     fun provideNotificationPlatformConfiguration(
-        notificationIconId: Int
+        @NotificationIcon iconRes: Int,
     ): NotificationPlatformConfiguration =
          NotificationPlatformConfiguration.Android(
-            notificationIconResId = notificationIconId,
+            notificationIconResId = iconRes,
             showPushNotification = true,
         )
 
@@ -37,8 +40,11 @@ interface AndroidAppGraph : AppGraph {
     interface Factory {
         fun create(
             @Provides application: Application,
-            @Provides notificationIconId: Int, // TODO give this a qualifier
+            @Provides @NotificationIcon iconRes: Int,
             @Provides platformFlags: Flags = Flags(),
         ): AndroidAppGraph
     }
 }
+
+@Qualifier
+annotation class NotificationIcon

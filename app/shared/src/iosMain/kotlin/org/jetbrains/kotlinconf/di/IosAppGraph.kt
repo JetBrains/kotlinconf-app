@@ -4,13 +4,11 @@ import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfig
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.ObservableSettings
-import com.russhwolf.settings.observable.makeObservable
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import org.jetbrains.kotlinconf.Flags
-import org.jetbrains.kotlinconf.IOSLocalNotificationService
 import platform.Foundation.NSUserDefaults
 
 @DependencyGraph(AppScope::class)

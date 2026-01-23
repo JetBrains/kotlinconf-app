@@ -104,6 +104,7 @@ kotlin {
             implementation(libs.androidx.core.ktx)
             implementation(libs.androidx.preference)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.metrox.android)
         }
 
         iosMain.dependencies {

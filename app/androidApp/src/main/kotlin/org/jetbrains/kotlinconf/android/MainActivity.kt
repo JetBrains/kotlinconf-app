@@ -11,19 +11,28 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
 import com.mmk.kmpnotifier.notification.NotifierManager
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.android.ActivityKey
 import org.jetbrains.kotlinconf.App
 import org.jetbrains.kotlinconf.EXTRA_LOCAL_NOTIFICATION_ID
+import org.jetbrains.kotlinconf.PermissionHandler
 import org.jetbrains.kotlinconf.navigation.navigateByLocalNotificationId
 
-class MainActivity : ComponentActivity() {
+@Inject
+@ActivityKey(MainActivity::class)
+//@ContributesIntoMap(AppScope::class)
+class MainActivity(
+    private val permissionHandler: PermissionHandler,
+) : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
 
-        processIntent(intent)
+        permissionHandler.activity = this
 
-        // TODO fix permission handler
-//        KoinPlatform.getKoin().declare(PermissionHandler(activity = this))
+        processIntent(intent)
 
         setContent {
             App(

@@ -3,17 +3,23 @@ package org.jetbrains.kotlinconf.android
 import android.app.Application
 import com.jetbrains.kotlinconf.R
 import dev.zacsweers.metro.createGraphFactory
+import dev.zacsweers.metrox.android.MetroAppComponentProviders
+import dev.zacsweers.metrox.android.MetroApplication
 import org.jetbrains.kotlinconf.di.AndroidAppGraph
 import org.jetbrains.kotlinconf.initApp
 import org.jetbrains.kotlinconf.utils.AndroidLogger
 
-class KotlinConfApplication : Application() {
+class KotlinConfApplication : Application(), MetroApplication {
+
     val appGraph: AndroidAppGraph by lazy {
         createGraphFactory<AndroidAppGraph.Factory>().create(
             application = this,
-            notificationIconId = R.drawable.kotlinconf_notification_icon,
+            iconRes = R.drawable.kotlinconf_notification_icon,
         )
     }
+
+    override val appComponentProviders: MetroAppComponentProviders
+        get() = appGraph
 
     override fun onCreate() {
         super.onCreate()

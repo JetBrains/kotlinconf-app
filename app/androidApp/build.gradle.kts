@@ -22,6 +22,8 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
     debugImplementation(libs.compose.ui.tooling)
 
+    implementation(libs.metrox.android)
+
     testImplementation(libs.junit)
 }
 
