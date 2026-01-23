@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.android
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -12,6 +13,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
 import com.mmk.kmpnotifier.notification.NotifierManager
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.binding
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metrox.android.ActivityKey
@@ -22,7 +24,7 @@ import org.jetbrains.kotlinconf.navigation.navigateByLocalNotificationId
 
 @Inject
 @ActivityKey(MainActivity::class)
-//@ContributesIntoMap(AppScope::class)
+@ContributesIntoMap(AppScope::class, binding = binding<Activity>())
 class MainActivity(
     private val permissionHandler: PermissionHandler,
 ) : ComponentActivity() {
