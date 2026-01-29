@@ -73,8 +73,20 @@ data object PartnersScreen : AppRoute
 data class PartnerDetailScreen(val partnerId: PartnerId) : AppRoute
 
 @Serializable
-@SerialName("Main")
-data object MainScreen : AppRoute
+@SerialName("Schedule")
+data object ScheduleScreen : AppRoute
+
+@Serializable
+@SerialName("Speakers")
+data object SpeakersScreen : AppRoute
+
+@Serializable
+@SerialName("Map")
+data object MapScreen : AppRoute
+
+@Serializable
+@SerialName("Info")
+data object InfoScreen : AppRoute
 
 @Serializable
 @SerialName("Session")

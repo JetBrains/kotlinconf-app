@@ -1,5 +1,8 @@
 package org.jetbrains.kotlinconf.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -12,6 +15,8 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.compose.serialization.serializers.SnapshotStateListSerializer
 import kotlinx.coroutines.channels.Channel
+import org.jetbrains.kotlinconf.ConferenceService
+import org.jetbrains.kotlinconf.LocalAppGraph
 import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.LocalNotificationId
 import org.jetbrains.kotlinconf.SessionId
@@ -23,15 +28,18 @@ import org.jetbrains.kotlinconf.screens.AppPrivacyNoticePrompt
 import org.jetbrains.kotlinconf.screens.AppTermsOfUse
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
 import org.jetbrains.kotlinconf.screens.DeveloperMenuScreen
+import org.jetbrains.kotlinconf.screens.InfoScreen
 import org.jetbrains.kotlinconf.screens.LicensesScreen
-import org.jetbrains.kotlinconf.screens.MainScreen
+import org.jetbrains.kotlinconf.screens.MapScreen
 import org.jetbrains.kotlinconf.screens.NestedMapScreen
 import org.jetbrains.kotlinconf.screens.PartnerDetailScreen
 import org.jetbrains.kotlinconf.screens.PartnersScreen
+import org.jetbrains.kotlinconf.screens.ScheduleScreen
 import org.jetbrains.kotlinconf.screens.SessionScreen
 import org.jetbrains.kotlinconf.screens.SettingsScreen
 import org.jetbrains.kotlinconf.screens.SingleLicenseScreen
 import org.jetbrains.kotlinconf.screens.SpeakerDetailScreen
+import org.jetbrains.kotlinconf.screens.SpeakersScreen
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 import org.jetbrains.kotlinconf.screens.VisitorPrivacyNotice
 import org.jetbrains.kotlinconf.screens.VisitorTermsOfUse
@@ -65,7 +73,11 @@ private fun NotificationHandler(backStack: MutableList<AppRoute>) {
 internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
     val backstack: MutableList<AppRoute> =
         rememberSerializable(serializer = SnapshotStateListSerializer()) {
-            val startDestination = if (isOnboardingComplete) MainScreen else StartPrivacyNoticeScreen
+            val startDestination: AppRoute = if (isOnboardingComplete) {
+                ScheduleScreen
+            } else {
+                StartPrivacyNoticeScreen
+            }
             mutableStateListOf(startDestination)
         }
 
@@ -77,18 +89,27 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
         if (backstack.size > 1) backstack.removeLastOrNull()
     }
 
-    NavDisplay(
-        backStack = backstack,
-        onBack = onBack,
-        entryProvider = entryProvider {
-            screens(backstack, onBack)
-        },
-        entryDecorators = listOf(
-            rememberSaveableStateHolderNavEntryDecorator(),
-            rememberViewModelStoreNavEntryDecorator(),
-        ),
-    )
+    NavigationShell(backstack = backstack) {
+        NavDisplay(
+            backStack = backstack,
+            onBack = onBack,
+            entryProvider = entryProvider {
+                screens(backstack, onBack)
+            },
+            entryDecorators = listOf(
+                rememberSaveableStateHolderNavEntryDecorator(),
+                rememberViewModelStoreNavEntryDecorator(),
+            ),
+        )
+    }
 }
+
+private val noAnimationTransition = EnterTransition.None togetherWith ExitTransition.None
+
+private val noAnimationMetadata =
+    NavDisplay.transitionSpec { noAnimationTransition } +
+            NavDisplay.popTransitionSpec { noAnimationTransition } +
+            NavDisplay.predictivePopTransitionSpec { noAnimationTransition }
 
 private fun EntryProviderScope<AppRoute>.screens(
     backStack: MutableList<AppRoute>,
@@ -100,7 +121,7 @@ private fun EntryProviderScope<AppRoute>.screens(
             onRejectNotice = {
                 if (skipNotifications) {
                     backStack.clear()
-                    backStack.add(MainScreen)
+                    backStack.add(ScheduleScreen)
                 } else {
                     backStack.add(StartNotificationsScreen)
                 }
@@ -108,7 +129,7 @@ private fun EntryProviderScope<AppRoute>.screens(
             onAcceptNotice = {
                 if (skipNotifications) {
                     backStack.clear()
-                    backStack.add(MainScreen)
+                    backStack.add(ScheduleScreen)
                 } else {
                     backStack.add(StartNotificationsScreen)
                 }
@@ -121,19 +142,74 @@ private fun EntryProviderScope<AppRoute>.screens(
         StartNotificationsScreen(
             onDone = {
                 backStack.clear()
-                backStack.add(MainScreen)
+                backStack.add(ScheduleScreen)
             }
         )
     }
 
-    entry<MainScreen> {
-        MainScreen(onNavigate = { backStack.add(it) })
+    entry<ScheduleScreen>(
+        metadata = noAnimationMetadata
+    ) {
+        val service: ConferenceService = LocalAppGraph.current.conferenceService
+        LaunchedEffect(Unit) {
+            service.completeOnboarding()
+        }
+        ScheduleScreen(
+            onSession = { backStack.add(SessionScreen(it)) },
+            onPrivacyNoticeNeeded = { backStack.add(AppPrivacyNoticePrompt) },
+            onRequestFeedbackWithComment = { sessionId ->
+                backStack.add(SessionScreen(sessionId, openedForFeedback = true))
+            },
+        )
     }
+
+    entry<SpeakersScreen>(
+        metadata = noAnimationMetadata,
+    ) {
+        val service: ConferenceService = koinInject()
+        LaunchedEffect(Unit) {
+            service.completeOnboarding()
+        }
+        SpeakersScreen(
+            onSpeaker = { backStack.add(SpeakerDetailScreen(it)) }
+        )
+    }
+
+    entry<MapScreen>(
+        metadata = noAnimationMetadata,
+    ) {
+        val service: ConferenceService = koinInject()
+        LaunchedEffect(Unit) {
+            service.completeOnboarding()
+        }
+        MapScreen()
+    }
+
+    entry<InfoScreen>(
+        metadata = noAnimationMetadata,
+    ) {
+        val service: ConferenceService = koinInject()
+        LaunchedEffect(Unit) {
+            service.completeOnboarding()
+        }
+        val uriHandler = LocalUriHandler.current
+        InfoScreen(
+            onAboutConf = { backStack.add(AboutConferenceScreen) },
+            onAboutApp = { backStack.add(AboutAppScreen) },
+            onOurPartners = { backStack.add(PartnersScreen) },
+            onCodeOfConduct = { backStack.add(CodeOfConductScreen) },
+            onTwitter = { uriHandler.openUri(URLs.TWITTER) },
+            onSlack = { uriHandler.openUri(URLs.SLACK) },
+            onBluesky = { uriHandler.openUri(URLs.BLUESKY) },
+            onSettings = { backStack.add(SettingsScreen) },
+        )
+    }
+
     entry<SpeakerDetailScreen> {
         SpeakerDetailScreen(
             speakerId = it.speakerId,
             onBack = onBack,
-            onSession = { backStack.add(SessionScreen(it)) },
+            onSession = { sessionId -> backStack.add(SessionScreen(sessionId)) },
         )
     }
     entry<SessionScreen> {
