@@ -35,7 +35,7 @@ import org.jetbrains.kotlinconf.generated.resources.info_title
 import org.jetbrains.kotlinconf.generated.resources.kotlinconf_by_jetbrains
 import org.jetbrains.kotlinconf.generated.resources.slack
 import org.jetbrains.kotlinconf.generated.resources.twitter
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -54,7 +54,7 @@ fun InfoScreen(
 ) {
     Column(Modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
         MainHeaderTitleBar(stringResource(Res.string.info_title))
-        Divider(1.dp, KotlinConfTheme.colors.strokePale)
+        HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
 
         Column(
             Modifier

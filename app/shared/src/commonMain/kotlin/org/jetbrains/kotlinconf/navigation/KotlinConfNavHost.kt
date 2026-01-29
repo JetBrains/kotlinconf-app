@@ -73,11 +73,8 @@ private fun NotificationHandler(backStack: MutableList<AppRoute>) {
 internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
     val backstack: MutableList<AppRoute> =
         rememberSerializable(serializer = SnapshotStateListSerializer()) {
-            val startDestination: AppRoute = if (isOnboardingComplete) {
-                ScheduleScreen
-            } else {
-                StartPrivacyNoticeScreen
-            }
+            val startDestination =
+                if (isOnboardingComplete) ScheduleScreen else StartPrivacyNoticeScreen
             mutableStateListOf(startDestination)
         }
 
@@ -85,11 +82,16 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
 
     NotificationHandler(backstack)
 
+    val mainBackEnabled = LocalFlags.current.enableBackOnMainScreens
     val onBack = {
-        if (backstack.size > 1) backstack.removeLastOrNull()
+        if (backstack.last() is MainRoute && !mainBackEnabled) {
+            // Ignore back nav
+        } else if (backstack.size > 1) {
+            backstack.removeLastOrNull()
+        }
     }
 
-    NavigationShell(backstack = backstack) {
+    NavScaffold(backstack = backstack) {
         NavDisplay(
             backStack = backstack,
             onBack = onBack,
@@ -147,9 +149,7 @@ private fun EntryProviderScope<AppRoute>.screens(
         )
     }
 
-    entry<ScheduleScreen>(
-        metadata = noAnimationMetadata
-    ) {
+    entry<ScheduleScreen>(metadata = noAnimationMetadata) {
         val service: ConferenceService = LocalAppGraph.current.conferenceService
         LaunchedEffect(Unit) {
             service.completeOnboarding()
@@ -163,35 +163,17 @@ private fun EntryProviderScope<AppRoute>.screens(
         )
     }
 
-    entry<SpeakersScreen>(
-        metadata = noAnimationMetadata,
-    ) {
-        val service: ConferenceService = koinInject()
-        LaunchedEffect(Unit) {
-            service.completeOnboarding()
-        }
+    entry<SpeakersScreen>(metadata = noAnimationMetadata) {
         SpeakersScreen(
             onSpeaker = { backStack.add(SpeakerDetailScreen(it)) }
         )
     }
 
-    entry<MapScreen>(
-        metadata = noAnimationMetadata,
-    ) {
-        val service: ConferenceService = koinInject()
-        LaunchedEffect(Unit) {
-            service.completeOnboarding()
-        }
+    entry<MapScreen>(metadata = noAnimationMetadata) {
         MapScreen()
     }
 
-    entry<InfoScreen>(
-        metadata = noAnimationMetadata,
-    ) {
-        val service: ConferenceService = koinInject()
-        LaunchedEffect(Unit) {
-            service.completeOnboarding()
-        }
+    entry<InfoScreen>(metadata = noAnimationMetadata) {
         val uriHandler = LocalUriHandler.current
         InfoScreen(
             onAboutConf = { backStack.add(AboutConferenceScreen) },

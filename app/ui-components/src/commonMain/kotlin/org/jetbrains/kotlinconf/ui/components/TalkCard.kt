@@ -30,7 +30,6 @@ import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.runtime.Composable
@@ -173,7 +172,7 @@ fun TalkCard(
             status = status,
         )
         Spacer(Modifier.weight(1f))
-        Divider(
+        HorizontalDivider(
             thickness = 1.dp,
             color = KotlinConfTheme.colors.strokePale,
         )
@@ -190,7 +189,7 @@ fun TalkCard(
             enter = fadeIn(tween(300, 70, EaseOut)) + expandVertically(tween(150, 0, EaseOut)),
             exit = fadeOut(tween(300, 70, EaseOut)) + shrinkVertically(tween(150, 0, EaseOut)),
         ) {
-            Divider(
+            HorizontalDivider(
                 thickness = 1.dp,
                 color = KotlinConfTheme.colors.strokePale,
             )

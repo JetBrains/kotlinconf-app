@@ -28,7 +28,7 @@ import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
 import org.jetbrains.kotlinconf.generated.resources.speaker_detail_error_not_found
 import org.jetbrains.kotlinconf.generated.resources.speaker_detail_title
 import org.jetbrains.kotlinconf.toEmotion
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MajorError
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
@@ -73,7 +73,7 @@ fun SpeakerDetailScreen(
                 )
             }
         )
-        Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
         AnimatedContent(
             targetState = speaker,

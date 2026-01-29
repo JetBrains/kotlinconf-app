@@ -37,7 +37,7 @@ import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.speakers_error_no_data
 import org.jetbrains.kotlinconf.generated.resources.speakers_number_of_results
 import org.jetbrains.kotlinconf.generated.resources.speakers_title
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
@@ -112,7 +112,7 @@ fun SpeakersScreen(
             }
         )
 
-        Divider(1.dp, KotlinConfTheme.colors.strokePale)
+        HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
 
         AnimatedContent(
             uiState,

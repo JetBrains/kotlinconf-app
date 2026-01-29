@@ -17,6 +17,9 @@ import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 import org.jetbrains.kotlinconf.di.AppGraph
 import org.jetbrains.kotlinconf.navigation.KotlinConfNavHost
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.LocalWindowSize
+import org.jetbrains.kotlinconf.utils.windowSize
+import org.koin.compose.koinInject
 
 @Composable
 fun App(
@@ -44,6 +47,7 @@ fun App(
         LocalFlags provides flags,
         LocalAppGraph provides appGraph,
         LocalMetroViewModelFactory provides appGraph.metroViewModelFactory,
+        LocalWindowSize provides windowSize(),
     ) {
         KotlinConfTheme(
             darkTheme = isDarkTheme,

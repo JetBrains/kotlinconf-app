@@ -39,7 +39,7 @@ import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.kodee_frightened
 import org.jetbrains.kotlinconf.ui.components.Button
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.SettingsItem
 import org.jetbrains.kotlinconf.ui.components.Text
@@ -83,7 +83,7 @@ fun DeveloperMenuScreen(
                 }
             )
 
-            Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+            HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
             val appGraph = LocalAppGraph.current
 
@@ -163,7 +163,7 @@ fun DeveloperMenuScreen(
                     )
                 }
 
-                Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+                HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
                 val flagsManager = appGraph.flagsManager
                 Row(

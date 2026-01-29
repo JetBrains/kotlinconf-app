@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -92,7 +91,7 @@ fun ServiceEvents(
     ) {
         events.forEachIndexed { index, event ->
             if (index > 0) {
-                Divider(1.dp, KotlinConfTheme.colors.strokePale)
+                HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
             }
             ServiceEventItem(event)
         }

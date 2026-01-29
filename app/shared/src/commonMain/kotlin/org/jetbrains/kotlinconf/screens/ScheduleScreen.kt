@@ -60,7 +60,7 @@ import org.jetbrains.kotlinconf.generated.resources.schedule_number_of_results
 import org.jetbrains.kotlinconf.isLive
 import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.DayHeader
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.components.FilterItem
 import org.jetbrains.kotlinconf.ui.components.Filters
@@ -158,7 +158,7 @@ fun ScheduleScreen(
             onClearSearch = { viewModel.resetFilters() },
             viewModel = viewModel
         )
-        Divider(
+        HorizontalDivider(
             thickness = 1.dp,
             color = KotlinConfTheme.colors.strokePale,
         )
