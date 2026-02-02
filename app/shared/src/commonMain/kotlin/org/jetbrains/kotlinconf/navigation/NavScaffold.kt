@@ -44,7 +44,7 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.LocalWindowSize
 import org.jetbrains.kotlinconf.utils.WindowSize
 
-private val bottomNavDestinations: List<MainNavDestination<AppRoute>> = listOf(
+private val bottomNavDestinations: List<MainNavDestination<TopLevelRoute>> = listOf(
     MainNavDestination(
         label = Res.string.nav_destination_schedule,
         icon = Res.drawable.clock_28,
@@ -71,27 +71,14 @@ private val bottomNavDestinations: List<MainNavDestination<AppRoute>> = listOf(
     ),
 )
 
-private val mainRoutes = bottomNavDestinations.map { it.route }
-
 @Composable
 internal fun NavScaffold(
-    backstack: MutableList<AppRoute>,
-    content: @Composable () -> Unit
+    navState: NavigationState,
+    navigator: Navigator,
+    content: @Composable (() -> Unit)
 ) {
-    val onSelectRoute: (AppRoute) -> Unit = { route ->
-        if (route is ScheduleScreen) {
-            // Going to Schedule: clear to just Schedule
-            while (backstack.size > 1) {
-                backstack.removeAt(backstack.size - 1)
-            }
-            backstack[0] = ScheduleScreen
-        } else {
-            // Going to other main tab: Schedule at base, selected tab on top
-            // Other main tabs don't stack on each other
-            backstack.clear()
-            backstack.add(ScheduleScreen)
-            backstack.add(route)
-        }
+    val onSelectRoute: (TopLevelRoute) -> Unit = { route ->
+        navigator.activate(route)
     }
 
     Box(
@@ -101,8 +88,7 @@ internal fun NavScaffold(
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         val windowSize = LocalWindowSize.current
-        val currentRoute = backstack.lastOrNull()
-        val showNavigation = currentRoute in mainRoutes
+        val showNavigation = navState.topLevelRoute != null
 
         Row(
             Modifier
@@ -116,7 +102,7 @@ internal fun NavScaffold(
                 exit = shrinkHorizontally(),
             ) {
                 SideNavigation(
-                    currentRoute = currentRoute,
+                    currentRoute = navState.topLevelRoute,
                     onSelectRoute = onSelectRoute,
                     expanded = windowSize == WindowSize.Large,
                 )
@@ -133,7 +119,7 @@ internal fun NavScaffold(
                     exit = shrinkVertically(),
                 ) {
                     BottomNavigation(
-                        currentRoute = currentRoute,
+                        currentRoute = navState.topLevelRoute,
                         onSelectRoute = onSelectRoute,
                     )
                 }
@@ -150,8 +136,8 @@ private fun isKeyboardOpen(): Boolean {
 
 @Composable
 private fun BottomNavigation(
-    currentRoute: AppRoute?,
-    onSelectRoute: (AppRoute) -> Unit,
+    currentRoute: TopLevelRoute?,
+    onSelectRoute: (TopLevelRoute) -> Unit,
 ) {
     val currentDestination = bottomNavDestinations.find { it.route == currentRoute }
 
@@ -169,8 +155,8 @@ private fun BottomNavigation(
 
 @Composable
 private fun SideNavigation(
-    currentRoute: AppRoute?,
-    onSelectRoute: (AppRoute) -> Unit,
+    currentRoute: TopLevelRoute?,
+    onSelectRoute: (TopLevelRoute) -> Unit,
     expanded: Boolean,
 ) {
     val currentDestination = bottomNavDestinations.find { it.route == currentRoute }

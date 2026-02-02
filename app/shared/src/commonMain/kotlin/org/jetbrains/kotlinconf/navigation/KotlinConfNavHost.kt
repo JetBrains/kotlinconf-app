@@ -5,15 +5,11 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.saveable.rememberSerializable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import androidx.savedstate.compose.serialization.serializers.SnapshotStateListSerializer
 import kotlinx.coroutines.channels.Channel
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.LocalAppGraph
@@ -55,53 +51,61 @@ fun navigateByLocalNotificationId(notificationId: String) {
 }
 
 fun navigateToSession(sessionId: SessionId) {
-    notificationNavRequests.trySend(SessionScreen(sessionId))
+    notificationNavRequests.trySend(NavRequest(ScheduleScreen, SessionScreen(sessionId)))
 }
 
-private val notificationNavRequests = Channel<AppRoute>(capacity = 1)
+data class NavRequest(val topLevelRoute: TopLevelRoute, val targetRoute: AppRoute)
+
+private val notificationNavRequests = Channel<NavRequest>(capacity = 1)
 
 @Composable
-private fun NotificationHandler(backStack: MutableList<AppRoute>) {
+private fun NotificationHandler(navigator: Navigator) {
     LaunchedEffect(Unit) {
         while (true) {
-            backStack.add(notificationNavRequests.receive())
+            val request: NavRequest = notificationNavRequests.receive()
+            navigator.activate(request.topLevelRoute)
+            navigator.add(request.targetRoute)
         }
     }
 }
 
 @Composable
 internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
-    val backstack: MutableList<AppRoute> =
-        rememberSerializable(serializer = SnapshotStateListSerializer()) {
-            val startDestination =
-                if (isOnboardingComplete) ScheduleScreen else StartPrivacyNoticeScreen
-            mutableStateListOf(startDestination)
-        }
+    val startRoute = remember {
+        if (isOnboardingComplete) ScheduleScreen else StartPrivacyNoticeScreen
+    }
+
+    val navState = rememberNavigationState(
+        startRoute = startRoute,
+        topLevelRoutes = setOf(
+            ScheduleScreen,
+            SpeakersScreen,
+            MapScreen,
+            InfoScreen,
+        ),
+        primaryTopLevelRoute = ScheduleScreen,
+    )
+
+    val mainBackEnabled = LocalFlags.current.enableBackOnMainScreens
+    val navigator = remember(navState, mainBackEnabled) {
+        Navigator(navState, mainBackEnabled)
+    }
 
     // TODO Integrate with browser navigation here https://github.com/JetBrains/kotlinconf-app/issues/557
 
-    NotificationHandler(backstack)
+    NotificationHandler(navigator)
 
-    val mainBackEnabled = LocalFlags.current.enableBackOnMainScreens
-    val onBack = {
-        if (backstack.last() is MainRoute && !mainBackEnabled) {
-            // Ignore back nav
-        } else if (backstack.size > 1) {
-            backstack.removeLastOrNull()
-        }
+    val entryProvider = entryProvider {
+        screens(
+            navigator = navigator,
+            onBack = { navigator.goBack() },
+        )
     }
 
-    NavScaffold(backstack = backstack) {
+    NavScaffold(navState, navigator) {
         NavDisplay(
-            backStack = backstack,
-            onBack = onBack,
-            entryProvider = entryProvider {
-                screens(backstack, onBack)
-            },
-            entryDecorators = listOf(
-                rememberSaveableStateHolderNavEntryDecorator(),
-                rememberViewModelStoreNavEntryDecorator(),
-            ),
+            entries = navState.toDecoratedEntries(entryProvider),
+            onBack = navigator::goBack,
         )
     }
 }
@@ -114,7 +118,7 @@ private val noAnimationMetadata =
             NavDisplay.predictivePopTransitionSpec { noAnimationTransition }
 
 private fun EntryProviderScope<AppRoute>.screens(
-    backStack: MutableList<AppRoute>,
+    navigator: Navigator,
     onBack: () -> Unit,
 ) {
     entry<StartPrivacyNoticeScreen> {
@@ -122,29 +126,29 @@ private fun EntryProviderScope<AppRoute>.screens(
         AppPrivacyNoticePrompt(
             onRejectNotice = {
                 if (skipNotifications) {
-                    backStack.clear()
-                    backStack.add(ScheduleScreen)
+                    navigator.clear()
+                    navigator.add(ScheduleScreen)
                 } else {
-                    backStack.add(StartNotificationsScreen)
+                    navigator.add(StartNotificationsScreen)
                 }
             },
             onAcceptNotice = {
                 if (skipNotifications) {
-                    backStack.clear()
-                    backStack.add(ScheduleScreen)
+                    navigator.clear()
+                    navigator.add(ScheduleScreen)
                 } else {
-                    backStack.add(StartNotificationsScreen)
+                    navigator.add(StartNotificationsScreen)
                 }
             },
-            onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
+            onAppTermsOfUse = { navigator.add(AppTermsOfUseScreen) },
             confirmationRequired = false,
         )
     }
     entry<StartNotificationsScreen> {
         StartNotificationsScreen(
             onDone = {
-                backStack.clear()
-                backStack.add(ScheduleScreen)
+                navigator.clear()
+                navigator.add(ScheduleScreen)
             }
         )
     }
@@ -155,17 +159,17 @@ private fun EntryProviderScope<AppRoute>.screens(
             service.completeOnboarding()
         }
         ScheduleScreen(
-            onSession = { backStack.add(SessionScreen(it)) },
-            onPrivacyNoticeNeeded = { backStack.add(AppPrivacyNoticePrompt) },
+            onSession = { navigator.add(SessionScreen(it)) },
+            onPrivacyNoticeNeeded = { navigator.add(AppPrivacyNoticePrompt) },
             onRequestFeedbackWithComment = { sessionId ->
-                backStack.add(SessionScreen(sessionId, openedForFeedback = true))
+                navigator.add(SessionScreen(sessionId, openedForFeedback = true))
             },
         )
     }
 
     entry<SpeakersScreen>(metadata = noAnimationMetadata) {
         SpeakersScreen(
-            onSpeaker = { backStack.add(SpeakerDetailScreen(it)) }
+            onSpeaker = { navigator.add(SpeakerDetailScreen(it)) }
         )
     }
 
@@ -176,14 +180,14 @@ private fun EntryProviderScope<AppRoute>.screens(
     entry<InfoScreen>(metadata = noAnimationMetadata) {
         val uriHandler = LocalUriHandler.current
         InfoScreen(
-            onAboutConf = { backStack.add(AboutConferenceScreen) },
-            onAboutApp = { backStack.add(AboutAppScreen) },
-            onOurPartners = { backStack.add(PartnersScreen) },
-            onCodeOfConduct = { backStack.add(CodeOfConductScreen) },
+            onAboutConf = { navigator.add(AboutConferenceScreen) },
+            onAboutApp = { navigator.add(AboutAppScreen) },
+            onOurPartners = { navigator.add(PartnersScreen) },
+            onCodeOfConduct = { navigator.add(CodeOfConductScreen) },
             onTwitter = { uriHandler.openUri(URLs.TWITTER) },
             onSlack = { uriHandler.openUri(URLs.SLACK) },
             onBluesky = { uriHandler.openUri(URLs.BLUESKY) },
-            onSettings = { backStack.add(SettingsScreen) },
+            onSettings = { navigator.add(SettingsScreen) },
         )
     }
 
@@ -191,7 +195,7 @@ private fun EntryProviderScope<AppRoute>.screens(
         SpeakerDetailScreen(
             speakerId = it.speakerId,
             onBack = onBack,
-            onSession = { sessionId -> backStack.add(SessionScreen(sessionId)) },
+            onSession = { sessionId -> navigator.add(SessionScreen(sessionId)) },
         )
     }
     entry<SessionScreen> {
@@ -200,11 +204,11 @@ private fun EntryProviderScope<AppRoute>.screens(
             sessionId = it.sessionId,
             openedForFeedback = it.openedForFeedback,
             onBack = onBack,
-            onPrivacyNoticeNeeded = { backStack.add(AppPrivacyNoticePrompt) },
-            onSpeaker = { speakerId -> backStack.add(SpeakerDetailScreen(speakerId)) },
+            onPrivacyNoticeNeeded = { navigator.add(AppPrivacyNoticePrompt) },
+            onSpeaker = { speakerId -> navigator.add(SpeakerDetailScreen(speakerId)) },
             onWatchVideo = { videoUrl -> urlHandler.openUri(videoUrl) },
             onNavigateToMap = { roomName ->
-                backStack.add(NestedMapScreen(roomName))
+                navigator.add(NestedMapScreen(roomName))
             },
         )
     }
@@ -215,17 +219,17 @@ private fun EntryProviderScope<AppRoute>.screens(
             onBack = onBack,
             onGitHubRepo = { uriHandler.openUri(URLs.GITHUB_REPO) },
             onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
-            onPrivacyNotice = { backStack.add(AppPrivacyNoticeScreen) },
-            onTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
-            onLicenses = { backStack.add(LicensesScreen) },
+            onPrivacyNotice = { navigator.add(AppPrivacyNoticeScreen) },
+            onTermsOfUse = { navigator.add(AppTermsOfUseScreen) },
+            onLicenses = { navigator.add(LicensesScreen) },
             onJunie = { uriHandler.openUri(URLs.JUNIE_LANDING_PAGE) },
-            onDeveloperMenu = { backStack.add(DeveloperMenuScreen) },
+            onDeveloperMenu = { navigator.add(DeveloperMenuScreen) },
         )
     }
     entry<LicensesScreen> {
         LicensesScreen(
             onLicenseClick = { licenseName, licenseText ->
-                backStack.add(SingleLicenseScreen(licenseName, licenseText))
+                navigator.add(SingleLicenseScreen(licenseName, licenseText))
             },
             onBack = onBack,
         )
@@ -240,11 +244,11 @@ private fun EntryProviderScope<AppRoute>.screens(
     entry<AboutConferenceScreen> {
         val urlHandler = LocalUriHandler.current
         AboutConference(
-            onPrivacyNotice = { backStack.add(VisitorPrivacyNoticeScreen) },
-            onGeneralTerms = { backStack.add(TermsOfUseScreen) },
+            onPrivacyNotice = { navigator.add(VisitorPrivacyNoticeScreen) },
+            onGeneralTerms = { navigator.add(TermsOfUseScreen) },
             onWebsiteLink = { urlHandler.openUri(URLs.KOTLINCONF_HOMEPAGE) },
             onBack = onBack,
-            onSpeaker = { speakerId -> backStack.add(SpeakerDetailScreen(speakerId)) },
+            onSpeaker = { speakerId -> navigator.add(SpeakerDetailScreen(speakerId)) },
         )
     }
     entry<CodeOfConductScreen> {
@@ -259,21 +263,21 @@ private fun EntryProviderScope<AppRoute>.screens(
     entry<AppPrivacyNoticeScreen> {
         AppPrivacyNotice(
             onBack = onBack,
-            onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
+            onAppTermsOfUse = { navigator.add(AppTermsOfUseScreen) },
         )
     }
     entry<TermsOfUseScreen> {
         VisitorTermsOfUse(
             onBack = onBack,
-            onCodeOfConduct = { backStack.add(CodeOfConductScreen) },
-            onVisitorPrivacyNotice = { backStack.add(VisitorPrivacyNoticeScreen) },
+            onCodeOfConduct = { navigator.add(CodeOfConductScreen) },
+            onVisitorPrivacyNotice = { navigator.add(VisitorPrivacyNoticeScreen) },
         )
     }
     entry<AppTermsOfUseScreen> {
         AppTermsOfUse(
             onBack = onBack,
             onAppPrivacyNotice = {
-                backStack.add(AppPrivacyNoticeScreen)
+                navigator.add(AppPrivacyNoticeScreen)
             },
         )
     }
@@ -281,7 +285,7 @@ private fun EntryProviderScope<AppRoute>.screens(
         PartnersScreen(
             onBack = onBack,
             onPartnerDetail = { partnerId ->
-                backStack.add(PartnerDetailScreen(partnerId))
+                navigator.add(PartnerDetailScreen(partnerId))
             }
         )
     }
@@ -296,7 +300,7 @@ private fun EntryProviderScope<AppRoute>.screens(
         AppPrivacyNoticePrompt(
             onRejectNotice = onBack,
             onAcceptNotice = onBack,
-            onAppTermsOfUse = { backStack.add(AppTermsOfUseScreen) },
+            onAppTermsOfUse = { navigator.add(AppTermsOfUseScreen) },
             confirmationRequired = true,
         )
     }
