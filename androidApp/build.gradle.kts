@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.googleServices)
+    alias(libs.plugins.baselineprofile)
 }
 
 kotlin {
@@ -16,6 +17,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.core.splashscreen)
             implementation(libs.androidx.navigation3.ui)
+            implementation(libs.androidx.profileinstaller)
         }
 
         androidUnitTest.dependencies {
@@ -64,4 +66,12 @@ android {
 
 dependencies {
     debugImplementation(libs.compose.ui.tooling)
+    baselineProfile(projects.benchmarks)
+}
+
+baselineProfile {
+    // Don't build on every iteration of a full assemble.
+    // Instead enable generation directly for the release build variant.
+    automaticGenerationDuringBuild = false
+    dexLayoutOptimization = true
 }

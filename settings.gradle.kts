@@ -35,6 +35,7 @@ dependencyResolutionManagement {
 }
 
 include(":androidApp")
+include(":benchmarks")
 include(":ui-components")
 include(":shared")
 include(":backend")
