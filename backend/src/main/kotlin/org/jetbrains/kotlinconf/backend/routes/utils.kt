@@ -2,8 +2,11 @@ package org.jetbrains.kotlinconf.backend.routes
 
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.routing.*
 import org.jetbrains.kotlinconf.backend.plugins.KotlinConfPrincipal
 import org.jetbrains.kotlinconf.backend.repositories.KotlinConfRepository
+import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
+import org.jetbrains.kotlinconf.backend.utils.NotFound
 import org.jetbrains.kotlinconf.backend.utils.Unauthorized
 
 internal fun ApplicationCall.checkAdminKey(adminSecret: String) {
@@ -17,4 +20,22 @@ internal suspend fun ApplicationCall.validatePrincipal(database: KotlinConfRepos
     val principal = principal<KotlinConfPrincipal>() ?: return null
     if (!database.validateUser(principal.token)) return null
     return principal
+}
+
+/**
+ * Gets the year for this request.
+ * - If "year" path parameter is absent: returns null (meaning current year)
+ * - If "year" path parameter exists: validates and returns it (throws NotFound if invalid)
+ */
+internal fun RoutingContext.getYearFromPath(config: ConferenceConfig): Int {
+    val yearParam = call.parameters["year"] ?: return config.currentYear
+
+    val year = yearParam.toIntOrNull()
+        ?: throw NotFound()
+
+    if (year !in config.supportedYears) {
+        throw NotFound()
+    }
+
+    return year
 }

@@ -1,0 +1,23 @@
+{
+  "sessions": [
+    {
+      "id": "test-session-2024",
+      "title": "Test Session from 2024",
+      "description": "A test session for archived year testing",
+      "speakerIds": ["test-speaker"],
+      "location": "Test Room",
+      "startsAt": "2024-05-23T09:00:00",
+      "endsAt": "2024-05-23T10:00:00",
+      "tags": ["Test"]
+    }
+  ],
+  "speakers": [
+    {
+      "id": "test-speaker",
+      "name": "Test Speaker",
+      "position": "Test Position",
+      "description": "Test description",
+      "photoUrl": "https://example.com/photo.jpg"
+    }
+  ]
+}
