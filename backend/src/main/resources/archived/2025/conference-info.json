@@ -1,0 +1,274 @@
+{
+  "partners": [
+    {
+      "level": "Platinum",
+      "partners": [
+        {
+          "id": "revenuecat",
+          "name": "RevenueCat",
+          "description": "RevenueCat makes it easy to build analyze, and grow in-app subscriptions. Trusted by over 38k apps, developers can manage cross-platform payments, track customer data, and access powerful analytics to maximize their app's revenue.",
+          "logoUrlLight": "partner-logos/revenuecat-light.png",
+          "logoUrlDark": "partner-logos/revenuecat-dark.png",
+          "url": "https://www.rev.cat"
+        }
+      ]
+    },
+    {
+      "level": "Gold",
+      "partners": [
+        {
+          "id": "google",
+          "name": "Google",
+          "description": "Google's mission is to organize the world's information and make it universally accessible and useful.",
+          "logoUrlLight": "partner-logos/google-light.png",
+          "logoUrlDark": "partner-logos/google-dark.png",
+          "url": "https://about.google/"
+        }
+      ]
+    },
+    {
+      "level": "Silver",
+      "partners": [
+        {
+          "id": "gradle",
+          "name": "Gradle",
+          "description": "Develocity is the leading software solution for improving developer productivity & the developer experience. It does this by leveraging advanced build and test performance acceleration technologies.",
+          "logoUrlLight": "partner-logos/gradle-light.png",
+          "logoUrlDark": "partner-logos/gradle-dark.png",
+          "url": "http://www.gradle.com/"
+        },
+        {
+          "id": "kotlinfoundation",
+          "name": "Kotlin Foundation",
+          "description": "The Kotlin Foundation is dedicated to promoting Kotlin as a multiplatform language, helping grow the ecosystem, as well as increasing adoption of Kotlin in Education. In addition, it safeguards the Kotlin trademark, and oversees backwards incompatible changes to the language.",
+          "logoUrlLight": "partner-logos/kotlin-foundation-light.png",
+          "logoUrlDark": "partner-logos/kotlin-foundation-dark.png",
+          "url": "https://kotlinfoundation.org/"
+        },
+        {
+          "id": "kotzilla",
+          "name": "Kotzilla",
+          "description": "Creators of Koin, the popular Kotlin dependency injection framework, Kotzilla provides debugging tools for Kotlin devs to resolve complex app issues, empowering them to develop safer, faster apps.",
+          "logoUrlLight": "partner-logos/kotzilla-light.png",
+          "logoUrlDark": "partner-logos/kotzilla-dark.png",
+          "url": "https://kotzilla.io/"
+        },
+        {
+          "id": "uber",
+          "name": "Uber",
+          "description": "We reimagine the way the world moves for the better Movement is what we power.",
+          "logoUrlLight": "partner-logos/uber-lght.png",
+          "logoUrlDark": "partner-logos/uberdark.png",
+          "url": "https://www.uber.com/nl/en/"
+        }
+      ]
+    },
+    {
+      "level": "Bronze",
+      "partners": [
+        {
+          "id": "bloomberg",
+          "name": "Bloomberg",
+          "description": "Bloomberg's 9,000+ engineers solve complex, real-world problems. Kotlin is popular among the firm's Java and the JVM community, and increasingly, it is used to write entire application stacks.",
+          "logoUrlLight": "partner-logos/bloomberg-light.png",
+          "logoUrlDark": "partner-logos/bloomberg-dark.png",
+          "url": "https://www.bloomberg.com/company/values/tech-at-bloomberg/"
+        },
+        {
+          "id": "gitar",
+          "name": "Gitar",
+          "description": "Gitar simplifies code maintenance for developers with automated solutions for dead code cleanup, feature flag removal, and seamless app migrations. Boost efficiency and code quality effortlessly!",
+          "logoUrlLight": "partner-logos/gitar-light.png",
+          "logoUrlDark": "partner-logos/gitar-dark.png",
+          "url": "www.gitar.ai"
+        },
+        {
+          "id": "sentry",
+          "name": "Sentry",
+          "description": "For software teams, Sentry is essential for monitoring application code quality. From Error tracking to Performance monitoring, developers can see clearer, solve quicker, and learn continuously about their applications — from frontend to backend. Loved by nearly 4 million developers and 90,000 organizations worldwide, Sentry provides code-level observability to many of the world's best-known companies like Disney, Cloudflare, Eventbrite, Slack, Supercell, and Rockstar Games.",
+          "logoUrlLight": "partner-logos/sentry-light.png",
+          "logoUrlDark": "partner-logos/sentry-dark.png",
+          "url": "https://sentry.io/welcome"
+        }
+      ]
+    },
+    {
+      "level": "Video",
+      "partners": [
+        {
+          "id": "amex",
+          "name": "American Express",
+          "description": "American Express is a globally integrated payments company, providing customers with access to products, insights and experiences that enrich lives and build business success. Find your place in Tech at Amex.",
+          "logoUrlLight": "partner-logos/american-express-light.png",
+          "logoUrlDark": "partner-logos/american-express-dark.png",
+          "url": "americanexpress.com/techcareers"
+        }
+      ]
+    },
+    {
+      "level": "Codelab",
+      "partners": [
+        {
+          "id": "google",
+          "name": "Google",
+          "description": "Google's mission is to organize the world's information and make it universally accessible and useful.",
+          "logoUrlLight": "partner-logos/google-light.png",
+          "logoUrlDark": "partner-logos/google-dark.png",
+          "url": "https://about.google/"
+        }
+      ]
+    },
+    {
+      "level": "Digital",
+      "partners": [
+        {
+          "id": "kodein",
+          "name": "Kodein Koders",
+          "description": "Level-up your Kotlin expertise with Kodein Koders: guiding developers to master Kotlin Multiplatform through hands-on workshops to tackle real-world Android, iOS, Desktop, and Web challenges.",
+          "logoUrlLight": "partner-logos/kodeinkoders-light.png",
+          "logoUrlDark": "partner-logos/kodeinkoders-dark.png",
+          "url": "https://kodein.net"
+        },
+        {
+          "id": "typealias",
+          "name": "Typealias Studios",
+          "description": "TypeAlias Studios makes it easy to level up your Kotlin and Android skills with illustrated articles, videos, livestreams, and courses—equipping developers at every level, from beginner to pro.",
+          "logoUrlLight": "partner-logos/typealias-light.png",
+          "logoUrlDark": "partner-logos/typealias-dark.png",
+          "url": "https://typealias.com"
+        },
+        {
+          "id": "worldline",
+          "name": "World Line",
+          "description": "Worldline is a global payments player, employing over 7000 tech engineers. Our technology powers the growth of millions of businesses around the world; from your local coffee shop, to global e-commerce players and international banks.",
+          "logoUrlLight": "partner-logos/worldline-light.png",
+          "logoUrlDark": "partner-logos/worldline-dark.png",
+          "url": "https://worldline.com/"
+        }
+      ]
+    },
+    {
+      "level": "Media",
+      "partners": [
+        {
+          "id": "androidweekly",
+          "name": "Android Weekly",
+          "description": "Android Weekly is a free newsletter that helps you to stay cutting-edge with your Android Development.",
+          "logoUrlLight": "partner-logos/android-weekly-light.png",
+          "logoUrlDark": "partner-logos/android-weekly-dark.png",
+          "url": "https://androidweekly.net"
+        },
+        {
+          "id": "jvmweekly",
+          "name": "JVM Weekly",
+          "description": "From the latest updates in JVM languages like Java, Kotlin, and Scala to emerging technologies like GraalVM and Quarkus, this newsletter covers a wide range of topics that are of interest to developers and tech enthusiasts.",
+          "logoUrlLight": "partner-logos/JVM-Weekly-light.png",
+          "logoUrlDark": "partner-logos/JVM-Weekly-dark.png",
+          "url": "https://www.jvm-weekly.com/"
+        },
+        {
+          "id": "kotlinweekly",
+          "name": "Kotlin Weekly",
+          "description": "Kotlin Weekly is your weekly source of Kotlin news, libraries, and events going on the Kotlin world.",
+          "logoUrlLight": "partner-logos/kotlin-weekly-light.png",
+          "logoUrlDark": "partner-logos/kotlin-weekly-dark.png",
+          "url": "https://kotlinweekly.net/"
+        }
+      ]
+    },
+    {
+      "level": "Swag",
+      "partners": [
+        {
+          "id": "revenuecat",
+          "name": "RevenueCat",
+          "description": "RevenueCat makes it easy to build analyze, and grow in-app subscriptions. Trusted by over 38k apps, developers can manage cross-platform payments, track customer data, and access powerful analytics to maximize their app's revenue.",
+          "logoUrlLight": "partner-logos/revenuecat-light.png",
+          "logoUrlDark": "partner-logos/revenuecat-dark.png",
+          "url": "https://www.rev.cat"
+        }
+      ]
+    }
+  ],
+  "days": [
+    {
+      "date": "2025-05-21",
+      "line1": "Workshop",
+      "line2": "Day"
+    },
+    {
+      "date": "2025-05-22",
+      "line1": "Conference",
+      "line2": "Day 1"
+    },
+    {
+      "date": "2025-05-23",
+      "line1": "Conference",
+      "line2": "Day 2"
+    }
+  ],
+  "aboutBlocks": [
+    {
+      "sessionId": "857088",
+      "month": "MAY",
+      "day": "22",
+      "title1": "Opening",
+      "title2": "keynote",
+      "description": null
+    },
+    {
+      "sessionId": "797367",
+      "month": "MAY",
+      "day": "23",
+      "title1": "Second day",
+      "title2": "keynote",
+      "description": null
+    },
+    {
+      "sessionId": null,
+      "month": "MAY",
+      "day": "22-23",
+      "title1": "Code",
+      "title2": "labs",
+      "description": "Participate in code labs by Google and get practical, hands-on experience with Kotlin Multiplatform! They'll guide you through setting up your environment, introducing shared logic to a mobile app, and migrating existing Android code to multiple platforms."
+    },
+    {
+      "sessionId": "62b7f3ff-2afa-4b2e-8aec-e69e536cdb6a",
+      "month": "MAY",
+      "day": "22",
+      "title1": "",
+      "title2": "Party",
+      "description": "Have fun and mingle with the community at the biggest Kotlin party of the year!"
+    },
+    {
+      "sessionId": "857092",
+      "month": "MAY",
+      "day": "23",
+      "title1": "Closing",
+      "title2": "panel",
+      "description": "Come and seize the opportunity to ask the KotlinConf speakers your questions in person."
+    }
+  ],
+  "tags": {
+    "categories": [
+      "Server-side",
+      "Multiplatform",
+      "Android",
+      "Extensibility/Tooling",
+      "Language and best practices",
+      "Education",
+      "Other"
+    ],
+    "levels": [
+      "Introductory and overview",
+      "Intermediate",
+      "Advanced"
+    ],
+    "formats": [
+      "Workshop",
+      "Regular session",
+      "Lightning talk",
+      "Codelab"
+    ]
+  }
+}

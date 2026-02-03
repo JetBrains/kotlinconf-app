@@ -41,7 +41,8 @@ import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.DayValues
+import kotlinx.datetime.LocalDate
+import org.jetbrains.kotlinconf.DayInfo
 import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
 import org.jetbrains.kotlinconf.LocalAppGraph
 import org.jetbrains.kotlinconf.LocalFlags
@@ -220,12 +221,14 @@ fun ScheduleScreen(
                         }
 
                         val tags by viewModel.filterItems.collectAsStateWithLifecycle()
+                        val dayInfoMap by viewModel.dayInfoMap.collectAsStateWithLifecycle()
                         ScheduleList(
                             scheduleItems = items,
                             onSession = onSession,
                             listState = listState,
                             userSignedIn = targetState.userSignedIn,
                             isSearch = isSearch,
+                            dayInfoMap = dayInfoMap,
                             onSubmitFeedback = { sessionId, emotion ->
                                 viewModel.onSubmitFeedback(sessionId, emotion)
                             },
@@ -391,6 +394,7 @@ private fun ScheduleList(
     listState: LazyListState,
     isSearch: Boolean,
     userSignedIn: Boolean,
+    dayInfoMap: Map<LocalDate, DayInfo>,
     onSubmitFeedback: (SessionId, Emotion?) -> Unit,
     onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
     onRequestFeedbackWithComment: ((SessionId) -> Unit)?,
@@ -454,12 +458,12 @@ private fun ScheduleList(
 
                     is DayHeaderItem -> {
                         val date = item.value.date
-                        val dayValues = DayValues.map[date]
+                        val dayInfo = dayInfoMap[date]
                         DayHeader(
                             month = DateTimeFormatting.month(date).uppercase(),
                             day = date.day.toString(),
-                            line1 = dayValues?.line1 ?: "",
-                            line2 = dayValues?.line2 ?: "",
+                            line1 = dayInfo?.line1 ?: "",
+                            line2 = dayInfo?.line2 ?: "",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 16.dp)

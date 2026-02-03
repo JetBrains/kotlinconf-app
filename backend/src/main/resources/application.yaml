@@ -17,6 +17,7 @@ sessionize:
 conference:
     currentYear: 2025
     supportedYears: [2025]
+    baseUrl: "$CONFERENCE_BASE_URL:http://localhost:8080"
 
 database:
     host: "$DB0_HOST:"

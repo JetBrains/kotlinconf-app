@@ -17,13 +17,14 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalDate
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.Day
+import org.jetbrains.kotlinconf.DayInfo
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
-import org.jetbrains.kotlinconf.TagValues
 import org.jetbrains.kotlinconf.TimeProvider
 import org.jetbrains.kotlinconf.TimeSlot
 import org.jetbrains.kotlinconf.isServiceEvent
@@ -92,16 +93,39 @@ class ScheduleViewModel(
         return map { FilterItem(type = type, value = it, isSelected = false) }
     }
 
-    val filterItems = MutableStateFlow(
-        TagValues.categories.toTags(FilterItemType.Category) +
-                TagValues.levels.toTags(FilterItemType.Level) +
-                TagValues.formats.toTags(FilterItemType.Format)
-    )
+    private val _filterItems = MutableStateFlow<List<FilterItem>>(emptyList())
+    val filterItems: StateFlow<List<FilterItem>> = _filterItems.asStateFlow()
+
+    val dayInfoMap: StateFlow<Map<LocalDate, DayInfo>> = service.conferenceInfo
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+        .let { conferenceInfoFlow ->
+            MutableStateFlow<Map<LocalDate, DayInfo>>(emptyMap()).also { mutableFlow ->
+                viewModelScope.launch {
+                    conferenceInfoFlow.collect { info ->
+                        val days = info?.days ?: emptyList()
+                        mutableFlow.value = days.associateBy { it.date }
+                    }
+                }
+            }
+        }
+
+    init {
+        viewModelScope.launch {
+            service.conferenceInfo.collect { info ->
+                val tags = info?.tags
+                if (tags != null && _filterItems.value.isEmpty()) {
+                    _filterItems.value = tags.categories.toTags(FilterItemType.Category) +
+                            tags.levels.toTags(FilterItemType.Level) +
+                            tags.formats.toTags(FilterItemType.Format)
+                }
+            }
+        }
+    }
 
     private var loading = MutableStateFlow(false)
 
     fun toggleFilter(item: FilterItem, selected: Boolean) {
-        filterItems.update {
+        _filterItems.update {
             val list = it.toMutableList()
 
             if (item.type == FilterItemType.Level || item.type == FilterItemType.Format) {
@@ -122,7 +146,7 @@ class ScheduleViewModel(
     }
 
     fun resetFilters() {
-        filterItems.update {
+        _filterItems.update {
             it.map { filter -> filter.copy(isSelected = false) }
         }
     }
