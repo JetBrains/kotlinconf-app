@@ -16,5 +16,8 @@ internal object Votes : Table() {
 
     val rating = integer("rating")
 
-    override val primaryKey: PrimaryKey = PrimaryKey(userId, sessionId)
+    // TODO: if we have an existing DB, populate it with the correct year values
+    val year = integer("year")
+
+    override val primaryKey: PrimaryKey = PrimaryKey(userId, sessionId, year)
 }

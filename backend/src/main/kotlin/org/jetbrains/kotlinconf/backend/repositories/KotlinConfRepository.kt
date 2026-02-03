@@ -76,14 +76,13 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         return@newSuspendedTransaction true
     }
 
-    suspend fun getVotes(uuid: String): List<VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
-        Votes.selectAll().where { Votes.userId eq uuid }
+    suspend fun getVotes(uuid: String, year: Int): List<VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
+        Votes.selectAll().where { (Votes.userId eq uuid) and (Votes.year eq year) }
             .map { VoteInfo(it[Votes.sessionId], Score.Companion.fromValue(it[Votes.rating])) }
-
     }
 
-    suspend fun getAllVotes(): List<VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
-        Votes.selectAll()
+    suspend fun getAllVotes(year: Int): List<VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
+        Votes.selectAll().where { Votes.year eq year }
             .map { VoteInfo(it[Votes.sessionId], Score.Companion.fromValue(it[Votes.rating])) }
     }
 
@@ -91,16 +90,17 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         userIdValue: String,
         sessionIdValue: SessionId,
         scoreValue: Score?,
-        timestampValue: LocalDateTime
+        timestampValue: LocalDateTime,
+        yearValue: Int,
     ) {
         if (scoreValue == null) {
-            deleteVote(userIdValue, sessionIdValue)
+            deleteVote(userIdValue, sessionIdValue, yearValue)
             return
         }
 
         newSuspendedTransaction(Dispatchers.IO) {
             val count = Votes.selectAll()
-                .where { (Votes.userId eq userIdValue) and (Votes.sessionId eq sessionIdValue) }.count()
+                .where { (Votes.userId eq userIdValue) and (Votes.sessionId eq sessionIdValue) and (Votes.year eq yearValue) }.count()
 
             if (count == 0L) {
                 Votes.insert {
@@ -108,15 +108,15 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
                     it[sessionId] = sessionIdValue
                     it[rating] = scoreValue.value
                     it[timestamp] = timestampValue.toString()
+                    it[year] = yearValue
                 }
                 return@newSuspendedTransaction
             }
 
-            Votes.update({ (Votes.userId eq userIdValue) and (Votes.sessionId eq sessionIdValue) }) {
+            Votes.update({ (Votes.userId eq userIdValue) and (Votes.sessionId eq sessionIdValue) and (Votes.year eq yearValue) }) {
                 it[rating] = scoreValue.value
             }
         }
-
     }
 
     suspend fun setFeedback(
@@ -133,9 +133,9 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         }.insertedCount > 0
     }
 
-    suspend fun deleteVote(uuid: String, sessionId: SessionId) {
+    suspend fun deleteVote(uuid: String, sessionId: SessionId, year: Int) {
         newSuspendedTransaction(Dispatchers.IO) {
-            Votes.deleteWhere { (userId eq uuid) and (Votes.sessionId eq sessionId) }
+            Votes.deleteWhere { (userId eq uuid) and (Votes.sessionId eq sessionId) and (Votes.year eq year) }
         }
     }
 
