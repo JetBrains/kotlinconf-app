@@ -95,6 +95,15 @@ class APIClient(
     }
 
     /**
+     * Get [ConferenceInfo] (partners, days, about blocks, tags)
+     */
+    suspend fun downloadConferenceInfo(): ConferenceInfo? {
+        return safeApiCall {
+            client.get("conference-info").body()
+        }
+    }
+
+    /**
      * Vote for session.
      */
     suspend fun vote(sessionId: SessionId, score: Score?): Boolean {

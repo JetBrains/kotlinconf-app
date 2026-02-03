@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinconf.Conference
+import org.jetbrains.kotlinconf.ConferenceInfo
 import org.jetbrains.kotlinconf.Flags
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.SessionId
@@ -59,6 +60,12 @@ class MultiplatformSettingsStorage(
 
     override suspend fun setConferenceCache(value: Conference) = settings
         .set(Keys.CONFERENCE_CACHE, json.encodeToString(value))
+
+    override fun getConferenceInfoCache(): Flow<ConferenceInfo?> = settings.getStringOrNullFlow(Keys.CONFERENCE_INFO_CACHE)
+        .map { it.decodeOrNull<ConferenceInfo>() }
+
+    override suspend fun setConferenceInfoCache(value: ConferenceInfo) = settings
+        .set(Keys.CONFERENCE_INFO_CACHE, json.encodeToString(value))
 
     override fun getFavorites(): Flow<Set<SessionId>> = settings.getStringOrNullFlow(Keys.FAVORITES)
         .map { it.decodeOrNull<Set<SessionId>>() ?: emptySet() }
@@ -165,6 +172,7 @@ class MultiplatformSettingsStorage(
         const val ONBOARDING_COMPLETE = "onboardingComplete"
         const val THEME = "theme"
         const val CONFERENCE_CACHE = "conferenceCache"
+        const val CONFERENCE_INFO_CACHE = "conferenceInfoCache"
         const val NEWS_CACHE = "newsCache"
         const val FAVORITES = "favorites"
         const val NOTIFICATION_SETTINGS = "notificationSettings"

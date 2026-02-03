@@ -110,6 +110,9 @@ class ConferenceService(
         }
         .stateIn(scope, SharingStarted.Eagerly, emptyMap())
 
+    val conferenceInfo: StateFlow<ConferenceInfo?> = storage.getConferenceInfoCache()
+        .stateIn(scope, SharingStarted.Eagerly, null)
+
     fun getTheme(): Flow<Theme> = storage.getTheme()
 
     fun setTheme(theme: Theme) {
@@ -117,6 +120,9 @@ class ConferenceService(
     }
 
     suspend fun loadConferenceData() {
+        // Load conference info (partners, days, about blocks, tags)
+        client.downloadConferenceInfo()?.let { storage.setConferenceInfoCache(it) }
+
         val newData = client.downloadConferenceData() ?: return
         val oldData = storage.getConferenceCache().first()
 
