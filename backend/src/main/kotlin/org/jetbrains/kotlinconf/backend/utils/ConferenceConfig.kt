@@ -8,4 +8,9 @@ class ConferenceConfig(config: ApplicationConfig) {
     val sessionizeInterval = config.property("sessionize.interval").getString().toLong()
 
     val adminSecret: String = config.property("service.secret").getString()
+
+    val currentYear: Int = config.property("conference.currentYear").getString().toInt()
+    val supportedYears: List<Int> = config.property("conference.supportedYears")
+        .getList()
+        .map { it.toInt() }
 }

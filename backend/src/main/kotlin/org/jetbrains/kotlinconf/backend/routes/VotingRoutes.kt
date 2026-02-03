@@ -24,9 +24,14 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 private val COME_BACK_LATER = HttpStatusCode(477, "Come Back Later")
+private val ARCHIVED_YEAR_FORBIDDEN = HttpStatusCode(403, "Forbidden: Archived Year")
 
 /*
 GET http://localhost:8080/vote
+Accept: application/json
+Authorization: Bearer 1238476512873162837
+
+GET http://localhost:8080/{year}/vote
 Accept: application/json
 Authorization: Bearer 1238476512873162837
 */
@@ -38,11 +43,19 @@ fun Route.votingRoutes() {
 
     route("vote") {
         get {
+            val year = getYearFromPath(config)
             val principal = call.validatePrincipal(repository) ?: throw Unauthorized()
-            val votes = repository.getVotes(principal.token)
+            val votes = repository.getVotes(principal.token, year)
             call.respond(Votes(votes))
         }
         post {
+            val year = getYearFromPath(config)
+
+            // Only allow requests if the current year is explicitly specified
+            if (!isLiveRequest(config)) {
+                return@post call.respond(ARCHIVED_YEAR_FORBIDDEN)
+            }
+
             val principal = call.validatePrincipal(repository) ?: throw Unauthorized()
             val vote = call.receive<VoteInfo>()
             val sessionId = vote.sessionId
@@ -60,7 +73,7 @@ fun Route.votingRoutes() {
             }
 
             val timestamp = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-            repository.changeVote(principal.token, sessionId, vote.score, timestamp)
+            repository.changeVote(principal.token, sessionId, vote.score, timestamp, year)
             call.respond(HttpStatusCode.OK)
         }
 
@@ -68,14 +81,22 @@ fun Route.votingRoutes() {
          * Admin endpoints
          */
         get("all") {
+            val year = getYearFromPath(config)
             call.checkAdminKey(config.adminSecret)
 
-            val votes = repository.getAllVotes()
+            val votes = repository.getAllVotes(year)
             call.respond(votes)
         }
     }
     route("feedback") {
         post {
+            val year = getYearFromPath(config)
+
+            // Only allow requests if the current year is explicitly specified
+            if (!isLiveRequest(config)) {
+                return@post call.respond(ARCHIVED_YEAR_FORBIDDEN)
+            }
+
             val principal = call.validatePrincipal(repository) ?: throw Unauthorized()
             val feedback = call.receive<FeedbackInfo>()
 
