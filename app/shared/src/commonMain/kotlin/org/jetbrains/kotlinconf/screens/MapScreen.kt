@@ -3,7 +3,6 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.EaseOutCubic
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -23,7 +22,6 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -121,7 +119,12 @@ fun NestedMapScreen(
     roomName: String,
     onBack: (() -> Unit),
 ) {
-    MapScreenImpl(rooms[roomName] ?: venue, onBack, Modifier.padding(topInsetPadding()))
+    MapScreenImpl(
+        location = rooms[roomName] ?: venue,
+        onBack = onBack,
+        modifier = Modifier.padding(topInsetPadding()),
+        onHowToFindVenue = null,
+    )
 }
 
 @Composable
@@ -174,8 +177,9 @@ private fun MapScreenImpl(
 
         svg?.let {
             val containerSize = LocalWindowInfo.current.containerSize
-            val scaleAdjustment = remember { sqrt(containerSize.width / it.width * (containerSize.height / it.height)) }
-            Map(
+            val scaleAdjustment =
+                remember { sqrt(containerSize.width / it.width * (containerSize.height / it.height)) }
+            MapWithControls(
                 svg = it,
                 initialZoom = 2f * scaleAdjustment,
                 initialOffset = location.offset.asSvgOffset(it),
@@ -199,97 +203,62 @@ fun StaticMap(
     }
 
     svg?.let {
+        val state = rememberMapState(zoom, location.offset.asSvgOffset(it))
         Map(
             svg = it,
+            state = state,
             modifier = modifier,
-            initialZoom = zoom,
-            initialOffset = location.offset.asSvgOffset(it),
             interactive = false,
         )
     }
 }
 
+private class MapState(
+    initialZoom: Float,
+    initialOffset: Offset,
+) {
+    val scale = Animatable(initialZoom)
+    val offsetX = Animatable(initialOffset.x)
+    val offsetY = Animatable(initialOffset.y)
+}
+
+private val mapStateSaver = Saver<MapState, List<Float>>(
+    save = { listOf(it.scale.value, it.offsetX.value, it.offsetY.value) },
+    restore = { values ->
+        val (scale, offsetX, offsetY) = values
+        MapState(scale, Offset(offsetX, offsetY))
+    }
+)
+
 @Composable
-private fun Map(
+private fun rememberMapState(initialZoom: Float, initialOffset: Offset): MapState {
+    return rememberSaveable(saver = mapStateSaver) {
+        MapState(initialZoom, initialOffset)
+    }
+}
+
+@Composable
+private fun MapWithControls(
     svg: Svg,
-    modifier: Modifier = Modifier,
     initialZoom: Float = 1f,
     initialOffset: Offset = Offset.Zero,
     zoomRange: ClosedFloatingPointRange<Float> = 0.5f..5f,
-    interactive: Boolean = true,
     onHowToFindVenue: (() -> Unit)? = null,
 ) {
-    val scale = rememberSaveable(saver = FloatAnimSaver) { Animatable(initialZoom) }
-    val offsetX = rememberSaveable(saver = FloatAnimSaver) { Animatable(initialOffset.x) }
-    val offsetY = rememberSaveable(saver = FloatAnimSaver) { Animatable(initialOffset.y) }
-
+    val state = rememberMapState(initialZoom, initialOffset)
     val scope = rememberCoroutineScope()
-
-    val validOffsetX = (-svg.width * 0.5f)..(svg.width * 0.5f)
-    val validOffsetY = (-svg.height * 0.5f)..(svg.height * 0.5f)
-
-    val spec = tween<Float>(500, easing = EaseOutCubic)
-
-    val interactiveModifiers = if (!interactive) {
-        Modifier
-    } else {
-        Modifier
-            .transformable(rememberTransformableState { zoomChange, panChange, _ ->
-                if (!interactive) return@rememberTransformableState
-
-                scope.launch {
-                    scale.snapTo((scale.value * zoomChange).coerceIn(zoomRange))
-                    offsetX.snapTo((offsetX.value + panChange.x / scale.value).coerceIn(validOffsetX))
-                    offsetY.snapTo((offsetY.value + panChange.y / scale.value).coerceIn(validOffsetY))
-                }
-            })
-            .pointerInput(Unit) {
-                if (!interactive) return@pointerInput
-
-                detectTapGestures(
-                    onDoubleTap = { tapOffset ->
-                        if (scale.value >= zoomRange.endInclusive - 0.1f) {
-                            scope.launch { scale.animateTo(initialZoom, spec) }
-                        } else {
-                            val newScale = (scale.value * 2f).coerceIn(zoomRange)
-
-                            val newOffsetX = (offsetX.value + (size.width / 2 - tapOffset.x) / 2 / scale.value)
-                                .coerceIn(validOffsetX)
-                            val newOffsetY = (offsetY.value + (size.height / 2 - tapOffset.y) / 2 / scale.value)
-                                .coerceIn(validOffsetY)
-
-                            scope.launch {
-                                async { scale.animateTo(newScale, spec) }
-                                async { offsetX.animateTo(newOffsetX, spec) }
-                                async { offsetY.animateTo(newOffsetY, spec) }
-                            }
-                        }
-                    }
-                )
-            }
-    }
+    val spec = remember { tween<Float>(500, easing = EaseOutCubic) }
 
     Box(Modifier.fillMaxSize()) {
+        Map(
+            svg = svg,
+            state = state,
+            zoomRange = zoomRange,
+            interactive = true,
+        )
+
         val buttonEdgePadding = 12.dp
 
-        Canvas(
-            modifier
-                .clipToBounds()
-                .fillMaxSize()
-                .then(interactiveModifiers)
-        ) {
-            translate(
-                left = offsetX.value + (size.width - svg.width) / 2,
-                top = offsetY.value + (size.height - svg.height) / 2,
-            ) {
-                scale(
-                    scale = scale.value,
-                    pivot = Offset(svg.width / 2 - offsetX.value, svg.height / 2 - offsetY.value),
-                ) {
-                    svg.renderTo(this)
-                }
-            }
-        }
         Column(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
@@ -298,11 +267,11 @@ private fun Map(
         ) {
             IconButton(
                 icon = Res.drawable.plus_24,
-                enabled = scale.targetValue < zoomRange.endInclusive,
+                enabled = state.scale.value < zoomRange.endInclusive,
                 onClick = {
                     scope.launch {
-                        scale.animateTo(
-                            targetValue = (scale.value * 2f).coerceIn(zoomRange),
+                        state.scale.animateTo(
+                            targetValue = (state.scale.value * 2f).coerceIn(zoomRange),
                             animationSpec = spec,
                         )
                     }
@@ -311,11 +280,11 @@ private fun Map(
             )
             IconButton(
                 icon = Res.drawable.minus_24,
-                enabled = scale.targetValue > zoomRange.start,
+                enabled = state.scale.value > zoomRange.start,
                 onClick = {
                     scope.launch {
-                        scale.animateTo(
-                            targetValue = (scale.value / 2f).coerceIn(zoomRange),
+                        state.scale.animateTo(
+                            targetValue = (state.scale.value / 2f).coerceIn(zoomRange),
                             animationSpec = spec,
                         )
                     }
@@ -323,6 +292,7 @@ private fun Map(
                 contentDescription = stringResource(Res.string.map_zoom_out),
             )
         }
+
         if (onHowToFindVenue != null) {
             ActionButton(
                 label = stringResource(Res.string.map_how_to_find_venue),
@@ -336,9 +306,86 @@ private fun Map(
     }
 }
 
-private object FloatAnimSaver : Saver<Animatable<Float, AnimationVector1D>, Float> {
-    override fun restore(value: Float): Animatable<Float, AnimationVector1D>? = Animatable(value)
-    override fun SaverScope.save(value: Animatable<Float, AnimationVector1D>): Float? = value.value
+@Composable
+private fun Map(
+    svg: Svg,
+    state: MapState,
+    modifier: Modifier = Modifier,
+    zoomRange: ClosedFloatingPointRange<Float> = 0.5f..5f,
+    interactive: Boolean = true,
+) {
+    val scope = rememberCoroutineScope()
+    val spec = remember { tween<Float>(500, easing = EaseOutCubic) }
+
+    val validOffsetX = (-svg.width * 0.5f)..(svg.width * 0.5f)
+    val validOffsetY = (-svg.height * 0.5f)..(svg.height * 0.5f)
+
+    val interactiveModifiers = if (!interactive) {
+        Modifier
+    } else {
+        Modifier
+            .transformable(rememberTransformableState { zoomChange, panChange, _ ->
+                scope.launch {
+                    state.scale.snapTo((state.scale.value * zoomChange).coerceIn(zoomRange))
+                    state.offsetX.snapTo(
+                        (state.offsetX.value + panChange.x / state.scale.value).coerceIn(
+                            validOffsetX
+                        )
+                    )
+                    state.offsetY.snapTo(
+                        (state.offsetY.value + panChange.y / state.scale.value).coerceIn(
+                            validOffsetY
+                        )
+                    )
+                }
+            })
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onDoubleTap = { tapOffset ->
+                        if (state.scale.value >= zoomRange.endInclusive - 0.1f) {
+                            scope.launch { state.scale.animateTo(state.scale.value / 2f, spec) }
+                        } else {
+                            val newScale = (state.scale.value * 2f).coerceIn(zoomRange)
+
+                            val newOffsetX =
+                                (state.offsetX.value + (size.width / 2 - tapOffset.x) / 2 / state.scale.value)
+                                    .coerceIn(validOffsetX)
+                            val newOffsetY =
+                                (state.offsetY.value + (size.height / 2 - tapOffset.y) / 2 / state.scale.value)
+                                    .coerceIn(validOffsetY)
+
+                            scope.launch {
+                                async { state.scale.animateTo(newScale, spec) }
+                                async { state.offsetX.animateTo(newOffsetX, spec) }
+                                async { state.offsetY.animateTo(newOffsetY, spec) }
+                            }
+                        }
+                    }
+                )
+            }
+    }
+
+    Canvas(
+        modifier
+            .fillMaxSize()
+            .clipToBounds()
+            .then(interactiveModifiers)
+    ) {
+        translate(
+            left = state.offsetX.value + (size.width - svg.width) / 2,
+            top = state.offsetY.value + (size.height - svg.height) / 2,
+        ) {
+            scale(
+                scale = state.scale.value,
+                pivot = Offset(
+                    svg.width / 2 - state.offsetX.value,
+                    svg.height / 2 - state.offsetY.value
+                ),
+            ) {
+                svg.renderTo(this)
+            }
+        }
+    }
 }
 
 expect class Svg(svgBytes: ByteArray) {
