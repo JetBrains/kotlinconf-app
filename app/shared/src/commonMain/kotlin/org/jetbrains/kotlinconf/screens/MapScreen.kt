@@ -43,20 +43,23 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.arrow_left_24
-import org.jetbrains.kotlinconf.generated.resources.bookmark_24
 import org.jetbrains.kotlinconf.generated.resources.map_first_floor
 import org.jetbrains.kotlinconf.generated.resources.map_ground_floor
+import org.jetbrains.kotlinconf.generated.resources.map_how_to_find_venue
 import org.jetbrains.kotlinconf.generated.resources.map_title
 import org.jetbrains.kotlinconf.generated.resources.map_zoom_in
 import org.jetbrains.kotlinconf.generated.resources.map_zoom_out
 import org.jetbrains.kotlinconf.generated.resources.minus_24
 import org.jetbrains.kotlinconf.generated.resources.navigate_back
 import org.jetbrains.kotlinconf.generated.resources.plus_24
+import org.jetbrains.kotlinconf.ui.components.ActionButton
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.IconButton
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.Switcher
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
+import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
+import org.jetbrains.kotlinconf.ui.generated.resources.arrow_up_right_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 import kotlin.math.sqrt
@@ -122,8 +125,15 @@ fun NestedMapScreen(
 }
 
 @Composable
-fun MapScreen() {
-    MapScreenImpl(venue, null, modifier = Modifier.padding(topInsetPadding()))
+fun MapScreen(
+    onHowToFindVenue: () -> Unit,
+) {
+    MapScreenImpl(
+        location = venue,
+        onBack = null,
+        onHowToFindVenue = onHowToFindVenue,
+        modifier = Modifier.padding(topInsetPadding()),
+    )
 }
 
 @Composable
@@ -131,6 +141,7 @@ private fun MapScreenImpl(
     location: LocationInfo,
     onBack: (() -> Unit)?,
     modifier: Modifier = Modifier,
+    onHowToFindVenue: (() -> Unit)? = null,
 ) {
     var floorIndex by rememberSaveable { mutableStateOf(location.floor.ordinal) }
     val floor: Floor = remember(floorIndex) { Floor.entries[floorIndex] }
@@ -168,7 +179,8 @@ private fun MapScreenImpl(
                 svg = it,
                 initialZoom = 2f * scaleAdjustment,
                 initialOffset = location.offset.asSvgOffset(it),
-                zoomRange = 1f..6f
+                zoomRange = 1f..6f,
+                onHowToFindVenue = onHowToFindVenue,
             )
         }
     }
@@ -205,6 +217,7 @@ private fun Map(
     initialOffset: Offset = Offset.Zero,
     zoomRange: ClosedFloatingPointRange<Float> = 0.5f..5f,
     interactive: Boolean = true,
+    onHowToFindVenue: (() -> Unit)? = null,
 ) {
     val scale = rememberSaveable(saver = FloatAnimSaver) { Animatable(initialZoom) }
     val offsetX = rememberSaveable(saver = FloatAnimSaver) { Animatable(initialOffset.x) }
@@ -257,6 +270,8 @@ private fun Map(
     }
 
     Box(Modifier.fillMaxSize()) {
+        val buttonEdgePadding = 12.dp
+
         Canvas(
             modifier
                 .clipToBounds()
@@ -277,8 +292,8 @@ private fun Map(
         }
         Column(
             modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(bottom = 24.dp, end = 12.dp),
+                .align(Alignment.CenterEnd)
+                .padding(end = buttonEdgePadding),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             IconButton(
@@ -306,6 +321,16 @@ private fun Map(
                     }
                 },
                 contentDescription = stringResource(Res.string.map_zoom_out),
+            )
+        }
+        if (onHowToFindVenue != null) {
+            ActionButton(
+                label = stringResource(Res.string.map_how_to_find_venue),
+                icon = UiRes.drawable.arrow_up_right_24,
+                onClick = onHowToFindVenue,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = buttonEdgePadding)
             )
         }
     }

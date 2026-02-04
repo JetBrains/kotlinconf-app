@@ -29,8 +29,8 @@ fun Action(
     label: String,
     icon: DrawableResource,
     size: ActionSize,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
     enabled: Boolean = true,
     iconRotation: Float = 0f,
 ) {
@@ -43,12 +43,18 @@ fun Action(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .clickable(
-                onClick = onClick,
-                enabled = enabled,
-                interactionSource = null,
-                indication = null,
-                role = Role.Button,
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable(
+                        onClick = onClick,
+                        enabled = enabled,
+                        interactionSource = null,
+                        indication = null,
+                        role = Role.Button,
+                    )
+                } else {
+                    Modifier
+                }
             )
     ) {
         Text(

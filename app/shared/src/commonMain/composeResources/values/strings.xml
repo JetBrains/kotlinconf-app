@@ -23,6 +23,7 @@ For the source code and more technical details, visit the GitHub repository.</st
 
     <string name="info_title">Info</string>
     <string name="info_link_about_conf">About the conference</string>
+    <string name="info_link_how_to_find_venue">How to find the venue</string>
     <string name="info_link_about_app">About the app</string>
     <string name="info_link_partners">Our partners</string>
     <string name="info_link_code_of_conduct">Code of conduct</string>
@@ -131,6 +132,7 @@ We will process your data in accordance with the App Privacy Notice. You can adj
     <string name="map_first_floor">First floor</string>
     <string name="map_zoom_in">Zoom in</string>
     <string name="map_zoom_out">Zoom out</string>
+    <string name="map_how_to_find_venue">How to find the venue</string>
 
     <string name="speakers_title">Speakers</string>
     <string name="speakers_error_no_results">No results</string>
