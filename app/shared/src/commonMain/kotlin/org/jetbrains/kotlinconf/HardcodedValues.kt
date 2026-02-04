@@ -29,6 +29,8 @@ import org.jetbrains.kotlinconf.generated.resources.partners_silver
 import org.jetbrains.kotlinconf.generated.resources.partners_swag
 import org.jetbrains.kotlinconf.generated.resources.partners_video
 
+const val VENUE_ADDRESS = "Bella Center, Center Boulevard 5, 2300 Copenhagen, Denmark"
+
 object TagValues {
     val categories = listOf(
         "Server-side",

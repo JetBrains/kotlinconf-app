@@ -8,7 +8,6 @@ object URLs {
 
     // kotlinconf.com
     const val KOTLINCONF_HOMEPAGE = "https://kotlinconf.com/"
-    const val HOW_TO_FIND_VENUE = "https://kotlinconf.com/venue/"
 
     // Social Media URLs
     const val TWITTER = "https://x.com/kotlinconf"
