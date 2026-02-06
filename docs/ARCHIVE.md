@@ -19,7 +19,7 @@ Once the new year's Sessionize data is ready, export the existing data and creat
 
 ```bash
 mkdir -p backend/src/main/resources/archived/{YEAR}
-curl -L https://kotlinconf-app-prod.labs.jb.gg/conference > backend/src/main/resources/archived/{YEAR}/conference.json
+curl -L https://kotlinconf-app-prod.labs.jb.gg/{YEAR}/conference > backend/src/main/resources/archived/{YEAR}/conference.json
 ```
 
 ### 2. Update Configuration
