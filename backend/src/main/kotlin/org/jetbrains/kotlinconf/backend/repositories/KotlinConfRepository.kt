@@ -123,13 +123,15 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         userIdValue: String,
         sessionIdValue: SessionId,
         feedbackValue: String,
-        timestampValue: LocalDateTime
+        timestampValue: LocalDateTime,
+        yearValue: Int,
     ): Boolean = newSuspendedTransaction(Dispatchers.IO) {
         Feedback.insert {
             it[userId] = userIdValue
             it[sessionId] = sessionIdValue
             it[feedback] = feedbackValue
             it[timestamp] = timestampValue.toString()
+            it[year] = yearValue
         }.insertedCount > 0
     }
 
@@ -139,8 +141,8 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         }
     }
 
-    suspend fun getFeedbackSummary(): List<FeedbackInfo> = newSuspendedTransaction {
-        Feedback.selectAll().map {
+    suspend fun getFeedbackSummary(year: Int): List<FeedbackInfo> = newSuspendedTransaction {
+        Feedback.selectAll().where { Feedback.year eq year }.map {
             FeedbackInfo(
                 it[Feedback.sessionId], it[Feedback.feedback]
             )

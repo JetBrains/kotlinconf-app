@@ -16,5 +16,8 @@ internal object Feedback : Table() {
 
     val feedback: Column<String> = varchar("feedback", length = 5000)
 
-    override val primaryKey: PrimaryKey = PrimaryKey(Votes.userId, Votes.sessionId)
+    // TODO: if we have an existing DB, populate it with the correct year values
+    val year = integer("year")
+
+    override val primaryKey: PrimaryKey = PrimaryKey(userId, sessionId, year)
 }
