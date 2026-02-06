@@ -10,6 +10,7 @@ import org.jetbrains.kotlinconf.backend.routes.scheduleRoutes
 import org.jetbrains.kotlinconf.backend.routes.timeRoutes
 import org.jetbrains.kotlinconf.backend.routes.userRoutes
 import org.jetbrains.kotlinconf.backend.routes.votingRoutes
+import org.jetbrains.kotlinconf.backend.routes.configRoutes
 
 
 fun Application.routesModule() {
@@ -20,6 +21,7 @@ fun Application.routesModule() {
         }
         timeRoutes()
         adminRoutes()
+        configRoutes()
 
         // Routes without the year prefix for backwards compatibility
         yearBasedRoutes()

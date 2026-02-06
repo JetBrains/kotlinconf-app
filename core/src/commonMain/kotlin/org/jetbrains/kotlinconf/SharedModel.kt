@@ -72,3 +72,9 @@ enum class Score(val value: Int) {
 class Votes(
     val votes: List<VoteInfo> = emptyList()
 )
+
+@Serializable
+data class AppConfig(
+    val currentYear: Int,
+    val supportedYears: List<Int>,
+)
