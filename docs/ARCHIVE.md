@@ -6,7 +6,7 @@ The app supports year-based API versioning. The current year fetches live data f
 
 Key components:
 - `ConferenceConfig` (`application.yaml`) - Defines `currentYear` and `supportedYears`
-- `ArchivedDataService` - Loads static JSON from `resources/archived/{YEAR}/conference.json`
+- `ArchivedDataService` - Loads static JSON from `resources/years/{YEAR}/conference.json`
 - `SessionizeService` - Fetches live data for the current year
 
 ## Archiving Steps
@@ -18,8 +18,8 @@ Replace `{YEAR}` below with the year being archived (e.g., `2025`) and `{NEW_YEA
 Once the new year's Sessionize data is ready, export the existing data and create the archive of the previous year:
 
 ```bash
-mkdir -p backend/src/main/resources/archived/{YEAR}
-curl -L https://kotlinconf-app-prod.labs.jb.gg/conference > backend/src/main/resources/archived/{YEAR}/conference.json
+mkdir -p backend/src/main/resources/years/{YEAR}
+curl -L https://kotlinconf-app-prod.labs.jb.gg/conference > backend/src/main/resources/years/{YEAR}/conference.json
 ```
 
 ### 2. Update Configuration

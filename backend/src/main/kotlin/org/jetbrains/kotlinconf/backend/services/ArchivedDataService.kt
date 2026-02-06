@@ -30,7 +30,7 @@ class ArchivedDataService(
     }
 
     private fun loadConferenceData(year: Int): Conference? {
-        val resourcePath = "/archived/$year/conference.json"
+        val resourcePath = "/years/$year/conference.json"
         val inputStream = javaClass.getResourceAsStream(resourcePath)
 
         if (inputStream == null) {

@@ -27,7 +27,7 @@ class ConferenceInfoService(
     }
 
     private fun loadConferenceInfo(year: Int): ConferenceInfo? {
-        val resourcePath = "/archived/$year/conference-info.json"
+        val resourcePath = "/years/$year/conference-info.json"
         val inputStream = javaClass.getResourceAsStream(resourcePath)
 
         if (inputStream == null) {
@@ -82,7 +82,7 @@ class ConferenceInfoService(
     }
 
     private fun loadPartnerLogo(year: Int, filename: String): ByteArray? {
-        val resourcePath = "/archived/$year/partner-logos/$filename"
+        val resourcePath = "/years/$year/partner-logos/$filename"
         val inputStream = javaClass.getResourceAsStream(resourcePath)
 
         if (inputStream == null) {
