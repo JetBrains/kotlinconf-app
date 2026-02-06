@@ -7,19 +7,14 @@ import com.russhwolf.settings.coroutines.getStringOrNullFlow
 import com.russhwolf.settings.set
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import org.jetbrains.kotlinconf.Conference
-import org.jetbrains.kotlinconf.ConferenceInfo
 import org.jetbrains.kotlinconf.Flags
 import org.jetbrains.kotlinconf.NotificationSettings
-import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Theme
-import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
 
@@ -46,12 +41,6 @@ class MultiplatformSettingsStorage(
         }
     }
 
-    override fun getUserId(): Flow<String?> = settings.getStringOrNullFlow(Keys.USER_ID)
-    override suspend fun setUserId(value: String?) = settings.set(Keys.USER_ID, value)
-
-    override fun getPendingUserId(): Flow<String?> = settings.getStringOrNullFlow(Keys.PENDING_USER_ID)
-    override suspend fun setPendingUserId(value: String?) = settings.set(Keys.PENDING_USER_ID, value)
-
     override fun isOnboardingComplete(): Flow<Boolean> = settings.getBooleanFlow(Keys.ONBOARDING_COMPLETE, false)
     override suspend fun setOnboardingComplete(value: Boolean) = settings.set(Keys.ONBOARDING_COMPLETE, value)
 
@@ -61,37 +50,6 @@ class MultiplatformSettingsStorage(
     override suspend fun setTheme(value: Theme) = settings
         .set(Keys.THEME, value.name)
 
-    override fun getConferenceCache(): Flow<Conference?> = settings.getStringOrNullFlow(Keys.CONFERENCE_CACHE)
-        .map { it.decodeOrNull<Conference>() }
-
-    override suspend fun setConferenceCache(value: Conference) = settings
-        .set(Keys.CONFERENCE_CACHE, json.encodeToString(value))
-
-    override fun getConferenceInfoCache(): Flow<ConferenceInfo?> = settings.getStringOrNullFlow(Keys.CONFERENCE_INFO_CACHE)
-        .map { it.decodeOrNull<ConferenceInfo>() }
-
-    override suspend fun setConferenceInfoCache(value: ConferenceInfo) = settings
-        .set(Keys.CONFERENCE_INFO_CACHE, json.encodeToString(value))
-
-    override fun getFavorites(): Flow<Set<SessionId>> = settings.getStringOrNullFlow(Keys.FAVORITES)
-        .map { it.decodeOrNull<Set<SessionId>>() ?: emptySet() }
-
-    override suspend fun setFavorites(value: Set<SessionId>) = settings
-        .set(Keys.FAVORITES, json.encodeToString(value))
-
-    override fun getNotificationSettings(): Flow<NotificationSettings?> =
-        settings.getStringOrNullFlow(Keys.NOTIFICATION_SETTINGS)
-            .map { it.decodeOrNull<NotificationSettings>() }
-
-    override suspend fun setNotificationSettings(value: NotificationSettings) = settings
-        .set(Keys.NOTIFICATION_SETTINGS, json.encodeToString(value))
-
-    override fun getVotes(): Flow<List<VoteInfo>> = settings.getStringOrNullFlow(Keys.VOTES)
-        .map { it.decodeOrNull<List<VoteInfo>>() ?: emptyList() }
-
-    override suspend fun setVotes(value: List<VoteInfo>) = settings
-        .set(Keys.VOTES, json.encodeToString(value))
-
     override fun getFlagsBlocking(): Flags? =
         settings.getStringOrNull(Keys.FLAGS)?.decodeOrNull<Flags>()
 
@@ -100,6 +58,12 @@ class MultiplatformSettingsStorage(
 
     override suspend fun setFlags(value: Flags) = settings
         .set(Keys.FLAGS, json.encodeToString(value))
+
+    override fun getSelectedYear(): Flow<Int?> = settings.getStringOrNullFlow(Keys.SELECTED_YEAR)
+        .map { it?.toIntOrNull() }
+
+    override suspend fun setSelectedYear(value: Int) = settings
+        .set(Keys.SELECTED_YEAR, value.toString())
 
     override fun ensureCurrentVersion() {
         var version = settings.getInt(Keys.STORAGE_VERSION, 0)
@@ -112,19 +76,19 @@ class MultiplatformSettingsStorage(
             return
         }
 
-        if (version > CURRENT_STORAGE_VERSION) {
+        if (version > LATEST_STORAGE_VERSION) {
             taggedLogger.log { "Storage version not recognized, performing destructive migration" }
             destructiveUpgrade()
             return
         }
 
-        if (version == CURRENT_STORAGE_VERSION) {
+        if (version == LATEST_STORAGE_VERSION) {
             taggedLogger.log { "Storage version matches expected version, no need to migrate" }
             return
         }
 
-        while (version < CURRENT_STORAGE_VERSION) {
-            taggedLogger.log { "Finding migrations from $version to $CURRENT_STORAGE_VERSION..." }
+        while (version < LATEST_STORAGE_VERSION) {
+            taggedLogger.log { "Finding migrations from $version to $LATEST_STORAGE_VERSION..." }
 
             // Find a migration from the current version that takes us as far forward as possible
             val nextMigration = migrations.filter { it.from == version }.maxByOrNull { it.to }
@@ -147,9 +111,9 @@ class MultiplatformSettingsStorage(
     }
 
     private fun destructiveUpgrade() {
-        taggedLogger.log { "Performing destructive upgrade to $CURRENT_STORAGE_VERSION" }
+        taggedLogger.log { "Performing destructive upgrade to $LATEST_STORAGE_VERSION" }
         settings.clear()
-        settings.set(Keys.STORAGE_VERSION, CURRENT_STORAGE_VERSION)
+        settings.set(Keys.STORAGE_VERSION, LATEST_STORAGE_VERSION)
     }
 
     private data class Migration(val from: Int, val to: Int, val migrate: () -> Unit)
@@ -157,32 +121,60 @@ class MultiplatformSettingsStorage(
     private val migrations = listOf(
         Migration(V2025, V2026) {
             // News were removed
-            settings.remove(Keys.NEWS_CACHE)
+            settings.remove(OldKeys.NEWS_CACHE)
             // We removed news fields from NotificationSettings, read/write it once to update
-            settings.getStringOrNull(Keys.NOTIFICATION_SETTINGS)
+            settings.getStringOrNull(OldKeys.NOTIFICATION_SETTINGS)
                 ?.decodeOrNull<NotificationSettings>()
-                ?.let { settings.set(Keys.NOTIFICATION_SETTINGS, json.encodeToString(it)) }
+                ?.let { settings.set(OldKeys.NOTIFICATION_SETTINGS, json.encodeToString(it)) }
+        },
+        Migration(V2026, V2026_001) {
+            // Migrate year-specific data that was created during 2025
+            val year = 2025
+            migrateKey(OldKeys.USER_ID, "${year}_userId")
+            migrateKey(OldKeys.PENDING_USER_ID, "${year}_pendingUserId")
+            migrateKey(OldKeys.CONFERENCE_CACHE, "${year}_conferenceCache")
+            migrateKey(OldKeys.CONFERENCE_INFO_CACHE, "${year}_conferenceInfoCache")
+            migrateKey(OldKeys.FAVORITES, "${year}_favorites")
+            migrateKey(OldKeys.NOTIFICATION_SETTINGS, "${year}_notificationSettings")
+            migrateKey(OldKeys.VOTES, "${year}_votes")
         },
     )
+
+    private fun migrateKey(oldKey: String, newKey: String) {
+        val value = settings.getStringOrNull(oldKey)
+        if (value != null) {
+            settings[newKey] = value
+            settings.remove(oldKey)
+        }
+    }
 
     companion object {
         const val V2025 = 2025_000
         const val V2026 = 2026_000
-        const val CURRENT_STORAGE_VERSION: Int = V2026
+        const val V2026_001 = 2026_001
+        const val LATEST_STORAGE_VERSION: Int = V2026_001
     }
 
     private object Keys {
         const val STORAGE_VERSION = "storageVersion"
-        const val USER_ID = "userId2025"
-        const val PENDING_USER_ID = "pendingUserId2025"
         const val ONBOARDING_COMPLETE = "onboardingComplete"
         const val THEME = "theme"
+        const val FLAGS = "flags"
+        const val SELECTED_YEAR = "selectedYear"
+    }
+
+    /** Keys from older storage versions, used only during migrations. */
+    private object OldKeys {
+        // 2025_000
+        const val NEWS_CACHE = "newsCache"
+
+        // 2026_000
+        const val USER_ID = "userId2025"
+        const val PENDING_USER_ID = "pendingUserId2025"
         const val CONFERENCE_CACHE = "conferenceCache"
         const val CONFERENCE_INFO_CACHE = "conferenceInfoCache"
-        const val NEWS_CACHE = "newsCache"
         const val FAVORITES = "favorites"
         const val NOTIFICATION_SETTINGS = "notificationSettings"
         const val VOTES = "votes"
-        const val FLAGS = "flags"
     }
 }

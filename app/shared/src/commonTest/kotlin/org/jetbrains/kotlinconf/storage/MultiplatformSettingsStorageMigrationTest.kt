@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.runTest
 import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -38,8 +39,24 @@ class MultiplatformSettingsStorageMigrationTest {
         """.trimIndent()
     }
 
+    /**
+     * Creates a storage object with data matching the 2026 storage version (pre year-based split).
+     */
+    private fun get2026Settings() = inMemorySettings().apply {
+        this["storageVersion"] = MultiplatformSettingsStorage.V2026
+        this["userId2025"] = "user-123"
+        this["pendingUserId2025"] = "pending-456"
+        this["conferenceCache"] = "{\"sessions\":[],\"speakers\":[]}"
+        this["conferenceInfoCache"] = "{\"dummy\":\"info\"}"
+        this["favorites"] = "[\"S1\",\"S2\"]"
+        this["notificationSettings"] = """{"sessionReminders":true,"scheduleUpdates":false}"""
+        this["votes"] = """[{"sessionId":{"id":"S1"},"score":"GOOD"}]"""
+        this["theme"] = "DARK"
+        this["flags"] = """{"debugLogging":true}"""
+    }
+
     @Test
-    fun migration_2025_to_2026_updates_version() {
+    fun migration_2025_to_current_updates_version() {
         val settings = get2025Settings()
         val storage = MultiplatformSettingsStorage(settings, emptyLogger())
 
@@ -47,11 +64,11 @@ class MultiplatformSettingsStorageMigrationTest {
         storage.ensureCurrentVersion()
 
         // Storage version should be successfully updated to the current version
-        assertEquals(MultiplatformSettingsStorage.CURRENT_STORAGE_VERSION, settings.getInt("storageVersion", 0))
+        assertEquals(MultiplatformSettingsStorage.LATEST_STORAGE_VERSION, settings.getInt("storageVersion", 0))
     }
 
     @Test
-    fun migration_2026_to_2026_removes_news_cache() {
+    fun migration_2025_to_2026_removes_news_cache() {
         val settings = get2025Settings()
         val storage = MultiplatformSettingsStorage(settings, emptyLogger())
 
@@ -63,16 +80,51 @@ class MultiplatformSettingsStorageMigrationTest {
     }
 
     @Test
-    fun migration_2026_to_2026_migrates_notification_settings() = runTest {
-        val settings = get2025Settings()
+    fun migration_2026_to_2026_001_moves_year_specific_data() {
+        val settings = get2026Settings()
         val storage = MultiplatformSettingsStorage(settings, emptyLogger())
 
         // Run migrations
         storage.ensureCurrentVersion()
 
-        // Notification settings should still be readable with the current version
-        val notiSettings = storage.getNotificationSettings().first()
-        assertTrue(notiSettings != null)
+        // Old keys should be removed
+        assertNull(settings.getStringOrNull("userId2025"))
+        assertNull(settings.getStringOrNull("pendingUserId2025"))
+        assertNull(settings.getStringOrNull("conferenceCache"))
+        assertNull(settings.getStringOrNull("conferenceInfoCache"))
+        assertNull(settings.getStringOrNull("favorites"))
+        assertNull(settings.getStringOrNull("notificationSettings"))
+        assertNull(settings.getStringOrNull("votes"))
+
+        // New year-prefixed keys should exist
+        assertEquals("user-123", settings.getStringOrNull("2026_userId"))
+        assertEquals("pending-456", settings.getStringOrNull("2026_pendingUserId"))
+        assertNotNull(settings.getStringOrNull("2026_conferenceCache"))
+        assertNotNull(settings.getStringOrNull("2026_conferenceInfoCache"))
+        assertEquals("[\"S1\",\"S2\"]", settings.getStringOrNull("2026_favorites"))
+        assertNotNull(settings.getStringOrNull("2026_notificationSettings"))
+        assertNotNull(settings.getStringOrNull("2026_votes"))
+
+        // Global keys should still be present
+        assertEquals("DARK", settings.getStringOrNull("theme"))
+        assertNotNull(settings.getStringOrNull("flags"))
+    }
+
+    @Test
+    fun migration_2026_to_2026_001_preserves_global_data() = runTest {
+        val settings = get2026Settings()
+        val storage = MultiplatformSettingsStorage(settings, emptyLogger())
+
+        // Run migrations
+        storage.ensureCurrentVersion()
+
+        // Global data should still be accessible through the storage interface
+        val theme = storage.getTheme().first()
+        assertEquals(org.jetbrains.kotlinconf.Theme.DARK, theme)
+
+        val flags = storage.getFlags().first()
+        assertNotNull(flags)
+        assertTrue(flags.debugLogging)
     }
 
     @Test
@@ -88,7 +140,7 @@ class MultiplatformSettingsStorageMigrationTest {
 
         // Only the storageVersion should remain and be set to the current version
         assertEquals(setOf("storageVersion"), settings.keys)
-        assertEquals(MultiplatformSettingsStorage.CURRENT_STORAGE_VERSION, settings.getInt("storageVersion", 0))
+        assertEquals(MultiplatformSettingsStorage.LATEST_STORAGE_VERSION, settings.getInt("storageVersion", 0))
     }
 
     @Test
@@ -103,6 +155,6 @@ class MultiplatformSettingsStorageMigrationTest {
 
         // Only the storageVersion should remain and be set to the current version
         assertEquals(setOf("storageVersion"), settings.keys)
-        assertEquals(MultiplatformSettingsStorage.CURRENT_STORAGE_VERSION, settings.getInt("storageVersion", 0))
+        assertEquals(MultiplatformSettingsStorage.LATEST_STORAGE_VERSION, settings.getInt("storageVersion", 0))
     }
 }

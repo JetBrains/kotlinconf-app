@@ -6,30 +6,37 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.LocalNotificationId.Type
+import org.jetbrains.kotlinconf.di.YearGraph
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
+import org.jetbrains.kotlinconf.storage.YearlyStorage
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
 import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Inject
 @SingleIn(AppScope::class)
 class ConferenceService(
     private val client: APIClient,
     private val timeProvider: TimeProvider,
     private val storage: ApplicationStorage,
+    private val yearGraphFactory: YearGraph.Factory,
     private val localNotificationService: LocalNotificationService,
     private val scope: CoroutineScope,
     logger: Logger,
@@ -40,19 +47,36 @@ class ConferenceService(
 
     private val taggedLogger = logger.tagged(LOG_TAG)
 
+    private val _currentYearlyStorage = MutableStateFlow<YearlyStorage?>(null)
+    private val currentYearlyStorage: Flow<YearlyStorage> = _currentYearlyStorage.filterNotNull()
+
+    private fun yearStorage(): YearlyStorage =
+        _currentYearlyStorage.value ?: error("Year storage not initialized yet")
+
     init {
         storage.ensureCurrentVersion()
+
+        scope.launch {
+            storage.getSelectedYear().filterNotNull().collect { year ->
+                taggedLogger.log { "Selected year changed to $year" }
+                val yearGraph = yearGraphFactory.create(year)
+                _currentYearlyStorage.value = yearGraph.yearlyStorage
+            }
+        }
 
         val userIdLoaded = CompletableDeferred<Unit>()
 
         scope.launch {
-            storage.getUserId().collect {
+            currentYearlyStorage.flatMapLatest { it.getUserId() }.collect {
                 userIdLoaded.complete(Unit)
                 client.userId = it
             }
         }
 
         scope.launch {
+            // Wait for year storage to be ready
+            currentYearlyStorage.first()
+
             // Download fresh conference data
             loadConferenceData()
 
@@ -68,7 +92,7 @@ class ConferenceService(
         }
 
         scope.launch {
-            storage.getNotificationSettings()
+            currentYearlyStorage.flatMapLatest { it.getNotificationSettings() }
                 .filterNotNull()
                 .collect { settings ->
                     taggedLogger.log { "Synchronizing settings to Firebase topics: $settings" }
@@ -86,10 +110,10 @@ class ConferenceService(
 
     val agenda: StateFlow<List<Day>> =
         combine(
-            storage.getConferenceCache(),
-            storage.getFavorites(),
+            currentYearlyStorage.flatMapLatest { it.getConferenceCache() },
+            currentYearlyStorage.flatMapLatest { it.getFavorites() },
             timeProvider.time,
-            storage.getVotes(),
+            currentYearlyStorage.flatMapLatest { it.getVotes() },
         ) { conference, favorites, time, votes ->
             conference?.buildAgenda(favorites, votes, time) ?: emptyList()
         }.stateIn(scope, SharingStarted.Eagerly, emptyList())
@@ -99,10 +123,10 @@ class ConferenceService(
             it.flatMap { it.timeSlots }.flatMap { it.sessions }
         }.stateIn(scope, SharingStarted.Eagerly, emptyList())
 
-    val userId: StateFlow<String?> = storage.getUserId()
+    val userId: StateFlow<String?> = currentYearlyStorage.flatMapLatest { it.getUserId() }
         .stateIn(scope, SharingStarted.Eagerly, null)
 
-    val speakers: StateFlow<List<Speaker>> = storage.getConferenceCache()
+    val speakers: StateFlow<List<Speaker>> = currentYearlyStorage.flatMapLatest { it.getConferenceCache() }
         .map {
             (it?.speakers ?: emptyList())
                 .filter { speaker -> speaker.photoUrl.isNotBlank() }
@@ -115,7 +139,7 @@ class ConferenceService(
         }
         .stateIn(scope, SharingStarted.Eagerly, emptyMap())
 
-    val conferenceInfo: StateFlow<ConferenceInfo?> = storage.getConferenceInfoCache()
+    val conferenceInfo: StateFlow<ConferenceInfo?> = currentYearlyStorage.flatMapLatest { it.getConferenceInfoCache() }
         .stateIn(scope, SharingStarted.Eagerly, null)
 
     fun getTheme(): Flow<Theme> = storage.getTheme()
@@ -124,14 +148,22 @@ class ConferenceService(
         scope.launch { storage.setTheme(theme) }
     }
 
+    fun getSelectedYear(): Flow<Int?> = storage.getSelectedYear()
+
+    suspend fun setSelectedYear(year: Int) {
+        storage.setSelectedYear(year)
+    }
+
     suspend fun loadConferenceData() {
+        val yearStorage = yearStorage()
+
         // Load conference info (partners, days, about blocks, tags)
-        client.downloadConferenceInfo()?.let { storage.setConferenceInfoCache(it) }
+        client.downloadConferenceInfo()?.let { yearStorage.setConferenceInfoCache(it) }
 
         val newData = client.downloadConferenceData() ?: return
-        val oldData = storage.getConferenceCache().first()
+        val oldData = yearStorage.getConferenceCache().first()
 
-        storage.setConferenceCache(newData)
+        yearStorage.setConferenceCache(newData)
 
         if (oldData != null) {
             val oldSessions = oldData.sessions.associateBy { it.id }
@@ -144,9 +176,9 @@ class ConferenceService(
             }
 
             // Remove removed sessions from favorites
-            val favorites = storage.getFavorites().first().toMutableSet()
+            val favorites = yearStorage.getFavorites().first().toMutableSet()
             favorites.removeAll { it in removedIds }
-            storage.setFavorites(favorites)
+            yearStorage.setFavorites(favorites)
 
             // Check if any favorite sessions were rescheduled
             favorites.forEach { sessionId ->
@@ -174,7 +206,8 @@ class ConferenceService(
     }
 
     suspend fun acceptPrivacyNotice(): Boolean {
-        val userId = storage.getUserId().first()
+        val yearStorage = yearStorage()
+        val userId = yearStorage.getUserId().first()
         if (userId != null) return true
 
         @OptIn(ExperimentalUuidApi::class)
@@ -189,13 +222,14 @@ class ConferenceService(
     }
 
     private suspend fun registerUser(newUserId: String): Boolean {
+        val yearStorage = yearStorage()
         val success = client.sign(newUserId)
         if (success) {
-            storage.setUserId(newUserId)
-            storage.setPendingUserId(null)
+            yearStorage.setUserId(newUserId)
+            yearStorage.setPendingUserId(null)
             taggedLogger.log { "Signed up successfully with $newUserId" }
         } else {
-            storage.setPendingUserId(newUserId)
+            yearStorage.setPendingUserId(newUserId)
             taggedLogger.log { "Sign up failed, stored pending user ID $newUserId" }
         }
         return success
@@ -210,10 +244,11 @@ class ConferenceService(
      * @return true if there's a valid user ID set.
      */
     private suspend fun checkUserId(): Boolean {
-        val userId = storage.getUserId().first()
+        val yearStorage = yearStorage()
+        val userId = yearStorage.getUserId().first()
         if (userId != null) return true
 
-        val pendingUserId = storage.getPendingUserId().first()
+        val pendingUserId = yearStorage.getPendingUserId().first()
         if (pendingUserId == null) return false
 
         return registerUser(pendingUserId)
@@ -226,17 +261,18 @@ class ConferenceService(
     suspend fun requestNotificationPermissions(): Boolean = localNotificationService.requestPermission()
         .also { taggedLogger.log { "Notification permissions granted: $it" } }
 
-    fun getNotificationSettings(): Flow<NotificationSettings> = storage.getNotificationSettings()
-        .map {
-            // No stored value yet, create settings with everything enabled by default
-            it ?: NotificationSettings(
-                sessionReminders = true,
-                scheduleUpdates = true,
-            )
-        }
+    fun getNotificationSettings(): Flow<NotificationSettings> =
+        currentYearlyStorage.flatMapLatest { it.getNotificationSettings() }
+            .map {
+                // No stored value yet, create settings with everything enabled by default
+                it ?: NotificationSettings(
+                    sessionReminders = true,
+                    scheduleUpdates = true,
+                )
+            }
 
     suspend fun setNotificationSettings(settings: NotificationSettings) {
-        storage.setNotificationSettings(settings)
+        yearStorage().setNotificationSettings(settings)
     }
 
     fun canVote(): Boolean {
@@ -246,14 +282,15 @@ class ConferenceService(
     suspend fun vote(sessionId: SessionId, rating: Score?): Boolean {
         if (!checkUserId()) return false
 
-        val localVotes = storage.getVotes().first().toMutableList()
+        val yearStorage = yearStorage()
+        val localVotes = yearStorage.getVotes().first().toMutableList()
         val existingIndex = localVotes.indexOfFirst { it.sessionId == sessionId }
         if (existingIndex != -1) {
             localVotes[existingIndex] = VoteInfo(sessionId, rating)
         } else {
             localVotes += VoteInfo(sessionId, rating)
         }
-        storage.setVotes(localVotes)
+        yearStorage.setVotes(localVotes)
 
         return client.vote(sessionId, rating)
     }
@@ -282,9 +319,10 @@ class ConferenceService(
 
     fun setFavorite(sessionId: SessionId, favorite: Boolean) {
         scope.launch {
-            val favorites = storage.getFavorites().first().toMutableSet()
+            val yearStorage = yearStorage()
+            val favorites = yearStorage.getFavorites().first().toMutableSet()
             if (favorite) favorites.add(sessionId) else favorites.remove(sessionId)
-            storage.setFavorites(favorites)
+            yearStorage.setFavorites(favorites)
 
             if (favorite) {
                 val session = sessionByIdFlow(sessionId).first()
@@ -357,8 +395,9 @@ class ConferenceService(
     private suspend fun syncVotes() {
         if (!checkUserId()) return
 
+        val yearStorage = yearStorage()
         val apiVotes = client.myVotes().associateBy { it.sessionId }
-        val localVotes = storage.getVotes().first().associateBy { it.sessionId }
+        val localVotes = yearStorage.getVotes().first().associateBy { it.sessionId }
         val mergedVotes = (apiVotes.keys union localVotes.keys)
             .mapNotNull { sessionId ->
                 val localVote = localVotes[sessionId]
@@ -370,6 +409,6 @@ class ConferenceService(
 
                 localVote ?: apiVote
             }
-        storage.setVotes(mergedVotes)
+        yearStorage.setVotes(mergedVotes)
     }
 }
