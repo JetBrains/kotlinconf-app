@@ -103,7 +103,7 @@ fun Route.votingRoutes() {
             val timestamp = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
             val result = repository.setFeedback(
-                principal.token, feedback.sessionId, feedback.value, timestamp
+                principal.token, feedback.sessionId, feedback.value, timestamp, year
             )
 
             if (result) {
@@ -113,8 +113,9 @@ fun Route.votingRoutes() {
             }
         }
         get("summary") {
+            val year = getYearFromPath(config)
             call.checkAdminKey(config.adminSecret)
-            call.respond(repository.getFeedbackSummary())
+            call.respond(repository.getFeedbackSummary(year))
         }
     }
 }

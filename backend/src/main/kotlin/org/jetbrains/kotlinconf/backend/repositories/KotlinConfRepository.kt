@@ -99,7 +99,12 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
 
         suspendTransaction {
             val count = Votes.selectAll()
-                .where { (Votes.userId eq userIdValue) and (Votes.sessionId eq sessionIdValue) and (Votes.year eq yearValue) }.count()
+                .where {
+                    (Votes.userId eq userIdValue) and
+                            (Votes.sessionId eq sessionIdValue) and
+                            (Votes.year eq yearValue)
+                }
+                .count()
 
             if (count == 0L) {
                 Votes.insert {
@@ -123,12 +128,14 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         sessionIdValue: SessionId,
         feedbackValue: String,
         timestampValue: LocalDateTime,
+        yearValue: Int,
     ): Boolean = suspendTransaction {
         Feedback.insert {
             it[userId] = userIdValue
             it[sessionId] = sessionIdValue
             it[feedback] = feedbackValue
             it[timestamp] = timestampValue.toString()
+            it[year] = yearValue
         }.insertedCount > 0
     }
 
@@ -138,12 +145,12 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         }
     }
 
-    suspend fun getFeedbackSummary(): List<FeedbackInfo> = suspendTransaction {
-        Feedback.selectAll().map {
-            FeedbackInfo(
-                it[Feedback.sessionId], it[Feedback.feedback]
-            )
-        }
+    suspend fun getFeedbackSummary(year: Int): List<FeedbackInfo> = suspendTransaction {
+        Feedback.selectAll()
+            .where { Feedback.year eq year }
+            .map {
+                FeedbackInfo(it[Feedback.sessionId], it[Feedback.feedback])
+            }
     }
 }
 
