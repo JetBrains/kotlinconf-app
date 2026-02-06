@@ -22,13 +22,15 @@ internal suspend fun ApplicationCall.validatePrincipal(database: KotlinConfRepos
     return principal
 }
 
+private const val DEFAULT_YEAR = 2025
+
 /**
  * Gets the year for this request.
- * - If "year" path parameter is absent: returns null (meaning current year)
+ * - If "year" path parameter is absent: returns [DEFAULT_YEAR] (the archive year for backwards-compatible routes)
  * - If "year" path parameter exists: validates and returns it (throws NotFound if invalid)
  */
 internal fun RoutingContext.getYearFromPath(config: ConferenceConfig): Int {
-    val yearParam = call.parameters["year"] ?: return config.currentYear
+    val yearParam = call.parameters["year"] ?: return DEFAULT_YEAR
 
     val year = yearParam.toIntOrNull()
         ?: throw NotFound()
@@ -38,4 +40,13 @@ internal fun RoutingContext.getYearFromPath(config: ConferenceConfig): Int {
     }
 
     return year
+}
+
+/**
+ * Checks if the request contains an explicit year parameter that matches the current year.
+ */
+internal fun RoutingContext.isLiveRequest(config: ConferenceConfig): Boolean {
+    val yearParam = call.parameters["year"] ?: return false
+    val year = yearParam.toIntOrNull() ?: return false
+    return year == config.currentYear
 }

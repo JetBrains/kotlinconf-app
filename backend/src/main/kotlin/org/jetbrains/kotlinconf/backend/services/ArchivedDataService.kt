@@ -14,12 +14,6 @@ class ArchivedDataService(
     private val cache = mutableMapOf<Int, Conference>()
 
     fun getConferenceData(year: Int): Conference? {
-        if (year == config.currentYear) {
-            // This should be served from live data, even if we already
-            // have archived data for the current year as well
-            return null
-        }
-
         if (year !in config.supportedYears) {
             return null
         }

@@ -51,8 +51,8 @@ fun Route.votingRoutes() {
         post {
             val year = getYearFromPath(config)
 
-            // Only allow voting for current year
-            if (year != config.currentYear) {
+            // Only allow requests if the current year is explicitly specified
+            if (!isLiveRequest(config)) {
                 return@post call.respond(ARCHIVED_YEAR_FORBIDDEN)
             }
 
@@ -92,8 +92,8 @@ fun Route.votingRoutes() {
         post {
             val year = getYearFromPath(config)
 
-            // Only allow feedback for current year
-            if (year != config.currentYear) {
+            // Only allow requests if the current year is explicitly specified
+            if (!isLiveRequest(config)) {
                 return@post call.respond(ARCHIVED_YEAR_FORBIDDEN)
             }
 

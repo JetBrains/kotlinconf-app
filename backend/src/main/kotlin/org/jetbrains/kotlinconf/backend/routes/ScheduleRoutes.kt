@@ -24,11 +24,12 @@ fun Route.scheduleRoutes() {
     val config: ConferenceConfig by inject()
 
     get("conference") {
-        val year = getYearFromPath(config)
 
-        val conference = when (year) {
-            config.currentYear -> sessionize.getConferenceData()
-            else -> archivedData.getConferenceData(year) ?: throw NotFound()
+        val conference = if (isLiveRequest(config)) {
+            sessionize.getConferenceData()
+        } else {
+            val year = getYearFromPath(config)
+            archivedData.getConferenceData(year) ?: throw NotFound()
         }
 
         call.respond(conference)
