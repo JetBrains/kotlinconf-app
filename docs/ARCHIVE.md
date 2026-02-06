@@ -6,7 +6,7 @@ The app supports year-based API versioning. The current year fetches live data f
 
 Key components:
 - `ConferenceConfig` (`application.yaml`) - Defines `currentYear` and `supportedYears`
-- `ArchivedDataService` - Loads static JSON from `resources/archived/{YEAR}/conference.json`
+- `ArchivedDataService` - Loads static JSON from `resources/years/{YEAR}/conference.json`
 - `SessionizeService` - Fetches live data for the current year
 
 ## Archiving Steps
