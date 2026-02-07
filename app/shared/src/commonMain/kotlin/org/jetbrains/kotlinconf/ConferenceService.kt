@@ -24,6 +24,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.LocalNotificationId.Type
 import org.jetbrains.kotlinconf.di.YearGraph
+import org.jetbrains.kotlinconf.network.ApplicationApi
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.storage.YearlyStorage
 import org.jetbrains.kotlinconf.utils.Logger
@@ -36,7 +37,7 @@ import kotlin.uuid.Uuid
 @Inject
 @SingleIn(AppScope::class)
 class ConferenceService(
-    private val appClient: APIClient,
+    private val appClient: ApplicationApi,
     private val appStorage: ApplicationStorage,
     private val timeProvider: TimeProvider,
     private val yearGraphFactory: YearGraph.Factory,
@@ -63,7 +64,7 @@ class ConferenceService(
         appStorage.getConfig(),
         yearGraphs,
     ) { config, years ->
-        years[config?.currentYear]?.yearlyStorage
+        years[config?.currentYear]?.storage
     }.filterNotNull()
 
     init {
@@ -76,7 +77,9 @@ class ConferenceService(
                 appStorage.setConfig(newConfig)
                 taggedLogger.log { "Stored new config locally" }
             }
+        }
 
+        scope.launch {
             appStorage.getConfig()
                 .distinctUntilChanged()
                 .collect { config ->
@@ -164,8 +167,8 @@ class ConferenceService(
 
     suspend fun loadConferenceData() {
         val currentYearGraph = currentYearGraph.value ?: return
-        val storage = currentYearGraph.yearlyStorage
-        val client = currentYearGraph.yearlyAPIClient
+        val storage = currentYearGraph.storage
+        val client = currentYearGraph.api
 
         // Load conference info (partners, days, about blocks, tags)
         client.downloadConferenceInfo()?.let { storage.setConferenceInfoCache(it) }
@@ -217,7 +220,7 @@ class ConferenceService(
 
     suspend fun acceptPrivacyNotice(): Boolean {
         val currentYearGraph = currentYearGraph.value ?: return false
-        val storage = currentYearGraph.yearlyStorage
+        val storage = currentYearGraph.storage
 
         val userId = storage.getUserId().first()
         if (userId != null) return true
@@ -235,8 +238,8 @@ class ConferenceService(
 
     private suspend fun registerUser(newUserId: String): Boolean {
         val currentYearGraph = currentYearGraph.value ?: return false
-        val storage = currentYearGraph.yearlyStorage
-        val client = currentYearGraph.yearlyAPIClient
+        val storage = currentYearGraph.storage
+        val client = currentYearGraph.api
 
         val success = client.sign(newUserId)
         if (success) {
@@ -260,7 +263,7 @@ class ConferenceService(
      */
     private suspend fun checkUserId(): Boolean {
         val currentYearGraph = currentYearGraph.value ?: return false
-        val storage = currentYearGraph.yearlyStorage
+        val storage = currentYearGraph.storage
 
         val userId = storage.getUserId().first()
         if (userId != null) return true
@@ -291,14 +294,14 @@ class ConferenceService(
 
     suspend fun setNotificationSettings(settings: NotificationSettings) {
         val currentYearGraph = currentYearGraph.value ?: return
-        val storage = currentYearGraph.yearlyStorage
+        val storage = currentYearGraph.storage
 
         storage.setNotificationSettings(settings)
     }
 
     suspend fun canVote(): Boolean {
         val currentYearGraph = currentYearGraph.value ?: return false
-        val storage = currentYearGraph.yearlyStorage
+        val storage = currentYearGraph.storage
         return storage.getUserId().first() != null
     }
 
@@ -306,8 +309,8 @@ class ConferenceService(
         if (!checkUserId()) return false
 
         val currentYearGraph = currentYearGraph.value ?: return false
-        val storage = currentYearGraph.yearlyStorage
-        val client = currentYearGraph.yearlyAPIClient
+        val storage = currentYearGraph.storage
+        val client = currentYearGraph.api
 
         val localVotes = storage.getVotes().first().toMutableList()
         val existingIndex = localVotes.indexOfFirst { it.sessionId == sessionId }
@@ -323,7 +326,7 @@ class ConferenceService(
 
     suspend fun sendFeedback(sessionId: SessionId, feedbackValue: String): Boolean {
         if (!checkUserId()) return false
-        val client = currentYearGraph.value?.yearlyAPIClient ?: return false
+        val client = currentYearGraph.value?.api ?: return false
         return client.sendFeedback(sessionId, feedbackValue)
     }
 
@@ -347,7 +350,7 @@ class ConferenceService(
     suspend fun setFavorite(sessionId: SessionId, favorite: Boolean) {
         withContext(NonCancellable) {
             val currentYearGraph = currentYearGraph.value ?: return@withContext
-            val storage = currentYearGraph.yearlyStorage
+            val storage = currentYearGraph.storage
 
             val favorites = storage.getFavorites().first().toMutableSet()
             if (favorite) favorites.add(sessionId) else favorites.remove(sessionId)
@@ -428,8 +431,8 @@ class ConferenceService(
         }
 
         val currentYearGraph = currentYearGraph.value ?: return
-        val storage = currentYearGraph.yearlyStorage
-        val client = currentYearGraph.yearlyAPIClient
+        val storage = currentYearGraph.storage
+        val client = currentYearGraph.api
 
         taggedLogger.log { "Synchronizing votes for user ${client.userId.value}" }
 

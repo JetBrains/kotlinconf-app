@@ -22,7 +22,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import org.jetbrains.kotlinconf.APIClient
+import org.jetbrains.kotlinconf.network.ApplicationApi
 import io.ktor.client.plugins.logging.Logger as KtorLogger
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.FakeTimeProvider
@@ -115,19 +115,19 @@ interface AppGraph : ViewModelGraph {
     fun provideApiClient(
         client: HttpClient,
         logger: Logger,
-    ): APIClient = APIClient(client, logger)
+    ): ApplicationApi = ApplicationApi(client, logger)
 
     @Provides
     @SingleIn(AppScope::class)
     fun provideTimeProvider(
         applicationStorage: ApplicationStorage,
         logger: Lazy<Logger>,
-        apiClient: Lazy<APIClient>,
+        applicationApi: Lazy<ApplicationApi>,
     ): TimeProvider {
         val flags = applicationStorage.getFlagsBlocking()
         return when {
             flags != null && flags.useFakeTime -> FakeTimeProvider(logger.value)
-            else -> ServerBasedTimeProvider(apiClient.value)
+            else -> ServerBasedTimeProvider(applicationApi.value)
         }
     }
 }

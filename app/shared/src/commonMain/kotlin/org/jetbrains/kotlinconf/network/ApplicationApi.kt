@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalTime::class)
 
-package org.jetbrains.kotlinconf
+package org.jetbrains.kotlinconf.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -11,6 +11,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
 import io.ktor.http.encodedPath
 import kotlinx.coroutines.CancellationException
+import org.jetbrains.kotlinconf.AppConfig
 import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -18,11 +19,11 @@ import kotlin.time.Instant
 /**
  * Adapter to handle app-level (year-independent) backend API calls.
  */
-class APIClient(
+class ApplicationApi(
     private val client: HttpClient,
     private val appLogger: Logger,
 ) {
-    companion object {
+    companion object Companion {
         private const val LOG_TAG = "APIClient"
     }
 
