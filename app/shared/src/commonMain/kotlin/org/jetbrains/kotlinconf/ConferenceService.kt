@@ -93,11 +93,6 @@ class ConferenceService(
                     taggedLogger.log { "Loading conference data for year ${config?.currentYear}" }
                     loadConferenceData()
 
-                    val userId = currentYearlyStorage.first().getUserId().first()
-                    taggedLogger.log { "Found user ID $userId, setting in app client" }
-                    appClient.userId = userId
-
-                    taggedLogger.log { "Synchronizing votes for user $userId" }
                     syncVotes()
 
                     taggedLogger.log { "ConferenceService init successful" }
@@ -170,12 +165,12 @@ class ConferenceService(
     suspend fun loadConferenceData() {
         val currentYearGraph = currentYearGraph.value ?: return
         val storage = currentYearGraph.yearlyStorage
-        val appClient = appClient // TODO use yearly later
+        val client = currentYearGraph.yearlyAPIClient
 
         // Load conference info (partners, days, about blocks, tags)
-        appClient.downloadConferenceInfo()?.let { storage.setConferenceInfoCache(it) }
+        client.downloadConferenceInfo()?.let { storage.setConferenceInfoCache(it) }
 
-        val newData = appClient.downloadConferenceData() ?: return
+        val newData = client.downloadConferenceData() ?: return
         val oldData = storage.getConferenceCache().first()
 
         storage.setConferenceCache(newData)
@@ -241,8 +236,9 @@ class ConferenceService(
     private suspend fun registerUser(newUserId: String): Boolean {
         val currentYearGraph = currentYearGraph.value ?: return false
         val storage = currentYearGraph.yearlyStorage
+        val client = currentYearGraph.yearlyAPIClient
 
-        val success = appClient.sign(newUserId)
+        val success = client.sign(newUserId)
         if (success) {
             storage.setUserId(newUserId)
             storage.setPendingUserId(null)
@@ -300,8 +296,10 @@ class ConferenceService(
         storage.setNotificationSettings(settings)
     }
 
-    fun canVote(): Boolean {
-        return appClient.userId != null
+    suspend fun canVote(): Boolean {
+        val currentYearGraph = currentYearGraph.value ?: return false
+        val storage = currentYearGraph.yearlyStorage
+        return storage.getUserId().first() != null
     }
 
     suspend fun vote(sessionId: SessionId, rating: Score?): Boolean {
@@ -309,7 +307,7 @@ class ConferenceService(
 
         val currentYearGraph = currentYearGraph.value ?: return false
         val storage = currentYearGraph.yearlyStorage
-        val appClient = appClient // TODO use yearly later
+        val client = currentYearGraph.yearlyAPIClient
 
         val localVotes = storage.getVotes().first().toMutableList()
         val existingIndex = localVotes.indexOfFirst { it.sessionId == sessionId }
@@ -320,12 +318,13 @@ class ConferenceService(
         }
         storage.setVotes(localVotes)
 
-        return appClient.vote(sessionId, rating)
+        return client.vote(sessionId, rating)
     }
 
     suspend fun sendFeedback(sessionId: SessionId, feedbackValue: String): Boolean {
         if (!checkUserId()) return false
-        return appClient.sendFeedback(sessionId, feedbackValue)
+        val client = currentYearGraph.value?.yearlyAPIClient ?: return false
+        return client.sendFeedback(sessionId, feedbackValue)
     }
 
     fun speakerById(speakerId: SpeakerId): Speaker? = speakersById.value[speakerId]
@@ -423,12 +422,18 @@ class ConferenceService(
 
 
     private suspend fun syncVotes() {
-        if (!checkUserId()) return
+        if (!checkUserId()) {
+            taggedLogger.log { "Can't sync votes, missing userId" }
+            return
+        }
 
         val currentYearGraph = currentYearGraph.value ?: return
         val storage = currentYearGraph.yearlyStorage
+        val client = currentYearGraph.yearlyAPIClient
 
-        val apiVotes = appClient.myVotes().associateBy { it.sessionId }
+        taggedLogger.log { "Synchronizing votes for user ${client.userId.value}" }
+
+        val apiVotes = client.myVotes().associateBy { it.sessionId }
         val localVotes = storage.getVotes().first().associateBy { it.sessionId }
         val mergedVotes = (apiVotes.keys union localVotes.keys)
             .mapNotNull { sessionId ->
@@ -436,11 +441,13 @@ class ConferenceService(
                 val apiVote = apiVotes[sessionId]
 
                 if (localVote?.score != apiVote?.score) {
-                    appClient.vote(sessionId, localVote?.score)
+                    client.vote(sessionId, localVote?.score)
                 }
 
                 localVote ?: apiVote
             }
         storage.setVotes(mergedVotes)
+
+        taggedLogger.log { "Synchronized votes successfully" }
     }
 }
