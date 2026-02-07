@@ -33,9 +33,9 @@ import kotlin.uuid.Uuid
 @Inject
 @SingleIn(AppScope::class)
 class ConferenceService(
-    private val client: APIClient,
+    private val appClient: APIClient,
+    private val appStorage: ApplicationStorage,
     private val timeProvider: TimeProvider,
-    private val storage: ApplicationStorage,
     private val yearGraphFactory: YearGraph.Factory,
     private val localNotificationService: LocalNotificationService,
     private val scope: CoroutineScope,
@@ -54,10 +54,10 @@ class ConferenceService(
         _currentYearlyStorage.value ?: error("Year storage not initialized yet")
 
     init {
-        storage.ensureCurrentVersion()
+        appStorage.ensureCurrentVersion()
 
         scope.launch {
-            storage.getSelectedYear().filterNotNull().collect { year ->
+            appStorage.getSelectedYear().filterNotNull().collect { year ->
                 taggedLogger.log { "Selected year changed to $year" }
                 val yearGraph = yearGraphFactory.create(year)
                 _currentYearlyStorage.value = yearGraph.yearlyStorage
@@ -69,7 +69,7 @@ class ConferenceService(
         scope.launch {
             currentYearlyStorage.flatMapLatest { it.getUserId() }.collect {
                 userIdLoaded.complete(Unit)
-                client.userId = it
+                appClient.userId = it
             }
         }
 
@@ -142,25 +142,25 @@ class ConferenceService(
     val conferenceInfo: StateFlow<ConferenceInfo?> = currentYearlyStorage.flatMapLatest { it.getConferenceInfoCache() }
         .stateIn(scope, SharingStarted.Eagerly, null)
 
-    fun getTheme(): Flow<Theme> = storage.getTheme()
+    fun getTheme(): Flow<Theme> = appStorage.getTheme()
 
     fun setTheme(theme: Theme) {
-        scope.launch { storage.setTheme(theme) }
+        scope.launch { appStorage.setTheme(theme) }
     }
 
-    fun getSelectedYear(): Flow<Int?> = storage.getSelectedYear()
+    fun getSelectedYear(): Flow<Int?> = appStorage.getSelectedYear()
 
     suspend fun setSelectedYear(year: Int) {
-        storage.setSelectedYear(year)
+        appStorage.setSelectedYear(year)
     }
 
     suspend fun loadConferenceData() {
         val yearStorage = yearStorage()
 
         // Load conference info (partners, days, about blocks, tags)
-        client.downloadConferenceInfo()?.let { yearStorage.setConferenceInfoCache(it) }
+        appClient.downloadConferenceInfo()?.let { yearStorage.setConferenceInfoCache(it) }
 
-        val newData = client.downloadConferenceData() ?: return
+        val newData = appClient.downloadConferenceData() ?: return
         val oldData = yearStorage.getConferenceCache().first()
 
         yearStorage.setConferenceCache(newData)
@@ -198,11 +198,11 @@ class ConferenceService(
     }
 
     fun isOnboardingComplete(): Flow<Boolean> {
-        return storage.isOnboardingComplete()
+        return appStorage.isOnboardingComplete()
     }
 
     suspend fun completeOnboarding() {
-        storage.setOnboardingComplete(true)
+        appStorage.setOnboardingComplete(true)
     }
 
     suspend fun acceptPrivacyNotice(): Boolean {
@@ -223,7 +223,7 @@ class ConferenceService(
 
     private suspend fun registerUser(newUserId: String): Boolean {
         val yearStorage = yearStorage()
-        val success = client.sign(newUserId)
+        val success = appClient.sign(newUserId)
         if (success) {
             yearStorage.setUserId(newUserId)
             yearStorage.setPendingUserId(null)
@@ -276,7 +276,7 @@ class ConferenceService(
     }
 
     fun canVote(): Boolean {
-        return client.userId != null
+        return appClient.userId != null
     }
 
     suspend fun vote(sessionId: SessionId, rating: Score?): Boolean {
@@ -292,12 +292,12 @@ class ConferenceService(
         }
         yearStorage.setVotes(localVotes)
 
-        return client.vote(sessionId, rating)
+        return appClient.vote(sessionId, rating)
     }
 
     suspend fun sendFeedback(sessionId: SessionId, feedbackValue: String): Boolean {
         if (!checkUserId()) return false
-        return client.sendFeedback(sessionId, feedbackValue)
+        return appClient.sendFeedback(sessionId, feedbackValue)
     }
 
     fun speakerById(speakerId: SpeakerId): Speaker? = speakersById.value[speakerId]
@@ -396,7 +396,7 @@ class ConferenceService(
         if (!checkUserId()) return
 
         val yearStorage = yearStorage()
-        val apiVotes = client.myVotes().associateBy { it.sessionId }
+        val apiVotes = appClient.myVotes().associateBy { it.sessionId }
         val localVotes = yearStorage.getVotes().first().associateBy { it.sessionId }
         val mergedVotes = (apiVotes.keys union localVotes.keys)
             .mapNotNull { sessionId ->
@@ -404,7 +404,7 @@ class ConferenceService(
                 val apiVote = apiVotes[sessionId]
 
                 if (localVote?.score != apiVote?.score) {
-                    client.vote(sessionId, localVote?.score)
+                    appClient.vote(sessionId, localVote?.score)
                 }
 
                 localVote ?: apiVote
