@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.kotlinconf.network.ApplicationApi
 import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.time.Clock
 import kotlin.time.Duration
@@ -33,7 +34,7 @@ operator fun LocalDateTime.minus(other: LocalDateTime): Duration =
 operator fun LocalDateTime.minus(duration: Duration): LocalDateTime =
     (toInstant(EVENT_TIME_ZONE) - duration).toLocalDateTime(EVENT_TIME_ZONE)
 
-class ServerBasedTimeProvider(private val client: APIClient) : TimeProvider {
+class ServerBasedTimeProvider(private val client: ApplicationApi) : TimeProvider {
     private var offset: Duration = Duration.ZERO
 
     override fun now(): LocalDateTime {

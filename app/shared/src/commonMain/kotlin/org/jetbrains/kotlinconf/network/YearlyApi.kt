@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf
+package org.jetbrains.kotlinconf.network
 
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -18,6 +18,13 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import org.jetbrains.kotlinconf.Conference
+import org.jetbrains.kotlinconf.ConferenceInfo
+import org.jetbrains.kotlinconf.FeedbackInfo
+import org.jetbrains.kotlinconf.Score
+import org.jetbrains.kotlinconf.SessionId
+import org.jetbrains.kotlinconf.VoteInfo
+import org.jetbrains.kotlinconf.Votes
 import org.jetbrains.kotlinconf.di.YearScope
 import org.jetbrains.kotlinconf.storage.YearlyStorage
 import org.jetbrains.kotlinconf.utils.Logger
@@ -25,14 +32,14 @@ import org.jetbrains.kotlinconf.utils.tagged
 
 @Inject
 @SingleIn(YearScope::class)
-class YearlyAPIClientInt(
+class YearlyApi(
     private val year: Int,
     private val client: HttpClient,
     yearStorage: YearlyStorage,
     appScope: CoroutineScope,
     logger: Logger,
 ) {
-    companion object {
+    companion object Companion {
         private const val LOG_TAG = "YearlyAPIClient"
     }
 
