@@ -36,7 +36,7 @@ class DayInfo(
 
 @Serializable
 class AboutBlockInfo(
-    val sessionId: String?,
+    val sessionId: SessionId?,
     val month: String,
     val day: String,
     val title1: String,

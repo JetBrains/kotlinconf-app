@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -452,5 +453,14 @@ class ConferenceService(
         storage.setVotes(mergedVotes)
 
         taggedLogger.log { "Synchronized votes successfully" }
+    }
+
+    fun getPartner(partnerId: PartnerId): Flow<PartnerInfo?> {
+        return conferenceInfo
+            .map { info ->
+                info ?: return@map null
+
+                info.partners.flatMap { it.partners }.firstOrNull { it.id == partnerId }
+            }
     }
 }

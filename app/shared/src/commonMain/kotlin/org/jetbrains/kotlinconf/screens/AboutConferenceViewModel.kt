@@ -39,8 +39,7 @@ class AboutConferenceViewModel(
             val aboutBlocks = conferenceInfo?.aboutBlocks ?: emptyList()
 
             aboutBlocks.map { block ->
-                val sessionId = block.sessionId?.let { SessionId(it) }
-                val session = sessionId?.let { sessionsById[it] }
+                val session = block.sessionId?.let { sessionsById[it] }
                 val speakers = session?.speakerIds?.mapNotNull { speakersById[it] }
                 AboutConferenceEvent(
                     sessionCard = session,

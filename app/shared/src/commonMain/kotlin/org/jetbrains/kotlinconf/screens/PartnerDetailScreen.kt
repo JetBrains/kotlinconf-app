@@ -31,7 +31,7 @@ fun PartnerDetailScreen(
             create(partnerId)
         },
 ) {
-    val partner by viewModel.partner.collectAsStateWithLifecycle()
+    val partner = viewModel.partner.collectAsStateWithLifecycle().value
     val theme by viewModel.theme.collectAsStateWithLifecycle()
     val isDark = when (theme) {
         Theme.SYSTEM -> isSystemInDarkTheme()
@@ -44,10 +44,10 @@ fun PartnerDetailScreen(
         onBack = onBack,
     ) {
         if (partner != null) {
-            val logoUrl = if (isDark) partner!!.logoUrlDark else partner!!.logoUrlLight
+            val logoUrl = if (isDark) partner.logoUrlDark else partner.logoUrlLight
             NetworkImage(
                 photoUrl = logoUrl,
-                contentDescription = partner!!.name,
+                contentDescription = partner.name,
                 modifier = Modifier.fillMaxWidth()
                     .height(180.dp)
                     .padding(horizontal = 32.dp, vertical = 16.dp)
@@ -57,14 +57,14 @@ fun PartnerDetailScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = partner!!.name,
+                text = partner.name,
                 style = KotlinConfTheme.typography.h1,
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = partner!!.description,
+                text = partner.description,
                 color = KotlinConfTheme.colors.longText,
             )
 

@@ -12,6 +12,9 @@ import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.PartnerInfo
@@ -23,11 +26,8 @@ class PartnerDetailViewModel(
     service: ConferenceService,
     @Assisted private val partnerId: PartnerId,
 ) : ViewModel() {
-    val partner: StateFlow<PartnerInfo?> = service.conferenceInfo
-        .combine(service.getTheme()) { info, _ ->
-            info?.partners?.flatMap { it.partners }?.firstOrNull { it.id == partnerId }
-        }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+    val partner: StateFlow<PartnerInfo?> = service.getPartner(partnerId)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val theme: StateFlow<Theme> = service.getTheme()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), Theme.SYSTEM)

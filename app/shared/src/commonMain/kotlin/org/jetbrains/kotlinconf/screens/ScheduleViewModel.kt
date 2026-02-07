@@ -12,11 +12,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.Day
 import org.jetbrains.kotlinconf.DayInfo
@@ -88,44 +90,40 @@ class ScheduleViewModel(
 
     private val searchParams = MutableStateFlow(ScheduleSearchParams())
 
-    private fun List<String>.toTags(type: FilterItemType): List<FilterItem> {
+    private fun List<String>.toFilterItems(type: FilterItemType): List<FilterItem> {
         return map { FilterItem(type = type, value = it, isSelected = false) }
     }
 
     private val _filterItems = MutableStateFlow<List<FilterItem>>(emptyList())
     val filterItems: StateFlow<List<FilterItem>> = _filterItems.asStateFlow()
 
-    val dayInfoMap: StateFlow<Map<LocalDate, DayInfo>> = service.conferenceInfo
-        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
-        .let { conferenceInfoFlow ->
-            MutableStateFlow<Map<LocalDate, DayInfo>>(emptyMap()).also { mutableFlow ->
-                viewModelScope.launch {
-                    conferenceInfoFlow.collect { info ->
-                        val days = info?.days ?: emptyList()
-                        mutableFlow.value = days.associateBy { it.date }
-                    }
-                }
-            }
-        }
-
     init {
         viewModelScope.launch {
             service.conferenceInfo.collect { info ->
+                // Overwrite existing filter items based on the new info
                 val tags = info?.tags
                 if (tags != null && _filterItems.value.isEmpty()) {
-                    _filterItems.value = tags.categories.toTags(FilterItemType.Category) +
-                            tags.levels.toTags(FilterItemType.Level) +
-                            tags.formats.toTags(FilterItemType.Format)
+                    _filterItems.value =
+                        tags.categories.toFilterItems(FilterItemType.Category) +
+                                tags.levels.toFilterItems(FilterItemType.Level) +
+                                tags.formats.toFilterItems(FilterItemType.Format)
                 }
             }
         }
     }
 
+    val dayInfoMap: StateFlow<Map<LocalDate, DayInfo>> = service.conferenceInfo
+        .map { info ->
+            val days = info?.days ?: emptyList()
+            days.associateBy { it.date }
+        }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyMap())
+
     private var loading = MutableStateFlow(false)
 
     fun toggleFilter(item: FilterItem, selected: Boolean) {
-        _filterItems.update {
-            val list = it.toMutableList()
+        _filterItems.update { oldItems ->
+            val list = oldItems.toMutableList()
 
             if (item.type == FilterItemType.Level || item.type == FilterItemType.Format) {
                 // Remove previous format or level selection, if there is one
@@ -253,13 +251,15 @@ class ScheduleViewModel(
                             ((seenPastSlot && now < timeSlot.startsAt) || // There was a slot in the past before and this one is still upcoming OR
                                     (day.date == now.date && now < timeSlot.startsAt)) // This is today and the day didn't start yet
                         ) {
-                            firstActiveIndex = lastIndex // We'll consider the DayHeader and this first slot active
+                            firstActiveIndex =
+                                lastIndex // We'll consider the DayHeader and this first slot active
                             activeTimeSlot = true
                         } else if (
                             (seenPastSlot && now < timeSlot.startsAt) || // There was a slot in the past before and this one is still upcoming OR
                             (now in timeSlot.startsAt..<timeSlot.endsAt) // We're in this slot right now
                         ) {
-                            firstActiveIndex = lastIndex + 1 // This is the active slot, starting with its title
+                            firstActiveIndex =
+                                lastIndex + 1 // This is the active slot, starting with its title
                             activeTimeSlot = true
                         }
                     }
@@ -273,7 +273,8 @@ class ScheduleViewModel(
                         add(ServiceEventGroupItem(serviceEvents))
                     }
 
-                    val validTalks = if (isBookmarkedOnly) allTalks.filter { it.isFavorite } else allTalks
+                    val validTalks =
+                        if (isBookmarkedOnly) allTalks.filter { it.isFavorite } else allTalks
                     validTalks.forEach { session ->
                         add(SessionItem(session))
                     }
