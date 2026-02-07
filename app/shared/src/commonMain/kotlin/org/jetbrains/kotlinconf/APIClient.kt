@@ -187,4 +187,6 @@ class APIClient(
     override fun close() {
         client.close()
     }
+
+    suspend fun getConfig(): AppConfig? = safeApiCall { client.get("config").body() }
 }

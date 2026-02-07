@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import org.jetbrains.kotlinconf.AppConfig
 import org.jetbrains.kotlinconf.Flags
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.Theme
@@ -60,11 +61,11 @@ class MultiplatformSettingsStorage(
     override suspend fun setFlags(value: Flags) = settings
         .set(Keys.FLAGS, json.encodeToString(value))
 
-    override fun getSelectedYear(): Flow<Int?> = settings.getStringOrNullFlow(Keys.SELECTED_YEAR)
-        .map { it?.toIntOrNull() }
+    override fun getConfig(): Flow<AppConfig?> = settings.getStringOrNullFlow(Keys.CONFIG)
+        .map { it.decodeOrNull<AppConfig>() }
 
-    override suspend fun setSelectedYear(value: Int) = settings
-        .set(Keys.SELECTED_YEAR, value.toString())
+    override fun setConfig(config: AppConfig) = settings
+        .set(Keys.CONFIG, json.encodeToString(config))
 
     override fun ensureCurrentVersion() {
         var version = settings.getInt(Keys.STORAGE_VERSION, 0)
@@ -161,7 +162,7 @@ class MultiplatformSettingsStorage(
         const val ONBOARDING_COMPLETE = "onboardingComplete"
         const val THEME = "theme"
         const val FLAGS = "flags"
-        const val SELECTED_YEAR = "selectedYear"
+        const val CONFIG = "config"
     }
 
     /** Keys from older storage versions, used only during migrations. */

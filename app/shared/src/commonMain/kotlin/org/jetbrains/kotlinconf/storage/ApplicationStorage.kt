@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf.storage
 
 import kotlinx.coroutines.flow.Flow
+import org.jetbrains.kotlinconf.AppConfig
 import org.jetbrains.kotlinconf.Flags
 import org.jetbrains.kotlinconf.Theme
 
@@ -15,8 +16,8 @@ interface ApplicationStorage {
     fun getFlags(): Flow<Flags?>
     suspend fun setFlags(value: Flags)
 
-    fun getSelectedYear(): Flow<Int?>
-    suspend fun setSelectedYear(value: Int)
+    fun getConfig(): Flow<AppConfig?>
+    fun setConfig(config: AppConfig)
 
     fun ensureCurrentVersion()
 }
