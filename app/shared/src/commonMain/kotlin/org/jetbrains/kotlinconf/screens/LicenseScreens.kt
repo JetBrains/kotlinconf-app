@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,6 +35,7 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import com.mikepenz.aboutlibraries.entity.Library
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
@@ -60,7 +60,6 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
-import org.koin.compose.viewmodel.koinViewModel
 
 private val Library.licenseName: String
     get() = licenses.firstOrNull()?.name ?: "Unknown license"
@@ -78,7 +77,7 @@ private val Library.author: String
 fun LicensesScreen(
     onLicenseClick: (licenseName: String, licenseText: String) -> Unit,
     onBack: () -> Unit,
-    viewModel: LicensesViewModel = koinViewModel(),
+    viewModel: LicensesViewModel = metroViewModel(),
 ) {
     var searchState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
     var searchText by rememberSaveable { mutableStateOf("") }
