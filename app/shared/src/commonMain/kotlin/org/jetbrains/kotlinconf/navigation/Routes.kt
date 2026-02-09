@@ -2,6 +2,8 @@ package org.jetbrains.kotlinconf.navigation
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.jetbrains.kotlinconf.AwardCategoryId
+import org.jetbrains.kotlinconf.NomineeId
 import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
@@ -23,6 +25,10 @@ data object SpeakersScreen : AppRoute, TopLevelRoute
 @Serializable
 @SerialName("Map")
 data object MapScreen : AppRoute, TopLevelRoute
+
+@Serializable
+@SerialName("GoldenKodee")
+data object GoldenKodeeScreen : AppRoute, TopLevelRoute
 
 @Serializable
 @SerialName("Info")
@@ -104,6 +110,14 @@ data class SpeakerDetailScreen(val speakerId: SpeakerId) : AppRoute
 @Serializable
 @SerialName("MapDetail")
 data class NestedMapScreen(val roomName: String) : AppRoute
+
+@Serializable
+@SerialName("GoldenKodeeCategory")
+data class GoldenKodeeCategoryScreen(val categoryId: AwardCategoryId) : AppRoute
+
+@Serializable
+@SerialName("GoldenKodeeNominee")
+data class GoldenKodeeNomineeScreen(val categoryId: AwardCategoryId, val nomineeId: NomineeId) : AppRoute
 
 @Serializable
 @SerialName("DeveloperMenu")

@@ -17,12 +17,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.award_28
+import org.jetbrains.kotlinconf.generated.resources.award_28_fill
 import org.jetbrains.kotlinconf.generated.resources.clock_28
 import org.jetbrains.kotlinconf.generated.resources.clock_28_fill
 import org.jetbrains.kotlinconf.generated.resources.info_28
@@ -30,6 +33,7 @@ import org.jetbrains.kotlinconf.generated.resources.info_28_fill
 import org.jetbrains.kotlinconf.generated.resources.location_28
 import org.jetbrains.kotlinconf.generated.resources.location_28_fill
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_info
+import org.jetbrains.kotlinconf.generated.resources.nav_destination_golden_kodee
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_map
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_schedule
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_speakers
@@ -60,6 +64,12 @@ private val bottomNavDestinations: List<MainNavDestination<TopLevelRoute>> = lis
         route = SpeakersScreen,
     ),
     MainNavDestination(
+        label = Res.string.nav_destination_golden_kodee,
+        icon = Res.drawable.award_28,
+        iconSelected = Res.drawable.award_28_fill,
+        route = GoldenKodeeScreen,
+    ),
+    MainNavDestination(
         label = Res.string.nav_destination_map,
         icon = Res.drawable.location_28,
         iconSelected = Res.drawable.location_28_fill,
@@ -77,10 +87,19 @@ private val bottomNavDestinations: List<MainNavDestination<TopLevelRoute>> = lis
 internal fun NavScaffold(
     navState: NavState,
     navigator: Navigator,
+    showGoldenKodee: Boolean,
     content: @Composable (() -> Unit)
 ) {
     val onSelectRoute: (TopLevelRoute) -> Unit = { route ->
         navigator.activate(route)
+    }
+
+    val destinations = remember(showGoldenKodee) {
+        if (showGoldenKodee) {
+            bottomNavDestinations
+        } else {
+            bottomNavDestinations.filter { it.route !is GoldenKodeeScreen }
+        }
     }
 
     val windowSize = LocalWindowSize.current
@@ -105,6 +124,7 @@ internal fun NavScaffold(
         ) {
             SideNavigation(
                 currentRoute = navState.topLevelRoute,
+                destinations = destinations,
                 onSelectRoute = onSelectRoute,
                 expanded = windowSize == WindowSize.Large,
             )
@@ -122,6 +142,7 @@ internal fun NavScaffold(
             ) {
                 BottomNavigation(
                     currentRoute = navState.topLevelRoute,
+                    destinations = destinations,
                     onSelectRoute = onSelectRoute,
                 )
             }
@@ -138,9 +159,10 @@ private fun isKeyboardOpen(): Boolean {
 @Composable
 private fun BottomNavigation(
     currentRoute: TopLevelRoute?,
+    destinations: List<MainNavDestination<TopLevelRoute>>,
     onSelectRoute: (TopLevelRoute) -> Unit,
 ) {
-    val currentDestination = bottomNavDestinations.find { it.route == currentRoute }
+    val currentDestination = destinations.find { it.route == currentRoute }
 
     Column(
         Modifier.padding(bottomInsetPadding()),
@@ -148,7 +170,7 @@ private fun BottomNavigation(
         HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
         MainNavigationBar(
             currentDestination = currentDestination,
-            destinations = bottomNavDestinations,
+            destinations = destinations,
             onSelect = { selectedDestination ->
                 onSelectRoute(selectedDestination.route)
             },
@@ -159,15 +181,16 @@ private fun BottomNavigation(
 @Composable
 private fun SideNavigation(
     currentRoute: TopLevelRoute?,
+    destinations: List<MainNavDestination<TopLevelRoute>>,
     onSelectRoute: (TopLevelRoute) -> Unit,
     expanded: Boolean,
 ) {
-    val currentDestination = bottomNavDestinations.find { it.route == currentRoute }
+    val currentDestination = destinations.find { it.route == currentRoute }
 
     Row {
         MainNavigationRail(
             currentDestination = currentDestination,
-            destinations = bottomNavDestinations,
+            destinations = destinations,
             onSelect = { selectedDestination ->
                 onSelectRoute(selectedDestination.route)
             },

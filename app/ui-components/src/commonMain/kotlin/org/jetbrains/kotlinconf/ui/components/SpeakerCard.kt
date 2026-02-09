@@ -29,7 +29,7 @@ fun SpeakerCard(
     name: String,
     title: String,
     photoUrl: String,
-    onClick: () -> Unit,
+    onClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
     nameHighlights: List<IntRange> = emptyList(),
     titleHighlights: List<IntRange> = emptyList(),
@@ -37,7 +37,7 @@ fun SpeakerCard(
     Row(
         modifier = modifier
             .clip(KotlinConfTheme.shapes.roundedCornerMd)
-            .clickable(onClick = onClick),
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

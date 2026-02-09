@@ -65,16 +65,16 @@ expect object LocalAppTheme {
 
 @Composable
 fun KotlinConfTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    colors: Colors = if (isSystemInDarkTheme()) KotlinConfDarkColors else KotlinConfLightColors,
     rippleEnabled: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
-        LocalColors provides if (darkTheme) KotlinConfDarkColors else KotlinConfLightColors,
+        LocalColors provides colors,
         LocalShapes provides KotlinConfShapes,
         LocalTypography provides KotlinConfTypography,
         LocalIndication provides if (rippleEnabled) rememberRippleIndication() else NoIndication,
-        LocalAppTheme provides darkTheme,
+        LocalAppTheme provides colors.isDark,
     ) {
         content()
     }
