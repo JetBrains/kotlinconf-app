@@ -2,11 +2,16 @@ package org.jetbrains.kotlinconf.navigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.AnimationConstants
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +26,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.IntSize.Companion
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.clock_28
@@ -88,7 +94,13 @@ internal fun NavScaffold(
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         val windowSize = LocalWindowSize.current
-        val showNavigation = navState.topLevelRoute != null
+
+        val showLargeNavigation = windowSize != WindowSize.Compact &&
+                navState.topLevelRoute != null
+        val showCompactNavigation = windowSize == WindowSize.Compact &&
+                navState.topLevelRoute != null &&
+                navState.currentBackstack.size == 1 &&
+                !isKeyboardOpen()
 
         Row(
             Modifier
@@ -97,9 +109,9 @@ internal fun NavScaffold(
             val enterAnimSpec = tween<IntSize>(delayMillis = AnimationConstants.DefaultDurationMillis)
 
             AnimatedVisibility(
-                visible = showNavigation && windowSize != WindowSize.Compact,
+                visible = showLargeNavigation,
                 enter = expandHorizontally(enterAnimSpec),
-                exit = shrinkHorizontally(),
+                exit = shrinkHorizontally() + fadeOut(),
             ) {
                 SideNavigation(
                     currentRoute = navState.topLevelRoute,
@@ -114,9 +126,9 @@ internal fun NavScaffold(
                 }
 
                 AnimatedVisibility(
-                    visible = showNavigation && windowSize == WindowSize.Compact && !isKeyboardOpen(),
+                    visible = showCompactNavigation,
                     enter = expandVertically(enterAnimSpec),
-                    exit = shrinkVertically(),
+                    exit = shrinkVertically() + fadeOut(),
                 ) {
                     BottomNavigation(
                         currentRoute = navState.topLevelRoute,
