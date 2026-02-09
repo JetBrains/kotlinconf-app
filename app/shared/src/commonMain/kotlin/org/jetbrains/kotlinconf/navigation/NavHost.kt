@@ -95,9 +95,9 @@ internal fun NavHost(
         primaryTopLevelRoute = ScheduleScreen,
     )
 
-    val mainBackEnabled = LocalFlags.current.enableBackOnMainScreens
-    val navigator = remember(navState, mainBackEnabled) {
-        Navigator(navState, mainBackEnabled)
+    val topLevelBackEnabled = LocalFlags.current.enableBackOnTopLevelScreens
+    val navigator = remember(navState, topLevelBackEnabled) {
+        Navigator(navState, topLevelBackEnabled)
     }
 
     // TODO Integrate with browser navigation here https://github.com/JetBrains/kotlinconf-app/issues/557

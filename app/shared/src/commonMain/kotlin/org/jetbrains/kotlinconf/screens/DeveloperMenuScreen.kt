@@ -101,10 +101,10 @@ fun DeveloperMenuScreen(
                     )
 
                     SettingsItem(
-                        title = "Enable back on main screens",
-                        note = "Allow users to use back navigation between the top-level destinations on the Main screen",
-                        enabled = flags.enableBackOnMainScreens,
-                        onToggle = { flags = flags.copy(enableBackOnMainScreens = it) }
+                        title = "Enable back on top-level screens",
+                        note = "Allow users to use back navigation between top-level destinations",
+                        enabled = flags.enableBackOnTopLevelScreens,
+                        onToggle = { flags = flags.copy(enableBackOnTopLevelScreens = it) }
                     )
 
                     SettingsItem(

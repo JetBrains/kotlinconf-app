@@ -2,7 +2,7 @@ package org.jetbrains.kotlinconf.navigation
 
 class Navigator(
     val state: NavState,
-    val mainBackEnabled: Boolean,
+    val topLevelBackEnabled: Boolean,
 ) {
     fun goBack() {
         if (state.topLevelRoute == null) {
@@ -13,9 +13,9 @@ class Navigator(
         val currentBackstack = state.currentBackstack
         if (currentBackstack.size == 1) {
             if (state.topLevelRoute != state.primaryTopLevelRoute) {
-                // Go back to the main top-level route
+                // Go back to the primary top-level route
                 state.topLevelRoute = state.primaryTopLevelRoute
-            } else if (mainBackEnabled) {
+            } else if (topLevelBackEnabled) {
                 currentBackstack.removeLastOrNull()
             }
         } else {
