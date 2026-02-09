@@ -1,9 +1,6 @@
 package org.jetbrains.kotlinconf
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -16,7 +13,6 @@ import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
 import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 import org.jetbrains.kotlinconf.di.AppGraph
 import org.jetbrains.kotlinconf.navigation.KotlinConfNavHost
-import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.LocalWindowSize
 import org.jetbrains.kotlinconf.utils.windowSize
 import org.koin.compose.koinInject
@@ -49,19 +45,8 @@ fun App(
         LocalMetroViewModelFactory provides appGraph.metroViewModelFactory,
         LocalWindowSize provides windowSize(),
     ) {
-        KotlinConfTheme(
-            darkTheme = isDarkTheme,
-            rippleEnabled = LocalFlags.current.rippleEnabled,
-        ) {
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(KotlinConfTheme.colors.mainBackground)
-            ) {
-                if (isOnboardingComplete != null) {
-                    KotlinConfNavHost(isOnboardingComplete)
-                }
-            }
+        if (isOnboardingComplete != null) {
+            KotlinConfNavHost(isOnboardingComplete, isDarkTheme)
         }
     }
 }

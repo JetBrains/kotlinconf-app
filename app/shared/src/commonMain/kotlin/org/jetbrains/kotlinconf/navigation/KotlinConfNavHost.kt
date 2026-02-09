@@ -3,9 +3,13 @@ package org.jetbrains.kotlinconf.navigation
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.entryProvider
@@ -16,7 +20,9 @@ import org.jetbrains.kotlinconf.LocalAppGraph
 import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.LocalNotificationId
 import org.jetbrains.kotlinconf.SessionId
+import org.jetbrains.kotlinconf.ThemeChangeAnimation
 import org.jetbrains.kotlinconf.URLs
+import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
 import org.jetbrains.kotlinconf.screens.AppPrivacyNotice
@@ -70,7 +76,10 @@ private fun NotificationHandler(navigator: Navigator) {
 }
 
 @Composable
-internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
+internal fun KotlinConfNavHost(
+    isOnboardingComplete: Boolean,
+    isDarkTheme: Boolean,
+) {
     val startRoute = remember {
         if (isOnboardingComplete) ScheduleScreen else StartPrivacyNoticeScreen
     }
@@ -102,11 +111,27 @@ internal fun KotlinConfNavHost(isOnboardingComplete: Boolean) {
         )
     }
 
-    NavScaffold(navState, navigator) {
-        NavDisplay(
-            entries = navState.toDecoratedEntries(entryProvider),
-            onBack = navigator::goBack,
-        )
+    ThemeChangeAnimation(
+        isDarkTheme = isDarkTheme,
+        enabled = navState.currentBackstack.lastOrNull() is SettingsScreen,
+    ) { appliedIsDarkTheme ->
+        KotlinConfTheme(
+            darkTheme = appliedIsDarkTheme,
+            rippleEnabled = LocalFlags.current.rippleEnabled,
+        ) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(KotlinConfTheme.colors.mainBackground)
+            ) {
+                NavScaffold(navState, navigator) {
+                    NavDisplay(
+                        entries = navState.toDecoratedEntries(entryProvider),
+                        onBack = navigator::goBack,
+                    )
+                }
+            }
+        }
     }
 }
 

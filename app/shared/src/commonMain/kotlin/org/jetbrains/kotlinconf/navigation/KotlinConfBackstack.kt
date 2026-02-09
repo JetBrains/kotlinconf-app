@@ -21,18 +21,13 @@ class Navigator(
     val state: NavigationState,
     val mainBackEnabled: Boolean,
 ) {
-    private fun currentBackstack(): SnapshotStateList<AppRoute> {
-        val topLevel = state.topLevelRoute
-        return if (topLevel != null) state.topLevelBackStacks[topLevel]!! else state.defaultBackstack
-    }
-
     fun goBack() {
         if (state.topLevelRoute == null) {
             state.defaultBackstack.removeLastOrNull()
             return
         }
 
-        val currentBackstack = currentBackstack()
+        val currentBackstack = state.currentBackstack
         if (currentBackstack.size == 1) {
             if (state.topLevelRoute != state.primaryTopLevelRoute) {
                 // Go back to the main top-level route
@@ -49,12 +44,12 @@ class Navigator(
         if (route is TopLevelRoute) {
             activate(route)
         } else {
-            currentBackstack().add(route)
+            state.currentBackstack.add(route)
         }
     }
 
     fun clear() {
-        currentBackstack().clear()
+        state.currentBackstack.clear()
     }
 
     fun activate(route: TopLevelRoute) {
@@ -117,6 +112,9 @@ class NavigationState(
     val primaryTopLevelRoute: TopLevelRoute,
 ) {
     var topLevelRoute by topLevelRoute
+
+    val currentBackstack: SnapshotStateList<AppRoute>
+        get() = if (topLevelRoute != null) topLevelBackStacks[topLevelRoute]!! else defaultBackstack
 
     @Composable
     fun toDecoratedEntries(
