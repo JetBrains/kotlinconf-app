@@ -16,7 +16,7 @@ fun PreviewHelper(
     paddingEnabled: Boolean = true,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    KotlinConfTheme(darkTheme = isSystemInDarkTheme()) {
+    KotlinConfTheme {
         Column(
             modifier = modifier
                 .background(KotlinConfTheme.colors.mainBackground)

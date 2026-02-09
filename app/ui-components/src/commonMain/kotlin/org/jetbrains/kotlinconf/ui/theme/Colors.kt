@@ -30,7 +30,7 @@ import org.jetbrains.kotlinconf.ui.theme.UI.white50
 import org.jetbrains.kotlinconf.ui.theme.UI.white70
 import org.jetbrains.kotlinconf.ui.theme.UI.white80
 
-class Colors(
+data class Colors(
     val isDark: Boolean,
 
     val mainBackground: Color,
@@ -64,7 +64,7 @@ class Colors(
     val toggleOff: Color,
 )
 
-internal val KotlinConfLightColors = Colors(
+val KotlinConfLightColors = Colors(
     isDark = false,
 
     mainBackground = white100,
@@ -98,7 +98,7 @@ internal val KotlinConfLightColors = Colors(
     toggleOn = purple100,
 )
 
-internal val KotlinConfDarkColors = Colors(
+val KotlinConfDarkColors = Colors(
     isDark = true,
 
     mainBackground = black100,
@@ -130,4 +130,8 @@ internal val KotlinConfDarkColors = Colors(
 
     toggleOff = grey500,
     toggleOn = purpleTextDark,
+)
+
+val GoldenKodeeColors = KotlinConfDarkColors.copy(
+    mainBackground = Color(0xFF3A0057),
 )

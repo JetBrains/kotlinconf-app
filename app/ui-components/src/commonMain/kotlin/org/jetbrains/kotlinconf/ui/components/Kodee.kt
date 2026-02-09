@@ -109,7 +109,7 @@ fun KodeeIconLarge(
     Image(
         imageVector = vectorResource(resource),
         contentDescription = contentDescription,
-        modifier = modifier.size(width = 64.dp, height = 55.dp)
+        modifier = modifier.size(width = 64.dp, height = 55.dp),
     )
 }
 
