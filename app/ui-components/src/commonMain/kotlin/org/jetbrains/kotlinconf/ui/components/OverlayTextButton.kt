@@ -23,7 +23,7 @@ import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 private val ActionButtonShape = RoundedCornerShape(100)
 
 @Composable
-fun ActionButton(
+fun OverlayTextButton(
     label: String,
     icon: DrawableResource,
     onClick: () -> Unit,
@@ -53,7 +53,7 @@ fun ActionButton(
 @Composable
 internal fun ActionButtonPreview() {
     PreviewHelper {
-        ActionButton(
+        OverlayTextButton(
             label = "How to find the venue",
             icon = UiRes.drawable.arrow_up_right_24,
             onClick = {},

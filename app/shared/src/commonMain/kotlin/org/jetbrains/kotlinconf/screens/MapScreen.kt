@@ -50,10 +50,10 @@ import org.jetbrains.kotlinconf.generated.resources.map_zoom_out
 import org.jetbrains.kotlinconf.generated.resources.minus_24
 import org.jetbrains.kotlinconf.generated.resources.navigate_back
 import org.jetbrains.kotlinconf.generated.resources.plus_24
-import org.jetbrains.kotlinconf.ui.components.ActionButton
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
-import org.jetbrains.kotlinconf.ui.components.IconButton
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
+import org.jetbrains.kotlinconf.ui.components.OverlayIconButton
+import org.jetbrains.kotlinconf.ui.components.OverlayTextButton
 import org.jetbrains.kotlinconf.ui.components.Switcher
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
@@ -265,7 +265,7 @@ private fun MapWithControls(
                 .padding(end = buttonEdgePadding),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            IconButton(
+            OverlayIconButton(
                 icon = Res.drawable.plus_24,
                 enabled = state.scale.value < zoomRange.endInclusive,
                 onClick = {
@@ -278,7 +278,7 @@ private fun MapWithControls(
                 },
                 contentDescription = stringResource(Res.string.map_zoom_in),
             )
-            IconButton(
+            OverlayIconButton(
                 icon = Res.drawable.minus_24,
                 enabled = state.scale.value > zoomRange.start,
                 onClick = {
@@ -294,7 +294,7 @@ private fun MapWithControls(
         }
 
         if (onHowToFindVenue != null) {
-            ActionButton(
+            OverlayTextButton(
                 label = stringResource(Res.string.map_how_to_find_venue),
                 icon = UiRes.drawable.arrow_up_right_24,
                 onClick = onHowToFindVenue,
