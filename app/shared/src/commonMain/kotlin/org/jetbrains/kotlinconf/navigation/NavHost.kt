@@ -76,7 +76,7 @@ private fun NotificationHandler(navigator: Navigator) {
 }
 
 @Composable
-internal fun KotlinConfNavHost(
+internal fun NavHost(
     isOnboardingComplete: Boolean,
     isDarkTheme: Boolean,
 ) {
@@ -84,7 +84,7 @@ internal fun KotlinConfNavHost(
         if (isOnboardingComplete) ScheduleScreen else StartPrivacyNoticeScreen
     }
 
-    val navState = rememberNavigationState(
+    val navState = rememberNavState(
         startRoute = startRoute,
         topLevelRoutes = setOf(
             ScheduleScreen,

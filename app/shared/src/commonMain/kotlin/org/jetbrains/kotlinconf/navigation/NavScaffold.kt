@@ -73,7 +73,7 @@ private val bottomNavDestinations: List<MainNavDestination<TopLevelRoute>> = lis
 
 @Composable
 internal fun NavScaffold(
-    navState: NavigationState,
+    navState: NavState,
     navigator: Navigator,
     content: @Composable (() -> Unit)
 ) {

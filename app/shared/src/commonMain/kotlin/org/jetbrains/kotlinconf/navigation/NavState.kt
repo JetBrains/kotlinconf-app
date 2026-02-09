@@ -17,60 +17,12 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.savedstate.compose.serialization.serializers.MutableStateSerializer
 import androidx.savedstate.compose.serialization.serializers.SnapshotStateListSerializer
 
-class Navigator(
-    val state: NavigationState,
-    val mainBackEnabled: Boolean,
-) {
-    fun goBack() {
-        if (state.topLevelRoute == null) {
-            state.defaultBackstack.removeLastOrNull()
-            return
-        }
-
-        val currentBackstack = state.currentBackstack
-        if (currentBackstack.size == 1) {
-            if (state.topLevelRoute != state.primaryTopLevelRoute) {
-                // Go back to the main top-level route
-                state.topLevelRoute = state.primaryTopLevelRoute
-            } else if (mainBackEnabled) {
-                currentBackstack.removeLastOrNull()
-            }
-        } else {
-            currentBackstack.removeLastOrNull()
-        }
-    }
-
-    fun add(route: AppRoute) {
-        if (route is TopLevelRoute) {
-            activate(route)
-        } else {
-            state.currentBackstack.add(route)
-        }
-    }
-
-    fun clear() {
-        state.currentBackstack.clear()
-    }
-
-    fun activate(route: TopLevelRoute) {
-        if (route == state.topLevelRoute) {
-            // Reselected the current top-level route
-            val backstack = state.topLevelBackStacks.getValue(route)
-            if (backstack.size > 1) {
-                backstack.removeRange(1, backstack.size)
-            }
-        }
-        state.topLevelRoute = route
-    }
-}
-
-
 @Composable
-fun rememberNavigationState(
+fun rememberNavState(
     startRoute: AppRoute,
     primaryTopLevelRoute: TopLevelRoute,
     topLevelRoutes: Set<TopLevelRoute>,
-): NavigationState {
+): NavState {
 
     val topLevelRoute = rememberSerializable(
         startRoute, topLevelRoutes,
@@ -96,7 +48,7 @@ fun rememberNavigationState(
     }
 
     return remember(startRoute, topLevelRoutes) {
-        NavigationState(
+        NavState(
             topLevelRoute = topLevelRoute,
             primaryTopLevelRoute = primaryTopLevelRoute,
             topLevelBackStacks = topLevelBackstacks,
@@ -105,7 +57,7 @@ fun rememberNavigationState(
     }
 }
 
-class NavigationState(
+class NavState(
     topLevelRoute: MutableState<TopLevelRoute?>,
     val topLevelBackStacks: Map<TopLevelRoute, SnapshotStateList<AppRoute>>,
     val defaultBackstack: SnapshotStateList<AppRoute>,

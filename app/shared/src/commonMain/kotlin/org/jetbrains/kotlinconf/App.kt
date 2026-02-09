@@ -13,6 +13,7 @@ import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
 import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 import org.jetbrains.kotlinconf.di.AppGraph
 import org.jetbrains.kotlinconf.navigation.KotlinConfNavHost
+import org.jetbrains.kotlinconf.navigation.NavHost
 import org.jetbrains.kotlinconf.utils.LocalWindowSize
 import org.jetbrains.kotlinconf.utils.windowSize
 import org.koin.compose.koinInject
@@ -46,7 +47,7 @@ fun App(
         LocalWindowSize provides windowSize(),
     ) {
         if (isOnboardingComplete != null) {
-            KotlinConfNavHost(isOnboardingComplete, isDarkTheme)
+            NavHost(isOnboardingComplete, isDarkTheme)
         }
     }
 }
