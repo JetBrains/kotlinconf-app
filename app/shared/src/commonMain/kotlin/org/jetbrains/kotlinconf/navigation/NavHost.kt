@@ -8,13 +8,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.map
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.LocalAppGraph
 import org.jetbrains.kotlinconf.LocalFlags
@@ -23,7 +26,6 @@ import org.jetbrains.kotlinconf.LocalNotificationId
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.ThemeChangeAnimation
 import org.jetbrains.kotlinconf.URLs
-import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
 import org.jetbrains.kotlinconf.screens.AppPrivacyNotice
@@ -31,6 +33,9 @@ import org.jetbrains.kotlinconf.screens.AppPrivacyNoticePrompt
 import org.jetbrains.kotlinconf.screens.AppTermsOfUse
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
 import org.jetbrains.kotlinconf.screens.DeveloperMenuScreen
+import org.jetbrains.kotlinconf.screens.GoldenKodeeCategoryScreen
+import org.jetbrains.kotlinconf.screens.GoldenKodeeNomineeScreen
+import org.jetbrains.kotlinconf.screens.GoldenKodeeScreen
 import org.jetbrains.kotlinconf.screens.InfoScreen
 import org.jetbrains.kotlinconf.screens.LicensesScreen
 import org.jetbrains.kotlinconf.screens.MapScreen
@@ -46,6 +51,10 @@ import org.jetbrains.kotlinconf.screens.SpeakersScreen
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 import org.jetbrains.kotlinconf.screens.VisitorPrivacyNotice
 import org.jetbrains.kotlinconf.screens.VisitorTermsOfUse
+import org.jetbrains.kotlinconf.ui.theme.GoldenKodeeColors
+import org.jetbrains.kotlinconf.ui.theme.KotlinConfDarkColors
+import org.jetbrains.kotlinconf.ui.theme.KotlinConfLightColors
+import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 
 fun navigateByLocalNotificationId(notificationId: String) {
@@ -90,6 +99,7 @@ internal fun NavHost(
         topLevelRoutes = setOf(
             ScheduleScreen,
             SpeakersScreen,
+            GoldenKodeeScreen,
             MapScreen,
             InfoScreen,
         ),
@@ -112,20 +122,34 @@ internal fun NavHost(
         )
     }
 
+    val goldenKodeeService = LocalAppGraph.current.goldenKodeeService
+    val showGoldenKodee by remember { goldenKodeeService.getCategories().map { it.isNotEmpty() } }
+        .collectAsStateWithLifecycle(false)
+
+    val isGoldenKodee = navState.topLevelRoute is GoldenKodeeScreen
+
     ThemeChangeAnimation(
         isDarkTheme = isDarkTheme,
         enabled = navState.currentBackstack.lastOrNull() is SettingsScreen,
     ) { appliedIsDarkTheme ->
         KotlinConfTheme(
-            darkTheme = appliedIsDarkTheme,
             rippleEnabled = LocalFlags.current.rippleEnabled,
+            colors = when {
+                isGoldenKodee -> GoldenKodeeColors
+                appliedIsDarkTheme -> KotlinConfDarkColors
+                else -> KotlinConfLightColors
+            },
         ) {
             Box(
                 Modifier
                     .fillMaxSize()
                     .background(KotlinConfTheme.colors.mainBackground)
             ) {
-                NavScaffold(navState, navigator) {
+                NavScaffold(
+                    navState = navState,
+                    navigator = navigator,
+                    showGoldenKodee = showGoldenKodee,
+                ) {
                     NavDisplay(
                         entries = navState.toDecoratedEntries(entryProvider),
                         onBack = navigator::goBack,
@@ -190,6 +214,29 @@ private fun EntryProviderScope<AppRoute>.screens(
     entry<SpeakersScreen>(metadata = noAnimationMetadata) {
         SpeakersScreen(
             onSpeaker = { navigator.add(SpeakerDetailScreen(it)) }
+        )
+    }
+
+    entry<GoldenKodeeScreen>(metadata = noAnimationMetadata) {
+        GoldenKodeeScreen(
+            onCategoryClick = { categoryId -> navigator.add(GoldenKodeeCategoryScreen(categoryId)) },
+        )
+    }
+
+    entry<GoldenKodeeCategoryScreen> {
+        GoldenKodeeCategoryScreen(
+            categoryId = it.categoryId,
+            onBack = onBack,
+            onNomineeClick = { nomineeId ->
+                navigator.add(GoldenKodeeNomineeScreen(it.categoryId, nomineeId))
+            },
+        )
+    }
+    entry<GoldenKodeeNomineeScreen> {
+        GoldenKodeeNomineeScreen(
+            categoryId = it.categoryId,
+            nomineeId = it.nomineeId,
+            onBack = onBack,
         )
     }
 

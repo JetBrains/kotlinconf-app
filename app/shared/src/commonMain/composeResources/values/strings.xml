@@ -7,8 +7,15 @@
     <string name="nav_destination_schedule">Schedule</string>
     <string name="nav_destination_speakers">Speakers</string>
     <string name="nav_destination_map">Map</string>
+    <string name="nav_destination_golden_kodee">Golden Kodee</string>
 
     <!-- Screen resources -->
+
+    <string name="golden_kodee_title">Golden Kodee</string>
+    <string name="golden_kodee_winner">Winner</string>
+    <string name="golden_kodee_finalist">Finalist</string>
+    <string name="golden_kodee_winner_banner_title">You've Got the Golden Kodee Award!</string>
+    <string name="golden_kodee_winner_banner_description">Amazing work! The community is inspired by your creative approach. Thank you for making the Kotlin ecosystem brighter and more exciting.</string>
 
     <string name="about_app_title">About the app</string>
     <string name="about_app_description">The KotlinConf application is developed by the JetBrains team using Kotlin Multiplatform for shared logic and Compose Multiplatform for UI across Android, iOS, Desktop, and Web platforms.

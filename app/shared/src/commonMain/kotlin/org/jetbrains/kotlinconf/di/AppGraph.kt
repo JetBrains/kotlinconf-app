@@ -25,6 +25,7 @@ import kotlinx.coroutines.SupervisorJob
 import org.jetbrains.kotlinconf.network.ApplicationApi
 import io.ktor.client.plugins.logging.Logger as KtorLogger
 import org.jetbrains.kotlinconf.ConferenceService
+import org.jetbrains.kotlinconf.FakeGoldenKodeeService
 import org.jetbrains.kotlinconf.FakeTimeProvider
 import org.jetbrains.kotlinconf.Flags
 import org.jetbrains.kotlinconf.FlagsManager
@@ -38,6 +39,7 @@ import kotlin.reflect.KClass
 
 interface AppGraph : ViewModelGraph {
     val conferenceService: ConferenceService
+    val goldenKodeeService: FakeGoldenKodeeService
     val flagsManager: FlagsManager
     val timeProvider: TimeProvider
     val logger: Logger

@@ -22,6 +22,8 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
+import org.jetbrains.kotlinconf.ui.generated.resources.award_28
+import org.jetbrains.kotlinconf.ui.generated.resources.award_28_fill
 import org.jetbrains.kotlinconf.ui.generated.resources.clock_28
 import org.jetbrains.kotlinconf.ui.generated.resources.clock_28_fill
 import org.jetbrains.kotlinconf.ui.generated.resources.info_28
@@ -112,12 +114,6 @@ private fun MainNavigationBarPreview() = PreviewHelper(paddingEnabled = false) {
         destinations = listOf(
             MainNavDestination(
                 label = UiRes.string.now,
-                icon = UiRes.drawable.info_28,
-                iconSelected = UiRes.drawable.info_28_fill,
-                route = "Info"
-            ),
-            MainNavDestination(
-                label = UiRes.string.now,
                 icon = UiRes.drawable.clock_28,
                 iconSelected = UiRes.drawable.clock_28_fill,
                 route = "Schedule"
@@ -130,9 +126,21 @@ private fun MainNavigationBarPreview() = PreviewHelper(paddingEnabled = false) {
             ),
             MainNavDestination(
                 label = UiRes.string.now,
+                icon = UiRes.drawable.award_28,
+                iconSelected = UiRes.drawable.award_28_fill,
+                route = "GoldenKodee"
+            ),
+            MainNavDestination(
+                label = UiRes.string.now,
                 icon = UiRes.drawable.location_28,
                 iconSelected = UiRes.drawable.location_28_fill,
                 route = "Map"
+            ),
+            MainNavDestination(
+                label = UiRes.string.now,
+                icon = UiRes.drawable.info_28,
+                iconSelected = UiRes.drawable.info_28_fill,
+                route = "Info"
             ),
         ),
         onSelect = { currentDestination = it },
