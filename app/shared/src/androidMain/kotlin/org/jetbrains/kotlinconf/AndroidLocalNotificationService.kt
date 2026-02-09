@@ -3,6 +3,7 @@
 package org.jetbrains.kotlinconf
 
 import android.Manifest
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager.IMPORTANCE_HIGH
@@ -16,10 +17,17 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.BroadcastReceiverKey
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
+import org.jetbrains.kotlinconf.di.NotificationIcon
 import org.jetbrains.kotlinconf.utils.Logger
-import org.koin.mp.KoinPlatform
 import kotlin.time.ExperimentalTime
 
 const val EXTRA_LOCAL_NOTIFICATION_ID = "localNotificationId"
@@ -28,10 +36,13 @@ private const val EXTRA_MESSAGE = "message"
 private const val NOTIFICATION_CHANNEL_ID = "channel_all_notifications"
 private const val ACTION_SHOW_NOTIFICATION = "org.jetbrains.kotlinconf.SHOW_NOTIFICATION"
 
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
 class AndroidLocalNotificationService(
     private val timeProvider: TimeProvider,
+    private val permissionHandler: PermissionHandler,
     private val context: Context,
-    private val iconId: Int,
+    @NotificationIcon private val iconRes: Int,
     private val logger: Logger,
 ) : LocalNotificationService {
 
@@ -61,9 +72,7 @@ class AndroidLocalNotificationService(
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true
 
         val permissions = listOfNotNull(Manifest.permission.POST_NOTIFICATIONS, getRelevantAlarmPermission())
-
-        val permissionHandler = KoinPlatform.getKoin().getOrNull<PermissionHandler>()
-        return permissionHandler?.requestPermissions(permissions.toTypedArray()) ?: false
+        return permissionHandler.requestPermissions(permissions.toTypedArray())
     }
 
     override fun post(
@@ -152,7 +161,7 @@ class AndroidLocalNotificationService(
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setSmallIcon(iconId)
+            .setSmallIcon(iconRes)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
@@ -183,7 +192,12 @@ class AndroidLocalNotificationService(
     }
 }
 
-class AlarmBroadcastReceiver : BroadcastReceiver() {
+@Inject
+@BroadcastReceiverKey(AlarmBroadcastReceiver::class)
+@ContributesIntoMap(AppScope::class, binding = binding<BroadcastReceiver>())
+class AlarmBroadcastReceiver(
+    private val localNotificationService: LocalNotificationService
+) : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != ACTION_SHOW_NOTIFICATION) return
 
@@ -191,7 +205,6 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         val message = intent.getStringExtra(EXTRA_MESSAGE) ?: return
         val notificationId = intent.getStringExtra(EXTRA_LOCAL_NOTIFICATION_ID) ?: return
 
-        val localNotificationService = KoinPlatform.getKoin().get<LocalNotificationService>()
         localNotificationService.post(
             title = title,
             message = message,
