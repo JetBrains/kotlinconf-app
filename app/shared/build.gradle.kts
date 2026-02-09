@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.metro)
 }
 
 kotlin {
@@ -58,7 +59,7 @@ kotlin {
             api(libs.compose.components.resources)
             implementation(libs.compose.ui.tooling.preview)
 
-            api(libs.koin.compose.viewmodel.navigation)
+            implementation(libs.metrox.viewmodel.compose)
 
             api(libs.ktor.client.logging)
             api(libs.ktor.serialization.kotlinx.json)
@@ -103,6 +104,7 @@ kotlin {
             implementation(libs.androidx.core.ktx)
             implementation(libs.androidx.preference)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.metrox.android)
         }
 
         iosMain.dependencies {

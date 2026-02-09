@@ -22,6 +22,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.generated.resources.Res
@@ -32,12 +33,11 @@ import org.jetbrains.kotlinconf.generated.resources.notifications_title
 import org.jetbrains.kotlinconf.ui.components.Button
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun StartNotificationsScreen(
     onDone: () -> Unit,
-    viewModel: StartNotificationsViewModel = koinViewModel(),
+    viewModel: StartNotificationsViewModel = metroViewModel(),
 ) {
     val notificationSettings = viewModel.notificationSettings.collectAsStateWithLifecycle().value
 

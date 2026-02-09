@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.android
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -11,23 +12,32 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
 import com.mmk.kmpnotifier.notification.NotifierManager
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
 import org.jetbrains.kotlinconf.App
 import org.jetbrains.kotlinconf.EXTRA_LOCAL_NOTIFICATION_ID
 import org.jetbrains.kotlinconf.PermissionHandler
 import org.jetbrains.kotlinconf.navigation.navigateByLocalNotificationId
-import org.koin.mp.KoinPlatform
 
-class MainActivity : ComponentActivity() {
+@ActivityKey(MainActivity::class)
+@ContributesIntoMap(AppScope::class, binding = binding<Activity>())
+class MainActivity(
+    private val appGraph: AndroidAppGraph,
+    private val permissionHandler: PermissionHandler,
+) : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
 
-        processIntent(intent)
+        permissionHandler.initialize(this)
 
-        KoinPlatform.getKoin().declare(PermissionHandler(activity = this))
+        processIntent(intent)
 
         setContent {
             App(
+                appGraph = appGraph,
                 onThemeChange = { isDarkMode ->
                     val systemBarStyle = SystemBarStyle.auto(
                         lightScrim = Color.TRANSPARENT,
