@@ -20,6 +20,7 @@ import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.backend.schema.Feedback
+import org.jetbrains.kotlinconf.backend.schema.SignedPolicies
 import org.jetbrains.kotlinconf.backend.schema.Users
 import org.jetbrains.kotlinconf.backend.schema.Votes
 import org.slf4j.LoggerFactory
@@ -54,7 +55,7 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         Database.Companion.connect(connectionPool)
 
         transaction {
-            SchemaUtils.create(Users, Votes, Feedback)
+            SchemaUtils.create(Users, SignedPolicies, Votes, Feedback)
         }
     }
 
@@ -71,6 +72,22 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         Users.insert {
             it[userId] = uuidValue
             it[timestamp] = timestampValue.toString()
+        }
+
+        return@newSuspendedTransaction true
+    }
+
+    suspend fun signPolicy(
+        uuidValue: String, yearValue: Int
+    ): Boolean = newSuspendedTransaction(Dispatchers.IO) {
+        val count = SignedPolicies.selectAll()
+            .where { (SignedPolicies.userId eq uuidValue) and (SignedPolicies.year eq yearValue) }
+            .count()
+        if (count != 0L) return@newSuspendedTransaction false
+
+        SignedPolicies.insert {
+            it[userId] = uuidValue
+            it[year] = yearValue
         }
 
         return@newSuspendedTransaction true
