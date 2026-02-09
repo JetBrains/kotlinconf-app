@@ -51,6 +51,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_hint
 import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
+import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
 fun SpeakersScreen(
@@ -75,7 +76,11 @@ fun SpeakersScreen(
         viewModel.setSearchText(searchText)
     }
 
-    Column(Modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
+    Column(
+        Modifier.fillMaxSize()
+            .background(color = KotlinConfTheme.colors.mainBackground)
+            .padding(topInsetPadding())
+    ) {
         MainHeaderContainer(
             state = searchState,
             titleContent = {

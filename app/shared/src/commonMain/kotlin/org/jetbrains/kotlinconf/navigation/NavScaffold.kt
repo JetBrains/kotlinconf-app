@@ -2,16 +2,12 @@ package org.jetbrains.kotlinconf.navigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.AnimationConstants
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.VisibilityThreshold
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,14 +15,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.IntSize.Companion
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.clock_28
@@ -49,6 +43,8 @@ import org.jetbrains.kotlinconf.ui.components.VerticalDivider
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.LocalWindowSize
 import org.jetbrains.kotlinconf.utils.WindowSize
+import org.jetbrains.kotlinconf.utils.bottomInsetPadding
+import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 private val bottomNavDestinations: List<MainNavDestination<TopLevelRoute>> = listOf(
     MainNavDestination(
@@ -87,54 +83,47 @@ internal fun NavScaffold(
         navigator.activate(route)
     }
 
-    Box(
-        Modifier
-            .fillMaxSize()
+    val windowSize = LocalWindowSize.current
+
+    val showLargeNavigation = windowSize != WindowSize.Compact &&
+            navState.topLevelRoute != null
+    val showCompactNavigation = windowSize == WindowSize.Compact &&
+            navState.topLevelRoute != null &&
+            navState.currentBackstack.size == 1 &&
+            !isKeyboardOpen()
+
+    Row(
+        Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
-        val windowSize = LocalWindowSize.current
+        val enterAnimSpec = tween<IntSize>(delayMillis = AnimationConstants.DefaultDurationMillis)
 
-        val showLargeNavigation = windowSize != WindowSize.Compact &&
-                navState.topLevelRoute != null
-        val showCompactNavigation = windowSize == WindowSize.Compact &&
-                navState.topLevelRoute != null &&
-                navState.currentBackstack.size == 1 &&
-                !isKeyboardOpen()
-
-        Row(
-            Modifier
-                .fillMaxSize()
+        AnimatedVisibility(
+            visible = showLargeNavigation,
+            enter = expandHorizontally(enterAnimSpec),
+            exit = shrinkHorizontally() + fadeOut(),
         ) {
-            val enterAnimSpec = tween<IntSize>(delayMillis = AnimationConstants.DefaultDurationMillis)
+            SideNavigation(
+                currentRoute = navState.topLevelRoute,
+                onSelectRoute = onSelectRoute,
+                expanded = windowSize == WindowSize.Large,
+            )
+        }
 
-            AnimatedVisibility(
-                visible = showLargeNavigation,
-                enter = expandHorizontally(enterAnimSpec),
-                exit = shrinkHorizontally() + fadeOut(),
-            ) {
-                SideNavigation(
-                    currentRoute = navState.topLevelRoute,
-                    onSelectRoute = onSelectRoute,
-                    expanded = windowSize == WindowSize.Large,
-                )
+        Column(Modifier.weight(1f)) {
+            Box(Modifier.weight(1f)) {
+                content()
             }
 
-            Column(Modifier.weight(1f)) {
-                Box(Modifier.weight(1f)) {
-                    content()
-                }
-
-                AnimatedVisibility(
-                    visible = showCompactNavigation,
-                    enter = expandVertically(enterAnimSpec),
-                    exit = shrinkVertically() + fadeOut(),
-                ) {
-                    BottomNavigation(
-                        currentRoute = navState.topLevelRoute,
-                        onSelectRoute = onSelectRoute,
-                    )
-                }
+            AnimatedVisibility(
+                visible = showCompactNavigation,
+                enter = expandVertically(enterAnimSpec),
+                exit = shrinkVertically() + fadeOut(),
+            ) {
+                BottomNavigation(
+                    currentRoute = navState.topLevelRoute,
+                    onSelectRoute = onSelectRoute,
+                )
             }
         }
     }
@@ -153,7 +142,9 @@ private fun BottomNavigation(
 ) {
     val currentDestination = bottomNavDestinations.find { it.route == currentRoute }
 
-    Column {
+    Column(
+        Modifier.padding(bottomInsetPadding()),
+    ) {
         HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
         MainNavigationBar(
             currentDestination = currentDestination,
@@ -181,6 +172,7 @@ private fun SideNavigation(
                 onSelectRoute(selectedDestination.route)
             },
             expanded = expanded,
+            modifier = Modifier.padding(topInsetPadding()),
         )
         VerticalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
     }

@@ -39,6 +39,7 @@ import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 
 @Composable
@@ -52,7 +53,11 @@ fun InfoScreen(
     onBluesky: () -> Unit,
     onSettings: () -> Unit,
 ) {
-    Column(Modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
+    Column(
+        Modifier.fillMaxSize()
+            .background(color = KotlinConfTheme.colors.mainBackground)
+            .padding(topInsetPadding())
+    ) {
         MainHeaderTitleBar(stringResource(Res.string.info_title))
         HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
 

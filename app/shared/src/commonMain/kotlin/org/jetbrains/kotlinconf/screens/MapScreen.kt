@@ -123,7 +123,7 @@ fun NestedMapScreen(
 
 @Composable
 fun MapScreen() {
-    MapScreenImpl(venue, null)
+    MapScreenImpl(venue, null, modifier = Modifier.padding(topInsetPadding()))
 }
 
 @Composable
