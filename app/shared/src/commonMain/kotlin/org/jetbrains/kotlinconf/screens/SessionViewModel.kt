@@ -12,7 +12,6 @@ import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -29,8 +28,8 @@ class SessionViewModel(
     @Assisted private val sessionId: SessionId,
 ) : ViewModel() {
 
-    private val _navigateToPrivacyNotice = MutableStateFlow(false)
-    val navigateToPrivacyNotice: StateFlow<Boolean> = _navigateToPrivacyNotice.asStateFlow()
+    val navigateToPrivacyNotice: StateFlow<Boolean>
+        field = MutableStateFlow(false)
 
     val session: StateFlow<SessionCardView?> = service.sessionByIdFlow(sessionId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
@@ -53,7 +52,7 @@ class SessionViewModel(
             if (service.canVote()) {
                 service.vote(sessionId, emotion?.toScore())
             } else {
-                _navigateToPrivacyNotice.value = true
+                navigateToPrivacyNotice.value = true
             }
         }
     }
@@ -64,13 +63,13 @@ class SessionViewModel(
                 service.vote(sessionId, emotion.toScore())
                 service.sendFeedback(sessionId, comment)
             } else {
-                _navigateToPrivacyNotice.value = true
+                navigateToPrivacyNotice.value = true
             }
         }
     }
 
     fun onNavigatedToPrivacyNotice() {
-        _navigateToPrivacyNotice.value = false
+        navigateToPrivacyNotice.value = false
     }
 
     private fun Emotion.toScore() = when (this) {

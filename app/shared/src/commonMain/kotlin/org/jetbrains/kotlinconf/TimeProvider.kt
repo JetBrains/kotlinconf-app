@@ -6,7 +6,6 @@ import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
@@ -42,7 +41,7 @@ class ServerBasedTimeProvider(private val client: ApplicationApi) : TimeProvider
     }
 
     private val _time = MutableStateFlow(Clock.System.now().toLocalDateTime(EVENT_TIME_ZONE))
-    override val time: StateFlow<LocalDateTime> = _time.asStateFlow()
+    override val time: StateFlow<LocalDateTime> = _time
 
     override suspend fun run(): Nothing {
         runCatching {

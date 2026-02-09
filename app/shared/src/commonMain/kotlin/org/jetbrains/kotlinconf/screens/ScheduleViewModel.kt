@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -85,8 +84,8 @@ class ScheduleViewModel(
     private val service: ConferenceService,
     private val timeProvider: TimeProvider,
 ) : ViewModel() {
-    private val _navigateToPrivacyNotice = MutableStateFlow(false)
-    val navigateToPrivacyNotice: StateFlow<Boolean> = _navigateToPrivacyNotice.asStateFlow()
+    val navigateToPrivacyNotice: StateFlow<Boolean>
+        field = MutableStateFlow(false)
 
     private val searchParams = MutableStateFlow(ScheduleSearchParams())
 
@@ -94,16 +93,16 @@ class ScheduleViewModel(
         return map { FilterItem(type = type, value = it, isSelected = false) }
     }
 
-    private val _filterItems = MutableStateFlow<List<FilterItem>>(emptyList())
-    val filterItems: StateFlow<List<FilterItem>> = _filterItems.asStateFlow()
+    val filterItems: StateFlow<List<FilterItem>>
+        field = MutableStateFlow<List<FilterItem>>(emptyList())
 
     init {
         viewModelScope.launch {
             service.conferenceInfo.collect { info ->
                 // Overwrite existing filter items based on the new info
                 val tags = info?.tags
-                if (tags != null && _filterItems.value.isEmpty()) {
-                    _filterItems.value =
+                if (tags != null && filterItems.value.isEmpty()) {
+                    filterItems.value =
                         tags.categories.toFilterItems(FilterItemType.Category) +
                                 tags.levels.toFilterItems(FilterItemType.Level) +
                                 tags.formats.toFilterItems(FilterItemType.Format)
@@ -122,7 +121,7 @@ class ScheduleViewModel(
     private var loading = MutableStateFlow(false)
 
     fun toggleFilter(item: FilterItem, selected: Boolean) {
-        _filterItems.update { oldItems ->
+        filterItems.update { oldItems ->
             val list = oldItems.toMutableList()
 
             if (item.type == FilterItemType.Level || item.type == FilterItemType.Format) {
@@ -143,7 +142,7 @@ class ScheduleViewModel(
     }
 
     fun resetFilters() {
-        _filterItems.update {
+        filterItems.update {
             it.map { filter -> filter.copy(isSelected = false) }
         }
     }
@@ -349,7 +348,7 @@ class ScheduleViewModel(
             if (service.canVote()) {
                 service.vote(sessionId, score)
             } else {
-                _navigateToPrivacyNotice.value = true
+                navigateToPrivacyNotice.value = true
             }
         }
     }
@@ -365,13 +364,13 @@ class ScheduleViewModel(
                 service.vote(sessionId, score)
                 service.sendFeedback(sessionId, comment)
             } else {
-                _navigateToPrivacyNotice.value = true
+                navigateToPrivacyNotice.value = true
             }
         }
     }
 
     fun onNavigatedToPrivacyNotice() {
-        _navigateToPrivacyNotice.value = false
+        navigateToPrivacyNotice.value = false
     }
 
     fun onBookmark(sessionId: SessionId, bookmarked: Boolean) {
