@@ -39,7 +39,7 @@ import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.kodee_frightened
 import org.jetbrains.kotlinconf.ui.components.Button
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.SettingsItem
 import org.jetbrains.kotlinconf.ui.components.Text
@@ -83,7 +83,7 @@ fun DeveloperMenuScreen(
                 }
             )
 
-            Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+            HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
             val appGraph = LocalAppGraph.current
 
@@ -101,10 +101,10 @@ fun DeveloperMenuScreen(
                     )
 
                     SettingsItem(
-                        title = "Enable back on main screens",
-                        note = "Allow users to use back navigation between the top-level destinations on the Main screen",
-                        enabled = flags.enableBackOnMainScreens,
-                        onToggle = { flags = flags.copy(enableBackOnMainScreens = it) }
+                        title = "Enable back on top-level screens",
+                        note = "Allow users to use back navigation between top-level destinations",
+                        enabled = flags.enableBackOnTopLevelScreens,
+                        onToggle = { flags = flags.copy(enableBackOnTopLevelScreens = it) }
                     )
 
                     SettingsItem(
@@ -163,7 +163,7 @@ fun DeveloperMenuScreen(
                     )
                 }
 
-                Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+                HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
                 val flagsManager = appGraph.flagsManager
                 Row(

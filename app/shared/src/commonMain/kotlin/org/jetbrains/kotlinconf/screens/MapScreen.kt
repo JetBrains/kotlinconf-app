@@ -52,7 +52,7 @@ import org.jetbrains.kotlinconf.generated.resources.map_zoom_out
 import org.jetbrains.kotlinconf.generated.resources.minus_24
 import org.jetbrains.kotlinconf.generated.resources.navigate_back
 import org.jetbrains.kotlinconf.generated.resources.plus_24
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.IconButton
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.Switcher
@@ -123,7 +123,7 @@ fun NestedMapScreen(
 
 @Composable
 fun MapScreen() {
-    MapScreenImpl(venue, null)
+    MapScreenImpl(venue, null, modifier = Modifier.padding(topInsetPadding()))
 }
 
 @Composable
@@ -152,7 +152,7 @@ private fun MapScreenImpl(
                 }
             }
         )
-        Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
         Switcher(
             items = Floor.entries.map { stringResource(it.title) },

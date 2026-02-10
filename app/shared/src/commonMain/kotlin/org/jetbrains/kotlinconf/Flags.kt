@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Flags(
-    val enableBackOnMainScreens: Boolean = true,
+    val enableBackOnTopLevelScreens: Boolean = true,
     val supportsNotifications: Boolean = true,
     val rippleEnabled: Boolean = true,
     val redirectFeedbackToSessionPage: Boolean = false,

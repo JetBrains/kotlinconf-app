@@ -69,9 +69,9 @@ import org.jetbrains.kotlinconf.generated.resources.up_24
 import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
-import org.jetbrains.kotlinconf.ui.components.Divider
 import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.components.FeedbackForm
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.KodeeIconLarge
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MajorError
@@ -130,7 +130,7 @@ fun SessionScreen(
             },
         )
 
-        Divider(
+        HorizontalDivider(
             thickness = 1.dp,
             color = KotlinConfTheme.colors.strokePale
         )
@@ -333,7 +333,7 @@ private fun FeedbackPanel(
             ),
         ) {
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+                HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
                 val iconRotation by animateFloatAsState(if (feedbackExpanded) 0f else 180f)
                 Action(

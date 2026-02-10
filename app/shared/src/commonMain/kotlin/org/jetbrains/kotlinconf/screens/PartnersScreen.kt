@@ -19,7 +19,7 @@ import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.partners_title
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PartnerCard
 import org.jetbrains.kotlinconf.ui.components.Text
@@ -54,7 +54,7 @@ fun PartnersScreen(
             }
         )
 
-        Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
         val lazyListState = rememberLazyListState()
         ScrollToTopHandler(lazyListState)

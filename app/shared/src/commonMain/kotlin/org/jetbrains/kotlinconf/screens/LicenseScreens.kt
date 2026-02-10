@@ -44,7 +44,7 @@ import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.licenses_number_of_results
 import org.jetbrains.kotlinconf.generated.resources.licenses_title
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
@@ -145,7 +145,7 @@ fun LicensesScreen(
             }
         )
 
-        Divider(1.dp, KotlinConfTheme.colors.strokePale)
+        HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
 
         LibraryList(
             libraries = libraries,

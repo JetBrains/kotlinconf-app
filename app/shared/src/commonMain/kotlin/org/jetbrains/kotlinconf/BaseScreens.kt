@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MarkdownView
 import org.jetbrains.kotlinconf.ui.components.Text
@@ -49,7 +49,7 @@ fun ScreenWithTitle(
             }
         )
 
-        Divider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
         Column(
             Modifier

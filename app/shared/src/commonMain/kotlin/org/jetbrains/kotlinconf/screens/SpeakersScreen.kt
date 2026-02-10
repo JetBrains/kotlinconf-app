@@ -37,7 +37,7 @@ import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.speakers_error_no_data
 import org.jetbrains.kotlinconf.generated.resources.speakers_number_of_results
 import org.jetbrains.kotlinconf.generated.resources.speakers_title
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
@@ -51,6 +51,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_hint
 import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
+import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
 fun SpeakersScreen(
@@ -75,7 +76,11 @@ fun SpeakersScreen(
         viewModel.setSearchText(searchText)
     }
 
-    Column(Modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
+    Column(
+        Modifier.fillMaxSize()
+            .background(color = KotlinConfTheme.colors.mainBackground)
+            .padding(topInsetPadding())
+    ) {
         MainHeaderContainer(
             state = searchState,
             titleContent = {
@@ -112,7 +117,7 @@ fun SpeakersScreen(
             }
         )
 
-        Divider(1.dp, KotlinConfTheme.colors.strokePale)
+        HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
 
         AnimatedContent(
             uiState,
