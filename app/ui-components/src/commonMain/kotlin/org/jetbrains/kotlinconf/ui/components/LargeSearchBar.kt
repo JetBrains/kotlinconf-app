@@ -54,6 +54,7 @@ fun LargeSearchBar(
     onClear: () -> Unit,
     modifier: Modifier = Modifier,
     hasAdditionalInputs: Boolean = false,
+    hint: String = stringResource(UiRes.string.main_header_search_hint),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     val focused by interactionSource.collectIsFocusedAsState()
@@ -76,13 +77,12 @@ fun LargeSearchBar(
             )
             .clip(KotlinConfTheme.shapes.roundedCornerSm)
             .heightIn(min = 40.dp)
-            .fillMaxWidth()
             .background(KotlinConfTheme.colors.mainBackground),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            modifier = modifier
+            modifier = Modifier
                 .padding(start = 8.dp)
                 .size(24.dp),
             painter = painterResource(UiRes.drawable.search_24),
@@ -121,7 +121,7 @@ fun LargeSearchBar(
                 exit = fadeOut(tween(10)),
             ) {
                 Text(
-                    text = stringResource(UiRes.string.main_header_search_hint),
+                    text = hint,
                     style = KotlinConfTheme.typography.text1,
                     color = KotlinConfTheme.colors.placeholderText
                 )
