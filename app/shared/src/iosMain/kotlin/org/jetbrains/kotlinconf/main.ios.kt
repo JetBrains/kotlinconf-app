@@ -23,7 +23,7 @@ class IOSLogger : Logger {
 private val appGraph = createGraphFactory<IosAppGraph.Factory>()
     .create(
         Flags(
-            enableBackOnMainScreens = false,
+            enableBackOnTopLevelScreens = false,
             rippleEnabled = false,
             hideKeyboardOnDrag = true,
         )

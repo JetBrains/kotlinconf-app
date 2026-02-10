@@ -10,6 +10,25 @@ import org.jetbrains.kotlinconf.SpeakerId
 sealed interface AppRoute
 
 @Serializable
+sealed interface TopLevelRoute : AppRoute
+
+@Serializable
+@SerialName("Schedule")
+data object ScheduleScreen : AppRoute, TopLevelRoute
+
+@Serializable
+@SerialName("Speakers")
+data object SpeakersScreen : AppRoute, TopLevelRoute
+
+@Serializable
+@SerialName("Map")
+data object MapScreen : AppRoute, TopLevelRoute
+
+@Serializable
+@SerialName("Info")
+data object InfoScreen : AppRoute, TopLevelRoute
+
+@Serializable
 @SerialName("AboutConference")
 data object AboutConferenceScreen : AppRoute
 
@@ -71,10 +90,6 @@ data object PartnersScreen : AppRoute
 @Serializable
 @SerialName("Partner")
 data class PartnerDetailScreen(val partnerId: PartnerId) : AppRoute
-
-@Serializable
-@SerialName("Main")
-data object MainScreen : AppRoute
 
 @Serializable
 @SerialName("Session")
