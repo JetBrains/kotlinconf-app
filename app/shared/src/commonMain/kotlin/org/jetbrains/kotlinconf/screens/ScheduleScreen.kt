@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -60,7 +63,7 @@ import org.jetbrains.kotlinconf.generated.resources.schedule_number_of_results
 import org.jetbrains.kotlinconf.isLive
 import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.DayHeader
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.components.FilterItem
 import org.jetbrains.kotlinconf.ui.components.Filters
@@ -85,6 +88,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
+import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
 fun ScheduleScreen(
@@ -146,6 +150,7 @@ fun ScheduleScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
+            .padding(topInsetPadding())
     ) {
         Header(
             startContent = { NowButtonContent(state, listState) },
@@ -158,7 +163,7 @@ fun ScheduleScreen(
             onClearSearch = { viewModel.resetFilters() },
             viewModel = viewModel
         )
-        Divider(
+        HorizontalDivider(
             thickness = 1.dp,
             color = KotlinConfTheme.colors.strokePale,
         )

@@ -41,7 +41,7 @@ import org.jetbrains.kotlinconf.generated.resources.privacy_notice_title
 import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
 import org.jetbrains.kotlinconf.ui.components.Button
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MarkdownView
 import org.jetbrains.kotlinconf.ui.components.Text
@@ -92,7 +92,7 @@ fun AppPrivacyNoticePrompt(
                             )
                         }
                     )
-                    Divider(
+                    HorizontalDivider(
                         thickness = 1.dp,
                         color = KotlinConfTheme.colors.strokePale,
                     )
@@ -111,7 +111,7 @@ fun AppPrivacyNoticePrompt(
                         },
                     )
                     Spacer(Modifier.weight(1f))
-                    Divider(
+                    HorizontalDivider(
                         thickness = 1.dp,
                         color = KotlinConfTheme.colors.strokePale,
                     )

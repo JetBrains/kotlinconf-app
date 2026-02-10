@@ -41,7 +41,7 @@ import org.jetbrains.kotlinconf.generated.resources.arrow_up_right_24
 import org.jetbrains.kotlinconf.generated.resources.kotlinconf_by_jetbrains
 import org.jetbrains.kotlinconf.generated.resources.kotlinconf_by_jetbrains_description
 import org.jetbrains.kotlinconf.ui.components.DayHeader
-import org.jetbrains.kotlinconf.ui.components.Divider
+import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.Text
@@ -173,7 +173,7 @@ private fun EventCard(
         }
 
         if (location.isNotEmpty() || time.isNotEmpty()) {
-            Divider(1.dp, KotlinConfTheme.colors.strokePale)
+            HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
 
             Row(
                 modifier = Modifier.padding(16.dp).fillMaxSize(),
