@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberBasicTooltipState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -88,29 +87,6 @@ private fun TopMenuButtonImpl(
             contentDescription = contentDescription,
             tint = iconColor,
         )
-    }
-}
-
-@Composable
-fun Tooltip(
-    text: String,
-) {
-    Text(
-        text = text,
-        style = KotlinConfTheme.typography.text2,
-        color = KotlinConfTheme.colors.primaryTextInverted,
-        modifier = Modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(KotlinConfTheme.colors.tooltipBackground)
-            .padding(vertical = 4.dp, horizontal = 8.dp)
-    )
-}
-
-@Preview
-@Composable
-fun TooltipPreview() {
-    PreviewHelper {
-        Tooltip("Tooltip")
     }
 }
 
