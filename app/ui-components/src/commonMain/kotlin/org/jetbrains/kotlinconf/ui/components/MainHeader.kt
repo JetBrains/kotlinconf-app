@@ -264,6 +264,25 @@ internal fun MainHeaderPreview() {
             }
         )
 
+        // Example with search state
+        var state3 by remember { mutableStateOf(MainHeaderContainerState.Search) }
+        var search3 by remember { mutableStateOf("") }
+        MainHeaderContainer(
+            state = state3,
+            titleContent = {
+                // Omitted
+            },
+            searchContent = {
+                MainHeaderSearchBar(
+                    searchValue = search3,
+                    onSearchValueChange = { search3 = it },
+                    onClose = { state3 = MainHeaderContainerState.Title },
+                    onClear = {},
+                    hasAdditionalInputs = false,
+                )
+            }
+        )
+
         // Example with back action
         MainHeaderTitleBar(
             title = "Privacy notice",
@@ -276,7 +295,7 @@ internal fun MainHeaderPreview() {
             }
         )
 
-        // Exaple with title only
+        // Example with title only
         MainHeaderTitleBar(title = "Info")
     }
 }
