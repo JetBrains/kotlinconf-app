@@ -465,6 +465,7 @@ private fun ScheduleList(
                             day = date.day.toString(),
                             line1 = dayValues?.line1 ?: "",
                             line2 = dayValues?.line2 ?: "",
+                            fullWidth = true,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 16.dp)

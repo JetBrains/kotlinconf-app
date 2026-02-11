@@ -149,7 +149,7 @@ private fun EventCard(
             )
             .clip(KotlinConfTheme.shapes.roundedCornerMd),
     ) {
-        DayHeader(month, day, line1, line2, modifier = Modifier.fillMaxWidth(), day2 = day2)
+        DayHeader(month, day, line1, line2, modifier = Modifier.fillMaxWidth(), day2 = day2, fullWidth = true)
 
         if (description.isNotEmpty()) {
             Text(description, modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp))
