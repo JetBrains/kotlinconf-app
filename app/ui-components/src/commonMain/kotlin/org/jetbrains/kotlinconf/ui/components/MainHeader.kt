@@ -77,33 +77,13 @@ fun MainHeaderSearchBar(
             }
         }
 
-        Box(
+        SearchInput(
+            searchValue = searchValue,
+            onSearchValueChange = onSearchValueChange,
+            hint = stringResource(UiRes.string.main_header_search_hint),
+            focusRequester = focusRequester,
             modifier = Modifier.weight(1f).fillMaxHeight(),
-            contentAlignment = Alignment.CenterStart,
-        ) {
-            BasicTextField(
-                value = searchValue,
-                onValueChange = { onSearchValueChange(it) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester),
-                singleLine = true,
-                textStyle = KotlinConfTheme.typography.text1
-                    .copy(color = KotlinConfTheme.colors.primaryText),
-                cursorBrush = SolidColor(KotlinConfTheme.colors.primaryText),
-            )
-            androidx.compose.animation.AnimatedVisibility(
-                searchValue.isEmpty(),
-                enter = fadeIn(tween(10)),
-                exit = fadeOut(tween(10)),
-            ) {
-                Text(
-                    text = stringResource(UiRes.string.main_header_search_hint),
-                    style = KotlinConfTheme.typography.text1,
-                    color = KotlinConfTheme.colors.placeholderText
-                )
-            }
-        }
+        )
 
         AnimatedVisibility(
             visible = searchValue.isNotEmpty() || hasAdditionalInputs,
