@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
@@ -20,7 +21,10 @@ import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 
 
 @Composable
-fun NowLabel(modifier: Modifier = Modifier) {
+fun NowLabel(
+    modifier: Modifier = Modifier,
+    textStyle: TextStyle = KotlinConfTheme.typography.text2,
+) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -34,7 +38,7 @@ fun NowLabel(modifier: Modifier = Modifier) {
         Text(
             text = stringResource(UiRes.string.now),
             color = KotlinConfTheme.colors.accentText,
-            style = KotlinConfTheme.typography.text2,
+            style = textStyle,
             maxLines = 1,
         )
     }
