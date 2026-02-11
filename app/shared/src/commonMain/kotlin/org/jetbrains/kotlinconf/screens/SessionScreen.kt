@@ -54,6 +54,7 @@ import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
 import org.jetbrains.kotlinconf.generated.resources.arrow_left_24
 import org.jetbrains.kotlinconf.generated.resources.arrow_up_right_24
 import org.jetbrains.kotlinconf.generated.resources.down_24
@@ -168,6 +169,10 @@ fun SessionScreen(
                                 bookmarked = session.isFavorite,
                                 onBookmark = { viewModel.toggleFavorite(it) },
                                 modifier = Modifier.padding(vertical = 24.dp),
+                                timeNote = session.startsInMinutes?.let { count ->
+                                    stringResource(Res.string.schedule_in_x_minutes, count)
+                                },
+                                isLive = session.state == SessionState.Live,
                             )
                             if (session.videoUrl != null) {
                                 PageMenuItem(

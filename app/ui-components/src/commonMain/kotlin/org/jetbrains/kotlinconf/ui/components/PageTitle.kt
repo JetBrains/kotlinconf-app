@@ -1,6 +1,12 @@
 package org.jetbrains.kotlinconf.ui.components
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,8 +17,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.InlineTextContent
@@ -94,6 +102,8 @@ fun PageTitle(
     title: String,
     tags: Set<String>,
     lightning: Boolean,
+    timeNote: String?,
+    isLive: Boolean,
     bookmarked: Boolean,
     onBookmark: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -103,23 +113,43 @@ fun PageTitle(
         modifier = modifier.semantics(mergeDescendants = true) {},
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (lightning) {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    painter = painterResource(UiRes.drawable.lightning_16_fill),
-                    contentDescription = null,
-                    tint = KotlinConfTheme.colors.orangeText,
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if (lightning) {
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        painter = painterResource(UiRes.drawable.lightning_16_fill),
+                        contentDescription = null,
+                        tint = KotlinConfTheme.colors.orangeText,
+                    )
+                }
+
+                Text(
+                    text = time,
+                    style = KotlinConfTheme.typography.h3,
+                    color = KotlinConfTheme.colors.primaryText
                 )
             }
 
-            Text(
-                text = time,
-                style = KotlinConfTheme.typography.h3,
-                color = KotlinConfTheme.colors.primaryText
-            )
+            if (timeNote != null) {
+                Text(
+                    text = timeNote,
+                    style = KotlinConfTheme.typography.text1,
+                    color = KotlinConfTheme.colors.noteText,
+                    maxLines = 1,
+                )
+            }
+
+            AnimatedVisibility(isLive, enter = fadeIn(), exit = fadeOut()) {
+                NowLabel(
+                    textStyle = KotlinConfTheme.typography.text1,
+                )
+            }
 
             Spacer(Modifier.weight(1f))
 
@@ -194,6 +224,8 @@ internal fun PageTitlePreview() {
             tags = setOf("Lightning talk", "Intermediate", "Libraries"),
             bookmarked = bookmarked1,
             lightning = true,
+            timeNote = null,
+            isLive = false,
             onBookmark = { bookmarked1 = it },
         )
 
@@ -204,7 +236,37 @@ internal fun PageTitlePreview() {
             tags = setOf("Regular talk", "Beginner", "Server-side"),
             bookmarked = bookmarked2,
             lightning = false,
+            timeNote = null,
+            isLive = false,
             onBookmark = { bookmarked2 = it },
+        )
+    }
+}
+
+@Preview
+@Composable
+internal fun PageTitleWithNotesPreview() {
+    PreviewHelper {
+        PageTitle(
+            time = "May 23, 15:00 - 15:20",
+            title = "Starting Soon Talk Example",
+            tags = setOf("Lightning talk", "Beginner"),
+            bookmarked = true,
+            lightning = true,
+            timeNote = "In 22 min",
+            isLive = false,
+            onBookmark = { },
+        )
+        Spacer(Modifier.height(16.dp))
+        PageTitle(
+            time = "May 23, 14:00 - 14:40",
+            title = "Live Talk Example",
+            tags = setOf("Regular talk", "Advanced"),
+            bookmarked = false,
+            lightning = false,
+            timeNote = null,
+            isLive = true,
+            onBookmark = {  },
         )
     }
 }
