@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.screens
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -7,6 +8,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -63,8 +65,8 @@ import org.jetbrains.kotlinconf.generated.resources.session_room_state_descripti
 import org.jetbrains.kotlinconf.generated.resources.session_screen_error
 import org.jetbrains.kotlinconf.generated.resources.session_title
 import org.jetbrains.kotlinconf.generated.resources.session_watch_video
-import org.jetbrains.kotlinconf.generated.resources.session_your_feedback
-import org.jetbrains.kotlinconf.generated.resources.up_24
+import org.jetbrains.kotlinconf.generated.resources.session_feedback_sent
+import org.jetbrains.kotlinconf.generated.resources.session_thanks_for_rating
 import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
@@ -83,6 +85,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_how_was_the_tal
 import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_how_was_the_workshop
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
+import org.jetbrains.kotlinconf.utils.LocalNotificationBar
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
@@ -243,11 +246,24 @@ private fun FeedbackPanel(
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = feedbackQuestion,
-                style = KotlinConfTheme.typography.text2,
-                color = KotlinConfTheme.colors.primaryText,
-            )
+            AnimatedContent(
+                targetState = selectedEmotion != null,
+                contentAlignment = Alignment.Center,
+            ) { emotionSelected ->
+                if (emotionSelected) {
+                    Text(
+                        stringResource(Res.string.session_thanks_for_rating),
+                        style = KotlinConfTheme.typography.h4,
+                        color = KotlinConfTheme.colors.primaryText,
+                    )
+                } else {
+                    Text(
+                        text = feedbackQuestion,
+                        style = KotlinConfTheme.typography.text2,
+                        color = KotlinConfTheme.colors.primaryText,
+                    )
+                }
+            }
             Spacer(Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth().selectableGroup(),
@@ -279,30 +295,10 @@ private fun FeedbackPanel(
         }
 
         AnimatedVisibility(
-            selectedEmotion != null,
+            visible = feedbackExpanded,
             enter = fadeIn() + expandVertically(clip = false, expandFrom = Alignment.Top),
-            exit = fadeOut(animationSpec = tween(100)) + shrinkVertically(
-                clip = false,
-                shrinkTowards = Alignment.Top
-            ),
+            exit = fadeOut() + shrinkVertically(clip = false, shrinkTowards = Alignment.Top),
         ) {
-            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
-
-                val iconRotation by animateFloatAsState(if (feedbackExpanded) 0f else 180f)
-                Action(
-                    label = stringResource(Res.string.session_your_feedback),
-                    icon = Res.drawable.up_24,
-                    size = ActionSize.Medium,
-                    enabled = true,
-                    onClick = { feedbackExpanded = !feedbackExpanded },
-                    iconRotation = iconRotation,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-        }
-
-        AnimatedVisibility(visible = feedbackExpanded) {
             var focusRequested by rememberSaveable { mutableStateOf(false) }
             val focusRequester = remember { FocusRequester() }
             if (!focusRequested) {
@@ -312,6 +308,8 @@ private fun FeedbackPanel(
                 }
             }
             val hapticFeedback = LocalHapticFeedback.current
+            val notificationBar = LocalNotificationBar.current
+            val feedbackSentMessage = stringResource(Res.string.session_feedback_sent)
             FeedbackForm(
                 feedbackText = feedbackText,
                 onFeedbackTextChange = { feedbackText = it },
@@ -319,7 +317,13 @@ private fun FeedbackPanel(
                 onSubmit = { emotion, comment ->
                     hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
                     onFeedbackWithComment(emotion, comment)
+                    notificationBar.show(feedbackSentMessage)
                     feedbackExpanded = false
+                    feedbackText = ""
+                },
+                onSkip = {
+                    feedbackExpanded = false
+                    feedbackText = ""
                 },
                 past = true,
                 modifier = Modifier

@@ -11,7 +11,9 @@ import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
 import org.jetbrains.kotlinconf.di.AppGraph
 import org.jetbrains.kotlinconf.flags.LocalFlags
 import org.jetbrains.kotlinconf.navigation.NavHost
+import org.jetbrains.kotlinconf.utils.LocalNotificationBar
 import org.jetbrains.kotlinconf.utils.LocalWindowSize
+import org.jetbrains.kotlinconf.utils.rememberNotificationBarState
 import org.jetbrains.kotlinconf.utils.windowSize
 
 @Composable
@@ -38,6 +40,7 @@ fun App(
         LocalMetroViewModelFactory provides appGraph.metroViewModelFactory,
         LocalWindowSize provides windowSize(),
         LocalMapHandler provides rememberMapHandler(),
+        LocalNotificationBar provides rememberNotificationBarState(),
     ) {
         if (isOnboardingComplete != null) {
             NavHost(isOnboardingComplete, isDarkTheme, onThemeChange)

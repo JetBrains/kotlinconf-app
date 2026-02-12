@@ -122,8 +122,9 @@ Please try again.
     </plurals>
 
     <string name="session_title">Session</string>
-    <string name="session_your_feedback">Your feedback</string>
     <string name="session_screen_error">The details of this session are not available at the moment.</string>
+    <string name="session_feedback_sent">Your comment has been sent.</string>
+    <string name="session_thanks_for_rating">Thanks for your rating!</string>
     <string name="session_watch_video">Watch the recording</string>
     <string name="session_room_state_description_expanded">Expanded</string>
     <string name="session_room_state_description_collapsed">Collapsed</string>

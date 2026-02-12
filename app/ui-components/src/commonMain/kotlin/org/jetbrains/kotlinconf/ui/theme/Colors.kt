@@ -34,6 +34,7 @@ data class Colors(
     val isDark: Boolean,
 
     val mainBackground: Color,
+    val mainBackgroundInverted: Color,
     val primaryBackground: Color,
     val tileBackground: Color,
     val tooltipBackground: Color,
@@ -68,6 +69,7 @@ val KotlinConfLightColors = Colors(
     isDark = false,
 
     mainBackground = white100,
+    mainBackgroundInverted = black100,
     primaryBackground = magenta100,
     tileBackground = black05,
     tooltipBackground = grey900,
@@ -102,6 +104,7 @@ val KotlinConfDarkColors = Colors(
     isDark = true,
 
     mainBackground = black100,
+    mainBackgroundInverted = white100,
     primaryBackground = magenta100,
     tileBackground = white10,
     tooltipBackground = grey100,
