@@ -83,7 +83,7 @@ fun <T : Any> MainNavigationBar(
             MainNavigationButton(
                 iconResource = destination.icon,
                 iconFilledResource = destination.iconSelected,
-                contentDescription = destination.label?.let { stringResource(it) },
+                contentDescription = destination.label.let { stringResource(it) },
                 selected = destination == currentDestination,
                 onClick = { onSelect(destination) },
                 modifier = Modifier

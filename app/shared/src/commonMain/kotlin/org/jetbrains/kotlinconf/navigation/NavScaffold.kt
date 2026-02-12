@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.generated.resources.Res
@@ -32,8 +34,8 @@ import org.jetbrains.kotlinconf.generated.resources.info_28
 import org.jetbrains.kotlinconf.generated.resources.info_28_fill
 import org.jetbrains.kotlinconf.generated.resources.location_28
 import org.jetbrains.kotlinconf.generated.resources.location_28_fill
-import org.jetbrains.kotlinconf.generated.resources.nav_destination_info
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_golden_kodee
+import org.jetbrains.kotlinconf.generated.resources.nav_destination_info
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_map
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_schedule
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_speakers
@@ -43,8 +45,10 @@ import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainNavDestination
 import org.jetbrains.kotlinconf.ui.components.MainNavigationBar
 import org.jetbrains.kotlinconf.ui.components.MainNavigationRail
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.VerticalDivider
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.LocalNotificationBar
 import org.jetbrains.kotlinconf.utils.LocalWindowSize
 import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
@@ -135,6 +139,8 @@ internal fun NavScaffold(
                 content()
             }
 
+            NotificationBar()
+
             AnimatedVisibility(
                 visible = showCompactNavigation,
                 enter = expandVertically(enterAnimSpec),
@@ -198,5 +204,24 @@ private fun SideNavigation(
             modifier = Modifier.padding(topInsetPadding()),
         )
         VerticalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+    }
+}
+
+@Composable
+private fun NotificationBar() {
+    val message = LocalNotificationBar.current.message
+    AnimatedVisibility(
+        visible = message != null,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Text(
+            text = message ?: "",
+            color = KotlinConfTheme.colors.primaryTextInverted,
+            style = KotlinConfTheme.typography.text2.copy(textAlign = TextAlign.Center),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = KotlinConfTheme.colors.mainBackgroundInverted)
+                .padding(vertical = 16.dp, horizontal = 10.dp)
+        )
     }
 }

@@ -23,6 +23,10 @@
     <!-- Components -->
     <string name="feedback_form_type_something">Type something</string>
     <string name="feedback_form_send">Send</string>
+    <string name="feedback_form_skip_comment">Skip comment</string>
+    <string name="feedback_form_positive">Glad you enjoyed the session! What was your favorite part?</string>
+    <string name="feedback_form_neutral">What did you enjoy in this session? What could have made it even better?</string>
+    <string name="feedback_form_negative">Sorry you didn’t like this session. Please help us improve with a constructive and respectful comment.</string>
 
     <string name="filter_by_tags">Filter by tags</string>
     <plurals name="filter_by_tags_tag_count">
@@ -38,7 +42,7 @@
     <string name="main_header_search_hint">Type to search</string>
     <string name="main_header_search_clear">Clear</string>
 
-    <string name="talk_card_your_feedback">Your feedback</string>
+    <string name="talk_card_thanks_for_rating">Thanks for your rating!</string>
     <string name="talk_card_how_was_the_talk">How was the talk?</string>
     <string name="talk_card_how_was_the_workshop">How was the workshop?</string>
     <string name="talk_card_icon_desc_education">Education</string>

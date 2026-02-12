@@ -53,6 +53,7 @@ import org.jetbrains.kotlinconf.generated.resources.schedule_error_no_data
 import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
 import org.jetbrains.kotlinconf.generated.resources.schedule_label_no_bookmarks
 import org.jetbrains.kotlinconf.generated.resources.schedule_number_of_results
+import org.jetbrains.kotlinconf.generated.resources.session_feedback_sent
 import org.jetbrains.kotlinconf.isLive
 import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.DayHeader
@@ -81,6 +82,7 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.utils.ErrorLoadingState
+import org.jetbrains.kotlinconf.utils.LocalNotificationBar
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
@@ -529,6 +531,8 @@ private fun SessionCard(
     tagHighlights: List<String> = emptyList(),
     speakerHighlights: List<IntRange> = emptyList(),
 ) {
+    val notificationBar = LocalNotificationBar.current
+    val feedbackSentMessage = stringResource(Res.string.session_feedback_sent)
     TalkCard(
         title = session.title,
         titleHighlights = titleHighlights,
@@ -555,6 +559,7 @@ private fun SessionCard(
         },
         onSubmitFeedbackWithComment = { emotion, comment ->
             onSubmitFeedbackWithComment(session.id, emotion, comment)
+            notificationBar.show(feedbackSentMessage)
         },
         onClick = { onSession(session.id) },
         modifier = modifier,

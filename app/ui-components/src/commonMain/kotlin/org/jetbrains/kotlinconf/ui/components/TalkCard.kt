@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseOut
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -14,7 +13,6 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -74,8 +72,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_how_was_the_tal
 import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_how_was_the_workshop
 import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_icon_desc_codelab
 import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_icon_desc_education
-import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_your_feedback
-import org.jetbrains.kotlinconf.ui.generated.resources.up_24
+import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_thanks_for_rating
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
@@ -436,21 +433,7 @@ private fun FeedbackBlock(
     var feedbackExpanded by rememberSaveable { mutableStateOf(false) }
     var feedbackText by rememberSaveable { mutableStateOf("") }
 
-    val interactionModifier = if (selectedEmotion != null) {
-        Modifier.clickable(
-            indication = null,
-            interactionSource = remember { MutableInteractionSource() },
-        ) {
-            feedbackExpanded = !feedbackExpanded
-        }
-    } else {
-        Modifier
-    }
-
-    Column(
-        Modifier
-            .then(interactionModifier),
-    ) {
+    Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -466,13 +449,10 @@ private fun FeedbackBlock(
                 contentAlignment = Alignment.CenterStart,
             ) { emotionSelected ->
                 if (emotionSelected) {
-                    val iconRotation by animateFloatAsState(if (feedbackExpanded) 0f else 180f)
-                    Action(
-                        label = stringResource(UiRes.string.talk_card_your_feedback),
-                        icon = UiRes.drawable.up_24,
-                        size = ActionSize.Medium,
-                        onClick = { feedbackExpanded = !feedbackExpanded },
-                        iconRotation = iconRotation,
+                    Text(
+                        stringResource(UiRes.string.talk_card_thanks_for_rating),
+                        color = KotlinConfTheme.colors.primaryText,
+                        style = KotlinConfTheme.typography.h4,
                     )
                 } else {
                     Text(
@@ -505,15 +485,9 @@ private fun FeedbackBlock(
                                 interactionSource = null
                             ) {
                                 hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
-                                selectedEmotion =
-                                    if (emotion == selectedEmotion) null else emotion
+                                selectedEmotion = if (emotion == selectedEmotion) null else emotion
                                 onSubmitFeedback(selectedEmotion)
-
-                                if (selectedEmotion != null) {
-                                    feedbackExpanded = true
-                                } else {
-                                    feedbackExpanded = false
-                                }
+                                feedbackExpanded = selectedEmotion != null
                             }
                             .padding(12.dp),
                     )
@@ -546,9 +520,14 @@ private fun FeedbackBlock(
                     hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
                     onSubmitFeedbackWithComment(emotion, comment)
                     feedbackExpanded = false
+                    feedbackText = ""
+                },
+                onSkip = {
+                    feedbackExpanded = false
+                    feedbackText = ""
                 },
                 past = status == TalkStatus.Past,
-                modifier = Modifier.padding(bottom = 14.dp).focusRequester(focusRequester)
+                modifier = Modifier.focusRequester(focusRequester)
             )
         }
     }
