@@ -2,9 +2,9 @@ package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 @Composable
 fun SectionTitle(
@@ -19,11 +19,14 @@ fun SectionTitle(
     )
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun SectionTitlePreview() {
-    PreviewHelper {
-        SectionTitle("Section title")
-        SectionTitle("7:30")
-    }
+private fun SectionTitleTextPreview() = PreviewHelper {
+    SectionTitle("Section title")
+}
+
+@PreviewLightDark
+@Composable
+private fun SectionTitleTimePreview() = PreviewHelper {
+    SectionTitle("7:30")
 }

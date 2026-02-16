@@ -15,11 +15,13 @@ import androidx.compose.ui.node.DelegatableNode
 import androidx.compose.ui.node.DrawModifierNode
 
 private object NoIndication : IndicationNodeFactory {
-    override fun create(interactionSource: InteractionSource): DelegatableNode = object: DelegatableNode, DrawModifierNode, Modifier.Node() {
-        override fun ContentDrawScope.draw() {
-            drawContent()
+    override fun create(interactionSource: InteractionSource): DelegatableNode =
+        object : DelegatableNode, DrawModifierNode, Modifier.Node() {
+            override fun ContentDrawScope.draw() {
+                drawContent()
+            }
         }
-    }
+
     override fun equals(other: Any?): Boolean = other === NoIndication
     override fun hashCode(): Int = 0
 }
@@ -56,6 +58,7 @@ object KotlinConfTheme {
 // Exposes custom theme value to Compose resources, https://youtrack.jetbrains.com/issue/CMP-4197
 expect object LocalAppTheme {
     val current: Boolean @Composable get
+
     @Composable
     infix fun provides(value: Boolean?): ProvidedValue<*>
 }

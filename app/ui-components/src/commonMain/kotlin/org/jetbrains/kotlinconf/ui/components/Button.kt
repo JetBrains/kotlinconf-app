@@ -14,15 +14,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 private val ButtonShape = RoundedCornerShape(percent = 100)
 
@@ -67,11 +65,14 @@ fun Button(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun ButtonPreview() {
-    PreviewHelper {
-        Button("Primary", { }, primary = true)
-        Button("Secondary", { }, primary = false)
-    }
+private fun ButtonPrimaryPreview() = PreviewHelper {
+    Button("Primary", { }, primary = true)
+}
+
+@PreviewLightDark
+@Composable
+private fun ButtonSecondaryPreview() = PreviewHelper {
+    Button("Secondary", { }, primary = false)
 }

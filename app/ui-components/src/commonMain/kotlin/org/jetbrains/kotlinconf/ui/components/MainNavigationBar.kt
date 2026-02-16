@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -34,6 +33,8 @@ import org.jetbrains.kotlinconf.ui.generated.resources.team_28
 import org.jetbrains.kotlinconf.ui.generated.resources.team_28_fill
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.WidePreviewLightDark
 
 @Composable
 private fun MainNavigationButton(
@@ -92,49 +93,48 @@ fun <T : Any> MainNavigationBar(
     }
 }
 
-@Preview
+@PreviewLightDark
+@WidePreviewLightDark
 @Composable
-internal fun MainNavigationBarPreview() {
-    PreviewHelper {
-        var currentDestination by remember {
-            mutableStateOf(
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.clock_28,
-                    iconSelected = UiRes.drawable.clock_28_fill,
-                    route = "Schedule"
-                )
+private fun MainNavigationBarPreview() = PreviewHelper(paddingEnabled = false) {
+    var currentDestination by remember {
+        mutableStateOf(
+            MainNavDestination(
+                label = UiRes.string.now,
+                icon = UiRes.drawable.clock_28,
+                iconSelected = UiRes.drawable.clock_28_fill,
+                route = "Schedule"
             )
-        }
-        MainNavigationBar(
-            currentDestination = currentDestination,
-            destinations = listOf(
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.info_28,
-                    iconSelected = UiRes.drawable.info_28_fill,
-                    route = "Info"
-                ),
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.clock_28,
-                    iconSelected = UiRes.drawable.clock_28_fill,
-                    route = "Schedule"
-                ),
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.team_28,
-                    iconSelected = UiRes.drawable.team_28_fill,
-                    route = "Speakers"
-                ),
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.location_28,
-                    iconSelected = UiRes.drawable.location_28_fill,
-                    route = "Map"
-                ),
-            ),
-            onSelect = { currentDestination = it },
         )
     }
+    MainNavigationBar(
+        currentDestination = currentDestination,
+        destinations = listOf(
+            MainNavDestination(
+                label = UiRes.string.now,
+                icon = UiRes.drawable.info_28,
+                iconSelected = UiRes.drawable.info_28_fill,
+                route = "Info"
+            ),
+            MainNavDestination(
+                label = UiRes.string.now,
+                icon = UiRes.drawable.clock_28,
+                iconSelected = UiRes.drawable.clock_28_fill,
+                route = "Schedule"
+            ),
+            MainNavDestination(
+                label = UiRes.string.now,
+                icon = UiRes.drawable.team_28,
+                iconSelected = UiRes.drawable.team_28_fill,
+                route = "Speakers"
+            ),
+            MainNavDestination(
+                label = UiRes.string.now,
+                icon = UiRes.drawable.location_28,
+                iconSelected = UiRes.drawable.location_28_fill,
+                route = "Map"
+            ),
+        ),
+        onSelect = { currentDestination = it },
+    )
 }

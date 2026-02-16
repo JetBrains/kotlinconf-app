@@ -19,6 +19,12 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
+import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
+import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 /**
  * Based on the Material 3 Icon implementation.
@@ -30,7 +36,9 @@ fun Icon(
     modifier: Modifier = Modifier,
     tint: Color = Color.Black,
 ) {
-    val colorFilter = remember(tint) { if (tint == Color.Unspecified) null else ColorFilter.tint(tint) }
+    val colorFilter = remember(tint) {
+        if (tint == Color.Unspecified) null else ColorFilter.tint(tint)
+    }
     Box(
         modifier
             .toolingGraphicsLayer()
@@ -74,3 +82,22 @@ private fun Modifier.defaultSizeFor(painter: Painter) = this.then(
 
 private fun Size.isInfinite() = width.isInfinite() && height.isInfinite()
 
+@PreviewLightDark
+@Composable
+private fun IconPreview() = PreviewHelper {
+    Icon(
+        painter = painterResource(UiRes.drawable.bookmark_24),
+        contentDescription = null,
+        tint = KotlinConfTheme.colors.primaryText,
+    )
+}
+
+@PreviewLightDark
+@Composable
+private fun TintedIconPreview() = PreviewHelper {
+    Icon(
+        painter = painterResource(UiRes.drawable.bookmark_24),
+        contentDescription = null,
+        tint = Color(0xFFFF5A13),
+    )
+}

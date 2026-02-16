@@ -42,7 +42,6 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
@@ -58,6 +57,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.loading
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.theme.UI
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -241,50 +241,73 @@ fun Loading(
 }
 
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun LoadingPreview() {
-    PreviewHelper {
-        Loading(enabled = true)
-        Loading(enabled = false)
+private fun LoadingEnabledPreview() = PreviewHelper {
+    Loading(enabled = true)
+}
 
-        NormalErrorWithLoading(
-            message = "Error message",
-            isLoading = true,
-            loadingText = "Loading...",
-            retryText = "Retry",
-            onRetry = {}
-        )
+@PreviewLightDark
+@Composable
+private fun LoadingDisabledPreview() = PreviewHelper {
+    Loading(enabled = false)
+}
 
-        var scope = rememberCoroutineScope()
-        var loading by remember { mutableStateOf(false) }
-        NormalErrorWithLoading(
-            message = "Error message",
-            isLoading = loading,
-            loadingText = "Loading...",
-            retryText = "Retry",
-            onRetry = {
-                scope.launch {
-                    loading = true
-                    delay(1000)
-                    loading = false
-                }
+@PreviewLightDark
+@Composable
+private fun NormalErrorLoadingPreview() = PreviewHelper {
+    NormalErrorWithLoading(
+        message = "Error message",
+        isLoading = true,
+        loadingText = "Loading...",
+        retryText = "Retry",
+        onRetry = {}
+    )
+}
+
+@PreviewLightDark
+@Composable
+private fun NormalErrorInteractivePreview() = PreviewHelper {
+    var scope = rememberCoroutineScope()
+    var loading by remember { mutableStateOf(false) }
+    NormalErrorWithLoading(
+        message = "Error message",
+        isLoading = loading,
+        loadingText = "Loading...",
+        retryText = "Retry",
+        onRetry = {
+            scope.launch {
+                loading = true
+                delay(1000)
+                loading = false
             }
-        )
+        }
+    )
+}
 
-        NormalErrorWithLoading(
-            message = "Error message",
-            isLoading = false,
-            loadingText = "Loading...",
-            retryText = "Retry"
-        )
+@PreviewLightDark
+@Composable
+private fun NormalErrorIdlePreview() = PreviewHelper {
+    NormalErrorWithLoading(
+        message = "Error message",
+        isLoading = false,
+        loadingText = "Loading...",
+        retryText = "Retry"
+    )
+}
 
-        MinorError(
-            message = "Minor error message"
-        )
+@PreviewLightDark
+@Composable
+private fun MinorErrorPreview() = PreviewHelper {
+    MinorError(
+        message = "Minor error message"
+    )
+}
 
-        MajorError(
-            message = "Major error message"
-        )
-    }
+@PreviewLightDark
+@Composable
+private fun MajorErrorPreview() = PreviewHelper {
+    MajorError(
+        message = "Major error message"
+    )
 }
