@@ -1,6 +1,6 @@
 @file:OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+// import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -19,19 +19,19 @@ kotlin {
         compilerOptions.jvmTarget = JvmTarget.JVM_11
     }
 
-    jvm()
+    // jvm()
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    // iosX64()
+    // iosArm64()
+    // iosSimulatorArm64()
 
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        browser()
-    }
-    js {
-        browser()
-    }
+    // @OptIn(ExperimentalWasmDsl::class)
+    // wasmJs {
+    //     browser()
+    // }
+    // js {
+    //     browser()
+    // }
 
     sourceSets {
         commonMain.dependencies {

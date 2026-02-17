@@ -1,7 +1,7 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+// import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -22,19 +22,19 @@ kotlin {
         androidResources.enable = true
     }
 
-    jvm()
+    // jvm()
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    // iosX64()
+    // iosArm64()
+    // iosSimulatorArm64()
 
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        browser()
-    }
-    js {
-        browser()
-    }
+    // @OptIn(ExperimentalWasmDsl::class)
+    // wasmJs {
+    //     browser()
+    // }
+    // js {
+    //     browser()
+    // }
 
     sourceSets {
         commonMain.dependencies {
@@ -53,25 +53,26 @@ kotlin {
             implementation(libs.multiplatform.markdown.renderer)
         }
 
-        val nonAndroidMain by creating {
-            dependsOn(commonMain.get())
-        }
-        configure(listOf(iosMain, jvmMain, webMain)) {
-            get().dependsOn(nonAndroidMain)
-        }
+        // val nonAndroidMain by creating {
+        //     dependsOn(commonMain.get())
+        // }
+        // configure(listOf(iosMain, jvmMain, webMain)) {
+        //     get().dependsOn(nonAndroidMain)
+        // }
 
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.androidx.compose.foundation)
         }
-        jvmMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
-        }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-        }
-        jsMain.dependencies {
-            implementation(libs.ktor.client.js)
-        }
+        // jvmMain.dependencies {
+        //     implementation(libs.ktor.client.okhttp)
+        // }
+        // iosMain.dependencies {
+        //     implementation(libs.ktor.client.darwin)
+        // }
+        // jsMain.dependencies {
+        //     implementation(libs.ktor.client.js)
+        // }
     }
 
     jvmToolchain(21)

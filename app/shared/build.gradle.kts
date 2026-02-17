@@ -3,7 +3,7 @@
 import com.mikepenz.aboutlibraries.plugin.DuplicateMode
 import com.mikepenz.aboutlibraries.plugin.DuplicateRule
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+// import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -29,22 +29,22 @@ kotlin {
         androidResources.enable = true
     }
 
-    jvm()
+    // jvm()
 
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs { browser() }
-    js { browser() }
+    // @OptIn(ExperimentalWasmDsl::class)
+    // wasmJs { browser() }
+    // js { browser() }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
-            isStatic = true
-        }
-    }
+    // listOf(
+    //     iosX64(),
+    //     iosArm64(),
+    //     iosSimulatorArm64()
+    // ).forEach {
+    //     it.binaries.framework {
+    //         baseName = "shared"
+    //         isStatic = true
+    //     }
+    // }
 
     applyDefaultHierarchyTemplate()
 
@@ -92,12 +92,12 @@ kotlin {
             implementation(libs.kotlinx.coroutines.test)
         }
 
-        val nonAndroidMain by creating {
-            dependsOn(commonMain.get())
-        }
-        configure(listOf(iosMain, jvmMain, webMain)) {
-            get().dependsOn(nonAndroidMain)
-        }
+        // val nonAndroidMain by creating {
+        //     dependsOn(commonMain.get())
+        // }
+        // configure(listOf(iosMain, jvmMain, webMain)) {
+        //     get().dependsOn(nonAndroidMain)
+        // }
 
         androidMain.dependencies {
             implementation(libs.android.svg)
@@ -107,21 +107,21 @@ kotlin {
             implementation(libs.metrox.android)
         }
 
-        iosMain.dependencies {
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.ktor.client.darwin)
-        }
+        // iosMain.dependencies {
+        //     implementation(libs.kotlinx.coroutines.core)
+        //     implementation(libs.ktor.client.darwin)
+        // }
 
-        jvmMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
-            implementation(libs.android.svg)
-            implementation(libs.slf4j.nop)
-        }
+        // jvmMain.dependencies {
+        //     implementation(libs.ktor.client.okhttp)
+        //     implementation(libs.android.svg)
+        //     implementation(libs.slf4j.nop)
+        // }
 
-        webMain.dependencies {
-            implementation(libs.ktor.client.js)
-            implementation(npm("@js-joda/timezone", "2.22.0"))
-        }
+        // webMain.dependencies {
+        //     implementation(libs.ktor.client.js)
+        //     implementation(npm("@js-joda/timezone", "2.22.0"))
+        // }
     }
 
     jvmToolchain(21)

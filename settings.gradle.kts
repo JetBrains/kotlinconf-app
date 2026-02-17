@@ -17,6 +17,9 @@ pluginManagement {
         }
         gradlePluginPortal()
         mavenCentral()
+        maven {
+            url = uri("https://androidx.dev/snapshots/builds/14884013/artifacts/repository")
+        }
     }
 }
 
@@ -31,6 +34,9 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        maven {
+            url = uri("https://androidx.dev/snapshots/builds/14884013/artifacts/repository")
+        }
     }
 }
 
@@ -41,5 +47,5 @@ include(":backend")
 include(":app:shared")
 include(":app:ui-components")
 include(":app:androidApp")
-include(":app:desktopApp")
-include(":app:webApp")
+//include(":app:desktopApp")
+//include(":app:webApp")
