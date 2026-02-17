@@ -1,9 +1,8 @@
 package org.jetbrains.kotlinconf.backend.schema
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.Table
 
-// TODO initialize this table from 2025 user list
 internal object SignedPolicies : Table() {
     val userId: Column<String> = varchar("uuid", 50)
         .index()

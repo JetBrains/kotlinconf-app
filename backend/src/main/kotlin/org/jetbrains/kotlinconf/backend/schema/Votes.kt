@@ -1,7 +1,7 @@
 package org.jetbrains.kotlinconf.backend.schema
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.kotlinconf.SessionId
 
 internal object Votes : Table() {
@@ -16,7 +16,6 @@ internal object Votes : Table() {
 
     val rating = integer("rating")
 
-    // TODO: if we have an existing DB, populate it with the correct year values
     val year = integer("year")
 
     override val primaryKey: PrimaryKey = PrimaryKey(userId, sessionId, year)

@@ -1,7 +1,7 @@
 package org.jetbrains.kotlinconf.backend.schema
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.kotlinconf.SessionId
 
 internal object Feedback : Table() {
@@ -16,7 +16,6 @@ internal object Feedback : Table() {
 
     val feedback: Column<String> = varchar("feedback", length = 5000)
 
-    // TODO: if we have an existing DB, populate it with the correct year values
     val year = integer("year")
 
     override val primaryKey: PrimaryKey = PrimaryKey(userId, sessionId, year)
