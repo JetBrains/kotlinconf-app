@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalFoundationStyleApi::class)
+
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.AnimatedContent
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

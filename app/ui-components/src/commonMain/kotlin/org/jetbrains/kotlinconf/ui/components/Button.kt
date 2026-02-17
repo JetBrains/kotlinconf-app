@@ -7,54 +7,25 @@ import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.foundation.style.MutableStyleState
 import androidx.compose.foundation.style.Style
-import androidx.compose.foundation.style.StyleScope
-import androidx.compose.foundation.style.StyleStateKey
 import androidx.compose.foundation.style.styleable
+import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.LocalColors
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.theme.styles.isPrimary
 
-private val ButtonShape = RoundedCornerShape(percent = 100)
-
-private val PrimaryStateKey = StyleStateKey(false)
-
-private var MutableStyleState.isPrimary: Boolean
-    get() = this[PrimaryStateKey]
-    set(value) { this[PrimaryStateKey] = value }
-
-private fun StyleScope.primary(style: Style) {
-    state(PrimaryStateKey, style) { key, state -> state[key] }
-}
-
-private val buttonStyle = Style {
-    shape(ButtonShape)
-    border(1.dp, LocalColors.currentValue.strokeHalf)
-    background(Color.Transparent)
-    contentColor(LocalColors.currentValue.primaryText)
-    contentPaddingHorizontal(32.dp)
-
-    primary {
-        animate {
-            borderColor(Color.Transparent)
-            background(LocalColors.currentValue.primaryBackground)
-            contentColor(LocalColors.currentValue.primaryTextWhiteFixed)
-        }
-    }
-}
-
+// Strange: Even though we have a file-level opt in here, every usage of Button
+// also requires the same opt in to be added
 @Composable
 fun Button(
     label: String,
@@ -62,6 +33,7 @@ fun Button(
     modifier: Modifier = Modifier,
     primary: Boolean = false,
     enabled: Boolean = true,
+    style: Style = Style,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val styleState = remember(interactionSource) { MutableStyleState(interactionSource) }
@@ -82,7 +54,7 @@ fun Button(
                 role = Role.Button,
                 onClick = onClick,
             )
-            .styleable(styleState, buttonStyle),
+            .styleable(styleState, KotlinConfTheme.styles.button then style),
         contentAlignment = Alignment.Center,
     ) {
         Text(

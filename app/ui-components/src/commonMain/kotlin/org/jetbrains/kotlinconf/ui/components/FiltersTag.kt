@@ -5,13 +5,11 @@ package org.jetbrains.kotlinconf.ui.components
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.foundation.style.MutableStyleState
 import androidx.compose.foundation.style.Style
-import androidx.compose.foundation.style.StyleScope
-import androidx.compose.foundation.style.StyleStateKey
 import androidx.compose.foundation.style.styleable
+import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,42 +17,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.LocalColors
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-
-private val FilterTagShape = RoundedCornerShape(size = 6.dp)
-
-private val TagSelectedStateKey = StyleStateKey<Boolean>(false)
-
-private var MutableStyleState.isTagSelected: Boolean
-    get() = this[TagSelectedStateKey]
-    set(value) { this[TagSelectedStateKey] = value }
-
-private fun StyleScope.tagSelected(style: Style) {
-    state(TagSelectedStateKey, style) { key, state -> state[key] == true }
-}
-
-private val filterTagStyle = Style {
-    shape(FilterTagShape)
-    border(1.dp, LocalColors.currentValue.strokeFull)
-    background(LocalColors.currentValue.mainBackground)
-    contentColor(LocalColors.currentValue.primaryText)
-    contentPaddingHorizontal(12.dp)
-    contentPaddingVertical(10.dp)
-
-    tagSelected {
-        animate {
-            borderColor(Color.Transparent)
-            background(LocalColors.currentValue.primaryBackground)
-            contentColor(LocalColors.currentValue.primaryTextWhiteFixed)
-        }
-    }
-}
+import org.jetbrains.kotlinconf.ui.theme.styles.isTagSelected
 
 @Composable
 fun FilterTag(
@@ -62,6 +29,7 @@ fun FilterTag(
     selected: Boolean,
     onSelect: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    style: Style = Style,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val styleState = remember(interactionSource) { MutableStyleState(interactionSource) }
@@ -79,7 +47,7 @@ fun FilterTag(
                 onClick = { onSelect(!selected) },
                 role = Role.RadioButton,
             )
-            .styleable(styleState, filterTagStyle),
+            .styleable(styleState, KotlinConfTheme.styles.filterTag then style),
         contentAlignment = Alignment.Center,
     ) {
         Text(

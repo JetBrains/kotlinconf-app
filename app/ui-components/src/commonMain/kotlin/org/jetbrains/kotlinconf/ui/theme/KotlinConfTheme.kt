@@ -36,6 +36,10 @@ val LocalTypography = compositionLocalOf<Typography> {
     error("KotlinConfTheme must be part of the call hierarchy to provide typography")
 }
 
+val LocalStyles = compositionLocalOf<Styles> {
+    error("KotlinConfTheme must be part of the call hierarchy to provide styles")
+}
+
 object KotlinConfTheme {
     val colors: Colors
         @Composable
@@ -51,6 +55,11 @@ object KotlinConfTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalTypography.current
+
+    val styles: Styles
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalStyles.current
 }
 
 // Exposes custom theme value to Compose resources, https://youtrack.jetbrains.com/issue/CMP-4197
@@ -70,6 +79,7 @@ fun KotlinConfTheme(
         LocalColors provides if (darkTheme) KotlinConfDarkColors else KotlinConfLightColors,
         LocalShapes provides KotlinConfShapes,
         LocalTypography provides KotlinConfTypography,
+        LocalStyles provides KotlinConfStyles,
         LocalIndication provides if (rippleEnabled) rememberRippleIndication() else NoIndication,
         LocalAppTheme provides darkTheme,
     ) {

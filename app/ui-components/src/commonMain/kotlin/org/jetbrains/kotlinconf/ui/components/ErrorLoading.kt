@@ -1,4 +1,8 @@
+@file:OptIn(ExperimentalFoundationStyleApi::class)
+
 package org.jetbrains.kotlinconf.ui.components
+
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateContentSize
