@@ -3,7 +3,6 @@ package org.jetbrains.kotlinconf.backend.repositories
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.config.ApplicationConfig
-import kotlinx.coroutines.Dispatchers
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
@@ -11,7 +10,7 @@ import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
-import org.jetbrains.exposed.v1.jdbc.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.jetbrains.kotlinconf.FeedbackInfo
 import org.jetbrains.kotlinconf.Score
@@ -56,48 +55,48 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         initializeDatabase()
     }
 
-    suspend fun validateUser(uuid: String): Boolean = newSuspendedTransaction(Dispatchers.IO) {
+    suspend fun validateUser(uuid: String): Boolean = suspendTransaction {
         Users.selectAll().where { Users.userId eq uuid }.count() != 0L
     }
 
     suspend fun createUser(
         uuidValue: String, timestampValue: LocalDateTime
-    ): Boolean = newSuspendedTransaction(Dispatchers.IO) {
+    ): Boolean = suspendTransaction {
         val count = Users.selectAll().where { Users.userId eq uuidValue }.count()
-        if (count != 0L) return@newSuspendedTransaction false
+        if (count != 0L) return@suspendTransaction false
 
         Users.insert {
             it[userId] = uuidValue
             it[timestamp] = timestampValue.toString()
         }
 
-        return@newSuspendedTransaction true
+        return@suspendTransaction true
     }
 
     suspend fun signPolicy(
         uuidValue: String, yearValue: Int
-    ): Boolean = newSuspendedTransaction(Dispatchers.IO) {
+    ): Boolean = suspendTransaction {
         val count = SignedPolicies.selectAll()
             .where { (SignedPolicies.userId eq uuidValue) and (SignedPolicies.year eq yearValue) }
             .count()
-        if (count != 0L) return@newSuspendedTransaction false
+        if (count != 0L) return@suspendTransaction false
 
         SignedPolicies.insert {
             it[userId] = uuidValue
             it[year] = yearValue
         }
 
-        return@newSuspendedTransaction true
+        return@suspendTransaction true
     }
 
-    suspend fun getVotes(uuid: String, year: Int): List<VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
+    suspend fun getVotes(uuid: String, year: Int): List<VoteInfo> = suspendTransaction {
         Votes.selectAll().where { (Votes.userId eq uuid) and (Votes.year eq year) }
-            .map { VoteInfo(it[Votes.sessionId], Score.Companion.fromValue(it[Votes.rating])) }
+            .map { VoteInfo(it[Votes.sessionId], Score.fromValue(it[Votes.rating])) }
     }
 
-    suspend fun getAllVotes(year: Int): List<VoteInfo> = newSuspendedTransaction(Dispatchers.IO) {
+    suspend fun getAllVotes(year: Int): List<VoteInfo> = suspendTransaction {
         Votes.selectAll().where { Votes.year eq year }
-            .map { VoteInfo(it[Votes.sessionId], Score.Companion.fromValue(it[Votes.rating])) }
+            .map { VoteInfo(it[Votes.sessionId], Score.fromValue(it[Votes.rating])) }
     }
 
     suspend fun changeVote(
@@ -112,7 +111,7 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
             return
         }
 
-        newSuspendedTransaction(Dispatchers.IO) {
+        suspendTransaction {
             val count = Votes.selectAll()
                 .where { (Votes.userId eq userIdValue) and (Votes.sessionId eq sessionIdValue) and (Votes.year eq yearValue) }.count()
 
@@ -124,7 +123,7 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
                     it[timestamp] = timestampValue.toString()
                     it[year] = yearValue
                 }
-                return@newSuspendedTransaction
+                return@suspendTransaction
             }
 
             Votes.update({ (Votes.userId eq userIdValue) and (Votes.sessionId eq sessionIdValue) and (Votes.year eq yearValue) }) {
@@ -139,7 +138,7 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         feedbackValue: String,
         timestampValue: LocalDateTime,
         yearValue: Int,
-    ): Boolean = newSuspendedTransaction(Dispatchers.IO) {
+    ): Boolean = suspendTransaction {
         Feedback.insert {
             it[userId] = userIdValue
             it[sessionId] = sessionIdValue
@@ -150,12 +149,12 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
     }
 
     suspend fun deleteVote(uuid: String, sessionId: SessionId, year: Int) {
-        newSuspendedTransaction(Dispatchers.IO) {
+        suspendTransaction {
             Votes.deleteWhere { (userId eq uuid) and (Votes.sessionId eq sessionId) and (Votes.year eq year) }
         }
     }
 
-    suspend fun getFeedbackSummary(year: Int): List<FeedbackInfo> = newSuspendedTransaction {
+    suspend fun getFeedbackSummary(year: Int): List<FeedbackInfo> = suspendTransaction {
         Feedback.selectAll().where { Feedback.year eq year }.map {
             FeedbackInfo(
                 it[Feedback.sessionId], it[Feedback.feedback]
