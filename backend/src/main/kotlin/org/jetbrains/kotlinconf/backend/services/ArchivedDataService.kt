@@ -9,11 +9,27 @@ class ArchivedDataService(
     private val config: ConferenceConfig,
 ) {
     private val log = LoggerFactory.getLogger("ArchivedDataService")
-    private val json = Json { ignoreUnknownKeys = true }
 
-    private val cache = mutableMapOf<Int, Conference>()
+    private val cache = mutableMapOf<Int, ByteArray>()
 
-    fun getConferenceData(year: Int): Conference? {
+    internal fun validateArchives() {
+        val json = Json { ignoreUnknownKeys = true }
+        for (year in config.supportedYears) {
+            val data = getConferenceData(year)
+            if (data == null) {
+                log.warn("No archived data found for year $year")
+                continue
+            }
+            try {
+                json.decodeFromString<Conference>(data.decodeToString())
+                log.info("Archived data for year $year is valid")
+            } catch (e: Exception) {
+                log.error("Archived data for year $year failed to decode: ${e.message}", e)
+            }
+        }
+    }
+
+    fun getConferenceData(year: Int): ByteArray? {
         if (year !in config.supportedYears) {
             return null
         }
@@ -23,7 +39,7 @@ class ArchivedDataService(
         }
     }
 
-    private fun loadConferenceData(year: Int): Conference? {
+    private fun loadConferenceData(year: Int): ByteArray? {
         val resourcePath = "/archived/$year/conference.json"
         val inputStream = javaClass.getResourceAsStream(resourcePath)
 
@@ -33,10 +49,9 @@ class ArchivedDataService(
         }
 
         return try {
-            val jsonString = inputStream.bufferedReader().use { it.readText() }
-            json.decodeFromString<Conference>(jsonString)
+            inputStream.use { it.readBytes() }
         } catch (e: Exception) {
-            log.error("Failed to parse archived data for year $year: ${e.message}", e)
+            log.error("Failed to read archived data for year $year: ${e.message}", e)
             null
         }
     }

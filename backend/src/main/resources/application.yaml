@@ -5,6 +5,7 @@ ktor:
     application:
         modules:
             - org.jetbrains.kotlinconf.backend.DiModuleKt.diModule
+            - org.jetbrains.kotlinconf.backend.StartupModuleKt.startupModule
             - org.jetbrains.kotlinconf.backend.PluginsModuleKt.pluginsSetup
             - org.jetbrains.kotlinconf.backend.RoutesModuleKt.routesModule
 

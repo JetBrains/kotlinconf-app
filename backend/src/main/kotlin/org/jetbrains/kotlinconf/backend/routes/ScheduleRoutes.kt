@@ -1,6 +1,8 @@
 package org.jetbrains.kotlinconf.backend.routes
 
+import io.ktor.http.ContentType
 import io.ktor.server.response.respond
+import io.ktor.server.response.respondBytes
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import org.jetbrains.kotlinconf.backend.services.ArchivedDataService
@@ -24,14 +26,12 @@ fun Route.scheduleRoutes() {
     val config: ConferenceConfig by inject()
 
     get("conference") {
-
-        val conference = if (isLiveRequest(config)) {
-            sessionize.getConferenceData()
+        if (isLiveRequest(config)) {
+            call.respond(sessionize.getConferenceData())
         } else {
             val year = getYearFromPath(config)
-            archivedData.getConferenceData(year) ?: throw NotFound()
+            val bytes = archivedData.getConferenceData(year) ?: throw NotFound()
+            call.respondBytes(bytes, ContentType.Application.Json)
         }
-
-        call.respond(conference)
     }
 }
