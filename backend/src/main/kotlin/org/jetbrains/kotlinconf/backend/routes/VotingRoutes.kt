@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalTime::class)
-
 package org.jetbrains.kotlinconf.backend.routes
 
 import io.ktor.http.*
@@ -21,7 +19,6 @@ import org.jetbrains.kotlinconf.backend.utils.NotFound
 import org.jetbrains.kotlinconf.backend.utils.Unauthorized
 import org.koin.ktor.ext.inject
 import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
 private val COME_BACK_LATER = HttpStatusCode(477, "Come Back Later")
 private val ARCHIVED_YEAR_FORBIDDEN = HttpStatusCode(403, "Forbidden: Archived Year")

@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalTime::class)
-
 package org.jetbrains.kotlinconf.backend.routes
 
 import io.ktor.http.HttpStatusCode
@@ -13,7 +11,6 @@ import org.jetbrains.kotlinconf.backend.repositories.KotlinConfRepository
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.koin.ktor.ext.inject
 import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
 private val ARCHIVED_YEAR_FORBIDDEN = HttpStatusCode(403, "Forbidden: Archived Year")
 
