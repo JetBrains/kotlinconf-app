@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberBasicTooltipState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -67,8 +66,10 @@ private fun TopMenuButtonImpl(
     interactionModifier: Modifier,
     backgroundColor: Color,
     iconColor: Color,
+    large: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val buttonSize = if (large) 40.dp else 36.dp
     BasicTooltipBox(
         positionProvider = rememberPositionProvider(),
         tooltip = { Tooltip(contentDescription) },
@@ -76,8 +77,8 @@ private fun TopMenuButtonImpl(
     ) {
         Icon(
             modifier = modifier
-                .padding(6.dp)
-                .size(36.dp)
+                .padding(if (large) 0.dp else 6.dp)
+                .size(buttonSize)
                 .clip(CircleShape)
                 .then(interactionModifier)
                 .background(backgroundColor)
@@ -89,39 +90,17 @@ private fun TopMenuButtonImpl(
     }
 }
 
-@Composable
-fun Tooltip(
-    text: String,
-) {
-    Text(
-        text = text,
-        style = KotlinConfTheme.typography.text2,
-        color = KotlinConfTheme.colors.primaryTextInverted,
-        modifier = Modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(KotlinConfTheme.colors.tooltipBackground)
-            .padding(vertical = 4.dp, horizontal = 8.dp)
-    )
-}
-
-@Preview
-@Composable
-fun TooltipPreview() {
-    PreviewHelper {
-        Tooltip("Tooltip")
-    }
-}
-
 /**
  * A toggleable top menu button with selection state.
  */
 @Composable
 fun TopMenuButton(
     icon: DrawableResource,
-    selected: Boolean = false,
-    onToggle: (Boolean) -> Unit,
     contentDescription: String,
+    selected: Boolean,
+    onToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    large: Boolean = false,
 ) {
     val backgroundColor by animateColorAsState(
         if (selected) KotlinConfTheme.colors.primaryBackground
@@ -144,6 +123,7 @@ fun TopMenuButton(
         ),
         backgroundColor = backgroundColor,
         iconColor = iconColor,
+        large = large,
     )
 }
 
@@ -153,9 +133,10 @@ fun TopMenuButton(
 @Composable
 fun TopMenuButton(
     icon: DrawableResource,
-    onClick: () -> Unit,
     contentDescription: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    large: Boolean = false,
 ) {
     TopMenuButtonImpl(
         icon = icon,
@@ -164,6 +145,7 @@ fun TopMenuButton(
         interactionModifier = Modifier.clickable(onClick = onClick),
         backgroundColor = Color.Transparent,
         iconColor = KotlinConfTheme.colors.primaryText,
+        large = large,
     )
 }
 
@@ -173,13 +155,30 @@ internal fun TopMenuButtonPreview() {
     PreviewHelper {
         Row {
             var state1 by remember { mutableStateOf(false) }
-            TopMenuButton(UiRes.drawable.bookmark_24, state1, { state1 = it }, "Bookmark")
+            TopMenuButton(UiRes.drawable.bookmark_24, "Bookmark", selected = state1, { state1 = it })
 
             var state2 by remember { mutableStateOf(true) }
-            TopMenuButton(UiRes.drawable.bookmark_24, state2, { state2 = it }, "Bookmark")
+            TopMenuButton(UiRes.drawable.bookmark_24, "Bookmark", selected = state2, { state2 = it })
 
-            TopMenuButton(UiRes.drawable.close_24, {}, "Bookmark")
-            TopMenuButton(UiRes.drawable.search_24, {}, "Bookmark")
+            TopMenuButton(UiRes.drawable.close_24, "Bookmark", {})
+            TopMenuButton(UiRes.drawable.search_24, "Bookmark", {})
+        }
+    }
+}
+
+@Preview
+@Composable
+internal fun TopMenuButtonLargePreview() {
+    PreviewHelper {
+        Row {
+            var state1 by remember { mutableStateOf(false) }
+            TopMenuButton(UiRes.drawable.bookmark_24, "Bookmark", selected = state1,{ state1 = it }, large = true)
+
+            var state2 by remember { mutableStateOf(true) }
+            TopMenuButton(UiRes.drawable.bookmark_24, "Bookmark", selected = state2,{ state2 = it }, large = true)
+
+            TopMenuButton(UiRes.drawable.close_24, "Bookmark", {}, large = true)
+            TopMenuButton(UiRes.drawable.search_24, "Bookmark", {}, large = true)
         }
     }
 }
