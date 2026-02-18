@@ -1,9 +1,6 @@
-@file:OptIn(ExperimentalTime::class)
-
 package org.jetbrains.kotlinconf
 
 import android.Manifest
-import android.app.Activity
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager.IMPORTANCE_HIGH
@@ -28,7 +25,6 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
 import org.jetbrains.kotlinconf.di.NotificationIcon
 import org.jetbrains.kotlinconf.utils.Logger
-import kotlin.time.ExperimentalTime
 
 const val EXTRA_LOCAL_NOTIFICATION_ID = "localNotificationId"
 private const val EXTRA_TITLE = "title"
