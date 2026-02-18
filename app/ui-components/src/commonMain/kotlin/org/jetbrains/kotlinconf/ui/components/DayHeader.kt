@@ -1,17 +1,20 @@
 package org.jetbrains.kotlinconf.ui.components
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
@@ -49,11 +52,17 @@ fun DayHeader(
     day: String,
     line1: String,
     line2: String,
+    fullWidth: Boolean,
     modifier: Modifier = Modifier,
     day2: String = "",
 ) {
+    val cornerRadius by animateDpAsState(if (fullWidth) 0.dp else 16.dp)
     Row(
         modifier = modifier
+            .graphicsLayer {
+                shape = RoundedCornerShape(cornerRadius)
+                clip = true
+            }
             .background(colorGradient)
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp)
@@ -113,8 +122,8 @@ fun DayHeader(
 @Composable
 internal fun DayHeaderPreview() {
     PreviewHelper {
-        DayHeader("TEST", "1", "Test", "Data")
-        DayHeader("MAY", "21", "Workshop", "Day")
-        DayHeader("MAY", "22", "Code", "Labs", day2 = "23")
+        DayHeader("TEST", "1", "Test", "Data", fullWidth = true)
+        DayHeader("MAY", "21", "Workshop", "Day", fullWidth = false)
+        DayHeader("MAY", "22", "Code", "Labs", fullWidth = false, day2 = "23")
     }
 }
