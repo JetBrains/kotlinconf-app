@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -13,9 +14,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,7 +26,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -52,6 +58,48 @@ fun NowButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = time != Current,
 ) {
+    NowButtonImpl(
+        time = time,
+        enabled = enabled,
+        onClick = onClick,
+        minWidth = 72.dp,
+        minHeight = 36.dp,
+        textStyle = KotlinConfTheme.typography.text2,
+        shape = NowButtonShape,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun FloatingNowButton(
+    time: NowButtonState,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = time != Current,
+) {
+    NowButtonImpl(
+        time = time,
+        enabled = enabled,
+        onClick = onClick,
+        minWidth = 90.dp,
+        minHeight = 48.dp,
+        textStyle = KotlinConfTheme.typography.text1,
+        shape = CircleShape,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun NowButtonImpl(
+    time: NowButtonState,
+    enabled: Boolean,
+    onClick: () -> Unit,
+    minWidth: Dp,
+    minHeight: Dp,
+    textStyle: TextStyle,
+    shape: Shape,
+    modifier: Modifier = Modifier,
+) {
     val active = time != Current
     val textColor by animateColorAsState(
         if (active) KotlinConfTheme.colors.primaryTextWhiteFixed
@@ -63,20 +111,21 @@ fun NowButton(
         else KotlinConfTheme.colors.tileBackground,
         ColorSpringSpec,
     )
+    val startPadding by animateDpAsState(if (active) 6.dp else 0.dp)
 
     Row(
         modifier = modifier
-            .clip(NowButtonShape)
+            .clip(shape)
             .clickable(onClick = onClick, enabled = enabled)
             .background(background)
-            .width(72.dp)
-            .heightIn(min = 36.dp),
+            .sizeIn(minWidth = minWidth, minHeight = minHeight)
+            .padding(start = startPadding),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
         Text(
             text = stringResource(UiRes.string.now),
-            style = KotlinConfTheme.typography.text2,
+            style = textStyle,
             color = textColor,
         )
 
@@ -109,5 +158,15 @@ internal fun NowButtonPreview() {
         NowButton(Before, {})
         NowButton(Current, {})
         NowButton(After, {})
+    }
+}
+
+@Preview
+@Composable
+internal fun FloatingNowButtonPreview() {
+    PreviewHelper {
+        FloatingNowButton(Before, {})
+        FloatingNowButton(Current, {})
+        FloatingNowButton(After, {})
     }
 }
