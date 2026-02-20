@@ -33,10 +33,10 @@ For the source code and more technical details, visit the GitHub repository.</st
     <string name="info_link_description_bluesky">Bluesky</string>
 
     <string name="about_conference_title">About the conference</string>
-    <string name="about_conference_header">KotlinConf 2025</string>
-    <string name="about_conference_description">May 21: Workshops
-May 22–23: Conference
-Bella Center, Copenhagen, Denmark
+    <string name="about_conference_header">KotlinConf 2026</string>
+    <string name="about_conference_description">May 20: Workshops
+May 21–22: Conference
+ICM Messe, Munich, Germany
 
 KotlinConf is the official Kotlin conference by JetBrains. It is a place for the community to gather and discuss all things Kotlin.
 
@@ -62,7 +62,7 @@ Social media hashtag: #KotlinConf</string>
     <string name="about_conference_closingpanel_title_line1">Closing</string>
     <string name="about_conference_closingpanel_title_line2">panel</string>
 
-    <string name="kotlinconf_by_jetbrains_description">KotlinConf by JetBrains 2025</string>
+    <string name="kotlinconf_by_jetbrains_description">KotlinConf by JetBrains 2026</string>
 
     <string name="privacy_notice_title">Privacy notice</string>
     <string name="privacy_notice_description">For you to maximize the benefits of this app, we need your consent to access and use your device ID so you can provide and we can collect and track your feedback about talks.
