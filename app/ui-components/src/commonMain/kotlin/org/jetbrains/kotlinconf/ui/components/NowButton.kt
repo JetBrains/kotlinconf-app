@@ -25,7 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -144,7 +144,7 @@ private fun NowButtonImpl(
                 contentDescription = null,
                 modifier = Modifier
                     .size(16.dp)
-                    .rotate(if (targetTime == Before) 0f else 180f),
+                    .graphicsLayer { rotationZ = if (targetTime == Before) 0f else 180f },
                 tint = textColor,
             )
         }
