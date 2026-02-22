@@ -36,6 +36,7 @@ import org.jetbrains.kotlinconf.ui.components.FilterItemType
 import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import org.jetbrains.kotlinconf.utils.containsDiacritics
 import org.jetbrains.kotlinconf.utils.removeDiacritics
+import org.jetbrains.kotlinconf.utils.toScore
 
 sealed interface ScheduleListItem
 
@@ -329,12 +330,7 @@ class ScheduleViewModel(
     }
 
     fun onSubmitFeedback(sessionId: SessionId, emotion: Emotion?) {
-        val score = when (emotion) {
-            Emotion.Positive -> Score.GOOD
-            Emotion.Neutral -> Score.OK
-            Emotion.Negative -> Score.BAD
-            null -> null
-        }
+        val score = emotion?.toScore()
         viewModelScope.launch {
             if (service.isPolicySigned()) {
                 service.vote(sessionId, score)
@@ -345,11 +341,7 @@ class ScheduleViewModel(
     }
 
     fun onSubmitFeedbackWithComment(sessionId: SessionId, emotion: Emotion, comment: String) {
-        val score = when (emotion) {
-            Emotion.Positive -> Score.GOOD
-            Emotion.Neutral -> Score.OK
-            Emotion.Negative -> Score.BAD
-        }
+        val score = emotion.toScore()
         viewModelScope.launch {
             if (service.isPolicySigned()) {
                 service.vote(sessionId, score)
