@@ -313,7 +313,7 @@ private fun Header(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     onClearSearch: () -> Unit,
-    viewModel: ScheduleViewModel = metroViewModel(),
+    viewModel: ScheduleViewModel,
 ) {
     MainHeaderContainer(
         state = headerState,
