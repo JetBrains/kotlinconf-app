@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.screens
+package org.jetbrains.kotlinconf.screens.licenses
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -61,17 +61,8 @@ import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
-private val Library.licenseName: String
-    get() = licenses.firstOrNull()?.name ?: "Unknown license"
-
 private val Library.licenseContent: String
     get() = licenses.firstOrNull()?.licenseContent ?: ""
-
-private val Library.author: String
-    get() = when {
-        developers.isNotEmpty() -> developers.joinToString { it.name.toString() }
-        else -> organization?.name ?: ""
-    }
 
 @Composable
 fun LicensesScreen(
