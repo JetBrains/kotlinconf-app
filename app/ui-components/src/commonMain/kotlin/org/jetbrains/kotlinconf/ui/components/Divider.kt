@@ -19,8 +19,9 @@ import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 fun HorizontalDivider(
     thickness: Dp,
     color: Color,
+    modifier: Modifier = Modifier,
 ) {
-    Canvas(Modifier.fillMaxWidth().height(thickness)) {
+    Canvas(modifier.fillMaxWidth().height(thickness)) {
         drawLine(
             color = color,
             strokeWidth = thickness.toPx(),
@@ -34,8 +35,9 @@ fun HorizontalDivider(
 fun VerticalDivider(
     thickness: Dp,
     color: Color,
+    modifier: Modifier = Modifier,
 ) {
-    Canvas(Modifier.fillMaxHeight().width(thickness)) {
+    Canvas(modifier.fillMaxHeight().width(thickness)) {
         drawLine(
             color = color,
             strokeWidth = thickness.toPx(),
