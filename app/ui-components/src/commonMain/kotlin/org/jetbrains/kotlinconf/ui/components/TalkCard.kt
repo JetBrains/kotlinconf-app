@@ -262,8 +262,8 @@ private fun TopBlock(
                     else UiRes.drawable.bookmark_24
                 ),
                 contentDescription = stringResource(
-                    if (bookmarked) UiRes.string.action_bookmark_session
-                    else UiRes.string.action_remove_session_from_bookmarks,
+                    if (bookmarked) UiRes.string.action_remove_session_from_bookmarks
+                    else UiRes.string.action_bookmark_session,
                     title
                 ),
                 tint = iconColor,
