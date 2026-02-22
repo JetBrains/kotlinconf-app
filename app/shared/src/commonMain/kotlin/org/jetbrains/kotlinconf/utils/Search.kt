@@ -6,7 +6,7 @@ inline fun <T, R> List<T>.performSearch(
     selectors: List<(T) -> String>,
 ): List<R> {
     val diacriticsSearch = searchText.containsDiacritics()
-    val searchPattern = searchText.toRegex(RegexOption.IGNORE_CASE)
+    val searchPattern = Regex.escape(searchText).toRegex(RegexOption.IGNORE_CASE)
 
     return this.mapNotNull { item ->
         val allMatches = selectors.map { selector ->
