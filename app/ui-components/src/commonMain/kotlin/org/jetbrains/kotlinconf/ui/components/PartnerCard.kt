@@ -22,9 +22,10 @@ fun PartnerCard(
     name: String,
     logoUrl: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(16.dp))
             .background(KotlinConfTheme.colors.tileBackground)
             .clickable(onClick = onClick)
