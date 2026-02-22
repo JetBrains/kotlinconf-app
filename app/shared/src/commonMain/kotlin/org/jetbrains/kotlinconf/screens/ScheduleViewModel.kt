@@ -201,7 +201,7 @@ class ScheduleViewModel(
                 for (session in timeSlot.sessions) {
                     val result = match(
                         session = session,
-                        searchRegex = searchQuery.toRegex(RegexOption.IGNORE_CASE),
+                        searchRegex = Regex.escape(searchQuery).toRegex(RegexOption.IGNORE_CASE),
                         diacriticsSearch = searchQuery.containsDiacritics(),
                         tags = selectedTags,
                     )
