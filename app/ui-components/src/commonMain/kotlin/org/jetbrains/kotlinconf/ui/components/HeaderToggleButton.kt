@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -30,8 +29,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.PopupPositionProvider
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
@@ -41,26 +40,6 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
-
-@Composable
-private fun rememberPositionProvider(): PopupPositionProvider {
-    val tooltipAnchorSpacing = with(LocalDensity.current) { 4.dp.roundToPx() }
-    return remember(tooltipAnchorSpacing) {
-        object : PopupPositionProvider {
-            override fun calculatePosition(
-                anchorBounds: IntRect,
-                windowSize: IntSize,
-                layoutDirection: LayoutDirection,
-                popupContentSize: IntSize,
-            ): IntOffset {
-                val x = anchorBounds.left + (anchorBounds.width - popupContentSize.width) / 2
-                var y = anchorBounds.bottom - tooltipAnchorSpacing
-                if (y < 0) y = anchorBounds.bottom + tooltipAnchorSpacing
-                return IntOffset(x, y)
-            }
-        }
-    }
-}
 
 private val HeaderToggleItemWidth = 48.dp
 private val HeaderToggleItemHeight = 40.dp
@@ -99,7 +78,7 @@ fun HeaderToggleButton(
                 )
 
                 BasicTooltipBox(
-                    positionProvider = rememberPositionProvider(),
+                    positionProvider = rememberTooltipPositionProvider(),
                     tooltip = { Tooltip(option.contentDescription) },
                     state = rememberBasicTooltipState(),
                 ) {
