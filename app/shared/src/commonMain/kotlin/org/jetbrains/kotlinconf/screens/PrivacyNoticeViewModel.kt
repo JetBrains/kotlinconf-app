@@ -16,9 +16,9 @@ import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 
 sealed class PrivacyNoticeState {
-    object Idle : PrivacyNoticeState()
-    object Loading : PrivacyNoticeState()
-    object Done : PrivacyNoticeState()
+    data object Idle : PrivacyNoticeState()
+    data object Loading : PrivacyNoticeState()
+    data object Done : PrivacyNoticeState()
 }
 
 @ContributesIntoMap(AppScope::class)
