@@ -131,7 +131,6 @@ kotlin {
 
         jvmMain.dependencies {
             implementation(libs.ktor.client.okhttp)
-            implementation(libs.android.svg)
             implementation(libs.slf4j.nop)
         }
 
