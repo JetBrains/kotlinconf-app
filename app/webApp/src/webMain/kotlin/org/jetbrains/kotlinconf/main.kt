@@ -1,14 +1,11 @@
 @file:OptIn(ExperimentalWasmJsInterop::class)
 
-package org.example.project
+package org.jetbrains.kotlinconf
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import dev.zacsweers.metro.createGraphFactory
-import org.jetbrains.kotlinconf.App
-import org.jetbrains.kotlinconf.Flags
 import org.jetbrains.kotlinconf.di.WebAppGraph
-import org.jetbrains.kotlinconf.initApp
 import org.jetbrains.kotlinconf.ui.initCoil
 import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.js.ExperimentalWasmJsInterop
