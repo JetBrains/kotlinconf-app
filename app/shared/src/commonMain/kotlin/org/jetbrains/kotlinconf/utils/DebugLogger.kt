@@ -2,7 +2,7 @@ package org.jetbrains.kotlinconf.utils
 
 import kotlin.time.Clock
 
-class DebugLogger(private val platformLogger: Logger) : Logger {
+class DebugLogger(private val platformLogger: Logger) : Logger, LogExporter {
     private val logs = mutableListOf<String>()
 
     override fun log(tag: String, lazyMessage: () -> String) {
@@ -13,5 +13,5 @@ class DebugLogger(private val platformLogger: Logger) : Logger {
         platformLogger.log(tag, lazyMessage)
     }
 
-    fun getAllLogs(): String = logs.joinToString("\n")
+    override fun getAllLogs(): String = logs.joinToString("\n")
 }
