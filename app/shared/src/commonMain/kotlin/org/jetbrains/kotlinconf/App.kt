@@ -41,6 +41,7 @@ fun App(
         LocalAppGraph provides appGraph,
         LocalMetroViewModelFactory provides appGraph.metroViewModelFactory,
         LocalWindowSize provides windowSize(),
+        LocalMapHandler provides rememberMapHandler(),
     ) {
         if (isOnboardingComplete != null) {
             NavHost(isOnboardingComplete, isDarkTheme)
