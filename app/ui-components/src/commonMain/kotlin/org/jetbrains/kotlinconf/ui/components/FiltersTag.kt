@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,6 +31,7 @@ fun FilterTag(
     label: String,
     selected: Boolean,
     onSelect: (Boolean) -> Unit,
+    isExclusive: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor by animateColorAsState(
@@ -56,10 +58,20 @@ fun FilterTag(
                 color = strokeColor,
                 shape = FilterTagShape,
             )
-            .selectable(
-                selected = selected,
-                onClick = { onSelect(!selected) },
-                role = Role.RadioButton
+            .then(
+                if (isExclusive) {
+                    Modifier.selectable(
+                        selected = selected,
+                        onClick = { onSelect(!selected) },
+                        role = Role.RadioButton,
+                    )
+                } else {
+                    Modifier.toggleable(
+                        value = selected,
+                        onValueChange = { onSelect(it) },
+                        role = Role.Checkbox,
+                    )
+                }
             )
             .background(backgroundColor)
             .padding(horizontal = 12.dp, vertical = 10.dp),
@@ -77,12 +89,12 @@ fun FilterTag(
 @Composable
 private fun FilterTagUnselectedPreview() = PreviewHelper {
     var state by remember { mutableStateOf(false) }
-    FilterTag("Label", state, { state = it })
+    FilterTag("Label", state, { state = it }, isExclusive = true)
 }
 
 @PreviewLightDark
 @Composable
 private fun FilterTagSelectedPreview() = PreviewHelper {
     var state by remember { mutableStateOf(true) }
-    FilterTag("Label", state, { state = it })
+    FilterTag("Label", state, { state = it }, isExclusive = false)
 }
