@@ -37,7 +37,6 @@ import org.jetbrains.kotlinconf.screens.GoldenKodeeCategoryScreen
 import org.jetbrains.kotlinconf.screens.GoldenKodeeNomineeScreen
 import org.jetbrains.kotlinconf.screens.GoldenKodeeScreen
 import org.jetbrains.kotlinconf.screens.InfoScreen
-import org.jetbrains.kotlinconf.screens.LicensesScreen
 import org.jetbrains.kotlinconf.screens.MapScreen
 import org.jetbrains.kotlinconf.screens.NestedMapScreen
 import org.jetbrains.kotlinconf.screens.PartnerDetailScreen
@@ -45,12 +44,13 @@ import org.jetbrains.kotlinconf.screens.PartnersScreen
 import org.jetbrains.kotlinconf.screens.ScheduleScreen
 import org.jetbrains.kotlinconf.screens.SessionScreen
 import org.jetbrains.kotlinconf.screens.SettingsScreen
-import org.jetbrains.kotlinconf.screens.SingleLicenseScreen
 import org.jetbrains.kotlinconf.screens.SpeakerDetailScreen
 import org.jetbrains.kotlinconf.screens.SpeakersScreen
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 import org.jetbrains.kotlinconf.screens.VisitorPrivacyNotice
 import org.jetbrains.kotlinconf.screens.VisitorTermsOfUse
+import org.jetbrains.kotlinconf.screens.licenses.LicensesScreen
+import org.jetbrains.kotlinconf.screens.licenses.SingleLicenseScreen
 import org.jetbrains.kotlinconf.ui.theme.GoldenKodeeColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfDarkColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfLightColors

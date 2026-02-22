@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf.screens
+package org.jetbrains.kotlinconf.screens.licenses
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -42,15 +42,6 @@ class LicensesViewModel : ViewModel() {
     fun setSearchText(searchText: String) {
         this.searchText.value = searchText
     }
-
-    private val Library.author: String
-        get() = when {
-            developers.isNotEmpty() -> developers.joinToString { it.name.toString() }
-            else -> organization?.name ?: ""
-        }
-
-    private val Library.licenseName: String
-        get() = licenses.firstOrNull()?.name ?: "Unknown license"
 
     val licensesState: StateFlow<List<LibraryWithHighlights>> = combine(
         libraries, searchText
