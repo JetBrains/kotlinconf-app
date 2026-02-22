@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.Score
+import org.jetbrains.kotlinconf.utils.toScore
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Speaker
@@ -72,12 +73,6 @@ class SessionViewModel(
 
     fun onNavigatedToPrivacyNotice() {
         _navigateToPrivacyNotice.value = false
-    }
-
-    private fun Emotion.toScore() = when (this) {
-        Emotion.Positive -> Score.GOOD
-        Emotion.Neutral -> Score.OK
-        Emotion.Negative -> Score.BAD
     }
 
     @AssistedFactory
