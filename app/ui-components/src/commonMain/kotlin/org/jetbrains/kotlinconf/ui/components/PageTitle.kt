@@ -61,14 +61,11 @@ private val iconPlaceholder = Placeholder(
     placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
 )
 
-@Composable
-private fun pageTitleInlineContent(): Map<String, InlineTextContent> {
-    return mapOf(
-        iconId to InlineTextContent(iconPlaceholder) { placeholder ->
-            InlineIconContent(placeholder)
-        },
-    )
-}
+private val pageTitleInlineContent = mapOf(
+    iconId to InlineTextContent(iconPlaceholder) { placeholder ->
+        InlineIconContent(placeholder)
+    },
+)
 
 @Composable
 private fun InlineIconContent(placeholder: String) {
@@ -195,7 +192,7 @@ fun PageTitle(
             style = KotlinConfTheme.typography.h1,
             color = KotlinConfTheme.colors.primaryText,
             selectable = true,
-            inlineContent = if (hasIcon) pageTitleInlineContent() else emptyMap(),
+            inlineContent = if (hasIcon) pageTitleInlineContent else emptyMap(),
             modifier = Modifier.semantics { heading() }
         )
         FlowRow(
