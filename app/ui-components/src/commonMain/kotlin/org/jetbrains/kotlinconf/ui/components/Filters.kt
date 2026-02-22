@@ -162,16 +162,19 @@ fun Filters(
                     title = stringResource(UiRes.string.filter_label_category),
                     items = tags.filter { it.type == FilterItemType.Category },
                     toggle = toggleItem,
+                    isExclusive = false,
                 )
                 FilterItemGroup(
                     title = stringResource(UiRes.string.filter_label_level),
                     items = tags.filter { it.type == FilterItemType.Level },
                     toggle = toggleItem,
+                    isExclusive = true,
                 )
                 FilterItemGroup(
                     title = stringResource(UiRes.string.filter_label_session_format),
                     items = tags.filter { it.type == FilterItemType.Format },
                     toggle = toggleItem,
+                    isExclusive = true,
                 )
             }
         }
@@ -184,6 +187,7 @@ private fun FilterItemGroup(
     title: String,
     items: List<FilterItem>,
     toggle: (FilterItem, Boolean) -> Unit,
+    isExclusive: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -199,7 +203,7 @@ private fun FilterItemGroup(
             }
         )
         FlowRow(
-            modifier = Modifier.selectableGroup(),
+            modifier = if (isExclusive) Modifier.selectableGroup() else Modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -208,6 +212,7 @@ private fun FilterItemGroup(
                     label = item.value,
                     selected = item.isSelected,
                     onSelect = { value -> toggle(item, value) },
+                    isExclusive = isExclusive,
                 )
             }
         }
