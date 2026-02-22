@@ -48,7 +48,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_left_24
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_back
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.utils.DebugLogger
+import org.jetbrains.kotlinconf.utils.LogExporter
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
@@ -141,18 +141,18 @@ fun DeveloperMenuScreen(
                         enabled = flags.debugLogging,
                         onToggle = { flags = flags.copy(debugLogging = it) }
                     )
-                    val debugLogger = appGraph.logger as? DebugLogger
+                    val logExporter = appGraph.logger as? LogExporter
                     val clipboardManager = LocalClipboardManager.current
                     Button(
                         label = "Copy logs to clipboard",
                         onClick = {
-                            debugLogger?.getAllLogs()?.let {
+                            logExporter?.getAllLogs()?.let {
                                 clipboardManager.setText(AnnotatedString(it))
                             }
                         },
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         primary = true,
-                        enabled = flags.debugLogging && debugLogger != null,
+                        enabled = flags.debugLogging && logExporter != null,
                     )
                 }
 

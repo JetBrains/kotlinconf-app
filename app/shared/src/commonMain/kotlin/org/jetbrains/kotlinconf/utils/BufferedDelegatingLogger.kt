@@ -18,7 +18,7 @@ import kotlinx.coroutines.sync.withLock
 @SingleIn(AppScope::class)
 class BufferedDelegatingLogger(
     private val scope: CoroutineScope,
-) : Logger {
+) : Logger, LogExporter {
     private var delegate: Logger? = null
 
     private data class Entry(val tag: String, val lazyMessage: () -> String)
@@ -43,6 +43,8 @@ class BufferedDelegatingLogger(
             }
         }
     }
+
+    override fun getAllLogs(): String? = (delegate as? LogExporter)?.getAllLogs()
 
     fun attach(realLogger: Logger) {
         require(delegate == null) { "Logger delegate was already set, this should only happen once" }
