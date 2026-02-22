@@ -23,6 +23,7 @@ Für den Quellcode und weitere technische Details besuchen Sie das GitHub-Reposi
 
     <string name="info_title">Info</string>
     <string name="info_link_about_conf">Über die Konferenz</string>
+    <string name="info_link_how_to_find_venue">Anfahrt</string>
     <string name="info_link_about_app">Über die App</string>
     <string name="info_link_partners">Unsere Partner</string>
     <string name="info_link_code_of_conduct">Verhaltenskodex</string>
@@ -131,6 +132,7 @@ Wir verarbeiten Ihre Daten gemäß dem Datenschutzhinweis der App. Sie können I
     <string name="map_first_floor">Erster Stock</string>
     <string name="map_zoom_in">Hineinzoomen</string>
     <string name="map_zoom_out">Herauszoomen</string>
+    <string name="map_how_to_find_venue">Anfahrt</string>
 
     <string name="speakers_title">Sprecher</string>
     <string name="speakers_error_no_results">Keine Ergebnisse</string>
