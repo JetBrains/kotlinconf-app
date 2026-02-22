@@ -91,7 +91,7 @@ internal fun buildHighlightedString(
         append(text)
         highlights.forEach { range ->
             // Ignore invalid ranges
-            if (!range.isEmpty()) {
+            if (!range.isEmpty() && range.first in text.indices && range.last in text.indices) {
                 addStyle(
                     style = SpanStyle(
                         color = KotlinConfTheme.colors.primaryTextWhiteFixed,
