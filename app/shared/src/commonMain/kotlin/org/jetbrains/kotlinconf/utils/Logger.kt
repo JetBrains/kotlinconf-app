@@ -21,4 +21,8 @@ class NoopProdLogger : Logger {
     }
 }
 
+interface LogExporter {
+    fun getAllLogs(): String?
+}
+
 internal const val MAX_LOG_MESSAGES_IN_MEMORY = 200
