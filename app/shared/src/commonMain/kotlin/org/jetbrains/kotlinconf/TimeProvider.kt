@@ -42,12 +42,10 @@ class ServerBasedTimeProvider(private val client: ApplicationApi) : TimeProvider
     override val time: StateFlow<LocalDateTime> = _time.asStateFlow()
 
     override suspend fun run(): Nothing {
-        runCatching {
-            val serverTime = client.getServerTime()
-            if (serverTime != null) {
-                val requestTime = Clock.System.now()
-                offset = serverTime - requestTime
-            }
+        val serverTime = client.getServerTime()
+        if (serverTime != null) {
+            val requestTime = Clock.System.now()
+            offset = serverTime - requestTime
         }
         _time.value = now()
 
