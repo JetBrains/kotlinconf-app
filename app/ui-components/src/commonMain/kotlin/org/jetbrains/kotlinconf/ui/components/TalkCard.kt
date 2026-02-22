@@ -332,7 +332,6 @@ private val iconPlaceholder = Placeholder(
     placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
 )
 
-@Composable
 private fun talkCardTitleInlineContent(status: TalkStatus): Map<String, InlineTextContent> {
     return mapOf(
         iconId to InlineTextContent(iconPlaceholder) { placeholder ->
