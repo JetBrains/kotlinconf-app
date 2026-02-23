@@ -153,16 +153,14 @@ private fun EntryProviderScope<AppRoute>.screens(
         AppPrivacyNoticePrompt(
             onRejectNotice = {
                 if (skipNotifications) {
-                    navigator.clear()
-                    navigator.add(ScheduleScreen)
+                    navigator.set(ScheduleScreen)
                 } else {
                     navigator.add(StartNotificationsScreen)
                 }
             },
             onAcceptNotice = {
                 if (skipNotifications) {
-                    navigator.clear()
-                    navigator.add(ScheduleScreen)
+                    navigator.set(ScheduleScreen)
                 } else {
                     navigator.add(StartNotificationsScreen)
                 }
@@ -174,8 +172,7 @@ private fun EntryProviderScope<AppRoute>.screens(
     entry<StartNotificationsScreen> {
         StartNotificationsScreen(
             onDone = {
-                navigator.clear()
-                navigator.add(ScheduleScreen)
+                navigator.set(ScheduleScreen)
             }
         )
     }
