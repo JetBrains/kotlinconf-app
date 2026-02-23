@@ -12,13 +12,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_up_right_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 private val ActionButtonShape = RoundedCornerShape(100)
 
@@ -49,14 +49,12 @@ fun OverlayTextButton(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun ActionButtonPreview() {
-    PreviewHelper {
-        OverlayTextButton(
-            label = "How to find the venue",
-            icon = UiRes.drawable.arrow_up_right_24,
-            onClick = {},
-        )
-    }
+private fun ActionButtonPreview() = PreviewHelper {
+    OverlayTextButton(
+        label = "How to find the venue",
+        icon = UiRes.drawable.arrow_up_right_24,
+        onClick = {},
+    )
 }

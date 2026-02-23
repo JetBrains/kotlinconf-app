@@ -2,12 +2,11 @@ package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -35,6 +34,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.kodee_small_positive_fill
 import org.jetbrains.kotlinconf.ui.generated.resources.kodee_small_positive_outline
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 enum class Emotion {
     Negative, Neutral, Positive;
@@ -132,32 +132,37 @@ fun KodeeEmotion(
     }
 }
 
-@Preview
-@Composable
-internal fun KodeeIconsPreview() {
-    PreviewHelper {
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            KodeeIconSmall(Emotion.Negative, false)
-            KodeeIconSmall(Emotion.Neutral, false)
-            KodeeIconSmall(Emotion.Positive, false)
-
-            KodeeIconSmall(Emotion.Negative, true)
-            KodeeIconSmall(Emotion.Neutral, true)
-            KodeeIconSmall(Emotion.Positive, true)
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            KodeeIconLarge(Emotion.Negative, false)
-            KodeeIconLarge(Emotion.Neutral, false)
-            KodeeIconLarge(Emotion.Positive, false)
-
-            KodeeIconLarge(Emotion.Negative, true)
-            KodeeIconLarge(Emotion.Neutral, true)
-            KodeeIconLarge(Emotion.Positive, true)
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            KodeeEmotion(Emotion.Negative)
-            KodeeEmotion(Emotion.Neutral)
-            KodeeEmotion(Emotion.Positive)
-        }
-    }
+private class EmotionProvider : PreviewParameterProvider<Emotion> {
+    override val values = Emotion.entries.asSequence()
+    override fun getDisplayName(index: Int) = values.elementAt(index).name
 }
+
+@PreviewLightDark
+@Composable
+private fun KodeeIconSmallSelectedPreview(
+    @PreviewParameter(EmotionProvider::class) emotion: Emotion,
+) = PreviewHelper { KodeeIconSmall(emotion, true) }
+
+@PreviewLightDark
+@Composable
+private fun KodeeIconSmallUnselectedPreview(
+    @PreviewParameter(EmotionProvider::class) emotion: Emotion,
+) = PreviewHelper { KodeeIconSmall(emotion, false) }
+
+@PreviewLightDark
+@Composable
+private fun KodeeIconLargeSelectedPreview(
+    @PreviewParameter(EmotionProvider::class) emotion: Emotion,
+) = PreviewHelper { KodeeIconLarge(emotion, true) }
+
+@PreviewLightDark
+@Composable
+private fun KodeeIconLargeUnselectedPreview(
+    @PreviewParameter(EmotionProvider::class) emotion: Emotion,
+) = PreviewHelper { KodeeIconLarge(emotion, false) }
+
+@PreviewLightDark
+@Composable
+private fun KodeeEmotionPreview(
+    @PreviewParameter(EmotionProvider::class) emotion: Emotion,
+) = PreviewHelper { KodeeEmotion(emotion) }

@@ -14,10 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 data class ServiceEventData(
     val title: String,
@@ -98,35 +98,38 @@ fun ServiceEvents(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun ServiceEventsPreview() {
-    PreviewHelper {
-        ServiceEvent(
+private fun ServiceEventPreview() = PreviewHelper {
+    ServiceEvent(
+        ServiceEventData(
+            title = "Breakfast",
+            now = false,
+            time = "9:00 – 10:00",
+        )
+    )
+}
+
+@PreviewLightDark
+@Composable
+private fun ServiceEventBlockPreview() = PreviewHelper {
+    ServiceEvents(
+        listOf(
             ServiceEventData(
-                title = "Breakfast",
+                title = "Lunch",
                 now = false,
-                time = "9:00 – 10:00",
+                time = "12:00 – 13:00",
+                note = "In 30 min",
+            ),
+            ServiceEventData(
+                title = "Dinner",
+                now = true,
+                time = "17:00 – 18:00",
+            ),
+            ServiceEventData(
+                title = "Party",
+                now = false,
             )
         )
-        ServiceEvents(
-            listOf(
-                ServiceEventData(
-                    title = "Lunch",
-                    now = false,
-                    time = "12:00 – 13:00",
-                    note = "In 30 min",
-                ),
-                ServiceEventData(
-                    title = "Dinner",
-                    now = true,
-                    time = "17:00 – 18:00",
-                ),
-                ServiceEventData(
-                    title = "Party",
-                    now = false,
-                )
-            )
-        )
-    }
+    )
 }

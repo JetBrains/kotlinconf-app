@@ -9,7 +9,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 /**
  * A simple text component that uses defaults from [KotlinConfTheme],
@@ -63,3 +67,32 @@ fun Text(
     }
 }
 
+private data class TypographyStylePreviewParams(
+    val name: String,
+    val style: @Composable () -> TextStyle,
+)
+
+private class TypographyStylePreviewProvider :
+    PreviewParameterProvider<TypographyStylePreviewParams> {
+    override val values = sequenceOf(
+        TypographyStylePreviewParams("h1") { KotlinConfTheme.typography.h1 },
+        TypographyStylePreviewParams("h2") { KotlinConfTheme.typography.h2 },
+        TypographyStylePreviewParams("h3") { KotlinConfTheme.typography.h3 },
+        TypographyStylePreviewParams("h4") { KotlinConfTheme.typography.h4 },
+        TypographyStylePreviewParams("text1") { KotlinConfTheme.typography.text1 },
+        TypographyStylePreviewParams("text2") { KotlinConfTheme.typography.text2 },
+    )
+
+    override fun getDisplayName(index: Int) = values.elementAt(index).name
+}
+
+@PreviewLightDark
+@Composable
+private fun TextStylePreview(
+    @PreviewParameter(TypographyStylePreviewProvider::class) params: TypographyStylePreviewParams,
+) = PreviewHelper {
+    Text(
+        text = "This is a text demo in the kotlinconf-app codebase",
+        style = params.style(),
+    )
+}

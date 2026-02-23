@@ -11,7 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -19,6 +20,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_right_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 enum class ActionSize {
     Medium, Large,
@@ -83,37 +85,32 @@ fun Action(
     }
 }
 
-@Preview
-@Composable
-internal fun ActionPreview() {
-    PreviewHelper {
-        Action(
-            label = "Action",
-            icon = UiRes.drawable.arrow_right_24,
-            size = ActionSize.Medium,
-            onClick = {},
-            enabled = true,
-        )
-        Action(
-            label = "Action",
-            icon = UiRes.drawable.arrow_right_24,
-            size = ActionSize.Medium,
-            onClick = {},
-            enabled = false,
-        )
-        Action(
-            label = "Action",
-            icon = UiRes.drawable.arrow_right_24,
-            size = ActionSize.Large,
-            onClick = {},
-            enabled = true,
-        )
-        Action(
-            label = "Action",
-            icon = UiRes.drawable.arrow_right_24,
-            size = ActionSize.Large,
-            onClick = {},
-            enabled = false,
-        )
+private data class ActionPreviewParams(val size: ActionSize, val enabled: Boolean)
+
+private class ActionPreviewParamsProvider : PreviewParameterProvider<ActionPreviewParams> {
+    override val values = ActionSize.entries.flatMap { size ->
+        listOf(true, false).map { enabled ->
+            ActionPreviewParams(size, enabled)
+        }
+    }.asSequence()
+
+    override fun getDisplayName(index: Int): String {
+        val params = values.elementAt(index)
+        val enabled = if (params.enabled) "enabled" else "disabled"
+        return "${params.size}, $enabled"
     }
+}
+
+@PreviewLightDark
+@Composable
+private fun ActionPreview(
+    @PreviewParameter(ActionPreviewParamsProvider::class) params: ActionPreviewParams,
+) = PreviewHelper {
+    Action(
+        label = "Action",
+        icon = UiRes.drawable.arrow_right_24,
+        size = params.size,
+        onClick = {},
+        enabled = params.enabled,
+    )
 }

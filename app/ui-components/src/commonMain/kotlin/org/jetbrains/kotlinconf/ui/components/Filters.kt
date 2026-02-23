@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -43,7 +42,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
@@ -58,6 +56,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.filter_label_session_form
 import org.jetbrains.kotlinconf.ui.generated.resources.up_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 enum class FilterItemType {
     Category, Level, Format,
@@ -118,7 +117,7 @@ fun Filters(
                 iconRotation = iconRotation,
             )
 
-            val count = remember(tags) { tags.count { it.isSelected } }
+            val count = tags.count { it.isSelected }
             AnimatedVisibility(
                 visible = !isExpanded && count > 0,
                 enter = fadeIn() + expandHorizontally(clip = false, expandFrom = Alignment.Start),
@@ -132,7 +131,11 @@ fun Filters(
                             .clip(CircleShape)
                             .background(KotlinConfTheme.colors.primaryBackground)
                     ) {
-                        val tagCountContentDescription = pluralStringResource(UiRes.plurals.filter_by_tags_tag_count, count, count)
+                        val tagCountContentDescription = pluralStringResource(
+                            UiRes.plurals.filter_by_tags_tag_count,
+                            count,
+                            count
+                        )
                         Text(
                             text = count.toString(),
                             color = KotlinConfTheme.colors.primaryTextWhiteFixed,
@@ -157,17 +160,17 @@ fun Filters(
             ) {
                 FilterItemGroup(
                     title = stringResource(UiRes.string.filter_label_category),
-                    items = remember(tags) { tags.filter { it.type == FilterItemType.Category } },
+                    items = tags.filter { it.type == FilterItemType.Category },
                     toggle = toggleItem,
                 )
                 FilterItemGroup(
                     title = stringResource(UiRes.string.filter_label_level),
-                    items = remember(tags) { tags.filter { it.type == FilterItemType.Level } },
+                    items = tags.filter { it.type == FilterItemType.Level },
                     toggle = toggleItem,
                 )
                 FilterItemGroup(
                     title = stringResource(UiRes.string.filter_label_session_format),
-                    items = remember(tags) { tags.filter { it.type == FilterItemType.Format } },
+                    items = tags.filter { it.type == FilterItemType.Format },
                     toggle = toggleItem,
                 )
             }
@@ -211,41 +214,39 @@ private fun FilterItemGroup(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun FiltersPreview() {
-    PreviewHelper {
-        val tags = remember {
-            mutableStateListOf(
-                FilterItem(FilterItemType.Category, "Server-side", false),
-                FilterItem(FilterItemType.Category, "Multiplatform", false),
-                FilterItem(FilterItemType.Category, "Android", false),
-                FilterItem(FilterItemType.Category, "Extensibility/Tooling", false),
-                FilterItem(FilterItemType.Category, "Language and Best Practices", false),
-                FilterItem(FilterItemType.Category, "Other", false),
-                FilterItem(FilterItemType.Level, "Introductory and overview", false),
-                FilterItem(FilterItemType.Level, "Intermediate", false),
-                FilterItem(FilterItemType.Level, "Advanced", false),
-                FilterItem(FilterItemType.Format, "Workshop", false),
-                FilterItem(FilterItemType.Format, "Regular session", false),
-                FilterItem(FilterItemType.Format, "Lightning session", false),
-            )
+private fun FiltersPreview() = PreviewHelper {
+    fun <T> MutableList<T>.replace(old: T, new: T) {
+        val index = indexOf(old)
+        if (index >= 0) {
+            set(index, new)
         }
+    }
 
-        Filters(
-            tags = tags,
-            toggleItem = { item, value ->
-                val newItem = item.copy(isSelected = value)
-                tags.replace(item, newItem)
-            },
-            modifier = Modifier.height(300.dp),
+    val tags = remember {
+        mutableStateListOf(
+            FilterItem(FilterItemType.Category, "Server-side", false),
+            FilterItem(FilterItemType.Category, "Multiplatform", false),
+            FilterItem(FilterItemType.Category, "Android", false),
+            FilterItem(FilterItemType.Category, "Extensibility/Tooling", false),
+            FilterItem(FilterItemType.Category, "Language and Best Practices", false),
+            FilterItem(FilterItemType.Category, "Other", false),
+            FilterItem(FilterItemType.Level, "Introductory and overview", false),
+            FilterItem(FilterItemType.Level, "Intermediate", false),
+            FilterItem(FilterItemType.Level, "Advanced", false),
+            FilterItem(FilterItemType.Format, "Workshop", false),
+            FilterItem(FilterItemType.Format, "Regular session", false),
+            FilterItem(FilterItemType.Format, "Lightning session", false),
         )
     }
-}
 
-private fun <T> MutableList<T>.replace(old: T, new: T) {
-    val index = indexOf(old)
-    if (index >= 0) {
-        set(index, new)
-    }
+    Filters(
+        tags = tags,
+        toggleItem = { item, value ->
+            val newItem = item.copy(isSelected = value)
+            tags.replace(item, newItem)
+        },
+        modifier = Modifier.height(300.dp),
+    )
 }

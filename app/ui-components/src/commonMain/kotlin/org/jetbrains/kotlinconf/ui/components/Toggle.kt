@@ -25,10 +25,10 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 private val ToggleBackgroundShape = RoundedCornerShape(percent = 100)
 private val ToggleThumbShape = CircleShape
@@ -94,20 +94,25 @@ fun Toggle(
                     indication = LocalIndication.current,
                 )
                 .drawBehind {
-                    drawCircle(color = thumbCenterColor, radius = (size.minDimension / 2) - 2.dp.toPx())
+                    drawCircle(
+                        color = thumbCenterColor,
+                        radius = (size.minDimension / 2) - 2.dp.toPx()
+                    )
                 }
         )
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun TogglePreview() {
-    PreviewHelper {
-        var state1 by remember { mutableStateOf(false) }
-        Toggle(state1, { state1 = it })
+private fun ToggleOffPreview() = PreviewHelper {
+    var state by remember { mutableStateOf(false) }
+    Toggle(state, { state = it })
+}
 
-        var state2 by remember { mutableStateOf(true) }
-        Toggle(state2, { state2 = it })
-    }
+@PreviewLightDark
+@Composable
+private fun ToggleOnPreview() = PreviewHelper {
+    var state by remember { mutableStateOf(true) }
+    Toggle(state, { state = it })
 }

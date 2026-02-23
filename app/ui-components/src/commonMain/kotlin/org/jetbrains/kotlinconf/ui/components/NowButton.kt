@@ -25,15 +25,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.ui.components.NowButtonState.After
 import org.jetbrains.kotlinconf.ui.components.NowButtonState.Before
 import org.jetbrains.kotlinconf.ui.components.NowButtonState.Current
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
@@ -41,6 +41,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.arrow_down_16
 import org.jetbrains.kotlinconf.ui.generated.resources.now
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 private val NowButtonShape = RoundedCornerShape(
     topEndPercent = 50,
@@ -151,22 +152,23 @@ private fun NowButtonImpl(
     }
 }
 
-@Preview
-@Composable
-internal fun NowButtonPreview() {
-    PreviewHelper {
-        NowButton(Before, {})
-        NowButton(Current, {})
-        NowButton(After, {})
-    }
+private class NowButtonStateProvider : PreviewParameterProvider<NowButtonState> {
+    override val values = NowButtonState.entries.asSequence()
+    override fun getDisplayName(index: Int) = NowButtonState.entries[index].name
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun FloatingNowButtonPreview() {
-    PreviewHelper {
-        FloatingNowButton(Before, {})
-        FloatingNowButton(Current, {})
-        FloatingNowButton(After, {})
-    }
+private fun NowButtonPreview(
+    @PreviewParameter(NowButtonStateProvider::class) state: NowButtonState,
+) = PreviewHelper {
+    NowButton(state, {})
+}
+
+@PreviewLightDark
+@Composable
+private fun FloatingNowButtonPreview(
+    @PreviewParameter(NowButtonStateProvider::class) state: NowButtonState,
+) = PreviewHelper {
+    FloatingNowButton(state, {})
 }

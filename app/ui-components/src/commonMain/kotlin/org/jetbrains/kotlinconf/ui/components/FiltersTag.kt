@@ -17,10 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 
 private val FilterTagShape = RoundedCornerShape(size = 6.dp)
@@ -73,14 +73,16 @@ fun FilterTag(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun FilterTagPreview() {
-    PreviewHelper {
-        var state1 by remember { mutableStateOf(false) }
-        FilterTag("Label", state1, { state1 = it })
+private fun FilterTagUnselectedPreview() = PreviewHelper {
+    var state by remember { mutableStateOf(false) }
+    FilterTag("Label", state, { state = it })
+}
 
-        var state2 by remember { mutableStateOf(true) }
-        FilterTag("Label", state2, { state2 = it })
-    }
+@PreviewLightDark
+@Composable
+private fun FilterTagSelectedPreview() = PreviewHelper {
+    var state by remember { mutableStateOf(true) }
+    FilterTag("Label", state, { state = it })
 }
