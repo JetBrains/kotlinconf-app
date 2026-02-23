@@ -9,6 +9,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
@@ -95,6 +96,18 @@ class YearlyApi(
                 setBody(FeedbackInfo(sessionId, feedback))
             }.status.isSuccess()
         } ?: false
+    }
+
+    suspend fun getAllDocuments(): Map<String, String>? {
+        return safeApiCall {
+            client.get { yearApiUrl("documents") }.body()
+        }
+    }
+
+    suspend fun getDocument(name: String): String? {
+        return safeApiCall {
+            client.get { yearApiUrl("documents/$name") }.bodyAsText()
+        }
     }
 
     suspend fun myVotes(): List<VoteInfo> {

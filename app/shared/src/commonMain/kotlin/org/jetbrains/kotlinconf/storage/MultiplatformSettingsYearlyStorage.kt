@@ -76,6 +76,12 @@ class MultiplatformSettingsYearlyStorage(
     override suspend fun setVotes(value: List<VoteInfo>) = settings
         .set(key(Keys.VOTES), json.encodeToString(value))
 
+    override fun getDocument(name: String): Flow<String?> =
+        settings.getStringOrNullFlow(key("${Keys.DOCUMENT_PREFIX}$name"))
+
+    override suspend fun setDocument(name: String, content: String) =
+        settings.set(key("${Keys.DOCUMENT_PREFIX}$name"), content)
+
     private object Keys {
         const val USER_ID = "userId"
         const val PENDING_USER_ID = "pendingUserId"
@@ -84,5 +90,6 @@ class MultiplatformSettingsYearlyStorage(
         const val FAVORITES = "favorites"
         const val NOTIFICATION_SETTINGS = "notificationSettings"
         const val VOTES = "votes"
+        const val DOCUMENT_PREFIX = "document_"
     }
 }

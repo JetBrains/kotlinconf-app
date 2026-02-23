@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -96,6 +95,9 @@ class ConferenceService(
 
                     taggedLogger.log { "Loading conference data for year ${config?.currentYear}" }
                     loadConferenceData()
+
+                    taggedLogger.log { "Checking documents" }
+                    loadAllDocuments()
 
                     syncVotes()
 
@@ -453,6 +455,57 @@ class ConferenceService(
         storage.setVotes(mergedVotes)
 
         taggedLogger.log { "Synchronized votes successfully" }
+    }
+
+    private suspend fun loadAllDocuments() {
+        val currentYearGraph = currentYearGraph.value ?: return
+        val storage = currentYearGraph.storage
+        val client = currentYearGraph.api
+
+        val allDocNames = listOf(
+            "code-of-conduct.md",
+            "visitors-privacy-notice.md",
+            "visitors-terms.md",
+        )
+        val allDocsValid = allDocNames.all { docName ->
+            val doc = storage.getDocument(docName).first()
+            !doc.isNullOrBlank()
+        }
+
+        if (allDocsValid) {
+            taggedLogger.log { "Local docs: present and valid" }
+            return
+        }
+
+        taggedLogger.log { "Local docs: missing some, downloading them again" }
+
+        val docs = client.getAllDocuments()
+        if (docs != null) {
+            docs.forEach { (name, content) ->
+                storage.setDocument(name, content)
+            }
+            taggedLogger.log { "Loaded and stored ${docs.size} documents from server" }
+        } else {
+            taggedLogger.log { "Failed to load documents" }
+        }
+    }
+
+    fun getDocument(name: String): Flow<String?> =
+        currentYearlyStorage.flatMapLatest { it.getDocument(name) }
+
+    suspend fun downloadDocument(name: String) {
+        val currentYearGraph = currentYearGraph.value ?: return
+        val storage = currentYearGraph.storage
+        val client = currentYearGraph.api
+
+        taggedLogger.log { "Downloading document $name" }
+        val content = client.getDocument(name)
+        if (content != null) {
+            taggedLogger.log { "Download successful" }
+            storage.setDocument(name, content)
+        } else {
+            taggedLogger.log { "Download failed" }
+        }
     }
 
     fun getPartner(partnerId: PartnerId): Flow<PartnerInfo?> {

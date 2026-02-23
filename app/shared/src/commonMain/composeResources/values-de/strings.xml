@@ -80,6 +80,8 @@ Wir verarbeiten Ihre Daten gemäß dem Datenschutzhinweis der App. Sie können I
     <string name="notifications_schedule_update_description">Bleiben Sie über wichtige Änderungen informiert! Erhalten Sie eine Benachrichtigung, wenn es eine bedeutende Aktualisierung des Veranstaltungszeitplans gibt.</string>
     <string name="notifications_lets_get_started">Lass uns anfangen!</string>
 
+    <string name="document_error_no_data">Dieses Dokument ist derzeit nicht verfügbar.</string>
+
     <string name="code_of_conduct">Verhaltenskodex</string>
 
     <string name="general_terms">Allgemeine Geschäftsbedingungen</string>

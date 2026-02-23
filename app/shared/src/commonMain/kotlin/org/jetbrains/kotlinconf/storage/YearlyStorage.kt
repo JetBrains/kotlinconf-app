@@ -28,4 +28,7 @@ interface YearlyStorage {
 
     fun getVotes(): Flow<List<VoteInfo>>
     suspend fun setVotes(value: List<VoteInfo>)
+
+    fun getDocument(name: String): Flow<String?>
+    suspend fun setDocument(name: String, content: String)
 }

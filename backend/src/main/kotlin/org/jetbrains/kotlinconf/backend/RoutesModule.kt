@@ -12,6 +12,7 @@ import org.jetbrains.kotlinconf.backend.routes.timeRoutes
 import org.jetbrains.kotlinconf.backend.routes.userRoutes
 import org.jetbrains.kotlinconf.backend.routes.votingRoutes
 import org.jetbrains.kotlinconf.backend.routes.configRoutes
+import org.jetbrains.kotlinconf.backend.routes.documentsRoutes
 
 
 fun Application.routesModule() {
@@ -46,4 +47,5 @@ private fun Route.yearBasedRoutes() {
     votingRoutes()
     imageProxyRoutes()
     conferenceInfoRoutes()
+    documentsRoutes()
 }
