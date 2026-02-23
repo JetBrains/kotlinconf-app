@@ -25,7 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
@@ -43,6 +44,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.team_28
 import org.jetbrains.kotlinconf.ui.generated.resources.team_28_fill
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 @Composable
 private fun NavRailMenuItem(
@@ -152,98 +154,48 @@ fun <T : Any> MainNavigationRail(
     }
 }
 
-@Preview
-@Composable
-internal fun MainNavigationRailPreview() {
-    PreviewHelper {
-        var currentDestination by remember {
-            mutableStateOf(
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.clock_28,
-                    iconSelected = UiRes.drawable.clock_28_fill,
-                    route = "Schedule"
-                )
-            )
-        }
-        MainNavigationRail(
-            currentDestination = currentDestination,
-            destinations = listOf(
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.info_28,
-                    iconSelected = UiRes.drawable.info_28_fill,
-                    route = "Info"
-                ),
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.clock_28,
-                    iconSelected = UiRes.drawable.clock_28_fill,
-                    route = "Schedule"
-                ),
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.team_28,
-                    iconSelected = UiRes.drawable.team_28_fill,
-                    route = "Speakers"
-                ),
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.location_28,
-                    iconSelected = UiRes.drawable.location_28_fill,
-                    route = "Map"
-                ),
-            ),
-            onSelect = { currentDestination = it },
-            expanded = false,
-        )
-    }
+private class ExpandedPreviewProvider : PreviewParameterProvider<Boolean> {
+    override val values = sequenceOf(false, true)
+    override fun getDisplayName(index: Int) = if (index == 0) "collapsed" else "expanded"
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun MainNavigationRailExpandedPreview() {
-    PreviewHelper {
-        var currentDestination by remember {
-            mutableStateOf(
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.clock_28,
-                    iconSelected = UiRes.drawable.clock_28_fill,
-                    route = "Schedule"
-                )
-            )
-        }
-        MainNavigationRail(
-            currentDestination = currentDestination,
-            destinations = listOf(
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.info_28,
-                    iconSelected = UiRes.drawable.info_28_fill,
-                    route = "Info"
-                ),
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.clock_28,
-                    iconSelected = UiRes.drawable.clock_28_fill,
-                    route = "Schedule"
-                ),
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.team_28,
-                    iconSelected = UiRes.drawable.team_28_fill,
-                    route = "Speakers"
-                ),
-                MainNavDestination(
-                    label = UiRes.string.now,
-                    icon = UiRes.drawable.location_28,
-                    iconSelected = UiRes.drawable.location_28_fill,
-                    route = "Map"
-                ),
-            ),
-            onSelect = { currentDestination = it },
-            expanded = true,
-        )
-    }
+private fun MainNavigationRailPreview(
+    @PreviewParameter(ExpandedPreviewProvider::class) expanded: Boolean,
+) = PreviewHelper(paddingEnabled = false) {
+    val navRailPreviewDestinations = listOf(
+        MainNavDestination(
+            label = UiRes.string.now,
+            icon = UiRes.drawable.info_28,
+            iconSelected = UiRes.drawable.info_28_fill,
+            route = "Info"
+        ),
+        MainNavDestination(
+            label = UiRes.string.now,
+            icon = UiRes.drawable.clock_28,
+            iconSelected = UiRes.drawable.clock_28_fill,
+            route = "Schedule"
+        ),
+        MainNavDestination(
+            label = UiRes.string.now,
+            icon = UiRes.drawable.team_28,
+            iconSelected = UiRes.drawable.team_28_fill,
+            route = "Speakers"
+        ),
+        MainNavDestination(
+            label = UiRes.string.now,
+            icon = UiRes.drawable.location_28,
+            iconSelected = UiRes.drawable.location_28_fill,
+            route = "Map"
+        ),
+    )
+
+    var currentDestination by remember { mutableStateOf(navRailPreviewDestinations[1]) }
+    MainNavigationRail(
+        currentDestination = currentDestination,
+        destinations = navRailPreviewDestinations,
+        onSelect = { currentDestination = it },
+        expanded = expanded,
+    )
 }

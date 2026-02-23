@@ -21,8 +21,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -56,7 +54,6 @@ import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import org.jetbrains.compose.resources.painterResource
@@ -82,6 +79,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_your_feedback
 import org.jetbrains.kotlinconf.ui.generated.resources.up_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 @Composable
 internal fun buildHighlightedString(
@@ -154,7 +152,11 @@ fun TalkCard(
 
     Column(
         modifier
-            .border(width = 1.dp, color = borderColor, shape = KotlinConfTheme.shapes.roundedCornerMd)
+            .border(
+                width = 1.dp,
+                color = borderColor,
+                shape = KotlinConfTheme.shapes.roundedCornerMd
+            )
             .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .clickable(onClick = onClick)
             .background(backgroundColor)
@@ -171,7 +173,7 @@ fun TalkCard(
             speakerHighlights = speakerHighlights,
             status = status,
         )
-        Spacer(Modifier.weight(1f))
+        // TODO BLOCKER double-check if removing this weight is correct
         HorizontalDivider(
             thickness = 1.dp,
             color = KotlinConfTheme.colors.strokePale,
@@ -242,7 +244,7 @@ private fun TopBlock(
                 else KotlinConfTheme.colors.primaryText
             )
             val stateDesc = stringResource(
-                resource =  if (bookmarked)
+                resource = if (bookmarked)
                     UiRes.string.action_state_description_bookmarked
                 else
                     UiRes.string.action_state_description_not_bookmarked
@@ -468,7 +470,7 @@ private fun FeedbackBlock(
                     fadeIn(tween(FeedbackAnimationDuration)) togetherWith
                             fadeOut(tween(FeedbackAnimationDuration))
                 },
-                modifier = Modifier.fillMaxHeight().weight(1f),
+                modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.CenterStart,
             ) { emotionSelected ->
                 if (emotionSelected) {
@@ -521,7 +523,8 @@ private fun FeedbackBlock(
                             ) {
                                 if (userSignedIn) {
                                     hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
-                                    selectedEmotion = if (emotion == selectedEmotion) null else emotion
+                                    selectedEmotion =
+                                        if (emotion == selectedEmotion) null else emotion
                                     onSubmitFeedback(selectedEmotion)
 
                                     if (selectedEmotion != null) {
@@ -577,69 +580,67 @@ private fun FeedbackBlock(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun TalkCardPreview() {
-    PreviewHelper {
-        Row(Modifier.fillMaxWidth()) {
-            var bookmarked by remember { mutableStateOf(false) }
-            TalkCard(
-                title = "Asynchronous Programming With Kotlin Coroutines",
-                titleHighlights = listOf(
-                    30..35,
-                ),
-                bookmarked = bookmarked,
-                onBookmark = { bookmarked = it },
-                tags = setOf(
-                    "Workshop", "Kotlin", "Coroutines", "Multiplatform",
-                    "Label", "Label", "Label", "Label", "Label",
-                ),
-                tagHighlights = listOf(
-                    "Kotlin", "Multiplatform",
-                ),
-                speakers = "Sebastian Aigner, Vsevolod Tolstopyatov",
-                speakerHighlights = listOf(10..15),
-                location = "Auditorium 14",
-                lightning = true,
-                time = "9:00 – 10:00",
-                timeNote = null,
-                status = TalkStatus.Live,
-                initialEmotion = Emotion.Positive,
-                onRequestFeedbackWithComment = null,
-                onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
-                onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
-                onClick = { println("Clicked session") },
-                modifier = Modifier.weight(1f),
-                feedbackEnabled = true,
-                userSignedIn = true,
-            )
-            Spacer(Modifier.width(16.dp))
-            TalkCard(
-                title = "Asynchronous Programming With Kotlin Coroutines",
-                titleHighlights = emptyList(),
-                bookmarked = false,
-                onBookmark = { },
-                tags = setOf(
-                    "Workshop", "Kotlin", "Coroutines", "Multiplatform",
-                    "Label", "Label", "Label", "Label", "Label",
-                ),
-                tagHighlights = listOf(),
-                speakers = "Sebastian Aigner, Vsevolod Tolstopyatov",
-                speakerHighlights = emptyList(),
-                location = "Auditorium 14",
-                lightning = true,
-                time = "9:00 – 10:00",
-                timeNote = "In 10 min",
-                status = TalkStatus.Upcoming,
-                initialEmotion = null,
-                onRequestFeedbackWithComment = null,
-                onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
-                onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
-                onClick = { println("Clicked session") },
-                modifier = Modifier.weight(1f),
-                feedbackEnabled = false,
-                userSignedIn = true,
-            )
-        }
-    }
+private fun TalkCardLivePreview() = PreviewHelper {
+    var bookmarked by remember { mutableStateOf(false) }
+    TalkCard(
+        title = "Asynchronous Programming With Kotlin Coroutines",
+        titleHighlights = listOf(
+            30..35,
+        ),
+        bookmarked = bookmarked,
+        onBookmark = { bookmarked = it },
+        tags = setOf(
+            "Workshop", "Kotlin", "Coroutines", "Multiplatform",
+            "Label", "Label", "Label", "Label", "Label",
+        ),
+        tagHighlights = listOf(
+            "Kotlin", "Multiplatform",
+        ),
+        speakers = "Sebastian Aigner, Vsevolod Tolstopyatov",
+        speakerHighlights = listOf(10..15),
+        location = "Auditorium 14",
+        lightning = true,
+        time = "9:00 – 10:00",
+        timeNote = null,
+        status = TalkStatus.Live,
+        initialEmotion = Emotion.Positive,
+        onRequestFeedbackWithComment = null,
+        onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
+        onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
+        onClick = { println("Clicked session") },
+        feedbackEnabled = true,
+        userSignedIn = true,
+    )
+}
+
+@PreviewLightDark
+@Composable
+private fun TalkCardUpcomingPreview() = PreviewHelper {
+    TalkCard(
+        title = "Asynchronous Programming With Kotlin Coroutines",
+        titleHighlights = emptyList(),
+        bookmarked = false,
+        onBookmark = { },
+        tags = setOf(
+            "Workshop", "Kotlin", "Coroutines", "Multiplatform",
+            "Label", "Label", "Label", "Label", "Label",
+        ),
+        tagHighlights = listOf(),
+        speakers = "Sebastian Aigner, Vsevolod Tolstopyatov",
+        speakerHighlights = emptyList(),
+        location = "Auditorium 14",
+        lightning = true,
+        time = "9:00 – 10:00",
+        timeNote = "In 10 min",
+        status = TalkStatus.Upcoming,
+        initialEmotion = null,
+        onRequestFeedbackWithComment = null,
+        onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
+        onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
+        onClick = { println("Clicked session") },
+        feedbackEnabled = false,
+        userSignedIn = true,
+    )
 }

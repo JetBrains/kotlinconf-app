@@ -1,12 +1,9 @@
 package org.jetbrains.kotlinconf.ui.components
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
-import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.InlineTextContent
@@ -39,7 +35,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import org.jetbrains.compose.resources.painterResource
@@ -54,6 +49,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.session_codelab
 import org.jetbrains.kotlinconf.ui.generated.resources.session_education
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 private const val iconId = "iconId'"
 private const val eduPlaceholder = "[e]"
@@ -213,37 +209,49 @@ fun PageTitle(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun PageTitlePreview() {
-    PreviewHelper {
-        var bookmarked1 by remember { mutableStateOf(false) }
-        PageTitle(
-            time = "May 23, 13:00 - 13:20",
-            title = "My Incredible Talk About Kotlin Multiplatform",
-            tags = setOf("Lightning talk", "Intermediate", "Libraries"),
-            bookmarked = bookmarked1,
-            lightning = true,
-            timeNote = null,
-            isLive = false,
-            onBookmark = { bookmarked1 = it },
-        )
-
-        var bookmarked2 by remember { mutableStateOf(false) }
-        PageTitle(
-            time = "May 21, 9:00 - 9:40",
-            title = "A Wonderful Server-side Kotlin Talk",
-            tags = setOf("Regular talk", "Beginner", "Server-side"),
-            bookmarked = bookmarked2,
-            lightning = false,
-            timeNote = null,
-            isLive = false,
-            onBookmark = { bookmarked2 = it },
-        )
-    }
+private fun PageTitleLightningPreview() = PreviewHelper {
+    var bookmarked by remember { mutableStateOf(false) }
+    PageTitle(
+        time = "May 23, 13:00 - 13:20",
+        title = "My Incredible Talk About Kotlin Multiplatform",
+        tags = setOf("Lightning talk", "Intermediate", "Libraries"),
+        bookmarked = bookmarked,
+        lightning = true,
+        timeNote = null,
+        isLive = false,
+        onBookmark = { bookmarked = it },
+    )
 }
 
-@Preview
+@PreviewLightDark
+@Composable
+private fun PageTitleRegularPreview() = PreviewHelper {
+    var bookmarked by remember { mutableStateOf(false) }
+    PageTitle(
+        time = "May 21, 9:00 - 9:40",
+        title = "A Wonderful Server-side Kotlin Talk",
+        tags = setOf(
+            "Regular talk",
+            "Beginner",
+            "Server-side",
+            "Several",
+            "Other",
+            "Fictional",
+            "Tags",
+            "To",
+            "Display"
+        ),
+        bookmarked = bookmarked,
+        lightning = false,
+        timeNote = null,
+        isLive = false,
+        onBookmark = { bookmarked = it },
+    )
+}
+
+@PreviewLightDark
 @Composable
 internal fun PageTitleWithNotesPreview() {
     PreviewHelper {
@@ -253,7 +261,7 @@ internal fun PageTitleWithNotesPreview() {
             tags = setOf("Lightning talk", "Beginner"),
             bookmarked = true,
             lightning = true,
-            timeNote = "In 22 min",
+            timeNote = "in 22 min",
             isLive = false,
             onBookmark = { },
         )
@@ -266,7 +274,7 @@ internal fun PageTitleWithNotesPreview() {
             lightning = false,
             timeNote = null,
             isLive = true,
-            onBookmark = {  },
+            onBookmark = { },
         )
     }
 }

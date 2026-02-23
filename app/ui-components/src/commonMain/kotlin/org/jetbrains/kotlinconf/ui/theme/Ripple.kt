@@ -11,7 +11,7 @@ import androidx.compose.ui.node.DelegatableNode
 import androidx.compose.ui.unit.Dp
 
 @Composable
-fun rememberRippleIndication(): IndicationNodeFactory = remember { RippleNodeFactory() }
+internal fun rememberRippleIndication(): IndicationNodeFactory = remember { RippleNodeFactory() }
 
 internal class RippleNodeFactory : IndicationNodeFactory {
     override fun create(interactionSource: InteractionSource): DelegatableNode {

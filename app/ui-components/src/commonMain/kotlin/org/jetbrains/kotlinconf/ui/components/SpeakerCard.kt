@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
@@ -24,6 +22,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.kodee_emotion_neutral
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 @Composable
 fun SpeakerCard(
@@ -81,23 +80,26 @@ fun SpeakerAvatar(
     )
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun SpeakerCardPreview() {
-    PreviewHelper {
-        SpeakerCard(
-            name = "John Doe",
-            title = "Whatever Role Name at That Company",
-            photoUrl = "https://example.com/not-an-image.jpg",
-            onClick = {},
-        )
-        SpeakerCard(
-            name = "John Doe",
-            nameHighlights = listOf(0..3),  // Highlight "John"
-            title = "Whatever Role Name at That Company",
-            titleHighlights = listOf(9..12),  // Highlight "Role"
-            photoUrl = "https://sessionize.com/image/2e2f-0o0o0-XGxKBoqZvxxQxosrZHQHTT.png?download=sebastian-aigner.png",
-            onClick = {},
-        )
-    }
+private fun SpeakerCardPreview() = PreviewHelper {
+    SpeakerCard(
+        name = "John Doe",
+        title = "Whatever Role Name at That Company",
+        photoUrl = "https://example.com/not-an-image.jpg",
+        onClick = {},
+    )
+}
+
+@PreviewLightDark
+@Composable
+private fun SpeakerCardWithHighlightsPreview() = PreviewHelper {
+    SpeakerCard(
+        name = "John Doe",
+        nameHighlights = listOf(0..3),  // Highlight "John"
+        title = "Whatever Role Name at That Company",
+        titleHighlights = listOf(9..12),  // Highlight "Role"
+        photoUrl = "https://sessionize.com/image/2e2f-0o0o0-XGxKBoqZvxxQxosrZHQHTT.png?download=sebastian-aigner.png",
+        onClick = {},
+    )
 }

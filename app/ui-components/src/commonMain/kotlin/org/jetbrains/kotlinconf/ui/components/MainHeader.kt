@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,11 +24,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
@@ -42,6 +38,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_hint
 import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 @Composable
 fun MainHeaderSearchBar(
@@ -162,120 +159,127 @@ fun MainHeaderContainer(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun MainHeaderPreview() {
+private fun MainHeaderSchedulePreview() = PreviewHelper(paddingEnabled = false) {
     // Example with Now button, bookmark and search action
-    PreviewHelper(paddingEnabled = false) {
-        var nowState by remember { mutableStateOf(NowButtonState.Before) }
-        var state1 by remember { mutableStateOf(MainHeaderContainerState.Title) }
-        var search1 by remember { mutableStateOf("") }
-        var bookmarkFilter1 by remember { mutableStateOf(false) }
-        MainHeaderContainer(
-            state = state1,
-            titleContent = {
-                MainHeaderTitleBar(
-                    title = "Schedule",
-                    startContent = {
-                        NowButton(
-                            time = nowState,
-                            onClick = {
-                                // Rotate through states as a demo
-                                nowState = when (nowState) {
-                                    NowButtonState.Before -> NowButtonState.Current
-                                    NowButtonState.Current -> NowButtonState.After
-                                    NowButtonState.After -> NowButtonState.Before
-                                }
-                            },
-                            enabled = true,
-                        )
-                    },
-                    endContent = {
-                        TopMenuButton(
-                            icon = UiRes.drawable.bookmark_24,
-                            selected = bookmarkFilter1,
-                            onToggle = { bookmarkFilter1 = it },
-                            contentDescription = "Bookmark filter",
-                        )
-                        TopMenuButton(
-                            icon = UiRes.drawable.search_24,
-                            onClick = { state1 = MainHeaderContainerState.Search },
-                            contentDescription = "Search",
-                        )
-                    }
-                )
-            },
-            searchContent = {
-                MainHeaderSearchBar(
-                    searchValue = search1,
-                    onSearchValueChange = { search1 = it },
-                    onClose = { state1 = MainHeaderContainerState.Title },
-                    onClear = {},
-                    hasAdditionalInputs = bookmarkFilter1,
-                )
-            }
-        )
+    var nowState by remember { mutableStateOf(NowButtonState.Before) }
+    var state by remember { mutableStateOf(MainHeaderContainerState.Title) }
+    var search by remember { mutableStateOf("") }
+    var bookmarkFilter by remember { mutableStateOf(false) }
+    MainHeaderContainer(
+        state = state,
+        titleContent = {
+            MainHeaderTitleBar(
+                title = "Schedule",
+                startContent = {
+                    NowButton(
+                        time = nowState,
+                        onClick = {
+                            nowState = when (nowState) {
+                                NowButtonState.Before -> NowButtonState.Current
+                                NowButtonState.Current -> NowButtonState.After
+                                NowButtonState.After -> NowButtonState.Before
+                            }
+                        },
+                        enabled = true,
+                    )
+                },
+                endContent = {
+                    TopMenuButton(
+                        icon = UiRes.drawable.bookmark_24,
+                        selected = bookmarkFilter,
+                        onToggle = { bookmarkFilter = it },
+                        contentDescription = "Bookmark filter",
+                    )
+                    TopMenuButton(
+                        icon = UiRes.drawable.search_24,
+                        onClick = { state = MainHeaderContainerState.Search },
+                        contentDescription = "Search",
+                    )
+                }
+            )
+        },
+        searchContent = {
+            MainHeaderSearchBar(
+                searchValue = search,
+                onSearchValueChange = { search = it },
+                onClose = { state = MainHeaderContainerState.Title },
+                onClear = {},
+                hasAdditionalInputs = bookmarkFilter,
+            )
+        }
+    )
+}
 
-        // Example with search action
-        var state2 by remember { mutableStateOf(MainHeaderContainerState.Title) }
-        var search2 by remember { mutableStateOf("") }
-        MainHeaderContainer(
-            state = state2,
-            titleContent = {
-                MainHeaderTitleBar(
-                    title = "Speaker",
-                    endContent = {
-                        TopMenuButton(
-                            icon = UiRes.drawable.search_24,
-                            onClick = { state2 = MainHeaderContainerState.Search },
-                            contentDescription = "Search",
-                        )
-                    }
-                )
-            },
-            searchContent = {
-                MainHeaderSearchBar(
-                    searchValue = search2,
-                    onSearchValueChange = { search2 = it },
-                    onClose = { state2 = MainHeaderContainerState.Title },
-                    onClear = {},
-                    hasAdditionalInputs = false,
-                )
-            }
-        )
+@PreviewLightDark
+@Composable
+private fun MainHeaderSpeakerPreview() = PreviewHelper(paddingEnabled = false) {
+    var state by remember { mutableStateOf(MainHeaderContainerState.Title) }
+    var search by remember { mutableStateOf("") }
+    MainHeaderContainer(
+        state = state,
+        titleContent = {
+            MainHeaderTitleBar(
+                title = "Speaker",
+                endContent = {
+                    TopMenuButton(
+                        icon = UiRes.drawable.search_24,
+                        onClick = { state = MainHeaderContainerState.Search },
+                        contentDescription = "Search",
+                    )
+                }
+            )
+        },
+        searchContent = {
+            MainHeaderSearchBar(
+                searchValue = search,
+                onSearchValueChange = { search = it },
+                onClose = { state = MainHeaderContainerState.Title },
+                onClear = {},
+                hasAdditionalInputs = false,
+            )
+        }
+    )
+}
 
-        // Example with search state
-        var state3 by remember { mutableStateOf(MainHeaderContainerState.Search) }
-        var search3 by remember { mutableStateOf("") }
-        MainHeaderContainer(
-            state = state3,
-            titleContent = {
-                // Omitted
-            },
-            searchContent = {
-                MainHeaderSearchBar(
-                    searchValue = search3,
-                    onSearchValueChange = { search3 = it },
-                    onClose = { state3 = MainHeaderContainerState.Title },
-                    onClear = {},
-                    hasAdditionalInputs = false,
-                )
-            }
-        )
+@PreviewLightDark
+@Composable
+private fun MainHeaderSearchStatePreview() = PreviewHelper(paddingEnabled = false) {
+    var state by remember { mutableStateOf(MainHeaderContainerState.Search) }
+    var search by remember { mutableStateOf("") }
+    MainHeaderContainer(
+        state = state,
+        titleContent = {},
+        searchContent = {
+            MainHeaderSearchBar(
+                searchValue = search,
+                onSearchValueChange = { search = it },
+                onClose = { state = MainHeaderContainerState.Title },
+                onClear = {},
+                hasAdditionalInputs = false,
+            )
+        }
+    )
+}
 
-        // Example with back action
-        MainHeaderTitleBar(
-            title = "Privacy notice",
-            startContent = {
-                TopMenuButton(
-                    icon = UiRes.drawable.arrow_left_24,
-                    contentDescription = "Back",
-                    onClick = {},
-                )
-            }
-        )
+@PreviewLightDark
+@Composable
+private fun MainHeaderBackPreview() = PreviewHelper(paddingEnabled = false) {
+    MainHeaderTitleBar(
+        title = "Privacy notice",
+        startContent = {
+            TopMenuButton(
+                icon = UiRes.drawable.arrow_left_24,
+                contentDescription = "Back",
+                onClick = {},
+            )
+        }
+    )
+}
 
-        // Example with title only
-        MainHeaderTitleBar(title = "Info")
-    }
+@PreviewLightDark
+@Composable
+private fun MainHeaderTitleOnlyPreview() = PreviewHelper(paddingEnabled = false) {
+    MainHeaderTitleBar(title = "Info")
 }

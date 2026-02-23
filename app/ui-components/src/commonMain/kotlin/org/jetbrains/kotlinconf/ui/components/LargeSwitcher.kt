@@ -3,15 +3,11 @@ package org.jetbrains.kotlinconf.ui.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,13 +19,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.Brand
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.WidePreviewLightDark
 
 private val LargeSwitcherItemShape = RoundedCornerShape(percent = 100)
 
@@ -82,15 +78,6 @@ private fun LargeSwitcherItem(
     }
 }
 
-@Preview(widthDp = 300)
-@Composable
-internal fun LargeSwitcherItemPreview() {
-    PreviewHelper {
-        LargeSwitcherItem("May 1", "Normal item", {}, selected = false)
-        LargeSwitcherItem("May 2", "Selected item", {}, selected = true)
-    }
-}
-
 data class LargeSwitcherOption(val label1: String, val label2: String)
 
 @Composable
@@ -118,19 +105,30 @@ fun LargeSwitcher(
     }
 }
 
+@PreviewLightDark
 @Composable
-@Preview(widthDp = 900)
-internal fun LargeSwitcherPreview() {
-    PreviewHelper {
-        var selectedIndex by remember { mutableIntStateOf(0) }
-        LargeSwitcher(
-            options = listOf(
-                LargeSwitcherOption("May 21", "Workshop day"),
-                LargeSwitcherOption("May 22", "Conference day 1"),
-                LargeSwitcherOption("May 23", "Conference day 2"),
-            ),
-            selectedIndex = selectedIndex,
-            onSelect = { selectedIndex = it },
-        )
-    }
+private fun LargeSwitcherItemUnselectedPreview() = PreviewHelper {
+    LargeSwitcherItem("May 21", "Conference day 1", {}, selected = false)
+}
+
+@PreviewLightDark
+@Composable
+private fun LargeSwitcherItemSelectedPreview() = PreviewHelper {
+    LargeSwitcherItem("May 22", "Conference day 2", {}, selected = true)
+}
+
+
+@Composable
+@WidePreviewLightDark
+private fun LargeSwitcherPreview() = PreviewHelper {
+    var selectedIndex by remember { mutableIntStateOf(0) }
+    LargeSwitcher(
+        options = listOf(
+            LargeSwitcherOption("May 21", "Workshop day"),
+            LargeSwitcherOption("May 22", "Conference day 1"),
+            LargeSwitcherOption("May 23", "Conference day 2"),
+        ),
+        selectedIndex = selectedIndex,
+        onSelect = { selectedIndex = it },
+    )
 }

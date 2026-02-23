@@ -20,7 +20,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.kotlinconf.ui.theme.Brand.colorGradient
@@ -28,6 +29,7 @@ import org.jetbrains.kotlinconf.ui.theme.JetBrainsSans
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.theme.UI.white60
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 private val DayDateStyle
     @Composable
@@ -118,12 +120,35 @@ fun DayHeader(
     }
 }
 
-@Preview
+private data class DayHeaderPreviewParams(
+    val fullWidth: Boolean,
+    val multiDay: Boolean,
+)
+
+private class DayHeaderPreviewParamsProvider : PreviewParameterProvider<DayHeaderPreviewParams> {
+    override val values = sequenceOf(true, false)
+        .flatMap { fullWidth ->
+            listOf(false, true).map { multiDay ->
+                DayHeaderPreviewParams(fullWidth, multiDay)
+            }
+        }
+
+    override fun getDisplayName(index: Int): String {
+        val params = values.elementAt(index)
+        val width = if (params.fullWidth) "full width" else "rounded"
+        val days = if (params.multiDay) "multi-day" else "single day"
+        return "$width, $days"
+    }
+}
+
+@PreviewLightDark
 @Composable
-internal fun DayHeaderPreview() {
-    PreviewHelper {
-        DayHeader("TEST", "1", "Test", "Data", fullWidth = true)
-        DayHeader("MAY", "21", "Workshop", "Day", fullWidth = false)
-        DayHeader("MAY", "22", "Code", "Labs", fullWidth = false, day2 = "23")
+private fun DayHeaderPreview(
+    @PreviewParameter(DayHeaderPreviewParamsProvider::class) params: DayHeaderPreviewParams,
+) = PreviewHelper(paddingEnabled = !params.fullWidth) {
+    if (params.multiDay) {
+        DayHeader("MAY", "22", "Code", "Labs", fullWidth = params.fullWidth, day2 = "23")
+    } else {
+        DayHeader("MAY", "21", "Workshop", "Day", fullWidth = params.fullWidth)
     }
 }
