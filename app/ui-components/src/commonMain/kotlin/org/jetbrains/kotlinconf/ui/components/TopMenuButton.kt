@@ -5,7 +5,6 @@ import androidx.compose.foundation.BasicTooltipBox
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberBasicTooltipState
@@ -21,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
@@ -32,10 +30,9 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
-import org.jetbrains.kotlinconf.ui.generated.resources.close_24
-import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 
 @Composable
@@ -149,36 +146,42 @@ fun TopMenuButton(
     )
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun TopMenuButtonPreview() {
-    PreviewHelper {
-        Row {
-            var state1 by remember { mutableStateOf(false) }
-            TopMenuButton(UiRes.drawable.bookmark_24, "Bookmark", selected = state1, { state1 = it })
-
-            var state2 by remember { mutableStateOf(true) }
-            TopMenuButton(UiRes.drawable.bookmark_24, "Bookmark", selected = state2, { state2 = it })
-
-            TopMenuButton(UiRes.drawable.close_24, "Bookmark", {})
-            TopMenuButton(UiRes.drawable.search_24, "Bookmark", {})
-        }
-    }
+private fun TopMenuButtonUnselectedPreview() = PreviewHelper {
+    var selected by remember { mutableStateOf(false) }
+    TopMenuButton(UiRes.drawable.bookmark_24, "Bookmark", selected = selected, { selected = it })
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun TopMenuButtonLargePreview() {
-    PreviewHelper {
-        Row {
-            var state1 by remember { mutableStateOf(false) }
-            TopMenuButton(UiRes.drawable.bookmark_24, "Bookmark", selected = state1,{ state1 = it }, large = true)
+private fun TopMenuButtonSelectedPreview() = PreviewHelper {
+    var selected by remember { mutableStateOf(true) }
+    TopMenuButton(UiRes.drawable.bookmark_24, "Bookmark", selected = selected, { selected = it })
+}
 
-            var state2 by remember { mutableStateOf(true) }
-            TopMenuButton(UiRes.drawable.bookmark_24, "Bookmark", selected = state2,{ state2 = it }, large = true)
+@PreviewLightDark
+@Composable
+private fun TopMenuButtonLargeUnselectedPreview() = PreviewHelper {
+    var selected by remember { mutableStateOf(false) }
+    TopMenuButton(
+        UiRes.drawable.bookmark_24,
+        "Bookmark",
+        selected = selected,
+        { selected = it },
+        large = true
+    )
+}
 
-            TopMenuButton(UiRes.drawable.close_24, "Bookmark", {}, large = true)
-            TopMenuButton(UiRes.drawable.search_24, "Bookmark", {}, large = true)
-        }
-    }
+@PreviewLightDark
+@Composable
+private fun TopMenuButtonLargeSelectedPreview() = PreviewHelper {
+    var selected by remember { mutableStateOf(true) }
+    TopMenuButton(
+        UiRes.drawable.bookmark_24,
+        "Bookmark",
+        selected = selected,
+        { selected = it },
+        large = true
+    )
 }

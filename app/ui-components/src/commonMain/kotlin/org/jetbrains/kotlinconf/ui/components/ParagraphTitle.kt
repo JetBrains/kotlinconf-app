@@ -3,10 +3,10 @@ package org.jetbrains.kotlinconf.ui.components
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 @Composable
 fun ParagraphTitle(
@@ -26,10 +26,8 @@ fun ParagraphTitle(
     )
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun ParagraphTitlePreview() {
-    PreviewHelper {
-        ParagraphTitle("Title")
-    }
+private fun ParagraphTitlePreview() = PreviewHelper {
+    ParagraphTitle("Title")
 }

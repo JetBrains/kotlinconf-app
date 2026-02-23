@@ -11,16 +11,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,9 +26,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -46,6 +39,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.utils.PreviewInteractionSource
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 @Composable
 fun LargeSearchBar(
@@ -127,29 +121,31 @@ fun LargeSearchBar(
     }
 }
 
-@Preview
+private class SearchValueProvider : PreviewParameterProvider<String> {
+    override val values = sequenceOf("", "Kotlin")
+    override fun getDisplayName(index: Int) = if (index == 0) "empty" else "with input"
+}
+
+@PreviewLightDark
 @Composable
-internal fun LargeSearchBarPreview() {
-    PreviewHelper {
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            LargeSearchBar(
-                searchValue = "",
-                onSearchValueChange = {},
-                onClear = {},
-            )
-            LargeSearchBar(
-                searchValue = "Kotlin",
-                onSearchValueChange = {},
-                onClear = {},
-                interactionSource = PreviewInteractionSource.Hovered,
-            )
-            LargeSearchBar(
-                searchValue = "",
-                onSearchValueChange = {},
-                onClear = {},
-                hasAdditionalInputs = true,
-                interactionSource = PreviewInteractionSource.Focused,
-            )
-        }
-    }
+private fun LargeSearchBarPreview(
+    @PreviewParameter(SearchValueProvider::class) searchValue: String,
+) = PreviewHelper {
+    LargeSearchBar(
+        searchValue = searchValue,
+        onSearchValueChange = {},
+        onClear = {},
+    )
+    LargeSearchBar(
+        searchValue = searchValue,
+        onSearchValueChange = {},
+        onClear = {},
+        interactionSource = PreviewInteractionSource.Hovered,
+    )
+    LargeSearchBar(
+        searchValue = searchValue,
+        onSearchValueChange = {},
+        onClear = {},
+        interactionSource = PreviewInteractionSource.Focused,
+    )
 }

@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -14,10 +15,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 private val CardTagShape = RoundedCornerShape(size = 4.dp)
 
@@ -54,14 +55,16 @@ fun CardTag(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun CardTagPreview() {
-    PreviewHelper {
-        var state1 by remember { mutableStateOf(false) }
-        CardTag("Label", state1)
+private fun CardTagUnselectedPreview() = PreviewHelper {
+    var selected by remember { mutableStateOf(false) }
+    CardTag("Label", selected = selected, Modifier.clickable { selected = !selected })
+}
 
-        var state2 by remember { mutableStateOf(true) }
-        CardTag("Label", state2)
-    }
+@PreviewLightDark
+@Composable
+private fun CardTagSelectedPreview() = PreviewHelper {
+    var selected by remember { mutableStateOf(true) }
+    CardTag("Label", selected = selected, Modifier.clickable { selected = !selected })
 }

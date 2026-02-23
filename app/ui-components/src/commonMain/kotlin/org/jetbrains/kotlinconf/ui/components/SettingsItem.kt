@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,10 +20,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 @Composable
 fun SettingsItem(
@@ -80,23 +79,25 @@ fun SettingsItem(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun SettingsItemPreview() {
-    PreviewHelper {
-        var enabled1 by remember { mutableStateOf(false) }
-        SettingsItem(
-            title = "Conference schedule updates",
-            note = "We recommend keeping this setting enabled to receive timely notifications about any changes or important information.",
-            enabled = enabled1,
-            onToggle = { enabled1 = it },
-        )
+private fun SettingsItemSimplePreview() = PreviewHelper {
+    var enabled by remember { mutableStateOf(true) }
+    SettingsItem(
+        title = "Kodee containment",
+        enabled = enabled,
+        onToggle = { enabled = it },
+    )
+}
 
-        var enabled2 by remember { mutableStateOf(true) }
-        SettingsItem(
-            title = "Kodee containment",
-            enabled = enabled2,
-            onToggle = { enabled2 = it },
-        )
-    }
+@PreviewLightDark
+@Composable
+private fun SettingsItemWithNotePreview() = PreviewHelper {
+    var enabled by remember { mutableStateOf(false) }
+    SettingsItem(
+        title = "Conference schedule updates",
+        note = "We recommend keeping this setting enabled to receive timely notifications about any changes or important information.",
+        enabled = enabled,
+        onToggle = { enabled = it },
+    )
 }

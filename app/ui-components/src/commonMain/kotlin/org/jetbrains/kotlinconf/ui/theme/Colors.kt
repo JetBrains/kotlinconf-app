@@ -64,7 +64,7 @@ class Colors(
     val toggleOff: Color,
 )
 
-val KotlinConfLightColors = Colors(
+internal val KotlinConfLightColors = Colors(
     isDark = false,
 
     mainBackground = white100,
@@ -98,7 +98,7 @@ val KotlinConfLightColors = Colors(
     toggleOn = purple100,
 )
 
-val KotlinConfDarkColors = Colors(
+internal val KotlinConfDarkColors = Colors(
     isDark = true,
 
     mainBackground = black100,

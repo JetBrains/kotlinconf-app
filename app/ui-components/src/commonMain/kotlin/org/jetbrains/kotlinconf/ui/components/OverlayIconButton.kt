@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -22,6 +21,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 @Composable
 fun OverlayIconButton(
@@ -59,28 +59,24 @@ fun OverlayIconButton(
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-fun IconButtonPreviewEnabled() {
-    PreviewHelper {
-        OverlayIconButton(
-            icon = UiRes.drawable.bookmark_24,
-            enabled = true,
-            onClick = {},
-            contentDescription = "Bookmark",
-        )
-    }
+private fun IconButtonPreviewEnabled() = PreviewHelper {
+    OverlayIconButton(
+        icon = UiRes.drawable.bookmark_24,
+        enabled = true,
+        onClick = {},
+        contentDescription = "Bookmark",
+    )
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-fun IconButtonPreviewDisabled() {
-    PreviewHelper {
-        OverlayIconButton(
-            icon = UiRes.drawable.bookmark_24,
-            enabled = false,
-            onClick = {},
-            contentDescription = "Bookmark",
-        )
-    }
+private fun IconButtonPreviewDisabled() = PreviewHelper {
+    OverlayIconButton(
+        icon = UiRes.drawable.bookmark_24,
+        enabled = false,
+        onClick = {},
+        contentDescription = "Bookmark",
+    )
 }

@@ -11,13 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.now
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 
 @Composable
@@ -45,9 +45,7 @@ fun NowLabel(
 }
 
 @Composable
-@Preview
-internal fun NowLabelPreview() {
-    PreviewHelper {
-        NowLabel()
-    }
+@PreviewLightDark
+private fun NowLabelPreview() = PreviewHelper {
+    NowLabel()
 }

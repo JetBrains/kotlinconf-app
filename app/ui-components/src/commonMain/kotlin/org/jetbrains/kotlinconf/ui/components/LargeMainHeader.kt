@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
@@ -20,6 +19,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.view_grid_24
 import org.jetbrains.kotlinconf.ui.generated.resources.view_list_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.WidePreviewLightDark
 
 @Composable
 fun LargeMainHeader(
@@ -45,42 +45,41 @@ fun LargeMainHeader(
 }
 
 @Composable
-@Preview(widthDp = 1000)
-fun LargeMainHeaderPreview() {
-    PreviewHelper {
-        LargeMainHeader(
-            "Main",
-            endContent = {
-                TopMenuButton(
-                    icon = UiRes.drawable.bookmark_24,
-                    contentDescription = "Bookmarked",
-                    selected = false,
-                    large = true,
-                    onToggle = { }
-                )
+@WidePreviewLightDark
+private fun LargeMainHeaderPreview() = PreviewHelper {
+    LargeMainHeader(
+        "Main",
+        endContent = {
+            TopMenuButton(
+                icon = UiRes.drawable.bookmark_24,
+                contentDescription = "Bookmarked",
+                selected = false,
+                large = true,
+                onToggle = { }
+            )
 
-                var searchValue by remember { mutableStateOf("") }
-                LargeSearchBar(
-                    searchValue = searchValue,
-                    onSearchValueChange = {
-                        searchValue = it
-                    }, onClear = {
-                        searchValue = ""
-                    },
-                    modifier = Modifier.width(370.dp),
-                )
+            var searchValue by remember { mutableStateOf("") }
+            LargeSearchBar(
+                searchValue = searchValue,
+                onSearchValueChange = {
+                    searchValue = it
+                },
+                onClear = {
+                    searchValue = ""
+                },
+                modifier = Modifier.width(370.dp),
+            )
 
-                val options = listOf(
-                    HeaderToggleOption(UiRes.drawable.view_list_24, "List view"),
-                    HeaderToggleOption(UiRes.drawable.view_grid_24, "Grid view"),
-                )
-                var selectedIndex by remember { mutableStateOf(1) }
-                HeaderToggleButton(
-                    options = options,
-                    selectedIndex = selectedIndex,
-                    onSelect = { selectedIndex = it },
-                )
-            }
-        )
-    }
+            val options = listOf(
+                HeaderToggleOption(UiRes.drawable.view_list_24, "List view"),
+                HeaderToggleOption(UiRes.drawable.view_grid_24, "Grid view"),
+            )
+            var selectedIndex by remember { mutableStateOf(1) }
+            HeaderToggleButton(
+                options = options,
+                selectedIndex = selectedIndex,
+                onSelect = { selectedIndex = it },
+            )
+        }
+    )
 }

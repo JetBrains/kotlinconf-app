@@ -6,10 +6,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
 @Composable
 fun Tooltip(
@@ -26,10 +26,8 @@ fun Tooltip(
     )
 }
 
-@Preview
+@PreviewLightDark
 @Composable
-internal fun TooltipPreview() {
-    PreviewHelper {
-        Tooltip("Tooltip")
-    }
+private fun TooltipPreview() = PreviewHelper {
+    Tooltip("Tooltip")
 }
