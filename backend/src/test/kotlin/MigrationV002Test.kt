@@ -1,13 +1,24 @@
 // ABOUTME: Integration tests for V001->V002 migration verifying data backfill and schema changes.
 // ABOUTME: Tests year column addition, SignedPolicies creation, nullable year, and data preservation.
 
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.insert
+import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.kotlinconf.SessionId
+import org.jetbrains.kotlinconf.backend.schema.Feedback
 import org.jetbrains.kotlinconf.backend.schema.Migration
 import org.jetbrains.kotlinconf.backend.schema.MigrationRunner
+import org.jetbrains.kotlinconf.backend.schema.SignedPolicies
+import org.jetbrains.kotlinconf.backend.schema.Users
+import org.jetbrains.kotlinconf.backend.schema.Votes
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class MigrationV002Test {
@@ -183,5 +194,73 @@ class MigrationV002Test {
             rs.next(); rs.getString("feedback")
         }
         assertEquals("Great talk!", feedbackText, "Feedback text should be preserved")
+    }
+
+    @Test
+    fun `Exposed DSL works with migrated schema`() {
+        MigrationRunner.migrate(database)
+
+        // Insert via Exposed DSL
+        transaction(database) {
+            Users.insert {
+                it[userId] = "dsl-user"
+                it[timestamp] = "2026-01-01T00:00:00"
+            }
+            Votes.insert {
+                it[userId] = "dsl-user"
+                it[sessionId] = SessionId("session-abc")
+                it[rating] = 3
+                it[timestamp] = "2026-01-01T00:00:00"
+                it[year] = 2026
+            }
+            Feedback.insert {
+                it[userId] = "dsl-user"
+                it[sessionId] = SessionId("session-abc")
+                it[feedback] = "Loved it"
+                it[timestamp] = "2026-01-01T00:00:00"
+                it[year] = 2026
+            }
+            SignedPolicies.insert {
+                it[userId] = "dsl-user"
+                it[timestamp] = "2026-01-01T00:00:00"
+                it[year] = 2026
+            }
+        }
+
+        // Read back via Exposed DSL
+        transaction(database) {
+            val vote = Votes.selectAll()
+                .where { (Votes.userId eq "dsl-user") and (Votes.sessionId eq SessionId("session-abc")) }
+                .single()
+            assertEquals(3, vote[Votes.rating])
+            assertEquals(2026, vote[Votes.year])
+
+            val fb = Feedback.selectAll()
+                .where { (Feedback.userId eq "dsl-user") and (Feedback.sessionId eq SessionId("session-abc")) }
+                .single()
+            assertEquals("Loved it", fb[Feedback.feedback])
+            assertEquals(2026, fb[Feedback.year])
+
+            val policy = SignedPolicies.selectAll()
+                .where { (SignedPolicies.userId eq "dsl-user") and (SignedPolicies.year eq 2026) }
+                .single()
+            assertNotNull(policy[SignedPolicies.timestamp])
+        }
+
+        // Verify nullable year works via DSL
+        transaction(database) {
+            Votes.insert {
+                it[userId] = "dsl-user"
+                it[sessionId] = SessionId("session-xyz")
+                it[rating] = 1
+                it[timestamp] = "2026-01-01T00:00:00"
+            }
+        }
+        transaction(database) {
+            val nullYearVote = Votes.selectAll()
+                .where { (Votes.userId eq "dsl-user") and (Votes.sessionId eq SessionId("session-xyz")) }
+                .single()
+            assertNull(nullYearVote[Votes.year], "Year should be null when not specified via DSL")
+        }
     }
 }
