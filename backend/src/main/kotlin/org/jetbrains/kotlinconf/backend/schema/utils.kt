@@ -1,6 +1,6 @@
 package org.jetbrains.kotlinconf.backend.schema
 
-import org.jetbrains.exposed.sql.ColumnTransformer
+import org.jetbrains.exposed.v1.core.ColumnTransformer
 import org.jetbrains.kotlinconf.SessionId
 
 internal object SessionIdTransformer : ColumnTransformer<String, SessionId> {
