@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.aboutLibraries) apply false
     alias(libs.plugins.androidApplication) apply false
-    alias(libs.plugins.androidLibrary) apply false
+    alias(libs.plugins.androidMultiplatformLibrary) apply false
     alias(libs.plugins.composeMultiplatform) apply false
     alias(libs.plugins.kotlinParcelize) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.jib) apply false
     alias(libs.plugins.googleServices) apply false
+    alias(libs.plugins.metro) apply false
 }
 
 apply(from = "gradle/releases.gradle.kts")

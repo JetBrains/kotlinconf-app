@@ -1,0 +1,82 @@
+package org.jetbrains.kotlinconf.android
+
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Color
+import android.os.Build
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
+import com.mmk.kmpnotifier.notification.NotifierManager
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
+import org.jetbrains.kotlinconf.App
+import org.jetbrains.kotlinconf.EXTRA_LOCAL_NOTIFICATION_ID
+import org.jetbrains.kotlinconf.PermissionHandler
+import org.jetbrains.kotlinconf.navigation.navigateByLocalNotificationId
+
+@ActivityKey(MainActivity::class)
+@ContributesIntoMap(AppScope::class, binding = binding<Activity>())
+class MainActivity(
+    private val appGraph: AndroidAppGraph,
+    private val permissionHandler: PermissionHandler,
+) : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        installSplashScreen()
+
+        permissionHandler.initialize(this)
+
+        processIntent(intent)
+
+        setContent {
+            App(
+                appGraph = appGraph,
+                onThemeChange = { isDarkMode ->
+                    val systemBarStyle = SystemBarStyle.auto(
+                        lightScrim = Color.TRANSPARENT,
+                        darkScrim = Color.TRANSPARENT,
+                        detectDarkMode = { isDarkMode }
+                    )
+                    enableEdgeToEdge(
+                        statusBarStyle = systemBarStyle,
+                        navigationBarStyle = systemBarStyle,
+                    )
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        // Don't enforce scrim https://issuetracker.google.com/issues/298296168
+                        window.isNavigationBarContrastEnforced = false
+                    }
+                },
+            )
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        processIntent(intent)
+    }
+
+    private fun processIntent(intent: Intent?) {
+        if (intent == null) return
+
+        try {
+            val notificationId = intent.getStringExtra(EXTRA_LOCAL_NOTIFICATION_ID)
+            if (notificationId != null) {
+                // Local notification clicked
+                navigateByLocalNotificationId(notificationId)
+                return
+            }
+
+            // Process push notifications
+            NotifierManager.onCreateOrOnNewIntent(intent)
+        } catch (e: Exception) {
+            return
+        }
+    }
+}

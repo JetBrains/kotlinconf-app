@@ -1,0 +1,13 @@
+{
+  "name": "KotlinConf",
+  "icons": [
+    {
+      "src": "./images/KotlinConf-icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "white"
+}
