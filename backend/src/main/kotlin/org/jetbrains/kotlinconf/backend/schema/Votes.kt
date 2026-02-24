@@ -16,7 +16,7 @@ internal object Votes : Table() {
 
     val rating = integer("rating")
 
-    val year: Column<Int> = integer("year")
+    val year: Column<Int?> = integer("year").nullable()
 
-    override val primaryKey: PrimaryKey = PrimaryKey(userId, sessionId, year)
+    override val primaryKey: PrimaryKey = PrimaryKey(userId, sessionId)
 }

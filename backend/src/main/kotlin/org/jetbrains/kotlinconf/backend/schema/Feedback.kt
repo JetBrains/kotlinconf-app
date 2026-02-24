@@ -16,7 +16,7 @@ internal object Feedback : Table() {
 
     val feedback: Column<String> = varchar("feedback", length = 5000)
 
-    val year: Column<Int> = integer("year")
+    val year: Column<Int?> = integer("year").nullable()
 
-    override val primaryKey: PrimaryKey = PrimaryKey(userId, sessionId, year)
+    override val primaryKey: PrimaryKey = PrimaryKey(userId, sessionId)
 }

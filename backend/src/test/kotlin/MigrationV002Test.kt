@@ -1,5 +1,5 @@
 // ABOUTME: Integration tests for V001->V002 migration verifying data backfill and schema changes.
-// ABOUTME: Tests year column addition, PK updates, SignedPolicies creation, and data preservation.
+// ABOUTME: Tests year column addition, SignedPolicies creation, nullable year, and data preservation.
 
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
@@ -127,6 +127,31 @@ class MigrationV002Test {
         assertTrue(rows.all { it.second == 2025 }, "All policies should have year=2025")
         assertEquals("user1", rows[0].first)
         assertEquals("user2", rows[1].first)
+    }
+
+    @Test
+    fun `V002 allows null year on new rows`() {
+        val migrations = MigrationRunner.discoverMigrations()
+        val v001 = migrations.first { it.version == 1 }
+        val v002 = migrations.first { it.version == 2 }
+
+        applyMigration(v001)
+        applyMigration(v002)
+
+        // Insert rows without specifying year
+        runSql("""INSERT INTO "Users" ("uuid", "timestamp") VALUES ('user3', '2026-01-01T00:00:00')""")
+        runSql("""INSERT INTO "Votes" ("timestamp", "uuid", "sessionId", "rating") VALUES ('2026-01-01T00:00:00', 'user3', 'session1', 1)""")
+        runSql("""INSERT INTO "Feedback" ("timestamp", "uuid", "sessionId", "feedback") VALUES ('2026-01-01T00:00:00', 'user3', 'session1', 'Nice')""")
+
+        val voteYear = query("""SELECT "year" FROM "Votes" WHERE "uuid" = 'user3'""") { rs ->
+            rs.next(); rs.getObject("year")
+        }
+        assertEquals(null, voteYear, "Year should be null for new rows without year")
+
+        val feedbackYear = query("""SELECT "year" FROM "Feedback" WHERE "uuid" = 'user3'""") { rs ->
+            rs.next(); rs.getObject("year")
+        }
+        assertEquals(null, feedbackYear, "Year should be null for new feedback rows without year")
     }
 
     @Test
