@@ -5,21 +5,21 @@ import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.config.ApplicationConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.datetime.LocalDateTime
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.deleteWhere
+import org.jetbrains.exposed.v1.jdbc.insert
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.update
 import org.jetbrains.kotlinconf.FeedbackInfo
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.backend.schema.Feedback
+import org.jetbrains.kotlinconf.backend.schema.MigrationRunner
 import org.jetbrains.kotlinconf.backend.schema.Users
 import org.jetbrains.kotlinconf.backend.schema.Votes
 import org.slf4j.LoggerFactory
@@ -51,11 +51,9 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         log.info("Connecting to database at '${hikariConfig.jdbcUrl}")
 
         val connectionPool = HikariDataSource(hikariConfig)
-        Database.Companion.connect(connectionPool)
+        Database.connect(connectionPool)
 
-        transaction {
-            SchemaUtils.create(Users, Votes, Feedback)
-        }
+        MigrationRunner.migrate()
     }
 
     suspend fun validateUser(uuid: String): Boolean = newSuspendedTransaction(Dispatchers.IO) {

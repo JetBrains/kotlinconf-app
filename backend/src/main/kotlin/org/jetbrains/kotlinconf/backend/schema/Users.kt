@@ -1,7 +1,7 @@
 package org.jetbrains.kotlinconf.backend.schema
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.Table
 
 internal object Users : Table() {
     val userId: Column<String> = varchar("uuid", 50)
