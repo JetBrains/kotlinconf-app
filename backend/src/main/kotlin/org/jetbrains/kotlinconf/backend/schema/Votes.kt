@@ -1,7 +1,7 @@
 package org.jetbrains.kotlinconf.backend.schema
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.kotlinconf.SessionId
 
 internal object Votes : Table() {
@@ -15,6 +15,8 @@ internal object Votes : Table() {
         .index()
 
     val rating = integer("rating")
+
+    val year: Column<Int?> = integer("year").nullable()
 
     override val primaryKey: PrimaryKey = PrimaryKey(userId, sessionId)
 }
