@@ -33,7 +33,7 @@ class MapsApiTest {
 
         val mapData = response.body<ConferenceInfo>().mapData
         assertNotNull(mapData)
-        assertEquals(2, mapData!!.floors.size)
+        assertEquals(2, mapData.floors.size)
         assertTrue(mapData.floors[0].svgPathLight.contains("maps/ground-floor.svg"))
     }
 
@@ -46,7 +46,7 @@ class MapsApiTest {
         val mapData = info.mapData
         assertNotNull(mapData)
 
-        assertEquals(1, mapData!!.floors.size)
+        assertEquals(1, mapData.floors.size)
         assertEquals("Main hall", mapData.floors[0].name)
         assertTrue(mapData.floors[0].svgPathLight.contains("maps/main-hall.svg"))
         assertTrue(mapData.floors[0].svgPathDark.contains("maps/main-hall-dark.svg"))
@@ -97,7 +97,7 @@ class MapsApiTest {
     @Test
     fun `map SVG URLs in conference-info are valid and fetchable`() = runTest {
         val info = client.get("/2025/conference-info").body<ConferenceInfo>()
-        val mapData = info.mapData!!
+        val mapData = info.mapData
 
         for (floor in mapData.floors) {
             val lightResponse = client.get(floor.svgPathLight)

@@ -21,7 +21,6 @@ import org.koin.ktor.ext.inject
 import kotlin.time.Clock
 
 private val COME_BACK_LATER = HttpStatusCode(477, "Come Back Later")
-private val ARCHIVED_YEAR_FORBIDDEN = HttpStatusCode(403, "Forbidden: Archived Year")
 
 /*
 GET http://localhost:8080/vote

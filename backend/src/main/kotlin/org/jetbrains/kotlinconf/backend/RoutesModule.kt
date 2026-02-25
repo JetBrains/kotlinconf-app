@@ -6,13 +6,13 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.jetbrains.kotlinconf.backend.routes.adminRoutes
 import org.jetbrains.kotlinconf.backend.routes.conferenceInfoRoutes
+import org.jetbrains.kotlinconf.backend.routes.configRoutes
+import org.jetbrains.kotlinconf.backend.routes.documentsRoutes
 import org.jetbrains.kotlinconf.backend.routes.imageProxyRoutes
 import org.jetbrains.kotlinconf.backend.routes.scheduleRoutes
 import org.jetbrains.kotlinconf.backend.routes.timeRoutes
 import org.jetbrains.kotlinconf.backend.routes.userRoutes
 import org.jetbrains.kotlinconf.backend.routes.votingRoutes
-import org.jetbrains.kotlinconf.backend.routes.configRoutes
-
 
 fun Application.routesModule() {
     routing {
@@ -46,4 +46,5 @@ private fun Route.yearBasedRoutes() {
     votingRoutes()
     imageProxyRoutes()
     conferenceInfoRoutes()
+    documentsRoutes()
 }
