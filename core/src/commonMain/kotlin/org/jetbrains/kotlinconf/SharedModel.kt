@@ -38,6 +38,10 @@ value class SpeakerId(val id: String)
 
 @Serializable
 @JvmInline
+value class PartnerId(val id: String)
+
+@Serializable
+@JvmInline
 value class SessionId(val id: String)
 
 @Serializable
