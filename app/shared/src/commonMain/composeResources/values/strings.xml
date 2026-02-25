@@ -133,6 +133,8 @@ We will process your data in accordance with the App Privacy Notice. You can adj
     <string name="map_zoom_in">Zoom in</string>
     <string name="map_zoom_out">Zoom out</string>
     <string name="map_how_to_find_venue">How to find the venue</string>
+    <string name="map_error_no_data">The map is taking a detour.
+Please try again.</string>
 
     <string name="speakers_title">Speakers</string>
     <string name="speakers_error_no_results">No results</string>

@@ -200,7 +200,7 @@ private fun EntryProviderScope<AppRoute>.screens(
     entry<MapScreen>(metadata = noAnimationMetadata) {
         val mapHandler = LocalMapHandler.current
         MapScreen(
-            onHowToFindVenue = { mapHandler.openNavigation(VENUE_ADDRESS) },
+            onHowToFindVenue = { address -> mapHandler.openNavigation(address) },
         )
     }
 

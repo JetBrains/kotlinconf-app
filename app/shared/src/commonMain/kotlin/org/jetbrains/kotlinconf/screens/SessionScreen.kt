@@ -27,6 +27,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +46,7 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -390,8 +392,17 @@ private fun RoomSection(
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     val iconRotation by animateFloatAsState(if (isExpanded) 180f else 0f)
 
+    val mapViewModel: MapViewModel = metroViewModel()
+    val mapState = mapViewModel.state.collectAsStateWithLifecycle().value
+
+    val mapContent = (mapState as? ErrorLoadingState.Content)?.data
+    val mapData = mapContent?.mapData
+    val room = mapData?.rooms?.get(roomName)
+
+    val canDisplayRoom = room != null
+
     Column(modifier = modifier.padding(vertical = 16.dp)) {
-        if (rooms[roomName] == null) {
+        if (!canDisplayRoom) {
             Text(
                 text = roomName,
                 style = KotlinConfTheme.typography.h3,
@@ -421,7 +432,9 @@ private fun RoomSection(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 StaticMap(
-                    roomName = roomName,
+                    mapData = mapData,
+                    room = room,
+                    svgsByPath = mapContent.svgsByPath,
                     modifier = Modifier
                         .padding(top = 8.dp)
                         .clip(KotlinConfTheme.shapes.roundedCornerMd)

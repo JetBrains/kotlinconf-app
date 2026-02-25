@@ -3,11 +3,12 @@ package org.jetbrains.kotlinconf.screens
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import io.ktor.utils.io.core.toByteArray
 import org.jetbrains.skia.Data
 import org.jetbrains.skia.svg.SVGDOM
 
-actual class Svg actual constructor(svgBytes: ByteArray) {
-    private val svg = SVGDOM(Data.makeFromBytes(svgBytes))
+actual class Svg actual constructor(svgString: String) {
+    private val svg = SVGDOM(Data.makeFromBytes(svgString.toByteArray()))
 
     actual val width: Float get() = svg.root?.width?.value ?: 0f
     actual val height: Float get() = svg.root?.height?.value ?: 0f
