@@ -5,6 +5,8 @@ import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
+import org.jetbrains.kotlinconf.backend.services.AssetService
+import org.jetbrains.kotlinconf.backend.services.AssetService.AssetType
 import org.jetbrains.kotlinconf.backend.services.ConferenceInfoService
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.jetbrains.kotlinconf.backend.utils.NotFound
@@ -23,6 +25,7 @@ GET http://localhost:8080/{year}/maps/{filename}
 */
 fun Route.conferenceInfoRoutes() {
     val conferenceInfoService: ConferenceInfoService by inject()
+    val assetService: AssetService by inject()
     val config: ConferenceConfig by inject()
 
     get("conference-info") {
@@ -34,14 +37,14 @@ fun Route.conferenceInfoRoutes() {
     get("partner-logos/{filename}") {
         val year = getYearFromPath(config)
         val filename = call.parameters["filename"] ?: throw NotFound()
-        val logoSvg = conferenceInfoService.getPartnerLogo(year, filename) ?: throw NotFound()
+        val logoSvg = assetService.getAsset(year, AssetType.Partner, filename) ?: throw NotFound()
         call.respondText(logoSvg, ContentType("image", "svg+xml"))
     }
 
     get("maps/{filename}") {
         val year = getYearFromPath(config)
         val filename = call.parameters["filename"] ?: throw NotFound()
-        val svgContent = conferenceInfoService.getMapSvg(year, filename) ?: throw NotFound()
+        val svgContent = assetService.getAsset(year, AssetType.Map, filename) ?: throw NotFound()
         call.respondText(svgContent, ContentType("image", "svg+xml"))
     }
 }

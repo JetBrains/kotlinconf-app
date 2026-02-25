@@ -12,8 +12,6 @@ import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.koin.ktor.ext.inject
 import kotlin.time.Clock
 
-private val ARCHIVED_YEAR_FORBIDDEN = HttpStatusCode(403, "Forbidden: Archived Year")
-
 /*
 POST http://localhost:8080/{year}/sign
 1238476512873162837
