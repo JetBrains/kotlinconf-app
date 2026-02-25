@@ -81,6 +81,8 @@ We will process your data in accordance with the App Privacy Notice. You can adj
     <string name="notifications_schedule_update_description">Stay informed about crucial changes! Get an alert if there's a significant update to the event schedule.</string>
     <string name="notifications_lets_get_started">Let’s get started!</string>
 
+    <string name="document_error_no_data">This document is not available at the moment.</string>
+
     <string name="code_of_conduct">Code of Conduct</string>
 
     <string name="general_terms">General Terms and Conditions</string>

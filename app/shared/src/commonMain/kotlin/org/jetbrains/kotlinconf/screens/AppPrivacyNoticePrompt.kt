@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.metroViewModel
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.ScrollToTopHandler
@@ -34,6 +33,7 @@ import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.kodee_privacy
 import org.jetbrains.kotlinconf.generated.resources.privacy_notice_accept
 import org.jetbrains.kotlinconf.generated.resources.privacy_notice_back
+import org.jetbrains.kotlinconf.generated.resources.document_error_no_data
 import org.jetbrains.kotlinconf.generated.resources.privacy_notice_description
 import org.jetbrains.kotlinconf.generated.resources.privacy_notice_read_action
 import org.jetbrains.kotlinconf.generated.resources.privacy_notice_reject
@@ -45,6 +45,7 @@ import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MarkdownView
 import org.jetbrains.kotlinconf.ui.components.Text
+import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_left_24
@@ -62,6 +63,7 @@ fun AppPrivacyNoticePrompt(
 ) {
     var detailsVisible by rememberSaveable { mutableStateOf(false) }
     val noticeState by viewModel.state.collectAsStateWithLifecycle()
+    val documentState by viewModel.documentState.collectAsStateWithLifecycle()
 
     LaunchedEffect(noticeState) {
         if (noticeState is PrivacyNoticeState.Done) {
@@ -98,18 +100,21 @@ fun AppPrivacyNoticePrompt(
                     )
                     val scrollState = rememberScrollState()
                     ScrollToTopHandler(scrollState)
-                    MarkdownView(
-                        loadText = {
-                            @OptIn(ExperimentalResourceApi::class)
-                            Res.readBytes("files/app-privacy-notice.md")
-                        },
-                        modifier = Modifier.padding(horizontal = 12.dp).verticalScroll(scrollState),
-                        onCustomUriClick = { uri ->
-                            if (uri == "app-terms.md") {
-                                onAppTermsOfUse()
-                            }
-                        },
-                    )
+                    ErrorLoadingContent(
+                        state = documentState,
+                        errorMessage = stringResource(Res.string.document_error_no_data),
+                        onRetry = { viewModel.refreshDocument() },
+                    ) { content ->
+                        MarkdownView(
+                            text = content,
+                            modifier = Modifier.padding(horizontal = 12.dp).verticalScroll(scrollState),
+                            onCustomUriClick = { uri ->
+                                if (uri == "app-terms.md") {
+                                    onAppTermsOfUse()
+                                }
+                            },
+                        )
+                    }
                     Spacer(Modifier.weight(1f))
                     HorizontalDivider(
                         thickness = 1.dp,
