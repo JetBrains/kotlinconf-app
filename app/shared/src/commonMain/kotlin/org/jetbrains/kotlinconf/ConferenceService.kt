@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMap
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -111,10 +112,6 @@ class ConferenceService(
 
     private val userId = applicationStorage.userId
 
-    val isPolicySignedFlow: StateFlow<Boolean> =
-        currentYearlyStorage.flatMapLatest { it.isPolicySigned() }
-            .stateIn(scope, SharingStarted.Eagerly, false)
-
     val agenda: StateFlow<List<Day>> =
         combine(
             currentYearlyStorage.flatMapLatest { it.getConferenceCache() },
@@ -166,6 +163,7 @@ class ConferenceService(
         // Load conference info (partners, days, about blocks, tags, map data)
         client.downloadConferenceInfo()?.let { storage.setConferenceInfoCache(it) }
 
+        // Load conference schedule data
         val newData = client.downloadConferenceData() ?: return
         val oldData = storage.getConferenceCache().first()
 

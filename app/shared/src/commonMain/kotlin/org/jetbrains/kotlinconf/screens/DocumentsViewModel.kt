@@ -34,7 +34,7 @@ class DocumentsViewModel(
         viewModelScope.launch {
             loading.value = true
             try {
-                document.value = service.getFile(documentPath)
+                document.value = service.getAsset(documentPath)
             } finally {
                 loading.value = false
             }

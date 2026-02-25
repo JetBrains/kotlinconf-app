@@ -106,7 +106,6 @@ fun SessionScreen(
 ) {
     val session = viewModel.session.collectAsStateWithLifecycle().value
     val speakers = viewModel.speakers.collectAsStateWithLifecycle().value
-    val userSignedIn by viewModel.userSignedIn.collectAsStateWithLifecycle()
     val shouldNavigateToPrivacyNotice by viewModel.navigateToPrivacyNotice.collectAsStateWithLifecycle()
 
     LaunchedEffect(shouldNavigateToPrivacyNotice) {
@@ -141,7 +140,6 @@ fun SessionScreen(
         AnimatedContent(
             session != null,
             modifier = Modifier.fillMaxSize(),
-            contentKey = { it::class },
             transitionSpec = { FadingAnimationSpec }
         ) { hasState ->
             if (hasState && session != null) {
@@ -204,7 +202,6 @@ fun SessionScreen(
                                         listState.animateScrollToItem(1)
                                     }
                                 },
-                                userSignedIn = userSignedIn,
                                 startExpanded = openedForFeedback,
                                 initialEmotion = session.vote?.toEmotion(),
                                 feedbackQuestion = stringResource(
@@ -258,7 +255,6 @@ private fun FeedbackPanel(
     onFeedback: (Emotion?) -> Unit,
     onFeedbackWithComment: (Emotion, String) -> Unit,
     onFeedbackExpanded: () -> Unit,
-    userSignedIn: Boolean,
     modifier: Modifier = Modifier,
     startExpanded: Boolean,
     initialEmotion: Emotion? = null,
@@ -316,15 +312,10 @@ private fun FeedbackPanel(
                             interactionSource = null
                         ) {
                             val newEmotion = if (emotion == selectedEmotion) null else emotion
-                            if (userSignedIn) {
-                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
-                                selectedEmotion = newEmotion
-                                feedbackExpanded = newEmotion != null
-                                onFeedback(newEmotion)
-                            } else {
-                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Reject)
-                                onFeedback(newEmotion)
-                            }
+                            hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
+                            selectedEmotion = newEmotion
+                            feedbackExpanded = newEmotion != null
+                            onFeedback(newEmotion)
                         },
                     )
                 }

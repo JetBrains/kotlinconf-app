@@ -113,7 +113,8 @@ Wir verarbeiten Ihre Daten gemäß dem Datenschutzhinweis der App. Sie können I
     <string name="schedule_action_filter_bookmarked">Lesezeichen filtern</string>
     <string name="schedule_action_search">Suchen</string>
     <string name="schedule_in_x_minutes">in %1$d Min</string>
-    <string name="schedule_error_no_data">Bitte warten Sie, unser Zeitplan steckt im Verkehr fest. Wir beseitigen den Stau!
+    <string name="schedule_error_no_data">Unser Zeitplan steckt wohl im Verkehr fest.
+Bitte versuchen Sie es erneut.
     </string>
     <string name="schedule_error_no_results">Keine Ergebnisse</string>
     <string name="schedule_label_no_bookmarks">Keine Lesezeichen hinzugefügt</string>
@@ -140,7 +141,8 @@ Bitte versuchen Sie es erneut.</string>
 
     <string name="speakers_title">Sprecher</string>
     <string name="speakers_error_no_results">Keine Ergebnisse</string>
-    <string name="speakers_error_no_data">Unsere Sprecher spielen Verstecken. Geben Sie uns einen Moment, um sie zu finden!</string>
+    <string name="speakers_error_no_data">Unsere Sprecher spielen Verstecken.
+Bitte versuchen Sie es erneut.</string>
     <plurals name="speakers_number_of_results">
         <item quantity="one">%1$d Sprecher gefunden</item>
         <item quantity="other">%1$d Sprecher gefunden</item>
