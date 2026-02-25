@@ -13,4 +13,5 @@ class ConferenceConfig(config: ApplicationConfig) {
     val supportedYears: List<Int> = config.property("conference.supportedYears")
         .getList()
         .map { it.toInt() }
+    val baseUrl: String = config.property("conference.baseUrl").getString().trimEnd('/')
 }
