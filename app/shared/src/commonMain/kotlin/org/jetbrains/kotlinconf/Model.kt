@@ -2,11 +2,6 @@ package org.jetbrains.kotlinconf
 
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.DrawableResource
-import kotlin.jvm.JvmInline
-
-@Serializable
-@JvmInline
-value class PartnerId(val id: String)
 
 class Partner(
     val id: PartnerId,
