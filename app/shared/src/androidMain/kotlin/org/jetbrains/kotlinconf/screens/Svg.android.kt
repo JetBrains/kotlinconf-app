@@ -5,8 +5,8 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import com.caverock.androidsvg.SVG
 
-actual class Svg actual constructor(svgBytes: ByteArray) {
-    private val svg = SVG.getFromString(svgBytes.decodeToString())
+actual class Svg actual constructor(svgString: String) {
+    private val svg = SVG.getFromString(svgString)
 
     actual fun renderTo(scope: DrawScope) {
         scope.drawIntoCanvas { canvas ->

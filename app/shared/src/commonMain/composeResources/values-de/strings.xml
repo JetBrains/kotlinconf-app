@@ -133,6 +133,8 @@ Wir verarbeiten Ihre Daten gemäß dem Datenschutzhinweis der App. Sie können I
     <string name="map_zoom_in">Hineinzoomen</string>
     <string name="map_zoom_out">Herauszoomen</string>
     <string name="map_how_to_find_venue">Anfahrt</string>
+    <string name="map_error_no_data">Die Karte macht einen Umweg.
+Bitte versuchen Sie es erneut.</string>
 
     <string name="speakers_title">Sprecher</string>
     <string name="speakers_error_no_results">Keine Ergebnisse</string>
