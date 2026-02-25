@@ -39,7 +39,7 @@ class MapViewModel(
             try {
                 taggedLogger.log { "Download started" }
                 service.loadConferenceData()
-                service.downloadAllFiles()
+                service.downloadAllAssets()
                 taggedLogger.log { "Download done" }
             } finally {
                 taggedLogger.log { "Loading complete" }
@@ -61,7 +61,7 @@ class MapViewModel(
                         add(it.svgPathDark)
                     }
                 }
-                val svgFilesByPath = allSvgPaths.associateWith { service.getFile(it) }
+                val svgFilesByPath = allSvgPaths.associateWith { service.getAsset(it) }
 
                 if (svgFilesByPath.values.any { it == null }) {
                     ErrorLoadingState.Error

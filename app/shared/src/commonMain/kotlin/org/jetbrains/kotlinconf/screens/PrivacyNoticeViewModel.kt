@@ -50,7 +50,7 @@ class PrivacyNoticeViewModel(
         viewModelScope.launch {
             documentLoading.value = true
             try {
-                document.value = service.getFile("documents/app-privacy-notice.md")
+                document.value = service.getAsset("documents/app-privacy-notice.md")
             } finally {
                 documentLoading.value = false
             }

@@ -1,15 +1,6 @@
 package org.jetbrains.kotlinconf
 
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.resources.DrawableResource
-
-class Partner(
-    val id: PartnerId,
-    val name: String,
-    val description: String,
-    val icon: DrawableResource,
-    val url: String,
-)
 
 @Serializable
 enum class Theme {

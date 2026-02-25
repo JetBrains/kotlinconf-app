@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,24 +11,29 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.Day
+import org.jetbrains.kotlinconf.DayInfo
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
-import org.jetbrains.kotlinconf.TagValues
 import org.jetbrains.kotlinconf.TimeProvider
 import org.jetbrains.kotlinconf.TimeSlot
 import org.jetbrains.kotlinconf.isServiceEvent
 import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.components.FilterItem
 import org.jetbrains.kotlinconf.ui.components.FilterItemType
+import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import org.jetbrains.kotlinconf.utils.containsDiacritics
 import org.jetbrains.kotlinconf.utils.removeDiacritics
 
@@ -64,18 +68,12 @@ data class ScheduleSearchParams(
     val isBookmarkedOnly: Boolean = false,
 )
 
-sealed class ScheduleUiState {
-    data object Loading : ScheduleUiState()
-    data object Error : ScheduleUiState()
-
-    data class Content(
-        val days: List<Day>,
-        val items: List<ScheduleListItem>,
-        val userSignedIn: Boolean,
-        val firstActiveIndex: Int = -1,
-        val lastActiveIndex: Int = -1,
-    ) : ScheduleUiState()
-}
+data class ScheduleContent(
+    val days: List<Day>,
+    val items: List<ScheduleListItem>,
+    val firstActiveIndex: Int = -1,
+    val lastActiveIndex: Int = -1,
+)
 
 @ContributesIntoMap(AppScope::class)
 @ViewModelKey(ScheduleViewModel::class)
@@ -88,21 +86,37 @@ class ScheduleViewModel(
 
     private val searchParams = MutableStateFlow(ScheduleSearchParams())
 
-    private fun List<String>.toTags(type: FilterItemType): List<FilterItem> {
+    private fun List<String>.toFilterItems(type: FilterItemType): List<FilterItem> {
         return map { FilterItem(type = type, value = it, isSelected = false) }
     }
 
-    val filterItems = MutableStateFlow(
-        TagValues.categories.toTags(FilterItemType.Category) +
-                TagValues.levels.toTags(FilterItemType.Level) +
-                TagValues.formats.toTags(FilterItemType.Format)
-    )
+    private val _filterItems = MutableStateFlow<List<FilterItem>>(emptyList())
+    val filterItems: StateFlow<List<FilterItem>> = _filterItems.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            service.conferenceInfo
+                .mapNotNull { it?.tags }
+                .distinctUntilChanged()
+                .collect { tags ->
+                    _filterItems.value =
+                        tags.categories.toFilterItems(FilterItemType.Category) +
+                                tags.levels.toFilterItems(FilterItemType.Level) +
+                                tags.formats.toFilterItems(FilterItemType.Format)
+                }
+        }
+    }
+
+    val dayInfoMap: StateFlow<Map<LocalDate, DayInfo>> = service.conferenceInfo
+        .mapNotNull { info -> info?.days }
+        .map { days -> days.associateBy { it.date } }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyMap())
 
     private var loading = MutableStateFlow(false)
 
     fun toggleFilter(item: FilterItem, selected: Boolean) {
-        filterItems.update {
-            val list = it.toMutableList()
+        _filterItems.update { oldItems ->
+            val list = oldItems.toMutableList()
 
             if (item.type == FilterItemType.Level || item.type == FilterItemType.Format) {
                 // Remove previous format or level selection, if there is one
@@ -122,7 +136,7 @@ class ScheduleViewModel(
     }
 
     fun resetFilters() {
-        filterItems.update {
+        _filterItems.update {
             it.map { filter -> filter.copy(isSelected = false) }
         }
     }
@@ -131,15 +145,14 @@ class ScheduleViewModel(
         this.searchParams.value = searchParams
     }
 
-    val uiState: StateFlow<ScheduleUiState> = combine(
+    val uiState: StateFlow<ErrorLoadingState<ScheduleContent>> = combine(
         service.agenda,
-        service.userId,
         searchParams,
         filterItems,
         loading,
-    ) { agenda, userId, searchParams, tags, loading ->
+    ) { agenda, searchParams, tags, loading ->
         when {
-            loading -> ScheduleUiState.Loading
+            loading -> ErrorLoadingState.Loading
 
             searchParams.isSearch -> {
                 val searchItems = buildSearchItems(
@@ -147,7 +160,7 @@ class ScheduleViewModel(
                     searchQuery = searchParams.searchQuery,
                     selectedTags = tags.filter { it.isSelected }.map { it.value },
                 )
-                ScheduleUiState.Content(agenda, searchItems, userId != null)
+                ErrorLoadingState.Content(ScheduleContent(agenda, searchItems))
             }
 
             else -> {
@@ -157,14 +170,15 @@ class ScheduleViewModel(
                     isBookmarkedOnly = searchParams.isBookmarkedOnly,
                 )
                 if (items.isEmpty()) {
-                    ScheduleUiState.Error
+                    ErrorLoadingState.Error
                 } else {
-                    ScheduleUiState.Content(
-                        days = agenda,
-                        items = items,
-                        userSignedIn = userId != null,
-                        firstActiveIndex = firstActiveIndex,
-                        lastActiveIndex = lastActiveIndex,
+                    ErrorLoadingState.Content(
+                        ScheduleContent(
+                            days = agenda,
+                            items = items,
+                            firstActiveIndex = firstActiveIndex,
+                            lastActiveIndex = lastActiveIndex,
+                        )
                     )
                 }
             }
@@ -174,7 +188,7 @@ class ScheduleViewModel(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = ScheduleUiState.Loading
+            initialValue = ErrorLoadingState.Loading
         )
 
     private fun buildSearchItems(
@@ -322,7 +336,7 @@ class ScheduleViewModel(
             null -> null
         }
         viewModelScope.launch {
-            if (service.canVote()) {
+            if (service.isPolicySigned()) {
                 service.vote(sessionId, score)
             } else {
                 _navigateToPrivacyNotice.value = true
@@ -337,7 +351,7 @@ class ScheduleViewModel(
             Emotion.Negative -> Score.BAD
         }
         viewModelScope.launch {
-            if (service.canVote()) {
+            if (service.isPolicySigned()) {
                 service.vote(sessionId, score)
                 service.sendFeedback(sessionId, comment)
             } else {

@@ -5,6 +5,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMap
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -48,24 +50,13 @@ class ConferenceService(
 
     private val taggedLogger = logger.tagged(LOG_TAG)
 
-    private val yearGraphs: MutableStateFlow<Map<Int, YearGraph>> = MutableStateFlow(emptyMap())
+    private val currentYearGraph: MutableStateFlow<YearGraph?> = MutableStateFlow(null)
 
-    private val currentYearGraph: StateFlow<YearGraph?> = combine(
-        applicationStorage.getConfig(),
-        yearGraphs,
-    ) { config, years ->
-        years[config?.currentYear]
-    }.stateIn(scope, SharingStarted.Eagerly, null)
-
-    private val currentYearlyStorage: Flow<YearlyStorage> = combine(
-        applicationStorage.getConfig(),
-        yearGraphs,
-    ) { config, years ->
-        years[config?.currentYear]?.storage
-    }.filterNotNull()
+    private val currentYearlyStorage: Flow<YearlyStorage> =
+        currentYearGraph.map { it?.storage }.filterNotNull()
 
     init {
-        applicationStorage.ensureCurrentVersion()
+        applicationStorage.initialize()
 
         scope.launch {
             val newConfig = appClient.getConfig()
@@ -80,19 +71,18 @@ class ConferenceService(
             applicationStorage.getConfig()
                 .filterNotNull()
                 .collect { config ->
-                    taggedLogger.log { "Loaded local config: $config" }
+                    taggedLogger.log { "Loaded local config: $config, loading data for ${config.currentYear}" }
 
-                    yearGraphs.update {
-                        config?.supportedYears?.associateWith { year -> yearGraphFactory.create(year) } ?: emptyMap()
+                    taggedLogger.log { "Recreating year graph" }
+                    currentYearGraph.update {
+                        yearGraphFactory.create(config.currentYear)
                     }
 
-                    taggedLogger.log { "Recreated year graphs: ${yearGraphs.value}" }
-
-                    taggedLogger.log { "Loading conference data for year ${config?.currentYear}" }
+                    taggedLogger.log { "Loading conference data" }
                     loadConferenceData()
 
-                    taggedLogger.log { "Preloading files" }
-                    downloadAllFiles()
+                    taggedLogger.log { "Preloading assets" }
+                    downloadAllAssets()
 
                     syncVotes()
 
@@ -120,6 +110,7 @@ class ConferenceService(
         }
     }
 
+    private val userId = applicationStorage.userId
 
     val agenda: StateFlow<List<Day>> =
         combine(
@@ -135,9 +126,6 @@ class ConferenceService(
         agenda.map {
             it.flatMap { it.timeSlots }.flatMap { it.sessions }
         }.stateIn(scope, SharingStarted.Eagerly, emptyList())
-
-    val userId: StateFlow<String?> = currentYearlyStorage.flatMapLatest { it.getUserId() }
-        .stateIn(scope, SharingStarted.Eagerly, null)
 
     val speakers: StateFlow<List<Speaker>> =
         currentYearlyStorage.flatMapLatest { it.getConferenceCache() }
@@ -175,6 +163,7 @@ class ConferenceService(
         // Load conference info (partners, days, about blocks, tags, map data)
         client.downloadConferenceInfo()?.let { storage.setConferenceInfoCache(it) }
 
+        // Load conference schedule data
         val newData = client.downloadConferenceData() ?: return
         val oldData = storage.getConferenceCache().first()
 
@@ -220,60 +209,32 @@ class ConferenceService(
         applicationStorage.setOnboardingComplete(true)
     }
 
+    /**
+     * Sign the privacy policy for the current year.
+     *
+     * @return true if the policy is signed.
+     */
     suspend fun acceptPrivacyNotice(): Boolean {
         val currentYearGraph = currentYearGraph.value ?: return false
         val storage = currentYearGraph.storage
+        val client = currentYearGraph.api
 
-        val userId = storage.getUserId().first()
-        if (userId != null) return true
+        if (storage.isPolicySigned().first()) return true
 
-        @OptIn(ExperimentalUuidApi::class)
-        val generatedUserId = "${getPlatformId()}-${Uuid.random()}"
-        return registerUser(generatedUserId)
+        val success = client.sign(userId.value)
+        if (success) {
+            storage.setPolicySigned(true)
+            taggedLogger.log { "Policy signed successfully for user ${userId.value}" }
+        } else {
+            taggedLogger.log { "Policy signing failed for user ${userId.value}" }
+        }
+        return success
     }
 
     fun acceptPrivacyNoticeAsync() {
         scope.launch {
             acceptPrivacyNotice()
         }
-    }
-
-    private suspend fun registerUser(newUserId: String): Boolean {
-        val currentYearGraph = currentYearGraph.value ?: return false
-        val storage = currentYearGraph.storage
-        val client = currentYearGraph.api
-
-        val success = client.sign(newUserId)
-        if (success) {
-            storage.setUserId(newUserId)
-            storage.setPendingUserId(null)
-            taggedLogger.log { "Signed up successfully with $newUserId" }
-        } else {
-            storage.setPendingUserId(newUserId)
-            taggedLogger.log { "Sign up failed, stored pending user ID $newUserId" }
-        }
-        return success
-    }
-
-    /**
-     * Ensure that we have a valid user ID.
-     *
-     * If a user ID is not yet set, but there's a pending user ID,
-     * this method will attempt to send that to the server.
-     *
-     * @return true if there's a valid user ID set.
-     */
-    private suspend fun checkUserId(): Boolean {
-        val currentYearGraph = currentYearGraph.value ?: return false
-        val storage = currentYearGraph.storage
-
-        val userId = storage.getUserId().first()
-        if (userId != null) return true
-
-        val pendingUserId = storage.getPendingUserId().first()
-        if (pendingUserId == null) return false
-
-        return registerUser(pendingUserId)
     }
 
     /**
@@ -301,14 +262,13 @@ class ConferenceService(
         storage.setNotificationSettings(settings)
     }
 
-    suspend fun canVote(): Boolean {
-        val currentYearGraph = currentYearGraph.value ?: return false
-        val storage = currentYearGraph.storage
-        return storage.getUserId().first() != null
+    suspend fun isPolicySigned(): Boolean {
+        val storage = currentYearGraph.value?.storage ?: return false
+        return storage.isPolicySigned().first()
     }
 
     suspend fun vote(sessionId: SessionId, rating: Score?): Boolean {
-        if (!checkUserId()) return false
+        if (!isPolicySigned()) return false
 
         val currentYearGraph = currentYearGraph.value ?: return false
         val storage = currentYearGraph.storage
@@ -327,7 +287,7 @@ class ConferenceService(
     }
 
     suspend fun sendFeedback(sessionId: SessionId, feedbackValue: String): Boolean {
-        if (!checkUserId()) return false
+        if (!isPolicySigned()) return false
         val client = currentYearGraph.value?.api ?: return false
         return client.sendFeedback(sessionId, feedbackValue)
     }
@@ -350,7 +310,7 @@ class ConferenceService(
 
 
     suspend fun setFavorite(sessionId: SessionId, favorite: Boolean) {
-        withContext(NonCancellable) {
+        withContext(Dispatchers.Default + NonCancellable) {
             val currentYearGraph = currentYearGraph.value ?: return@withContext
             val storage = currentYearGraph.storage
 
@@ -427,8 +387,8 @@ class ConferenceService(
 
 
     private suspend fun syncVotes() {
-        if (!checkUserId()) {
-            taggedLogger.log { "Can't sync votes, missing userId" }
+        if (!isPolicySigned()) {
+            taggedLogger.log { "Can't sync votes, policy not signed" }
             return
         }
 
@@ -436,7 +396,7 @@ class ConferenceService(
         val storage = currentYearGraph.storage
         val client = currentYearGraph.api
 
-        taggedLogger.log { "Synchronizing votes for user ${client.userId.value}" }
+        taggedLogger.log { "Synchronizing votes for user ${userId.value}" }
 
         val apiVotes = client.myVotes().associateBy { it.sessionId }
         val localVotes = storage.getVotes().first().associateBy { it.sessionId }
@@ -456,7 +416,7 @@ class ConferenceService(
         taggedLogger.log { "Synchronized votes successfully" }
     }
 
-    suspend fun downloadAllFiles() {
+    suspend fun downloadAllAssets() {
         val currentYearGraph = currentYearGraph.value ?: return
         val storage = currentYearGraph.storage
         val client = currentYearGraph.api
@@ -472,22 +432,22 @@ class ConferenceService(
         val mapPaths = mapData?.floors?.flatMap { listOf(it.svgPathLight, it.svgPathDark) } ?: emptyList()
 
         val allFiles = (docPaths + mapPaths)
-        val missing = allFiles.filter { storage.getFile(it) == null }
+        val missing = allFiles.filter { storage.getAsset(it) == null }
 
         if (missing.isEmpty()) {
-            taggedLogger.log { "All files cached locally" }
+            taggedLogger.log { "All assets cached locally" }
             return
         }
 
-        taggedLogger.log { "${missing.size} file(s) missing, downloading" }
+        taggedLogger.log { "${missing.size} asset(s) missing, downloading" }
 
         for (path in missing) {
-            val content = client.downloadFile(path)
+            val content = client.downloadAsset(path)
             if (content != null) {
-                storage.setFile(path, content)
-                taggedLogger.log { "Cached file: $path" }
+                storage.setAsset(path, content)
+                taggedLogger.log { "Cached asset: $path" }
             } else {
-                taggedLogger.log { "Failed to download file: $path" }
+                taggedLogger.log { "Failed to download asset: $path" }
             }
         }
     }
@@ -496,43 +456,44 @@ class ConferenceService(
      * Reads the file contents from cache if available,
      * or attempts to download it (once) if missing.
      */
-    suspend fun getFile(path: String): String? {
-        taggedLogger.log { "Reading file: $path" }
+    suspend fun getAsset(path: String): String? {
+        taggedLogger.log { "Reading asset: $path" }
 
         val storage = currentYearGraph.value?.storage ?: return null
-        val cached = storage.getFile(path)
+        val cached = storage.getAsset(path)
 
         if (cached != null) {
             taggedLogger.log { "Found in cache: $path" }
             return cached
         }
 
-        downloadFile(path)
+        downloadAsset(path)
 
-        return storage.getFile(path)
+        return storage.getAsset(path)
     }
 
-    suspend fun downloadFile(path: String) {
+    suspend fun downloadAsset(path: String) {
         val currentYearGraph = currentYearGraph.value ?: return
         val storage = currentYearGraph.storage
         val client = currentYearGraph.api
 
-        taggedLogger.log { "Downloading file: $path" }
-        val content = client.downloadFile(path)
+        taggedLogger.log { "Downloading asset: $path" }
+        val content = client.downloadAsset(path)
         if (content != null) {
-            taggedLogger.log { "Cached file: $path" }
-            storage.setFile(path, content)
+            taggedLogger.log { "Cached asset: $path" }
+            storage.setAsset(path, content)
         } else {
-            taggedLogger.log { "Failed to download file: $path" }
+            taggedLogger.log { "Failed to download asset: $path" }
         }
     }
 
     fun getPartner(partnerId: PartnerId): Flow<PartnerInfo?> {
         return conferenceInfo
+            .filterNotNull()
             .map { info ->
-                info ?: return@map null
-
-                info.partners.flatMap { it.partners }.firstOrNull { it.id == partnerId }
+                info.partners
+                    .flatMap { it.partners }
+                    .firstOrNull { it.id == partnerId }
             }
     }
 }

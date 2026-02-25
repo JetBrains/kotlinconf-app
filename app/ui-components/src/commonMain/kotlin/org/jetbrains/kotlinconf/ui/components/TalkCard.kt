@@ -131,7 +131,6 @@ fun TalkCard(
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     onClick: () -> Unit,
     feedbackEnabled: Boolean,
-    userSignedIn: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor by animateColorAsState(
@@ -197,7 +196,6 @@ fun TalkCard(
             )
             FeedbackBlock(
                 status = status,
-                userSignedIn = userSignedIn,
                 initialEmotion = initialEmotion,
                 onSubmitFeedback = onSubmitFeedback,
                 onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
@@ -433,7 +431,6 @@ private const val FeedbackAnimationDuration = 50
 @Composable
 private fun FeedbackBlock(
     status: TalkStatus,
-    userSignedIn: Boolean,
     initialEmotion: Emotion? = null,
     onSubmitFeedback: (Emotion?) -> Unit,
     onRequestFeedbackWithComment: (() -> Unit)?,
@@ -521,24 +518,19 @@ private fun FeedbackBlock(
                                 indication = null,
                                 interactionSource = null
                             ) {
-                                if (userSignedIn) {
-                                    hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
-                                    selectedEmotion =
-                                        if (emotion == selectedEmotion) null else emotion
-                                    onSubmitFeedback(selectedEmotion)
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
+                                selectedEmotion =
+                                    if (emotion == selectedEmotion) null else emotion
+                                onSubmitFeedback(selectedEmotion)
 
-                                    if (selectedEmotion != null) {
-                                        if (onRequestFeedbackWithComment != null) {
-                                            onRequestFeedbackWithComment()
-                                        } else {
-                                            feedbackExpanded = true
-                                        }
+                                if (selectedEmotion != null) {
+                                    if (onRequestFeedbackWithComment != null) {
+                                        onRequestFeedbackWithComment()
                                     } else {
-                                        feedbackExpanded = false
+                                        feedbackExpanded = true
                                     }
                                 } else {
-                                    hapticFeedback.performHapticFeedback(HapticFeedbackType.Reject)
-                                    onSubmitFeedback(selectedEmotion)
+                                    feedbackExpanded = false
                                 }
                             }
                             .padding(12.dp),
@@ -611,7 +603,6 @@ private fun TalkCardLivePreview() = PreviewHelper {
         onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
         onClick = { println("Clicked session") },
         feedbackEnabled = true,
-        userSignedIn = true,
     )
 }
 
@@ -641,6 +632,5 @@ private fun TalkCardUpcomingPreview() = PreviewHelper {
         onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
         onClick = { println("Clicked session") },
         feedbackEnabled = false,
-        userSignedIn = true,
     )
 }
