@@ -424,6 +424,8 @@ class ConferenceService(
         val client = currentYearGraph.api
 
         val docPaths = listOf(
+            "documents/app-privacy-notice.md",
+            "documents/app-terms.md",
             "documents/code-of-conduct.md",
             "documents/visitors-privacy-notice.md",
             "documents/visitors-terms.md",
