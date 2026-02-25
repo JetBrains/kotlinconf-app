@@ -159,6 +159,7 @@ Bitte versuchen Sie es erneut.</string>
     <string name="partners_digital">Digital</string>
     <string name="partners_media">Medien</string>
     <string name="partners_swag">Offizielle KotlinConf-Merchandise</string>
+    <string name="partners_error">Partnerinformationen sind nicht verfügbar.</string>
 
     <string name="partner_detail_title">Partner</string>
 </resources>
