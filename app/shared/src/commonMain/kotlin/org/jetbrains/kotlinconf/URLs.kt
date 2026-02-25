@@ -2,9 +2,10 @@ package org.jetbrains.kotlinconf
 
 object URLs {
     // API Endpoints
-    const val STAGING_URL = "https://kotlin-conf-staging.labs.jb.gg/"
+    const val STAGING_URL = "https://kotlin-conf-staging.labs.jb.gg"
     const val PRODUCTION_URL = "https://kotlinconf-app-prod.labs.jb.gg"
-    const val LOCAL_URL = "http://10.0.2.2:8080"
+    const val LOCAL_URL = "http://0.0.0.0:8080"
+    const val ANDROID_LOCAL_URL = "http://10.0.2.2:8080"
 
     // kotlinconf.com
     const val KOTLINCONF_HOMEPAGE = "https://kotlinconf.com/"

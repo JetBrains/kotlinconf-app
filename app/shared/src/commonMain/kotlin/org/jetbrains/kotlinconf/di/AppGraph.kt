@@ -10,10 +10,20 @@ import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
 import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 import dev.zacsweers.metrox.viewmodel.ViewModelGraph
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.http.takeFrom
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import org.jetbrains.kotlinconf.APIClient
+import org.jetbrains.kotlinconf.network.ApplicationApi
+import io.ktor.client.plugins.logging.Logger as KtorLogger
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.FakeTimeProvider
 import org.jetbrains.kotlinconf.Flags
@@ -34,7 +44,6 @@ interface AppGraph : ViewModelGraph {
 
     val scope: CoroutineScope
     val bufferedDelegatingLogger: BufferedDelegatingLogger
-    val applicationStorage: ApplicationStorage
     val notificationConfiguration: NotificationPlatformConfiguration
 
     @Provides
@@ -56,18 +65,46 @@ interface AppGraph : ViewModelGraph {
 
     @Provides
     @SingleIn(AppScope::class)
-    fun provideApiClient(
+    fun provideHttpClient(
         applicationStorage: ApplicationStorage,
         platformFlags: Flags,
         logger: Logger,
-    ): APIClient {
-        val flags = applicationStorage.getFlagsBlocking()
+    ): HttpClient {
 
-        val endpoint = when {
+        val flags = applicationStorage.getFlagsBlocking()
+        val baseUrl = when {
             flags != null && (flags != platformFlags) -> URLs.STAGING_URL
             else -> URLs.PRODUCTION_URL
         }
-        return APIClient(endpoint, logger)
+
+        return HttpClient {
+            install(ContentNegotiation) {
+                json()
+            }
+
+            install(Logging) {
+                level = LogLevel.HEADERS
+                this.logger = object : KtorLogger {
+                    override fun log(message: String) {
+                        logger.log("HttpClient") { message }
+                    }
+                }
+            }
+
+            expectSuccess = true
+            install(HttpTimeout) {
+                requestTimeoutMillis = 5000
+            }
+
+            install(HttpRequestRetry) {
+                retryOnServerErrors(maxRetries = 3)
+                exponentialDelay()
+            }
+
+            install(DefaultRequest) {
+                url.takeFrom(baseUrl)
+            }
+        }
     }
 
     @Provides
@@ -75,12 +112,12 @@ interface AppGraph : ViewModelGraph {
     fun provideTimeProvider(
         applicationStorage: ApplicationStorage,
         logger: Lazy<Logger>,
-        apiClient: Lazy<APIClient>,
+        applicationApi: Lazy<ApplicationApi>,
     ): TimeProvider {
         val flags = applicationStorage.getFlagsBlocking()
         return when {
             flags != null && flags.useFakeTime -> FakeTimeProvider(logger.value)
-            else -> ServerBasedTimeProvider(apiClient.value)
+            else -> ServerBasedTimeProvider(applicationApi.value)
         }
     }
 }

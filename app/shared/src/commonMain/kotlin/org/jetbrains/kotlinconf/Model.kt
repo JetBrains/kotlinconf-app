@@ -16,6 +16,11 @@ enum class Theme {
     SYSTEM,
     LIGHT,
     DARK,
+
+    ;
+    companion object {
+        operator fun invoke(text: String?): Theme = valueOf(text ?: return SYSTEM)
+    }
 }
 
 @Serializable

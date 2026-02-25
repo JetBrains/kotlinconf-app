@@ -39,5 +39,5 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 android-build
 
-**/store.properties
+app/desktopApp/files
 /tmp/
