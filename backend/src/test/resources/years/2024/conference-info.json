@@ -1,0 +1,29 @@
+{
+  "partners": [],
+  "days": [],
+  "aboutBlocks": [],
+  "tags": {
+    "categories": [],
+    "levels": [],
+    "formats": []
+  },
+  "mapData": {
+    "venueAddress": "Test Venue 2024",
+    "floors": [
+      {
+        "name": "Main hall",
+        "svgPathLight": "maps/main-hall.svg",
+        "svgPathDark": "maps/main-hall-dark.svg"
+      }
+    ],
+    "rooms": {
+      "Room 1": { "floorIndex": 0, "offsetX": 0.2, "offsetY": 0.8 }
+    },
+    "defaultFloorIndex": 0,
+    "defaultOffsetX": 0.5,
+    "defaultOffsetY": 0.5,
+    "initialZoom": 1.5,
+    "minZoom": 0.5,
+    "maxZoom": 4.0
+  }
+}
