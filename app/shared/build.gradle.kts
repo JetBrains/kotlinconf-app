@@ -92,11 +92,26 @@ kotlin {
             implementation(libs.kotlinx.coroutines.test)
         }
 
+        jvmTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+        }
+
         val nonAndroidMain by creating {
             dependsOn(commonMain.get())
         }
         configure(listOf(iosMain, jvmMain, webMain)) {
             get().dependsOn(nonAndroidMain)
+        }
+
+        val nonWebMain by creating {
+            dependsOn(commonMain.get())
+            dependencies {
+                implementation(libs.okio)
+            }
+        }
+        configure(listOf(androidMain, iosMain, jvmMain)) {
+            get().dependsOn(nonWebMain)
         }
 
         androidMain.dependencies {

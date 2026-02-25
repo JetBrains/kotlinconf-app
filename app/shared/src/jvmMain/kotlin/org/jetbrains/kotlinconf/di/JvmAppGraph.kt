@@ -20,6 +20,11 @@ interface JvmAppGraph : AppGraph {
 
     @Provides
     @SingleIn(AppScope::class)
+    @FileStorageDir
+    fun provideFileStorageDir(): String = "files"
+
+    @Provides
+    @SingleIn(AppScope::class)
     fun provideLocalNotificationService(): LocalNotificationService = EmptyLocalNotificationService()
 
     @Provides

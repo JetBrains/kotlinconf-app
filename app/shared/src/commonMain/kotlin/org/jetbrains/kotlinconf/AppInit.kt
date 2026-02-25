@@ -5,11 +5,9 @@ import com.mmk.kmpnotifier.notification.NotifierManager.Listener
 import com.mmk.kmpnotifier.notification.PayloadData
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.di.AppGraph
 import org.jetbrains.kotlinconf.navigation.navigateToSession
-import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.utils.BufferedDelegatingLogger
 import org.jetbrains.kotlinconf.utils.DebugLogger
 import org.jetbrains.kotlinconf.utils.Logger
@@ -21,11 +19,11 @@ fun initApp(
     appGraph: AppGraph,
     platformLogger: Logger,
 ) {
-    initLogging(
+    initFlagsAndLogging(
         appScope = appGraph.scope,
         platformLogger = platformLogger,
         bufferedDelegatingLogger = appGraph.bufferedDelegatingLogger,
-        applicationStorage = appGraph.applicationStorage,
+        flagsManager = appGraph.flagsManager,
     )
     initNotifier(
         configuration = appGraph.notificationConfiguration,
@@ -33,18 +31,17 @@ fun initApp(
     )
 }
 
-
-private fun initLogging(
+private fun initFlagsAndLogging(
     appScope: CoroutineScope,
     platformLogger: Logger,
     bufferedDelegatingLogger: BufferedDelegatingLogger,
-    applicationStorage: ApplicationStorage,
+    flagsManager: FlagsManager,
 ) {
     appScope.launch {
-        val flags = applicationStorage.getFlags().first()
+        val flags = flagsManager.initAndGetFlags()
         bufferedDelegatingLogger.attach(
             when {
-                flags != null && flags.debugLogging -> DebugLogger(platformLogger)
+                flags.debugLogging -> DebugLogger(platformLogger)
                 else -> NoopProdLogger()
             }
         )
