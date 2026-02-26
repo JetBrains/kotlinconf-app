@@ -37,7 +37,7 @@ fun Application.routesModule() {
  * Registers all year-based routes.
  * Route handlers will check for the "year" path parameter:
  * - If present: validate and use that year
- * - If absent: use current year
+ * - If absent: use 2025 (temporary, will be removed soon)
  */
 private fun Route.yearBasedRoutes() {
     userRoutes()

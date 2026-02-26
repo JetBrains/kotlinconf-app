@@ -40,4 +40,4 @@ conference:
 
 - http://0.0.0.0:8080/{YEAR}/conference should return the archived data
 - http://0.0.0.0:8080/{NEW_YEAR}/conference should return the live Sessionize data
-- http://0.0.0.0:8080/conference should also return the live Sessionize data
+- http://0.0.0.0:8080/conference should still return 2025 data
