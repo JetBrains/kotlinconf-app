@@ -10,22 +10,33 @@ import io.ktor.server.routing.post
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.kotlinconf.backend.repositories.KotlinConfRepository
+import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.koin.ktor.ext.inject
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
+private val ARCHIVED_YEAR_FORBIDDEN = HttpStatusCode(403, "Forbidden: Archived Year")
+
 /*
-POST http://localhost:8080/sign
+POST http://localhost:8080/{year}/sign
 1238476512873162837
  */
 fun Route.userRoutes() {
     val repository by inject<KotlinConfRepository>()
+    val config: ConferenceConfig by inject()
 
     post("sign") {
+        val year = getYearFromPath(config)
+
+        if (!isLiveRequest(config)) {
+            return@post call.respond(ARCHIVED_YEAR_FORBIDDEN)
+        }
+
         val userUUID = call.receive<String>()
         val timestamp = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        val created = repository.createUser(userUUID, timestamp)
-        val code = if (created) HttpStatusCode.Created else HttpStatusCode.Conflict
+        repository.createUser(userUUID, timestamp)
+        val signed = repository.signPolicy(userUUID, year)
+        val code = if (signed) HttpStatusCode.Created else HttpStatusCode.Conflict
         call.respond(code)
     }
 }

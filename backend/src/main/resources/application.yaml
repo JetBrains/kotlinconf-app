@@ -5,6 +5,7 @@ ktor:
     application:
         modules:
             - org.jetbrains.kotlinconf.backend.DiModuleKt.diModule
+            - org.jetbrains.kotlinconf.backend.StartupModuleKt.startupModule
             - org.jetbrains.kotlinconf.backend.PluginsModuleKt.pluginsSetup
             - org.jetbrains.kotlinconf.backend.RoutesModuleKt.routesModule
 
@@ -13,6 +14,10 @@ sessionize:
     url: "https://sessionize.com/api/v2/oleuq4yu/view/All"
     imagesUrl: "https://sessionize.com/image/"
     interval: 60
+
+conference:
+    currentYear: 2025
+    supportedYears: [2025]
 
 database:
     host: "$DB0_HOST:"
