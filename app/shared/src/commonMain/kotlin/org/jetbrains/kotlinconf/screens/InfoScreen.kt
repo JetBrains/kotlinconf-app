@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,31 +20,28 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.generated.resources.Res
-import org.jetbrains.kotlinconf.generated.resources.about_app_link_github
 import org.jetbrains.kotlinconf.generated.resources.arrow_up_right_24
 import org.jetbrains.kotlinconf.generated.resources.bluesky
 import org.jetbrains.kotlinconf.generated.resources.info_link_about_app
 import org.jetbrains.kotlinconf.generated.resources.info_link_about_conf
 import org.jetbrains.kotlinconf.generated.resources.info_link_code_of_conduct
-import org.jetbrains.kotlinconf.generated.resources.info_link_how_to_find_venue
 import org.jetbrains.kotlinconf.generated.resources.info_link_description_bluesky
 import org.jetbrains.kotlinconf.generated.resources.info_link_description_slack
 import org.jetbrains.kotlinconf.generated.resources.info_link_description_twitter
+import org.jetbrains.kotlinconf.generated.resources.info_link_how_to_find_venue
 import org.jetbrains.kotlinconf.generated.resources.info_link_partners
 import org.jetbrains.kotlinconf.generated.resources.info_link_settings
 import org.jetbrains.kotlinconf.generated.resources.info_title
-import org.jetbrains.kotlinconf.generated.resources.kotlinconf_by_jetbrains
 import org.jetbrains.kotlinconf.generated.resources.slack
 import org.jetbrains.kotlinconf.generated.resources.twitter
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
-import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
-import org.jetbrains.kotlinconf.ui.generated.resources.arrow_up_right_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
@@ -64,6 +60,9 @@ fun InfoScreen(
     viewModel: InfoViewModel = metroViewModel(),
 ) {
     val venueAddress = viewModel.venueAddress.collectAsStateWithLifecycle().value
+    val isDark = KotlinConfTheme.colors.isDark
+    val images = viewModel.images.collectAsStateWithLifecycle().value
+    val logoUrl = if (isDark) images?.kotlinConfDark else images?.kotlinConfLight
     Column(
         Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
@@ -80,13 +79,15 @@ fun InfoScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Image(
-                imageVector = vectorResource(Res.drawable.kotlinconf_by_jetbrains),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(24.dp)
-                    .widthIn(max = 360.dp)
-            )
+            if (logoUrl != null) {
+                AsyncImage(
+                    model = logoUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(24.dp)
+                        .widthIn(max = 360.dp)
+                )
+            }
             PageMenuItem(stringResource(Res.string.info_link_about_conf), onClick = onAboutConf)
             if (venueAddress != null) {
                 PageMenuItem(

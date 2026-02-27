@@ -33,14 +33,6 @@ Für den Quellcode und weitere technische Details besuchen Sie das GitHub-Reposi
     <string name="info_link_description_bluesky">Bluesky</string>
 
     <string name="about_conference_title">Über die Konferenz</string>
-    <string name="about_conference_header">KotlinConf 2025</string>
-    <string name="about_conference_description">21. Mai: Workshops
-22.–23. Mai: Konferenz
-Bella Center, Kopenhagen, Dänemark
-
-KotlinConf ist die offizielle Kotlin-Konferenz von JetBrains. Es ist ein Ort, an dem sich die Community trifft und über alles rund um Kotlin diskutiert.
-
-Social-Media-Hashtag: #KotlinConf</string>
 
     <string name="about_conference_privacy_notice_link">Datenschutzhinweis für Besucher</string>
     <string name="about_conference_general_terms_link">Allgemeine Geschäftsbedingungen</string>

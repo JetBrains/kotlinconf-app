@@ -9,7 +9,10 @@ import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import org.jetbrains.kotlinconf.ConferenceImages
+import org.jetbrains.kotlinconf.ConferenceInfo
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.Speaker
@@ -51,4 +54,7 @@ class AboutConferenceViewModel(
                 )
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val conferenceInfo: StateFlow<ConferenceInfo?> = service.conferenceInfo
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 }

@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -23,22 +22,19 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
 import dev.zacsweers.metrox.viewmodel.metroViewModel
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.generated.resources.Res
-import org.jetbrains.kotlinconf.generated.resources.about_conference_description
 import org.jetbrains.kotlinconf.generated.resources.about_conference_general_terms_link
-import org.jetbrains.kotlinconf.generated.resources.about_conference_header
 import org.jetbrains.kotlinconf.generated.resources.about_conference_privacy_notice_link
 import org.jetbrains.kotlinconf.generated.resources.about_conference_title
 import org.jetbrains.kotlinconf.generated.resources.about_conference_website_link
 import org.jetbrains.kotlinconf.generated.resources.arrow_up_right_24
-import org.jetbrains.kotlinconf.generated.resources.kotlinconf_by_jetbrains
 import org.jetbrains.kotlinconf.generated.resources.kotlinconf_by_jetbrains_description
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
@@ -56,6 +52,12 @@ fun AboutConference(
     onSpeaker: (SpeakerId) -> Unit,
     viewModel: AboutConferenceViewModel = metroViewModel(),
 ) {
+    val isDark = KotlinConfTheme.colors.isDark
+    val conferenceInfo = viewModel.conferenceInfo.collectAsStateWithLifecycle().value
+    val logoUrl = when {
+        isDark -> conferenceInfo?.images?.kotlinConfDark
+        else -> conferenceInfo?.images?.kotlinConfLight
+    }
     val scrollState = rememberScrollState()
     ScrollToTopHandler(scrollState)
     ScreenWithTitle(
@@ -63,19 +65,21 @@ fun AboutConference(
         onBack = onBack,
         contentScrollState = scrollState,
     ) {
-        Column(
-            modifier = Modifier.padding(top = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-        ) {
-            Text(
-                text = stringResource(Res.string.about_conference_header),
-                style = KotlinConfTheme.typography.h1,
-                modifier = Modifier.semantics { heading() }
-            )
-            Text(text = stringResource(Res.string.about_conference_description))
+        if (conferenceInfo != null) {
+            Column(
+                modifier = Modifier.padding(vertical = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+            ) {
+                Text(
+                    text = conferenceInfo.aboutHeader,
+                    style = KotlinConfTheme.typography.h1,
+                    modifier = Modifier.semantics { heading() }
+                )
+                Text(text = conferenceInfo.aboutDescription)
+            }
         }
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Column(
             verticalArrangement = Arrangement.spacedBy(48.dp),
@@ -96,13 +100,17 @@ fun AboutConference(
             }
         }
 
-        Image(
-            painter = painterResource(Res.drawable.kotlinconf_by_jetbrains),
-            contentDescription = stringResource(Res.string.kotlinconf_by_jetbrains_description),
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-                .padding(vertical = 64.dp)
-                .widthIn(max = 360.dp)
-        )
+        Spacer(modifier = Modifier.height(64.dp))
+
+        if (logoUrl != null) {
+            AsyncImage(
+                model = logoUrl,
+                contentDescription = stringResource(Res.string.kotlinconf_by_jetbrains_description),
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+                    .widthIn(max = 360.dp)
+            )
+            Spacer(modifier = Modifier.height(64.dp))
+        }
 
         Column(
             modifier = Modifier.padding(bottom = 24.dp),
@@ -149,7 +157,15 @@ private fun EventCard(
             )
             .clip(KotlinConfTheme.shapes.roundedCornerMd),
     ) {
-        DayHeader(month, day, line1, line2, modifier = Modifier.fillMaxWidth(), day2 = day2, fullWidth = true)
+        DayHeader(
+            month = month,
+            day = day,
+            line1 = line1,
+            line2 = line2,
+            modifier = Modifier.fillMaxWidth(),
+            day2 = day2,
+            fullWidth = true
+        )
 
         if (description.isNotEmpty()) {
             Text(description, modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp))
