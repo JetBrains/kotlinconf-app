@@ -1,0 +1,250 @@
+{
+  "aboutHeader": "KotlinConf 2026",
+  "aboutDescription": "May 20: Workshops\nMay 21–22: Conference\nICM München, Munich, Germany\n\nKotlinConf is the official Kotlin conference by JetBrains. It is a place for the community to gather and discuss all things Kotlin.",
+  "images": {
+    "kotlinConfLight": "partner-logos/kotlinconf-light.svg",
+    "kotlinConfDark": "partner-logos/kotlinconf-dark.svg"
+  },
+  "partners": [
+    {
+      "level": "Gold",
+      "partners": [
+        {
+          "id": "google",
+          "name": "Google",
+          "description": "Google's mission is to organize the world's information and make it universally accessible and useful.",
+          "logoUrlLight": "partner-logos/google.svg",
+          "logoUrlDark": "partner-logos/google.svg",
+          "url": "https://about.google/"
+        }
+      ]
+    },
+    {
+      "level": "Silver",
+      "partners": [
+        {
+          "id": "kotlinfoundation",
+          "name": "Kotlin Foundation",
+          "description": "The Kotlin Foundation is a non-profit company whose mission is to promote and advance the Kotlin ecosystem",
+          "logoUrlLight": "partner-logos/kotlin-foundation-light.svg",
+          "logoUrlDark": "partner-logos/kotlin-foundation-dark.svg",
+          "url": "https://kotlinfoundation.org/"
+        },
+        {
+          "id": "gradle",
+          "name": "Gradle",
+          "description": "Develocity is the leading software solution for improving developer productivity & the developer experience. It does this by leveraging advanced build and test performance acceleration technologies.",
+          "logoUrlLight": "partner-logos/gradle-light.svg",
+          "logoUrlDark": "partner-logos/gradle-dark.svg",
+          "url": "https://gradle.org/"
+        }
+      ]
+    },
+    {
+      "level": "Bronze",
+      "partners": [
+        {
+          "id": "cirruslabs",
+          "name": "Cirrus Labs",
+          "description": "Leading provider of GitHub Actions runners for macOS & Linux. Cirrus Runners offers fixed pricing and unlimited minutes, high-performance CPUs for Kotlin Multiplatform, Android & Docker builds.",
+          "logoUrlLight": "partner-logos/cirruslabs-light.svg",
+          "logoUrlDark": "partner-logos/cirruslabs-dark.svg",
+          "url": "https://cirruslabs.org/"
+        },
+        {
+          "id": "goodnotes",
+          "name": "Goodnotes",
+          "description": "Goodnotes is the leading digital note-taking app used by millions worldwide and by professionals at thousands of companies to capture, develop, and transform ideas into action. Founded in 2011 as a digital handwriting pioneer, Goodnotes continues to set new standards for context-rich, AI-powered productivity and cross-platform collaboration for both individuals and teams. Goodnotes supports all natural human input methods, including handwriting, typing, sketching, and voice, while providing AI assistance that adapts to how people naturally think and work. Goodnotes was named Apple's 2022 iPad App of the Year.",
+          "logoUrlLight": "partner-logos/goodnotes-light.svg",
+          "logoUrlDark": "partner-logos/goodnotes-dark.svg",
+          "url": "https://www.goodnotes.com/"
+        },
+        {
+          "id": "kotzilla",
+          "name": "Kotzilla",
+          "description": "Creators of Koin, the popular Kotlin dependency injection framework, Kotzilla provides debugging tools for Kotlin devs to resolve complex app issues, empowering them to develop safer, faster apps.",
+          "logoUrlLight": "partner-logos/kotzilla-light.svg",
+          "logoUrlDark": "partner-logos/kotzilla-dark.svg",
+          "url": "https://kotzilla.io/"
+        },
+        {
+          "id": "sentry",
+          "name": "Sentry",
+          "description": "Sentry helps every developer detect, understand, and fix broken code, fast. Using Sentry's debugging platform\u2013that favors action over dashboards\u2013decreases resolution time from days to minutes, resulting in freed up dev cycles and happier customers. Founded in 2008 by David Cramer and Chris Jennings as an Open Source side project, Sentry is used by over 4 million developers and 150,000 organizations, including Disney, Cloudflare, GitHub, Slack, Instacart, Atlassian, and Riot Games. Learn more at Sentry or follow Sentry on Bluesky, GitHub, Twitter, or LinkedIn.",
+          "logoUrlLight": "partner-logos/sentry-light.svg",
+          "logoUrlDark": "partner-logos/sentry-dark.svg",
+          "url": "https://sentry.io/welcome"
+        }
+      ]
+    },
+    {
+      "level": "Digital",
+      "partners": [
+        {
+          "id": "kodein",
+          "name": "Kodein Koders",
+          "description": "Level-up your Kotlin expertise with Kodein Koders: guiding developers to master Kotlin Multiplatform through hands-on workshops to tackle real-world Android, iOS, Desktop, and Web challenges.",
+          "logoUrlLight": "partner-logos/kodeinkoders-light.svg",
+          "logoUrlDark": "partner-logos/kodeinkoders-dark.svg",
+          "url": "https://kodein.net"
+        },
+        {
+          "id": "worldline",
+          "name": "Worldline",
+          "description": "Worldline is a global payment processor in Europe. Our technology powers the growth of millions of businesses around the world; from your local coffee shop, to global e-commerce players and international banks.",
+          "logoUrlLight": "partner-logos/worldline.svg",
+          "logoUrlDark": "partner-logos/worldline.svg",
+          "url": "https://worldline.com/"
+        }
+      ]
+    },
+    {
+      "level": "Media",
+      "partners": [
+        {
+          "id": "androidweekly",
+          "name": "Android Weekly",
+          "description": "Android Weekly is a free newsletter that helps you to stay cutting-edge with your Android Development.",
+          "logoUrlLight": "partner-logos/android-weekly-light.svg",
+          "logoUrlDark": "partner-logos/android-weekly-dark.svg",
+          "url": "https://androidweekly.net"
+        },
+        {
+          "id": "jvmweekly",
+          "name": "JVM Weekly",
+          "description": "From the latest updates in JVM languages like Java, Kotlin, and Scala to emerging technologies like GraalVM and Quarkus, this newsletter covers a wide range of topics that are of interest to developers and tech enthusiasts.",
+          "logoUrlLight": "partner-logos/jvm-weekly.svg",
+          "logoUrlDark": "partner-logos/jvm-weekly.svg",
+          "url": "https://www.jvm-weekly.com/"
+        },
+        {
+          "id": "kotlinweekly",
+          "name": "Kotlin Weekly",
+          "description": "Kotlin Weekly is your weekly source of Kotlin news, libraries, and events going on the Kotlin world.",
+          "logoUrlLight": "partner-logos/kotlin-weekly-light.svg",
+          "logoUrlDark": "partner-logos/kotlin-weekly-dark.svg",
+          "url": "https://kotlinweekly.net/"
+        }
+      ]
+    },
+    {
+      "level": "Swag",
+      "partners": [
+        {
+          "id": "pretix",
+          "name": "Pretix",
+          "description": "pretix helps you to sell tickets for your event in an easy way. It supports multi-lingual events and provides a wide range of features.",
+          "logoUrlLight": "partner-logos/pretix-light.svg",
+          "logoUrlDark": "partner-logos/pretix-dark.svg",
+          "url": "https://pretix.eu"
+        }
+      ]
+    }
+  ],
+  "days": [
+    {
+      "date": "2026-05-20",
+      "line1": "Workshop",
+      "line2": "Day"
+    },
+    {
+      "date": "2026-05-21",
+      "line1": "Conference",
+      "line2": "Day 1"
+    },
+    {
+      "date": "2026-05-22",
+      "line1": "Conference",
+      "line2": "Day 2"
+    }
+  ],
+  "aboutBlocks": [
+    {
+      "sessionId": "1148503",
+      "month": "MAY",
+      "day": "21",
+      "title1": "Opening",
+      "title2": "keynote",
+      "description": null
+    },
+    {
+      "sessionId": "1095750",
+      "month": "MAY",
+      "day": "22",
+      "title1": "Second day",
+      "title2": "keynote",
+      "description": null
+    },
+    {
+      "sessionId": "8316c80e-daeb-494a-8197-9443b84af81c",
+      "month": "MAY",
+      "day": "21",
+      "title1": "",
+      "title2": "Party",
+      "description": "Have fun and mingle with the community at the biggest Kotlin party of the year!"
+    },
+    {
+      "sessionId": "1166456",
+      "month": "MAY",
+      "day": "22",
+      "title1": "Golden Kodee",
+      "title2": "Awards",
+      "description": "The Golden Kodee honors outstanding contributors to the Kotlin community who share knowledge and inspire others."
+    }
+  ],
+  "tags": {
+    "categories": [
+      "Server-side",
+      "Multiplatform",
+      "Android",
+      "Extensibility/Tooling",
+      "Language and best practices",
+      "AI",
+      "Other"
+    ],
+    "levels": [
+      "Introductory and overview",
+      "Intermediate",
+      "Advanced"
+    ],
+    "formats": [
+      "Workshop",
+      "Regular session",
+      "Lightning talk",
+      "Codelab"
+    ]
+  },
+  "mapData": {
+    "venueAddress": "48.1367774197342 11.692216939881117",
+    "floors": [
+      {
+        "name": "Ground floor",
+        "svgPathLight": "maps/ground-floor.svg",
+        "svgPathDark": "maps/ground-floor-dark-placeholder.svg"
+      },
+      {
+        "name": "First floor",
+        "svgPathLight": "maps/first-floor.svg",
+        "svgPathDark": "maps/first-floor-dark-placeholder.svg"
+      },
+      {
+        "name": "Second floor",
+        "svgPathLight": "maps/second-floor.svg",
+        "svgPathDark": "maps/second-floor-dark-placeholder.svg"
+      }
+    ],
+    "rooms": {
+      "Auditorium 1": { "floorIndex": 0, "offsetX": 0.21, "offsetY": 0.77 },
+      "Room 5, Lightning talks": { "floorIndex": 0, "offsetX": 0.37, "offsetY": 0.16 },
+      "Keynote, Room 14": { "floorIndex": 1, "offsetX": 0.72, "offsetY": 0.27 },
+      "Room 13a": { "floorIndex": 1, "offsetX": 0.33, "offsetY": 0.21 },
+      "Room 13b": { "floorIndex": 1, "offsetX": 0.41, "offsetY": 0.21 }
+    },
+    "defaultFloorIndex": 0,
+    "defaultOffsetX": 0.5,
+    "defaultOffsetY": 0.5,
+    "initialZoom": 0.9,
+    "minZoom": 0.6,
+    "maxZoom": 3.0
+  }
+}
