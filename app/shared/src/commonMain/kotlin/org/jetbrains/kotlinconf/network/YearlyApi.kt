@@ -49,7 +49,7 @@ class YearlyApi(
         client.get { apiUrl("conference-info") }.body()
     }
 
-    suspend fun downloadFile(path: String): String? = safeApiCall {
+    suspend fun downloadAsset(path: String): String? = safeApiCall {
         client.get { apiUrl(path) }.bodyAsText()
     }
 

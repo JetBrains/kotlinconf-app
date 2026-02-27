@@ -38,9 +38,7 @@ class SessionViewModel(
     val speakers: StateFlow<List<Speaker>> = service.speakersBySessionId(sessionId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    val userSignedIn: StateFlow<Boolean> = service.userId
-        .map { it != null }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+    val userSignedIn: StateFlow<Boolean> = service.isPolicySignedFlow
 
     fun toggleFavorite(isBookmarked: Boolean) {
         viewModelScope.launch {
@@ -50,7 +48,7 @@ class SessionViewModel(
 
     fun submitFeedback(emotion: Emotion?) {
         viewModelScope.launch {
-            if (service.canVote()) {
+            if (service.isPolicySigned()) {
                 service.vote(sessionId, emotion?.toScore())
             } else {
                 _navigateToPrivacyNotice.value = true
@@ -60,7 +58,7 @@ class SessionViewModel(
 
     fun submitFeedbackWithComment(emotion: Emotion, comment: String) {
         viewModelScope.launch {
-            if (service.canVote()) {
+            if (service.isPolicySigned()) {
                 service.vote(sessionId, emotion.toScore())
                 service.sendFeedback(sessionId, comment)
             } else {
