@@ -1,4 +1,10 @@
 {
+  "aboutHeader": "KotlinConf 2025",
+  "aboutDescription": "May 21: Workshops\nMay 22–23: Conference\nBella Center, Copenhagen, Denmark\n\nKotlinConf is the official Kotlin conference by JetBrains. It is a place for the community to gather and discuss all things Kotlin.",
+  "images": {
+    "kotlinConfLight": "partner-logos/kotlinconf-light.svg",
+    "kotlinConfDark": "partner-logos/kotlinconf-dark.svg"
+  },
   "partners": [
     {
       "level": "Platinum",

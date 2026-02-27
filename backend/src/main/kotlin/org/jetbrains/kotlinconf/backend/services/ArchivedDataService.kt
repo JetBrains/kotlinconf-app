@@ -16,6 +16,10 @@ class ArchivedDataService(
     internal fun validateArchives() {
         val json = Json { ignoreUnknownKeys = true }
         for (year in config.supportedYears) {
+            if (year == config.currentYear) {
+                continue
+            }
+
             val data = getConferenceData(year)
             if (data == null) {
                 log.warn("No archived data found for year $year")

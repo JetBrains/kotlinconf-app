@@ -75,6 +75,8 @@ kotlin {
 
             implementation(libs.aboutlibraries.core)
 
+            implementation(libs.coil.compose)
+
             // Multiplatform Settings
             implementation(libs.settings)
             implementation(libs.settings.serialization)

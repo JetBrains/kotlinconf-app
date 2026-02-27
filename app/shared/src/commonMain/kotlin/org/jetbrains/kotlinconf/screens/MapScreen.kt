@@ -175,7 +175,6 @@ private fun MapScreenImpl(
 
 @Composable
 fun StaticMap(
-    zoom: Float = 2f,
     modifier: Modifier = Modifier,
     mapData: MapData,
     room: RoomData,
@@ -188,9 +187,13 @@ fun StaticMap(
     val svgData = svgsByPath[if (KotlinConfTheme.colors.isDark) floor.svgPathDark else floor.svgPathLight] ?: return
     val svg = remember(svgData) { Svg(svgData) }
 
+    val containerSize = LocalWindowInfo.current.containerSize
+    val scaleAdjustment = containerSize.width / svg.width
+    val initialZoom = scaleAdjustment * mapData.initialZoom * 1.5f
+
     Map(
         svg = svg,
-        state = rememberMapState(zoom, offset.asSvgOffset(svg)),
+        state = rememberMapState(initialZoom, offset.asSvgOffset(svg)),
         modifier = modifier,
         interactive = false,
     )
