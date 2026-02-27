@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf.backend.services
 
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.slf4j.LoggerFactory
+import java.util.concurrent.ConcurrentHashMap
 
 private val safeFilenamePattern = Regex("""^[A-Za-z0-9][A-Za-z0-9._-]*$""")
 private val validExtensions = setOf("md", "svg")
@@ -17,7 +18,7 @@ class AssetService(
 
     private val log = LoggerFactory.getLogger("AssetService")
 
-    private val assetCache = mutableMapOf<Pair<Int, String>, String>()
+    private val assetCache = ConcurrentHashMap<Pair<Int, String>, String>()
 
     fun getAsset(year: Int, assetType: AssetType, filename: String): String? {
         if (year !in config.supportedYears) {

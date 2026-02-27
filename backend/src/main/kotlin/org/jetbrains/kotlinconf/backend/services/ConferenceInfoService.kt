@@ -5,6 +5,7 @@ import org.jetbrains.kotlinconf.ConferenceInfo
 import org.jetbrains.kotlinconf.PartnerInfo
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.slf4j.LoggerFactory
+import java.util.concurrent.ConcurrentHashMap
 
 class ConferenceInfoService(
     private val config: ConferenceConfig
@@ -12,7 +13,7 @@ class ConferenceInfoService(
     private val log = LoggerFactory.getLogger("ConferenceInfoService")
     private val json = Json { ignoreUnknownKeys = true }
 
-    private val infoCache = mutableMapOf<Int, ConferenceInfo>()
+    private val infoCache = ConcurrentHashMap<Int, ConferenceInfo>()
 
     fun getConferenceInfo(year: Int): ConferenceInfo? {
         if (year !in config.supportedYears) {
