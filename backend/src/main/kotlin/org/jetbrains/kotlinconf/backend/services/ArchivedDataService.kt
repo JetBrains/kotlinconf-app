@@ -4,13 +4,14 @@ import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinconf.Conference
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.slf4j.LoggerFactory
+import java.util.concurrent.ConcurrentHashMap
 
 class ArchivedDataService(
     private val config: ConferenceConfig,
 ) {
     private val log = LoggerFactory.getLogger("ArchivedDataService")
 
-    private val cache = mutableMapOf<Int, ByteArray>()
+    private val cache = ConcurrentHashMap<Int, ByteArray>()
 
     internal fun validateArchives() {
         val json = Json { ignoreUnknownKeys = true }
