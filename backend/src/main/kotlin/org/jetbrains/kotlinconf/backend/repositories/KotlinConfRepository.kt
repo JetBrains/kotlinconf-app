@@ -22,6 +22,7 @@ import org.jetbrains.kotlinconf.backend.schema.SignedPolicies
 import org.jetbrains.kotlinconf.backend.schema.Users
 import org.jetbrains.kotlinconf.backend.schema.Votes
 import org.slf4j.LoggerFactory
+import kotlin.time.Clock
 
 internal class KotlinConfRepository(config: ApplicationConfig) {
     private val log = LoggerFactory.getLogger("KotlinConfRepository")
@@ -43,7 +44,7 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
             }
         } else {
             log.info("Host not found, using fallback")
-            hikariConfig.jdbcUrl = "jdbc:h2:file:./kotlinconfg"
+            hikariConfig.jdbcUrl = "jdbc:h2:file:./kotlinconfg;MODE=PostgreSQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
             hikariConfig.validate()
         }
 
@@ -74,7 +75,7 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
     }
 
     suspend fun signPolicy(
-        uuidValue: String, yearValue: Int
+        uuidValue: String, yearValue: Int, timestampValue: LocalDateTime
     ): Boolean = suspendTransaction {
         val count = SignedPolicies.selectAll()
             .where { (SignedPolicies.userId eq uuidValue) and (SignedPolicies.year eq yearValue) }
@@ -84,6 +85,7 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         SignedPolicies.insert {
             it[userId] = uuidValue
             it[year] = yearValue
+            it[timestamp] = timestampValue.toString()
         }
 
         return@suspendTransaction true

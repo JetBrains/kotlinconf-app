@@ -66,13 +66,18 @@ class AssetService(
         )
 
         for (year in config.supportedYears) {
+            var issueCount = 0
             for (name in requiredDocuments) {
                 val content = loadAsset(year, AssetType.Document, name)
                 when {
-                    content == null -> log.error("Missing document '$name' for year $year")
-                    content.isBlank() -> log.error("Empty document '$name' for year $year")
-                    else -> log.info("Document '$name' for year $year is valid (${content.length} chars)")
+                    content == null -> { log.error("Missing document '$name' for year $year"); issueCount++ }
+                    content.isBlank() -> { log.error("Empty document '$name' for year $year"); issueCount++ }
                 }
+            }
+            if (issueCount == 0) {
+                log.info("All documents for year $year are valid")
+            } else {
+                log.warn("$issueCount document issue(s) for year $year")
             }
         }
     }

@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf.backend.services
 
 import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinconf.ConferenceInfo
+import org.jetbrains.kotlinconf.ConferenceImages
 import org.jetbrains.kotlinconf.PartnerInfo
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.slf4j.LoggerFactory
@@ -46,6 +47,12 @@ class ConferenceInfoService(
     private fun ConferenceInfo.withFullImageUrls(year: Int): ConferenceInfo {
         val baseUrl = "${config.baseUrl}/$year"
         return copy(
+            images = images?.let {
+                ConferenceImages(
+                    kotlinConfLight = "$baseUrl/${it.kotlinConfLight}",
+                    kotlinConfDark = "$baseUrl/${it.kotlinConfDark}",
+                )
+            },
             partners = partners.map { group ->
                 group.copy(
                     partners = group.partners.map { partner ->
@@ -71,7 +78,8 @@ class ConferenceInfoService(
                 continue
             }
 
-            val issueCount = validatePartnerData(info, year) +
+            val issueCount = validateImages(info, year) +
+                    validatePartnerData(info, year) +
                     validateMapAssets(info, year) +
                     validateMapData(info, year)
 
@@ -81,6 +89,25 @@ class ConferenceInfoService(
                 log.warn("$issueCount conference data issue(s) for year $year")
             }
         }
+    }
+
+    private fun validateImages(
+        info: ConferenceInfo,
+        year: Int,
+    ): Int {
+        val images = info.images ?: return 0
+        var issueCount = 0
+        for ((variant, path) in listOf(
+            "light" to images.kotlinConfLight,
+            "dark" to images.kotlinConfDark,
+        )) {
+            val resourcePath = "/years/$year/$path"
+            if (javaClass.getResourceAsStream(resourcePath) == null) {
+                log.warn("$year | images | Missing $variant image file: $path")
+                issueCount++
+            }
+        }
+        return issueCount
     }
 
     private fun validatePartnerData(

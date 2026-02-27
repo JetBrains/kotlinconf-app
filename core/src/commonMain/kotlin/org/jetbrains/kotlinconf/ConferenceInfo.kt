@@ -5,11 +5,20 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ConferenceInfo(
+    val aboutHeader: String,
+    val aboutDescription: String,
+    val images: ConferenceImages? = null,
     val partners: List<PartnerGroup>,
     val days: List<DayInfo>,
     val aboutBlocks: List<AboutBlockInfo>,
     val tags: TagInfo,
     val mapData: MapData,
+)
+
+@Serializable
+data class ConferenceImages(
+    val kotlinConfLight: String,
+    val kotlinConfDark: String,
 )
 
 @Serializable
