@@ -11,13 +11,13 @@ ktor:
 
 
 sessionize:
-    url: "https://sessionize.com/api/v2/oleuq4yu/view/All"
+    url: "https://sessionize.com/api/v2/2r0suvtg/view/All"
     imagesUrl: "https://sessionize.com/image/"
     interval: 60
 
 conference:
-    currentYear: 2025
-    supportedYears: [2025]
+    currentYear: 2026
+    supportedYears: [2025, 2026]
     baseUrl: "$CONFERENCE_BASE_URL:http://localhost:8080"
 
 database:
