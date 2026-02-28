@@ -64,7 +64,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.action_bookmark_session
 import org.jetbrains.kotlinconf.ui.generated.resources.action_remove_session_from_bookmarks
 import org.jetbrains.kotlinconf.ui.generated.resources.action_state_description_bookmarked
 import org.jetbrains.kotlinconf.ui.generated.resources.action_state_description_not_bookmarked
-import org.jetbrains.kotlinconf.ui.generated.resources.arrow_right_24
 import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
 import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24_fill
 import org.jetbrains.kotlinconf.ui.generated.resources.lightning_16_fill
@@ -127,7 +126,6 @@ fun TalkCard(
     status: TalkStatus,
     initialEmotion: Emotion? = null,
     onSubmitFeedback: (Emotion?) -> Unit,
-    onRequestFeedbackWithComment: (() -> Unit)?,
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     onClick: () -> Unit,
     feedbackEnabled: Boolean,
@@ -199,7 +197,6 @@ fun TalkCard(
                 initialEmotion = initialEmotion,
                 onSubmitFeedback = onSubmitFeedback,
                 onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
-                onRequestFeedbackWithComment = onRequestFeedbackWithComment,
                 isWorkshop = tags.contains("Workshop"),
             )
         }
@@ -433,7 +430,6 @@ private fun FeedbackBlock(
     status: TalkStatus,
     initialEmotion: Emotion? = null,
     onSubmitFeedback: (Emotion?) -> Unit,
-    onRequestFeedbackWithComment: (() -> Unit)?,
     onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     isWorkshop: Boolean,
 ) {
@@ -471,23 +467,14 @@ private fun FeedbackBlock(
                 contentAlignment = Alignment.CenterStart,
             ) { emotionSelected ->
                 if (emotionSelected) {
-                    if (onRequestFeedbackWithComment != null) {
-                        Action(
-                            label = stringResource(UiRes.string.talk_card_your_feedback),
-                            icon = UiRes.drawable.arrow_right_24,
-                            size = ActionSize.Medium,
-                            onClick = onRequestFeedbackWithComment,
-                        )
-                    } else {
-                        val iconRotation by animateFloatAsState(if (feedbackExpanded) 0f else 180f)
-                        Action(
-                            label = stringResource(UiRes.string.talk_card_your_feedback),
-                            icon = UiRes.drawable.up_24,
-                            size = ActionSize.Medium,
-                            onClick = { feedbackExpanded = !feedbackExpanded },
-                            iconRotation = iconRotation,
-                        )
-                    }
+                    val iconRotation by animateFloatAsState(if (feedbackExpanded) 0f else 180f)
+                    Action(
+                        label = stringResource(UiRes.string.talk_card_your_feedback),
+                        icon = UiRes.drawable.up_24,
+                        size = ActionSize.Medium,
+                        onClick = { feedbackExpanded = !feedbackExpanded },
+                        iconRotation = iconRotation,
+                    )
                 } else {
                     Text(
                         text = stringResource(
@@ -524,11 +511,7 @@ private fun FeedbackBlock(
                                 onSubmitFeedback(selectedEmotion)
 
                                 if (selectedEmotion != null) {
-                                    if (onRequestFeedbackWithComment != null) {
-                                        onRequestFeedbackWithComment()
-                                    } else {
-                                        feedbackExpanded = true
-                                    }
+                                    feedbackExpanded = true
                                 } else {
                                     feedbackExpanded = false
                                 }
@@ -598,7 +581,6 @@ private fun TalkCardLivePreview() = PreviewHelper {
         timeNote = null,
         status = TalkStatus.Live,
         initialEmotion = Emotion.Positive,
-        onRequestFeedbackWithComment = null,
         onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
         onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
         onClick = { println("Clicked session") },
@@ -627,7 +609,6 @@ private fun TalkCardUpcomingPreview() = PreviewHelper {
         timeNote = "In 10 min",
         status = TalkStatus.Upcoming,
         initialEmotion = null,
-        onRequestFeedbackWithComment = null,
         onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
         onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
         onClick = { println("Clicked session") },

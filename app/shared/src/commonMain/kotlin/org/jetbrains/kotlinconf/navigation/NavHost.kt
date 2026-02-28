@@ -184,9 +184,6 @@ private fun EntryProviderScope<AppRoute>.screens(
         ScheduleScreen(
             onSession = { navigator.add(SessionScreen(it)) },
             onPrivacyNoticeNeeded = { navigator.add(AppPrivacyNoticePrompt) },
-            onRequestFeedbackWithComment = { sessionId ->
-                navigator.add(SessionScreen(sessionId, openedForFeedback = true))
-            },
         )
     }
 
@@ -230,7 +227,6 @@ private fun EntryProviderScope<AppRoute>.screens(
         val urlHandler = LocalUriHandler.current
         SessionScreen(
             sessionId = it.sessionId,
-            openedForFeedback = it.openedForFeedback,
             onBack = onBack,
             onPrivacyNoticeNeeded = { navigator.add(AppPrivacyNoticePrompt) },
             onSpeaker = { speakerId -> navigator.add(SpeakerDetailScreen(speakerId)) },
