@@ -8,6 +8,7 @@ import org.jetbrains.kotlinconf.backend.routes.adminRoutes
 import org.jetbrains.kotlinconf.backend.routes.conferenceInfoRoutes
 import org.jetbrains.kotlinconf.backend.routes.configRoutes
 import org.jetbrains.kotlinconf.backend.routes.documentsRoutes
+import org.jetbrains.kotlinconf.backend.routes.goldenKodeeRoutes
 import org.jetbrains.kotlinconf.backend.routes.imageProxyRoutes
 import org.jetbrains.kotlinconf.backend.routes.scheduleRoutes
 import org.jetbrains.kotlinconf.backend.routes.timeRoutes
@@ -46,5 +47,6 @@ private fun Route.yearBasedRoutes() {
     votingRoutes()
     imageProxyRoutes()
     conferenceInfoRoutes()
+    goldenKodeeRoutes()
     documentsRoutes()
 }

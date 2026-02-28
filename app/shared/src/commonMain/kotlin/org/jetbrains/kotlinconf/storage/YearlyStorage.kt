@@ -3,6 +3,7 @@ package org.jetbrains.kotlinconf.storage
 import kotlinx.coroutines.flow.Flow
 import org.jetbrains.kotlinconf.Conference
 import org.jetbrains.kotlinconf.ConferenceInfo
+import org.jetbrains.kotlinconf.GoldenKodeeData
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.VoteInfo
@@ -16,6 +17,9 @@ interface YearlyStorage {
 
     fun getConferenceInfoCache(): Flow<ConferenceInfo?>
     suspend fun setConferenceInfoCache(value: ConferenceInfo)
+
+    fun getGoldenKodeeCache(): Flow<GoldenKodeeData?>
+    suspend fun setGoldenKodeeCache(value: GoldenKodeeData)
 
     fun getFavorites(): Flow<Set<SessionId>>
     suspend fun setFavorites(value: Set<SessionId>)

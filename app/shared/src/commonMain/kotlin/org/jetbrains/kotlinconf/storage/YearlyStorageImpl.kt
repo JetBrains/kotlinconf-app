@@ -13,6 +13,7 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinconf.Conference
 import org.jetbrains.kotlinconf.ConferenceInfo
+import org.jetbrains.kotlinconf.GoldenKodeeData
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.VoteInfo
@@ -46,6 +47,7 @@ class YearlyStorageImpl(
     val POLICY_SIGNED = key("policySigned")
     val CONFERENCE_CACHE = key("conferenceCache")
     val CONFERENCE_INFO_CACHE = key("conferenceInfoCache")
+    val GOLDEN_KODEE_CACHE = key("goldenKodeeCache")
     val FAVORITES = key("favorites")
     val NOTIFICATION_SETTINGS = key("notificationSettings")
     val VOTES = key("votes")
@@ -58,6 +60,9 @@ class YearlyStorageImpl(
 
     override fun getConferenceInfoCache(): Flow<ConferenceInfo?> = settings.getStringOrNullFlow(CONFERENCE_INFO_CACHE).map { it.decodeOrNull<ConferenceInfo>() }
     override suspend fun setConferenceInfoCache(value: ConferenceInfo) = settings.set(CONFERENCE_INFO_CACHE, json.encodeToString(value))
+
+    override fun getGoldenKodeeCache(): Flow<GoldenKodeeData?> = settings.getStringOrNullFlow(GOLDEN_KODEE_CACHE).map { it.decodeOrNull<GoldenKodeeData>() }
+    override suspend fun setGoldenKodeeCache(value: GoldenKodeeData) = settings.set(GOLDEN_KODEE_CACHE, json.encodeToString(value))
 
     override fun getFavorites(): Flow<Set<SessionId>> = settings.getStringOrNullFlow(FAVORITES).map { it.decodeOrNull<Set<SessionId>>() ?: emptySet() }
     override suspend fun setFavorites(value: Set<SessionId>) = settings.set(FAVORITES, json.encodeToString(value))

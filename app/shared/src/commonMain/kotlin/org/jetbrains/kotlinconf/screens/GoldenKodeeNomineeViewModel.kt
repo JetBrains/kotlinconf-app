@@ -12,18 +12,22 @@ import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.map
 import org.jetbrains.kotlinconf.AwardCategoryId
-import org.jetbrains.kotlinconf.FakeGoldenKodeeService
+import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.Nominee
 import org.jetbrains.kotlinconf.NomineeId
 
 @AssistedInject
 class GoldenKodeeNomineeViewModel(
-    service: FakeGoldenKodeeService,
+    conferenceService: ConferenceService,
     @Assisted("categoryId") private val categoryId: AwardCategoryId,
     @Assisted("nomineeId") private val nomineeId: NomineeId,
 ) : ViewModel() {
-    val nominee: StateFlow<Nominee?> = service.getNominee(categoryId, nomineeId)
+    val nominee: StateFlow<Nominee?> = conferenceService.goldenKodeeData
+        .map { data ->
+            data?.categories?.find { it.id == categoryId }?.nominees?.find { it.id == nomineeId }
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     @AssistedFactory
