@@ -92,7 +92,6 @@ import org.jetbrains.kotlinconf.utils.topInsetPadding
 fun ScheduleScreen(
     onSession: (SessionId) -> Unit,
     onPrivacyNoticeNeeded: () -> Unit,
-    onRequestFeedbackWithComment: (SessionId) -> Unit,
     viewModel: ScheduleViewModel = metroViewModel(),
 ) {
     val scope = rememberCoroutineScope()
@@ -232,11 +231,6 @@ fun ScheduleScreen(
                     },
                     onSubmitFeedbackWithComment = { sessionId, emotion, comment ->
                         viewModel.onSubmitFeedbackWithComment(sessionId, emotion, comment)
-                    },
-                    onRequestFeedbackWithComment = if (LocalFlags.current.redirectFeedbackToSessionPage) {
-                        onRequestFeedbackWithComment
-                    } else {
-                        null
                     },
                     onBookmark = { sessionId, isBookmarked ->
                         viewModel.onBookmark(sessionId, isBookmarked)
@@ -383,7 +377,6 @@ private fun ScheduleList(
     dayInfoMap: Map<LocalDate, DayInfo>,
     onSubmitFeedback: (SessionId, Emotion?) -> Unit,
     onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
-    onRequestFeedbackWithComment: ((SessionId) -> Unit)?,
     onBookmark: (SessionId, Boolean) -> Unit,
     filterItems: List<FilterItem> = emptyList(),
     onToggleFilter: (FilterItem, Boolean) -> Unit = { _, _ -> },
@@ -479,7 +472,6 @@ private fun ScheduleList(
                             onBookmark = onBookmark,
                             onSubmitFeedback = onSubmitFeedback,
                             onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
-                            onRequestFeedbackWithComment = onRequestFeedbackWithComment,
                             onSession = onSession,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -536,7 +528,6 @@ private fun SessionCard(
     session: SessionCardView,
     onBookmark: (SessionId, Boolean) -> Unit,
     onSubmitFeedback: (SessionId, Emotion?) -> Unit,
-    onRequestFeedbackWithComment: ((SessionId) -> Unit)?,
     onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
     onSession: (SessionId) -> Unit,
     isSearch: Boolean,
@@ -568,9 +559,6 @@ private fun SessionCard(
         initialEmotion = session.vote?.toEmotion(),
         onSubmitFeedback = { emotion ->
             onSubmitFeedback(session.id, emotion)
-        },
-        onRequestFeedbackWithComment = onRequestFeedbackWithComment?.let {
-            { onRequestFeedbackWithComment(session.id) }
         },
         onSubmitFeedbackWithComment = { emotion, comment ->
             onSubmitFeedbackWithComment(session.id, emotion, comment)
