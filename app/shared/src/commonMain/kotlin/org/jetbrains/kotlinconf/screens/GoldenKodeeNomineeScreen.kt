@@ -17,7 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -25,20 +24,19 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.AwardCategoryId
 import org.jetbrains.kotlinconf.NomineeId
 import org.jetbrains.kotlinconf.generated.resources.Res
-import org.jetbrains.kotlinconf.generated.resources.golden_kodee_awards_content_description
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_finalist
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_title
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_winner
+import org.jetbrains.kotlinconf.generated.resources.golden_kodee_winner_background
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_winner_banner_description
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_winner_banner_title
-import org.jetbrains.kotlinconf.generated.resources.golden_kodee_winner
-import org.jetbrains.kotlinconf.generated.resources.golden_kodee_winner_background
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.NomineeTag
@@ -201,7 +199,7 @@ private fun WinnerBanner(
                 Spacer(Modifier.height(12.dp))
                 Image(
                     painter = painterResource(Res.drawable.golden_kodee_winner),
-                    contentDescription = stringResource(Res.string.golden_kodee_awards_content_description),
+                    contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally),
                 )
@@ -209,7 +207,7 @@ private fun WinnerBanner(
         } else {
             Image(
                 painter = painterResource(Res.drawable.golden_kodee_winner),
-                contentDescription = stringResource(Res.string.golden_kodee_awards_content_description),
+                contentDescription = null,
                 modifier = Modifier.align(Alignment.BottomEnd)
                     .padding(top = 12.dp)
                     .width(150.dp),

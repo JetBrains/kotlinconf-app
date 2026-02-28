@@ -149,6 +149,10 @@ class ConferenceService(
         .map { it?.mapData }
         .stateIn(scope, SharingStarted.Eagerly, null)
 
+    val goldenKodeeData: StateFlow<GoldenKodeeData?> =
+        currentYearlyStorage.flatMapLatest { it.getGoldenKodeeCache() }
+            .stateIn(scope, SharingStarted.Eagerly, null)
+
     fun getTheme(): Flow<Theme> = applicationStorage.getTheme()
 
     fun setTheme(theme: Theme) {
@@ -162,6 +166,9 @@ class ConferenceService(
 
         // Load conference info (partners, days, about blocks, tags, map data)
         client.downloadConferenceInfo()?.let { storage.setConferenceInfoCache(it) }
+
+        // Load Golden Kodee award data
+        client.downloadGoldenKodeeData()?.let { storage.setGoldenKodeeCache(it) }
 
         // Load conference schedule data
         val newData = client.downloadConferenceData() ?: return

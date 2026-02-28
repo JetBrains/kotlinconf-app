@@ -3,6 +3,7 @@ package org.jetbrains.kotlinconf.backend.di
 import org.jetbrains.kotlinconf.backend.services.ArchivedDataService
 import org.jetbrains.kotlinconf.backend.services.AssetService
 import org.jetbrains.kotlinconf.backend.services.ConferenceInfoService
+import org.jetbrains.kotlinconf.backend.services.GoldenKodeeService
 import org.jetbrains.kotlinconf.backend.services.SessionizeService
 import org.jetbrains.kotlinconf.backend.services.TimeService
 import org.koin.core.module.dsl.singleOf
@@ -13,5 +14,6 @@ val serviceModule = module {
     singleOf(::SessionizeService)
     singleOf(::ArchivedDataService)
     singleOf(::ConferenceInfoService)
+    singleOf(::GoldenKodeeService)
     singleOf(::AssetService)
 }
