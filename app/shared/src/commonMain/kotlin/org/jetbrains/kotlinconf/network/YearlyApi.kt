@@ -18,6 +18,7 @@ import io.ktor.http.isSuccess
 import kotlinx.coroutines.CancellationException
 import org.jetbrains.kotlinconf.Conference
 import org.jetbrains.kotlinconf.ConferenceInfo
+import org.jetbrains.kotlinconf.GoldenKodeeData
 import org.jetbrains.kotlinconf.FeedbackInfo
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionId
@@ -47,6 +48,10 @@ class YearlyApi(
 
     suspend fun downloadConferenceInfo(): ConferenceInfo? = safeApiCall {
         client.get { apiUrl("conference-info") }.body()
+    }
+
+    suspend fun downloadGoldenKodeeData(): GoldenKodeeData? = safeApiCall {
+        client.get { apiUrl("golden-kodee") }.body()
     }
 
     suspend fun downloadAsset(path: String): String? = safeApiCall {

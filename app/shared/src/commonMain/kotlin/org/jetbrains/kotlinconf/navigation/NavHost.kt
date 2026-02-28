@@ -122,8 +122,8 @@ internal fun NavHost(
         )
     }
 
-    val goldenKodeeService = LocalAppGraph.current.goldenKodeeService
-    val showGoldenKodee by remember { goldenKodeeService.getCategories().map { it.isNotEmpty() } }
+    val conferenceService = LocalAppGraph.current.conferenceService
+    val showGoldenKodee by remember { conferenceService.goldenKodeeData.map { it != null } }
         .collectAsStateWithLifecycle(false)
 
     val isGoldenKodee = navState.topLevelRoute is GoldenKodeeScreen
