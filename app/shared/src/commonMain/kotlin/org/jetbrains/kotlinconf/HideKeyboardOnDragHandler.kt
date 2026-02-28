@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.lazy.LazyListState
@@ -11,6 +12,11 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
+
+@Composable
+fun HideKeyboardOnDragHandler(scrollState: ScrollState) {
+    HideKeyboardOnDragHandlerImpl(scrollState.interactionSource)
+}
 
 @Composable
 fun HideKeyboardOnDragHandler(listState: LazyListState) {

@@ -122,13 +122,6 @@ fun DeveloperMenuScreen(
                     )
 
                     SettingsItem(
-                        title = "Redirect feedback to session page",
-                        note = "Don't allow typing in detailed feedback on the schedule screen, redirect to the session screen for written responses instead",
-                        enabled = flags.redirectFeedbackToSessionPage,
-                        onToggle = { flags = flags.copy(redirectFeedbackToSessionPage = it) }
-                    )
-
-                    SettingsItem(
                         title = "Hide keyboard on drag",
                         note = "Hides the keyboard when the content is scrolled",
                         enabled = flags.hideKeyboardOnDrag,

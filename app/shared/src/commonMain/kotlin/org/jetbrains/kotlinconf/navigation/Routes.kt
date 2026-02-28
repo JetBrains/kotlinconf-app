@@ -95,7 +95,6 @@ data class PartnerDetailScreen(val partnerId: PartnerId) : AppRoute
 @SerialName("Session")
 data class SessionScreen(
     val sessionId: SessionId,
-    val openedForFeedback: Boolean = false,
 ) : AppRoute
 
 @Serializable
