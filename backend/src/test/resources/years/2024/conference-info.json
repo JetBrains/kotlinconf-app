@@ -14,6 +14,7 @@
     "floors": [
       {
         "name": "Main hall",
+        "shortName": "Main",
         "svgPathLight": "maps/main-hall.svg",
         "svgPathDark": "maps/main-hall-dark.svg"
       }

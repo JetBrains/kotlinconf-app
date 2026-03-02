@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -27,6 +28,7 @@ fun Text(
     style: TextStyle = KotlinConfTheme.typography.text1,
     maxLines: Int = Int.MAX_VALUE,
     selectable: Boolean = false,
+    onTextLayout: ((TextLayoutResult) -> Unit)? = null,
 ) {
     Text(
         text = AnnotatedString(text),
@@ -35,6 +37,7 @@ fun Text(
         style = style,
         maxLines = maxLines,
         selectable = selectable,
+        onTextLayout = onTextLayout,
     )
 }
 
@@ -47,6 +50,7 @@ fun Text(
     maxLines: Int = Int.MAX_VALUE,
     selectable: Boolean = false,
     inlineContent: Map<String, InlineTextContent> = mapOf(),
+    onTextLayout: ((TextLayoutResult) -> Unit)? = null,
 ) {
     val content = @Composable {
         BasicText(
@@ -57,6 +61,7 @@ fun Text(
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
             inlineContent = inlineContent,
+            onTextLayout = onTextLayout,
         )
     }
 
