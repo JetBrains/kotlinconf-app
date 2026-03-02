@@ -282,11 +282,13 @@
     "floors": [
       {
         "name": "Ground floor",
+        "shortName": "GF",
         "svgPathLight": "maps/ground-floor.svg",
         "svgPathDark": "maps/ground-floor-dark.svg"
       },
       {
         "name": "First floor",
+        "shortName": "1F",
         "svgPathLight": "maps/first-floor.svg",
         "svgPathDark": "maps/first-floor-dark.svg"
       }

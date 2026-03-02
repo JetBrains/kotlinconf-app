@@ -146,9 +146,10 @@ private fun MapScreenImpl(
             Column(Modifier.fillMaxSize()) {
                 Switcher(
                     items = mapData.floors.map { it.name },
+                    shortItems = mapData.floors.map { it.shortName },
                     selectedIndex = floorIndex,
                     onSelect = { index -> floorIndex = index },
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                 )
 
                 val svg = remember(svgData) { Svg(svgData) }

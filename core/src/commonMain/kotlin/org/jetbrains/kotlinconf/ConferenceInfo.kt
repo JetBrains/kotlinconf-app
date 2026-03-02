@@ -37,6 +37,7 @@ data class MapData(
 @Serializable
 data class FloorData(
     val name: String,
+    val shortName: String = name,
     val svgPathLight: String,
     val svgPathDark: String,
 )
