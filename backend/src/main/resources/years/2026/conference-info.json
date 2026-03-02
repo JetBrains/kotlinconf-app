@@ -219,16 +219,19 @@
     "floors": [
       {
         "name": "Ground floor",
+        "shortName": "GF",
         "svgPathLight": "maps/ground-floor.svg",
         "svgPathDark": "maps/ground-floor-dark-placeholder.svg"
       },
       {
         "name": "First floor",
+        "shortName": "1F",
         "svgPathLight": "maps/first-floor.svg",
         "svgPathDark": "maps/first-floor-dark-placeholder.svg"
       },
       {
         "name": "Second floor",
+        "shortName": "2F",
         "svgPathLight": "maps/second-floor.svg",
         "svgPathDark": "maps/second-floor-dark-placeholder.svg"
       }

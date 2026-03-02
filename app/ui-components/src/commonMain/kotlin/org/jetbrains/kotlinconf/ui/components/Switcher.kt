@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,8 +34,9 @@ private val SwitcherItemShape = RoundedCornerShape(percent = 50)
 @Composable
 private fun SwitcherItem(
     label: String,
-    onClick: () -> Unit,
     selected: Boolean,
+    onClick: () -> Unit,
+    onLayout: (hasOverflow: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor by animateColorAsState(
@@ -71,6 +74,10 @@ private fun SwitcherItem(
             label,
             style = KotlinConfTheme.typography.text1,
             color = textColor,
+            maxLines = 1,
+            onTextLayout = { result ->
+                onLayout.invoke(result.hasVisualOverflow)
+            },
         )
     }
 }
@@ -78,37 +85,59 @@ private fun SwitcherItem(
 @PreviewLightDark
 @Composable
 private fun SwitcherItemNormalPreview() = PreviewHelper {
-    SwitcherItem("Normal item", {}, selected = false)
+    SwitcherItem("Normal item", selected = false, {}, {})
 }
 
 @PreviewLightDark
 @Composable
 private fun SwitcherItemSelectedPreview() = PreviewHelper {
-    SwitcherItem("Selected item", {}, selected = true)
+    SwitcherItem("Selected item", selected = true, {}, {})
 }
 
 @Composable
 fun Switcher(
     items: List<String>,
+    shortItems: List<String>?,
     selectedIndex: Int,
     onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier.selectableGroup(),
-        horizontalArrangement = Arrangement
-            .spacedBy(4.dp)
-    ) {
-        items.forEachIndexed { index, label ->
-            SwitcherItem(
-                label = label,
-                onClick = { onSelect(index) },
-                selected = index == selectedIndex,
-                modifier = Modifier.weight(1f),
-            )
+    BoxWithConstraints(modifier = modifier) {
+        var useShortItems by remember(items, constraints.maxWidth) { mutableStateOf(false) }
+        val displayItems = if (useShortItems && shortItems != null) shortItems else items
+
+        Row(
+            modifier = Modifier.selectableGroup(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            displayItems.forEachIndexed { index, label ->
+                SwitcherItem(
+                    label = label,
+                    selected = index == selectedIndex,
+                    onClick = { onSelect(index) },
+                    onLayout = { hasOverflow ->
+                        if (hasOverflow) useShortItems = true
+                    },
+                    modifier = Modifier.weight(1f),
+                )
+            }
         }
     }
 }
+
+@Composable
+@PreviewLightDark
+private fun SwitcherShortPreview() = PreviewHelper {
+    var selectedIndex by remember { mutableIntStateOf(0) }
+    Switcher(
+        items = listOf("May 21", "May 22", "May 23"),
+        shortItems = listOf("M21", "M22", "M23"),
+        selectedIndex = selectedIndex,
+        onSelect = { selectedIndex = it },
+        modifier = Modifier.width(230.dp),
+    )
+}
+
 
 @Composable
 @PreviewLightDark
@@ -116,6 +145,7 @@ private fun SwitcherPreview() = PreviewHelper {
     var selectedIndex by remember { mutableIntStateOf(0) }
     Switcher(
         items = listOf("May 21", "May 22", "May 23"),
+        shortItems = listOf("M21", "M22", "M23"),
         selectedIndex = selectedIndex,
         onSelect = { selectedIndex = it },
         modifier = Modifier.width(300.dp),

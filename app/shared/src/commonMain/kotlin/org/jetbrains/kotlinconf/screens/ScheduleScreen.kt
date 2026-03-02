@@ -200,6 +200,7 @@ fun ScheduleScreen(
                         items = remember(conferenceDates) {
                             conferenceDates.map { DateTimeFormatting.date(it) }
                         },
+                        shortItems = null,
                         selectedIndex = selectedDayIndex,
                         onSelect = { index ->
                             scope.launch {
