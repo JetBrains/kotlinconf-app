@@ -20,7 +20,7 @@ class JvmLogger : Logger {
 fun main() {
     val graph = createGraphFactory<JvmAppGraph.Factory>()
         .create(
-            platformFlags = Flags(supportsNotifications = false)
+            platformFlags = Flags(supportsNotifications = false, debugLogging = true)
         )
 
     initApp(

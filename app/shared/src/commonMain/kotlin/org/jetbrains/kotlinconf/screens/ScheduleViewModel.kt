@@ -133,11 +133,11 @@ class ScheduleViewModel(
 
     val uiState: StateFlow<ScheduleUiState> = combine(
         service.agenda,
-        service.userId,
+        service.isPolicySignedFlow,
         searchParams,
         filterItems,
         loading,
-    ) { agenda, userId, searchParams, tags, loading ->
+    ) { agenda, policySigned, searchParams, tags, loading ->
         when {
             loading -> ScheduleUiState.Loading
 
@@ -147,7 +147,7 @@ class ScheduleViewModel(
                     searchQuery = searchParams.searchQuery,
                     selectedTags = tags.filter { it.isSelected }.map { it.value },
                 )
-                ScheduleUiState.Content(agenda, searchItems, userId != null)
+                ScheduleUiState.Content(agenda, searchItems, policySigned)
             }
 
             else -> {
@@ -162,7 +162,7 @@ class ScheduleViewModel(
                     ScheduleUiState.Content(
                         days = agenda,
                         items = items,
-                        userSignedIn = userId != null,
+                        userSignedIn = policySigned,
                         firstActiveIndex = firstActiveIndex,
                         lastActiveIndex = lastActiveIndex,
                     )
@@ -322,7 +322,7 @@ class ScheduleViewModel(
             null -> null
         }
         viewModelScope.launch {
-            if (service.canVote()) {
+            if (service.isPolicySigned()) {
                 service.vote(sessionId, score)
             } else {
                 _navigateToPrivacyNotice.value = true
@@ -337,7 +337,7 @@ class ScheduleViewModel(
             Emotion.Negative -> Score.BAD
         }
         viewModelScope.launch {
-            if (service.canVote()) {
+            if (service.isPolicySigned()) {
                 service.vote(sessionId, score)
                 service.sendFeedback(sessionId, comment)
             } else {

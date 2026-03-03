@@ -8,10 +8,12 @@ import java.io.File
 import java.nio.charset.StandardCharsets
 import java.util.Properties
 
-private val propsFile = File("store.properties")
+private val propsFile = File("files/store.properties")
 
 @OptIn(ExperimentalSettingsApi::class)
 fun createSettings(): ObservableSettings {
+    propsFile.parentFile.mkdirs()
+
     val props = try {
         propsFile.reader(StandardCharsets.UTF_8).use { reader ->
             Properties().apply { load(reader) }

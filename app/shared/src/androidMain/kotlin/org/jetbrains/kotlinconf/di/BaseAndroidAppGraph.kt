@@ -25,6 +25,12 @@ interface BaseAndroidAppGraph : AppGraph, MetroAppComponentProviders {
 
     @Provides
     @SingleIn(AppScope::class)
+    @FileStorageDir
+    fun provideFileStorageDir(application: Application): String =
+        application.filesDir.resolve("files").absolutePath
+
+    @Provides
+    @SingleIn(AppScope::class)
     fun provideNotificationPlatformConfiguration(
         @NotificationIcon iconRes: Int,
     ): NotificationPlatformConfiguration =
