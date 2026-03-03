@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalResourceApi::class)
-
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.core.Animatable
@@ -18,12 +16,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -34,15 +32,14 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.async
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.MapData
+import org.jetbrains.kotlinconf.RoomData
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.arrow_left_24
-import org.jetbrains.kotlinconf.generated.resources.map_first_floor
-import org.jetbrains.kotlinconf.generated.resources.map_ground_floor
+import org.jetbrains.kotlinconf.generated.resources.map_error_no_data
 import org.jetbrains.kotlinconf.generated.resources.map_how_to_find_venue
 import org.jetbrains.kotlinconf.generated.resources.map_title
 import org.jetbrains.kotlinconf.generated.resources.map_zoom_in
@@ -50,6 +47,7 @@ import org.jetbrains.kotlinconf.generated.resources.map_zoom_out
 import org.jetbrains.kotlinconf.generated.resources.minus_24
 import org.jetbrains.kotlinconf.generated.resources.navigate_back
 import org.jetbrains.kotlinconf.generated.resources.plus_24
+import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.OverlayIconButton
@@ -62,46 +60,6 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 import kotlin.math.sqrt
 
-enum class Floor(
-    val title: StringResource,
-    val resourceLight: String,
-    val resourceDark: String,
-) {
-    GROUND(
-        Res.string.map_ground_floor,
-        "files/ground-floor.svg",
-        "files/ground-floor-dark.svg"
-    ),
-    FIRST(
-        Res.string.map_first_floor,
-        "files/first-floor.svg",
-        "files/first-floor-dark.svg",
-    );
-}
-
-val rooms = mapOf(
-    "Room #173" to LocationInfo(Floor.FIRST, Offset(0.30f, 0.65f)),
-    "Hall D3" to LocationInfo(Floor.GROUND, Offset(0.42f, 0.82f)),
-    "Keynote room" to LocationInfo(Floor.GROUND, Offset(0.42f, 0.82f)),
-    "Hall D2" to LocationInfo(Floor.GROUND, Offset(0.34f, 0.78f)),
-    "Auditorium 15" to LocationInfo(Floor.GROUND, Offset(0.48f, 0.59f)),
-    "Auditorium 11+12" to LocationInfo(Floor.FIRST, Offset(0.37f, 0.66f)),
-    "Auditorium 10" to LocationInfo(Floor.FIRST, Offset(0.33f, 0.65f)),
-    "Auditorium 10 (Lightning talks)" to LocationInfo(Floor.FIRST, Offset(0.33f, 0.65f)),
-)
-private val venue = LocationInfo(Floor.GROUND, Offset(0.4f, 0.69f))
-
-/**
- * The [offset] here are values for centering the map on the given location.
- * Each value is an x, y pair, indicating where within the SVG image the location is, as a percentage.
- * 0.0f 0.0f focuses the map on the top left corner
- * 0.5f 0.5f focuses the map on the center of the image
- */
-data class LocationInfo(
-    val floor: Floor,
-    val offset: Offset,
-)
-
 /**
  * Converts an offset containing x and y percentage locations within the SVG (0f..1f)
  * into real offset values from the middle of the SVG image.
@@ -111,47 +69,44 @@ private fun Offset.asSvgOffset(svg: Svg) = Offset(
     svg.height / 2 - svg.height * this.y
 )
 
-private val Floor.resource: String
-    @Composable get() = if (KotlinConfTheme.colors.isDark) resourceDark else resourceLight
-
 @Composable
 fun NestedMapScreen(
     roomName: String,
     onBack: (() -> Unit),
+    viewModel: MapViewModel = metroViewModel(),
 ) {
     MapScreenImpl(
-        location = rooms[roomName] ?: venue,
+        roomName = roomName,
         onBack = onBack,
+        viewModel = viewModel,
+        onHowToFindVenue = null, // Don't show this feature in the nested screen
         modifier = Modifier.padding(topInsetPadding()),
-        onHowToFindVenue = null,
     )
 }
 
 @Composable
 fun MapScreen(
-    onHowToFindVenue: () -> Unit,
+    onHowToFindVenue: (String) -> Unit,
+    viewModel: MapViewModel = metroViewModel(),
 ) {
     MapScreenImpl(
-        location = venue,
+        roomName = null,
         onBack = null,
         onHowToFindVenue = onHowToFindVenue,
+        viewModel = viewModel,
         modifier = Modifier.padding(topInsetPadding()),
     )
 }
 
 @Composable
 private fun MapScreenImpl(
-    location: LocationInfo,
+    roomName: String?,
     onBack: (() -> Unit)?,
+    viewModel: MapViewModel,
+    onHowToFindVenue: ((String) -> Unit)?,
     modifier: Modifier = Modifier,
-    onHowToFindVenue: (() -> Unit)? = null,
 ) {
-    var floorIndex by rememberSaveable { mutableStateOf(location.floor.ordinal) }
-    val floor: Floor = remember(floorIndex) { Floor.entries[floorIndex] }
-    val path = floor.resource
-    val svg: Svg? by produceState(null, path) {
-        value = Svg(Res.readBytes(path))
-    }
+    val state = viewModel.state.collectAsStateWithLifecycle().value
 
     Column(modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
         MainHeaderTitleBar(
@@ -168,49 +123,77 @@ private fun MapScreenImpl(
         )
         HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
-        Switcher(
-            items = Floor.entries.map { stringResource(it.title) },
-            selectedIndex = floor.ordinal,
-            onSelect = { index -> floorIndex = index },
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
-        )
-
-        svg?.let {
-            val containerSize = LocalWindowInfo.current.containerSize
-            val scaleAdjustment =
-                remember { sqrt(containerSize.width / it.width * (containerSize.height / it.height)) }
-            MapWithControls(
-                svg = it,
-                initialZoom = 2f * scaleAdjustment,
-                initialOffset = location.offset.asSvgOffset(it),
-                zoomRange = 1f..6f,
-                onHowToFindVenue = onHowToFindVenue,
+        ErrorLoadingContent(
+            state = state,
+            errorMessage = stringResource(Res.string.map_error_no_data),
+            onRetry = { viewModel.refresh() },
+            modifier = Modifier.fillMaxSize(),
+        ) { content ->
+            val mapData = content.mapData
+            val room = roomName?.let { mapData.rooms[it] }
+            val initialFloorIndex = room?.floorIndex ?: mapData.defaultFloorIndex
+            val initialOffset = Offset(
+                room?.offsetX ?: mapData.defaultOffsetX,
+                room?.offsetY ?: mapData.defaultOffsetY,
             )
+
+            var floorIndex by rememberSaveable { mutableStateOf(initialFloorIndex) }
+            val floor = mapData.floors.getOrNull(floorIndex) ?: return@ErrorLoadingContent
+
+            val svgPath = if (KotlinConfTheme.colors.isDark) floor.svgPathDark else floor.svgPathLight
+            val svgData = content.svgsByPath[svgPath] ?: return@ErrorLoadingContent
+
+            Column(Modifier.fillMaxSize()) {
+                Switcher(
+                    items = mapData.floors.map { it.name },
+                    selectedIndex = floorIndex,
+                    onSelect = { index -> floorIndex = index },
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                )
+
+                val svg = remember(svgData) { Svg(svgData) }
+                val containerSize = LocalWindowInfo.current.containerSize
+                val scaleAdjustment =
+                    remember { sqrt(containerSize.width / svg.width * (containerSize.height / svg.height)) }
+
+                val venueAddress = mapData.venueAddress
+                MapWithControls(
+                    svg = svg,
+                    initialZoom = mapData.initialZoom * scaleAdjustment,
+                    initialOffset = initialOffset.asSvgOffset(svg),
+                    zoomRange = mapData.minZoom..mapData.maxZoom,
+                    onHowToFindVenue = if (onHowToFindVenue != null && venueAddress != null) {
+                        { onHowToFindVenue(venueAddress) }
+                    } else {
+                        null
+                    },
+                )
+            }
         }
     }
 }
 
 @Composable
 fun StaticMap(
-    roomName: String?,
     zoom: Float = 2f,
     modifier: Modifier = Modifier,
+    mapData: MapData,
+    room: RoomData,
+    svgsByPath: Map<String, String>,
 ) {
-    val location = remember(roomName) { rooms[roomName] ?: venue }
-    val path = location.floor.resource
-    val svg: Svg? by produceState(null, path) {
-        value = Svg(Res.readBytes(path))
-    }
+    val floorIndex = room.floorIndex
+    val offset = Offset(room.offsetX, room.offsetY)
 
-    svg?.let {
-        val state = rememberMapState(zoom, location.offset.asSvgOffset(it))
-        Map(
-            svg = it,
-            state = state,
-            modifier = modifier,
-            interactive = false,
-        )
-    }
+    val floor = mapData.floors[floorIndex]
+    val svgData = svgsByPath[if (KotlinConfTheme.colors.isDark) floor.svgPathDark else floor.svgPathLight] ?: return
+    val svg = remember(svgData) { Svg(svgData) }
+
+    Map(
+        svg = svg,
+        state = rememberMapState(zoom, offset.asSvgOffset(svg)),
+        modifier = modifier,
+        interactive = false,
+    )
 }
 
 private class MapState(
@@ -240,10 +223,10 @@ private fun rememberMapState(initialZoom: Float, initialOffset: Offset): MapStat
 @Composable
 private fun MapWithControls(
     svg: Svg,
-    initialZoom: Float = 1f,
-    initialOffset: Offset = Offset.Zero,
-    zoomRange: ClosedFloatingPointRange<Float> = 0.5f..5f,
-    onHowToFindVenue: (() -> Unit)? = null,
+    initialZoom: Float,
+    initialOffset: Offset,
+    zoomRange: ClosedFloatingPointRange<Float>,
+    onHowToFindVenue: (() -> Unit)?,
 ) {
     val state = rememberMapState(initialZoom, initialOffset)
     val scope = rememberCoroutineScope()
@@ -355,9 +338,9 @@ private fun Map(
                                     .coerceIn(validOffsetY)
 
                             scope.launch {
-                                async { state.scale.animateTo(newScale, spec) }
-                                async { state.offsetX.animateTo(newOffsetX, spec) }
-                                async { state.offsetY.animateTo(newOffsetY, spec) }
+                                launch { state.scale.animateTo(newScale, spec) }
+                                launch { state.offsetX.animateTo(newOffsetX, spec) }
+                                launch { state.offsetY.animateTo(newOffsetY, spec) }
                             }
                         }
                     }
@@ -388,7 +371,7 @@ private fun Map(
     }
 }
 
-expect class Svg(svgBytes: ByteArray) {
+expect class Svg(svgString: String) {
     val width: Float
     val height: Float
 

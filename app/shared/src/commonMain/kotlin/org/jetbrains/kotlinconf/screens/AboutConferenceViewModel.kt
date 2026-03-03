@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import org.jetbrains.kotlinconf.ABOUT_CONFERENCE_BLOCKS
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.Speaker
@@ -31,13 +30,14 @@ class AboutConferenceViewModel(
     service: ConferenceService,
 ) : ViewModel() {
     val events: StateFlow<List<AboutConferenceEvent>> =
-        combine(service.agenda, service.speakers) { agenda, speakers ->
+        combine(service.agenda, service.speakers, service.conferenceInfo) { agenda, speakers, conferenceInfo ->
             val sessionsById = agenda
                 .flatMap { it.timeSlots.flatMap { it.sessions } }
                 .associateBy { it.id }
             val speakersById = speakers.associateBy { it.id }
+            val aboutBlocks = conferenceInfo?.aboutBlocks ?: emptyList()
 
-            ABOUT_CONFERENCE_BLOCKS.map { block ->
+            aboutBlocks.map { block ->
                 val session = block.sessionId?.let { sessionsById[it] }
                 val speakers = session?.speakerIds?.mapNotNull { speakersById[it] }
                 AboutConferenceEvent(

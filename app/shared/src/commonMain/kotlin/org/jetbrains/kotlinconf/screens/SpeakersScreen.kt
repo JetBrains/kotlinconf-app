@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.screens
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +17,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
@@ -38,11 +36,12 @@ import org.jetbrains.kotlinconf.generated.resources.speakers_error_no_data
 import org.jetbrains.kotlinconf.generated.resources.speakers_number_of_results
 import org.jetbrains.kotlinconf.generated.resources.speakers_title
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
+import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
+import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
-import org.jetbrains.kotlinconf.ui.components.NormalErrorWithLoading
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
@@ -50,7 +49,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_hint
 import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
@@ -119,70 +117,51 @@ fun SpeakersScreen(
 
         HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
 
-        AnimatedContent(
-            uiState,
-            modifier = Modifier.fillMaxSize().clipToBounds(),
-            contentKey = {
-                when (uiState) {
-                    is SpeakersUiState.Content -> 1
-                    SpeakersUiState.Error, SpeakersUiState.Loading -> 2
-                }
-            },
-            transitionSpec = { FadingAnimationSpec }
-        ) { targetState ->
-            when (targetState) {
-                is SpeakersUiState.Content -> {
-                    ScrollToTopHandler(gridState)
-                    HideKeyboardOnDragHandler(gridState)
+        ErrorLoadingContent(
+            state = uiState,
+            errorMessage = stringResource(Res.string.speakers_error_no_data),
+            onRetry = { viewModel.refresh() },
+            modifier = Modifier.fillMaxSize(),
+        ) { speakers ->
+            ScrollToTopHandler(gridState)
+            HideKeyboardOnDragHandler(gridState)
 
-                    val speakers = targetState.speakers
-                    LazyVerticalGrid(
-                        state = gridState,
-                        columns = GridCells.Adaptive(300.dp),
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        if (searchState == MainHeaderContainerState.Search) {
-                            item(span = { GridItemSpan(maxLineSpan) }, key = "number-of-speakers") {
-                                Text(
-                                    text = pluralStringResource(
-                                        Res.plurals.speakers_number_of_results,
-                                        speakers.size,
-                                        speakers.size
-                                    ),
-                                    color = KotlinConfTheme.colors.secondaryText,
-                                    style = KotlinConfTheme.typography.text2,
-                                    modifier = Modifier
-                                        .animateItem()
-                                        .padding(horizontal = 12.dp)
-                                        .padding(top = 12.dp, bottom = 4.dp)
-                                        .semantics { liveRegion = LiveRegionMode.Polite }
-                                )
-                            }
-                        }
-                        items(speakers, key = { it.speaker.id.id }) { speakerWithHighlights ->
-                            val speaker = speakerWithHighlights.speaker
-                            SpeakerCard(
-                                name = speaker.name,
-                                nameHighlights = speakerWithHighlights.nameHighlights,
-                                title = speaker.position,
-                                titleHighlights = speakerWithHighlights.titleHighlights,
-                                photoUrl = speaker.photoUrl,
-                                modifier = Modifier
-                                    .animateItem()
-                                    .fillMaxWidth()
-                                    .padding(12.dp),
-                                onClick = { onSpeaker(speaker.id) },
-                            )
-                        }
+            LazyVerticalGrid(
+                state = gridState,
+                columns = GridCells.Adaptive(300.dp),
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                if (searchState == MainHeaderContainerState.Search) {
+                    item(span = { GridItemSpan(maxLineSpan) }, key = "number-of-speakers") {
+                        Text(
+                            text = pluralStringResource(
+                                Res.plurals.speakers_number_of_results,
+                                speakers.size,
+                                speakers.size
+                            ),
+                            color = KotlinConfTheme.colors.secondaryText,
+                            style = KotlinConfTheme.typography.text2,
+                            modifier = Modifier
+                                .animateItem()
+                                .padding(horizontal = 12.dp)
+                                .padding(top = 12.dp, bottom = 4.dp)
+                                .semantics { liveRegion = LiveRegionMode.Polite }
+                        )
                     }
                 }
-
-                SpeakersUiState.Error, SpeakersUiState.Loading -> {
-                    NormalErrorWithLoading(
-                        message = stringResource(Res.string.speakers_error_no_data),
-                        isLoading = uiState is SpeakersUiState.Loading,
-                        modifier = Modifier.fillMaxSize(),
-                        onRetry = { viewModel.refresh() },
+                items(speakers, key = { it.speaker.id.id }) { speakerWithHighlights ->
+                    val speaker = speakerWithHighlights.speaker
+                    SpeakerCard(
+                        name = speaker.name,
+                        nameHighlights = speakerWithHighlights.nameHighlights,
+                        title = speaker.position,
+                        titleHighlights = speakerWithHighlights.titleHighlights,
+                        photoUrl = speaker.photoUrl,
+                        modifier = Modifier
+                            .animateItem()
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        onClick = { onSpeaker(speaker.id) },
                     )
                 }
             }

@@ -23,7 +23,6 @@ import org.jetbrains.kotlinconf.LocalNotificationId
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.ThemeChangeAnimation
 import org.jetbrains.kotlinconf.URLs
-import org.jetbrains.kotlinconf.VENUE_ADDRESS
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
@@ -200,7 +199,7 @@ private fun EntryProviderScope<AppRoute>.screens(
     entry<MapScreen>(metadata = noAnimationMetadata) {
         val mapHandler = LocalMapHandler.current
         MapScreen(
-            onHowToFindVenue = { mapHandler.openNavigation(VENUE_ADDRESS) },
+            onHowToFindVenue = { address -> mapHandler.openNavigation(address) },
         )
     }
 
@@ -209,7 +208,7 @@ private fun EntryProviderScope<AppRoute>.screens(
         val mapHandler = LocalMapHandler.current
         InfoScreen(
             onAboutConf = { navigator.add(AboutConferenceScreen) },
-            onHowToFindVenue = { mapHandler.openNavigation(VENUE_ADDRESS) },
+            onHowToFindVenue = { address -> mapHandler.openNavigation(address) },
             onAboutApp = { navigator.add(AboutAppScreen) },
             onOurPartners = { navigator.add(PartnersScreen) },
             onCodeOfConduct = { navigator.add(CodeOfConductScreen) },

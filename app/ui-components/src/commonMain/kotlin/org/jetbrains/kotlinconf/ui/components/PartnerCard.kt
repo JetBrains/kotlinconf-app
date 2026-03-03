@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -13,10 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
-import org.jetbrains.kotlinconf.ui.generated.resources.kodee_large_positive_light
+import coil3.compose.AsyncImage
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
@@ -24,7 +20,7 @@ import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 @Composable
 fun PartnerCard(
     name: String,
-    logo: DrawableResource,
+    logoUrl: String,
     onClick: () -> Unit,
 ) {
     Box(
@@ -34,11 +30,11 @@ fun PartnerCard(
             .clickable(onClick = onClick)
             .fillMaxWidth()
             .height(180.dp)
-            .padding(16.dp),
+            .padding(36.dp),
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(logo),
+        AsyncImage(
+            model = logoUrl,
             contentDescription = name,
         )
     }
@@ -47,5 +43,5 @@ fun PartnerCard(
 @PreviewLightDark
 @Composable
 private fun PartnerCardPreview() = PreviewHelper {
-    PartnerCard("Kodee", UiRes.drawable.kodee_large_positive_light, {})
+    PartnerCard("Kodee", "https://example.com/logo.png", {})
 }

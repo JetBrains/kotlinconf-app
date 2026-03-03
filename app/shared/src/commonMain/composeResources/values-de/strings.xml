@@ -81,6 +81,8 @@ Wir verarbeiten Ihre Daten gemäß dem Datenschutzhinweis der App. Sie können I
     <string name="notifications_schedule_update_description">Bleiben Sie über wichtige Änderungen informiert! Erhalten Sie eine Benachrichtigung, wenn es eine bedeutende Aktualisierung des Veranstaltungszeitplans gibt.</string>
     <string name="notifications_lets_get_started">Lass uns anfangen!</string>
 
+    <string name="document_error_no_data">Dieses Dokument ist derzeit nicht verfügbar.</string>
+
     <string name="code_of_conduct">Verhaltenskodex</string>
 
     <string name="general_terms">Allgemeine Geschäftsbedingungen</string>
@@ -111,7 +113,8 @@ Wir verarbeiten Ihre Daten gemäß dem Datenschutzhinweis der App. Sie können I
     <string name="schedule_action_filter_bookmarked">Lesezeichen filtern</string>
     <string name="schedule_action_search">Suchen</string>
     <string name="schedule_in_x_minutes">in %1$d Min</string>
-    <string name="schedule_error_no_data">Bitte warten Sie, unser Zeitplan steckt im Verkehr fest. Wir beseitigen den Stau!
+    <string name="schedule_error_no_data">Unser Zeitplan steckt wohl im Verkehr fest.
+Bitte versuchen Sie es erneut.
     </string>
     <string name="schedule_error_no_results">Keine Ergebnisse</string>
     <string name="schedule_label_no_bookmarks">Keine Lesezeichen hinzugefügt</string>
@@ -133,10 +136,13 @@ Wir verarbeiten Ihre Daten gemäß dem Datenschutzhinweis der App. Sie können I
     <string name="map_zoom_in">Hineinzoomen</string>
     <string name="map_zoom_out">Herauszoomen</string>
     <string name="map_how_to_find_venue">Anfahrt</string>
+    <string name="map_error_no_data">Die Karte macht einen Umweg.
+Bitte versuchen Sie es erneut.</string>
 
     <string name="speakers_title">Sprecher</string>
     <string name="speakers_error_no_results">Keine Ergebnisse</string>
-    <string name="speakers_error_no_data">Unsere Sprecher spielen Verstecken. Geben Sie uns einen Moment, um sie zu finden!</string>
+    <string name="speakers_error_no_data">Unsere Sprecher spielen Verstecken.
+Bitte versuchen Sie es erneut.</string>
     <plurals name="speakers_number_of_results">
         <item quantity="one">%1$d Sprecher gefunden</item>
         <item quantity="other">%1$d Sprecher gefunden</item>
@@ -155,6 +161,7 @@ Wir verarbeiten Ihre Daten gemäß dem Datenschutzhinweis der App. Sie können I
     <string name="partners_digital">Digital</string>
     <string name="partners_media">Medien</string>
     <string name="partners_swag">Offizielle KotlinConf-Merchandise</string>
+    <string name="partners_error">Partnerinformationen sind nicht verfügbar.</string>
 
     <string name="partner_detail_title">Partner</string>
 </resources>
