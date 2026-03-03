@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalTime::class)
-
 package org.jetbrains.kotlinconf
 
 import kotlinx.coroutines.awaitCancellation
@@ -16,7 +14,6 @@ import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
 interface TimeProvider {
     fun now(): LocalDateTime
