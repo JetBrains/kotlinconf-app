@@ -1,12 +1,9 @@
-@file:OptIn(ExperimentalTime::class)
-
 package org.jetbrains.kotlinconf.backend.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 @Serializable

@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.backend.routes
 
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -23,6 +24,8 @@ internal suspend fun ApplicationCall.validatePrincipal(database: KotlinConfRepos
 }
 
 private const val DEFAULT_YEAR = 2025
+
+val ARCHIVED_YEAR_FORBIDDEN = HttpStatusCode(403, "Forbidden: Archived Year")
 
 /**
  * Gets the year for this request.
