@@ -77,16 +77,10 @@ fun SpeakerDetailScreen(
 
         AnimatedContent(
             targetState = speaker,
-            contentKey = { speaker != null },
             transitionSpec = { FadingAnimationSpec },
             modifier = Modifier.fillMaxSize().weight(1f)
         ) { currentSpeaker ->
-            if (currentSpeaker == null) {
-                MajorError(
-                    message = stringResource(Res.string.speaker_detail_error_not_found),
-                    modifier = Modifier.fillMaxSize(),
-                )
-            } else {
+            if (currentSpeaker != null) {
                 val scrollState = rememberScrollState()
                 ScrollToTopHandler(scrollState)
                 Column(
@@ -157,7 +151,6 @@ fun SpeakerDetailScreen(
                             status = TalkStatus.Upcoming,
                             initialEmotion = session.vote?.toEmotion(),
                             feedbackEnabled = false, // Feedback not enabled on this screen
-                            userSignedIn = false, // Feedback not enabled on this screen
                             onSubmitFeedback = { }, // Feedback not enabled on this screen
                             onSubmitFeedbackWithComment = { _, _ -> }, // Feedback not enabled on this screen
                             onRequestFeedbackWithComment = null, // Feedback not enabled on this screen
@@ -166,6 +159,11 @@ fun SpeakerDetailScreen(
                         )
                     }
                 }
+            } else {
+                MajorError(
+                    message = stringResource(Res.string.speaker_detail_error_not_found),
+                    modifier = Modifier.fillMaxSize(),
+                )
             }
         }
     }

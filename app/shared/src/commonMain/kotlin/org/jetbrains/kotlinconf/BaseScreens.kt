@@ -12,6 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.document_error_no_data
+import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
+import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MarkdownView
@@ -68,8 +72,9 @@ fun ScreenWithTitle(
 fun MarkdownScreenWithTitle(
     title: String,
     header: String,
-    loadText: suspend () -> ByteArray,
+    documentState: ErrorLoadingState<String>,
     onBack: () -> Unit,
+    onReload: () -> Unit,
     onCustomUriClick: (String) -> Unit = {},
     endContent: @Composable ColumnScope.() -> Unit = {},
 ) {
@@ -77,11 +82,27 @@ fun MarkdownScreenWithTitle(
     ScrollToTopHandler(scrollState)
     ScreenWithTitle(title, onBack, contentScrollState = scrollState) {
         if (header.isNotEmpty()) {
-            Text(header, style = KotlinConfTheme.typography.h1, modifier = Modifier.padding(top = 24.dp, bottom = 12.dp))
+            Text(
+                header,
+                style = KotlinConfTheme.typography.h1,
+                modifier = Modifier.padding(top = 24.dp, bottom = 12.dp)
+            )
         }
 
-        MarkdownView(loadText, modifier = Modifier.padding(vertical = 12.dp), onCustomUriClick = onCustomUriClick)
-
-        endContent()
+        ErrorLoadingContent(
+            state = documentState,
+            errorMessage = stringResource(Res.string.document_error_no_data),
+            onRetry = onReload,
+            modifier = Modifier.fillMaxSize(),
+        ) { text ->
+            Column {
+                MarkdownView(
+                    text = text,
+                    modifier = Modifier.padding(vertical = 12.dp),
+                    onCustomUriClick = onCustomUriClick,
+                )
+                endContent()
+            }
+        }
     }
 }

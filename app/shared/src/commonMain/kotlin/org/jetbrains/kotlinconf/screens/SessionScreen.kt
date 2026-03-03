@@ -27,6 +27,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +46,7 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -104,7 +106,6 @@ fun SessionScreen(
 ) {
     val session = viewModel.session.collectAsStateWithLifecycle().value
     val speakers = viewModel.speakers.collectAsStateWithLifecycle().value
-    val userSignedIn by viewModel.userSignedIn.collectAsStateWithLifecycle()
     val shouldNavigateToPrivacyNotice by viewModel.navigateToPrivacyNotice.collectAsStateWithLifecycle()
 
     LaunchedEffect(shouldNavigateToPrivacyNotice) {
@@ -139,7 +140,6 @@ fun SessionScreen(
         AnimatedContent(
             session != null,
             modifier = Modifier.fillMaxSize(),
-            contentKey = { it::class },
             transitionSpec = { FadingAnimationSpec }
         ) { hasState ->
             if (hasState && session != null) {
@@ -202,7 +202,6 @@ fun SessionScreen(
                                         listState.animateScrollToItem(1)
                                     }
                                 },
-                                userSignedIn = userSignedIn,
                                 startExpanded = openedForFeedback,
                                 initialEmotion = session.vote?.toEmotion(),
                                 feedbackQuestion = stringResource(
@@ -256,7 +255,6 @@ private fun FeedbackPanel(
     onFeedback: (Emotion?) -> Unit,
     onFeedbackWithComment: (Emotion, String) -> Unit,
     onFeedbackExpanded: () -> Unit,
-    userSignedIn: Boolean,
     modifier: Modifier = Modifier,
     startExpanded: Boolean,
     initialEmotion: Emotion? = null,
@@ -314,15 +312,10 @@ private fun FeedbackPanel(
                             interactionSource = null
                         ) {
                             val newEmotion = if (emotion == selectedEmotion) null else emotion
-                            if (userSignedIn) {
-                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
-                                selectedEmotion = newEmotion
-                                feedbackExpanded = newEmotion != null
-                                onFeedback(newEmotion)
-                            } else {
-                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Reject)
-                                onFeedback(newEmotion)
-                            }
+                            hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
+                            selectedEmotion = newEmotion
+                            feedbackExpanded = newEmotion != null
+                            onFeedback(newEmotion)
                         },
                     )
                 }
@@ -390,8 +383,17 @@ private fun RoomSection(
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     val iconRotation by animateFloatAsState(if (isExpanded) 180f else 0f)
 
+    val mapViewModel: MapViewModel = metroViewModel()
+    val mapState = mapViewModel.state.collectAsStateWithLifecycle().value
+
+    val mapContent = (mapState as? ErrorLoadingState.Content)?.data
+    val mapData = mapContent?.mapData
+    val room = mapData?.rooms?.get(roomName)
+
+    val canDisplayRoom = room != null
+
     Column(modifier = modifier.padding(vertical = 16.dp)) {
-        if (rooms[roomName] == null) {
+        if (!canDisplayRoom) {
             Text(
                 text = roomName,
                 style = KotlinConfTheme.typography.h3,
@@ -421,7 +423,9 @@ private fun RoomSection(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 StaticMap(
-                    roomName = roomName,
+                    mapData = mapData,
+                    room = room,
+                    svgsByPath = mapContent.svgsByPath,
                     modifier = Modifier
                         .padding(top = 8.dp)
                         .clip(KotlinConfTheme.shapes.roundedCornerMd)

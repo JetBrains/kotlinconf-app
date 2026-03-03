@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.generated.resources.Res
@@ -50,7 +53,7 @@ import org.jetbrains.kotlinconf.utils.topInsetPadding
 @Composable
 fun InfoScreen(
     onAboutConf: () -> Unit,
-    onHowToFindVenue: () -> Unit,
+    onHowToFindVenue: (String) -> Unit,
     onAboutApp: () -> Unit,
     onOurPartners: () -> Unit,
     onCodeOfConduct: () -> Unit,
@@ -58,7 +61,9 @@ fun InfoScreen(
     onSlack: () -> Unit,
     onBluesky: () -> Unit,
     onSettings: () -> Unit,
+    viewModel: InfoViewModel = metroViewModel(),
 ) {
+    val venueAddress = viewModel.venueAddress.collectAsStateWithLifecycle().value
     Column(
         Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
@@ -83,11 +88,13 @@ fun InfoScreen(
                     .widthIn(max = 360.dp)
             )
             PageMenuItem(stringResource(Res.string.info_link_about_conf), onClick = onAboutConf)
-            PageMenuItem(
-                stringResource(Res.string.info_link_how_to_find_venue),
-                onClick = onHowToFindVenue,
-                drawableEnd = Res.drawable.arrow_up_right_24,
-            )
+            if (venueAddress != null) {
+                PageMenuItem(
+                    stringResource(Res.string.info_link_how_to_find_venue),
+                    onClick = { onHowToFindVenue(venueAddress) },
+                    drawableEnd = Res.drawable.arrow_up_right_24,
+                )
+            }
             PageMenuItem(stringResource(Res.string.info_link_about_app), onClick = onAboutApp)
             PageMenuItem(stringResource(Res.string.info_link_settings), onClick = onSettings)
             PageMenuItem(stringResource(Res.string.info_link_partners), onClick = onOurPartners)
