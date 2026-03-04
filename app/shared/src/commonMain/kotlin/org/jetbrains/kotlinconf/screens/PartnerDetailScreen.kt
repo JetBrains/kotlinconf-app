@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -17,10 +16,10 @@ import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.partner_detail_title
 import org.jetbrains.kotlinconf.generated.resources.partners_error
-import org.jetbrains.kotlinconf.ui.components.MajorError
 import org.jetbrains.kotlinconf.ui.components.NetworkImage
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 
 @Composable
 fun PartnerDetailScreen(
@@ -31,14 +30,18 @@ fun PartnerDetailScreen(
             create(partnerId)
         },
 ) {
-    val partner = viewModel.partner.collectAsStateWithLifecycle().value
+    val partnerState = viewModel.partner.collectAsStateWithLifecycle().value
     val isDark = KotlinConfTheme.colors.isDark
 
     ScreenWithTitle(
         title = stringResource(Res.string.partner_detail_title),
         onBack = onBack,
     ) {
-        if (partner != null) {
+        ErrorLoadingContent(
+            state = partnerState,
+            errorMessage = stringResource(Res.string.partners_error),
+            modifier = Modifier.fillMaxSize(),
+        ) { partner ->
             val logoUrl = if (isDark) partner.logoUrlDark else partner.logoUrlLight
             NetworkImage(
                 photoUrl = logoUrl,
@@ -46,7 +49,6 @@ fun PartnerDetailScreen(
                 modifier = Modifier.fillMaxWidth()
                     .height(180.dp)
                     .padding(horizontal = 32.dp, vertical = 16.dp)
-                    .align(Alignment.CenterHorizontally)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -64,11 +66,6 @@ fun PartnerDetailScreen(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-        } else {
-            MajorError(
-                message = stringResource(Res.string.partners_error),
-                modifier = Modifier.fillMaxSize(),
-            )
         }
     }
 }
