@@ -2,12 +2,10 @@ package org.jetbrains.kotlinconf.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSerializable
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -49,7 +47,7 @@ fun rememberNavState(
 
     return remember(startRoute, topLevelRoutes) {
         NavState(
-            topLevelRoute = topLevelRoute,
+            _topLevelRoute = topLevelRoute,
             primaryTopLevelRoute = primaryTopLevelRoute,
             topLevelBackStacks = topLevelBackstacks,
             defaultBackstack = defaultBackstack,
@@ -58,15 +56,39 @@ fun rememberNavState(
 }
 
 class NavState(
-    topLevelRoute: MutableState<TopLevelRoute?>,
+    private val _topLevelRoute: MutableState<TopLevelRoute?>,
     val topLevelBackStacks: Map<TopLevelRoute, SnapshotStateList<AppRoute>>,
     val defaultBackstack: SnapshotStateList<AppRoute>,
     val primaryTopLevelRoute: TopLevelRoute,
 ) {
-    var topLevelRoute by topLevelRoute
+    val currentBackstack: SnapshotStateList<AppRoute> = mutableStateListOf()
 
-    val currentBackstack: SnapshotStateList<AppRoute>
-        get() = if (topLevelRoute != null) topLevelBackStacks[topLevelRoute]!! else defaultBackstack
+    init {
+        val source = if (_topLevelRoute.value != null) {
+            topLevelBackStacks[_topLevelRoute.value]!!
+        } else {
+            defaultBackstack
+        }
+        currentBackstack.addAll(source)
+    }
+
+    var topLevelRoute: TopLevelRoute?
+        get() = _topLevelRoute.value
+        set(value) {
+            val oldRoute = _topLevelRoute.value
+
+            // Save current backstack to the old route's storage
+            val oldStorage = if (oldRoute != null) topLevelBackStacks[oldRoute]!! else defaultBackstack
+            oldStorage.clear()
+            oldStorage.addAll(currentBackstack)
+
+            _topLevelRoute.value = value
+
+            // Load new route's backstack into currentBackstack
+            val newStorage = if (value != null) topLevelBackStacks[value]!! else defaultBackstack
+            currentBackstack.clear()
+            currentBackstack.addAll(newStorage)
+        }
 
     @Composable
     fun toDecoratedEntries(
@@ -78,9 +100,9 @@ class NavState(
         )
 
         val topLevelEntries = topLevelBackStacks
-            .mapValues { (_, stack) ->
+            .mapValues { (route, stack) ->
                 rememberDecoratedNavEntries(
-                    backStack = stack,
+                    backStack = if (route == topLevelRoute) currentBackstack else stack,
                     entryDecorators = decorators,
                     entryProvider = entryProvider
                 )
@@ -88,7 +110,7 @@ class NavState(
             .withDefault { emptyList() }
 
         val defaultEntries = rememberDecoratedNavEntries(
-            backStack = defaultBackstack,
+            backStack = if (topLevelRoute == null) currentBackstack else defaultBackstack,
             entryDecorators = decorators,
             entryProvider = entryProvider,
         )
