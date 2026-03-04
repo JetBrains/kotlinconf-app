@@ -123,7 +123,7 @@ internal fun NavHost(
         Navigator(navState, topLevelBackEnabled)
     }
 
-    // TODO Integrate with browser navigation here https://github.com/JetBrains/kotlinconf-app/issues/557
+    BrowserIntegration(navState)
 
     NotificationHandler(navigator)
 

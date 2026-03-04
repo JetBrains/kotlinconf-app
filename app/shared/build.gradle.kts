@@ -135,6 +135,7 @@ kotlin {
 
         webMain.dependencies {
             implementation(libs.ktor.client.js)
+            implementation(libs.nav3.browser)
             implementation(npm("@js-joda/timezone", "2.22.0"))
             implementation(libs.kotlin.browser)
         }
