@@ -162,7 +162,7 @@ private fun MapScreenImpl(
                     svg = svg,
                     initialZoom = mapData.initialZoom * scaleAdjustment,
                     initialOffset = initialOffset.asSvgOffset(svg),
-                    zoomRange = mapData.minZoom..mapData.maxZoom,
+                    zoomRange = (mapData.minZoom * scaleAdjustment)..(mapData.maxZoom * scaleAdjustment),
                     onHowToFindVenue = if (onHowToFindVenue != null && venueAddress != null) {
                         { onHowToFindVenue(venueAddress) }
                     } else {
