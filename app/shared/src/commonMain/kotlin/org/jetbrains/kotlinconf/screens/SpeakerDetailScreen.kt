@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.screens
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -30,7 +29,6 @@ import org.jetbrains.kotlinconf.generated.resources.speaker_detail_title
 import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
-import org.jetbrains.kotlinconf.ui.components.MajorError
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
 import org.jetbrains.kotlinconf.ui.components.TalkCard
 import org.jetbrains.kotlinconf.ui.components.TalkStatus
@@ -40,7 +38,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_left_24
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_back
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
+import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
@@ -54,7 +52,7 @@ fun SpeakerDetailScreen(
             create(speakerId)
         }
 ) {
-    val speaker = viewModel.speaker.collectAsStateWithLifecycle().value
+    val speakerState = viewModel.speaker.collectAsStateWithLifecycle().value
     val sessions = viewModel.sessions.collectAsStateWithLifecycle().value
 
     Column(
@@ -75,94 +73,87 @@ fun SpeakerDetailScreen(
         )
         HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
-        AnimatedContent(
-            targetState = speaker,
-            transitionSpec = { FadingAnimationSpec },
-            modifier = Modifier.fillMaxSize().weight(1f)
+        ErrorLoadingContent(
+            state = speakerState,
+            errorMessage = stringResource(Res.string.speaker_detail_error_not_found),
+            modifier = Modifier.fillMaxSize().weight(1f),
         ) { currentSpeaker ->
-            if (currentSpeaker != null) {
-                val scrollState = rememberScrollState()
-                ScrollToTopHandler(scrollState)
-                Column(
-                    modifier = Modifier
-                        .verticalScroll(scrollState)
-                        .padding(vertical = 16.dp, horizontal = 12.dp)
-                        .padding(bottomInsetPadding()),
-                ) {
-                    Text(
-                        text = currentSpeaker.name,
-                        style = KotlinConfTheme.typography.h2,
-                        color = KotlinConfTheme.colors.primaryText,
-                        selectable = true,
-                        modifier = Modifier.semantics {
-                            heading()
-                        }
-                    )
-
-                    Spacer(Modifier.height(4.dp))
-
-                    Text(
-                        text = currentSpeaker.position,
-                        style = KotlinConfTheme.typography.text2,
-                        color = KotlinConfTheme.colors.secondaryText,
-                        selectable = true,
-                    )
-
-                    Spacer(Modifier.height(16.dp))
-
-                    SpeakerAvatar(
-                        photoUrl = currentSpeaker.photoUrl,
-                        modifier = Modifier.widthIn(max = 300.dp)
-                            .aspectRatio(1f)
-                    )
-
-                    Spacer(Modifier.height(24.dp))
-
-                    Text(
-                        text = currentSpeaker.description,
-                        style = KotlinConfTheme.typography.text2,
-                        color = KotlinConfTheme.colors.longText,
-                        selectable = true,
-                    )
-
-                    Spacer(Modifier.height(16.dp))
-
-                    sessions.forEach { session ->
-                        TalkCard(
-                            title = session.title,
-                            titleHighlights = emptyList(),
-                            bookmarked = session.isFavorite,
-                            onBookmark = { isBookmarked ->
-                                viewModel.onBookmark(
-                                    session.id,
-                                    isBookmarked
-                                )
-                            },
-                            tags = session.tags,
-                            tagHighlights = emptyList(),
-                            speakers = session.speakerLine,
-                            speakerHighlights = emptyList(),
-                            location = session.locationLine,
-                            lightning = session.isLightning,
-                            time = session.fullTimeline,
-                            timeNote = session.startsInMinutes?.let { count ->
-                                stringResource(Res.string.schedule_in_x_minutes, count)
-                            },
-                            status = TalkStatus.Upcoming,
-                            initialEmotion = session.vote?.toEmotion(),
-                            feedbackEnabled = false, // Feedback not enabled on this screen
-                            onSubmitFeedback = { }, // Feedback not enabled on this screen
-                            onSubmitFeedbackWithComment = { _, _ -> }, // Feedback not enabled on this screen
-                            onClick = { onSession(session.id) },
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                        )
+            val scrollState = rememberScrollState()
+            ScrollToTopHandler(scrollState)
+            Column(
+                modifier = Modifier
+                    .verticalScroll(scrollState)
+                    .padding(vertical = 16.dp, horizontal = 12.dp)
+                    .padding(bottomInsetPadding()),
+            ) {
+                Text(
+                    text = currentSpeaker.name,
+                    style = KotlinConfTheme.typography.h2,
+                    color = KotlinConfTheme.colors.primaryText,
+                    selectable = true,
+                    modifier = Modifier.semantics {
+                        heading()
                     }
-                }
-            } else {
-                MajorError(
-                    message = stringResource(Res.string.speaker_detail_error_not_found),
-                    modifier = Modifier.fillMaxSize(),
                 )
+
+                Spacer(Modifier.height(4.dp))
+
+                Text(
+                    text = currentSpeaker.position,
+                    style = KotlinConfTheme.typography.text2,
+                    color = KotlinConfTheme.colors.secondaryText,
+                    selectable = true,
+                )
+
+                Spacer(Modifier.height(16.dp))
+
+                SpeakerAvatar(
+                    photoUrl = currentSpeaker.photoUrl,
+                    modifier = Modifier.widthIn(max = 300.dp)
+                        .aspectRatio(1f)
+                )
+
+                Spacer(Modifier.height(24.dp))
+
+                Text(
+                    text = currentSpeaker.description,
+                    style = KotlinConfTheme.typography.text2,
+                    color = KotlinConfTheme.colors.longText,
+                    selectable = true,
+                )
+
+                Spacer(Modifier.height(16.dp))
+
+                sessions.forEach { session ->
+                    TalkCard(
+                        title = session.title,
+                        titleHighlights = emptyList(),
+                        bookmarked = session.isFavorite,
+                        onBookmark = { isBookmarked ->
+                            viewModel.onBookmark(
+                                session.id,
+                                isBookmarked
+                            )
+                        },
+                        tags = session.tags,
+                        tagHighlights = emptyList(),
+                        speakers = session.speakerLine,
+                        speakerHighlights = emptyList(),
+                        location = session.locationLine,
+                        lightning = session.isLightning,
+                        time = session.fullTimeline,
+                        timeNote = session.startsInMinutes?.let { count ->
+                            stringResource(Res.string.schedule_in_x_minutes, count)
+                        },
+                        status = TalkStatus.Upcoming,
+                        initialEmotion = session.vote?.toEmotion(),
+                        feedbackEnabled = false, // Feedback not enabled on this screen
+                        onSubmitFeedback = { }, // Feedback not enabled on this screen
+                        onSubmitFeedbackWithComment = { _, _ -> }, // Feedback not enabled on this screen
+                        onClick = { onSession(session.id) },
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                    )
+                }
             }
         }
     }

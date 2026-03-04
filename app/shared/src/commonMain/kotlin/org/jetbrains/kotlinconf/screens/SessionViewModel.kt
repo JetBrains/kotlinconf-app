@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.ConferenceService
@@ -21,6 +22,7 @@ import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.ui.components.Emotion
+import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 
 @AssistedInject
 class SessionViewModel(
@@ -31,8 +33,12 @@ class SessionViewModel(
     private val _navigateToPrivacyNotice = MutableStateFlow(false)
     val navigateToPrivacyNotice: StateFlow<Boolean> = _navigateToPrivacyNotice.asStateFlow()
 
-    val session: StateFlow<SessionCardView?> = service.sessionByIdFlow(sessionId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+    val session: StateFlow<ErrorLoadingState<SessionCardView>> = service.sessionByIdFlow(sessionId)
+        .map { session ->
+            if (session != null) ErrorLoadingState.Content(session)
+            else ErrorLoadingState.Error
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ErrorLoadingState.Loading)
 
     val speakers: StateFlow<List<Speaker>> = service.speakersBySessionId(sessionId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
