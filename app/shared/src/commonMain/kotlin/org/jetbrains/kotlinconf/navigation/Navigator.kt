@@ -5,15 +5,15 @@ class Navigator(
     val topLevelBackEnabled: Boolean,
 ) {
     fun goBack() {
+        val currentBackstack = state.currentBackstack
+
         if (state.topLevelRoute == null) {
             // We're using the default stack, remove an entry if possible
-            if (state.defaultBackstack.size > 1) {
-                state.defaultBackstack.removeLastOrNull()
+            if (currentBackstack.size > 1) {
+                currentBackstack.removeLastOrNull()
             }
             return
         }
-
-        val currentBackstack = state.currentBackstack
         if (currentBackstack.size == 1 && state.topLevelRoute != state.primaryTopLevelRoute) {
             // Can't go further up on current backstack, but we're not on the primary route
             if (topLevelBackEnabled) {
@@ -40,11 +40,13 @@ class Navigator(
 
     fun activate(route: TopLevelRoute) {
         if (route == state.topLevelRoute) {
-            // Reselected the current top-level route
-            val backstack = state.topLevelBackStacks.getValue(route)
-            if (backstack.size > 1) {
-                backstack.removeRange(1, backstack.size)
+            val currentBackstack = state.currentBackstack
+
+            // Reselected the current top-level route, clear to root
+            if (currentBackstack.size > 1) {
+                currentBackstack.removeRange(1, currentBackstack.size)
             }
+            return
         }
         state.topLevelRoute = route
     }
