@@ -2,26 +2,21 @@ package org.jetbrains.kotlinconf
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.datetime.LocalDateTime
-import org.jetbrains.kotlinconf.utils.GRANTED_PERMISSION
-import org.jetbrains.kotlinconf.utils.Notification
-import kotlin.coroutines.resume
+import web.notifications.Notification
+import web.notifications.NotificationPermission
+import web.notifications.granted
+import web.notifications.requestPermission
+import kotlin.js.js
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class ServiceWorkerLocalNotificationService(
     private val timeProvider: TimeProvider,
 ) : LocalNotificationService {
-    override suspend fun requestPermission(): Boolean {
-        return suspendCancellableCoroutine { continuation ->
-            Notification.requestPermission { result ->
-                continuation.resume(result == GRANTED_PERMISSION)
-            }
-        }
-    }
+    override suspend fun requestPermission(): Boolean =
+        Notification.requestPermission() == NotificationPermission.granted
 
     override fun post(
         localNotificationId: LocalNotificationId,

@@ -24,6 +24,7 @@ junit = "4.13.2"
 kmpnotifier = "1.6.1"
 koin = "4.1.1"
 kotlin = "2.3.10"
+kotlinBrowser = "2026.3.3"
 kotlinx-datetime = "0.7.1"
 kotlinxSerializationCore = "1.9.0"
 ktor = "3.3.3"
@@ -67,6 +68,7 @@ kmpnotifier = { module = "io.github.mirzemehdi:kmpnotifier", version.ref = "kmpn
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 koin-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
+kotlin-browser = { module = "org.jetbrains.kotlin-wrappers:kotlin-browser", version.ref = "kotlinBrowser" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
