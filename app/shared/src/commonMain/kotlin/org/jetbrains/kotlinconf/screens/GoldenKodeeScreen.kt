@@ -59,6 +59,8 @@ import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.bottomInsetPadding
+import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
@@ -121,7 +123,7 @@ fun GoldenKodeeScreen(
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Adaptive(300.dp),
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp) + bottomInsetPadding(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalItemSpacing = 24.dp,
             ) {
