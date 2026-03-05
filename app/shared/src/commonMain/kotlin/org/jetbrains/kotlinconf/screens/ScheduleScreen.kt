@@ -86,6 +86,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
 import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
+import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
@@ -389,6 +390,7 @@ private fun ScheduleList(
     LazyColumn(
         state = listState,
         modifier = modifier,
+        contentPadding = bottomInsetPadding(),
     ) {
         if (isSearch) {
             item(key = "filters") {
