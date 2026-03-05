@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -33,13 +35,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.rotate
-import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -78,48 +77,19 @@ fun GoldenKodeeScreen(
         MainHeaderTitleBar(stringResource(Res.string.golden_kodee_title))
         HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
 
-        val backdrop = painterResource(Res.drawable.golden_kodee_backdrop)
         val backdropAlpha = remember { Animatable(0f) }
         LaunchedEffect(Unit) {
-            backdropAlpha.animateTo(1f, tween(3000, 300))
+            backdropAlpha.animateTo(1f, tween(3000, 500))
         }
-        val windowContainerSize = LocalWindowInfo.current.containerSize
-        val infiniteTransition = rememberInfiniteTransition()
-        val rotation by infiniteTransition.animateFloat(
-            initialValue = 0f,
-            targetValue = 360f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(durationMillis = 200_000, easing = LinearEasing),
-            ),
-        )
+
         Box(
             Modifier
                 .fillMaxSize()
                 .clipToBounds()
-                .drawBehind {
-                    val alpha = backdropAlpha.value
-                    val backdropSize =
-                        maxOf(windowContainerSize.width, windowContainerSize.height) * 2f
-                    val scale = backdropSize / minOf(
-                        backdrop.intrinsicSize.width,
-                        backdrop.intrinsicSize.height
-                    )
-                    val drawWidth = backdrop.intrinsicSize.width * scale
-                    val drawHeight = backdrop.intrinsicSize.height * scale
-                    val pivotX = drawWidth / 2f
-                    val pivotY = drawHeight / 2f
-                    translate(
-                        left = -pivotX - drawWidth * 0.05f,
-                        top = -pivotY - drawHeight * 0.05f
-                    ) {
-                        rotate(rotation, pivot = Offset(pivotX, pivotY)) {
-                            with(backdrop) {
-                                draw(size = Size(drawWidth, drawHeight), alpha = alpha)
-                            }
-                        }
-                    }
-                },
         ) {
+            if (backdropAlpha.value > 0) {
+                RadialBackdrop(Modifier.graphicsLayer { alpha = backdropAlpha.value })
+            }
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Adaptive(300.dp),
                 modifier = Modifier.fillMaxSize(),
@@ -149,6 +119,37 @@ fun GoldenKodeeScreen(
             }
         }
     }
+}
+
+@Composable
+private fun RadialBackdrop(
+    modifier: Modifier = Modifier,
+) {
+    val windowContainerSize = LocalWindowInfo.current.containerSize
+    val infiniteTransition = rememberInfiniteTransition()
+    val rotation by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 200_000, easing = LinearEasing),
+        ),
+    )
+    val density = LocalDensity.current
+    val backdropSizePx = maxOf(windowContainerSize.width, windowContainerSize.height) * 2f
+    val backdropSizeDp = with(density) { backdropSizePx.toDp() }
+
+    Image(
+        painter = painterResource(Res.drawable.golden_kodee_backdrop),
+        contentDescription = null,
+        modifier
+            .requiredSize(backdropSizeDp)
+            .graphicsLayer {
+                transformOrigin = TransformOrigin.Center
+                translationX = -windowContainerSize.width / 2f
+                translationY = -windowContainerSize.height / 2f
+                rotationZ = rotation
+            }
+    )
 }
 
 @Composable
