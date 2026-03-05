@@ -37,7 +37,6 @@ import org.jetbrains.kotlinconf.generated.resources.speakers_number_of_results
 import org.jetbrains.kotlinconf.generated.resources.speakers_title
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
-import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
@@ -49,6 +48,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_hint
 import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
@@ -130,6 +130,7 @@ fun SpeakersScreen(
                 state = gridState,
                 columns = GridCells.Adaptive(300.dp),
                 modifier = Modifier.fillMaxSize(),
+                contentPadding = bottomInsetPadding(),
             ) {
                 if (searchState == MainHeaderContainerState.Search) {
                     item(span = { GridItemSpan(maxLineSpan) }, key = "number-of-speakers") {

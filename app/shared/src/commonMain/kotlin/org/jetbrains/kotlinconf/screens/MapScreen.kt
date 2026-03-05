@@ -11,6 +11,7 @@ import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -57,6 +58,8 @@ import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_up_right_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.bottomInsetPadding
+import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 import kotlin.math.sqrt
 
@@ -287,7 +290,7 @@ private fun MapWithControls(
                 onClick = onHowToFindVenue,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = buttonEdgePadding)
+                    .padding(PaddingValues(bottom = buttonEdgePadding) + bottomInsetPadding())
             )
         }
     }
