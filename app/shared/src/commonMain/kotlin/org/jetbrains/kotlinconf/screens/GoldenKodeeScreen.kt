@@ -59,6 +59,7 @@ import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
 fun GoldenKodeeScreen(
@@ -67,7 +68,11 @@ fun GoldenKodeeScreen(
     val viewModel = metroViewModel<GoldenKodeeViewModel>()
     val categories = viewModel.categories.collectAsStateWithLifecycle().value
 
-    Column(Modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
+    Column(
+        Modifier.fillMaxSize()
+            .background(color = KotlinConfTheme.colors.mainBackground)
+            .padding(topInsetPadding())
+    ) {
         MainHeaderTitleBar(stringResource(Res.string.golden_kodee_title))
         HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
 
