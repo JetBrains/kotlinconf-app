@@ -89,6 +89,7 @@ private fun NotificationHandler(navigator: Navigator) {
 internal fun NavHost(
     isOnboardingComplete: Boolean,
     isDarkTheme: Boolean,
+    onThemeChange: ((Boolean) -> Unit)?,
 ) {
     val startRoute = remember {
         if (isOnboardingComplete) ScheduleScreen else StartPrivacyNoticeScreen
@@ -132,13 +133,19 @@ internal fun NavHost(
         isDarkTheme = isDarkTheme,
         enabled = navState.currentBackstack.lastOrNull() is SettingsScreen,
     ) { appliedIsDarkTheme ->
+        val colors = when {
+            isGoldenKodee -> GoldenKodeeColors
+            appliedIsDarkTheme -> KotlinConfDarkColors
+            else -> KotlinConfLightColors
+        }
+
+        if (onThemeChange != null) {
+            LaunchedEffect(colors) { onThemeChange(colors.isDark) }
+        }
+
         KotlinConfTheme(
             rippleEnabled = LocalFlags.current.rippleEnabled,
-            colors = when {
-                isGoldenKodee -> GoldenKodeeColors
-                appliedIsDarkTheme -> KotlinConfDarkColors
-                else -> KotlinConfLightColors
-            },
+            colors = colors,
         ) {
             Box(
                 Modifier

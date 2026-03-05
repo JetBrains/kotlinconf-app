@@ -3,7 +3,6 @@ package org.jetbrains.kotlinconf
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -27,10 +26,6 @@ fun App(
         Theme.DARK -> true
     }
 
-    if (onThemeChange != null) {
-        LaunchedEffect(isDarkTheme) { onThemeChange(isDarkTheme) }
-    }
-
     val isOnboardingComplete = service.isOnboardingComplete()
         .collectAsStateWithLifecycle(initialValue = null)
         .value
@@ -44,7 +39,7 @@ fun App(
         LocalMapHandler provides rememberMapHandler(),
     ) {
         if (isOnboardingComplete != null) {
-            NavHost(isOnboardingComplete, isDarkTheme)
+            NavHost(isOnboardingComplete, isDarkTheme, onThemeChange)
         }
     }
 }
