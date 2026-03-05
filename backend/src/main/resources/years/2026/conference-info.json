@@ -87,14 +87,6 @@
           "logoUrlLight": "partner-logos/kodeinkoders-light.svg",
           "logoUrlDark": "partner-logos/kodeinkoders-dark.svg",
           "url": "https://kodein.net"
-        },
-        {
-          "id": "worldline",
-          "name": "Worldline",
-          "description": "Worldline is a global payment processor in Europe. Our technology powers the growth of millions of businesses around the world; from your local coffee shop, to global e-commerce players and international banks.",
-          "logoUrlLight": "partner-logos/worldline.svg",
-          "logoUrlDark": "partner-logos/worldline.svg",
-          "url": "https://worldline.com/"
         }
       ]
     },
