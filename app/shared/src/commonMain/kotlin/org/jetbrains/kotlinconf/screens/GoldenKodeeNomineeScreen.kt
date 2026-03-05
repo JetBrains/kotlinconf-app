@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -201,6 +201,7 @@ private fun WinnerBanner(
                     painter = painterResource(Res.drawable.golden_kodee_winner),
                     contentDescription = null,
                     modifier = Modifier
+                        .size(150.dp)
                         .align(Alignment.CenterHorizontally),
                 )
             }
@@ -210,7 +211,7 @@ private fun WinnerBanner(
                 contentDescription = null,
                 modifier = Modifier.align(Alignment.BottomEnd)
                     .padding(top = 12.dp)
-                    .width(150.dp),
+                    .size(150.dp),
             )
             Column(
                 Modifier.align(Alignment.CenterStart)
