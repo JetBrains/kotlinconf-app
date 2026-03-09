@@ -125,10 +125,10 @@
         {
           "id": "pretix",
           "name": "Pretix",
-          "description": "pretix helps you to sell tickets for your event in an easy way. It supports multi-lingual events and provides a wide range of features.",
+          "description": "Pretix is an all-in-one ticketing software that cares about your event—all the way. Starting with online ticketing pretix offers a cash register app, a check-in app and more. Numerous settings and extension modules allow you to tailor your pretix shop specifically to your use case. Simple, fast and flexible. Our processes are designed to make your life easier, not harder. All our products are connected to the same backend where you can see all your sales and data at one glance. As German open source software, we comply with the highest privacy standards and prioritize accessibility and stability.",
           "logoUrlLight": "partner-logos/pretix-light.svg",
           "logoUrlDark": "partner-logos/pretix-dark.svg",
-          "url": "https://pretix.eu"
+          "url": "https://pretix.eu/about/en/"
         }
       ]
     }
