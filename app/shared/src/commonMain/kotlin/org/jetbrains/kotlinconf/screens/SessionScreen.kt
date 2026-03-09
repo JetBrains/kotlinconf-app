@@ -6,20 +6,14 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -33,24 +27,24 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
-import org.jetbrains.kotlinconf.ScrollToTopHandler
+import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
+import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.generated.resources.Res
-import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
 import org.jetbrains.kotlinconf.generated.resources.arrow_left_24
 import org.jetbrains.kotlinconf.generated.resources.arrow_up_right_24
 import org.jetbrains.kotlinconf.generated.resources.down_24
 import org.jetbrains.kotlinconf.generated.resources.navigate_back
 import org.jetbrains.kotlinconf.generated.resources.play_video
+import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
 import org.jetbrains.kotlinconf.generated.resources.session_room_state_description_collapsed
 import org.jetbrains.kotlinconf.generated.resources.session_room_state_description_expanded
 import org.jetbrains.kotlinconf.generated.resources.session_screen_error
 import org.jetbrains.kotlinconf.generated.resources.session_title
 import org.jetbrains.kotlinconf.generated.resources.session_watch_video
-import org.jetbrains.kotlinconf.toEmotion
+import org.jetbrains.kotlinconf.ui.AdaptiveDetailLayout
 import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
@@ -62,8 +56,9 @@ import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
-import org.jetbrains.kotlinconf.utils.bottomInsetPadding
-import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.jetbrains.kotlinconf.utils.ErrorLoadingState
+import org.jetbrains.kotlinconf.utils.LocalWindowSize
+import org.jetbrains.kotlinconf.utils.WindowSize
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -80,101 +75,138 @@ fun SessionScreen(
     val sessionState = viewModel.session.collectAsStateWithLifecycle().value
     val speakers = viewModel.speakers.collectAsStateWithLifecycle().value
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
-    ) {
-        MainHeaderTitleBar(
-            title = stringResource(Res.string.session_title),
-            startContent = {
-                TopMenuButton(
-                    icon = Res.drawable.arrow_left_24,
-                    contentDescription = stringResource(Res.string.navigate_back),
-                    onClick = onBack,
+    ErrorLoadingContent(
+        state = sessionState,
+        errorMessage = stringResource(Res.string.session_screen_error),
+        modifier = Modifier.fillMaxSize(),
+    ) { session ->
+
+        AdaptiveDetailLayout(
+            compactHeader = {
+                MainHeaderTitleBar(
+                    title = stringResource(Res.string.session_title),
+                    startContent = {
+                        TopMenuButton(
+                            icon = Res.drawable.arrow_left_24,
+                            contentDescription = stringResource(Res.string.navigate_back),
+                            onClick = onBack,
+                        )
+                    },
+                )
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = KotlinConfTheme.colors.strokePale
                 )
             },
+            compactContentHeader = {
+                Title(session, viewModel, Modifier.padding(vertical = 24.dp))
+            },
+            largeContentHeader = {
+                Title(session, viewModel, Modifier.padding(bottom = 24.dp))
+            },
+            unifiedContent = {
+                VideoLink(session, onWatchVideo)
+                Feedback(session, onPrivacyNoticeNeeded)
+                Speakers(speakers, onSpeaker)
+                RoomSection(session.locationLine, onNavigateToMap)
+                Description(session.description)
+            },
+            largeMainContent = {
+                if (session.description.isNotBlank()) {
+                    Description(session.description)
+                } else {
+                    Speakers(speakers, onSpeaker)
+                }
+            },
+            largeSideContent = {
+                VideoLink(session, onWatchVideo)
+                Feedback(session, onPrivacyNoticeNeeded)
+                if (session.description.isNotBlank()) {
+                    Speakers(speakers, onSpeaker)
+                }
+                RoomSection(session.locationLine, onNavigateToMap)
+            },
+            onBack = onBack,
         )
-
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = KotlinConfTheme.colors.strokePale
-        )
-
-        ErrorLoadingContent(
-            state = sessionState,
-            errorMessage = stringResource(Res.string.session_screen_error),
-            modifier = Modifier.fillMaxSize(),
-        ) { session ->
-            val scrollState = rememberScrollState()
-
-            ScrollToTopHandler(scrollState)
-            HideKeyboardOnDragHandler(scrollState)
-
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 12.dp)
-                    .verticalScroll(scrollState)
-                    .padding(bottomInsetPadding())
-            ) {
-                PageTitle(
-                    time = session.fullTimeline,
-                    title = session.title,
-                    lightning = session.isLightning,
-                    tags = session.tags,
-                    bookmarked = session.isFavorite,
-                    onBookmark = { viewModel.toggleFavorite(it) },
-                    modifier = Modifier.padding(vertical = 24.dp),
-                    timeNote = session.startsInMinutes?.let { count ->
-                        stringResource(Res.string.schedule_in_x_minutes, count)
-                    },
-                    isLive = session.state == SessionState.Live,
-                )
-                if (session.videoUrl != null) {
-                    PageMenuItem(
-                        label = stringResource(Res.string.session_watch_video),
-                        onClick = { onWatchVideo(session.videoUrl) },
-                        drawableStart = Res.drawable.play_video,
-                        drawableEnd = Res.drawable.arrow_up_right_24,
-                        modifier = Modifier.padding(bottom = 12.dp),
-                    )
-                }
-
-                if (session.state != SessionState.Upcoming) {
-                    FeedbackPanel(
-                        sessionId = sessionId,
-                        tags = session.tags,
-                        onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
-                        modifier = Modifier.padding(bottom = 20.dp),
-                    )
-                }
-
-                speakers.forEach { speaker ->
-                    SpeakerCard(
-                        name = speaker.name,
-                        title = speaker.position,
-                        photoUrl = speaker.photoUrl,
-                        modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(),
-                        onClick = { onSpeaker(speaker.id) }
-                    )
-                }
-
-                RoomSection(
-                    roomName = session.locationLine,
-                    onNavigateToMap = onNavigateToMap
-                )
-
-                Text(
-                    text = session.description,
-                    style = KotlinConfTheme.typography.text1,
-                    selectable = true,
-                )
-
-                Spacer(Modifier.height(24.dp))
-            }
-        }
     }
+}
+
+@Composable
+private fun Description(description: String) {
+    Text(
+        text = description,
+        style = KotlinConfTheme.typography.text1,
+        selectable = true,
+    )
+}
+
+@Composable
+private fun Speakers(
+    speakers: List<Speaker>,
+    onSpeaker: (SpeakerId) -> Unit
+) {
+    speakers.forEach { speaker ->
+        SpeakerCard(
+            name = speaker.name,
+            title = speaker.position,
+            photoUrl = speaker.photoUrl,
+            modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(),
+            onClick = { onSpeaker(speaker.id) }
+        )
+    }
+}
+
+@Composable
+private fun Feedback(
+    session: SessionCardView,
+    onPrivacyNoticeNeeded: () -> Unit,
+) {
+    if (session.state != SessionState.Upcoming) {
+        FeedbackPanel(
+            sessionId = session.id,
+            tags = session.tags,
+            onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
+            modifier = Modifier.padding(bottom = 20.dp),
+        )
+    }
+}
+
+@Composable
+private fun VideoLink(
+    session: SessionCardView,
+    onWatchVideo: (String) -> Unit
+) {
+    if (session.videoUrl != null) {
+        PageMenuItem(
+            label = stringResource(Res.string.session_watch_video),
+            onClick = { onWatchVideo(session.videoUrl) },
+            drawableStart = Res.drawable.play_video,
+            drawableEnd = Res.drawable.arrow_up_right_24,
+            modifier = Modifier.padding(bottom = 12.dp),
+        )
+    }
+}
+
+@Composable
+private fun Title(
+    session: SessionCardView,
+    viewModel: SessionViewModel,
+    modifier: Modifier = Modifier,
+) {
+    PageTitle(
+        time = session.fullTimeline,
+        title = session.title,
+        lightning = session.isLightning,
+        tags = session.tags,
+        bookmarked = session.isFavorite,
+        onBookmark = { viewModel.toggleFavorite(it) },
+        modifier = modifier,
+        timeNote = session.startsInMinutes?.let { count ->
+            stringResource(Res.string.schedule_in_x_minutes, count)
+        },
+        isLive = session.state == SessionState.Live,
+        large = LocalWindowSize.current != WindowSize.Compact,
+    )
 }
 
 @Composable
@@ -184,7 +216,6 @@ private fun RoomSection(
     modifier: Modifier = Modifier,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
-    val iconRotation by animateFloatAsState(if (isExpanded) 180f else 0f)
 
     val mapViewModel: MapViewModel = metroViewModel()
     val mapState = mapViewModel.state.collectAsStateWithLifecycle().value
@@ -193,34 +224,39 @@ private fun RoomSection(
     val mapData = mapContent?.mapData
     val room = mapData?.rooms?.get(roomName)
 
-    val canDisplayRoom = room != null
+    val largeScreen = LocalWindowSize.current == WindowSize.Large
 
     Column(modifier = modifier.padding(vertical = 16.dp)) {
-        if (!canDisplayRoom) {
-            Text(
-                text = roomName,
-                style = KotlinConfTheme.typography.h3,
-            )
-        } else {
-            val stateDesc = stringResource(
-                if (isExpanded) Res.string.session_room_state_description_expanded
-                else Res.string.session_room_state_description_collapsed
-            )
-            Action(
-                label = roomName,
-                icon = Res.drawable.down_24,
-                size = ActionSize.Large,
-                enabled = true,
-                onClick = { isExpanded = !isExpanded },
-                iconRotation = iconRotation,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .semantics {
-                        stateDescription = stateDesc
-                    }
-            )
+        if (room != null) {
+            if (largeScreen) {
+                Text(
+                    text = roomName,
+                    style = KotlinConfTheme.typography.h3,
+                    modifier = Modifier.padding(bottom = 8.dp),
+                )
+            } else {
+                val iconRotation by animateFloatAsState(if (isExpanded) 180f else 0f)
+                val stateDesc = stringResource(
+                    if (isExpanded) Res.string.session_room_state_description_expanded
+                    else Res.string.session_room_state_description_collapsed
+                )
+                Action(
+                    label = roomName,
+                    icon = Res.drawable.down_24,
+                    size = ActionSize.Large,
+                    enabled = true,
+                    onClick = { isExpanded = !isExpanded },
+                    iconRotation = iconRotation,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .semantics {
+                            stateDescription = stateDesc
+                        }
+                )
+            }
+
             AnimatedVisibility(
-                visible = isExpanded,
+                visible = largeScreen || isExpanded,
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically(),
                 modifier = Modifier.fillMaxWidth(),
@@ -239,6 +275,11 @@ private fun RoomSection(
                         .heightIn(max = 400.dp),
                 )
             }
+        } else {
+            Text(
+                text = roomName,
+                style = KotlinConfTheme.typography.h3,
+            )
         }
     }
 }

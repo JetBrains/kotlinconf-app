@@ -10,13 +10,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.InlineTextContent
@@ -99,6 +102,7 @@ fun PageTitle(
     isLive: Boolean,
     bookmarked: Boolean,
     onBookmark: (Boolean) -> Unit,
+    large: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -106,102 +110,128 @@ fun PageTitle(
         modifier = modifier.semantics(mergeDescendants = true) {},
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.heightIn(min = if (large) 40.dp else 24.dp),
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                if (lightning) {
-                    Icon(
-                        modifier = Modifier.size(16.dp),
-                        painter = painterResource(UiRes.drawable.lightning_16_fill),
-                        contentDescription = null,
-                        tint = KotlinConfTheme.colors.orangeText,
-                    )
-                }
-
-                Text(
-                    text = time,
-                    style = KotlinConfTheme.typography.h3,
-                    color = KotlinConfTheme.colors.primaryText
-                )
-            }
-
-            if (timeNote != null) {
-                Text(
-                    text = timeNote,
-                    style = KotlinConfTheme.typography.text1,
-                    color = KotlinConfTheme.colors.noteText,
-                    maxLines = 1,
-                )
-            }
-
-            AnimatedVisibility(isLive, enter = fadeIn(), exit = fadeOut()) {
-                NowLabel(
-                    textStyle = KotlinConfTheme.typography.text1,
-                )
-            }
-
+            TimeBlock(lightning, time, timeNote, isLive)
             Spacer(Modifier.weight(1f))
+            EndButtons(bookmarked, onBookmark, large)
+        }
+        Title(title, tags)
+        Tags(tags)
+    }
+}
 
-            val iconTint by animateColorAsState(
-                if (bookmarked) KotlinConfTheme.colors.orangeText
-                else KotlinConfTheme.colors.primaryText
-            )
+@Composable
+private fun RowScope.TimeBlock(
+    lightning: Boolean,
+    time: String,
+    timeNote: String?,
+    isLive: Boolean
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (lightning) {
             Icon(
-                modifier = Modifier
-                    .size(24.dp)
-                    .wrapContentSize(unbounded = true)
-                    .toggleable(
-                        value = bookmarked,
-                        onValueChange = { onBookmark(it) },
-                        role = Role.Checkbox,
-                        indication = null,
-                        interactionSource = null,
-                    )
-                    .padding(12.dp),
-                painter = painterResource(
-                    if (bookmarked) UiRes.drawable.bookmark_24_fill else UiRes.drawable.bookmark_24
-                ),
-                contentDescription = stringResource(UiRes.string.action_bookmark),
-                tint = iconTint,
+                modifier = Modifier.size(16.dp),
+                painter = painterResource(UiRes.drawable.lightning_16_fill),
+                contentDescription = null,
+                tint = KotlinConfTheme.colors.orangeText,
             )
         }
-        val isCodelab = "Codelab" in tags
-        val isEducation = "Education" in tags
-        val hasIcon = isCodelab || isEducation
 
         Text(
-            text = if (hasIcon) {
-                buildAnnotatedString {
-                    appendInlineContent(
-                        id = iconId,
-                        alternateText = when {
-                            isEducation -> eduPlaceholder
-                            isCodelab -> codelabPlaceholder
-                            else -> codelabPlaceholder // Should never happen
-                        },
-                    )
-                    append(title)
-                }
-            } else {
-                AnnotatedString(title)
-            },
-            style = KotlinConfTheme.typography.h1,
-            color = KotlinConfTheme.colors.primaryText,
-            selectable = true,
-            inlineContent = if (hasIcon) pageTitleInlineContent else emptyMap(),
-            modifier = Modifier.semantics { heading() }
+            text = time,
+            style = KotlinConfTheme.typography.h3,
+            color = KotlinConfTheme.colors.primaryText
         )
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            tags.forEach { tag ->
-                CardTag(label = tag, selected = false)
+    }
+
+    if (timeNote != null) {
+        Text(
+            text = timeNote,
+            style = KotlinConfTheme.typography.text1,
+            color = KotlinConfTheme.colors.noteText,
+            maxLines = 1,
+        )
+    }
+
+    AnimatedVisibility(isLive, enter = fadeIn(), exit = fadeOut()) {
+        NowLabel(
+            textStyle = KotlinConfTheme.typography.text1,
+        )
+    }
+}
+
+@Composable
+private fun EndButtons(bookmarked: Boolean, onBookmark: (Boolean) -> Unit, large: Boolean) {
+    val iconTint by animateColorAsState(
+        if (bookmarked) KotlinConfTheme.colors.orangeText
+        else KotlinConfTheme.colors.primaryText
+    )
+
+    Icon(
+        modifier = Modifier
+            .size(if (large) 40.dp else 24.dp)
+            .wrapContentSize(unbounded = true)
+            .toggleable(
+                value = bookmarked,
+                onValueChange = { onBookmark(it) },
+                role = Role.Checkbox,
+                indication = null,
+                interactionSource = null,
+            )
+            .padding(12.dp),
+        painter = painterResource(
+            if (bookmarked) UiRes.drawable.bookmark_24_fill else UiRes.drawable.bookmark_24
+        ),
+        contentDescription = stringResource(UiRes.string.action_bookmark),
+        tint = iconTint,
+    )
+}
+
+@Composable
+private fun Title(title: String, tags: Set<String>) {
+    val isCodelab = "Codelab" in tags
+    val isEducation = "Education" in tags
+    val hasIcon = isCodelab || isEducation
+
+    Text(
+        text = if (hasIcon) {
+            buildAnnotatedString {
+                appendInlineContent(
+                    id = iconId,
+                    alternateText = when {
+                        isEducation -> eduPlaceholder
+                        isCodelab -> codelabPlaceholder
+                        else -> codelabPlaceholder // Should never happen
+                    },
+                )
+                append(title)
             }
+        } else {
+            AnnotatedString(title)
+        },
+        style = KotlinConfTheme.typography.h1,
+        color = KotlinConfTheme.colors.primaryText,
+        selectable = true,
+        inlineContent = if (hasIcon) pageTitleInlineContent else emptyMap(),
+        modifier = Modifier.semantics { heading() }.widthIn(max = 640.dp),
+    )
+}
+
+@Composable
+private fun Tags(tags: Set<String>) {
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = Modifier.widthIn(max = 640.dp),
+    ) {
+        tags.forEach { tag ->
+            CardTag(label = tag, selected = false)
         }
     }
 }
@@ -219,6 +249,7 @@ private fun PageTitleLightningPreview() = PreviewHelper {
         timeNote = null,
         isLive = false,
         onBookmark = { bookmarked = it },
+        large = false,
     )
 }
 
@@ -245,6 +276,7 @@ private fun PageTitleRegularPreview() = PreviewHelper {
         timeNote = null,
         isLive = false,
         onBookmark = { bookmarked = it },
+        large = false,
     )
 }
 
@@ -261,6 +293,7 @@ internal fun PageTitleWithNotesPreview() {
             timeNote = "in 22 min",
             isLive = false,
             onBookmark = { },
+            large = false,
         )
         Spacer(Modifier.height(16.dp))
         PageTitle(
@@ -272,6 +305,26 @@ internal fun PageTitleWithNotesPreview() {
             timeNote = null,
             isLive = true,
             onBookmark = { },
+            large = false,
         )
     }
 }
+
+@PreviewLightDark
+@Composable
+internal fun LargePageTitleWithPreview() {
+    PreviewHelper {
+        PageTitle(
+            time = "May 23, 15:00 - 15:20",
+            title = "Starting Soon Talk Example",
+            tags = setOf("Lightning talk", "Beginner"),
+            bookmarked = true,
+            lightning = true,
+            timeNote = "in 22 min",
+            isLive = false,
+            onBookmark = { },
+            large = true,
+        )
+    }
+}
+

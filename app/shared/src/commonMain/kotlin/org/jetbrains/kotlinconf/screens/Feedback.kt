@@ -98,7 +98,6 @@ fun FeedbackPanel(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
             .border(
                 width = 1.dp,
                 color = KotlinConfTheme.colors.strokePale,

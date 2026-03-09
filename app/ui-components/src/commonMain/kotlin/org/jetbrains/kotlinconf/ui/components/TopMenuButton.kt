@@ -19,10 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntRect
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -44,7 +40,6 @@ private fun TopMenuButtonImpl(
     large: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val buttonSize = if (large) 40.dp else 36.dp
     BasicTooltipBox(
         positionProvider = rememberTooltipPositionProvider(),
         tooltip = { Tooltip(contentDescription) },
@@ -53,7 +48,7 @@ private fun TopMenuButtonImpl(
         Icon(
             modifier = modifier
                 .padding(if (large) 0.dp else 6.dp)
-                .size(buttonSize)
+                .size(if (large) 40.dp else 36.dp)
                 .clip(CircleShape)
                 .then(interactionModifier)
                 .background(backgroundColor)
