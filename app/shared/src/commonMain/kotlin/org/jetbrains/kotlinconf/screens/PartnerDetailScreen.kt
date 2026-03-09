@@ -1,5 +1,6 @@
 package org.jetbrains.kotlinconf.screens
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,30 +43,32 @@ fun PartnerDetailScreen(
             errorMessage = stringResource(Res.string.partners_error),
             modifier = Modifier.fillMaxSize(),
         ) { partner ->
-            val logoUrl = if (isDark) partner.logoUrlDark else partner.logoUrlLight
-            NetworkImage(
-                photoUrl = logoUrl,
-                contentDescription = partner.name,
-                modifier = Modifier.fillMaxWidth()
-                    .height(180.dp)
-                    .padding(horizontal = 32.dp, vertical = 16.dp)
-            )
+            Column {
+                val logoUrl = if (isDark) partner.logoUrlDark else partner.logoUrlLight
+                NetworkImage(
+                    photoUrl = logoUrl,
+                    contentDescription = partner.name,
+                    modifier = Modifier.fillMaxWidth()
+                        .height(180.dp)
+                        .padding(horizontal = 32.dp, vertical = 16.dp)
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = partner.name,
-                style = KotlinConfTheme.typography.h1,
-            )
+                Text(
+                    text = partner.name,
+                    style = KotlinConfTheme.typography.h1,
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = partner.description,
-                color = KotlinConfTheme.colors.longText,
-            )
+                Text(
+                    text = partner.description,
+                    color = KotlinConfTheme.colors.longText,
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }
 }
