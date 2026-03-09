@@ -143,6 +143,10 @@ internal fun NavHost(
     val showGoldenKodee by remember { conferenceService.goldenKodeeData.map { it != null } }
         .collectAsStateWithLifecycle(false)
 
+    val navigationDecorator = remember(navState, navigator, showGoldenKodee) {
+        NavigationSceneDecoratorStrategy(navState, navigator, showGoldenKodee)
+    }
+
     val isGoldenKodee = navState.topLevelRoute is GoldenKodeeScreen
 
     ThemeChangeAnimation(
@@ -171,16 +175,11 @@ internal fun NavHost(
                         WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)
                     )
             ) {
-                NavScaffold(
-                    navState = navState,
-                    navigator = navigator,
-                    showGoldenKodee = showGoldenKodee,
-                ) {
-                    NavDisplay(
-                        entries = navState.toDecoratedEntries(entryProvider),
-                        onBack = navigator::goBack,
-                    )
-                }
+                NavDisplay(
+                    entries = navState.toDecoratedEntries(entryProvider),
+                    onBack = navigator::goBack,
+                    sceneDecoratorStrategies = listOf(navigationDecorator),
+                )
 
                 val baseUrl = LocalAppGraph.current.baseUrl
                 val flagsManager = LocalAppGraph.current.flagsManager
