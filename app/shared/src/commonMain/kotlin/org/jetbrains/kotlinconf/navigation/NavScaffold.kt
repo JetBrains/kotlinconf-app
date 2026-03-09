@@ -23,6 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.scene.Scene
+import androidx.navigation3.scene.SceneDecoratorStrategy
+import androidx.navigation3.scene.SceneDecoratorStrategyScope
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.award_28
 import org.jetbrains.kotlinconf.generated.resources.award_28_fill
@@ -32,8 +35,8 @@ import org.jetbrains.kotlinconf.generated.resources.info_28
 import org.jetbrains.kotlinconf.generated.resources.info_28_fill
 import org.jetbrains.kotlinconf.generated.resources.location_28
 import org.jetbrains.kotlinconf.generated.resources.location_28_fill
-import org.jetbrains.kotlinconf.generated.resources.nav_destination_info
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_golden_kodee
+import org.jetbrains.kotlinconf.generated.resources.nav_destination_info
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_map
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_schedule
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_speakers
@@ -83,12 +86,37 @@ private val bottomNavDestinations: List<MainNavDestination<TopLevelRoute>> = lis
     ),
 )
 
+internal class NavigationSceneDecoratorStrategy(
+    private val navState: NavState,
+    private val navigator: Navigator,
+    private val showGoldenKodee: Boolean,
+) : SceneDecoratorStrategy<AppRoute> {
+    override fun SceneDecoratorStrategyScope<AppRoute>.decorateScene(scene: Scene<AppRoute>): Scene<AppRoute> {
+        return if (navState.topLevelRoute != null) {
+            NavigationDecoratingScene(scene, navState, navigator, showGoldenKodee)
+        } else {
+            scene
+        }
+    }
+}
+
+private class NavigationDecoratingScene(
+    private val scene: Scene<AppRoute>,
+    private val navState: NavState,
+    private val navigator: Navigator,
+    private val showGoldenKodee: Boolean,
+) : Scene<AppRoute> by scene {
+    override val content: @Composable () -> Unit = {
+        NavScaffold(navState, navigator, showGoldenKodee, scene)
+    }
+}
+
 @Composable
-internal fun NavScaffold(
+private fun NavScaffold(
     navState: NavState,
     navigator: Navigator,
     showGoldenKodee: Boolean,
-    content: @Composable (() -> Unit)
+    scene: Scene<AppRoute>,
 ) {
     val onSelectRoute: (TopLevelRoute) -> Unit = { route ->
         navigator.activate(route)
@@ -132,7 +160,7 @@ internal fun NavScaffold(
 
         Column(Modifier.weight(1f)) {
             Box(Modifier.weight(1f)) {
-                content()
+                scene.content()
             }
 
             AnimatedVisibility(
