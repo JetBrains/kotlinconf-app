@@ -55,6 +55,7 @@ import org.jetbrains.kotlinconf.ui.theme.GoldenKodeeColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfDarkColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfLightColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.LocalWindowSize
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 
 fun navigateByLocalNotificationId(notificationId: String) {
@@ -127,8 +128,14 @@ internal fun NavHost(
     val showGoldenKodee by remember { conferenceService.goldenKodeeData.map { it != null } }
         .collectAsStateWithLifecycle(false)
 
-    val navigationDecorator = remember(navState, navigator, showGoldenKodee) {
-        NavigationSceneDecoratorStrategy(navState, navigator, showGoldenKodee)
+    val windowSize = LocalWindowSize.current
+    val navigationDecorator = remember(navState, navigator, showGoldenKodee, windowSize) {
+        TopLevelNavStrategy(
+            navState = navState,
+            windowSize = windowSize,
+            showGoldenKodee = showGoldenKodee,
+            onSelectRoute = { route -> navigator.activate(route) },
+        )
     }
 
     val isGoldenKodee = navState.topLevelRoute is GoldenKodeeScreen
