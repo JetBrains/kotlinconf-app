@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +20,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
-import kotlinx.datetime.Month
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionCardView
@@ -33,6 +31,7 @@ import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
 import org.jetbrains.kotlinconf.generated.resources.speaker_detail_error_not_found
 import org.jetbrains.kotlinconf.generated.resources.speaker_detail_title
 import org.jetbrains.kotlinconf.toEmotion
+import org.jetbrains.kotlinconf.ui.AdaptiveDetailLayout
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
@@ -45,8 +44,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.arrow_left_24
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_back
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
-import org.jetbrains.kotlinconf.utils.LocalWindowSize
-import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
@@ -69,18 +66,6 @@ fun SpeakerDetailScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .padding(topInsetPadding())
     ) {
-        MainHeaderTitleBar(
-            title = stringResource(Res.string.speaker_detail_title),
-            startContent = {
-                TopMenuButton(
-                    icon = UiRes.drawable.arrow_left_24,
-                    contentDescription = stringResource(UiRes.string.main_header_back),
-                    onClick = onBack,
-                )
-            }
-        )
-        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
-
         ErrorLoadingContent(
             state = speakerState,
             errorMessage = stringResource(Res.string.speaker_detail_error_not_found),
@@ -89,47 +74,47 @@ fun SpeakerDetailScreen(
             val scrollState = rememberScrollState()
             ScrollToTopHandler(scrollState)
 
-
-            Box(
-                Modifier
-                    .verticalScroll(scrollState)
-                    .padding(vertical = 16.dp, horizontal = 12.dp)
-                    .padding(bottomInsetPadding())
-            ) {
-                when (LocalWindowSize.current) {
-                    WindowSize.Compact -> {
-                        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Name(currentSpeaker)
-                            Description(currentSpeaker)
-                            Talks(sessions, viewModel, onSession)
+            AdaptiveDetailLayout(
+                compactHeader = {
+                    MainHeaderTitleBar(
+                        title = stringResource(Res.string.speaker_detail_title),
+                        startContent = {
+                            TopMenuButton(
+                                icon = UiRes.drawable.arrow_left_24,
+                                contentDescription = stringResource(UiRes.string.main_header_back),
+                                onClick = onBack,
+                            )
                         }
+                    )
+                    HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+                },
+                largeHeader = {
+                    Text("This is the huge header")
+                },
+                unifiedContent = {
+                    Column(
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                    ) {
+                        Name(currentSpeaker, modifier = Modifier.padding(vertical = 16.dp, horizontal = 12.dp))
+                        Description(currentSpeaker)
+                        Talks(sessions, viewModel, onSession)
                     }
-
-                    WindowSize.Medium -> {
-                        Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                            Description(currentSpeaker)
-                            Talks(sessions, viewModel, onSession)
-                        }
-                    }
-
-                    WindowSize.Large -> {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(32.dp),
-                            modifier = Modifier.padding(start = 92.dp, top = 32.dp, end = 24.dp)
-                        ) {
-                            Description(currentSpeaker, Modifier.weight(1f))
-                            Talks(sessions, viewModel, onSession, Modifier.weight(1f))
-                        }
-                    }
-                }
-            }
+                },
+                largeMainContent = {
+                    Description(currentSpeaker)
+                },
+                largeSideContent = {
+                    Talks(sessions, viewModel, onSession)
+                },
+            )
         }
     }
 }
 
 @Composable
-private fun Name(currentSpeaker: Speaker) {
-    Column {
+private fun Name(currentSpeaker: Speaker, modifier: Modifier = Modifier) {
+    Column(modifier) {
         Text(
             text = currentSpeaker.name,
             style = KotlinConfTheme.typography.h2,
