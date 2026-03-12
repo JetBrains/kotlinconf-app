@@ -41,7 +41,7 @@ fun AdaptiveDetailLayout(
         WindowSize.Compact -> {
             Column {
                 compactHeader()
-                Column(contentModifier) {
+                Column(contentModifier.padding(horizontal = 12.dp)) {
                     unifiedContent()
                 }
             }
@@ -50,7 +50,7 @@ fun AdaptiveDetailLayout(
         WindowSize.Medium -> {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 largeHeader()
-                Column(contentModifier.widthIn(max = 640.dp)) {
+                Column(contentModifier.padding(horizontal = 24.dp).widthIn(max = 640.dp)) {
                     unifiedContent()
                 }
             }
@@ -63,10 +63,10 @@ fun AdaptiveDetailLayout(
                     modifier = contentModifier.padding(start = 96.dp, end = 24.dp),
                     horizontalArrangement = Arrangement.spacedBy(48.dp),
                 ) {
-                    Box(Modifier.weight(1f)) {
+                    Column(Modifier.weight(1f)) {
                         largeMainContent()
                     }
-                    Box(Modifier.weight(1f)) {
+                    Column(Modifier.weight(1f)) {
                         largeSideContent()
                     }
                 }

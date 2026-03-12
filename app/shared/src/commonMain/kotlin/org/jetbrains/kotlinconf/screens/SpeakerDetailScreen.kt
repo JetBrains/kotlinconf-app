@@ -93,10 +93,10 @@ fun SpeakerDetailScreen(
                 },
                 unifiedContent = {
                     Column(
-                        modifier = Modifier.padding(horizontal = 12.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier.padding(vertical = 16.dp),
                     ) {
-                        Name(currentSpeaker, modifier = Modifier.padding(vertical = 16.dp, horizontal = 12.dp))
+                        Name(currentSpeaker)
                         Description(currentSpeaker)
                         Talks(sessions, viewModel, onSession)
                     }

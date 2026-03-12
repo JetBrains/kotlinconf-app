@@ -132,7 +132,7 @@ fun SessionScreen(
                 )
             },
             largeHeader = {
-                Text("This is the huge header")
+                Title(session, viewModel)
             },
             unifiedContent = {
                 Title(session, viewModel)
@@ -143,20 +143,13 @@ fun SessionScreen(
                 Description(session)
             },
             largeMainContent = {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                ) {
-                    Title(session, viewModel)
-                    Description(session)
-                }
+                Description(session)
             },
             largeSideContent = {
-                Column {
-                    VideoLink(session, onWatchVideo)
-                    Feedback(session, viewModel)
-                    Speakers(speakers, onSpeaker)
-                    RoomSection(session.locationLine, onNavigateToMap)
-                }
+                VideoLink(session, onWatchVideo)
+                Feedback(session, viewModel)
+                Speakers(speakers, onSpeaker)
+                RoomSection(session.locationLine, onNavigateToMap)
             },
         )
     }
