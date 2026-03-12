@@ -1,7 +1,6 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -13,6 +12,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -79,7 +79,7 @@ fun GoldenKodeeScreen(
 
         val backdropAlpha = remember { Animatable(0f) }
         LaunchedEffect(Unit) {
-            backdropAlpha.animateTo(1f, tween(3000, 500))
+            backdropAlpha.animateTo(1f, tween(3000, 0))
         }
 
         Box(
@@ -131,25 +131,29 @@ private fun RadialBackdrop(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 200_000, easing = LinearEasing),
+            animation = tween(durationMillis = 160_000, easing = LinearEasing),
         ),
     )
     val density = LocalDensity.current
     val backdropSizePx = maxOf(windowContainerSize.width, windowContainerSize.height) * 2f
     val backdropSizeDp = with(density) { backdropSizePx.toDp() }
 
-    Image(
-        painter = painterResource(Res.drawable.golden_kodee_backdrop),
-        contentDescription = null,
-        modifier
-            .requiredSize(backdropSizeDp)
-            .graphicsLayer {
-                transformOrigin = TransformOrigin.Center
-                translationX = -windowContainerSize.width / 2f
-                translationY = -windowContainerSize.height / 2f
-                rotationZ = rotation
-            }
-    )
+    BoxWithConstraints {
+        val width = this.constraints.maxWidth
+        val height = this.constraints.maxHeight
+        Image(
+            painter = painterResource(Res.drawable.golden_kodee_backdrop),
+            contentDescription = null,
+            modifier = modifier
+                .requiredSize(backdropSizeDp)
+                .graphicsLayer {
+                    transformOrigin = TransformOrigin.Center
+                    translationX = -width / 1.9f
+                    translationY = -height / 1.9f
+                    rotationZ = rotation
+                },
+        )
+    }
 }
 
 @Composable
