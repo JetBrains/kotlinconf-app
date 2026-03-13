@@ -3,26 +3,25 @@ package org.jetbrains.kotlinconf.navigation
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.AnimationConstants
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.scene.Scene
+import androidx.navigation3.scene.SceneDecoratorStrategy
+import androidx.navigation3.scene.SceneDecoratorStrategyScope
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.award_28
 import org.jetbrains.kotlinconf.generated.resources.award_28_fill
@@ -32,8 +31,8 @@ import org.jetbrains.kotlinconf.generated.resources.info_28
 import org.jetbrains.kotlinconf.generated.resources.info_28_fill
 import org.jetbrains.kotlinconf.generated.resources.location_28
 import org.jetbrains.kotlinconf.generated.resources.location_28_fill
-import org.jetbrains.kotlinconf.generated.resources.nav_destination_info
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_golden_kodee
+import org.jetbrains.kotlinconf.generated.resources.nav_destination_info
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_map
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_schedule
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_speakers
@@ -45,12 +44,11 @@ import org.jetbrains.kotlinconf.ui.components.MainNavigationBar
 import org.jetbrains.kotlinconf.ui.components.MainNavigationRail
 import org.jetbrains.kotlinconf.ui.components.VerticalDivider
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.utils.LocalWindowSize
 import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
-private val bottomNavDestinations: List<MainNavDestination<TopLevelRoute>> = listOf(
+private val topLevelNavDestinations: List<MainNavDestination<TopLevelRoute>> = listOf(
     MainNavDestination(
         label = Res.string.nav_destination_schedule,
         icon = Res.drawable.clock_28,
@@ -83,120 +81,98 @@ private val bottomNavDestinations: List<MainNavDestination<TopLevelRoute>> = lis
     ),
 )
 
-@Composable
-internal fun NavScaffold(
-    navState: NavState,
-    navigator: Navigator,
-    showGoldenKodee: Boolean,
-    content: @Composable (() -> Unit)
-) {
-    val onSelectRoute: (TopLevelRoute) -> Unit = { route ->
-        navigator.activate(route)
-    }
+internal class TopLevelNavStrategy(
+    private val navState: NavState,
+    private val windowSize: WindowSize,
+    private val showGoldenKodee: Boolean,
+    private val onSelectRoute: (TopLevelRoute) -> Unit,
+) : SceneDecoratorStrategy<AppRoute> {
+    override fun SceneDecoratorStrategyScope<AppRoute>.decorateScene(scene: Scene<AppRoute>): Scene<AppRoute> {
+        if (navState.topLevelRoute == null) {
+            return scene
+        }
 
-    val destinations = remember(showGoldenKodee) {
-        if (showGoldenKodee) {
-            bottomNavDestinations
+        val destinations = if (showGoldenKodee) {
+            topLevelNavDestinations
         } else {
-            bottomNavDestinations.filter { it.route !is GoldenKodeeScreen }
-        }
-    }
-
-    val windowSize = LocalWindowSize.current
-
-    val showLargeNavigation = windowSize != WindowSize.Compact &&
-            navState.topLevelRoute != null
-    val showCompactNavigation = windowSize == WindowSize.Compact &&
-            navState.topLevelRoute != null &&
-            navState.currentBackstack.size == 1 &&
-            !isKeyboardOpen()
-
-    Row(
-        Modifier.fillMaxSize()
-            .background(color = KotlinConfTheme.colors.mainBackground)
-    ) {
-        val enterAnimSpec = tween<IntSize>(delayMillis = AnimationConstants.DefaultDurationMillis)
-
-        AnimatedVisibility(
-            visible = showLargeNavigation,
-            enter = expandHorizontally(enterAnimSpec),
-            exit = shrinkHorizontally() + fadeOut(),
-        ) {
-            SideNavigation(
-                currentRoute = navState.topLevelRoute,
-                destinations = destinations,
-                onSelectRoute = onSelectRoute,
-                expanded = windowSize == WindowSize.Large,
-            )
+            topLevelNavDestinations.filter { it.route !is GoldenKodeeScreen }
         }
 
-        Column(Modifier.weight(1f)) {
-            Box(Modifier.weight(1f)) {
-                content()
+        return when (windowSize) {
+            WindowSize.Compact -> {
+                if (navState.currentBackstack.size == 1) {
+                    BottomNavScene(scene, navState, onSelectRoute, destinations)
+                } else {
+                    scene
+                }
             }
 
+            WindowSize.Medium, WindowSize.Large -> {
+                NavRailScene(scene, navState, onSelectRoute, destinations, windowSize)
+            }
+        }
+    }
+}
+
+private class BottomNavScene(
+    private val scene: Scene<AppRoute>,
+    private val navState: NavState,
+    private val onSelectRoute: (TopLevelRoute) -> Unit,
+    private val destinations: List<MainNavDestination<TopLevelRoute>>,
+) : Scene<AppRoute> by scene {
+    override val content: @Composable () -> Unit = {
+        Column(Modifier.padding(bottomInsetPadding())) {
+            Box(Modifier.weight(1f)) {
+                scene.content()
+            }
+
+            val enterAnimSpec =
+                tween<IntSize>(delayMillis = AnimationConstants.DefaultDurationMillis)
+
+            val bottomInset = WindowInsets.ime.getBottom(LocalDensity.current)
+            val isKeyboardOpen by rememberUpdatedState(bottomInset > 300)
+
             AnimatedVisibility(
-                visible = showCompactNavigation,
+                visible = !isKeyboardOpen,
                 enter = expandVertically(enterAnimSpec),
                 exit = shrinkVertically() + fadeOut(),
             ) {
-                BottomNavigation(
-                    currentRoute = navState.topLevelRoute,
+                HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+
+                MainNavigationBar(
+                    currentDestination = destinations.find { it.route == navState.topLevelRoute },
                     destinations = destinations,
-                    onSelectRoute = onSelectRoute,
+                    onSelect = { selectedDestination ->
+                        onSelectRoute(selectedDestination.route)
+                    },
                 )
             }
         }
     }
 }
 
-@Composable
-private fun isKeyboardOpen(): Boolean {
-    val bottomInset = WindowInsets.ime.getBottom(LocalDensity.current)
-    return rememberUpdatedState(bottomInset > 300).value
-}
+private class NavRailScene(
+    private val scene: Scene<AppRoute>,
+    private val navState: NavState,
+    private val onSelectRoute: (TopLevelRoute) -> Unit,
+    private val destinations: List<MainNavDestination<TopLevelRoute>>,
+    private val windowSize: WindowSize,
+) : Scene<AppRoute> by scene {
+    override val content: @Composable () -> Unit = {
+        Row {
+            MainNavigationRail(
+                currentDestination = destinations.find { it.route == navState.topLevelRoute },
+                destinations = destinations,
+                onSelect = { selectedDestination ->
+                    onSelectRoute(selectedDestination.route)
+                },
+                expanded = windowSize == WindowSize.Large,
+                modifier = Modifier.padding(topInsetPadding()),
+            )
 
-@Composable
-private fun BottomNavigation(
-    currentRoute: TopLevelRoute?,
-    destinations: List<MainNavDestination<TopLevelRoute>>,
-    onSelectRoute: (TopLevelRoute) -> Unit,
-) {
-    val currentDestination = destinations.find { it.route == currentRoute }
+            VerticalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
-    Column(
-        Modifier.padding(bottomInsetPadding()),
-    ) {
-        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
-        MainNavigationBar(
-            currentDestination = currentDestination,
-            destinations = destinations,
-            onSelect = { selectedDestination ->
-                onSelectRoute(selectedDestination.route)
-            },
-        )
-    }
-}
-
-@Composable
-private fun SideNavigation(
-    currentRoute: TopLevelRoute?,
-    destinations: List<MainNavDestination<TopLevelRoute>>,
-    onSelectRoute: (TopLevelRoute) -> Unit,
-    expanded: Boolean,
-) {
-    val currentDestination = destinations.find { it.route == currentRoute }
-
-    Row {
-        MainNavigationRail(
-            currentDestination = currentDestination,
-            destinations = destinations,
-            onSelect = { selectedDestination ->
-                onSelectRoute(selectedDestination.route)
-            },
-            expanded = expanded,
-            modifier = Modifier.padding(topInsetPadding()),
-        )
-        VerticalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+            scene.content()
+        }
     }
 }
