@@ -7,6 +7,7 @@ import androidx.compose.ui.window.rememberWindowState
 import dev.zacsweers.metro.createGraphFactory
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.di.JvmAppGraph
+import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.generated.resources.desktop.Res
 import org.jetbrains.kotlinconf.generated.resources.desktop.app_name
 import org.jetbrains.kotlinconf.utils.Logger

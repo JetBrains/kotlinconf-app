@@ -33,9 +33,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.FlagsManager
 import org.jetbrains.kotlinconf.LocalAppGraph
-import org.jetbrains.kotlinconf.LocalFlags
+import org.jetbrains.kotlinconf.flags.LocalFlags
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.kodee_frightened
 import org.jetbrains.kotlinconf.ui.components.Button
@@ -49,7 +48,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.arrow_left_24
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_back
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.LogExporter
-import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
@@ -58,6 +56,7 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun DeveloperMenuScreen(
     onBack: () -> Unit,
+    skipWarningDelay: Boolean = false,
 ) {
     val realFlags = LocalFlags.current
     var flags by remember { mutableStateOf(realFlags) }
@@ -126,6 +125,13 @@ fun DeveloperMenuScreen(
                         note = "Hides the keyboard when the content is scrolled",
                         enabled = flags.hideKeyboardOnDrag,
                         onToggle = { flags = flags.copy(hideKeyboardOnDrag = it) }
+                    )
+
+                    SettingsItem(
+                        title = "Use fake Golden Kodee data",
+                        note = "Show hardcoded Golden Kodee award data with sample links instead of data from the server.",
+                        enabled = flags.useFakeGoldenKodeeData,
+                        onToggle = { flags = flags.copy(useFakeGoldenKodeeData = it) }
                     )
 
                     SettingsItem(
@@ -221,7 +227,7 @@ fun DeveloperMenuScreen(
                     )
                     Spacer(Modifier.height(24.dp))
 
-                    val enabled by produceState(false) {
+                    val enabled by produceState(skipWarningDelay) {
                         delay(3.seconds)
                         value = true
                     }

@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMap
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -25,7 +24,9 @@ import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.LocalNotificationId.Type
 import org.jetbrains.kotlinconf.di.YearGraph
+import org.jetbrains.kotlinconf.flags.FlagsManager
 import org.jetbrains.kotlinconf.network.ApplicationApi
+import org.jetbrains.kotlinconf.flags.FakeGoldenKodeeData
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.storage.YearlyStorage
 import org.jetbrains.kotlinconf.utils.Logger
@@ -41,6 +42,7 @@ class ConferenceService(
     private val timeProvider: TimeProvider,
     private val yearGraphFactory: YearGraph.Factory,
     private val localNotificationService: LocalNotificationService,
+    private val flagsManager: FlagsManager,
     private val scope: CoroutineScope,
     logger: Logger,
 ) {
@@ -150,8 +152,12 @@ class ConferenceService(
         .stateIn(scope, SharingStarted.Eagerly, null)
 
     val goldenKodeeData: StateFlow<GoldenKodeeData?> =
-        currentYearlyStorage.flatMapLatest { it.getGoldenKodeeCache() }
-            .stateIn(scope, SharingStarted.Eagerly, null)
+        combine(
+            currentYearlyStorage.flatMapLatest { it.getGoldenKodeeCache() },
+            flagsManager.flags,
+        ) { data, flags ->
+            if (flags.useFakeGoldenKodeeData) FakeGoldenKodeeData else data
+        }.stateIn(scope, SharingStarted.Eagerly, null)
 
     val currentYear: StateFlow<Int?> =
         applicationStorage.getConfig()

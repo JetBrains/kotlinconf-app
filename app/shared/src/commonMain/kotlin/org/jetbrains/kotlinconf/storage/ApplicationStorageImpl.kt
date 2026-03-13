@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinconf.AppConfig
-import org.jetbrains.kotlinconf.Flags
+import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.Theme
 import org.jetbrains.kotlinconf.getPlatformId
