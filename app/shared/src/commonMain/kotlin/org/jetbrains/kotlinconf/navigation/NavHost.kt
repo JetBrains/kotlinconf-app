@@ -33,8 +33,7 @@ import org.jetbrains.kotlinconf.screens.AppPrivacyNoticePrompt
 import org.jetbrains.kotlinconf.screens.AppTermsOfUse
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
 import org.jetbrains.kotlinconf.screens.DeveloperMenuScreen
-import org.jetbrains.kotlinconf.screens.GoldenKodeeCategoryScreen
-import org.jetbrains.kotlinconf.screens.GoldenKodeeNomineeScreen
+import org.jetbrains.kotlinconf.screens.GoldenKodeeFinalistScreen
 import org.jetbrains.kotlinconf.screens.GoldenKodeeScreen
 import org.jetbrains.kotlinconf.screens.InfoScreen
 import org.jetbrains.kotlinconf.screens.MapScreen
@@ -226,21 +225,14 @@ private fun EntryProviderScope<AppRoute>.screens(
 
     entry<GoldenKodeeScreen>(metadata = noAnimationMetadata) {
         GoldenKodeeScreen(
-            onCategoryClick = { categoryId -> navigator.add(GoldenKodeeCategoryScreen(categoryId)) },
-        )
-    }
-
-    entry<GoldenKodeeCategoryScreen> {
-        GoldenKodeeCategoryScreen(
-            categoryId = it.categoryId,
-            onBack = onBack,
-            onNomineeClick = { nomineeId ->
-                navigator.add(GoldenKodeeNomineeScreen(it.categoryId, nomineeId))
+            onNomineeClick = { categoryId, nomineeId ->
+                navigator.add(GoldenKodeeFinalistScreen(categoryId, nomineeId))
             },
         )
     }
-    entry<GoldenKodeeNomineeScreen> {
-        GoldenKodeeNomineeScreen(
+
+    entry<GoldenKodeeFinalistScreen> {
+        GoldenKodeeFinalistScreen(
             categoryId = it.categoryId,
             nomineeId = it.nomineeId,
             onBack = onBack,

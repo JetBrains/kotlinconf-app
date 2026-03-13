@@ -16,10 +16,8 @@ data class Nominee(
     val id: NomineeId,
     val name: String,
     val photoUrl: String,
-    val position: String = "",
     val bio: String = "",
-    val projectName: String = "",
-    val projectDescription: String = "",
+    val description: String = "",
     val winner: Boolean = false,
 )
 
@@ -27,7 +25,6 @@ data class Nominee(
 data class AwardCategory(
     val id: AwardCategoryId,
     val title: String,
-    val description: String,
     val nominees: List<Nominee>,
 )
 
