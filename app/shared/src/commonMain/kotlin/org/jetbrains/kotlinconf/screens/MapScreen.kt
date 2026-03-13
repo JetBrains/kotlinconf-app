@@ -10,6 +10,7 @@ import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -191,16 +192,18 @@ fun StaticMap(
     val svgData = svgsByPath[if (KotlinConfTheme.colors.isDark) floor.svgPathDark else floor.svgPathLight] ?: return
     val svg = remember(svgData) { Svg(svgData) }
 
-    val containerSize = LocalWindowInfo.current.containerSize
-    val scaleAdjustment = containerSize.width / svg.width
-    val initialZoom = scaleAdjustment * mapData.initialZoom * 1.5f
+    BoxWithConstraints {
+        val containerSize = constraints
+        val scaleAdjustment = containerSize.maxWidth / svg.width
+        val initialZoom = scaleAdjustment * mapData.initialZoom * 1.5f
 
-    Map(
-        svg = svg,
-        state = rememberMapState(initialZoom, offset.asSvgOffset(svg)),
-        modifier = modifier,
-        interactive = false,
-    )
+        Map(
+            svg = svg,
+            state = rememberMapState(initialZoom, offset.asSvgOffset(svg)),
+            modifier = modifier,
+            interactive = false,
+        )
+    }
 }
 
 private class MapState(
