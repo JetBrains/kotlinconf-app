@@ -11,6 +11,7 @@ import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
 import org.jetbrains.kotlinconf.FeedbackInfo
 import org.jetbrains.kotlinconf.Score
@@ -53,7 +54,63 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         val connectionPool = HikariDataSource(hikariConfig)
         Database.connect(connectionPool)
 
+        logDatabaseDiagnostics("BEFORE migrations")
         MigrationRunner.migrate()
+        logDatabaseDiagnostics("AFTER migrations")
+    }
+
+    private fun logDatabaseDiagnostics(label: String) {
+        transaction {
+            val diagLog = LoggerFactory.getLogger("DatabaseDiagnostics")
+
+            // List all tables in public schema with exact casing
+            val tables = mutableListOf<Pair<String, String>>()
+            exec(
+                "SELECT table_name, table_schema FROM information_schema.tables WHERE table_schema IN ('public', 'PUBLIC') ORDER BY table_name"
+            ) { rs ->
+                while (rs.next()) {
+                    tables.add(rs.getString("table_name") to rs.getString("table_schema"))
+                }
+            }
+            diagLog.info("=== Database Diagnostics: $label ===")
+            diagLog.info("Tables found (${tables.size}):")
+            for ((name, schema) in tables) {
+                diagLog.info("  table_name='$name' table_schema='$schema'")
+            }
+
+            // For each table, log row count and first 3 rows
+            for ((name, _) in tables) {
+                try {
+                    var count = 0L
+                    @Suppress("SqlSourceToSinkFlow")
+                    exec("SELECT COUNT(*) AS cnt FROM \"$name\"") { rs ->
+                        if (rs.next()) count = rs.getLong("cnt")
+                    }
+
+                    val rows = mutableListOf<String>()
+                    @Suppress("SqlSourceToSinkFlow")
+                    exec("SELECT * FROM \"$name\" LIMIT 3") { rs ->
+                        val meta = rs.metaData
+                        val colNames = (1..meta.columnCount).map { meta.getColumnName(it) }
+                        if (rows.isEmpty()) {
+                            rows.add("  columns: $colNames")
+                        }
+                        while (rs.next()) {
+                            val values = colNames.map { col -> "$col=${rs.getString(col)}" }
+                            rows.add("  row: ${values.joinToString(", ")}")
+                        }
+                    }
+
+                    diagLog.info("Table '$name': $count rows")
+                    for (row in rows) {
+                        diagLog.info(row)
+                    }
+                } catch (e: Exception) {
+                    diagLog.warn("Table '$name': failed to query - ${e.message}")
+                }
+            }
+            diagLog.info("=== End Database Diagnostics: $label ===")
+        }
     }
 
     suspend fun validateUser(uuid: String): Boolean = suspendTransaction {
