@@ -117,4 +117,4 @@ data class GoldenKodeeFinalistScreen(val categoryId: AwardCategoryId, val nomine
 
 @Serializable
 @SerialName("DeveloperMenu")
-data object DeveloperMenuScreen : AppRoute
+data class DeveloperMenuScreen(val skipWarningDelay: Boolean = false) : AppRoute
