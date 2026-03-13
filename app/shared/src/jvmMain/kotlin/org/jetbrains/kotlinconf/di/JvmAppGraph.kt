@@ -7,7 +7,7 @@ import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import org.jetbrains.kotlinconf.EmptyLocalNotificationService
-import org.jetbrains.kotlinconf.Flags
+import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.LocalNotificationService
 import org.jetbrains.kotlinconf.storage.createSettings
 

@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
+import org.jetbrains.kotlinconf.flags.LocalFlags
 
 @Composable
 fun HideKeyboardOnDragHandler(scrollState: ScrollState) {

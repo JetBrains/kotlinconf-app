@@ -4,6 +4,7 @@ import androidx.compose.ui.uikit.OnFocusBehavior
 import androidx.compose.ui.window.ComposeUIViewController
 import dev.zacsweers.metro.createGraphFactory
 import org.jetbrains.kotlinconf.di.IosAppGraph
+import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.utils.Logger
 import platform.Foundation.NSLog
 import platform.UIKit.UIViewController

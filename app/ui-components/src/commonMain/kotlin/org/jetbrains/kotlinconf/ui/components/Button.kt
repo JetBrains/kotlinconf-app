@@ -31,9 +31,10 @@ fun Button(
     modifier: Modifier = Modifier,
     primary: Boolean = false,
     enabled: Boolean = true,
+    primaryBackground: Color = KotlinConfTheme.colors.primaryBackground,
 ) {
     val backgroundColor by animateColorAsState(
-        if (primary) KotlinConfTheme.colors.primaryBackground
+        if (primary) primaryBackground
         else Color.Transparent
     )
     val borderColor by animateColorAsState(

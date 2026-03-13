@@ -6,6 +6,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import dev.zacsweers.metro.createGraphFactory
 import org.jetbrains.kotlinconf.di.WebAppGraph
+import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.ui.initCoil
 import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.js.ExperimentalWasmJsInterop

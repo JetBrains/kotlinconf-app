@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf
+package org.jetbrains.kotlinconf.flags
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
@@ -15,11 +15,10 @@ import org.jetbrains.kotlinconf.storage.ApplicationStorage
 @Inject
 @SingleIn(AppScope::class)
 class FlagsManager(
-    private val platformFlags: Flags,
+    val platformFlags: Flags,
     private val storage: ApplicationStorage,
     private val scope: CoroutineScope,
 ) {
-
     val flags: StateFlow<Flags> = storage.getFlags()
         .filterNotNull()
         .stateIn(scope, SharingStarted.Eagerly, platformFlags)

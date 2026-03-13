@@ -43,6 +43,7 @@ import org.jetbrains.kotlinconf.generated.resources.twitter
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
@@ -148,3 +149,4 @@ private fun SocialSquare(
         colorFilter = ColorFilter.tint(KotlinConfTheme.colors.primaryText),
     )
 }
+
