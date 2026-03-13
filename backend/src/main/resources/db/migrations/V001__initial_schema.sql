@@ -3,14 +3,14 @@
 
 CREATE TABLE IF NOT EXISTS Users (
     uuid VARCHAR(50) NOT NULL,
-    timestamp VARCHAR(50) NOT NULL,
+    "timestamp" VARCHAR(50) NOT NULL,
     CONSTRAINT pk_Users PRIMARY KEY (uuid)
 );
 
 CREATE INDEX IF NOT EXISTS Users_uuid ON Users (uuid);
 
 CREATE TABLE IF NOT EXISTS Votes (
-    timestamp VARCHAR(50) NOT NULL,
+    "timestamp" VARCHAR(50) NOT NULL,
     uuid VARCHAR(50) NOT NULL,
     sessionId VARCHAR(50) NOT NULL,
     rating INT NOT NULL,
@@ -21,7 +21,7 @@ CREATE INDEX IF NOT EXISTS Votes_uuid ON Votes (uuid);
 CREATE INDEX IF NOT EXISTS Votes_sessionId ON Votes (sessionId);
 
 CREATE TABLE IF NOT EXISTS Feedback (
-    timestamp VARCHAR(50) NOT NULL,
+    "timestamp" VARCHAR(50) NOT NULL,
     uuid VARCHAR(50) NOT NULL,
     sessionId VARCHAR(50) NOT NULL,
     feedback VARCHAR(5000) NOT NULL,
