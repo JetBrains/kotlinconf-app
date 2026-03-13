@@ -7,6 +7,7 @@ import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.di.AppGraph
+import org.jetbrains.kotlinconf.flags.FlagsManager
 import org.jetbrains.kotlinconf.navigation.navigateToSession
 import org.jetbrains.kotlinconf.utils.BufferedDelegatingLogger
 import org.jetbrains.kotlinconf.utils.DebugLogger

@@ -1,4 +1,4 @@
-package org.jetbrains.kotlinconf
+package org.jetbrains.kotlinconf.flags
 
 import androidx.compose.runtime.compositionLocalOf
 import kotlinx.serialization.Serializable
@@ -10,6 +10,7 @@ data class Flags(
     val rippleEnabled: Boolean = true,
     val hideKeyboardOnDrag: Boolean = false,
     val useFakeTime:  Boolean = false,
+    val useFakeGoldenKodeeData: Boolean = false,
     val debugLogging: Boolean = false,
 )
 

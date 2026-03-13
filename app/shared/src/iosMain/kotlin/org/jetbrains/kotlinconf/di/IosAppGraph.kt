@@ -8,7 +8,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
-import org.jetbrains.kotlinconf.Flags
+import org.jetbrains.kotlinconf.flags.Flags
 import platform.Foundation.NSApplicationSupportDirectory
 import platform.Foundation.NSSearchPathForDirectoriesInDomains
 import platform.Foundation.NSUserDefaults

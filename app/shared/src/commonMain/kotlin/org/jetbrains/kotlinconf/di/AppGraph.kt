@@ -22,25 +22,28 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import org.jetbrains.kotlinconf.network.ApplicationApi
-import io.ktor.client.plugins.logging.Logger as KtorLogger
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.FakeTimeProvider
-import org.jetbrains.kotlinconf.Flags
-import org.jetbrains.kotlinconf.FlagsManager
 import org.jetbrains.kotlinconf.ServerBasedTimeProvider
 import org.jetbrains.kotlinconf.TimeProvider
 import org.jetbrains.kotlinconf.URLs
+import org.jetbrains.kotlinconf.flags.Flags
+import org.jetbrains.kotlinconf.flags.FlagsManager
+import org.jetbrains.kotlinconf.network.ApplicationApi
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.utils.BufferedDelegatingLogger
 import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.reflect.KClass
+import io.ktor.client.plugins.logging.Logger as KtorLogger
 
 interface AppGraph : ViewModelGraph {
     val conferenceService: ConferenceService
     val flagsManager: FlagsManager
     val timeProvider: TimeProvider
     val logger: Logger
+
+    @BaseUrl
+    val baseUrl: String
 
     val scope: CoroutineScope
     val bufferedDelegatingLogger: BufferedDelegatingLogger
@@ -64,19 +67,26 @@ interface AppGraph : ViewModelGraph {
     fun bindLogger(impl: BufferedDelegatingLogger): Logger
 
     @Provides
+    @BaseUrl
     @SingleIn(AppScope::class)
-    fun provideHttpClient(
+    fun provideBaseUrl(
         applicationStorage: ApplicationStorage,
         platformFlags: Flags,
-        logger: Logger,
-    ): HttpClient {
-
+    ): String {
         val flags = applicationStorage.getFlagsBlocking()
-        val baseUrl = when {
+        return when {
             flags != null && (flags != platformFlags) -> URLs.STAGING_URL
             else -> URLs.PRODUCTION_URL
         }
+    }
 
+    @Provides
+    @SingleIn(AppScope::class)
+    fun provideHttpClient(
+        applicationStorage: ApplicationStorage,
+        @BaseUrl baseUrl: String,
+        logger: Logger,
+    ): HttpClient {
         return HttpClient {
             install(ContentNegotiation) {
                 json()

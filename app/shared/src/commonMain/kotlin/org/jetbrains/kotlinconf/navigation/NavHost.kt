@@ -4,14 +4,23 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.entryProvider
@@ -20,19 +29,18 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.map
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.LocalAppGraph
-import org.jetbrains.kotlinconf.LocalFlags
 import org.jetbrains.kotlinconf.LocalMapHandler
 import org.jetbrains.kotlinconf.LocalNotificationId
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.ThemeChangeAnimation
 import org.jetbrains.kotlinconf.URLs
+import org.jetbrains.kotlinconf.flags.LocalFlags
 import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
 import org.jetbrains.kotlinconf.screens.AppPrivacyNotice
 import org.jetbrains.kotlinconf.screens.AppPrivacyNoticePrompt
 import org.jetbrains.kotlinconf.screens.AppTermsOfUse
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
-import org.jetbrains.kotlinconf.screens.DeveloperMenuScreen
 import org.jetbrains.kotlinconf.screens.GoldenKodeeFinalistScreen
 import org.jetbrains.kotlinconf.screens.GoldenKodeeScreen
 import org.jetbrains.kotlinconf.screens.InfoScreen
@@ -50,11 +58,15 @@ import org.jetbrains.kotlinconf.screens.VisitorPrivacyNotice
 import org.jetbrains.kotlinconf.screens.VisitorTermsOfUse
 import org.jetbrains.kotlinconf.screens.licenses.LicensesScreen
 import org.jetbrains.kotlinconf.screens.licenses.SingleLicenseScreen
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.GoldenKodeeColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfDarkColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfLightColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.getStoreUrl
+import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.jetbrains.kotlinconf.screens.DeveloperMenuScreen as DeveloperMenuScreenContent
 
 fun navigateByLocalNotificationId(notificationId: String) {
     LocalNotificationId.parse(notificationId)?.let {
@@ -161,7 +173,52 @@ internal fun NavHost(
                         onBack = navigator::goBack,
                     )
                 }
+
+                val baseUrl = LocalAppGraph.current.baseUrl
+                val flagsManager = LocalAppGraph.current.flagsManager
+                val currentFlags = LocalFlags.current
+                val platformFlags = flagsManager.platformFlags
+                if (baseUrl != URLs.PRODUCTION_URL || currentFlags != platformFlags) {
+                    DebugMarker(
+                        Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(topInsetPadding())
+                            .clip(KotlinConfTheme.shapes.roundedCornerMd)
+                            .clickable { navigator.add(AboutAppScreen) }
+                            .padding(8.dp)
+                    )
+                }
             }
+        }
+    }
+}
+
+@Composable
+private fun DebugMarker(modifier: Modifier = Modifier) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = modifier,
+    ) {
+        Box(
+            Modifier.size(10.dp)
+                .clip(CircleShape)
+                .background(KotlinConfTheme.colors.orangeText)
+        )
+        Text(
+            text = "Testing",
+            color = KotlinConfTheme.colors.orangeText,
+            style = KotlinConfTheme.typography.text2,
+            maxLines = 1,
+        )
+        if (LocalFlags.current.useFakeTime) {
+            val dateTime by LocalAppGraph.current.timeProvider.time.collectAsStateWithLifecycle()
+            Text(
+                text = "Fake time: ${DateTimeFormatting.dateAndTime(dateTime)}",
+                color = KotlinConfTheme.colors.orangeText,
+                style = KotlinConfTheme.typography.text2,
+                maxLines = 1,
+            )
         }
     }
 }
@@ -293,7 +350,7 @@ private fun EntryProviderScope<AppRoute>.screens(
             onTermsOfUse = { navigator.add(AppTermsOfUseScreen) },
             onLicenses = { navigator.add(LicensesScreen) },
             onJunie = { uriHandler.openUri(URLs.JUNIE_LANDING_PAGE) },
-            onDeveloperMenu = { navigator.add(DeveloperMenuScreen) },
+            onDeveloperMenu = { skipDelay -> navigator.add(DeveloperMenuScreen(skipWarningDelay = skipDelay)) },
         )
     }
     entry<LicensesScreen> {
@@ -376,7 +433,10 @@ private fun EntryProviderScope<AppRoute>.screens(
     }
 
     entry<DeveloperMenuScreen> {
-        DeveloperMenuScreen(onBack = onBack)
+        DeveloperMenuScreenContent(
+            onBack = onBack,
+            skipWarningDelay = it.skipWarningDelay,
+        )
     }
 
     entry<NestedMapScreen> {

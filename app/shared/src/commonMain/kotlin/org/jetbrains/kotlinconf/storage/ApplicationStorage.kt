@@ -3,7 +3,7 @@ package org.jetbrains.kotlinconf.storage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.kotlinconf.AppConfig
-import org.jetbrains.kotlinconf.Flags
+import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.Theme
 
 interface ApplicationStorage {

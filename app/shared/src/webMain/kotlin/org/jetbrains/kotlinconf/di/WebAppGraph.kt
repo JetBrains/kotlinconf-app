@@ -9,7 +9,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
-import org.jetbrains.kotlinconf.Flags
+import org.jetbrains.kotlinconf.flags.Flags
 
 @DependencyGraph(AppScope::class)
 interface WebAppGraph : AppGraph {
