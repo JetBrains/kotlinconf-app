@@ -1,7 +1,6 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -13,12 +12,14 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -26,7 +27,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,31 +40,38 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.resources.vectorResource
-import org.jetbrains.kotlinconf.AwardCategory
 import org.jetbrains.kotlinconf.AwardCategoryId
+import org.jetbrains.kotlinconf.Nominee
+import org.jetbrains.kotlinconf.NomineeId
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_backdrop
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_banner
+import org.jetbrains.kotlinconf.generated.resources.golden_kodee_finalist
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_title
-import org.jetbrains.kotlinconf.generated.resources.golden_kodee_winner_icon
+import org.jetbrains.kotlinconf.generated.resources.golden_kodee_winner
+import org.jetbrains.kotlinconf.ui.components.CardTag
+import org.jetbrains.kotlinconf.ui.components.CardTagSize
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.LocalWindowSize
+import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
 fun GoldenKodeeScreen(
-    onCategoryClick: (AwardCategoryId) -> Unit,
+    onNomineeClick: (AwardCategoryId, NomineeId) -> Unit,
 ) {
     val viewModel = metroViewModel<GoldenKodeeViewModel>()
     val categories = viewModel.categories.collectAsStateWithLifecycle().value
@@ -74,15 +81,17 @@ fun GoldenKodeeScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .padding(topInsetPadding())
     ) {
-        MainHeaderTitleBar(stringResource(Res.string.golden_kodee_title))
-        HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
+        if (LocalWindowSize.current == WindowSize.Compact) {
+            MainHeaderTitleBar(stringResource(Res.string.golden_kodee_title))
+            HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
+        }
 
         val backdropAlpha = remember { Animatable(0f) }
         LaunchedEffect(Unit) {
-            backdropAlpha.animateTo(1f, tween(3000, 500))
+            backdropAlpha.animateTo(1f, tween(3000, 0))
         }
 
-        Box(
+        BoxWithConstraints(
             Modifier
                 .fillMaxSize()
                 .clipToBounds()
@@ -90,12 +99,16 @@ fun GoldenKodeeScreen(
             if (backdropAlpha.value > 0) {
                 RadialBackdrop(Modifier.graphicsLayer { alpha = backdropAlpha.value })
             }
+
+            val horizontalPadding = ((maxWidth - 1100.dp) / 2).coerceAtLeast(12.dp)
             LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Adaptive(300.dp),
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp) + bottomInsetPadding(),
+                modifier = Modifier.align(Alignment.Center).fillMaxSize(),
+                columns = StaggeredGridCells.Adaptive(340.dp),
+                contentPadding = PaddingValues(horizontal = horizontalPadding) +
+                        PaddingValues(top = 16.dp, bottom = 48.dp) +
+                        bottomInsetPadding(),
+                verticalItemSpacing = 16.dp,
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalItemSpacing = 24.dp,
             ) {
                 item(span = StaggeredGridItemSpan.FullLine) {
                     Box(
@@ -110,11 +123,30 @@ fun GoldenKodeeScreen(
                     }
                 }
 
-                items(categories) { category ->
-                    AwardCategoryCard(
-                        category = category,
-                        onClick = { onCategoryClick(category.id) },
-                    )
+                for (category in categories) {
+                    item(
+                        key = "header-${category.id.id}",
+                        span = StaggeredGridItemSpan.FullLine,
+                    ) {
+                        Text(
+                            text = category.title,
+                            style = KotlinConfTheme.typography.h2,
+                            color = KotlinConfTheme.colors.primaryText,
+                            modifier = Modifier
+                                .padding(top = 16.dp)
+                                .semantics { heading() },
+                        )
+                    }
+
+                    items(
+                        items = category.nominees.sortedByDescending { it.winner },
+                        key = { "nominee-${it.id.id}" },
+                    ) { nominee ->
+                        NomineeRow(
+                            nominee = nominee,
+                            onClick = { onNomineeClick(category.id, nominee.id) },
+                        )
+                    }
                 }
             }
         }
@@ -131,115 +163,82 @@ private fun RadialBackdrop(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 200_000, easing = LinearEasing),
+            animation = tween(durationMillis = 160_000, easing = LinearEasing),
         ),
     )
     val density = LocalDensity.current
     val backdropSizePx = maxOf(windowContainerSize.width, windowContainerSize.height) * 2f
     val backdropSizeDp = with(density) { backdropSizePx.toDp() }
 
-    Image(
-        painter = painterResource(Res.drawable.golden_kodee_backdrop),
-        contentDescription = null,
-        modifier
-            .requiredSize(backdropSizeDp)
-            .graphicsLayer {
-                transformOrigin = TransformOrigin.Center
-                translationX = -windowContainerSize.width / 2f
-                translationY = -windowContainerSize.height / 2f
-                rotationZ = rotation
-            }
-    )
+    BoxWithConstraints {
+        val width = this.constraints.maxWidth
+        val height = this.constraints.maxHeight
+        Image(
+            painter = painterResource(Res.drawable.golden_kodee_backdrop),
+            contentDescription = null,
+            modifier = modifier
+                .requiredSize(backdropSizeDp)
+                .graphicsLayer {
+                    transformOrigin = TransformOrigin.Center
+                    translationX = -width / 1.9f
+                    translationY = -height / 1.9f
+                    rotationZ = rotation
+                },
+        )
+    }
 }
 
 @Composable
-private fun AwardCategoryCard(
-    category: AwardCategory,
+private fun NomineeRow(
+    nominee: Nominee,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
+            .fillMaxWidth()
             .border(1.dp, Color(0x4DC969FF), KotlinConfTheme.shapes.roundedCornerMd)
             .clip(KotlinConfTheme.shapes.roundedCornerMd)
-            .clickable(onClick = onClick)
             .background(Color(0xFF59017B))
-            .padding(top = 24.dp, bottom = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+            .clickable(onClick = onClick)
+            .padding(12.dp),
     ) {
-        Text(
-            text = category.title,
-            style = KotlinConfTheme.typography.h2,
-            color = KotlinConfTheme.colors.primaryText,
-            modifier = Modifier.padding(horizontal = 12.dp),
-        )
-        Column {
-            for (nominee in category.nominees.sortedByDescending { it.winner }) {
-                NomineeCard(
-                    name = nominee.name,
-                    title = nominee.position,
-                    photoUrl = nominee.photoUrl,
-                    winner = nominee.winner,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(KotlinConfTheme.shapes.roundedCornerMd)
-                        .padding(12.dp)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun NomineeCard(
-    name: String,
-    title: String,
-    photoUrl: String,
-    winner: Boolean,
-    onClick: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier.then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(Modifier.size(96.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             SpeakerAvatar(
-                photoUrl = photoUrl,
+                photoUrl = nominee.photoUrl,
                 modifier = Modifier.size(96.dp),
             )
-            if (winner) {
-                Image(
-                    vectorResource(Res.drawable.golden_kodee_winner_icon),
-                    null,
-                    modifier = Modifier
-                        .graphicsLayer {
-                            translationX = 10.dp.toPx()
-                            translationY = -10.dp.toPx()
-                        }
-                        .align(Alignment.TopEnd)
-                        .size(28.dp)
-                        .border(4.dp, Color(0xFF59017B), RoundedCornerShape(10.dp))
-                        .padding(2.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(KotlinConfTheme.colors.primaryBackground)
-                        .padding(4.dp)
+            Column(Modifier.weight(1f)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Text(
+                        text = nominee.name,
+                        style = KotlinConfTheme.typography.h3,
+                        color = KotlinConfTheme.colors.primaryText,
+                    )
+                }
+                Spacer(Modifier.height(4.dp))
+                CardTag(
+                    label = if (nominee.winner) {
+                        stringResource(Res.string.golden_kodee_winner)
+                    } else {
+                        stringResource(Res.string.golden_kodee_finalist)
+                    },
+                    selected = nominee.winner,
+                    size = CardTagSize.Large,
                 )
             }
         }
-        Column {
-            Text(
-                text = name,
-                style = KotlinConfTheme.typography.h3,
-                color = KotlinConfTheme.colors.primaryText,
-            )
-            Spacer(modifier = Modifier.size(6.dp))
-            Text(
-                text = title,
-                style = KotlinConfTheme.typography.text2,
-                color = KotlinConfTheme.colors.secondaryText,
-            )
-        }
+        Spacer(Modifier.height(16.dp))
+        Text(
+            text = nominee.bio,
+            style = KotlinConfTheme.typography.text2,
+            color = KotlinConfTheme.colors.secondaryText,
+        )
     }
 }

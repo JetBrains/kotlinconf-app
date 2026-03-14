@@ -11,6 +11,7 @@ import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
 import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.map
 import org.jetbrains.kotlinconf.AwardCategoryId
@@ -19,7 +20,7 @@ import org.jetbrains.kotlinconf.Nominee
 import org.jetbrains.kotlinconf.NomineeId
 
 @AssistedInject
-class GoldenKodeeNomineeViewModel(
+class GoldenKodeeFinalistViewModel(
     conferenceService: ConferenceService,
     @Assisted("categoryId") private val categoryId: AwardCategoryId,
     @Assisted("nomineeId") private val nomineeId: NomineeId,
@@ -30,6 +31,11 @@ class GoldenKodeeNomineeViewModel(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
+    val year: StateFlow<String> = conferenceService.currentYear
+        .filterNotNull()
+        .map { it.toString() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "")
+
     @AssistedFactory
     @ManualViewModelAssistedFactoryKey(Factory::class)
     @ContributesIntoMap(AppScope::class)
@@ -37,6 +43,6 @@ class GoldenKodeeNomineeViewModel(
         fun create(
             @Assisted("categoryId") categoryId: AwardCategoryId,
             @Assisted("nomineeId") nomineeId: NomineeId,
-        ): GoldenKodeeNomineeViewModel
+        ): GoldenKodeeFinalistViewModel
     }
 }

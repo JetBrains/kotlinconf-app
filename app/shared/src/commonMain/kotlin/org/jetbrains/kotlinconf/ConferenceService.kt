@@ -153,6 +153,11 @@ class ConferenceService(
         currentYearlyStorage.flatMapLatest { it.getGoldenKodeeCache() }
             .stateIn(scope, SharingStarted.Eagerly, null)
 
+    val currentYear: StateFlow<Int?> =
+        applicationStorage.getConfig()
+            .map { it?.currentYear }
+            .stateIn(scope, SharingStarted.Eagerly, null)
+
     fun getTheme(): Flow<Theme> = applicationStorage.getTheme()
 
     fun setTheme(theme: Theme) {

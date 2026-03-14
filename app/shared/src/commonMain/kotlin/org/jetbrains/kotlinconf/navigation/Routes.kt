@@ -112,12 +112,8 @@ data class SpeakerDetailScreen(val speakerId: SpeakerId) : AppRoute
 data class NestedMapScreen(val roomName: String) : AppRoute
 
 @Serializable
-@SerialName("GoldenKodeeCategory")
-data class GoldenKodeeCategoryScreen(val categoryId: AwardCategoryId) : AppRoute
-
-@Serializable
-@SerialName("GoldenKodeeNominee")
-data class GoldenKodeeNomineeScreen(val categoryId: AwardCategoryId, val nomineeId: NomineeId) : AppRoute
+@SerialName("GoldenKodeeFinalist")
+data class GoldenKodeeFinalistScreen(val categoryId: AwardCategoryId, val nomineeId: NomineeId) : AppRoute
 
 @Serializable
 @SerialName("DeveloperMenu")
