@@ -14,7 +14,7 @@
     <string name="golden_kodee_title">Golden Kodee</string>
     <string name="golden_kodee_winner">Gewinner</string>
     <string name="golden_kodee_finalist">Finalist</string>
-    <string name="golden_kodee_winner_banner_title">Golden Kodee Awards %1$s Winner</string>
+    <string name="golden_kodee_winner_banner_title">Golden Kodee Awards %1$s Gewinner</string>
 
     <string name="about_app_title">Über die App</string>
     <string name="about_app_description">Die KotlinConf-Anwendung wird vom JetBrains-Team mit Kotlin Multiplatform für geteilte Logik und Compose Multiplatform für die Benutzeroberfläche auf Android-, iOS-, Desktop- und Web-Plattformen entwickelt.
