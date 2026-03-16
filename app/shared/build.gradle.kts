@@ -117,7 +117,6 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.android.svg)
-            implementation(libs.androidx.core.ktx)
             implementation(libs.androidx.preference)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.metrox.android)
