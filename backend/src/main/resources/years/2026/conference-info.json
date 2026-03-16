@@ -13,8 +13,8 @@
           "id": "google",
           "name": "Google",
           "description": "Google's mission is to organize the world's information and make it universally accessible and useful.",
-          "logoUrlLight": "partner-logos/google.svg",
-          "logoUrlDark": "partner-logos/google.svg",
+          "logoUrlLight": "partner-logos/google-light.svg",
+          "logoUrlDark": "partner-logos/google-dark.svg",
           "url": "https://about.google/"
         }
       ]
@@ -54,7 +54,7 @@
         {
           "id": "goodnotes",
           "name": "Goodnotes",
-          "description": "Goodnotes is the leading digital note-taking app used by millions worldwide and by professionals at thousands of companies to capture, develop, and transform ideas into action. Founded in 2011 as a digital handwriting pioneer, Goodnotes continues to set new standards for context-rich, AI-powered productivity and cross-platform collaboration for both individuals and teams. Goodnotes supports all natural human input methods, including handwriting, typing, sketching, and voice, while providing AI assistance that adapts to how people naturally think and work. Goodnotes was named Apple's 2022 iPad App of the Year.",
+          "description": "Goodnotes is the leading digital note-taking app used by millions worldwide and by professionals at thousands of companies to capture, develop, and transform ideas into action. Founded in 2011 as a digital handwriting pioneer, Goodnotes continues to set new standards for context-rich, AI-powered productivity and cross-platform collaboration for both individuals and teams. Goodnotes supports all natural human input methods, including handwriting, typing, and voice, while providing AI assistance that adapts to how people naturally think and work. Goodnotes was named Apple’s 2022 iPad App of the Year.",
           "logoUrlLight": "partner-logos/goodnotes-light.svg",
           "logoUrlDark": "partner-logos/goodnotes-dark.svg",
           "url": "https://www.goodnotes.com/"
