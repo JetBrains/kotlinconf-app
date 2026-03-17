@@ -22,8 +22,8 @@ import org.jetbrains.kotlinconf.NomineeId
 @AssistedInject
 class GoldenKodeeFinalistViewModel(
     conferenceService: ConferenceService,
-    @Assisted("categoryId") private val categoryId: AwardCategoryId,
-    @Assisted("nomineeId") private val nomineeId: NomineeId,
+    @Assisted private val categoryId: AwardCategoryId,
+    @Assisted private val nomineeId: NomineeId,
 ) : ViewModel() {
     val nominee: StateFlow<Nominee?> = conferenceService.goldenKodeeData
         .map { data ->
@@ -41,8 +41,8 @@ class GoldenKodeeFinalistViewModel(
     @ContributesIntoMap(AppScope::class)
     fun interface Factory : ManualViewModelAssistedFactory {
         fun create(
-            @Assisted("categoryId") categoryId: AwardCategoryId,
-            @Assisted("nomineeId") nomineeId: NomineeId,
+            categoryId: AwardCategoryId,
+            nomineeId: NomineeId,
         ): GoldenKodeeFinalistViewModel
     }
 }
