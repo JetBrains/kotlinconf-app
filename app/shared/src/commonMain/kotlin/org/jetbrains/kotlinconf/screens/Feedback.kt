@@ -32,6 +32,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import org.jetbrains.compose.resources.stringResource
@@ -53,12 +54,11 @@ import org.jetbrains.kotlinconf.utils.LocalNotificationBar
 @Composable
 fun FeedbackBlock(
     sessionId: SessionId,
-    initialEmotion: Emotion?,
     tags: Set<String>,
     status: TalkStatus,
     onPrivacyNoticeNeeded: () -> Unit,
 ) {
-    val viewModel = rememberFeedbackViewModel(sessionId, initialEmotion, onPrivacyNoticeNeeded)
+    val viewModel = rememberFeedbackViewModel(sessionId, onPrivacyNoticeNeeded)
     val selectedEmotion by viewModel.selectedEmotion.collectAsStateWithLifecycle()
 
     Column {
@@ -90,12 +90,11 @@ fun FeedbackBlock(
 @Composable
 fun FeedbackPanel(
     sessionId: SessionId,
-    initialEmotion: Emotion?,
     tags: Set<String>,
     onPrivacyNoticeNeeded: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel = rememberFeedbackViewModel(sessionId, initialEmotion, onPrivacyNoticeNeeded)
+    val viewModel = rememberFeedbackViewModel(sessionId, onPrivacyNoticeNeeded)
     val selectedEmotion by viewModel.selectedEmotion.collectAsStateWithLifecycle()
 
     Column(
@@ -145,12 +144,11 @@ fun FeedbackPanel(
 @Composable
 private fun rememberFeedbackViewModel(
     sessionId: SessionId,
-    initialEmotion: Emotion?,
     onPrivacyNoticeNeeded: () -> Unit,
 ): FeedbackViewModel {
     val viewModel =
         assistedMetroViewModel<FeedbackViewModel, FeedbackViewModel.Factory>(key = sessionId.id) {
-            create(sessionId, initialEmotion)
+            create(sessionId)
         }
 
     val shouldNavigate by viewModel.navigateToPrivacyNotice.collectAsStateWithLifecycle()
@@ -159,6 +157,11 @@ private fun rememberFeedbackViewModel(
             onPrivacyNoticeNeeded()
             viewModel.onNavigatedToPrivacyNotice()
         }
+    }
+
+    LifecycleResumeEffect(viewModel) {
+        viewModel.onReturnedFromPrivacyNotice()
+        onPauseOrDispose { }
     }
 
     return viewModel

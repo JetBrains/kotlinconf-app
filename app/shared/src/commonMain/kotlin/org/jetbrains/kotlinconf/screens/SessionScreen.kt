@@ -144,7 +144,6 @@ fun SessionScreen(
                 if (session.state != SessionState.Upcoming) {
                     FeedbackPanel(
                         sessionId = sessionId,
-                        initialEmotion = session.vote?.toEmotion(),
                         tags = session.tags,
                         onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
                         modifier = Modifier.padding(bottom = 20.dp),

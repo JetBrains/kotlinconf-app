@@ -31,7 +31,7 @@ fun Route.userRoutes() {
         val timestamp = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         repository.createUser(userUUID, timestamp)
         val signed = repository.signPolicy(userUUID, year, timestamp)
-        val code = if (signed) HttpStatusCode.Created else HttpStatusCode.Conflict
+        val code = if (signed) HttpStatusCode.Created else HttpStatusCode.OK
         call.respond(code)
     }
 }

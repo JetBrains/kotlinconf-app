@@ -24,9 +24,9 @@ import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.LocalNotificationId.Type
 import org.jetbrains.kotlinconf.di.YearGraph
+import org.jetbrains.kotlinconf.flags.FakeGoldenKodeeData
 import org.jetbrains.kotlinconf.flags.FlagsManager
 import org.jetbrains.kotlinconf.network.ApplicationApi
-import org.jetbrains.kotlinconf.flags.FakeGoldenKodeeData
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.storage.YearlyStorage
 import org.jetbrains.kotlinconf.utils.Logger
@@ -123,6 +123,10 @@ class ConferenceService(
         ) { conference, favorites, time, votes ->
             conference?.buildAgenda(favorites, votes, time) ?: emptyList()
         }.stateIn(scope, SharingStarted.Eagerly, emptyList())
+
+    val votes: StateFlow<List<VoteInfo>> =
+        currentYearlyStorage.flatMapLatest { it.getVotes() }
+            .stateIn(scope, SharingStarted.Eagerly, emptyList())
 
     private val sessionCards: StateFlow<List<SessionCardView>> =
         agenda.map {
@@ -447,7 +451,8 @@ class ConferenceService(
             "documents/visitors-terms.md",
         )
         val mapData = storage.getConferenceInfoCache().first()?.mapData
-        val mapPaths = mapData?.floors?.flatMap { listOf(it.svgPathLight, it.svgPathDark) } ?: emptyList()
+        val mapPaths =
+            mapData?.floors?.flatMap { listOf(it.svgPathLight, it.svgPathDark) } ?: emptyList()
 
         val allFiles = (docPaths + mapPaths)
         val missing = allFiles.filter { storage.getAsset(it) == null }
