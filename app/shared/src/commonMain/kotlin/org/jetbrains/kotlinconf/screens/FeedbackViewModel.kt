@@ -10,11 +10,15 @@ import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
 import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.SessionId
+import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.utils.toScore
 
@@ -22,11 +26,11 @@ import org.jetbrains.kotlinconf.utils.toScore
 class FeedbackViewModel(
     private val service: ConferenceService,
     @Assisted private val sessionId: SessionId,
-    @Assisted initialEmotion: Emotion?,
 ) : ViewModel() {
 
-    private val _selectedEmotion = MutableStateFlow(initialEmotion)
-    val selectedEmotion: StateFlow<Emotion?> = _selectedEmotion.asStateFlow()
+    val selectedEmotion: StateFlow<Emotion?> = service.votes
+        .map { vote -> vote.find { it.sessionId == sessionId }?.score?.toEmotion() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     private val _feedbackExpanded = MutableStateFlow(false)
     val feedbackExpanded: StateFlow<Boolean> = _feedbackExpanded.asStateFlow()
@@ -34,26 +38,31 @@ class FeedbackViewModel(
     private val _navigateToPrivacyNotice = MutableStateFlow(false)
     val navigateToPrivacyNotice: StateFlow<Boolean> = _navigateToPrivacyNotice.asStateFlow()
 
+    private val pendingEmotion = MutableStateFlow<Emotion?>(null)
+
     private val _feedbackSent = MutableStateFlow(false)
     val feedbackSent: StateFlow<Boolean> = _feedbackSent.asStateFlow()
 
     fun selectEmotion(emotion: Emotion) {
-        val newEmotion = if (emotion == _selectedEmotion.value) null else emotion
-        _selectedEmotion.value = newEmotion
-        _feedbackExpanded.value = newEmotion != null
-        submitVote(newEmotion)
+        val newEmotion = if (emotion == selectedEmotion.value) null else emotion
+
+        viewModelScope.launch {
+            if (service.isPolicySigned()) {
+                service.vote(sessionId, newEmotion?.toScore())
+                _feedbackExpanded.value = newEmotion != null
+            } else {
+                pendingEmotion.value = newEmotion
+                _navigateToPrivacyNotice.value = true
+            }
+        }
     }
 
     fun submitFeedbackWithComment(comment: String) {
-        val emotion = _selectedEmotion.value ?: return
         viewModelScope.launch {
             if (service.isPolicySigned()) {
-                service.vote(sessionId, emotion.toScore())
                 service.sendFeedback(sessionId, comment)
                 _feedbackExpanded.value = false
                 _feedbackSent.value = true
-            } else {
-                _navigateToPrivacyNotice.value = true
             }
         }
     }
@@ -66,24 +75,27 @@ class FeedbackViewModel(
         _navigateToPrivacyNotice.value = false
     }
 
-    fun onFeedbackSentHandled() {
-        _feedbackSent.value = false
-    }
-
-    private fun submitVote(emotion: Emotion?) {
+    fun onReturnedFromPrivacyNotice() {
+        val newEmotion = pendingEmotion.value ?: return
+        pendingEmotion.value = null
         viewModelScope.launch {
             if (service.isPolicySigned()) {
-                service.vote(sessionId, emotion?.toScore())
+                service.vote(sessionId, newEmotion.toScore())
+                _feedbackExpanded.value = true
             } else {
-                _navigateToPrivacyNotice.value = true
+                _feedbackExpanded.value = false
             }
         }
+    }
+
+    fun onFeedbackSentHandled() {
+        _feedbackSent.value = false
     }
 
     @AssistedFactory
     @ManualViewModelAssistedFactoryKey(Factory::class)
     @ContributesIntoMap(AppScope::class)
     fun interface Factory : ManualViewModelAssistedFactory {
-        fun create(sessionId: SessionId, initialEmotion: Emotion?): FeedbackViewModel
+        fun create(sessionId: SessionId): FeedbackViewModel
     }
 }

@@ -539,7 +539,6 @@ private fun SessionCard(
             {
                 FeedbackBlock(
                     sessionId = session.id,
-                    initialEmotion = session.vote?.toEmotion(),
                     tags = session.tags,
                     status = status,
                     onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
