@@ -53,11 +53,9 @@ import org.jetbrains.kotlinconf.generated.resources.schedule_error_no_data
 import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
 import org.jetbrains.kotlinconf.generated.resources.schedule_label_no_bookmarks
 import org.jetbrains.kotlinconf.generated.resources.schedule_number_of_results
-import org.jetbrains.kotlinconf.generated.resources.session_feedback_sent
 import org.jetbrains.kotlinconf.isLive
 import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.DayHeader
-import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.components.FilterItem
 import org.jetbrains.kotlinconf.ui.components.Filters
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
@@ -82,7 +80,6 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.utils.ErrorLoadingState
-import org.jetbrains.kotlinconf.utils.LocalNotificationBar
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
@@ -98,14 +95,6 @@ fun ScheduleScreen(
     val listState = rememberLazyListState()
 
     val state = viewModel.uiState.collectAsStateWithLifecycle().value
-    val shouldNavigateToPrivacyNotice by viewModel.navigateToPrivacyNotice.collectAsStateWithLifecycle()
-
-    LaunchedEffect(shouldNavigateToPrivacyNotice) {
-        if (shouldNavigateToPrivacyNotice) {
-            onPrivacyNoticeNeeded()
-            viewModel.onNavigatedToPrivacyNotice()
-        }
-    }
 
     var headerState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
     val isSearch = rememberSaveable(headerState) { headerState == MainHeaderContainerState.Search }
@@ -225,15 +214,10 @@ fun ScheduleScreen(
                     listState = listState,
                     isSearch = isSearch,
                     dayInfoMap = dayInfoMap,
-                    onSubmitFeedback = { sessionId, emotion ->
-                        viewModel.onSubmitFeedback(sessionId, emotion)
-                    },
-                    onSubmitFeedbackWithComment = { sessionId, emotion, comment ->
-                        viewModel.onSubmitFeedbackWithComment(sessionId, emotion, comment)
-                    },
                     onBookmark = { sessionId, isBookmarked ->
                         viewModel.onBookmark(sessionId, isBookmarked)
                     },
+                    onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
                     filterItems = tags,
                     onToggleFilter = { item, selected -> viewModel.toggleFilter(item, selected) },
                     modifier = Modifier.fillMaxSize()
@@ -369,9 +353,8 @@ private fun ScheduleList(
     listState: LazyListState,
     isSearch: Boolean,
     dayInfoMap: Map<LocalDate, DayInfo>,
-    onSubmitFeedback: (SessionId, Emotion?) -> Unit,
-    onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
     onBookmark: (SessionId, Boolean) -> Unit,
+    onPrivacyNoticeNeeded: () -> Unit,
     filterItems: List<FilterItem> = emptyList(),
     onToggleFilter: (FilterItem, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier,
@@ -465,9 +448,8 @@ private fun ScheduleList(
                             tagHighlights = item.tagMatches,
                             speakerHighlights = item.speakerHighlights,
                             onBookmark = onBookmark,
-                            onSubmitFeedback = onSubmitFeedback,
-                            onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
                             onSession = onSession,
+                            onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 12.dp, vertical = 8.dp)
@@ -522,17 +504,19 @@ private fun ScheduleList(
 private fun SessionCard(
     session: SessionCardView,
     onBookmark: (SessionId, Boolean) -> Unit,
-    onSubmitFeedback: (SessionId, Emotion?) -> Unit,
-    onSubmitFeedbackWithComment: (SessionId, Emotion, String) -> Unit,
     onSession: (SessionId) -> Unit,
+    onPrivacyNoticeNeeded: () -> Unit,
     isSearch: Boolean,
     modifier: Modifier = Modifier,
     titleHighlights: List<IntRange> = emptyList(),
     tagHighlights: List<String> = emptyList(),
     speakerHighlights: List<IntRange> = emptyList(),
 ) {
-    val notificationBar = LocalNotificationBar.current
-    val feedbackSentMessage = stringResource(Res.string.session_feedback_sent)
+    val status = when (session.state) {
+        SessionState.Live -> TalkStatus.Live
+        SessionState.Past -> TalkStatus.Past
+        SessionState.Upcoming -> TalkStatus.Upcoming
+    }
     TalkCard(
         title = session.title,
         titleHighlights = titleHighlights,
@@ -548,21 +532,19 @@ private fun SessionCard(
         timeNote = session.startsInMinutes?.let { count ->
             stringResource(Res.string.schedule_in_x_minutes, count)
         },
-        status = when (session.state) {
-            SessionState.Live -> TalkStatus.Live
-            SessionState.Past -> TalkStatus.Past
-            SessionState.Upcoming -> TalkStatus.Upcoming
-        },
-        initialEmotion = session.vote?.toEmotion(),
-        onSubmitFeedback = { emotion ->
-            onSubmitFeedback(session.id, emotion)
-        },
-        onSubmitFeedbackWithComment = { emotion, comment ->
-            onSubmitFeedbackWithComment(session.id, emotion, comment)
-            notificationBar.show(feedbackSentMessage)
-        },
+        status = status,
         onClick = { onSession(session.id) },
         modifier = modifier,
-        feedbackEnabled = !isSearch && session.state != SessionState.Upcoming,
+        feedbackContent = if (!isSearch && session.state != SessionState.Upcoming) {
+            {
+                FeedbackBlock(
+                    sessionId = session.id,
+                    initialEmotion = session.vote?.toEmotion(),
+                    tags = session.tags,
+                    status = status,
+                    onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
+                )
+            }
+        } else null,
     )
 }

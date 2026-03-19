@@ -42,9 +42,6 @@
     <string name="main_header_search_hint">Tippen zum Suchen</string>
     <string name="main_header_search_clear">Löschen</string>
 
-    <string name="talk_card_thanks_for_rating">Danke für Ihre Bewertung!</string>
-    <string name="talk_card_how_was_the_talk">Wie war der Vortrag?</string>
-    <string name="talk_card_how_was_the_workshop">Wie war der Workshop?</string>
     <string name="talk_card_icon_desc_education">Bildung</string>
     <string name="talk_card_icon_desc_codelab">Codelab</string>
 </resources>

@@ -124,10 +124,13 @@ Bitte versuchen Sie es erneut.
     <string name="session_title">Sitzung</string>
     <string name="session_screen_error">Die Details dieser Sitzung sind derzeit nicht verfügbar.</string>
     <string name="session_feedback_sent">Ihr Kommentar wurde gesendet.</string>
-    <string name="session_thanks_for_rating">Danke für Ihre Bewertung!</string>
     <string name="session_watch_video">Aufzeichnung ansehen</string>
     <string name="session_room_state_description_expanded">Erweitert</string>
     <string name="session_room_state_description_collapsed">Eingeklappt</string>
+
+    <string name="feedback_thanks_for_rating">Danke für Ihre Bewertung!</string>
+    <string name="feedback_how_was_the_talk">Wie war der Vortrag?</string>
+    <string name="feedback_how_was_the_workshop">Wie war der Workshop?</string>
 
     <string name="map_title">Karte</string>
     <string name="map_ground_floor">Erdgeschoss</string>

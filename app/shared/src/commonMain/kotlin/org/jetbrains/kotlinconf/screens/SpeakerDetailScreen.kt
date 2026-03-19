@@ -26,7 +26,6 @@ import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
 import org.jetbrains.kotlinconf.generated.resources.speaker_detail_error_not_found
 import org.jetbrains.kotlinconf.generated.resources.speaker_detail_title
-import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
@@ -146,11 +145,8 @@ fun SpeakerDetailScreen(
                             stringResource(Res.string.schedule_in_x_minutes, count)
                         },
                         status = TalkStatus.Upcoming,
-                        initialEmotion = session.vote?.toEmotion(),
-                        feedbackEnabled = false, // Feedback not enabled on this screen
-                        onSubmitFeedback = { }, // Feedback not enabled on this screen
-                        onSubmitFeedbackWithComment = { _, _ -> }, // Feedback not enabled on this screen
                         onClick = { onSession(session.id) },
+                        feedbackContent = null,
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                     )
                 }
