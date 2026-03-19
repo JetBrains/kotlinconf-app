@@ -148,6 +148,12 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         return@suspendTransaction true
     }
 
+    suspend fun isPolicySigned(uuidValue: String, yearValue: Int): Boolean = suspendTransaction {
+        SignedPolicies.selectAll()
+            .where { (SignedPolicies.userId eq uuidValue) and (SignedPolicies.year eq yearValue) }
+            .count() > 0
+    }
+
     suspend fun getVotes(uuid: String, year: Int): List<VoteInfo> = suspendTransaction {
         Votes.selectAll().where { (Votes.userId eq uuid) and (Votes.year eq year) }
             .map { VoteInfo(it[Votes.sessionId], Score.fromValue(it[Votes.rating])) }

@@ -67,6 +67,12 @@ class YearlyApi(
         } ?: false
     }
 
+    suspend fun getPolicySigned(): Boolean? {
+        return safeApiCall {
+            client.get { apiUrl("sign") }.status.isSuccess()
+        }
+    }
+
     suspend fun vote(sessionId: SessionId, score: Score?): Boolean = safeApiCall {
         client.post {
             apiUrl("vote")
