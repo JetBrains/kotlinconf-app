@@ -4,6 +4,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -32,6 +33,15 @@ fun Route.userRoutes() {
         repository.createUser(userUUID, timestamp)
         val signed = repository.signPolicy(userUUID, year, timestamp)
         val code = if (signed) HttpStatusCode.Created else HttpStatusCode.OK
+        call.respond(code)
+    }
+
+    get("sign") {
+        val year = getYearFromPath(config)
+        val principal = call.validatePrincipal(repository)
+            ?: return@get call.respond(HttpStatusCode.Unauthorized)
+        val signed = repository.isPolicySigned(principal.token, year)
+        val code = if (signed) HttpStatusCode.OK else HttpStatusCode.NotFound
         call.respond(code)
     }
 }

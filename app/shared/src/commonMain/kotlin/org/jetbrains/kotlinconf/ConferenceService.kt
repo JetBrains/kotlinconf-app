@@ -86,6 +86,7 @@ class ConferenceService(
                     taggedLogger.log { "Preloading assets" }
                     downloadAllAssets()
 
+                    verifyPolicyStatus()
                     syncVotes()
 
                     taggedLogger.log { "ConferenceService init successful" }
@@ -436,6 +437,26 @@ class ConferenceService(
         storage.setVotes(mergedVotes)
 
         taggedLogger.log { "Synchronized votes successfully" }
+    }
+
+    private suspend fun verifyPolicyStatus() {
+        val currentYearGraph = currentYearGraph.value ?: return
+        val storage = currentYearGraph.storage
+        val client = currentYearGraph.api
+
+        if (!storage.isPolicySigned().first()) return
+
+        taggedLogger.log { "We're supposed to have a signed policy, verifying with backend" }
+        val policySigned = client.getPolicySigned()
+        when (policySigned) {
+            null, true -> {
+                taggedLogger.log { "Policy status verified" }
+            }
+            else -> {
+                taggedLogger.log { "Policy status can't be verified, resetting value" }
+                storage.setPolicySigned(false)
+            }
+        }
     }
 
     suspend fun downloadAllAssets() {
