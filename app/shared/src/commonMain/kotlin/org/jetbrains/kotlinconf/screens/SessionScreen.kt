@@ -1,21 +1,15 @@
 package org.jetbrains.kotlinconf.screens
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,23 +18,14 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
@@ -65,27 +50,18 @@ import org.jetbrains.kotlinconf.generated.resources.session_room_state_descripti
 import org.jetbrains.kotlinconf.generated.resources.session_screen_error
 import org.jetbrains.kotlinconf.generated.resources.session_title
 import org.jetbrains.kotlinconf.generated.resources.session_watch_video
-import org.jetbrains.kotlinconf.generated.resources.session_feedback_sent
-import org.jetbrains.kotlinconf.generated.resources.session_thanks_for_rating
 import org.jetbrains.kotlinconf.toEmotion
 import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
-import org.jetbrains.kotlinconf.ui.components.Emotion
-import org.jetbrains.kotlinconf.ui.components.FeedbackForm
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
-import org.jetbrains.kotlinconf.ui.components.KodeeIconLarge
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.components.PageTitle
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
-import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
-import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_how_was_the_talk
-import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_how_was_the_workshop
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
-import org.jetbrains.kotlinconf.utils.LocalNotificationBar
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
@@ -103,14 +79,6 @@ fun SessionScreen(
 ) {
     val sessionState = viewModel.session.collectAsStateWithLifecycle().value
     val speakers = viewModel.speakers.collectAsStateWithLifecycle().value
-    val shouldNavigateToPrivacyNotice by viewModel.navigateToPrivacyNotice.collectAsStateWithLifecycle()
-
-    LaunchedEffect(shouldNavigateToPrivacyNotice) {
-        if (shouldNavigateToPrivacyNotice) {
-            onPrivacyNoticeNeeded()
-            viewModel.onNavigatedToPrivacyNotice()
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -175,17 +143,10 @@ fun SessionScreen(
 
                 if (session.state != SessionState.Upcoming) {
                     FeedbackPanel(
-                        onFeedback = { emotion ->
-                            viewModel.submitFeedback(emotion)
-                        },
-                        onFeedbackWithComment = { emotion, comment ->
-                            viewModel.submitFeedbackWithComment(emotion, comment)
-                        },
+                        sessionId = sessionId,
                         initialEmotion = session.vote?.toEmotion(),
-                        feedbackQuestion = stringResource(
-                            if (session.tags.contains("Workshop")) UiRes.string.talk_card_how_was_the_workshop
-                            else UiRes.string.talk_card_how_was_the_talk
-                        ),
+                        tags = session.tags,
+                        onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
                 }
@@ -213,123 +174,6 @@ fun SessionScreen(
 
                 Spacer(Modifier.height(24.dp))
             }
-        }
-    }
-}
-
-@Composable
-private fun FeedbackPanel(
-    onFeedback: (Emotion?) -> Unit,
-    onFeedbackWithComment: (Emotion, String) -> Unit,
-    modifier: Modifier = Modifier,
-    initialEmotion: Emotion? = null,
-    feedbackQuestion: String,
-) {
-    var selectedEmotion by rememberSaveable { mutableStateOf(initialEmotion) }
-    var feedbackExpanded by rememberSaveable { mutableStateOf(false) }
-    var feedbackText by rememberSaveable { mutableStateOf("") }
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .border(
-                width = 1.dp,
-                color = KotlinConfTheme.colors.strokePale,
-                shape = KotlinConfTheme.shapes.roundedCornerMd,
-            )
-            .clip(KotlinConfTheme.shapes.roundedCornerMd)
-            .background(KotlinConfTheme.colors.cardBackgroundPast),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            AnimatedContent(
-                targetState = selectedEmotion != null,
-                contentAlignment = Alignment.Center,
-            ) { emotionSelected ->
-                if (emotionSelected) {
-                    Text(
-                        stringResource(Res.string.session_thanks_for_rating),
-                        style = KotlinConfTheme.typography.h4,
-                        color = KotlinConfTheme.colors.primaryText,
-                    )
-                } else {
-                    Text(
-                        text = feedbackQuestion,
-                        style = KotlinConfTheme.typography.text2,
-                        color = KotlinConfTheme.colors.primaryText,
-                    )
-                }
-            }
-            Spacer(Modifier.height(16.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth().selectableGroup(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-            ) {
-                val feedbackEmotions = remember {
-                    listOf(Emotion.Negative, Emotion.Neutral, Emotion.Positive)
-                }
-                val hapticFeedback = LocalHapticFeedback.current
-                feedbackEmotions.forEach { emotion ->
-                    val selected = selectedEmotion == emotion
-                    KodeeIconLarge(
-                        emotion = emotion,
-                        selected = selected,
-                        modifier = Modifier.selectable(
-                            selected = selected,
-                            indication = null,
-                            interactionSource = null
-                        ) {
-                            val newEmotion = if (emotion == selectedEmotion) null else emotion
-                            hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
-                            selectedEmotion = newEmotion
-                            feedbackExpanded = newEmotion != null
-                            onFeedback(newEmotion)
-                        },
-                    )
-                }
-            }
-        }
-
-        AnimatedVisibility(
-            visible = feedbackExpanded,
-            enter = fadeIn() + expandVertically(clip = false, expandFrom = Alignment.Top),
-            exit = fadeOut() + shrinkVertically(clip = false, shrinkTowards = Alignment.Top),
-        ) {
-            var focusRequested by rememberSaveable { mutableStateOf(false) }
-            val focusRequester = remember { FocusRequester() }
-            if (!focusRequested) {
-                LaunchedEffect(Unit) {
-                    focusRequester.requestFocus()
-                    focusRequested = true
-                }
-            }
-            val hapticFeedback = LocalHapticFeedback.current
-            val notificationBar = LocalNotificationBar.current
-            val feedbackSentMessage = stringResource(Res.string.session_feedback_sent)
-            FeedbackForm(
-                feedbackText = feedbackText,
-                onFeedbackTextChange = { feedbackText = it },
-                emotion = selectedEmotion,
-                onSubmit = { emotion, comment ->
-                    hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
-                    onFeedbackWithComment(emotion, comment)
-                    notificationBar.show(feedbackSentMessage)
-                    feedbackExpanded = false
-                    feedbackText = ""
-                },
-                onSkip = {
-                    feedbackExpanded = false
-                    feedbackText = ""
-                },
-                past = true,
-                modifier = Modifier
-                    .focusRequester(focusRequester)
-                    .padding(bottom = 16.dp)
-            )
         }
     }
 }

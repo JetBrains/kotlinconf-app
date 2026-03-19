@@ -22,27 +22,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.relocation.BringIntoViewRequester
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -68,11 +59,8 @@ import org.jetbrains.kotlinconf.ui.generated.resources.lightning_16_fill
 import org.jetbrains.kotlinconf.ui.generated.resources.lightning_talk
 import org.jetbrains.kotlinconf.ui.generated.resources.session_codelab
 import org.jetbrains.kotlinconf.ui.generated.resources.session_education
-import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_how_was_the_talk
-import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_how_was_the_workshop
 import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_icon_desc_codelab
 import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_icon_desc_education
-import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_thanks_for_rating
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
@@ -121,11 +109,8 @@ fun TalkCard(
     time: String,
     timeNote: String?,
     status: TalkStatus,
-    initialEmotion: Emotion? = null,
-    onSubmitFeedback: (Emotion?) -> Unit,
-    onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
     onClick: () -> Unit,
-    feedbackEnabled: Boolean,
+    feedbackContent: (@Composable () -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor by animateColorAsState(
@@ -181,7 +166,7 @@ fun TalkCard(
             time = time,
         )
         AnimatedVisibility(
-            visible = feedbackEnabled,
+            visible = feedbackContent != null,
             enter = fadeIn(tween(300, 70, EaseOut)) + expandVertically(tween(150, 0, EaseOut)),
             exit = fadeOut(tween(300, 70, EaseOut)) + shrinkVertically(tween(150, 0, EaseOut)),
         ) {
@@ -189,13 +174,7 @@ fun TalkCard(
                 thickness = 1.dp,
                 color = KotlinConfTheme.colors.strokePale,
             )
-            FeedbackBlock(
-                status = status,
-                initialEmotion = initialEmotion,
-                onSubmitFeedback = onSubmitFeedback,
-                onSubmitFeedbackWithComment = onSubmitFeedbackWithComment,
-                isWorkshop = tags.contains("Workshop"),
-            )
+            feedbackContent?.invoke()
         }
     }
 }
@@ -419,120 +398,6 @@ private fun TimeBlock(
     }
 }
 
-private const val FeedbackAnimationDuration = 50
-
-@Composable
-private fun FeedbackBlock(
-    status: TalkStatus,
-    initialEmotion: Emotion? = null,
-    onSubmitFeedback: (Emotion?) -> Unit,
-    onSubmitFeedbackWithComment: (Emotion, String) -> Unit,
-    isWorkshop: Boolean,
-) {
-    var selectedEmotion by remember { mutableStateOf(initialEmotion) }
-    var feedbackExpanded by rememberSaveable { mutableStateOf(false) }
-    var feedbackText by rememberSaveable { mutableStateOf("") }
-
-    Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(start = 16.dp),
-        ) {
-            AnimatedContent(
-                targetState = selectedEmotion != null,
-                transitionSpec = {
-                    fadeIn(tween(FeedbackAnimationDuration)) togetherWith
-                            fadeOut(tween(FeedbackAnimationDuration))
-                },
-                modifier = Modifier.weight(1f),
-                contentAlignment = Alignment.CenterStart,
-            ) { emotionSelected ->
-                if (emotionSelected) {
-                    Text(
-                        stringResource(UiRes.string.talk_card_thanks_for_rating),
-                        color = KotlinConfTheme.colors.primaryText,
-                        style = KotlinConfTheme.typography.h4,
-                    )
-                } else {
-                    Text(
-                        text = stringResource(
-                            if (isWorkshop) UiRes.string.talk_card_how_was_the_workshop
-                            else UiRes.string.talk_card_how_was_the_talk
-                        ),
-                        style = KotlinConfTheme.typography.text2,
-                        color = KotlinConfTheme.colors.primaryText,
-                        maxLines = 1,
-                    )
-                }
-            }
-            Row(
-                modifier = Modifier.selectableGroup()
-            ) {
-                val feedbackEmotions = remember {
-                    listOf(Emotion.Negative, Emotion.Neutral, Emotion.Positive)
-                }
-                val hapticFeedback = LocalHapticFeedback.current
-                feedbackEmotions.forEach { emotion ->
-                    val selected = selectedEmotion == emotion
-                    KodeeIconSmall(
-                        emotion = emotion,
-                        selected = selected,
-                        modifier = Modifier
-                            .selectable(
-                                selected = selected,
-                                indication = null,
-                                interactionSource = null
-                            ) {
-                                hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
-                                selectedEmotion = if (emotion == selectedEmotion) null else emotion
-                                onSubmitFeedback(selectedEmotion)
-                                feedbackExpanded = selectedEmotion != null
-                            }
-                            .padding(12.dp),
-                    )
-                }
-            }
-        }
-        AnimatedVisibility(
-            visible = feedbackExpanded,
-            enter = fadeIn() + expandVertically(clip = false, expandFrom = Alignment.Top),
-            exit = fadeOut() + shrinkVertically(clip = false, shrinkTowards = Alignment.Top),
-        ) {
-            val focusRequester = remember { FocusRequester() }
-            val bringIntoViewRequester = remember { BringIntoViewRequester() }
-            var focusRequested by rememberSaveable { mutableStateOf(false) }
-
-            if (!focusRequested) {
-                LaunchedEffect(Unit) {
-                    bringIntoViewRequester.bringIntoView()
-                    focusRequester.requestFocus()
-                    focusRequested = true
-                }
-            }
-
-            val hapticFeedback = LocalHapticFeedback.current
-            FeedbackForm(
-                feedbackText = feedbackText,
-                onFeedbackTextChange = { feedbackText = it },
-                emotion = selectedEmotion,
-                onSubmit = { emotion, comment ->
-                    hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
-                    onSubmitFeedbackWithComment(emotion, comment)
-                    feedbackExpanded = false
-                    feedbackText = ""
-                },
-                onSkip = {
-                    feedbackExpanded = false
-                    feedbackText = ""
-                },
-                past = status == TalkStatus.Past,
-                modifier = Modifier.focusRequester(focusRequester)
-            )
-        }
-    }
-}
-
 @PreviewLightDark
 @Composable
 private fun TalkCardLivePreview() = PreviewHelper {
@@ -558,11 +423,28 @@ private fun TalkCardLivePreview() = PreviewHelper {
         time = "9:00 – 10:00",
         timeNote = null,
         status = TalkStatus.Live,
-        initialEmotion = Emotion.Positive,
-        onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
-        onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
         onClick = { println("Clicked session") },
-        feedbackEnabled = true,
+        feedbackContent = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(start = 16.dp),
+            ) {
+                Text(
+                    "Thanks for your rating!",
+                    color = KotlinConfTheme.colors.primaryText,
+                    style = KotlinConfTheme.typography.h4,
+                    modifier = Modifier.weight(1f),
+                )
+                Emotion.entries.forEach { emotion ->
+                    KodeeIconSmall(
+                        emotion = emotion,
+                        selected = emotion == Emotion.Positive,
+                        modifier = Modifier.padding(12.dp),
+                    )
+                }
+            }
+        },
     )
 }
 
@@ -586,10 +468,7 @@ private fun TalkCardUpcomingPreview() = PreviewHelper {
         time = "9:00 – 10:00",
         timeNote = "In 10 min",
         status = TalkStatus.Upcoming,
-        initialEmotion = null,
-        onSubmitFeedbackWithComment = { e, s -> println("Feedback, emotion + comment: $e, $s") },
-        onSubmitFeedback = { e -> println("Feedback, emotion only: $e") },
         onClick = { println("Clicked session") },
-        feedbackEnabled = false,
+        feedbackContent = null,
     )
 }

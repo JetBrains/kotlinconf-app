@@ -23,20 +23,17 @@ import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.Day
 import org.jetbrains.kotlinconf.DayInfo
-import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.TimeProvider
 import org.jetbrains.kotlinconf.TimeSlot
 import org.jetbrains.kotlinconf.isServiceEvent
-import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.components.FilterItem
 import org.jetbrains.kotlinconf.ui.components.FilterItemType
 import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import org.jetbrains.kotlinconf.utils.containsDiacritics
 import org.jetbrains.kotlinconf.utils.removeDiacritics
-import org.jetbrains.kotlinconf.utils.toScore
 
 sealed interface ScheduleListItem
 
@@ -82,9 +79,6 @@ class ScheduleViewModel(
     private val service: ConferenceService,
     private val timeProvider: TimeProvider,
 ) : ViewModel() {
-    private val _navigateToPrivacyNotice = MutableStateFlow(false)
-    val navigateToPrivacyNotice: StateFlow<Boolean> = _navigateToPrivacyNotice.asStateFlow()
-
     private val searchParams = MutableStateFlow(ScheduleSearchParams())
 
     private fun List<String>.toFilterItems(type: FilterItemType): List<FilterItem> {
@@ -327,33 +321,6 @@ class ScheduleViewModel(
             titleHighlights = titleHighlights,
             speakerHighlights = speakerHighlights,
         )
-    }
-
-    fun onSubmitFeedback(sessionId: SessionId, emotion: Emotion?) {
-        val score = emotion?.toScore()
-        viewModelScope.launch {
-            if (service.isPolicySigned()) {
-                service.vote(sessionId, score)
-            } else {
-                _navigateToPrivacyNotice.value = true
-            }
-        }
-    }
-
-    fun onSubmitFeedbackWithComment(sessionId: SessionId, emotion: Emotion, comment: String) {
-        val score = emotion.toScore()
-        viewModelScope.launch {
-            if (service.isPolicySigned()) {
-                service.vote(sessionId, score)
-                service.sendFeedback(sessionId, comment)
-            } else {
-                _navigateToPrivacyNotice.value = true
-            }
-        }
-    }
-
-    fun onNavigatedToPrivacyNotice() {
-        _navigateToPrivacyNotice.value = false
     }
 
     fun onBookmark(sessionId: SessionId, bookmarked: Boolean) {
