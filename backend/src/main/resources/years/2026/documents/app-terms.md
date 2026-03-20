@@ -76,7 +76,7 @@ JetBrains reserves the right to suspend Your access to KotlinConf App if Your us
 
 #### **10\. GENERAL**
 
-10.1. **Entire Agreement**. This Agreement constitutes together with the Code of Conduct available at [https://kotlinconf.com/code-of-conduct](https://kotlinconf.com/code-of-conduct) the entire agreement between You and JetBrains with respect to Your use of KotlinConf App**.**
+10.1. **Entire Agreement**. This Agreement constitutes together with the Code of Conduct available at [https://kotlinconf.com/code-of-conduct](https://kotlinconf.com/code-of-conduct) the entire agreement between You and JetBrains with respect to Your use of KotlinConf App.
 
 10.2. **Reservation of Rights**. JetBrains reserves the right at any time to alter features, functions, terms of use, JetBrains Content or other characteristics of KotlinConf App. Nothing in this Agreement limits any rights a consumer may have under applicable consumer protection laws.
 
@@ -96,7 +96,7 @@ JetBrains reserves the right to suspend Your access to KotlinConf App if Your us
 
 13.13. **Force Majeure**. Neither Party shall be in breach of this Agreement, or otherwise liable to the other, by reason of any delay in performance, or non-performance of any of its obligations under this Agreement (except payment obligations), arising directly from an act of God, fire, flood, natural disaster, act of terrorism, strike, lock-out, labour dispute, public health emergency, civil commotion, riot, or act of war.
 
-13.14. **Children and minors**. If You are under 18 years old, then by entering into this Agreement You explicitly stipulate, that (i) You have legal capacity to conclude this Agreement or that You have valid consent from a parent or legal guardian to do so and (ii) You understand the KotlinConf App Privacy Notice. You may not enter into this Agreement if You are under 16 years old. If You do not understand this section, do not understand the KotlinConf App Privacy Notice or do not know whether You have the legal capacity to accept these terms, please ask Your parent or legal guardian for help.
+13.14. **Children and minors**. If You are under 18 years old, then by entering into this Agreement You explicitly stipulate, that (i) You have legal capacity to conclude this Agreement or that You have valid consent from a parent or legal guardian to do so and (ii) You understand the [KotlinConf App Privacy Notice](app-privacy-notice.md). You may not enter into this Agreement if You are under 16 years old. If You do not understand this section, do not understand the [KotlinConf App Privacy Notice](app-privacy-notice.md) or do not know whether You have the legal capacity to accept these terms, please ask Your parent or legal guardian for help.
 
 For further information, please contact us at [info@kotlinconf.com](mailto:info@kotlinconf.com).
 
