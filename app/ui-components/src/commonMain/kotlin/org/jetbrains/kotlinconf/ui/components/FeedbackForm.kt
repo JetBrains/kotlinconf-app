@@ -43,6 +43,8 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
@@ -63,10 +65,11 @@ import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 fun FeedbackForm(
     feedbackText: String,
     onFeedbackTextChange: (String) -> Unit,
-    emotion: Emotion?,
+    emotion: Emotion,
     onSubmit: (emotion: Emotion, comment: String) -> Unit,
     onSkip: () -> Unit,
     past: Boolean,
+    bringIntoViewRequester: BringIntoViewRequester,
     modifier: Modifier = Modifier,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -156,6 +159,7 @@ fun FeedbackForm(
         )
         Row(
             modifier = Modifier
+                .bringIntoViewRequester(bringIntoViewRequester)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
         ) {
             Action(
@@ -174,23 +178,19 @@ fun FeedbackForm(
                 size = ActionSize.Large,
                 enabled = feedbackText.isNotEmpty(),
                 onClick = {
-                    if (emotion != null) {
-                        onSubmit(emotion, feedbackText)
-                    }
+                    onSubmit(emotion, feedbackText)
                 },
             )
         }
 
-        if (emotion != null) {
-            KodeeAdvice(
-                emotion = emotion,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(bottom = 12.dp)
-                    .widthIn(max = 400.dp)
-                    .align(Alignment.CenterHorizontally),
-            )
-        }
+        KodeeAdvice(
+            emotion = emotion,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 12.dp)
+                .widthIn(max = 400.dp)
+                .align(Alignment.CenterHorizontally),
+        )
     }
 }
 
@@ -298,5 +298,5 @@ private fun FeedbackFormPreview(
     @PreviewParameter(FeedbackFormPreviewParameterProvider::class) params: FeedbackFormPreviewParams,
 ) = PreviewHelper {
     var text by remember(params.text) { mutableStateOf(params.text) }
-    FeedbackForm(text, { text = it }, params.emotion, { _, _ -> }, {}, past = false)
+    FeedbackForm(text, { text = it }, params.emotion, { _, _ -> }, {}, past = false, bringIntoViewRequester = BringIntoViewRequester())
 }
