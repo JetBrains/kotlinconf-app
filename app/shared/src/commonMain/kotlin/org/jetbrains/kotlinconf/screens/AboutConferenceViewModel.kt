@@ -28,7 +28,7 @@ data class AboutConferenceEvent(
 )
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(AboutConferenceViewModel::class)
+@ViewModelKey
 class AboutConferenceViewModel(
     service: ConferenceService,
 ) : ViewModel() {

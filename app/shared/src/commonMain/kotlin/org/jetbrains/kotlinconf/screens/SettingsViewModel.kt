@@ -15,7 +15,7 @@ import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.Theme
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(SettingsViewModel::class)
+@ViewModelKey
 class SettingsViewModel(
     private val service: ConferenceService,
 ) : ViewModel() {

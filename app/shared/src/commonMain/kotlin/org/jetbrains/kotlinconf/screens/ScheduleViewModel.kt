@@ -74,7 +74,7 @@ data class ScheduleContent(
 )
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(ScheduleViewModel::class)
+@ViewModelKey
 class ScheduleViewModel(
     private val service: ConferenceService,
     private val timeProvider: TimeProvider,

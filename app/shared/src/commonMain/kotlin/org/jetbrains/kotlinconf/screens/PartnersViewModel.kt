@@ -13,7 +13,7 @@ import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.PartnerGroup
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(PartnersViewModel::class)
+@ViewModelKey
 class PartnersViewModel(
     service: ConferenceService,
 ) : ViewModel() {

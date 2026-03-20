@@ -13,7 +13,7 @@ import org.jetbrains.kotlinconf.AwardCategory
 import org.jetbrains.kotlinconf.ConferenceService
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(GoldenKodeeViewModel::class)
+@ViewModelKey
 class GoldenKodeeViewModel(
     conferenceService: ConferenceService,
 ) : ViewModel() {

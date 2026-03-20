@@ -13,7 +13,7 @@ import org.jetbrains.kotlinconf.ConferenceImages
 import org.jetbrains.kotlinconf.ConferenceService
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(InfoViewModel::class)
+@ViewModelKey
 class InfoViewModel(
     service: ConferenceService,
 ) : ViewModel() {
