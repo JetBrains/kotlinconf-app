@@ -1,11 +1,6 @@
 package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
@@ -29,8 +25,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -38,10 +36,10 @@ import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.generated.resources.Res
-import org.jetbrains.kotlinconf.generated.resources.session_feedback_sent
 import org.jetbrains.kotlinconf.generated.resources.feedback_how_was_the_talk
 import org.jetbrains.kotlinconf.generated.resources.feedback_how_was_the_workshop
 import org.jetbrains.kotlinconf.generated.resources.feedback_thanks_for_rating
+import org.jetbrains.kotlinconf.generated.resources.session_feedback_sent
 import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.ui.components.FeedbackForm
 import org.jetbrains.kotlinconf.ui.components.KodeeIconLarge
@@ -238,24 +236,25 @@ private fun FeedbackFormSection(
     past: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val feedbackExpanded by viewModel.feedbackExpanded.collectAsStateWithLifecycle()
+    val feedbackExpanded = viewModel.feedbackExpanded.collectAsStateWithLifecycle().value
+    val selectedEmotion = viewModel.selectedEmotion.collectAsStateWithLifecycle().value
 
-    AnimatedVisibility(
-        visible = feedbackExpanded,
-        enter = fadeIn() + expandVertically(clip = false, expandFrom = Alignment.Top),
-        exit = fadeOut() + shrinkVertically(clip = false, shrinkTowards = Alignment.Top),
-    ) {
+    if (feedbackExpanded && selectedEmotion != null) {
         var focusRequested by rememberSaveable { mutableStateOf(false) }
         val focusRequester = remember { FocusRequester() }
+        val bringIntoViewRequester = remember { BringIntoViewRequester() }
+
+
+        val windowSize = LocalWindowInfo.current.containerSize
         if (!focusRequested) {
             LaunchedEffect(Unit) {
+                bringIntoViewRequester.bringIntoView(Rect(0f, 0f, windowSize.width.toFloat(), windowSize.height / 2f))
                 focusRequester.requestFocus()
                 focusRequested = true
             }
         }
 
         var feedbackText by rememberSaveable { mutableStateOf("") }
-        val selectedEmotion by viewModel.selectedEmotion.collectAsStateWithLifecycle()
         val hapticFeedback = LocalHapticFeedback.current
 
         val notificationBar = LocalNotificationBar.current
@@ -283,6 +282,7 @@ private fun FeedbackFormSection(
                 feedbackText = ""
             },
             past = past,
+            bringIntoViewRequester = bringIntoViewRequester,
             modifier = modifier.focusRequester(focusRequester),
         )
     }
