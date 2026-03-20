@@ -27,7 +27,7 @@ data class LibraryWithHighlights(
 )
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(LicensesViewModel::class)
+@ViewModelKey
 class LicensesViewModel : ViewModel() {
     private var searchText = MutableStateFlow("")
     private val libraries = flow {

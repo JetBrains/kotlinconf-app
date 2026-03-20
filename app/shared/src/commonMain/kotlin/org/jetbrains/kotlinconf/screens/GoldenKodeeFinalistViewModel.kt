@@ -37,7 +37,7 @@ class GoldenKodeeFinalistViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "")
 
     @AssistedFactory
-    @ManualViewModelAssistedFactoryKey(Factory::class)
+    @ManualViewModelAssistedFactoryKey
     @ContributesIntoMap(AppScope::class)
     fun interface Factory : ManualViewModelAssistedFactory {
         fun create(

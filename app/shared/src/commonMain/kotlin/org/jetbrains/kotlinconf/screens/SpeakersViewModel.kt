@@ -25,7 +25,7 @@ data class SpeakerWithHighlights(
 )
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(SpeakersViewModel::class)
+@ViewModelKey
 class SpeakersViewModel(
     private val service: ConferenceService,
 ) : ViewModel() {

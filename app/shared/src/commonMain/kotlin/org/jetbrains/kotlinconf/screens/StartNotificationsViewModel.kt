@@ -15,7 +15,7 @@ import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.NotificationSettings
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(StartNotificationsViewModel::class)
+@ViewModelKey
 class StartNotificationsViewModel(
     private val service: ConferenceService,
 ) : ViewModel() {

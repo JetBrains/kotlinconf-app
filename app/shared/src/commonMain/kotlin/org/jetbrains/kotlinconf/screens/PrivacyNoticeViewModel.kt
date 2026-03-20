@@ -22,7 +22,7 @@ sealed class PrivacyNoticeState {
 }
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(PrivacyNoticeViewModel::class)
+@ViewModelKey
 class PrivacyNoticeViewModel(
     private val service: ConferenceService,
 ) : ViewModel() {

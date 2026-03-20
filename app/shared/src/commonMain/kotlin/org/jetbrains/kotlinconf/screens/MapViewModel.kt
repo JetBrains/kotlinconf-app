@@ -23,7 +23,7 @@ data class MapContent(
 )
 
 @ContributesIntoMap(AppScope::class)
-@ViewModelKey(MapViewModel::class)
+@ViewModelKey
 class MapViewModel(
     private val service: ConferenceService,
     logger: Logger
