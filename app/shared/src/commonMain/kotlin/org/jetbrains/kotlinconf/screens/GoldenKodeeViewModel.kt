@@ -21,6 +21,4 @@ class GoldenKodeeViewModel(
         .map { it?.categories ?: emptyList() }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    val useNativeNavigation: StateFlow<Boolean> = conferenceService.isExternalNavigation()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 }

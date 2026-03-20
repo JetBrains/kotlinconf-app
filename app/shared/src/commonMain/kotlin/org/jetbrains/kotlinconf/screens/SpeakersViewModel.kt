@@ -32,9 +32,6 @@ class SpeakersViewModel(
     private var loading = MutableStateFlow(false)
     private var searchText = MutableStateFlow("")
 
-    val useNativeNavigation: StateFlow<Boolean> = service.isExternalNavigation()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
-
     fun setSearchText(searchText: String) {
         this.searchText.value = searchText
     }

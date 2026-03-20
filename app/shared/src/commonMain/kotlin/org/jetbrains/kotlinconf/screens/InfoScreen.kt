@@ -42,6 +42,7 @@ import org.jetbrains.kotlinconf.generated.resources.slack
 import org.jetbrains.kotlinconf.generated.resources.twitter
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
@@ -63,7 +64,7 @@ fun InfoScreen(
     viewModel: InfoViewModel = metroViewModel(),
 ) {
     val venueAddress = viewModel.venueAddress.collectAsStateWithLifecycle().value
-    val useNativeNavigation = viewModel.useNativeNavigation.collectAsStateWithLifecycle().value
+    val useNativeNavigation = LocalUseNativeNavigation.current
     val isDark = KotlinConfTheme.colors.isDark
     val images = viewModel.images.collectAsStateWithLifecycle().value
     val logoUrl = if (isDark) images?.kotlinConfDark else images?.kotlinConfLight

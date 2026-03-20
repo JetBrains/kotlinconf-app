@@ -59,6 +59,7 @@ import org.jetbrains.kotlinconf.ui.components.CardTag
 import org.jetbrains.kotlinconf.ui.components.CardTagSize
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
 import org.jetbrains.kotlinconf.ui.components.Text
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.LocalWindowSize
 import org.jetbrains.kotlinconf.utils.WindowSize
@@ -72,7 +73,7 @@ fun GoldenKodeeScreen(
 ) {
     val viewModel = metroViewModel<GoldenKodeeViewModel>()
     val categories = viewModel.categories.collectAsStateWithLifecycle().value
-    val useNativeNavigation = viewModel.useNativeNavigation.collectAsStateWithLifecycle().value
+    val useNativeNavigation = LocalUseNativeNavigation.current
 
     Column(
         Modifier.fillMaxSize()

@@ -47,6 +47,7 @@ import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_hint
 import org.jetbrains.kotlinconf.ui.generated.resources.search_24
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
@@ -60,7 +61,7 @@ fun SpeakersScreen(
     var searchText by rememberSaveable { mutableStateOf("") }
 
     val uiState = viewModel.speakers.collectAsStateWithLifecycle().value
-    val useNativeNavigation = viewModel.useNativeNavigation.collectAsStateWithLifecycle().value
+    val useNativeNavigation = LocalUseNativeNavigation.current
 
     val gridState = rememberLazyGridState()
 
