@@ -55,7 +55,7 @@ To respect your privacy, before using your Personal Data we will inform you abou
 
 Collected Personal Data are shared based on this Privacy Notice. Additionally, we share collected Personal Data within the JetBrains group of companies described above, which act as joint data controllers and process Personal Data for the purposes described above.
 
-We may share your Personal Data with [Google Cloud Platform which third party hosts and helps us provide you with this App.](https://cloud.google.com/terms/cloud-privacy-notice) 
+We may share your Personal Data with [Google Cloud](https://cloud.google.com/terms/cloud-privacy-notice) Platform which third party hosts and helps us provide you with this App. 
 
 We may also share your Personal Data with certain third parties if we are obliged to do so under applicable legislation (especially with tax authorities or with other government bodies exercising their statutory powers) or if such sharing is necessary to achieve the purposes defined above (especially with government bodies or with parties harmed as a result of violations of applicable laws).  
 To adhere to the requirements of the California Consumer Privacy Act (CCPA), we hereby notify you that JetBrains will not a) retain, use, sell, or otherwise disclose any Personal Data for any purpose other than to provide the App; or b) retain, use, sell, or disclose such Personal Data outside of the direct relationship between you and JetBrains; or c) use Personal Data other than as described within this Privacy Notice.
