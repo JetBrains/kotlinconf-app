@@ -182,6 +182,12 @@ class ConferenceService(
         scope.launch { applicationStorage.setTheme(theme) }
     }
 
+    fun isExternalNavigation(): Flow<Boolean> = applicationStorage.isExternalNavigation()
+
+    fun setExternalNavigation(value: Boolean) {
+        scope.launch { applicationStorage.setExternalNavigation(value) }
+    }
+
     suspend fun loadConferenceData() {
         val currentYearGraph = currentYearGraph.value ?: return
         val storage = currentYearGraph.storage

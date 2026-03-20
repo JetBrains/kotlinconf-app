@@ -22,11 +22,18 @@ class SettingsViewModel(
     val theme: StateFlow<Theme> = service.getTheme()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), Theme.SYSTEM)
 
+    val externalNavigation: StateFlow<Boolean> = service.isExternalNavigation()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
     val notificationSettings: StateFlow<NotificationSettings?> = service.getNotificationSettings()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     fun setTheme(theme: Theme) {
         service.setTheme(theme)
+    }
+
+    fun setExternalNavigation(value: Boolean) {
+        service.setExternalNavigation(value)
     }
 
     fun setNotificationSettings(settings: NotificationSettings) {

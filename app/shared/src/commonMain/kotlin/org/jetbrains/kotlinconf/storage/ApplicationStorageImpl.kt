@@ -59,6 +59,9 @@ class ApplicationStorageImpl(
     override fun getTheme(): Flow<Theme> = settings.getStringOrNullFlow(Keys.THEME).map { Theme.entries.firstOrNull { entry -> entry.name == it } ?: Theme.SYSTEM }
     override suspend fun setTheme(value: Theme) = settings.set(Keys.THEME, value.name)
 
+    override fun isExternalNavigation(): Flow<Boolean> = settings.getBooleanFlow(Keys.EXTERNAL_NAVIGATION, false)
+    override suspend fun setExternalNavigation(value: Boolean) = settings.set(Keys.EXTERNAL_NAVIGATION, value)
+
     override fun getFlagsBlocking(): Flags? = settings.getStringOrNull(Keys.FLAGS)?.decodeOrNull<Flags>()
     override fun getFlags(): Flow<Flags?> = settings.getStringOrNullFlow(Keys.FLAGS).map { it.decodeOrNull<Flags>() }
     override suspend fun setFlags(value: Flags) = settings.set(Keys.FLAGS, json.encodeToString(value))
@@ -179,6 +182,7 @@ class ApplicationStorageImpl(
         const val USER_ID = "userId"
         const val ONBOARDING_COMPLETE = "onboardingComplete"
         const val THEME = "theme"
+        const val EXTERNAL_NAVIGATION = "externalNavigation"
         const val FLAGS = "flags"
         const val CONFIG = "config"
     }

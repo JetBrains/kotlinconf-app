@@ -34,6 +34,7 @@ import org.jetbrains.kotlinconf.flags.LocalFlags
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.Theme
 import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.settings_external_navigation
 import org.jetbrains.kotlinconf.generated.resources.settings_notifications_title
 import org.jetbrains.kotlinconf.generated.resources.settings_theme_dark
 import org.jetbrains.kotlinconf.generated.resources.settings_theme_light
@@ -43,6 +44,7 @@ import org.jetbrains.kotlinconf.generated.resources.settings_title
 import org.jetbrains.kotlinconf.generated.resources.theme_dark
 import org.jetbrains.kotlinconf.generated.resources.theme_light
 import org.jetbrains.kotlinconf.generated.resources.theme_system
+import org.jetbrains.kotlinconf.ui.components.SettingsItem
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 
@@ -60,6 +62,14 @@ fun SettingsScreen(
         Column {
             SectionHeading(stringResource(Res.string.settings_theme_title))
             ThemeSelector(currentTheme, onThemeChange = { viewModel.setTheme(it) })
+
+            Spacer(Modifier.height(24.dp))
+
+            SettingsItem(
+                title = stringResource(Res.string.settings_external_navigation),
+                enabled = viewModel.externalNavigation.collectAsStateWithLifecycle().value,
+                onToggle = { enabled -> viewModel.setExternalNavigation(enabled) },
+            )
 
             Spacer(Modifier.height(24.dp))
 
