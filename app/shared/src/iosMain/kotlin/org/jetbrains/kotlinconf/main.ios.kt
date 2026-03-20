@@ -5,6 +5,9 @@ import androidx.compose.ui.window.ComposeUIViewController
 import dev.zacsweers.metro.createGraphFactory
 import org.jetbrains.kotlinconf.di.IosAppGraph
 import org.jetbrains.kotlinconf.flags.Flags
+import org.jetbrains.kotlinconf.navigation.AppRoute
+import org.jetbrains.kotlinconf.navigation.ExternalNavigator
+import org.jetbrains.kotlinconf.navigation.TopLevelRoute
 import org.jetbrains.kotlinconf.utils.Logger
 import platform.Foundation.NSLog
 import platform.UIKit.UIViewController
@@ -31,8 +34,54 @@ private val appGraph = createGraphFactory<IosAppGraph.Factory>()
     )
 
 @Suppress("unused") // Called from Swift
-fun MainViewController(): UIViewController = ComposeUIViewController(
+fun MainViewController(topLevelRoute: TopLevelRoute): UIViewController = ComposeUIViewController(
     configure = { onFocusBehavior = OnFocusBehavior.DoNothing },
 ) {
-    App(appGraph)
+    App(appGraph, topLevelRoute)
+}
+
+@Suppress("unused") // Called from Swift
+fun MainViewController(
+    topLevelRoute: TopLevelRoute,
+    onNavigate: (AppRoute) -> Unit,
+    onGoBack: () -> Unit,
+    onSet: (AppRoute) -> Unit,
+    onActivate: (TopLevelRoute) -> Unit,
+): UIViewController = ComposeUIViewController(
+    configure = { onFocusBehavior = OnFocusBehavior.DoNothing },
+) {
+    App(
+        appGraph = appGraph,
+        topLevelRoute = topLevelRoute,
+        navigatorFactory = { navState, topLevelBackEnabled ->
+            ExternalNavigator(
+                state = navState,
+                topLevelBackEnabled = topLevelBackEnabled,
+                onAdd = onNavigate,
+                onGoBack = onGoBack,
+                onSet = onSet,
+                onActivate = onActivate,
+            )
+        },
+    )
+}
+
+@Suppress("unused") // Called from Swift
+fun ScreenViewController(
+    route: AppRoute,
+    onNavigate: (AppRoute) -> Unit,
+    onGoBack: () -> Unit,
+    onSet: (AppRoute) -> Unit,
+    onActivate: (TopLevelRoute) -> Unit,
+): UIViewController = ComposeUIViewController(
+    configure = { onFocusBehavior = OnFocusBehavior.DoNothing },
+) {
+    SingleScreenApp(
+        appGraph = appGraph,
+        route = route,
+        onNavigate = onNavigate,
+        onGoBack = onGoBack,
+        onSet = onSet,
+        onActivate = onActivate,
+    )
 }

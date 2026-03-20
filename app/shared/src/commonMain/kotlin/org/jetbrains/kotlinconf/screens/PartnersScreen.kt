@@ -21,6 +21,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.generated.resources.partners_error
 import org.jetbrains.kotlinconf.generated.resources.partners_title
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
@@ -53,18 +54,20 @@ fun PartnersScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .padding(topInsetPadding())
     ) {
-        MainHeaderTitleBar(
-            title = stringResource(Res.string.partners_title),
-            startContent = {
-                TopMenuButton(
-                    icon = UiRes.drawable.arrow_left_24,
-                    contentDescription = stringResource(UiRes.string.main_header_back),
-                    onClick = onBack,
-                )
-            }
-        )
+        if (!LocalUseNativeNavigation.current) {
+            MainHeaderTitleBar(
+                title = stringResource(Res.string.partners_title),
+                startContent = {
+                    TopMenuButton(
+                        icon = UiRes.drawable.arrow_left_24,
+                        contentDescription = stringResource(UiRes.string.main_header_back),
+                        onClick = onBack,
+                    )
+                }
+            )
 
-        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+            HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+        }
 
         AnimatedContent(
             targetState = partnerGroups.isNotEmpty(),

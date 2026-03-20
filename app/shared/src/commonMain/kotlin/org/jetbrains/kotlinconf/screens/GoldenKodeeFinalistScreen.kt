@@ -36,6 +36,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.AwardCategoryId
 import org.jetbrains.kotlinconf.NomineeId
 import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_finalist
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_title
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_winner
@@ -75,17 +76,19 @@ fun GoldenKodeeFinalistScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .padding(topInsetPadding())
     ) {
-        MainHeaderTitleBar(
-            title = stringResource(Res.string.golden_kodee_title),
-            startContent = {
-                TopMenuButton(
-                    icon = UiRes.drawable.arrow_left_24,
-                    contentDescription = stringResource(UiRes.string.main_header_back),
-                    onClick = onBack,
-                )
-            },
-        )
-        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+        if (!LocalUseNativeNavigation.current) {
+            MainHeaderTitleBar(
+                title = stringResource(Res.string.golden_kodee_title),
+                startContent = {
+                    TopMenuButton(
+                        icon = UiRes.drawable.arrow_left_24,
+                        contentDescription = stringResource(UiRes.string.main_header_back),
+                        onClick = onBack,
+                    )
+                },
+            )
+            HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+        }
 
         Box(
             Modifier.fillMaxSize()

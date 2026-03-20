@@ -34,6 +34,7 @@ import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.LocalAppGraph
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.flags.LocalFlags
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.kodee_frightened
@@ -71,18 +72,20 @@ fun DeveloperMenuScreen(
                 .background(color = KotlinConfTheme.colors.mainBackground)
                 .padding(topInsetPadding() + bottomInsetPadding())
         ) {
-            MainHeaderTitleBar(
-                title = "Developer Menu",
-                startContent = {
-                    TopMenuButton(
-                        icon = UiRes.drawable.arrow_left_24,
-                        contentDescription = stringResource(UiRes.string.main_header_back),
-                        onClick = onBack,
-                    )
-                }
-            )
+            if (!LocalUseNativeNavigation.current) {
+                MainHeaderTitleBar(
+                    title = "Developer Menu",
+                    startContent = {
+                        TopMenuButton(
+                            icon = UiRes.drawable.arrow_left_24,
+                            contentDescription = stringResource(UiRes.string.main_header_back),
+                            onClick = onBack,
+                        )
+                    }
+                )
 
-            HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+                HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+            }
 
             val appGraph = LocalAppGraph.current
 

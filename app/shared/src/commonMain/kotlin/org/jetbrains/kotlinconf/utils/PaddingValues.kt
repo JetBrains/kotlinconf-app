@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalLayoutDirection
 
 @Composable
 fun bottomInsetPadding() = WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom).asPaddingValues()
+
+@Composable
+fun bottomContentPadding() = WindowInsets.safeContent.only(WindowInsetsSides.Bottom).asPaddingValues()
 
 @Composable
 fun topInsetPadding() = WindowInsets.safeDrawing.only(WindowInsetsSides.Top).asPaddingValues()

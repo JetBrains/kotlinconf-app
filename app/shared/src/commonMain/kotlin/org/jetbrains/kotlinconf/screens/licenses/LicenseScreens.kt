@@ -42,6 +42,7 @@ import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.generated.resources.licenses_number_of_results
 import org.jetbrains.kotlinconf.generated.resources.licenses_title
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
@@ -93,50 +94,52 @@ fun LicensesScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .padding(topInsetPadding())
     ) {
-        MainHeaderContainer(
-            state = searchState,
-            titleContent = {
-                MainHeaderTitleBar(
-                    title = stringResource(Res.string.licenses_title),
-                    startContent = {
-                        TopMenuButton(
-                            icon = UiRes.drawable.arrow_left_24,
-                            contentDescription = stringResource(UiRes.string.main_header_back),
-                            onClick = onBack,
-                        )
-                    },
-                    endContent = {
-                        TopMenuButton(
-                            icon = UiRes.drawable.search_24,
-                            onClick = { searchState = MainHeaderContainerState.Search },
-                            contentDescription = stringResource(UiRes.string.main_header_search_hint)
-                        )
-                    }
-                )
-            },
-            searchContent = {
-                NavigationBackHandler(
-                    state = rememberNavigationEventState(NavigationEventInfo.None),
-                    isBackEnabled = true,
-                    onBackCompleted = {
-                        searchState = MainHeaderContainerState.Title
-                        searchText = ""
-                    },
-                )
+        if (!LocalUseNativeNavigation.current) {
+            MainHeaderContainer(
+                state = searchState,
+                titleContent = {
+                    MainHeaderTitleBar(
+                        title = stringResource(Res.string.licenses_title),
+                        startContent = {
+                            TopMenuButton(
+                                icon = UiRes.drawable.arrow_left_24,
+                                contentDescription = stringResource(UiRes.string.main_header_back),
+                                onClick = onBack,
+                            )
+                        },
+                        endContent = {
+                            TopMenuButton(
+                                icon = UiRes.drawable.search_24,
+                                onClick = { searchState = MainHeaderContainerState.Search },
+                                contentDescription = stringResource(UiRes.string.main_header_search_hint)
+                            )
+                        }
+                    )
+                },
+                searchContent = {
+                    NavigationBackHandler(
+                        state = rememberNavigationEventState(NavigationEventInfo.None),
+                        isBackEnabled = true,
+                        onBackCompleted = {
+                            searchState = MainHeaderContainerState.Title
+                            searchText = ""
+                        },
+                    )
 
-                MainHeaderSearchBar(
-                    searchValue = searchText,
-                    onSearchValueChange = { searchText = it },
-                    onClose = {
-                        searchState = MainHeaderContainerState.Title
-                        searchText = ""
-                    },
-                    onClear = { searchText = "" },
-                )
-            }
-        )
+                    MainHeaderSearchBar(
+                        searchValue = searchText,
+                        onSearchValueChange = { searchText = it },
+                        onClose = {
+                            searchState = MainHeaderContainerState.Title
+                            searchText = ""
+                        },
+                        onClear = { searchText = "" },
+                    )
+                }
+            )
 
-        HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
+            HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
+        }
 
         LibraryList(
             libraries = libraries,
