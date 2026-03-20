@@ -118,21 +118,24 @@ private fun MapScreenImpl(
     modifier: Modifier = Modifier,
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle().value
+    val useNativeNavigation = viewModel.useNativeNavigation.collectAsStateWithLifecycle(false).value
 
     Column(modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
-        MainHeaderTitleBar(
-            title = stringResource(Res.string.map_title),
-            startContent = {
-                if (onBack != null) {
-                    TopMenuButton(
-                        icon = Res.drawable.arrow_left_24,
-                        contentDescription = stringResource(Res.string.navigate_back),
-                        onClick = onBack,
-                    )
+        if (!useNativeNavigation) {
+            MainHeaderTitleBar(
+                title = stringResource(Res.string.map_title),
+                startContent = {
+                    if (onBack != null) {
+                        TopMenuButton(
+                            icon = Res.drawable.arrow_left_24,
+                            contentDescription = stringResource(Res.string.navigate_back),
+                            onClick = onBack,
+                        )
+                    }
                 }
-            }
-        )
-        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+            )
+            HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+        }
 
         ErrorLoadingContent(
             state = state,

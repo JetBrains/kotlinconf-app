@@ -60,6 +60,7 @@ fun SpeakersScreen(
     var searchText by rememberSaveable { mutableStateOf("") }
 
     val uiState = viewModel.speakers.collectAsStateWithLifecycle().value
+    val useNativeNavigation = viewModel.useNativeNavigation.collectAsStateWithLifecycle().value
 
     val gridState = rememberLazyGridState()
 
@@ -79,43 +80,45 @@ fun SpeakersScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .padding(topInsetPadding())
     ) {
-        MainHeaderContainer(
-            state = searchState,
-            titleContent = {
-                MainHeaderTitleBar(
-                    title = stringResource(Res.string.speakers_title),
-                    endContent = {
-                        TopMenuButton(
-                            icon = UiRes.drawable.search_24,
-                            onClick = { searchState = MainHeaderContainerState.Search },
-                            contentDescription = stringResource(UiRes.string.main_header_search_hint)
-                        )
-                    }
-                )
-            },
-            searchContent = {
-                NavigationBackHandler(
-                    state = rememberNavigationEventState(NavigationEventInfo.None),
-                    isBackEnabled = true,
-                    onBackCompleted = {
-                        searchState = MainHeaderContainerState.Title
-                        searchText = ""
-                    },
-                )
+        if (!useNativeNavigation) {
+            MainHeaderContainer(
+                state = searchState,
+                titleContent = {
+                    MainHeaderTitleBar(
+                        title = stringResource(Res.string.speakers_title),
+                        endContent = {
+                            TopMenuButton(
+                                icon = UiRes.drawable.search_24,
+                                onClick = { searchState = MainHeaderContainerState.Search },
+                                contentDescription = stringResource(UiRes.string.main_header_search_hint)
+                            )
+                        }
+                    )
+                },
+                searchContent = {
+                    NavigationBackHandler(
+                        state = rememberNavigationEventState(NavigationEventInfo.None),
+                        isBackEnabled = true,
+                        onBackCompleted = {
+                            searchState = MainHeaderContainerState.Title
+                            searchText = ""
+                        },
+                    )
 
-                MainHeaderSearchBar(
-                    searchValue = searchText,
-                    onSearchValueChange = { searchText = it },
-                    onClose = {
-                        searchState = MainHeaderContainerState.Title
-                        searchText = ""
-                    },
-                    onClear = { searchText = "" },
-                )
-            }
-        )
+                    MainHeaderSearchBar(
+                        searchValue = searchText,
+                        onSearchValueChange = { searchText = it },
+                        onClose = {
+                            searchState = MainHeaderContainerState.Title
+                            searchText = ""
+                        },
+                        onClear = { searchText = "" },
+                    )
+                }
+            )
 
-        HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
+            HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
+        }
 
         ErrorLoadingContent(
             state = uiState,

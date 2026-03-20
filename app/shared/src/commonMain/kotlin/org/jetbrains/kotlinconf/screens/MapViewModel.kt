@@ -48,6 +48,8 @@ class MapViewModel(
         }
     }
 
+    val useNativeNavigation get() = service.isExternalNavigation()
+
     val state: StateFlow<ErrorLoadingState<MapContent>> = combine(
         service.mapData, loading,
     ) { mapData, loading ->

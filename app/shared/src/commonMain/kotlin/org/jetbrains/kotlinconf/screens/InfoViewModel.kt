@@ -21,6 +21,9 @@ class InfoViewModel(
         .map { it?.mapData?.venueAddress }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
+    val useNativeNavigation: StateFlow<Boolean> = service.isExternalNavigation()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
     val images: StateFlow<ConferenceImages?> = service.conferenceInfo
         .map { it?.images }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)

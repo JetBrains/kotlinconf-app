@@ -72,6 +72,7 @@ fun GoldenKodeeScreen(
 ) {
     val viewModel = metroViewModel<GoldenKodeeViewModel>()
     val categories = viewModel.categories.collectAsStateWithLifecycle().value
+    val useNativeNavigation = viewModel.useNativeNavigation.collectAsStateWithLifecycle().value
 
     Column(
         Modifier.fillMaxSize()
@@ -97,6 +98,7 @@ fun GoldenKodeeScreen(
                 columns = StaggeredGridCells.Adaptive(340.dp),
                 contentPadding = topInsetPadding() +
                         PaddingValues(horizontal = horizontalPadding, vertical = 16.dp) +
+                        if (useNativeNavigation) topInsetPadding() else PaddingValues.Zero +
                         bottomInsetPadding(),
                 verticalItemSpacing = 16.dp,
                 horizontalArrangement = Arrangement.spacedBy(16.dp),

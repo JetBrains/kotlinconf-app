@@ -142,6 +142,8 @@ internal fun NavHost(
     val conferenceService = LocalAppGraph.current.conferenceService
     val showGoldenKodee by remember { conferenceService.goldenKodeeData.map { it != null } }
         .collectAsStateWithLifecycle(false)
+    val useNativeNavigation by remember { conferenceService.isExternalNavigation() }
+        .collectAsStateWithLifecycle(false)
 
     val isGoldenKodee = navState.topLevelRoute is GoldenKodeeScreen
 
@@ -171,14 +173,20 @@ internal fun NavHost(
                         WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)
                     )
             ) {
-                NavScaffold(
-                    navState = navState,
-                    navigator = navigator,
-                    showGoldenKodee = showGoldenKodee,
-                ) {
+                val content = @Composable {
                     NavDisplay(
                         entries = navState.toDecoratedEntries(entryProvider),
                         onBack = navigator::goBack,
+                    )
+                }
+                if (useNativeNavigation) {
+                    content()
+                } else {
+                    NavScaffold(
+                        navState = navState,
+                        navigator = navigator,
+                        showGoldenKodee = showGoldenKodee,
+                        content = content,
                     )
                 }
 

@@ -63,6 +63,7 @@ fun InfoScreen(
     viewModel: InfoViewModel = metroViewModel(),
 ) {
     val venueAddress = viewModel.venueAddress.collectAsStateWithLifecycle().value
+    val useNativeNavigation = viewModel.useNativeNavigation.collectAsStateWithLifecycle().value
     val isDark = KotlinConfTheme.colors.isDark
     val images = viewModel.images.collectAsStateWithLifecycle().value
     val logoUrl = if (isDark) images?.kotlinConfDark else images?.kotlinConfLight
@@ -71,8 +72,10 @@ fun InfoScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .padding(topInsetPadding())
     ) {
-        MainHeaderTitleBar(stringResource(Res.string.info_title))
-        HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
+        if (!useNativeNavigation) {
+            MainHeaderTitleBar(stringResource(Res.string.info_title))
+            HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
+        }
 
         Column(
             Modifier
