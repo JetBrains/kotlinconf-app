@@ -35,6 +35,7 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import dev.zacsweers.metrox.viewmodel.metroViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.pluralStringResource
@@ -54,7 +55,7 @@ import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
 import org.jetbrains.kotlinconf.generated.resources.schedule_label_no_bookmarks
 import org.jetbrains.kotlinconf.generated.resources.schedule_number_of_results
 import org.jetbrains.kotlinconf.isLive
-import org.jetbrains.kotlinconf.toEmotion
+import org.jetbrains.kotlinconf.navigation.TopLevelRoute
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.FilterItem
 import org.jetbrains.kotlinconf.ui.components.Filters
@@ -87,6 +88,7 @@ import org.jetbrains.kotlinconf.utils.topInsetPadding
 fun ScheduleScreen(
     onSession: (SessionId) -> Unit,
     onPrivacyNoticeNeeded: () -> Unit,
+    tabReselections: Flow<TopLevelRoute>,
     viewModel: ScheduleViewModel = metroViewModel(),
 ) {
     val scope = rememberCoroutineScope()
@@ -118,6 +120,17 @@ fun ScheduleScreen(
                     listState.scrollToItem(content.firstActiveIndex)
                     firstScrollPerformed = true
                 }
+            }
+        }
+    }
+
+    LaunchedEffect(tabReselections, state) {
+        tabReselections.collect {
+            val content = (state as? ErrorLoadingState.Content)?.data
+            if (content != null && content.firstActiveIndex != -1) {
+                listState.animateScrollToItem(content.firstActiveIndex)
+            } else {
+                listState.animateScrollToItem(0)
             }
         }
     }
