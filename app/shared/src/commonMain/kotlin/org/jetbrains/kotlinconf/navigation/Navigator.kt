@@ -1,9 +1,22 @@
 package org.jetbrains.kotlinconf.navigation
 
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.filter
+
 class Navigator(
     val state: NavState,
     val topLevelBackEnabled: Boolean,
 ) {
+    private val _tabReselections = MutableSharedFlow<TopLevelRoute>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_LATEST,
+    )
+
+    fun tabReselections(forRoute: TopLevelRoute): Flow<TopLevelRoute> =
+        _tabReselections.filter { it == forRoute }
+
     fun goBack() {
         val currentBackstack = state.currentBackstack
 
@@ -45,6 +58,9 @@ class Navigator(
             // Reselected the current top-level route, clear to root
             if (currentBackstack.size > 1) {
                 currentBackstack.removeRange(1, currentBackstack.size)
+            } else {
+                // Already at root, signal reselection for scroll-to-top
+                _tabReselections.tryEmit(route)
             }
             return
         }

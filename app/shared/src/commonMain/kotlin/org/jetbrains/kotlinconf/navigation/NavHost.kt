@@ -26,6 +26,7 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.LocalAppGraph
@@ -271,6 +272,7 @@ private fun EntryProviderScope<AppRoute>.screens(
         ScheduleScreen(
             onSession = { navigator.add(SessionScreen(it)) },
             onPrivacyNoticeNeeded = { navigator.add(AppPrivacyNoticePrompt) },
+            tabReselections = navigator.tabReselections(forRoute = ScheduleScreen),
         )
     }
 
