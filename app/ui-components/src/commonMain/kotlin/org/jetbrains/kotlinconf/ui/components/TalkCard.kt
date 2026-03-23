@@ -170,11 +170,16 @@ fun TalkCard(
             enter = fadeIn(tween(300, 70, EaseOut)) + expandVertically(tween(150, 0, EaseOut)),
             exit = fadeOut(tween(300, 70, EaseOut)) + shrinkVertically(tween(150, 0, EaseOut)),
         ) {
-            HorizontalDivider(
-                thickness = 1.dp,
-                color = KotlinConfTheme.colors.strokePale,
-            )
-            feedbackContent?.invoke()
+            Column(
+                // Prevent clicks on the non-interactive elements of the feedback area
+                Modifier.clickable(interactionSource = null, indication = null, onClick = {})
+            ) {
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = KotlinConfTheme.colors.strokePale,
+                )
+                feedbackContent?.invoke()
+            }
         }
     }
 }
