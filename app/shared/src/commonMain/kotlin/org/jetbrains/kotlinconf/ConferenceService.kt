@@ -503,7 +503,7 @@ class ConferenceService(
     suspend fun getAsset(path: String): String? {
         taggedLogger.log { "Reading asset: $path" }
 
-        val storage = currentYearGraph.value?.storage ?: return null
+        val storage = currentYearGraph.filterNotNull().first().storage
         val cached = storage.getAsset(path)
 
         if (cached != null) {
