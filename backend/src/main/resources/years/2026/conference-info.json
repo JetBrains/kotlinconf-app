@@ -160,20 +160,20 @@
       "description": null
     },
     {
-      "sessionId": "1095750",
-      "month": "MAY",
-      "day": "22",
-      "title1": "Second day",
-      "title2": "keynote",
-      "description": null
-    },
-    {
       "sessionId": "8316c80e-daeb-494a-8197-9443b84af81c",
       "month": "MAY",
       "day": "21",
       "title1": "",
       "title2": "Party",
       "description": "Have fun and mingle with the community at the biggest Kotlin party of the year!"
+    },
+    {
+      "sessionId": "1095750",
+      "month": "MAY",
+      "day": "22",
+      "title1": "Second day",
+      "title2": "keynote",
+      "description": null
     },
     {
       "sessionId": "1166456",
