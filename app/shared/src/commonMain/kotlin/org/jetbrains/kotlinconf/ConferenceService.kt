@@ -208,17 +208,21 @@ class ConferenceService(
             storage.setFavorites(favorites)
 
             // Check if any favorite sessions were rescheduled
+            val remindersEnabled = getNotificationSettings().first().sessionReminders
             favorites.forEach { sessionId ->
                 val newSession = newSessions[sessionId] ?: return@forEach
                 val oldSession = oldSessions[sessionId] ?: return@forEach
+
                 if (oldSession.startsAt != newSession.startsAt || oldSession.endsAt != newSession.endsAt) {
                     cancelNotifications(sessionId)
-                    scheduleNotification(
-                        start = newSession.startsAt,
-                        end = newSession.endsAt,
-                        sessionId = newSession.id,
-                        title = newSession.title,
-                    )
+                    if (remindersEnabled) {
+                        scheduleNotification(
+                            start = newSession.startsAt,
+                            end = newSession.endsAt,
+                            sessionId = newSession.id,
+                            title = newSession.title,
+                        )
+                    }
                 }
             }
         }
@@ -282,7 +286,31 @@ class ConferenceService(
         val currentYearGraph = currentYearGraph.value ?: return
         val storage = currentYearGraph.storage
 
+        val previousSettings = getNotificationSettings().first()
         storage.setNotificationSettings(settings)
+
+        if (previousSettings.sessionReminders != settings.sessionReminders) {
+            val favorites = storage.getFavorites().first()
+
+            if (settings.sessionReminders) {
+                // Re-schedule notifications for all favorite sessions
+                favorites
+                    .mapNotNull { sessionId -> sessionByIdFlow(sessionId).first() }
+                    .forEach { session ->
+                        scheduleNotification(
+                            start = session.startsAt,
+                            end = session.endsAt,
+                            sessionId = session.id,
+                            title = session.title,
+                        )
+                    }
+            } else {
+                // Cancel all session reminder notifications
+                favorites.forEach { sessionId ->
+                    cancelNotifications(sessionId)
+                }
+            }
+        }
     }
 
     suspend fun isPolicySigned(): Boolean {
@@ -342,14 +370,17 @@ class ConferenceService(
             storage.setFavorites(favorites)
 
             if (favorite) {
-                val session = sessionByIdFlow(sessionId).first()
-                if (session != null) {
-                    scheduleNotification(
-                        start = session.startsAt,
-                        end = session.endsAt,
-                        sessionId = session.id,
-                        title = session.title,
-                    )
+                val remindersEnabled = getNotificationSettings().first().sessionReminders
+                if (remindersEnabled) {
+                    val session = sessionByIdFlow(sessionId).first()
+                    if (session != null) {
+                        scheduleNotification(
+                            start = session.startsAt,
+                            end = session.endsAt,
+                            sessionId = session.id,
+                            title = session.title,
+                        )
+                    }
                 }
             } else {
                 cancelNotifications(sessionId)
