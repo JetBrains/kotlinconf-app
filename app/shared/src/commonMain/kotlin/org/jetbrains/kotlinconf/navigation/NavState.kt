@@ -45,12 +45,17 @@ fun rememberNavState(
         }
     }
 
+    val currentBackstack = rememberSerializable(serializer = SnapshotStateListSerializer()) {
+        mutableStateListOf<AppRoute>()
+    }
+
     return remember(startRoute, topLevelRoutes) {
         NavState(
             _topLevelRoute = topLevelRoute,
             primaryTopLevelRoute = primaryTopLevelRoute,
             topLevelBackStacks = topLevelBackstacks,
             defaultBackstack = defaultBackstack,
+            currentBackstack = currentBackstack,
         )
     }
 }
@@ -60,16 +65,18 @@ class NavState(
     val topLevelBackStacks: Map<TopLevelRoute, SnapshotStateList<AppRoute>>,
     val defaultBackstack: SnapshotStateList<AppRoute>,
     val primaryTopLevelRoute: TopLevelRoute,
+    val currentBackstack: SnapshotStateList<AppRoute>,
 ) {
-    val currentBackstack: SnapshotStateList<AppRoute> = mutableStateListOf()
 
     init {
-        val source = if (_topLevelRoute.value != null) {
-            topLevelBackStacks[_topLevelRoute.value]!!
-        } else {
-            defaultBackstack
+        if (currentBackstack.isEmpty()) {
+            val source = if (_topLevelRoute.value != null) {
+                topLevelBackStacks[_topLevelRoute.value]!!
+            } else {
+                defaultBackstack
+            }
+            currentBackstack.addAll(source)
         }
-        currentBackstack.addAll(source)
     }
 
     var topLevelRoute: TopLevelRoute?
