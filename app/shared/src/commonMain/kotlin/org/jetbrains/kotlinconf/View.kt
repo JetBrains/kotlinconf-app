@@ -59,10 +59,12 @@ fun List<Session>.groupByTime(
     val slotsToSessions: Map<SlotTimes, MutableList<SessionCardView>> =
         slots.associateWith { mutableListOf() }
 
+    val speakersById = conference.speakers.associateBy { it.id }
+
     this.forEach { session ->
         val slot = slots.find { (start, end) -> session.startsAt >= start && session.endsAt <= end } ?: return@forEach
         slotsToSessions.getValue(slot).add(
-            session.asSessionCard(conference, now, favorites, votes[session.id])
+            session.asSessionCard(speakersById, now, favorites, votes[session.id])
         )
     }
 
@@ -81,7 +83,7 @@ fun List<Session>.groupByTime(
 }
 
 fun Session.asSessionCard(
-    conference: Conference,
+    speakersById: Map<SpeakerId, Speaker>,
     now: LocalDateTime,
     favorites: Set<SessionId>,
     vote: VoteInfo?,
@@ -89,7 +91,7 @@ fun Session.asSessionCard(
     return SessionCardView(
         id = id,
         title = title,
-        speakerLine = speakerLine(conference),
+        speakerLine = speakerIds.mapNotNull { speakersById[it] }.joinToString { it.name },
         locationLine = location,
         isFavorite = id in favorites,
         startsAt = startsAt,
@@ -104,9 +106,4 @@ fun Session.asSessionCard(
         },
         videoUrl = videoUrl,
     )
-}
-
-fun Session.speakerLine(conference: Conference): String {
-    val speakers = conference.speakers.filter { it.id in speakerIds }
-    return speakers.joinToString { it.name }
 }
