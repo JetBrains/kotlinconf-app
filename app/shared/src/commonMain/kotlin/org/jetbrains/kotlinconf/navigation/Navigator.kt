@@ -51,8 +51,8 @@ class Navigator(
         add(route)
     }
 
-    fun activate(route: TopLevelRoute) {
-        if (route == state.topLevelRoute) {
+    fun activate(route: TopLevelRoute, withReselection: Boolean = true) {
+        if (withReselection && route == state.topLevelRoute) {
             val currentBackstack = state.currentBackstack
 
             // Reselected the current top-level route, clear to root

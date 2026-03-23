@@ -91,7 +91,7 @@ private fun NotificationHandler(navigator: Navigator) {
     LaunchedEffect(Unit) {
         while (true) {
             val request: NavRequest = notificationNavRequests.receive()
-            navigator.activate(request.topLevelRoute)
+            navigator.activate(request.topLevelRoute, withReselection = false)
             navigator.add(request.targetRoute)
         }
     }
