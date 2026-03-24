@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
@@ -135,7 +136,7 @@ internal fun NavScaffold(
         }
 
         Column(Modifier.weight(1f)) {
-            Box(Modifier.weight(1f)) {
+            Box(Modifier.weight(1f).clipToBounds()) {
                 content()
             }
 
