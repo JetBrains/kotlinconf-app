@@ -193,6 +193,7 @@
       "Language and best practices",
       "AI",
       "Education",
+      "Community",
       "Other"
     ],
     "levels": [
@@ -203,7 +204,8 @@
     "formats": [
       "Workshop",
       "Regular session",
-      "Lightning talk"
+      "Lightning talk",
+      "Discussion"
     ]
   },
   "mapData": {
