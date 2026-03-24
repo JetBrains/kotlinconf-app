@@ -192,6 +192,7 @@
       "Extensibility/Tooling",
       "Language and best practices",
       "AI",
+      "Education",
       "Other"
     ],
     "levels": [
@@ -202,8 +203,7 @@
     "formats": [
       "Workshop",
       "Regular session",
-      "Lightning talk",
-      "Codelab"
+      "Lightning talk"
     ]
   },
   "mapData": {
