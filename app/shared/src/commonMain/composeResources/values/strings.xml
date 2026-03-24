@@ -132,9 +132,9 @@ Please try again.
     <string name="feedback_how_was_the_talk">How was the talk?</string>
     <string name="feedback_how_was_the_workshop">How was the workshop?</string>
 
-    <string name="notification_session_starts_in_5_min">Starts in 5 minutes in %1$s</string>
-    <string name="notification_session_starting_soon">Starting soon in %1$s</string>
-    <string name="notification_session_already_started">Already started in %1$s!</string>
+    <string name="notification_session_starts_in_5_min">%1$s · In 5 minutes</string>
+    <string name="notification_session_starting_soon">%1$s · Starting soon</string>
+    <string name="notification_session_already_started">%1$s · Already started!</string>
     <string name="notification_session_finished">%1$s finished</string>
     <string name="notification_session_how_was_it">How was the talk?</string>
 
