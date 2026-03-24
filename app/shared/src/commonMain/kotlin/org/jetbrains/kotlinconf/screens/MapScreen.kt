@@ -13,8 +13,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,7 +28,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -35,6 +39,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.MapData
@@ -49,7 +54,6 @@ import org.jetbrains.kotlinconf.generated.resources.map_zoom_out
 import org.jetbrains.kotlinconf.generated.resources.minus_24
 import org.jetbrains.kotlinconf.generated.resources.navigate_back
 import org.jetbrains.kotlinconf.generated.resources.plus_24
-import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.OverlayIconButton
@@ -59,6 +63,9 @@ import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_up_right_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
+import org.jetbrains.kotlinconf.utils.LocalWindowSize
+import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
@@ -144,7 +151,8 @@ private fun MapScreenImpl(
             var floorIndex by rememberSaveable { mutableStateOf(initialFloorIndex) }
             val floor = mapData.floors.getOrNull(floorIndex) ?: return@ErrorLoadingContent
 
-            val svgPath = if (KotlinConfTheme.colors.isDark) floor.svgPathDark else floor.svgPathLight
+            val svgPath =
+                if (KotlinConfTheme.colors.isDark) floor.svgPathDark else floor.svgPathLight
             val svgData = content.svgsByPath[svgPath] ?: return@ErrorLoadingContent
 
             Column(Modifier.fillMaxSize()) {
@@ -189,7 +197,9 @@ fun StaticMap(
     val offset = Offset(room.offsetX, room.offsetY)
 
     val floor = mapData.floors[floorIndex]
-    val svgData = svgsByPath[if (KotlinConfTheme.colors.isDark) floor.svgPathDark else floor.svgPathLight] ?: return
+    val svgData =
+        svgsByPath[if (KotlinConfTheme.colors.isDark) floor.svgPathDark else floor.svgPathLight]
+            ?: return
     val svg = remember(svgData) { Svg(svgData) }
 
     BoxWithConstraints {
@@ -287,13 +297,15 @@ private fun MapWithControls(
         }
 
         if (onHowToFindVenue != null) {
+            val isLargeScreen = LocalWindowSize.current != WindowSize.Compact
+            val extraPadding = if (isLargeScreen) bottomInsetPadding() else PaddingValues(0.dp)
             OverlayTextButton(
                 label = stringResource(Res.string.map_how_to_find_venue),
                 icon = UiRes.drawable.arrow_up_right_24,
                 onClick = onHowToFindVenue,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(PaddingValues(bottom = buttonEdgePadding) + bottomInsetPadding())
+                    .padding(PaddingValues(bottom = buttonEdgePadding) + extraPadding)
             )
         }
     }
