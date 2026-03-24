@@ -249,14 +249,14 @@ private fun EntryProviderScope<AppRoute>.screens(
                 if (skipNotifications) {
                     navigator.set(ScheduleScreen)
                 } else {
-                    navigator.add(StartNotificationsScreen)
+                    navigator.set(StartNotificationsScreen)
                 }
             },
             onAcceptNotice = {
                 if (skipNotifications) {
                     navigator.set(ScheduleScreen)
                 } else {
-                    navigator.add(StartNotificationsScreen)
+                    navigator.set(StartNotificationsScreen)
                 }
             },
             onAppTermsOfUse = { navigator.add(AppTermsOfUseScreen) },
