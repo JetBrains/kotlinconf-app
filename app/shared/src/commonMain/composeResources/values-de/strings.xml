@@ -132,6 +132,12 @@ Bitte versuchen Sie es erneut.
     <string name="feedback_how_was_the_talk">Wie war der Vortrag?</string>
     <string name="feedback_how_was_the_workshop">Wie war der Workshop?</string>
 
+    <string name="notification_session_starts_in_5_min">Beginnt in 5 Minuten in %1$s</string>
+    <string name="notification_session_starting_soon">Beginnt gleich in %1$s</string>
+    <string name="notification_session_already_started">Bereits gestartet in %1$s!</string>
+    <string name="notification_session_finished">%1$s beendet</string>
+    <string name="notification_session_how_was_it">Wie war der Vortrag?</string>
+
     <string name="map_title">Karte</string>
     <string name="map_ground_floor">Erdgeschoss</string>
     <string name="map_first_floor">Erster Stock</string>

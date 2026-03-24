@@ -22,10 +22,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.kotlinconf.LocalNotificationId.Type
 import org.jetbrains.kotlinconf.di.YearGraph
 import org.jetbrains.kotlinconf.flags.FakeGoldenKodeeData
 import org.jetbrains.kotlinconf.flags.FlagsManager
+import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.notification_session_already_started
+import org.jetbrains.kotlinconf.generated.resources.notification_session_finished
+import org.jetbrains.kotlinconf.generated.resources.notification_session_how_was_it
+import org.jetbrains.kotlinconf.generated.resources.notification_session_starting_soon
+import org.jetbrains.kotlinconf.generated.resources.notification_session_starts_in_5_min
 import org.jetbrains.kotlinconf.network.ApplicationApi
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.storage.YearlyStorage
@@ -213,7 +220,9 @@ class ConferenceService(
                 val newSession = newSessions[sessionId] ?: return@forEach
                 val oldSession = oldSessions[sessionId] ?: return@forEach
 
-                if (oldSession.startsAt != newSession.startsAt || oldSession.endsAt != newSession.endsAt) {
+                if (oldSession.startsAt != newSession.startsAt ||
+                    oldSession.endsAt != newSession.endsAt ||
+                    oldSession.location != newSession.location) {
                     cancelNotifications(sessionId)
                     if (remindersEnabled) {
                         scheduleNotification(
@@ -221,6 +230,7 @@ class ConferenceService(
                             end = newSession.endsAt,
                             sessionId = newSession.id,
                             title = newSession.title,
+                            room = newSession.location,
                         )
                     }
                 }
@@ -302,6 +312,7 @@ class ConferenceService(
                             end = session.endsAt,
                             sessionId = session.id,
                             title = session.title,
+                            room = session.locationLine,
                         )
                     }
             } else {
@@ -379,6 +390,7 @@ class ConferenceService(
                             end = session.endsAt,
                             sessionId = session.id,
                             title = session.title,
+                            room = session.locationLine,
                         )
                     }
                 }
@@ -388,11 +400,12 @@ class ConferenceService(
         }
     }
 
-    private fun scheduleNotification(
+    private suspend fun scheduleNotification(
         start: LocalDateTime,
         end: LocalDateTime,
         sessionId: SessionId,
         title: String,
+        room: String,
     ) {
         val now = timeProvider.now()
 
@@ -407,19 +420,19 @@ class ConferenceService(
                 time = reminderTime,
                 localNotificationId = LocalNotificationId(Type.SessionStart, sessionId.id),
                 title = title,
-                message = "Starts in 5 minutes",
+                message = getString(Res.string.notification_session_starts_in_5_min, room),
             )
 
             startsSoon -> localNotificationService.post(
                 localNotificationId = LocalNotificationId(Type.SessionStart, sessionId.id),
                 title = title,
-                message = "The session is about to start",
+                message = getString(Res.string.notification_session_starting_soon, room),
             )
 
             isLive -> localNotificationService.post(
                 localNotificationId = LocalNotificationId(Type.SessionStart, sessionId.id),
                 title = title,
-                message = "Hurry up, the session has already started!",
+                message = getString(Res.string.notification_session_already_started, room),
             )
         }
 
@@ -428,8 +441,8 @@ class ConferenceService(
             localNotificationService.post(
                 time = end,
                 localNotificationId = LocalNotificationId(Type.SessionEnd, sessionId.id),
-                title = "$title finished",
-                message = "How was the talk?",
+                title = getString(Res.string.notification_session_finished, title),
+                message = getString(Res.string.notification_session_how_was_it),
             )
         }
     }
