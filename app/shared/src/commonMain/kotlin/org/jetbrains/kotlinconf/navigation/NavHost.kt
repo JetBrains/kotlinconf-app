@@ -26,7 +26,6 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.LocalAppGraph
@@ -242,14 +241,14 @@ private fun EntryProviderScope<AppRoute>.screens(
                 if (skipNotifications) {
                     navigator.set(ScheduleScreen)
                 } else {
-                    navigator.add(StartNotificationsScreen)
+                    navigator.set(StartNotificationsScreen)
                 }
             },
             onAcceptNotice = {
                 if (skipNotifications) {
                     navigator.set(ScheduleScreen)
                 } else {
-                    navigator.add(StartNotificationsScreen)
+                    navigator.set(StartNotificationsScreen)
                 }
             },
             onAppTermsOfUse = { navigator.add(AppTermsOfUseScreen) },
