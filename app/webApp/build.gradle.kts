@@ -30,6 +30,11 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.app.shared)
+            implementation(libs.compose.components.resources)
         }
     }
+}
+
+compose.resources {
+    packageOfResClass = "org.jetbrains.kotlinconf.web.generated.resources"
 }
