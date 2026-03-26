@@ -74,6 +74,14 @@
           "logoUrlLight": "partner-logos/sentry-light.svg",
           "logoUrlDark": "partner-logos/sentry-dark.svg",
           "url": "https://sentry.io/welcome"
+        },
+        {
+          "id": "xebia",
+          "name": "Xebia",
+          "description": "Xebia is a global leader in IT consulting, software engineering, and training. With over 25 years of experience and a team of 5,500+ professionals across 16 countries, Xebia specializes in Artificial Intelligence, Data and Cloud, Intelligent Automation, and Digital Products and Platforms. With a strong focus on engineering excellence and a people-first culture, they equip organizations to apply emerging technologies that accelerate business innovation and drive sustainable competitive advantage. Xebia leads with a responsible and human-centric approach to AI, ensuring organizations shape a better tomorrow for all.",
+          "logoUrlLight": "partner-logos/xebia-light.svg",
+          "logoUrlDark": "partner-logos/xebia-dark.svg",
+          "url": "https://xebia.com/"
         }
       ]
     },
@@ -129,6 +137,19 @@
           "logoUrlLight": "partner-logos/pretix-light.svg",
           "logoUrlDark": "partner-logos/pretix-dark.svg",
           "url": "https://pretix.eu/about/en/"
+        }
+      ]
+    },
+    {
+      "level": "Video",
+      "partners": [
+        {
+          "id": "amex",
+          "name": "American Express",
+          "description": "American Express is a global payments and premium lifestyle brand powered by technology. Our colleagues around the world back our customers with differentiated products, services, and experiences that enrich lives and build business success. Find your place in Tech at Amex.",
+          "logoUrlLight": "partner-logos/american-express-light.svg",
+          "logoUrlDark": "partner-logos/american-express-dark.svg",
+          "url": "https://americanexpress.com/techcareers"
         }
       ]
     }
