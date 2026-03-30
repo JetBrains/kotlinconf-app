@@ -272,6 +272,7 @@ private fun RoomSection(
                     modifier = Modifier
                         .padding(top = 8.dp)
                         .clip(KotlinConfTheme.shapes.roundedCornerMd)
+                        .background(KotlinConfTheme.colors.tileBackground)
                         .clickable {
                             onNavigateToMap(roomName)
                         }
