@@ -92,7 +92,7 @@ fun LicensesScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .then(if (LocalUseNativeNavigation.current) Modifier else Modifier.padding(topInsetPadding()))
     ) {
         if (!LocalUseNativeNavigation.current) {
             MainHeaderContainer(
@@ -185,7 +185,7 @@ private fun LibraryList(
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = 12.dp) + bottomInsetPadding(),
+        contentPadding = PaddingValues(vertical = 12.dp) + (if (LocalUseNativeNavigation.current) topInsetPadding() else PaddingValues(0.dp)) + bottomInsetPadding(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         state = listState,
     ) {

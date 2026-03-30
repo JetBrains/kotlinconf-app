@@ -34,6 +34,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.channels.Channel
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.LocalAppGraph
@@ -112,7 +114,8 @@ internal fun NavHost(
     startRoute: AppRoute,
     isDarkTheme: Boolean,
     onThemeChange: ((Boolean) -> Unit)?,
-    navigatorFactory: ((NavState, Boolean) -> Navigator)? = null,
+    onNavigate: ((AppRoute) -> Unit)? = null,
+    onActivate: ((TopLevelRoute) -> Unit)? = null,
 ) {
     val navState = rememberNavState(
         startRoute = startRoute,
@@ -127,9 +130,28 @@ internal fun NavHost(
     )
 
     val topLevelBackEnabled = LocalFlags.current.enableBackOnTopLevelScreens
-    val navigator = remember(navState, topLevelBackEnabled, navigatorFactory) {
-        navigatorFactory?.invoke(navState, topLevelBackEnabled)
-            ?: ComposeNavigator(navState, topLevelBackEnabled)
+    val navigator = remember(navState, topLevelBackEnabled) {
+        Navigator(navState, topLevelBackEnabled)
+    }
+
+    if (onNavigate != null) {
+        LaunchedEffect(navState) {
+            snapshotFlow { navState.currentBackstack.toList() }.collect { backstack: List<AppRoute> ->
+                val detailRoutes = backstack.drop(1)
+                if (detailRoutes.isNotEmpty()) {
+                    detailRoutes.forEach { onNavigate(it) }
+                    navState.currentBackstack.removeRange(1, navState.currentBackstack.size)
+                }
+            }
+        }
+    }
+
+    if (onActivate != null) {
+        LaunchedEffect(navState) {
+            snapshotFlow { navState.topLevelRoute }.collect { route: TopLevelRoute? ->
+                if (route != null) onActivate(route)
+            }
+        }
     }
 
     BrowserIntegration(navState)
@@ -476,8 +498,10 @@ private fun EntryProviderScope<AppRoute>.screens(
 @Composable
 internal fun ScreenContent(
     route: AppRoute,
-    navigator: Navigator,
+    onNavigate: (AppRoute) -> Unit,
     onBack: () -> Unit,
+    onSet: (AppRoute) -> Unit = {},
+    onActivate: (TopLevelRoute) -> Unit = {},
 ) {
     val uriHandler = LocalUriHandler.current
     val mapHandler = LocalMapHandler.current
@@ -488,15 +512,16 @@ internal fun ScreenContent(
                 service.completeOnboarding()
             }
             ScheduleScreen(
-                onSession = { navigator.add(SessionScreen(it)) },
-                onPrivacyNoticeNeeded = { navigator.add(AppPrivacyNoticePrompt) },
+                onSession = { onNavigate(SessionScreen(it)) },
+                onPrivacyNoticeNeeded = { onNavigate(AppPrivacyNoticePrompt) },
+                tabReselections = emptyFlow(),
             )
         }
 
         is SpeakersScreen -> {
             val viewModel = metroViewModel<SpeakersViewModel>()
             SpeakersScreen(
-                onSpeaker = { navigator.add(SpeakerDetailScreen(it)) },
+                onSpeaker = { onNavigate(SpeakerDetailScreen(it)) },
                 viewModel = viewModel,
             )
         }
@@ -504,7 +529,7 @@ internal fun ScreenContent(
         is GoldenKodeeScreen -> {
             GoldenKodeeScreen(
                 onNomineeClick = { categoryId, nomineeId ->
-                    navigator.add(GoldenKodeeFinalistScreen(categoryId, nomineeId))
+                    onNavigate(GoldenKodeeFinalistScreen(categoryId, nomineeId))
                 },
             )
         }
@@ -525,15 +550,15 @@ internal fun ScreenContent(
 
         is InfoScreen -> {
             InfoScreen(
-                onAboutConf = { navigator.add(AboutConferenceScreen) },
+                onAboutConf = { onNavigate(AboutConferenceScreen) },
                 onHowToFindVenue = { address -> mapHandler.openNavigation(address) },
-                onAboutApp = { navigator.add(AboutAppScreen) },
-                onOurPartners = { navigator.add(PartnersScreen) },
-                onCodeOfConduct = { navigator.add(CodeOfConductScreen) },
+                onAboutApp = { onNavigate(AboutAppScreen) },
+                onOurPartners = { onNavigate(PartnersScreen) },
+                onCodeOfConduct = { onNavigate(CodeOfConductScreen) },
                 onTwitter = { uriHandler.openUri(URLs.TWITTER) },
                 onSlack = { uriHandler.openUri(URLs.SLACK) },
                 onBluesky = { uriHandler.openUri(URLs.BLUESKY) },
-                onSettings = { navigator.add(SettingsScreen) },
+                onSettings = { onNavigate(SettingsScreen) },
             )
         }
 
@@ -541,7 +566,7 @@ internal fun ScreenContent(
             SpeakerDetailScreen(
                 speakerId = route.speakerId,
                 onBack = onBack,
-                onSession = { sessionId -> navigator.add(SessionScreen(sessionId)) },
+                onSession = { sessionId -> onNavigate(SessionScreen(sessionId)) },
             )
         }
 
@@ -549,12 +574,10 @@ internal fun ScreenContent(
             SessionScreen(
                 sessionId = route.sessionId,
                 onBack = onBack,
-                onPrivacyNoticeNeeded = { navigator.add(AppPrivacyNoticePrompt) },
-                onSpeaker = { speakerId -> navigator.add(SpeakerDetailScreen(speakerId)) },
+                onPrivacyNoticeNeeded = { onNavigate(AppPrivacyNoticePrompt) },
+                onSpeaker = { speakerId -> onNavigate(SpeakerDetailScreen(speakerId)) },
                 onWatchVideo = { videoUrl -> uriHandler.openUri(videoUrl) },
-                onNavigateToMap = { roomName ->
-                    navigator.add(NestedMapScreen(roomName))
-                },
+                onNavigateToMap = { roomName -> onNavigate(NestedMapScreen(roomName)) },
             )
         }
 
@@ -563,18 +586,18 @@ internal fun ScreenContent(
                 onBack = onBack,
                 onGitHubRepo = { uriHandler.openUri(URLs.GITHUB_REPO) },
                 onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
-                onPrivacyNotice = { navigator.add(AppPrivacyNoticeScreen) },
-                onTermsOfUse = { navigator.add(AppTermsOfUseScreen) },
-                onLicenses = { navigator.add(LicensesScreen) },
+                onPrivacyNotice = { onNavigate(AppPrivacyNoticeScreen) },
+                onTermsOfUse = { onNavigate(AppTermsOfUseScreen) },
+                onLicenses = { onNavigate(LicensesScreen) },
                 onJunie = { uriHandler.openUri(URLs.JUNIE_LANDING_PAGE) },
-                onDeveloperMenu = { skipDelay -> navigator.add(DeveloperMenuScreen(skipWarningDelay = skipDelay)) },
+                onDeveloperMenu = { skipDelay -> onNavigate(DeveloperMenuScreen(skipWarningDelay = skipDelay)) },
             )
         }
 
         is LicensesScreen -> {
             LicensesScreen(
                 onLicenseClick = { licenseName, licenseText ->
-                    navigator.add(SingleLicenseScreen(licenseName, licenseText))
+                    onNavigate(SingleLicenseScreen(licenseName, licenseText))
                 },
                 onBack = onBack,
             )
@@ -590,11 +613,11 @@ internal fun ScreenContent(
 
         is AboutConferenceScreen -> {
             AboutConference(
-                onPrivacyNotice = { navigator.add(VisitorPrivacyNoticeScreen) },
-                onGeneralTerms = { navigator.add(TermsOfUseScreen) },
+                onPrivacyNotice = { onNavigate(VisitorPrivacyNoticeScreen) },
+                onGeneralTerms = { onNavigate(TermsOfUseScreen) },
                 onWebsiteLink = { uriHandler.openUri(URLs.KOTLINCONF_HOMEPAGE) },
                 onBack = onBack,
-                onSpeaker = { speakerId -> navigator.add(SpeakerDetailScreen(speakerId)) },
+                onSpeaker = { speakerId -> onNavigate(SpeakerDetailScreen(speakerId)) },
             )
         }
 
@@ -613,33 +636,29 @@ internal fun ScreenContent(
         is AppPrivacyNoticeScreen -> {
             AppPrivacyNotice(
                 onBack = onBack,
-                onAppTermsOfUse = { navigator.add(AppTermsOfUseScreen) },
+                onAppTermsOfUse = { onNavigate(AppTermsOfUseScreen) },
             )
         }
 
         is TermsOfUseScreen -> {
             VisitorTermsOfUse(
                 onBack = onBack,
-                onCodeOfConduct = { navigator.add(CodeOfConductScreen) },
-                onVisitorPrivacyNotice = { navigator.add(VisitorPrivacyNoticeScreen) },
+                onCodeOfConduct = { onNavigate(CodeOfConductScreen) },
+                onVisitorPrivacyNotice = { onNavigate(VisitorPrivacyNoticeScreen) },
             )
         }
 
         is AppTermsOfUseScreen -> {
             AppTermsOfUse(
                 onBack = onBack,
-                onAppPrivacyNotice = {
-                    navigator.add(AppPrivacyNoticeScreen)
-                },
+                onAppPrivacyNotice = { onNavigate(AppPrivacyNoticeScreen) },
             )
         }
 
         is PartnersScreen -> {
             PartnersScreen(
                 onBack = onBack,
-                onPartnerDetail = { partnerId ->
-                    navigator.add(PartnerDetailScreen(partnerId))
-                }
+                onPartnerDetail = { partnerId -> onNavigate(PartnerDetailScreen(partnerId)) }
             )
         }
 
@@ -654,7 +673,7 @@ internal fun ScreenContent(
             AppPrivacyNoticePrompt(
                 onRejectNotice = onBack,
                 onAcceptNotice = onBack,
-                onAppTermsOfUse = { navigator.add(AppTermsOfUseScreen) },
+                onAppTermsOfUse = { onNavigate(AppTermsOfUseScreen) },
                 confirmationRequired = true,
             )
         }
@@ -677,21 +696,19 @@ internal fun ScreenContent(
             val skipNotifications = LocalFlags.current.supportsNotifications.not()
             AppPrivacyNoticePrompt(
                 onRejectNotice = {
-                    if (skipNotifications) navigator.set(ScheduleScreen)
-                    else navigator.add(StartNotificationsScreen)
+                    if (skipNotifications) onSet(ScheduleScreen) else onNavigate(StartNotificationsScreen)
                 },
                 onAcceptNotice = {
-                    if (skipNotifications) navigator.set(ScheduleScreen)
-                    else navigator.add(StartNotificationsScreen)
+                    if (skipNotifications) onSet(ScheduleScreen) else onNavigate(StartNotificationsScreen)
                 },
-                onAppTermsOfUse = { navigator.add(AppTermsOfUseScreen) },
+                onAppTermsOfUse = { onNavigate(AppTermsOfUseScreen) },
                 confirmationRequired = false,
             )
         }
 
         is StartNotificationsScreen -> {
             StartNotificationsScreen(
-                onDone = { navigator.set(ScheduleScreen) }
+                onDone = { onSet(ScheduleScreen) }
             )
         }
     }

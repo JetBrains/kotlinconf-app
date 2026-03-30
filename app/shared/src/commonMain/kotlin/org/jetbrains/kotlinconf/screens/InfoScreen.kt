@@ -71,7 +71,7 @@ fun InfoScreen(
     Column(
         Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .then(if (useNativeNavigation) Modifier else Modifier.padding(topInsetPadding()))
     ) {
         if (!useNativeNavigation) {
             MainHeaderTitleBar(stringResource(Res.string.info_title))
@@ -82,7 +82,7 @@ fun InfoScreen(
             Modifier
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
-                .padding(PaddingValues(12.dp) + bottomInsetPadding()),
+                .padding(PaddingValues(12.dp) + (if (useNativeNavigation) topInsetPadding() else PaddingValues(0.dp)) + bottomInsetPadding()),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

@@ -13,8 +13,6 @@ import org.jetbrains.kotlinconf.di.AppGraph
 import org.jetbrains.kotlinconf.flags.LocalFlags
 import org.jetbrains.kotlinconf.navigation.AppRoute
 import org.jetbrains.kotlinconf.navigation.NavHost
-import org.jetbrains.kotlinconf.navigation.NavState
-import org.jetbrains.kotlinconf.navigation.Navigator
 import org.jetbrains.kotlinconf.navigation.StartPrivacyNoticeScreen
 import org.jetbrains.kotlinconf.navigation.TopLevelRoute
 import org.jetbrains.kotlinconf.utils.LocalNotificationBar
@@ -27,7 +25,8 @@ fun App(
     appGraph: AppGraph,
     topLevelRoute: TopLevelRoute,
     onThemeChange: ((isDarkTheme: Boolean) -> Unit)? = null,
-    navigatorFactory: ((NavState, Boolean) -> Navigator)? = null,
+    onNavigate: ((AppRoute) -> Unit)? = null,
+    onActivate: ((TopLevelRoute) -> Unit)? = null,
 ) {
     val service = appGraph.conferenceService
     val currentTheme by service.getTheme().collectAsStateWithLifecycle(initialValue = Theme.SYSTEM)
@@ -54,7 +53,7 @@ fun App(
             val startRoute: AppRoute = remember {
                 if (isOnboardingComplete) topLevelRoute else StartPrivacyNoticeScreen
             }
-            NavHost(startRoute, isDarkTheme, onThemeChange, navigatorFactory)
+            NavHost(startRoute, isDarkTheme, onThemeChange, onNavigate, onActivate)
         }
     }
 }

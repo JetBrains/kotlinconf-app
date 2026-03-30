@@ -8,18 +8,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
 import org.jetbrains.kotlinconf.di.AppGraph
 import org.jetbrains.kotlinconf.flags.LocalFlags
 import org.jetbrains.kotlinconf.navigation.AppRoute
-import org.jetbrains.kotlinconf.navigation.ExternalNavigator
 import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.navigation.ScreenContent
-import org.jetbrains.kotlinconf.navigation.ScheduleScreen
 import org.jetbrains.kotlinconf.navigation.TopLevelRoute
-import org.jetbrains.kotlinconf.navigation.rememberNavState
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfDarkColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfLightColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -49,23 +45,6 @@ internal fun SingleScreenApp(
 
     val flags by appGraph.flagsManager.flags.collectAsStateWithLifecycle()
 
-    val navState = rememberNavState(
-        startRoute = ScheduleScreen,
-        topLevelRoutes = setOf(ScheduleScreen),
-        primaryTopLevelRoute = ScheduleScreen,
-    )
-
-    val navigator = remember(navState) {
-        ExternalNavigator(
-            state = navState,
-            topLevelBackEnabled = false,
-            onAdd = onNavigate,
-            onGoBack = onGoBack,
-            onSet = onSet,
-            onActivate = onActivate,
-        )
-    }
-
     CompositionLocalProvider(
         LocalFlags provides flags,
         LocalAppGraph provides appGraph,
@@ -86,8 +65,10 @@ internal fun SingleScreenApp(
             ) {
                 ScreenContent(
                     route = route,
-                    navigator = navigator,
+                    onNavigate = onNavigate,
                     onBack = onGoBack,
+                    onSet = onSet,
+                    onActivate = onActivate,
                 )
             }
         }

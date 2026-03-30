@@ -70,7 +70,8 @@ fun DeveloperMenuScreen(
             Modifier
                 .fillMaxSize()
                 .background(color = KotlinConfTheme.colors.mainBackground)
-                .padding(topInsetPadding() + bottomInsetPadding())
+                .then(if (LocalUseNativeNavigation.current) Modifier else Modifier.padding(topInsetPadding()))
+                .padding(bottomInsetPadding())
         ) {
             if (!LocalUseNativeNavigation.current) {
                 MainHeaderTitleBar(

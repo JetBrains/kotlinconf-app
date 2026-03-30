@@ -55,6 +55,7 @@ import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
 import org.jetbrains.kotlinconf.generated.resources.schedule_label_no_bookmarks
 import org.jetbrains.kotlinconf.generated.resources.schedule_number_of_results
 import org.jetbrains.kotlinconf.isLive
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.navigation.TopLevelRoute
 import org.jetbrains.kotlinconf.ui.components.DayHeader
 import org.jetbrains.kotlinconf.ui.components.FilterItem
@@ -144,31 +145,35 @@ fun ScheduleScreen(
         viewModel.setSearchParams(params)
     }
 
+    val useNativeNavigation = LocalUseNativeNavigation.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .then(Modifier.padding(topInsetPadding()))
     ) {
-        Header(
-            startContent = {
-                if (state is ErrorLoadingState.Content) {
-                    NowButtonContent(state.data, listState)
-                }
-            },
-            headerState = headerState,
-            onHeaderStateChange = { headerState = it },
-            bookmarkFilterEnabled = bookmarkFilterEnabled,
-            onBookmarkFilter = { bookmarkFilterEnabled = it },
-            searchQuery = searchQuery,
-            onSearchQueryChange = { searchQuery = it },
-            onClearSearch = { viewModel.resetFilters() },
-            viewModel = viewModel
-        )
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = KotlinConfTheme.colors.strokePale,
-        )
+        if (!useNativeNavigation) {
+            Header(
+                startContent = {
+                    if (state is ErrorLoadingState.Content) {
+                        NowButtonContent(state.data, listState)
+                    }
+                },
+                headerState = headerState,
+                onHeaderStateChange = { headerState = it },
+                bookmarkFilterEnabled = bookmarkFilterEnabled,
+                onBookmarkFilter = { bookmarkFilterEnabled = it },
+                searchQuery = searchQuery,
+                onSearchQueryChange = { searchQuery = it },
+                onClearSearch = { viewModel.resetFilters() },
+                viewModel = viewModel
+            )
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = KotlinConfTheme.colors.strokePale,
+            )
+        }
 
         ErrorLoadingContent(
             state = state,

@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.metroViewModel
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.MapData
@@ -118,7 +119,7 @@ private fun MapScreenImpl(
     modifier: Modifier = Modifier,
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle().value
-    val useNativeNavigation = viewModel.useNativeNavigation.collectAsStateWithLifecycle(false).value
+    val useNativeNavigation = LocalUseNativeNavigation.current
 
     Column(modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
         if (!useNativeNavigation) {

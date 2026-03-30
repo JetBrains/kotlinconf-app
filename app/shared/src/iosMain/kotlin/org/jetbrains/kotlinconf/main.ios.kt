@@ -6,7 +6,6 @@ import dev.zacsweers.metro.createGraphFactory
 import org.jetbrains.kotlinconf.di.IosAppGraph
 import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.navigation.AppRoute
-import org.jetbrains.kotlinconf.navigation.ExternalNavigator
 import org.jetbrains.kotlinconf.navigation.TopLevelRoute
 import org.jetbrains.kotlinconf.utils.Logger
 import platform.Foundation.NSLog
@@ -53,16 +52,8 @@ fun MainViewController(
     App(
         appGraph = appGraph,
         topLevelRoute = topLevelRoute,
-        navigatorFactory = { navState, topLevelBackEnabled ->
-            ExternalNavigator(
-                state = navState,
-                topLevelBackEnabled = topLevelBackEnabled,
-                onAdd = onNavigate,
-                onGoBack = onGoBack,
-                onSet = onSet,
-                onActivate = onActivate,
-            )
-        },
+        onNavigate = onNavigate,
+        onActivate = onActivate,
     )
 }
 

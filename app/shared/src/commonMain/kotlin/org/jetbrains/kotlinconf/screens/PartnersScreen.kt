@@ -52,7 +52,7 @@ fun PartnersScreen(
     Column(
         Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .then(if (LocalUseNativeNavigation.current) Modifier else Modifier.padding(topInsetPadding()))
     ) {
         if (!LocalUseNativeNavigation.current) {
             MainHeaderTitleBar(
@@ -80,7 +80,7 @@ fun PartnersScreen(
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
-                    contentPadding = PaddingValues(vertical = 12.dp) + bottomInsetPadding(),
+                    contentPadding = PaddingValues(vertical = 12.dp) + (if (LocalUseNativeNavigation.current) topInsetPadding() else PaddingValues(0.dp)) + bottomInsetPadding(),
                     state = lazyListState,
                 ) {
                     for (group in partnerGroups) {

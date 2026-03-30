@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -74,7 +76,7 @@ fun GoldenKodeeFinalistScreen(
         Modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .then(if (LocalUseNativeNavigation.current) Modifier else Modifier.padding(topInsetPadding()))
     ) {
         if (!LocalUseNativeNavigation.current) {
             MainHeaderTitleBar(
@@ -93,8 +95,7 @@ fun GoldenKodeeFinalistScreen(
         Box(
             Modifier.fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 12.dp, vertical = 16.dp)
-                .padding(bottomInsetPadding()),
+                .padding(PaddingValues(horizontal = 12.dp, vertical = 16.dp) + (if (LocalUseNativeNavigation.current) topInsetPadding() else PaddingValues(0.dp)) + bottomInsetPadding()),
             contentAlignment = Alignment.TopCenter,
         ) {
             Column(Modifier.widthIn(max = 580.dp)) {

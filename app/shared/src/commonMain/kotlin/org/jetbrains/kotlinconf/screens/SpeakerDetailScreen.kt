@@ -27,6 +27,7 @@ import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
 import org.jetbrains.kotlinconf.generated.resources.speaker_detail_error_not_found
 import org.jetbrains.kotlinconf.generated.resources.speaker_detail_title
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.ui.AdaptiveDetailLayout
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
@@ -59,7 +60,7 @@ fun SpeakerDetailScreen(
         Modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .then(if (LocalUseNativeNavigation.current) Modifier else Modifier.padding(topInsetPadding()))
     ) {
         ErrorLoadingContent(
             state = speakerState,
@@ -71,17 +72,19 @@ fun SpeakerDetailScreen(
 
             AdaptiveDetailLayout(
                 compactHeader = {
-                    MainHeaderTitleBar(
-                        title = stringResource(Res.string.speaker_detail_title),
-                        startContent = {
-                            TopMenuButton(
-                                icon = UiRes.drawable.arrow_left_24,
-                                contentDescription = stringResource(UiRes.string.main_header_back),
-                                onClick = onBack,
-                            )
-                        }
-                    )
-                    HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+                    if (!LocalUseNativeNavigation.current) {
+                        MainHeaderTitleBar(
+                            title = stringResource(Res.string.speaker_detail_title),
+                            startContent = {
+                                TopMenuButton(
+                                    icon = UiRes.drawable.arrow_left_24,
+                                    contentDescription = stringResource(UiRes.string.main_header_back),
+                                    onClick = onBack,
+                                )
+                            }
+                        )
+                        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+                    }
                 },
                 compactContentHeader = {
                     Name(currentSpeaker, Modifier.padding(vertical = 24.dp))

@@ -2,9 +2,11 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -79,7 +81,7 @@ fun SpeakersScreen(
     Column(
         Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .then(if (useNativeNavigation) Modifier else Modifier.padding(topInsetPadding()))
     ) {
         if (!useNativeNavigation) {
             MainHeaderContainer(
@@ -134,7 +136,7 @@ fun SpeakersScreen(
                 state = gridState,
                 columns = GridCells.Adaptive(300.dp),
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = bottomInsetPadding(),
+                contentPadding = (if (useNativeNavigation) topInsetPadding() else PaddingValues(0.dp)) + bottomInsetPadding(),
             ) {
                 if (searchState == MainHeaderContainerState.Search) {
                     item(span = { GridItemSpan(maxLineSpan) }, key = "number-of-speakers") {

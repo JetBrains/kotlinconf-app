@@ -45,6 +45,7 @@ import org.jetbrains.kotlinconf.generated.resources.session_room_state_descripti
 import org.jetbrains.kotlinconf.generated.resources.session_screen_error
 import org.jetbrains.kotlinconf.generated.resources.session_title
 import org.jetbrains.kotlinconf.generated.resources.session_watch_video
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.ui.AdaptiveDetailLayout
 import org.jetbrains.kotlinconf.ui.components.Action
 import org.jetbrains.kotlinconf.ui.components.ActionSize
@@ -82,25 +83,27 @@ fun SessionScreen(
         errorMessage = stringResource(Res.string.session_screen_error),
         modifier = Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding()),
+            .then(if (LocalUseNativeNavigation.current) Modifier else Modifier.padding(topInsetPadding())),
     ) { session ->
 
         AdaptiveDetailLayout(
             compactHeader = {
-                MainHeaderTitleBar(
-                    title = stringResource(Res.string.session_title),
-                    startContent = {
-                        TopMenuButton(
-                            icon = Res.drawable.arrow_left_24,
-                            contentDescription = stringResource(Res.string.navigate_back),
-                            onClick = onBack,
-                        )
-                    },
-                )
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = KotlinConfTheme.colors.strokePale
-                )
+                if (!LocalUseNativeNavigation.current) {
+                    MainHeaderTitleBar(
+                        title = stringResource(Res.string.session_title),
+                        startContent = {
+                            TopMenuButton(
+                                icon = Res.drawable.arrow_left_24,
+                                contentDescription = stringResource(Res.string.navigate_back),
+                                onClick = onBack,
+                            )
+                        },
+                    )
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = KotlinConfTheme.colors.strokePale
+                    )
+                }
             },
             compactContentHeader = {
                 Title(session, viewModel, Modifier.padding(vertical = 24.dp))
