@@ -235,28 +235,28 @@
       {
         "name": "Ground floor",
         "shortName": "GF",
-        "svgPathLight": "maps/ground-floor.svg",
-        "svgPathDark": "maps/ground-floor-dark.svg"
+        "svgPathLight": "maps/ground-floor-light-v1.svg",
+        "svgPathDark": "maps/ground-floor-dark-v1.svg"
       },
       {
         "name": "First floor",
         "shortName": "1F",
-        "svgPathLight": "maps/first-floor.svg",
-        "svgPathDark": "maps/first-floor-dark.svg"
-      },
-      {
-        "name": "Second floor",
-        "shortName": "2F",
-        "svgPathLight": "maps/second-floor.svg",
-        "svgPathDark": "maps/second-floor-dark.svg"
+        "svgPathLight": "maps/first-floor-light-v1.svg",
+        "svgPathDark": "maps/first-floor-dark-v1.svg"
       }
     ],
     "rooms": {
-      "Auditorium 1": { "floorIndex": 0, "offsetX": 0.21, "offsetY": 0.77 },
+      "Auditorium, Room 1": { "floorIndex": 0, "offsetX": 0.21, "offsetY": 0.77 },
       "Room 5, Lightning talks": { "floorIndex": 0, "offsetX": 0.37, "offsetY": 0.16 },
-      "Keynote, Room 14": { "floorIndex": 1, "offsetX": 0.72, "offsetY": 0.27 },
+      "Room 2": { "floorIndex": 0, "offsetX": 0.30, "offsetY": 0.35 },
+      "Room 3": { "floorIndex": 0, "offsetX": 0.35, "offsetY": 0.35 },
+      "Room 11b": { "floorIndex": 1, "offsetX": 0.30, "offsetY": 0.33 },
+      "Room 11a": { "floorIndex": 1, "offsetX": 0.30, "offsetY": 0.37 },
+      "Room 12b": { "floorIndex": 1, "offsetX": 0.45, "offsetY": 0.33 },
+      "Room 12a": { "floorIndex": 1, "offsetX": 0.45, "offsetY": 0.37 },
       "Room 13a": { "floorIndex": 1, "offsetX": 0.33, "offsetY": 0.21 },
-      "Room 13b": { "floorIndex": 1, "offsetX": 0.41, "offsetY": 0.21 }
+      "Room 13b": { "floorIndex": 1, "offsetX": 0.41, "offsetY": 0.21 },
+      "Keynote, Room 14": { "floorIndex": 1, "offsetX": 0.72, "offsetY": 0.27 }
     },
     "defaultFloorIndex": 0,
     "defaultOffsetX": 0.5,
