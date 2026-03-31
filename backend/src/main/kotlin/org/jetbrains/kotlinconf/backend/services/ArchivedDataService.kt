@@ -13,8 +13,9 @@ class ArchivedDataService(
 
     private val cache = ConcurrentHashMap<Int, ByteArray>()
 
-    internal fun validateArchives() {
+    internal fun validateArchives(): Int {
         val json = Json { ignoreUnknownKeys = true }
+        var totalIssues = 0
         for (year in config.supportedYears) {
             if (year == config.currentYear) {
                 continue
@@ -23,6 +24,7 @@ class ArchivedDataService(
             val data = getConferenceData(year)
             if (data == null) {
                 log.warn("No archived data found for year $year")
+                totalIssues++
                 continue
             }
             try {
@@ -30,8 +32,10 @@ class ArchivedDataService(
                 log.info("Archived data for year $year is valid")
             } catch (e: Exception) {
                 log.error("Archived data for year $year failed to decode: ${e.message}", e)
+                totalIssues++
             }
         }
+        return totalIssues
     }
 
     fun getConferenceData(year: Int): ByteArray? {

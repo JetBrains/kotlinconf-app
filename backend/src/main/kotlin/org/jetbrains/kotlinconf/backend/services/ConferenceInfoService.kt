@@ -70,11 +70,13 @@ class ConferenceInfoService(
         )
     }
 
-    internal fun validateConferenceInfo() {
+    internal fun validateConferenceInfo(): Int {
+        var totalIssues = 0
         for (year in config.supportedYears) {
             val info = loadConferenceInfo(year)
             if (info == null) {
                 log.warn("No conference info found for year $year, skipping validation")
+                totalIssues++
                 continue
             }
 
@@ -88,7 +90,9 @@ class ConferenceInfoService(
             } else {
                 log.warn("$issueCount conference data issue(s) for year $year")
             }
+            totalIssues += issueCount
         }
+        return totalIssues
     }
 
     private fun validateImages(

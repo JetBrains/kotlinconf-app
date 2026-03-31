@@ -42,7 +42,8 @@ class GoldenKodeeService(
         }
     }
 
-    internal fun validateGoldenKodeeData() {
+    internal fun validateGoldenKodeeData(): Int {
+        var totalIssues = 0
         for (year in config.supportedYears) {
             val data = loadGoldenKodeeData(year)
             if (data == null) {
@@ -77,6 +78,8 @@ class GoldenKodeeService(
             } else {
                 log.warn("$issueCount Golden Kodee data issue(s) for year $year")
             }
+            totalIssues += issueCount
         }
+        return totalIssues
     }
 }
