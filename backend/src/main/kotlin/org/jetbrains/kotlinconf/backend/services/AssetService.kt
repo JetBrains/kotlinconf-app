@@ -56,7 +56,7 @@ class AssetService(
         }
     }
 
-    internal fun validateDocuments() {
+    internal fun validateDocuments(): Int {
         val requiredDocuments = setOf(
             "app-privacy-notice.md",
             "app-terms.md",
@@ -65,6 +65,7 @@ class AssetService(
             "visitors-terms.md",
         )
 
+        var totalIssues = 0
         for (year in config.supportedYears) {
             var issueCount = 0
             for (name in requiredDocuments) {
@@ -79,6 +80,8 @@ class AssetService(
             } else {
                 log.warn("$issueCount document issue(s) for year $year")
             }
+            totalIssues += issueCount
         }
+        return totalIssues
     }
 }
