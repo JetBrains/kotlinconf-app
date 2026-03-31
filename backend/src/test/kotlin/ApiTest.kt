@@ -7,8 +7,8 @@ import io.ktor.server.config.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.test.runTest
 import org.jetbrains.kotlinconf.Conference
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
+import kotlin.test.assertFalse
 
 class ApiTest {
     val app = TestApplication {

@@ -7,10 +7,10 @@ import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.TestApplication
 import kotlinx.coroutines.test.runTest
 import org.jetbrains.kotlinconf.GoldenKodeeData
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 class GoldenKodeeApiTest {
     val app = TestApplication {

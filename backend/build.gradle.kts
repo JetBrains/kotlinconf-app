@@ -2,6 +2,7 @@ import com.google.cloud.tools.jib.gradle.JibTask
 
 plugins {
     alias(libs.plugins.kotlinJvm)
+    alias(libs.plugins.kotlinPowerAssert)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ktor)
 }
@@ -57,6 +58,17 @@ dependencies {
 
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test)
+}
+
+powerAssert {
+    functions = listOf(
+        "kotlin.test.assertTrue",
+        "kotlin.test.assertFalse",
+        "kotlin.test.assertEquals",
+        "kotlin.test.assertNotEquals",
+        "kotlin.test.assertNull",
+        "kotlin.test.assertNotNull",
+    )
 }
 
 tasks.test {

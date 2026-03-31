@@ -8,10 +8,10 @@ import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.TestApplication
 import kotlinx.coroutines.test.runTest
 import org.jetbrains.kotlinconf.ConferenceInfo
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class MapsApiTest {
     val app = TestApplication {
