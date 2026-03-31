@@ -37,6 +37,14 @@
           "logoUrlLight": "partner-logos/gradle-light.svg",
           "logoUrlDark": "partner-logos/gradle-dark.svg",
           "url": "https://gradle.org/"
+        },
+        {
+          "id": "uber",
+          "name": "Uber",
+          "description": "Uber's mission is to reimagine the way the world moves for the better. We build platforms that connect consumers with independent providers for ridesharing and micromobility, power local delivery for restaurants and merchants, and match shippers with carriers in the freight industry. Today, our technology helps people go anywhere and get anything in over 70 countries and 15,000 cities worldwide.",
+          "logoUrlLight": "partner-logos/uber-light.svg",
+          "logoUrlDark": "partner-logos/uber-dark.svg",
+          "url": "https://www.uber.com/nl/en/"
         }
       ]
     },
