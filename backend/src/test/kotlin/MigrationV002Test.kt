@@ -14,8 +14,8 @@ import org.jetbrains.kotlinconf.backend.schema.MigrationRunner
 import org.jetbrains.kotlinconf.backend.schema.SignedPolicies
 import org.jetbrains.kotlinconf.backend.schema.Users
 import org.jetbrains.kotlinconf.backend.schema.Votes
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -24,7 +24,7 @@ import kotlin.test.assertTrue
 class MigrationV002Test {
     private lateinit var database: Database
 
-    @BeforeEach
+    @BeforeTest
     fun setup() {
         database = Database.connect(
             "jdbc:h2:mem:test_v002_${System.nanoTime()};MODE=PostgreSQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1",

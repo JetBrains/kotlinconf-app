@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinPowerAssert)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.metro)
 }
@@ -141,6 +142,17 @@ kotlin {
     }
 
     jvmToolchain(21)
+}
+
+powerAssert {
+    functions = listOf(
+        "kotlin.test.assertTrue",
+        "kotlin.test.assertFalse",
+        "kotlin.test.assertEquals",
+        "kotlin.test.assertNotEquals",
+        "kotlin.test.assertNull",
+        "kotlin.test.assertNotNull",
+    )
 }
 
 // Android-based preview support

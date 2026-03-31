@@ -3,15 +3,15 @@
 
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.kotlinconf.backend.schema.MigrationRunner
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class MigrationRunnerTest {
     private lateinit var database: Database
 
-    @BeforeEach
+    @BeforeTest
     fun setup() {
         database = Database.connect(
             "jdbc:h2:mem:test_runner_${System.nanoTime()};MODE=PostgreSQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1",

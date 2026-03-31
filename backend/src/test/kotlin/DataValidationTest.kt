@@ -4,8 +4,8 @@ import org.jetbrains.kotlinconf.backend.services.AssetService
 import org.jetbrains.kotlinconf.backend.services.ConferenceInfoService
 import org.jetbrains.kotlinconf.backend.services.GoldenKodeeService
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * Runs the same data validations that run on server startup,
