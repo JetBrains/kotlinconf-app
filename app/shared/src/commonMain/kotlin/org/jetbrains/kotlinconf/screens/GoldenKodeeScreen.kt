@@ -54,12 +54,9 @@ import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_backdrop
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_banner
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_finalist
-import org.jetbrains.kotlinconf.generated.resources.golden_kodee_title
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_winner
 import org.jetbrains.kotlinconf.ui.components.CardTag
 import org.jetbrains.kotlinconf.ui.components.CardTagSize
-import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
-import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
@@ -79,13 +76,7 @@ fun GoldenKodeeScreen(
     Column(
         Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
     ) {
-        if (LocalWindowSize.current == WindowSize.Compact) {
-            MainHeaderTitleBar(stringResource(Res.string.golden_kodee_title))
-            HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
-        }
-
         val backdropAlpha = remember { Animatable(0f) }
         LaunchedEffect(Unit) {
             backdropAlpha.animateTo(1f, tween(3000, 0))
@@ -104,8 +95,8 @@ fun GoldenKodeeScreen(
             LazyVerticalStaggeredGrid(
                 modifier = Modifier.align(Alignment.Center).fillMaxSize(),
                 columns = StaggeredGridCells.Adaptive(340.dp),
-                contentPadding = PaddingValues(horizontal = horizontalPadding) +
-                        PaddingValues(top = 16.dp, bottom = 48.dp) +
+                contentPadding = topInsetPadding() +
+                        PaddingValues(horizontal = horizontalPadding, vertical = 16.dp) +
                         bottomInsetPadding(),
                 verticalItemSpacing = 16.dp,
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
