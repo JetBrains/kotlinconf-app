@@ -200,17 +200,20 @@
     {
       "date": "2025-05-21",
       "line1": "Workshop",
-      "line2": "Day"
+      "line2": "Day",
+      "combinedLine": "Workshop day"
     },
     {
       "date": "2025-05-22",
       "line1": "Conference",
-      "line2": "Day 1"
+      "line2": "Day 1",
+      "combinedLine": "Conference day 1"
     },
     {
       "date": "2025-05-23",
       "line1": "Conference",
-      "line2": "Day 2"
+      "line2": "Day 2",
+      "combinedLine": "Conference day 2"
     }
   ],
   "aboutBlocks": [

@@ -2,6 +2,7 @@ package org.jetbrains.kotlinconf.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -68,6 +70,7 @@ import org.jetbrains.kotlinconf.ui.theme.GoldenKodeeColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfDarkColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfLightColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.ui.theme.LocalSharedTransitionScope
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import org.jetbrains.kotlinconf.utils.topInsetPadding
@@ -163,38 +166,44 @@ internal fun NavHost(
             rippleEnabled = LocalFlags.current.rippleEnabled,
             colors = colors,
         ) {
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(KotlinConfTheme.colors.mainBackground)
-                    .windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)
-                    )
-            ) {
-                NavScaffold(
-                    navState = navState,
-                    navigator = navigator,
-                    showGoldenKodee = showGoldenKodee,
+            SharedTransitionLayout {
+                CompositionLocalProvider(
+                    LocalSharedTransitionScope provides this@SharedTransitionLayout,
                 ) {
-                    NavDisplay(
-                        entries = navState.toDecoratedEntries(entryProvider),
-                        onBack = navigator::goBack,
-                    )
-                }
-
-                val baseUrl = LocalAppGraph.current.baseUrl
-                val flagsManager = LocalAppGraph.current.flagsManager
-                val currentFlags = LocalFlags.current
-                val platformFlags = flagsManager.platformFlags
-                if (baseUrl != URLs.PRODUCTION_URL || currentFlags != platformFlags) {
-                    DebugMarker(
+                    Box(
                         Modifier
-                            .align(Alignment.TopCenter)
-                            .padding(topInsetPadding())
-                            .clip(KotlinConfTheme.shapes.roundedCornerMd)
-                            .clickable { navigator.add(AboutAppScreen) }
-                            .padding(8.dp)
-                    )
+                            .fillMaxSize()
+                            .background(KotlinConfTheme.colors.mainBackground)
+                            .windowInsetsPadding(
+                                WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)
+                            )
+                    ) {
+                        NavScaffold(
+                            navState = navState,
+                            navigator = navigator,
+                            showGoldenKodee = showGoldenKodee,
+                        ) {
+                            NavDisplay(
+                                entries = navState.toDecoratedEntries(entryProvider),
+                                onBack = navigator::goBack,
+                            )
+                        }
+
+                        val baseUrl = LocalAppGraph.current.baseUrl
+                        val flagsManager = LocalAppGraph.current.flagsManager
+                        val currentFlags = LocalFlags.current
+                        val platformFlags = flagsManager.platformFlags
+                        if (baseUrl != URLs.PRODUCTION_URL || currentFlags != platformFlags) {
+                            DebugMarker(
+                                Modifier
+                                    .align(Alignment.TopCenter)
+                                    .padding(topInsetPadding())
+                                    .clip(KotlinConfTheme.shapes.roundedCornerMd)
+                                    .clickable { navigator.add(AboutAppScreen) }
+                                    .padding(8.dp)
+                            )
+                        }
+                    }
                 }
             }
         }

@@ -1,14 +1,20 @@
 package org.jetbrains.kotlinconf.screens
 
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -111,6 +117,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.generated.resources.view_grid_24
 import org.jetbrains.kotlinconf.ui.generated.resources.view_list_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.ui.theme.LocalAnimatedContentScope
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.utils.ErrorLoadingState
@@ -128,12 +135,8 @@ fun ScheduleScreen(
 ) {
     val scope = rememberCoroutineScope()
     val windowSize = LocalWindowSize.current
-    val isGridViewPreferred = viewModel.isGridViewPreferred.collectAsStateWithLifecycle().value
-    var isGridView by rememberSaveable { mutableStateOf(true) }
-    LaunchedEffect(isGridViewPreferred) { isGridView = isGridViewPreferred }
-    if (windowSize == WindowSize.Compact) {
-        isGridView = false
-    }
+    val isGridViewPreferred by viewModel.isGridViewPreferred.collectAsStateWithLifecycle()
+    val isGridView = isGridViewPreferred && windowSize == WindowSize.Large
     var gridSelectedDayIndex by rememberSaveable { mutableStateOf(0) }
     var bookmarkFilterEnabled by rememberSaveable { mutableStateOf(false) }
     var searchQuery by rememberSaveable { mutableStateOf("") }
@@ -212,11 +215,8 @@ fun ScheduleScreen(
             onClearSearch = { viewModel.resetFilters() },
             viewModel = viewModel,
             isGridView = isGridView,
-            onGridViewToggle = {
-                isGridView = it
-                viewModel.setGridViewPreferred(it)
-            },
-            showGridToggle = windowSize != WindowSize.Compact,
+            onGridViewToggle = { viewModel.setGridViewPreferred(it) },
+            showGridToggle = windowSize == WindowSize.Large,
         )
         HorizontalDivider(
             thickness = 1.dp,
@@ -254,53 +254,77 @@ fun ScheduleScreen(
                     var targetDayIndex by remember { mutableStateOf<Int?>(null) }
                     val selectedDayIndex = targetDayIndex ?: computedDayIndex
 
-                    if (isGridView) {
-                        LargeSwitcher(
-                            options = remember(conferenceDates, dayInfoMap) {
-                                conferenceDates.map { date ->
-                                    val dayInfo = dayInfoMap[date]
-                                    LargeSwitcherOption(
-                                        label1 = DateTimeFormatting.date(date),
-                                        label2 = dayInfo?.line2 ?: "",
-                                    )
-                                }
-                            },
-                            selectedIndex = gridSelectedDayIndex,
-                            onSelect = { gridSelectedDayIndex = it },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 24.dp, vertical = 8.dp),
-                        )
-                    } else {
-                        Switcher(
-                            items = remember(conferenceDates) {
-                                conferenceDates.map { DateTimeFormatting.date(it) }
-                            },
-                            shortItems = null,
-                            selectedIndex = selectedDayIndex,
-                            onSelect = { index ->
-                                scope.launch {
-                                    val dayItemIndex = items.indexOf(DayHeaderItem(days[index]))
-                                    // Temporarily override the scroll state based selection
-                                    targetDayIndex = index
-                                    // Scroll to the item
-                                    listState.animateScrollToItem(dayItemIndex)
-                                    // Remove override, let scroll state determine the selection
-                                    targetDayIndex = null
-                                }
-                            },
-                            modifier = Modifier
-                                .then(
-                                    if (windowSize != WindowSize.Compact)
-                                        Modifier.widthIn(max = 640.dp)
-                                    else Modifier
+                    // Sync day selection between list and grid
+                    if (!isGridView) {
+                        LaunchedEffect(computedDayIndex) {
+                            gridSelectedDayIndex = computedDayIndex
+                        }
+                    }
+                    // When switching to list view, scroll to the grid's selected day
+                    LaunchedEffect(isGridView) {
+                        if (!isGridView && gridSelectedDayIndex < days.size) {
+                            val dayItemIndex = items.indexOf(DayHeaderItem(days[gridSelectedDayIndex]))
+                            if (dayItemIndex >= 0) {
+                                listState.scrollToItem(dayItemIndex)
+                            }
+                        }
+                    }
+
+                    AnimatedContent(
+                        targetState = isGridView,
+                        transitionSpec = { fadeIn(tween(300)) togetherWith fadeOut(tween(300)) },
+                    ) { showGrid ->
+                        CompositionLocalProvider(
+                            LocalAnimatedContentScope provides this@AnimatedContent,
+                        ) {
+                            if (showGrid) {
+                                LargeSwitcher(
+                                    options = remember(conferenceDates, dayInfoMap) {
+                                        conferenceDates.map { date ->
+                                            val dayInfo = dayInfoMap[date]
+                                            LargeSwitcherOption(
+                                                label1 = DateTimeFormatting.date(date),
+                                                label2 = dayInfo?.combinedLine ?: "",
+                                            )
+                                        }
+                                    },
+                                    selectedIndex = gridSelectedDayIndex,
+                                    onSelect = { gridSelectedDayIndex = it },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 24.dp, vertical = 8.dp),
+                                    sharedTransitionKey = "day-switcher",
                                 )
-                                .fillMaxWidth()
-                                .padding(
-                                    horizontal = 12.dp,
-                                    vertical = 8.dp,
+                            } else {
+                                Switcher(
+                                    items = remember(conferenceDates) {
+                                        conferenceDates.map { DateTimeFormatting.date(it) }
+                                    },
+                                    shortItems = null,
+                                    selectedIndex = selectedDayIndex,
+                                    onSelect = { index ->
+                                        scope.launch {
+                                            val dayItemIndex = items.indexOf(DayHeaderItem(days[index]))
+                                            targetDayIndex = index
+                                            listState.animateScrollToItem(dayItemIndex)
+                                            targetDayIndex = null
+                                        }
+                                    },
+                                    modifier = Modifier
+                                        .then(
+                                            if (windowSize != WindowSize.Compact)
+                                                Modifier.widthIn(max = 640.dp)
+                                            else Modifier
+                                        )
+                                        .fillMaxWidth()
+                                        .padding(
+                                            horizontal = 12.dp,
+                                            vertical = 8.dp,
+                                        ),
+                                    sharedTransitionKey = "day-switcher",
                                 )
-                        )
+                            }
+                        }
                     }
                 }
 
@@ -440,7 +464,7 @@ private fun Header(
     onGridViewToggle: (Boolean) -> Unit,
     showGridToggle: Boolean,
 ) {
-    if (showGridToggle && LocalWindowSize.current == WindowSize.Large) {
+    if (showGridToggle) {
         LargeHeader(
             bookmarkFilterEnabled = bookmarkFilterEnabled,
             onBookmarkFilter = onBookmarkFilter,
@@ -462,9 +486,6 @@ private fun Header(
             onSearchQueryChange = onSearchQueryChange,
             onClearSearch = onClearSearch,
             viewModel = viewModel,
-            isGridView = isGridView,
-            onGridViewToggle = onGridViewToggle,
-            showGridToggle = showGridToggle,
         )
     }
 }
@@ -524,9 +545,6 @@ private fun SmallHeader(
     onSearchQueryChange: (String) -> Unit,
     onClearSearch: () -> Unit,
     viewModel: ScheduleViewModel,
-    isGridView: Boolean = false,
-    onGridViewToggle: (Boolean) -> Unit = {},
-    showGridToggle: Boolean = false,
 ) {
     MainHeaderContainer(
         state = headerState,
@@ -535,16 +553,6 @@ private fun SmallHeader(
                 title = stringResource(Res.string.nav_destination_schedule),
                 startContent = startContent,
                 endContent = {
-                    if (showGridToggle) {
-                        HeaderToggleButton(
-                            options = listOf(
-                                HeaderToggleOption(UiRes.drawable.view_list_24, "List view"),
-                                HeaderToggleOption(UiRes.drawable.view_grid_24, "Grid view"),
-                            ),
-                            selectedIndex = if (isGridView) 1 else 0,
-                            onSelect = { onGridViewToggle(it == 1) },
-                        )
-                    }
                     TopMenuButton(
                         icon = UiRes.drawable.bookmark_24,
                         selected = bookmarkFilterEnabled,
@@ -898,7 +906,7 @@ private fun ScheduleGrid(
                     val isServiceSlot = allTalks.isEmpty()
 
                     if (isServiceSlot) {
-                        ServiceEventGridRow(timeSlot, serviceEvents)
+                        ServiceEventGridRow(timeSlot, serviceEvents, horizontalScrollState)
                     } else if (bookmarkFilterEnabled && talks.isEmpty()) {
                         Row(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
                             Text(
@@ -941,36 +949,56 @@ private fun ScheduleGrid(
 private fun ServiceEventGridRow(
     timeSlot: TimeSlot,
     events: List<SessionCardView>,
+    horizontalScrollState: ScrollState,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
             text = DateTimeFormatting.time(timeSlot.startsAt),
-            modifier = Modifier.width(TimeLabelWidth).padding(horizontal = 12.dp),
+            modifier = Modifier.width(TimeLabelWidth).padding(horizontal = 12.dp, vertical = 8.dp),
             style = KotlinConfTheme.typography.text2,
             color = KotlinConfTheme.colors.secondaryText,
         )
-        if (events.size == 1) {
-            ServiceEvent(
-                event = ServiceEventData(
-                    title = events.first().title,
-                    now = events.first().isLive,
-                ),
-                modifier = Modifier.weight(1f),
-            )
-        } else {
-            ServiceEvents(
-                events = events.map {
-                    ServiceEventData(
-                        title = it.title,
-                        now = it.isLive,
-                        time = it.shortTimeline,
+        BoxWithConstraints(Modifier.weight(1f)) {
+            val availableWidth = maxWidth
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(horizontalScrollState, overscrollEffect = null)
+                    .padding(vertical = 8.dp)
+                    .padding(end = 12.dp),
+            ) {
+                val eventModifier = Modifier.widthIn(min = availableWidth - 12.dp)
+                if (events.size == 1) {
+                    val event = events.first()
+                    ServiceEvent(
+                        event = ServiceEventData(
+                            title = event.title,
+                            now = event.isLive,
+                            note = event.startsInMinutes?.let { count ->
+                                stringResource(Res.string.schedule_in_x_minutes, count)
+                            },
+                        ),
+                        modifier = eventModifier,
                     )
-                },
-                modifier = Modifier.weight(1f),
-            )
+                } else {
+                    ServiceEvents(
+                        events = events.map {
+                            ServiceEventData(
+                                title = it.title,
+                                now = it.isLive,
+                                time = it.shortTimeline,
+                                note = it.startsInMinutes?.let { count ->
+                                    stringResource(Res.string.schedule_in_x_minutes, count)
+                                },
+                            )
+                        },
+                        modifier = eventModifier,
+                    )
+                }
+            }
         }
     }
 }
@@ -990,11 +1018,7 @@ private fun TalkGridRow(
     val talksByVenue = talks.groupBy { it.locationLine }
     val venuesWidth = ColumnWidth * venues.size
 
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-    ) {
+    Row(Modifier.fillMaxWidth()) {
         Text(
             text = DateTimeFormatting.time(timeSlot.startsAt),
             modifier = Modifier.width(TimeLabelWidth).padding(horizontal = 12.dp, vertical = 8.dp),
@@ -1007,6 +1031,7 @@ private fun TalkGridRow(
                 .horizontalScroll(horizontalScrollState, overscrollEffect = null)
                 .width(venuesWidth)
                 .height(IntrinsicSize.Max)
+                .padding(vertical = 8.dp)
         ) {
             venues.forEach { venue ->
                 val sessionsInVenue = talksByVenue[venue] ?: emptyList()
@@ -1033,7 +1058,7 @@ private fun TalkGridRow(
     }
 
     if (serviceEvents.isNotEmpty()) {
-        ServiceEventGridRow(timeSlot, serviceEvents)
+        ServiceEventGridRow(timeSlot, serviceEvents, horizontalScrollState)
     }
 }
 

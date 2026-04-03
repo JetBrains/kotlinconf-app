@@ -370,34 +370,14 @@ private fun TimeBlock(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.padding(16.dp)
     ) {
-        Text(
-            text = location,
-            style = KotlinConfTheme.typography.text2,
-            color = textColor,
-        )
-
-        Spacer(Modifier.weight(1f))
-
-        if (timeNote != null) {
+        if (location.isNotEmpty()) {
             Text(
-                text = timeNote,
+                text = location,
                 style = KotlinConfTheme.typography.text2,
-                color = KotlinConfTheme.colors.noteText,
-                maxLines = 1,
+                color = textColor,
             )
-        }
 
-        AnimatedVisibility(status == TalkStatus.Live, enter = fadeIn(), exit = fadeOut()) {
-            NowLabel()
-        }
-
-        if (lightning) {
-            Icon(
-                modifier = Modifier.size(16.dp),
-                painter = painterResource(UiRes.drawable.lightning_16_fill),
-                contentDescription = stringResource(UiRes.string.lightning_talk),
-                tint = KotlinConfTheme.colors.orangeText,
-            )
+            Spacer(Modifier.weight(1f))
         }
 
         AnimatedContent(
@@ -410,6 +390,28 @@ private fun TimeBlock(
                 color = textColor,
                 maxLines = 1,
             )
+        }
+
+        if (lightning) {
+            Icon(
+                modifier = Modifier.size(16.dp),
+                painter = painterResource(UiRes.drawable.lightning_16_fill),
+                contentDescription = stringResource(UiRes.string.lightning_talk),
+                tint = KotlinConfTheme.colors.orangeText,
+            )
+        }
+
+        if (timeNote != null) {
+            Text(
+                text = timeNote,
+                style = KotlinConfTheme.typography.text2,
+                color = KotlinConfTheme.colors.noteText,
+                maxLines = 1,
+            )
+        }
+
+        AnimatedVisibility(status == TalkStatus.Live, enter = fadeIn(), exit = fadeOut()) {
+            NowLabel()
         }
     }
 }

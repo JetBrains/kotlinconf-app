@@ -73,6 +73,7 @@ interface AppGraph : ViewModelGraph {
         applicationStorage: ApplicationStorage,
         platformFlags: Flags,
     ): String {
+        return URLs.LOCAL_URL
         val flags = applicationStorage.getFlagsBlocking()
         return when {
             flags != null && (flags != platformFlags) -> URLs.STAGING_URL

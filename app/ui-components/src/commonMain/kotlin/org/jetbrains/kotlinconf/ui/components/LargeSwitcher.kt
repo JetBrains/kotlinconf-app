@@ -23,6 +23,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.Brand
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.ui.theme.LocalAnimatedContentScope
+import org.jetbrains.kotlinconf.ui.theme.LocalSharedTransitionScope
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 import org.jetbrains.kotlinconf.ui.utils.WidePreviewLightDark
@@ -36,7 +38,30 @@ private fun LargeSwitcherItem(
     onClick: () -> Unit,
     selected: Boolean,
     modifier: Modifier = Modifier,
+    sharedTransitionKey: String? = null,
+    index: Int = 0,
 ) {
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    val animatedContentScope = LocalAnimatedContentScope.current
+
+    val containerMod = if (sharedTransitionKey != null && sharedTransitionScope != null && animatedContentScope != null) {
+        with(sharedTransitionScope) {
+            Modifier.sharedBounds(
+                rememberSharedContentState("$sharedTransitionKey-$index-container"),
+                animatedContentScope,
+            )
+        }
+    } else Modifier
+
+    val textMod = if (sharedTransitionKey != null && sharedTransitionScope != null && animatedContentScope != null) {
+        with(sharedTransitionScope) {
+            Modifier.sharedBounds(
+                rememberSharedContentState("$sharedTransitionKey-$index-text"),
+                animatedContentScope,
+            )
+        }
+    } else Modifier
+
     val gradientAlpha by animateFloatAsState(
         if (selected) 1f else 0f,
     )
@@ -48,6 +73,7 @@ private fun LargeSwitcherItem(
 
     Row(
         modifier = modifier
+            .then(containerMod)
             .fillMaxWidth()
             .heightIn(min = 48.dp)
             .clip(LargeSwitcherItemShape)
@@ -69,6 +95,7 @@ private fun LargeSwitcherItem(
             text = label1,
             style = KotlinConfTheme.typography.text1,
             color = textColor,
+            modifier = textMod,
         )
         Text(
             text = label2,
@@ -86,6 +113,7 @@ fun LargeSwitcher(
     selectedIndex: Int,
     onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    sharedTransitionKey: String? = null,
 ) {
     Row(
         modifier = modifier
@@ -100,6 +128,8 @@ fun LargeSwitcher(
                 onClick = { onSelect(index) },
                 selected = index == selectedIndex,
                 modifier = Modifier.weight(1f),
+                sharedTransitionKey = sharedTransitionKey,
+                index = index,
             )
         }
     }
