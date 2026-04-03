@@ -112,6 +112,8 @@ fun TalkCard(
     onClick: () -> Unit,
     feedbackContent: (@Composable () -> Unit)?,
     modifier: Modifier = Modifier,
+    stretchContent: Boolean = false,
+    titleMaxLines: Int = 2,
 ) {
     val backgroundColor by animateColorAsState(
         if (status == TalkStatus.Past) KotlinConfTheme.colors.cardBackgroundPast
@@ -151,6 +153,8 @@ fun TalkCard(
             speakers = speakers,
             speakerHighlights = speakerHighlights,
             status = status,
+            titleMaxLines = titleMaxLines,
+            modifier = if (stretchContent) Modifier.weight(1f) else Modifier,
         )
         // TODO BLOCKER double-check if removing this weight is correct
         HorizontalDivider(
@@ -197,9 +201,11 @@ private fun TopBlock(
     speakers: String,
     speakerHighlights: List<IntRange>,
     status: TalkStatus,
+    titleMaxLines: Int = 2,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier.padding(16.dp),
+        modifier = modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Row {
@@ -208,6 +214,7 @@ private fun TopBlock(
                 tags = tags,
                 textColor = textColor,
                 status = status,
+                maxLines = titleMaxLines,
                 modifier = Modifier
                     .weight(1f)
                     .semantics { heading() }
@@ -277,6 +284,7 @@ private fun TalkTitle(
     tags: Set<String>,
     textColor: Color,
     status: TalkStatus,
+    maxLines: Int,
     modifier: Modifier,
 ) {
     val isCodelab = "Codelab" in tags
@@ -301,7 +309,7 @@ private fun TalkTitle(
         },
         style = KotlinConfTheme.typography.h3,
         color = textColor,
-        maxLines = 2,
+        maxLines = maxLines,
         inlineContent = if (hasIcon) talkCardTitleInlineContent(status) else emptyMap(),
         modifier = modifier,
     )
