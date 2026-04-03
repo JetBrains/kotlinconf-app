@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -24,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
@@ -81,6 +84,8 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.utils.ErrorLoadingState
+import org.jetbrains.kotlinconf.utils.LocalWindowSize
+import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
@@ -179,62 +184,83 @@ fun ScheduleScreen(
             val days = content.days
             val items = content.items
 
-            Column(Modifier.fillMaxSize()) {
-                AnimatedVisibility(!isSearch) {
-                    // Day switcher selection state calculated from the scroll state
-                    val conferenceDates = days.map { it.date }
-                    val computedDayIndex by derivedStateOf {
-                        items.asSequence()
-                            .take(listState.firstVisibleItemIndex + 1)
-                            .findLast { it is DayHeaderItem }
-                            ?.let {
-                                val visibleDate = (it as DayHeaderItem).value.date
-                                conferenceDates.indexOf(visibleDate)
-                            } ?: 0
+            Column(
+                Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                val windowSize = LocalWindowSize.current
+                Column(
+                    when (windowSize) {
+                        WindowSize.Compact -> Modifier.fillMaxSize()
+                        WindowSize.Medium, WindowSize.Large -> Modifier
+                            .padding(horizontal = 24.dp)
+                            .widthIn(max = 640.dp)
+                            .fillMaxHeight()
                     }
-                    // Override for the day switcher selection
-                    var targetDayIndex by remember { mutableStateOf<Int?>(null) }
-                    val selectedDayIndex = targetDayIndex ?: computedDayIndex
+                ) {
+                    AnimatedVisibility(!isSearch) {
+                        // Day switcher selection state calculated from the scroll state
+                        val conferenceDates = days.map { it.date }
+                        val computedDayIndex by derivedStateOf {
+                            items.asSequence()
+                                .take(listState.firstVisibleItemIndex + 1)
+                                .findLast { it is DayHeaderItem }
+                                ?.let {
+                                    val visibleDate = (it as DayHeaderItem).value.date
+                                    conferenceDates.indexOf(visibleDate)
+                                } ?: 0
+                        }
+                        // Override for the day switcher selection
+                        var targetDayIndex by remember { mutableStateOf<Int?>(null) }
+                        val selectedDayIndex = targetDayIndex ?: computedDayIndex
 
-                    Switcher(
-                        items = remember(conferenceDates) {
-                            conferenceDates.map { DateTimeFormatting.date(it) }
+                        Switcher(
+                            items = remember(conferenceDates) {
+                                conferenceDates.map { DateTimeFormatting.date(it) }
+                            },
+                            shortItems = null,
+                            selectedIndex = selectedDayIndex,
+                            onSelect = { index ->
+                                scope.launch {
+                                    val dayItemIndex = items.indexOf(DayHeaderItem(days[index]))
+                                    // Temporarily override the scroll state based selection
+                                    targetDayIndex = index
+                                    // Scroll to the item
+                                    listState.animateScrollToItem(dayItemIndex)
+                                    // Remove override, let scroll state determine the selection
+                                    targetDayIndex = null
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    horizontal = if (windowSize == WindowSize.Compact) 12.dp else 0.dp,
+                                    vertical = 8.dp,
+                                )
+                        )
+                    }
+
+                    val tags by viewModel.filterItems.collectAsStateWithLifecycle()
+                    val dayInfoMap by viewModel.dayInfoMap.collectAsStateWithLifecycle()
+                    ScheduleList(
+                        scheduleItems = items,
+                        onSession = onSession,
+                        listState = listState,
+                        isSearch = isSearch,
+                        dayInfoMap = dayInfoMap,
+                        onBookmark = { sessionId, isBookmarked ->
+                            viewModel.onBookmark(sessionId, isBookmarked)
                         },
-                        shortItems = null,
-                        selectedIndex = selectedDayIndex,
-                        onSelect = { index ->
-                            scope.launch {
-                                val dayItemIndex = items.indexOf(DayHeaderItem(days[index]))
-                                // Temporarily override the scroll state based selection
-                                targetDayIndex = index
-                                // Scroll to the item
-                                listState.animateScrollToItem(dayItemIndex)
-                                // Remove override, let scroll state determine the selection
-                                targetDayIndex = null
-                            }
+                        onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
+                        filterItems = tags,
+                        onToggleFilter = { item, selected ->
+                            viewModel.toggleFilter(
+                                item,
+                                selected
+                            )
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 8.dp)
                     )
                 }
-
-                val tags by viewModel.filterItems.collectAsStateWithLifecycle()
-                val dayInfoMap by viewModel.dayInfoMap.collectAsStateWithLifecycle()
-                ScheduleList(
-                    scheduleItems = items,
-                    onSession = onSession,
-                    listState = listState,
-                    isSearch = isSearch,
-                    dayInfoMap = dayInfoMap,
-                    onBookmark = { sessionId, isBookmarked ->
-                        viewModel.onBookmark(sessionId, isBookmarked)
-                    },
-                    onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
-                    filterItems = tags,
-                    onToggleFilter = { item, selected -> viewModel.toggleFilter(item, selected) },
-                    modifier = Modifier.fillMaxSize()
-                )
             }
         }
     }
@@ -434,7 +460,7 @@ private fun ScheduleList(
                             day = date.day.toString(),
                             line1 = dayInfo?.line1 ?: "",
                             line2 = dayInfo?.line2 ?: "",
-                            fullWidth = true,
+                            fullWidth = LocalWindowSize.current == WindowSize.Compact,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 16.dp)
