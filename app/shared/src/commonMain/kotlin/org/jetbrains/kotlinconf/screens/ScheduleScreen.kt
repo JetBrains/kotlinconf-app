@@ -79,6 +79,8 @@ import org.jetbrains.kotlinconf.ui.components.HeaderToggleButton
 import org.jetbrains.kotlinconf.ui.components.HeaderToggleOption
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.Icon
+import org.jetbrains.kotlinconf.ui.components.LargeMainHeader
+import org.jetbrains.kotlinconf.ui.components.LargeSearchBar
 import org.jetbrains.kotlinconf.ui.components.LargeSwitcher
 import org.jetbrains.kotlinconf.ui.components.LargeSwitcherOption
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
@@ -132,7 +134,11 @@ fun ScheduleScreen(
     val state = viewModel.uiState.collectAsStateWithLifecycle().value
 
     var headerState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
-    val isSearch = rememberSaveable(headerState) { headerState == MainHeaderContainerState.Search }
+    val isSearch = if (windowSize == WindowSize.Large) {
+        searchQuery.isNotEmpty()
+    } else {
+        headerState == MainHeaderContainerState.Search
+    }
 
     var firstScrollPerformed by rememberSaveable(isSearch, searchQuery) { mutableStateOf(false) }
 
@@ -303,16 +309,18 @@ fun ScheduleScreen(
 
                     if (isGridView) {
                         val gridDay = days.getOrElse(gridSelectedDayIndex) { days.first() }
-                        val venues = remember(gridDay) {
+                        val venues = remember(gridDay, bookmarkFilterEnabled) {
                             gridDay.timeSlots
                                 .flatMap { it.sessions }
                                 .filter { !it.isServiceEvent }
+                                .filter { !bookmarkFilterEnabled || it.isFavorite }
                                 .map { it.locationLine }
                                 .distinct()
                         }
                         ScheduleGrid(
                             day = gridDay,
                             venues = venues,
+                            bookmarkFilterEnabled = bookmarkFilterEnabled,
                             onSession = onSession,
                             onBookmark = { sessionId, isBookmarked ->
                                 viewModel.onBookmark(sessionId, isBookmarked)
@@ -419,6 +427,88 @@ private fun Header(
     onGridViewToggle: (Boolean) -> Unit,
     showGridToggle: Boolean,
 ) {
+    if (showGridToggle) {
+        LargeHeader(
+            bookmarkFilterEnabled = bookmarkFilterEnabled,
+            onBookmarkFilter = onBookmarkFilter,
+            searchQuery = searchQuery,
+            onSearchQueryChange = onSearchQueryChange,
+            onClearSearch = onClearSearch,
+            viewModel = viewModel,
+            isGridView = isGridView,
+            onGridViewToggle = onGridViewToggle,
+        )
+    } else {
+        SmallHeader(
+            startContent = startContent,
+            headerState = headerState,
+            onHeaderStateChange = onHeaderStateChange,
+            bookmarkFilterEnabled = bookmarkFilterEnabled,
+            onBookmarkFilter = onBookmarkFilter,
+            searchQuery = searchQuery,
+            onSearchQueryChange = onSearchQueryChange,
+            onClearSearch = onClearSearch,
+            viewModel = viewModel,
+        )
+    }
+}
+
+@Composable
+private fun LargeHeader(
+    bookmarkFilterEnabled: Boolean,
+    onBookmarkFilter: (Boolean) -> Unit,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
+    onClearSearch: () -> Unit,
+    viewModel: ScheduleViewModel,
+    isGridView: Boolean,
+    onGridViewToggle: (Boolean) -> Unit,
+) {
+    val filterItems by viewModel.filterItems.collectAsStateWithLifecycle()
+
+    LargeMainHeader(
+        title = stringResource(Res.string.nav_destination_schedule),
+        endContent = {
+            TopMenuButton(
+                icon = UiRes.drawable.bookmark_24,
+                selected = bookmarkFilterEnabled,
+                onToggle = { onBookmarkFilter(it) },
+                contentDescription = stringResource(Res.string.schedule_action_filter_bookmarked),
+                large = true,
+            )
+
+            LargeSearchBar(
+                searchValue = searchQuery,
+                onSearchValueChange = { onSearchQueryChange(it) },
+                onClear = onClearSearch,
+                hasAdditionalInputs = filterItems.any { it.isSelected },
+                modifier = Modifier.width(370.dp),
+            )
+
+            HeaderToggleButton(
+                options = listOf(
+                    HeaderToggleOption(UiRes.drawable.view_list_24, "List view"),
+                    HeaderToggleOption(UiRes.drawable.view_grid_24, "Grid view"),
+                ),
+                selectedIndex = if (isGridView) 1 else 0,
+                onSelect = { onGridViewToggle(it == 1) },
+            )
+        }
+    )
+}
+
+@Composable
+private fun SmallHeader(
+    startContent: @Composable RowScope.() -> Unit,
+    headerState: MainHeaderContainerState,
+    onHeaderStateChange: (MainHeaderContainerState) -> Unit,
+    bookmarkFilterEnabled: Boolean,
+    onBookmarkFilter: (Boolean) -> Unit,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
+    onClearSearch: () -> Unit,
+    viewModel: ScheduleViewModel,
+) {
     MainHeaderContainer(
         state = headerState,
         titleContent = {
@@ -426,16 +516,6 @@ private fun Header(
                 title = stringResource(Res.string.nav_destination_schedule),
                 startContent = startContent,
                 endContent = {
-                    if (showGridToggle) {
-                        HeaderToggleButton(
-                            options = listOf(
-                                HeaderToggleOption(UiRes.drawable.view_list_24, "List view"),
-                                HeaderToggleOption(UiRes.drawable.view_grid_24, "Grid view"),
-                            ),
-                            selectedIndex = if (isGridView) 1 else 0,
-                            onSelect = { onGridViewToggle(it == 1) },
-                        )
-                    }
                     TopMenuButton(
                         icon = UiRes.drawable.bookmark_24,
                         selected = bookmarkFilterEnabled,
@@ -464,7 +544,6 @@ private fun Header(
 
             MainHeaderSearchBar(
                 searchValue = searchQuery,
-                // clearing the input should also reset tags
                 onSearchValueChange = { onSearchQueryChange(it) },
                 onClose = {
                     onHeaderStateChange(MainHeaderContainerState.Title)
@@ -682,12 +761,14 @@ private fun SessionCard(
 
 private val TimeLabelWidth = 72.dp
 private val MinColumnWidth = 200.dp
+private val MaxColumnWidth = 300.dp
 private val ArrowButtonSize = 40.dp
 
 @Composable
 private fun ScheduleGrid(
     day: Day,
     venues: List<String>,
+    bookmarkFilterEnabled: Boolean,
     onSession: (SessionId) -> Unit,
     onBookmark: (SessionId, Boolean) -> Unit,
     onPrivacyNoticeNeeded: () -> Unit,
@@ -709,10 +790,14 @@ private fun ScheduleGrid(
             (firstVisibleColumn + visibleColumnCount).coerceAtMost(venues.size),
         )
 
+        val maxGridWidth = TimeLabelWidth + MaxColumnWidth * visibleColumnCount +
+            (if (needsPaging) ArrowButtonSize else 0.dp)
+        val gridRowModifier = Modifier.widthIn(max = maxGridWidth)
+
         Column(Modifier.fillMaxSize()) {
             // Venue header row (sticky, outside LazyColumn)
             Row(
-                Modifier.fillMaxWidth(),
+                gridRowModifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 // Left arrow / spacer for time label
@@ -773,11 +858,26 @@ private fun ScheduleGrid(
                 contentPadding = bottomInsetPadding(),
             ) {
                 items(day.timeSlots, key = { it.startsAt.toString() }) { timeSlot ->
-                    val (serviceEvents, talks) = timeSlot.sessions.partition { it.isServiceEvent }
-                    val isServiceSlot = talks.isEmpty()
+                    val (serviceEvents, allTalks) = timeSlot.sessions.partition { it.isServiceEvent }
+                    val talks = if (bookmarkFilterEnabled) allTalks.filter { it.isFavorite } else allTalks
+                    val isServiceSlot = allTalks.isEmpty()
 
                     if (isServiceSlot) {
                         ServiceEventGridRow(timeSlot, serviceEvents, needsPaging)
+                    } else if (bookmarkFilterEnabled && talks.isEmpty()) {
+                        Row(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                            Text(
+                                text = DateTimeFormatting.time(timeSlot.startsAt),
+                                modifier = Modifier.width(TimeLabelWidth).padding(horizontal = 12.dp),
+                                style = KotlinConfTheme.typography.text2,
+                                color = KotlinConfTheme.colors.secondaryText,
+                            )
+                            Text(
+                                stringResource(Res.string.schedule_label_no_bookmarks),
+                                color = KotlinConfTheme.colors.noteText,
+                                modifier = Modifier.padding(12.dp),
+                            )
+                        }
                     } else {
                         TalkGridRow(
                             timeSlot = timeSlot,
@@ -788,6 +888,7 @@ private fun ScheduleGrid(
                             onBookmark = onBookmark,
                             onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
                             hasRightArrow = needsPaging,
+                            modifier = gridRowModifier,
                         )
                     }
                     HorizontalDivider(
@@ -852,11 +953,12 @@ private fun TalkGridRow(
     onBookmark: (SessionId, Boolean) -> Unit,
     onPrivacyNoticeNeeded: () -> Unit,
     hasRightArrow: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     val talksByVenue = talks.groupBy { it.locationLine }
 
     Row(
-        Modifier
+        modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Max)
             .padding(vertical = 8.dp)
