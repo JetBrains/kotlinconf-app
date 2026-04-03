@@ -22,5 +22,8 @@ interface ApplicationStorage {
     fun getConfig(): Flow<AppConfig?>
     suspend fun setConfig(config: AppConfig)
 
+    fun isGridViewPreferred(): Flow<Boolean>
+    suspend fun setGridViewPreferred(value: Boolean)
+
     fun initialize()
 }

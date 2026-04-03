@@ -66,6 +66,9 @@ class ApplicationStorageImpl(
     override fun getConfig(): Flow<AppConfig?> = settings.getStringOrNullFlow(Keys.CONFIG).map { it.decodeOrNull<AppConfig>() ?: DEFAULT_CONFIG }
     override suspend fun setConfig(config: AppConfig) = settings.set(Keys.CONFIG, json.encodeToString(config))
 
+    override fun isGridViewPreferred(): Flow<Boolean> = settings.getBooleanFlow(Keys.GRID_VIEW_PREFERRED, true)
+    override suspend fun setGridViewPreferred(value: Boolean) = settings.set(Keys.GRID_VIEW_PREFERRED, value)
+
     override fun initialize() {
         ensureCurrentVersion()
         ensureUserId()
@@ -181,6 +184,7 @@ class ApplicationStorageImpl(
         const val THEME = "theme"
         const val FLAGS = "flags"
         const val CONFIG = "config"
+        const val GRID_VIEW_PREFERRED = "gridViewPreferred"
     }
 
     /** Keys from older storage versions, used only during migrations. */

@@ -107,6 +107,13 @@ class ScheduleViewModel(
         .map { days -> days.associateBy { it.date } }
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyMap())
 
+    val isGridViewPreferred: StateFlow<Boolean> = service.isGridViewPreferred()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
+
+    fun setGridViewPreferred(value: Boolean) {
+        service.setGridViewPreferred(value)
+    }
+
     private var loading = MutableStateFlow(false)
 
     fun toggleFilter(item: FilterItem, selected: Boolean) {

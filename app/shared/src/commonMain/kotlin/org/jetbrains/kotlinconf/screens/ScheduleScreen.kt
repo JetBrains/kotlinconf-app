@@ -2,11 +2,14 @@ package org.jetbrains.kotlinconf.screens
 
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -20,11 +23,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -36,11 +40,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigationevent.NavigationEventInfo
@@ -53,12 +59,14 @@ import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.kotlinconf.Day
 import org.jetbrains.kotlinconf.DayInfo
 import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
+import org.jetbrains.kotlinconf.TimeSlot
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_schedule
 import org.jetbrains.kotlinconf.generated.resources.schedule_action_filter_bookmarked
@@ -67,8 +75,6 @@ import org.jetbrains.kotlinconf.generated.resources.schedule_error_no_data
 import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
 import org.jetbrains.kotlinconf.generated.resources.schedule_label_no_bookmarks
 import org.jetbrains.kotlinconf.generated.resources.schedule_number_of_results
-import org.jetbrains.kotlinconf.Day
-import org.jetbrains.kotlinconf.TimeSlot
 import org.jetbrains.kotlinconf.isLive
 import org.jetbrains.kotlinconf.isServiceEvent
 import org.jetbrains.kotlinconf.navigation.TopLevelRoute
@@ -122,8 +128,10 @@ fun ScheduleScreen(
 ) {
     val scope = rememberCoroutineScope()
     val windowSize = LocalWindowSize.current
+    val isGridViewPreferred = viewModel.isGridViewPreferred.collectAsStateWithLifecycle().value
     var isGridView by rememberSaveable { mutableStateOf(true) }
-    if (windowSize != WindowSize.Large) {
+    LaunchedEffect(isGridViewPreferred) { isGridView = isGridViewPreferred }
+    if (windowSize == WindowSize.Compact) {
         isGridView = false
     }
     var gridSelectedDayIndex by rememberSaveable { mutableStateOf(0) }
@@ -204,8 +212,11 @@ fun ScheduleScreen(
             onClearSearch = { viewModel.resetFilters() },
             viewModel = viewModel,
             isGridView = isGridView,
-            onGridViewToggle = { isGridView = it },
-            showGridToggle = windowSize == WindowSize.Large,
+            onGridViewToggle = {
+                isGridView = it
+                viewModel.setGridViewPreferred(it)
+            },
+            showGridToggle = windowSize != WindowSize.Compact,
         )
         HorizontalDivider(
             thickness = 1.dp,
@@ -225,95 +236,94 @@ fun ScheduleScreen(
                 Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Column(
-                    when (windowSize) {
-                        WindowSize.Compact -> Modifier.fillMaxSize()
-                        WindowSize.Medium -> Modifier
-                            .padding(horizontal = 24.dp)
-                            .widthIn(max = 640.dp)
-                            .fillMaxHeight()
-                        WindowSize.Large -> if (isGridView) {
-                            Modifier
-                                .padding(horizontal = 24.dp)
-                                .fillMaxSize()
-                        } else {
-                            Modifier
-                                .padding(horizontal = 24.dp)
-                                .widthIn(max = 640.dp)
-                                .fillMaxHeight()
-                        }
-                    }
-                ) {
-                    val dayInfoMap by viewModel.dayInfoMap.collectAsStateWithLifecycle()
+                val dayInfoMap by viewModel.dayInfoMap.collectAsStateWithLifecycle()
 
-                    AnimatedVisibility(!isSearch) {
-                        // Day switcher selection state calculated from the scroll state
-                        val conferenceDates = days.map { it.date }
-                        val computedDayIndex by derivedStateOf {
-                            items.asSequence()
-                                .take(listState.firstVisibleItemIndex + 1)
-                                .findLast { it is DayHeaderItem }
-                                ?.let {
-                                    val visibleDate = (it as DayHeaderItem).value.date
-                                    conferenceDates.indexOf(visibleDate)
-                                } ?: 0
-                        }
-                        // Override for the day switcher selection
-                        var targetDayIndex by remember { mutableStateOf<Int?>(null) }
-                        val selectedDayIndex = targetDayIndex ?: computedDayIndex
-
-                        if (isGridView) {
-                            LargeSwitcher(
-                                options = remember(conferenceDates, dayInfoMap) {
-                                    conferenceDates.map { date ->
-                                        val dayInfo = dayInfoMap[date]
-                                        LargeSwitcherOption(
-                                            label1 = DateTimeFormatting.date(date),
-                                            label2 = dayInfo?.line2 ?: "",
-                                        )
-                                    }
-                                },
-                                selectedIndex = gridSelectedDayIndex,
-                                onSelect = { gridSelectedDayIndex = it },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 8.dp),
-                            )
-                        } else {
-                            Switcher(
-                                items = remember(conferenceDates) {
-                                    conferenceDates.map { DateTimeFormatting.date(it) }
-                                },
-                                shortItems = null,
-                                selectedIndex = selectedDayIndex,
-                                onSelect = { index ->
-                                    scope.launch {
-                                        val dayItemIndex = items.indexOf(DayHeaderItem(days[index]))
-                                        // Temporarily override the scroll state based selection
-                                        targetDayIndex = index
-                                        // Scroll to the item
-                                        listState.animateScrollToItem(dayItemIndex)
-                                        // Remove override, let scroll state determine the selection
-                                        targetDayIndex = null
-                                    }
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        horizontal = if (windowSize == WindowSize.Compact) 12.dp else 0.dp,
-                                        vertical = 8.dp,
-                                    )
-                            )
-                        }
+                AnimatedVisibility(!isSearch) {
+                    // Day switcher selection state calculated from the scroll state
+                    val conferenceDates = days.map { it.date }
+                    val computedDayIndex by derivedStateOf {
+                        items.asSequence()
+                            .take(listState.firstVisibleItemIndex + 1)
+                            .findLast { it is DayHeaderItem }
+                            ?.let {
+                                val visibleDate = (it as DayHeaderItem).value.date
+                                conferenceDates.indexOf(visibleDate)
+                            } ?: 0
                     }
+                    // Override for the day switcher selection
+                    var targetDayIndex by remember { mutableStateOf<Int?>(null) }
+                    val selectedDayIndex = targetDayIndex ?: computedDayIndex
 
                     if (isGridView) {
+                        LargeSwitcher(
+                            options = remember(conferenceDates, dayInfoMap) {
+                                conferenceDates.map { date ->
+                                    val dayInfo = dayInfoMap[date]
+                                    LargeSwitcherOption(
+                                        label1 = DateTimeFormatting.date(date),
+                                        label2 = dayInfo?.line2 ?: "",
+                                    )
+                                }
+                            },
+                            selectedIndex = gridSelectedDayIndex,
+                            onSelect = { gridSelectedDayIndex = it },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp, vertical = 8.dp),
+                        )
+                    } else {
+                        Switcher(
+                            items = remember(conferenceDates) {
+                                conferenceDates.map { DateTimeFormatting.date(it) }
+                            },
+                            shortItems = null,
+                            selectedIndex = selectedDayIndex,
+                            onSelect = { index ->
+                                scope.launch {
+                                    val dayItemIndex = items.indexOf(DayHeaderItem(days[index]))
+                                    // Temporarily override the scroll state based selection
+                                    targetDayIndex = index
+                                    // Scroll to the item
+                                    listState.animateScrollToItem(dayItemIndex)
+                                    // Remove override, let scroll state determine the selection
+                                    targetDayIndex = null
+                                }
+                            },
+                            modifier = Modifier
+                                .then(
+                                    if (windowSize != WindowSize.Compact)
+                                        Modifier.widthIn(max = 640.dp)
+                                    else Modifier
+                                )
+                                .fillMaxWidth()
+                                .padding(
+                                    horizontal = 12.dp,
+                                    vertical = 8.dp,
+                                )
+                        )
+                    }
+                }
+
+                Crossfade(
+                    targetState = isGridView,
+                    animationSpec = tween(300),
+                    modifier = Modifier.fillMaxSize(),
+                ) { showGrid ->
+                    if (showGrid) {
                         val gridDay = days.getOrElse(gridSelectedDayIndex) { days.first() }
-                        val venues = remember(gridDay, bookmarkFilterEnabled) {
+                        // When searching, build a map of matched sessions with highlights
+                        val searchMatches: Map<SessionId, SessionItem>? = if (isSearch) {
+                            items.filterIsInstance<SessionItem>()
+                                .associateBy { it.value.id }
+                        } else {
+                            null
+                        }
+                        val venues = remember(gridDay, bookmarkFilterEnabled, searchMatches) {
                             gridDay.timeSlots
                                 .flatMap { it.sessions }
                                 .filter { !it.isServiceEvent }
                                 .filter { !bookmarkFilterEnabled || it.isFavorite }
+                                .filter { searchMatches == null || it.id in searchMatches }
                                 .map { it.locationLine }
                                 .distinct()
                         }
@@ -321,6 +331,7 @@ fun ScheduleScreen(
                             day = gridDay,
                             venues = venues,
                             bookmarkFilterEnabled = bookmarkFilterEnabled,
+                            searchMatches = searchMatches,
                             onSession = onSession,
                             onBookmark = { sessionId, isBookmarked ->
                                 viewModel.onBookmark(sessionId, isBookmarked)
@@ -346,6 +357,8 @@ fun ScheduleScreen(
                                     selected
                                 )
                             },
+                            modifier = Modifier.fillMaxSize(),
+                            maxItemWidth = if (windowSize != WindowSize.Compact) 640.dp else null,
                         )
                     }
                 }
@@ -427,7 +440,7 @@ private fun Header(
     onGridViewToggle: (Boolean) -> Unit,
     showGridToggle: Boolean,
 ) {
-    if (showGridToggle) {
+    if (showGridToggle && LocalWindowSize.current == WindowSize.Large) {
         LargeHeader(
             bookmarkFilterEnabled = bookmarkFilterEnabled,
             onBookmarkFilter = onBookmarkFilter,
@@ -449,6 +462,9 @@ private fun Header(
             onSearchQueryChange = onSearchQueryChange,
             onClearSearch = onClearSearch,
             viewModel = viewModel,
+            isGridView = isGridView,
+            onGridViewToggle = onGridViewToggle,
+            showGridToggle = showGridToggle,
         )
     }
 }
@@ -508,6 +524,9 @@ private fun SmallHeader(
     onSearchQueryChange: (String) -> Unit,
     onClearSearch: () -> Unit,
     viewModel: ScheduleViewModel,
+    isGridView: Boolean = false,
+    onGridViewToggle: (Boolean) -> Unit = {},
+    showGridToggle: Boolean = false,
 ) {
     MainHeaderContainer(
         state = headerState,
@@ -516,6 +535,16 @@ private fun SmallHeader(
                 title = stringResource(Res.string.nav_destination_schedule),
                 startContent = startContent,
                 endContent = {
+                    if (showGridToggle) {
+                        HeaderToggleButton(
+                            options = listOf(
+                                HeaderToggleOption(UiRes.drawable.view_list_24, "List view"),
+                                HeaderToggleOption(UiRes.drawable.view_grid_24, "Grid view"),
+                            ),
+                            selectedIndex = if (isGridView) 1 else 0,
+                            onSelect = { onGridViewToggle(it == 1) },
+                        )
+                    }
                     TopMenuButton(
                         icon = UiRes.drawable.bookmark_24,
                         selected = bookmarkFilterEnabled,
@@ -569,6 +598,7 @@ private fun ScheduleList(
     filterItems: List<FilterItem> = emptyList(),
     onToggleFilter: (FilterItem, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier,
+    maxItemWidth: Dp? = null,
 ) {
     ScrollToTopHandler(listState)
     HideKeyboardOnDragHandler(listState)
@@ -577,6 +607,7 @@ private fun ScheduleList(
         state = listState,
         modifier = modifier,
         contentPadding = bottomInsetPadding(),
+        horizontalAlignment = if (maxItemWidth != null) Alignment.CenterHorizontally else Alignment.Start,
     ) {
         if (isSearch) {
             item(key = "filters") {
@@ -618,7 +649,12 @@ private fun ScheduleList(
                 }
             },
         ) { item ->
-            Box(Modifier.animateItem()) {
+            Box(
+                Modifier
+                    .then(if (maxItemWidth != null) Modifier.widthIn(max = maxItemWidth) else Modifier)
+                    .fillMaxWidth()
+                    .animateItem()
+            ) {
                 when (item) {
                     is DaySeparatorItem -> {
                         Spacer(modifier = Modifier.height(48.dp))
@@ -760,8 +796,8 @@ private fun SessionCard(
 }
 
 private val TimeLabelWidth = 72.dp
-private val MinColumnWidth = 200.dp
-private val MaxColumnWidth = 300.dp
+private val ColumnWidth = 250.dp
+private val ScrollColumns = 2
 private val ArrowButtonSize = 40.dp
 
 @Composable
@@ -769,106 +805,106 @@ private fun ScheduleGrid(
     day: Day,
     venues: List<String>,
     bookmarkFilterEnabled: Boolean,
+    searchMatches: Map<SessionId, SessionItem>?,
     onSession: (SessionId) -> Unit,
     onBookmark: (SessionId, Boolean) -> Unit,
     onPrivacyNoticeNeeded: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BoxWithConstraints(modifier) {
-        // Calculate how many columns fit given the available width
-        val availableWidth = maxWidth - TimeLabelWidth
-        val maxVisibleColumns = maxOf(1, (availableWidth / MinColumnWidth).toInt())
-        val needsPaging = venues.size > maxVisibleColumns
-        val visibleColumnCount = if (needsPaging) maxVisibleColumns else venues.size
+    val horizontalScrollState = rememberScrollState()
+    val venuesWidth = ColumnWidth * venues.size
 
-        var firstVisibleColumn by rememberSaveable(venues) { mutableStateOf(0) }
-        val maxFirstColumn = (venues.size - visibleColumnCount).coerceAtLeast(0)
-        firstVisibleColumn = firstVisibleColumn.coerceIn(0, maxFirstColumn)
+    val canScrollLeft by remember { derivedStateOf { horizontalScrollState.value > 0 } }
+    val canScrollRight by remember { derivedStateOf { horizontalScrollState.value < horizontalScrollState.maxValue } }
+    val scope = rememberCoroutineScope()
+    val scrollAmount = (ColumnWidth * ScrollColumns).value.toInt()
 
-        val visibleVenues = venues.subList(
-            firstVisibleColumn,
-            (firstVisibleColumn + visibleColumnCount).coerceAtMost(venues.size),
-        )
-
-        val maxGridWidth = TimeLabelWidth + MaxColumnWidth * visibleColumnCount +
-            (if (needsPaging) ArrowButtonSize else 0.dp)
-        val gridRowModifier = Modifier.widthIn(max = maxGridWidth)
-
-        Column(Modifier.fillMaxSize()) {
-            // Venue header row (sticky, outside LazyColumn)
+    Column(modifier.fillMaxSize()) {
+        // Venue header row (sticky, outside LazyColumn) with inverted background
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .background(KotlinConfTheme.colors.mainBackgroundInverted),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            // Left arrow button
+            Box(Modifier.width(TimeLabelWidth), contentAlignment = Alignment.Center) {
+                Icon(
+                    painter = painterResource(UiRes.drawable.arrow_left_24),
+                    contentDescription = "Scroll left",
+                    tint = KotlinConfTheme.colors.primaryTextInverted,
+                    modifier = Modifier
+                        .size(ArrowButtonSize)
+                        .clip(CircleShape)
+                        .clickable(enabled = canScrollLeft) {
+                            scope.launch {
+                                horizontalScrollState.animateScrollTo(
+                                    (horizontalScrollState.value - scrollAmount).coerceAtLeast(0)
+                                )
+                            }
+                        }
+                        .alpha(if (canScrollLeft) 1f else 0.3f)
+                        .padding(8.dp),
+                )
+            }
             Row(
-                gridRowModifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
+                Modifier
+                    .weight(1f)
+                    .horizontalScroll(horizontalScrollState, overscrollEffect = null)
+                    .width(venuesWidth)
             ) {
-                // Left arrow / spacer for time label
-                Box(Modifier.width(TimeLabelWidth), contentAlignment = Alignment.Center) {
-                    if (needsPaging && firstVisibleColumn > 0) {
-                        Icon(
-                            painter = painterResource(UiRes.drawable.arrow_left_24),
-                            contentDescription = "Previous venues",
-                            tint = KotlinConfTheme.colors.primaryText,
-                            modifier = Modifier
-                                .size(ArrowButtonSize)
-                                .clip(CircleShape)
-                                .clickable { firstVisibleColumn-- }
-                                .padding(8.dp),
-                        )
-                    }
-                }
-
-                visibleVenues.forEach { venue ->
+                venues.forEach { venue ->
                     Text(
                         text = venue,
                         style = KotlinConfTheme.typography.text2,
-                        color = KotlinConfTheme.colors.secondaryText,
+                        color = KotlinConfTheme.colors.primaryTextInverted,
                         modifier = Modifier
-                            .weight(1f)
+                            .width(ColumnWidth)
                             .padding(horizontal = 4.dp, vertical = 8.dp),
                     )
                 }
-
-                // Right arrow
-                if (needsPaging) {
-                    Box(
-                        Modifier.width(ArrowButtonSize),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        if (firstVisibleColumn < maxFirstColumn) {
-                            Icon(
-                                painter = painterResource(UiRes.drawable.arrow_right_24),
-                                contentDescription = "Next venues",
-                                tint = KotlinConfTheme.colors.primaryText,
-                                modifier = Modifier
-                                    .size(ArrowButtonSize)
-                                    .clip(CircleShape)
-                                    .clickable { firstVisibleColumn++ }
-                                    .padding(8.dp),
+            }
+            // Right arrow button
+            Icon(
+                painter = painterResource(UiRes.drawable.arrow_right_24),
+                contentDescription = "Scroll right",
+                tint = KotlinConfTheme.colors.primaryTextInverted,
+                modifier = Modifier
+                    .size(ArrowButtonSize)
+                    .clip(CircleShape)
+                    .clickable(enabled = canScrollRight) {
+                        scope.launch {
+                            horizontalScrollState.animateScrollTo(
+                                (horizontalScrollState.value + scrollAmount)
+                                    .coerceAtMost(horizontalScrollState.maxValue)
                             )
                         }
                     }
-                }
-            }
-            HorizontalDivider(
-                thickness = 1.dp,
-                color = KotlinConfTheme.colors.strokePale,
+                    .alpha(if (canScrollRight) 1f else 0.3f)
+                    .padding(8.dp),
             )
+        }
 
-            // Scrollable content
-            LazyColumn(
-                contentPadding = bottomInsetPadding(),
-            ) {
-                items(day.timeSlots, key = { it.startsAt.toString() }) { timeSlot ->
+        // Scrollable content
+        LazyColumn(
+            contentPadding = bottomInsetPadding(),
+        ) {
+            items(day.timeSlots, key = { it.startsAt.toString() }) { timeSlot ->
+                Column(Modifier.animateItem()) {
                     val (serviceEvents, allTalks) = timeSlot.sessions.partition { it.isServiceEvent }
-                    val talks = if (bookmarkFilterEnabled) allTalks.filter { it.isFavorite } else allTalks
+                    val talks = allTalks
+                        .filter { !bookmarkFilterEnabled || it.isFavorite }
+                        .filter { searchMatches == null || it.id in searchMatches }
                     val isServiceSlot = allTalks.isEmpty()
 
                     if (isServiceSlot) {
-                        ServiceEventGridRow(timeSlot, serviceEvents, needsPaging)
+                        ServiceEventGridRow(timeSlot, serviceEvents)
                     } else if (bookmarkFilterEnabled && talks.isEmpty()) {
                         Row(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
                             Text(
                                 text = DateTimeFormatting.time(timeSlot.startsAt),
-                                modifier = Modifier.width(TimeLabelWidth).padding(horizontal = 12.dp),
+                                modifier = Modifier.width(TimeLabelWidth)
+                                    .padding(horizontal = 12.dp),
                                 style = KotlinConfTheme.typography.text2,
                                 color = KotlinConfTheme.colors.secondaryText,
                             )
@@ -883,12 +919,12 @@ private fun ScheduleGrid(
                             timeSlot = timeSlot,
                             talks = talks,
                             serviceEvents = serviceEvents,
-                            venues = visibleVenues,
+                            venues = venues,
+                            searchMatches = searchMatches,
                             onSession = onSession,
                             onBookmark = onBookmark,
                             onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
-                            hasRightArrow = needsPaging,
-                            modifier = gridRowModifier,
+                            horizontalScrollState = horizontalScrollState,
                         )
                     }
                     HorizontalDivider(
@@ -905,7 +941,6 @@ private fun ScheduleGrid(
 private fun ServiceEventGridRow(
     timeSlot: TimeSlot,
     events: List<SessionCardView>,
-    hasRightArrow: Boolean,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -937,9 +972,6 @@ private fun ServiceEventGridRow(
                 modifier = Modifier.weight(1f),
             )
         }
-        if (hasRightArrow) {
-            Spacer(Modifier.width(ArrowButtonSize))
-        }
     }
 }
 
@@ -949,18 +981,18 @@ private fun TalkGridRow(
     talks: List<SessionCardView>,
     serviceEvents: List<SessionCardView>,
     venues: List<String>,
+    searchMatches: Map<SessionId, SessionItem>?,
     onSession: (SessionId) -> Unit,
     onBookmark: (SessionId, Boolean) -> Unit,
     onPrivacyNoticeNeeded: () -> Unit,
-    hasRightArrow: Boolean,
-    modifier: Modifier = Modifier,
+    horizontalScrollState: ScrollState,
 ) {
     val talksByVenue = talks.groupBy { it.locationLine }
+    val venuesWidth = ColumnWidth * venues.size
 
     Row(
-        modifier
+        Modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Max)
             .padding(vertical = 8.dp)
     ) {
         Text(
@@ -970,37 +1002,46 @@ private fun TalkGridRow(
             color = KotlinConfTheme.colors.secondaryText,
         )
 
-        venues.forEach { venue ->
-            val sessionsInVenue = talksByVenue[venue] ?: emptyList()
-            Column(
-                modifier = Modifier.weight(1f).fillMaxHeight().padding(horizontal = 4.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                sessionsInVenue.forEach { session ->
-                    GridSessionCard(
-                        session = session,
-                        onSession = onSession,
-                        onBookmark = onBookmark,
-                        onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
-                        modifier = Modifier.weight(1f),
-                    )
+        Row(
+            Modifier
+                .horizontalScroll(horizontalScrollState, overscrollEffect = null)
+                .width(venuesWidth)
+                .height(IntrinsicSize.Max)
+        ) {
+            venues.forEach { venue ->
+                val sessionsInVenue = talksByVenue[venue] ?: emptyList()
+                Column(
+                    modifier = Modifier.width(ColumnWidth).fillMaxHeight()
+                        .padding(horizontal = 4.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    sessionsInVenue.forEach { session ->
+                        val match = searchMatches?.get(session.id)
+                        GridSessionCard(
+                            session = session,
+                            titleHighlights = match?.titleHighlights ?: emptyList(),
+                            speakerHighlights = match?.speakerHighlights ?: emptyList(),
+                            onSession = onSession,
+                            onBookmark = onBookmark,
+                            onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
                 }
             }
-        }
-
-        if (hasRightArrow) {
-            Spacer(Modifier.width(ArrowButtonSize))
         }
     }
 
     if (serviceEvents.isNotEmpty()) {
-        ServiceEventGridRow(timeSlot, serviceEvents, hasRightArrow)
+        ServiceEventGridRow(timeSlot, serviceEvents)
     }
 }
 
 @Composable
 private fun GridSessionCard(
     session: SessionCardView,
+    titleHighlights: List<IntRange>,
+    speakerHighlights: List<IntRange>,
     onSession: (SessionId) -> Unit,
     onBookmark: (SessionId, Boolean) -> Unit,
     onPrivacyNoticeNeeded: () -> Unit,
@@ -1013,13 +1054,13 @@ private fun GridSessionCard(
     }
     TalkCard(
         title = session.title,
-        titleHighlights = emptyList(),
+        titleHighlights = titleHighlights,
         bookmarked = session.isFavorite,
         onBookmark = { isBookmarked -> onBookmark(session.id, isBookmarked) },
-        tags = emptySet(),
+        tags = session.tags,
         tagHighlights = emptyList(),
         speakers = session.speakerLine,
-        speakerHighlights = emptyList(),
+        speakerHighlights = speakerHighlights,
         location = "",
         lightning = session.isLightning,
         time = session.shortTimeline,
@@ -1030,5 +1071,6 @@ private fun GridSessionCard(
         modifier = modifier.fillMaxWidth().fillMaxHeight(),
         stretchContent = true,
         titleMaxLines = Int.MAX_VALUE,
+        speakerMaxLines = Int.MAX_VALUE,
     )
 }

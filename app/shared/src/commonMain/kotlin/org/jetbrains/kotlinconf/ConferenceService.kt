@@ -182,6 +182,12 @@ class ConferenceService(
         scope.launch { applicationStorage.setTheme(theme) }
     }
 
+    fun isGridViewPreferred(): Flow<Boolean> = applicationStorage.isGridViewPreferred()
+
+    fun setGridViewPreferred(value: Boolean) {
+        scope.launch { applicationStorage.setGridViewPreferred(value) }
+    }
+
     suspend fun loadConferenceData() {
         val currentYearGraph = currentYearGraph.value ?: return
         val storage = currentYearGraph.storage

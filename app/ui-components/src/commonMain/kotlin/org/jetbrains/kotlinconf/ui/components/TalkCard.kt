@@ -113,7 +113,8 @@ fun TalkCard(
     feedbackContent: (@Composable () -> Unit)?,
     modifier: Modifier = Modifier,
     stretchContent: Boolean = false,
-    titleMaxLines: Int = 2,
+    titleMaxLines: Int = Int.MAX_VALUE,
+    speakerMaxLines: Int = Int.MAX_VALUE,
 ) {
     val backgroundColor by animateColorAsState(
         if (status == TalkStatus.Past) KotlinConfTheme.colors.cardBackgroundPast
@@ -154,6 +155,7 @@ fun TalkCard(
             speakerHighlights = speakerHighlights,
             status = status,
             titleMaxLines = titleMaxLines,
+            speakerMaxLines = speakerMaxLines,
             modifier = if (stretchContent) Modifier.weight(1f) else Modifier,
         )
         // TODO BLOCKER double-check if removing this weight is correct
@@ -201,7 +203,8 @@ private fun TopBlock(
     speakers: String,
     speakerHighlights: List<IntRange>,
     status: TalkStatus,
-    titleMaxLines: Int = 2,
+    titleMaxLines: Int = Int.MAX_VALUE,
+    speakerMaxLines: Int = Int.MAX_VALUE,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -269,7 +272,7 @@ private fun TopBlock(
             text = buildHighlightedString(speakers, speakerHighlights),
             color = KotlinConfTheme.colors.secondaryText,
             style = KotlinConfTheme.typography.text2,
-            maxLines = 1,
+            maxLines = speakerMaxLines,
         )
     }
 }
