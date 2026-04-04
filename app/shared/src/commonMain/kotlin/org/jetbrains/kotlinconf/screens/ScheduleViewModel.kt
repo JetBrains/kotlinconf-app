@@ -108,8 +108,7 @@ class ScheduleViewModel(
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyMap())
 
     val isGridViewPreferred: StateFlow<Boolean> = service.isGridViewPreferred()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
-
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
     fun setGridViewPreferred(value: Boolean) {
         service.setGridViewPreferred(value)
     }

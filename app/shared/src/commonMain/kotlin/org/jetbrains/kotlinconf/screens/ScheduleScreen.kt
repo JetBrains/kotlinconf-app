@@ -5,10 +5,10 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -52,6 +52,7 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -509,14 +510,14 @@ private fun LargeHeader(
             TopMenuButton(
                 icon = UiRes.drawable.bookmark_24,
                 selected = bookmarkFilterEnabled,
-                onToggle = { onBookmarkFilter(it) },
+                onToggle = onBookmarkFilter,
                 contentDescription = stringResource(Res.string.schedule_action_filter_bookmarked),
                 large = true,
             )
 
             LargeSearchBar(
                 searchValue = searchQuery,
-                onSearchValueChange = { onSearchQueryChange(it) },
+                onSearchValueChange = onSearchQueryChange,
                 onClear = onClearSearch,
                 hasAdditionalInputs = filterItems.any { it.isSelected },
                 modifier = Modifier.width(370.dp),
@@ -767,11 +768,7 @@ private fun SessionCard(
     tagHighlights: List<String> = emptyList(),
     speakerHighlights: List<IntRange> = emptyList(),
 ) {
-    val status = when (session.state) {
-        SessionState.Live -> TalkStatus.Live
-        SessionState.Past -> TalkStatus.Past
-        SessionState.Upcoming -> TalkStatus.Upcoming
-    }
+    val status = session.state.toTalkStatus()
     TalkCard(
         title = session.title,
         titleHighlights = titleHighlights,
@@ -803,6 +800,12 @@ private fun SessionCard(
     )
 }
 
+private fun SessionState.toTalkStatus(): TalkStatus = when (this) {
+    SessionState.Live -> TalkStatus.Live
+    SessionState.Past -> TalkStatus.Past
+    SessionState.Upcoming -> TalkStatus.Upcoming
+}
+
 private val TimeLabelWidth = 72.dp
 private val ColumnWidth = 250.dp
 private val ScrollColumns = 2
@@ -825,7 +828,8 @@ private fun ScheduleGrid(
     val canScrollLeft by remember { derivedStateOf { horizontalScrollState.value > 0 } }
     val canScrollRight by remember { derivedStateOf { horizontalScrollState.value < horizontalScrollState.maxValue } }
     val scope = rememberCoroutineScope()
-    val scrollAmount = (ColumnWidth * ScrollColumns).value.toInt()
+    val density = LocalDensity.current
+    val scrollAmount = with(density) { (ColumnWidth * ScrollColumns).toPx().toInt() }
 
     Column(modifier.fillMaxSize()) {
         // Venue header row (sticky, outside LazyColumn) with inverted background
@@ -1072,11 +1076,7 @@ private fun GridSessionCard(
     onPrivacyNoticeNeeded: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val status = when (session.state) {
-        SessionState.Live -> TalkStatus.Live
-        SessionState.Past -> TalkStatus.Past
-        SessionState.Upcoming -> TalkStatus.Upcoming
-    }
+    val status = session.state.toTalkStatus()
     TalkCard(
         title = session.title,
         titleHighlights = titleHighlights,

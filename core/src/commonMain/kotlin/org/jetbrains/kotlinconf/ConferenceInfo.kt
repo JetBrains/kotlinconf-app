@@ -70,7 +70,7 @@ data class DayInfo(
     val date: LocalDate,
     val line1: String,
     val line2: String,
-    val combinedLine: String = "$line1 $line2",
+    val combinedLine: String,
 )
 
 @Serializable

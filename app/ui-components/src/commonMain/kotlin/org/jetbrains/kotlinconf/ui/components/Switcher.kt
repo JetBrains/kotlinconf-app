@@ -26,8 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.LocalAnimatedContentScope
-import org.jetbrains.kotlinconf.ui.theme.LocalSharedTransitionScope
+import org.jetbrains.kotlinconf.ui.theme.rememberSharedBoundsModifier
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 
@@ -43,25 +42,12 @@ private fun SwitcherItem(
     sharedTransitionKey: String? = null,
     index: Int = 0,
 ) {
-    val sharedTransitionScope = LocalSharedTransitionScope.current
-    val animatedContentScope = LocalAnimatedContentScope.current
-
-    val containerMod = if (sharedTransitionKey != null && sharedTransitionScope != null && animatedContentScope != null) {
-        with(sharedTransitionScope) {
-            Modifier.sharedBounds(
-                rememberSharedContentState("$sharedTransitionKey-$index-container"),
-                animatedContentScope,
-            )
-        }
+    val containerMod = if (sharedTransitionKey != null) {
+        rememberSharedBoundsModifier("$sharedTransitionKey-$index-container")
     } else Modifier
 
-    val textMod = if (sharedTransitionKey != null && sharedTransitionScope != null && animatedContentScope != null) {
-        with(sharedTransitionScope) {
-            Modifier.sharedBounds(
-                rememberSharedContentState("$sharedTransitionKey-$index-text"),
-                animatedContentScope,
-            )
-        }
+    val textMod = if (sharedTransitionKey != null) {
+        rememberSharedBoundsModifier("$sharedTransitionKey-$index-text")
     } else Modifier
 
     val backgroundColor by animateColorAsState(

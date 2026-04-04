@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
@@ -14,7 +15,6 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,7 +60,7 @@ fun App(
             }
 
             val containerSize = LocalWindowInfo.current.containerDpSize
-            androidx.compose.foundation.text.BasicText(
+            BasicText(
                 text = "${containerSize.width.value.toInt()} × ${containerSize.height.value.toInt()} dp",
                 style = androidx.compose.ui.text.TextStyle(
                     color = Color.White,
@@ -76,7 +76,7 @@ fun App(
     }
 }
 
-public val LocalAppGraph: ProvidableCompositionLocal<AppGraph> =
+val LocalAppGraph: ProvidableCompositionLocal<AppGraph> =
     staticCompositionLocalOf {
         error("No AppGraph registered")
     }
