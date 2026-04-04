@@ -255,15 +255,11 @@ fun ScheduleScreen(
                     var targetDayIndex by remember { mutableStateOf<Int?>(null) }
                     val selectedDayIndex = targetDayIndex ?: computedDayIndex
 
-                    // Sync day selection between list and grid
-                    if (!isGridView) {
-                        LaunchedEffect(computedDayIndex) {
-                            gridSelectedDayIndex = computedDayIndex
-                        }
-                    }
-                    // When switching to list view, scroll to the grid's selected day
+                    // Sync day selection when switching between list and grid
                     LaunchedEffect(isGridView) {
-                        if (!isGridView && gridSelectedDayIndex < days.size) {
+                        if (isGridView) {
+                            gridSelectedDayIndex = computedDayIndex
+                        } else if (gridSelectedDayIndex < days.size && gridSelectedDayIndex != computedDayIndex) {
                             val dayItemIndex = items.indexOf(DayHeaderItem(days[gridSelectedDayIndex]))
                             if (dayItemIndex >= 0) {
                                 listState.scrollToItem(dayItemIndex)

@@ -23,7 +23,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.Brand
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.rememberSharedBoundsModifier
+import org.jetbrains.kotlinconf.ui.theme.sharedElementModifier
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
 import org.jetbrains.kotlinconf.ui.utils.WidePreviewLightDark
@@ -41,11 +41,11 @@ private fun LargeSwitcherItem(
     index: Int = 0,
 ) {
     val containerMod = if (sharedTransitionKey != null) {
-        rememberSharedBoundsModifier("$sharedTransitionKey-$index-container")
+        sharedElementModifier("$sharedTransitionKey-$index-container")
     } else Modifier
 
     val textMod = if (sharedTransitionKey != null) {
-        rememberSharedBoundsModifier("$sharedTransitionKey-$index-text")
+        sharedElementModifier("$sharedTransitionKey-$index-text")
     } else Modifier
 
     val gradientAlpha by animateFloatAsState(

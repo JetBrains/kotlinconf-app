@@ -19,12 +19,12 @@ val LocalSharedTransitionScope = compositionLocalOf<SharedTransitionScope?> { nu
 val LocalAnimatedContentScope = compositionLocalOf<AnimatedContentScope?> { null }
 
 @Composable
-fun rememberSharedBoundsModifier(key: String): Modifier {
+fun sharedElementModifier(key: String): Modifier {
     val sharedTransitionScope = LocalSharedTransitionScope.current
     val animatedContentScope = LocalAnimatedContentScope.current
     return if (sharedTransitionScope != null && animatedContentScope != null) {
         with(sharedTransitionScope) {
-            Modifier.sharedBounds(
+            Modifier.sharedElement(
                 rememberSharedContentState(key),
                 animatedContentScope,
             )

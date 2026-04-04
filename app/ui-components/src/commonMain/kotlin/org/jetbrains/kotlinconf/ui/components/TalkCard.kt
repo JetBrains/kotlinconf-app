@@ -113,8 +113,6 @@ fun TalkCard(
     feedbackContent: (@Composable () -> Unit)?,
     modifier: Modifier = Modifier,
     stretchContent: Boolean = false,
-    titleMaxLines: Int = Int.MAX_VALUE,
-    speakerMaxLines: Int = Int.MAX_VALUE,
 ) {
     val backgroundColor by animateColorAsState(
         if (status == TalkStatus.Past) KotlinConfTheme.colors.cardBackgroundPast
@@ -154,8 +152,6 @@ fun TalkCard(
             speakers = speakers,
             speakerHighlights = speakerHighlights,
             status = status,
-            titleMaxLines = titleMaxLines,
-            speakerMaxLines = speakerMaxLines,
             modifier = if (stretchContent) Modifier.weight(1f) else Modifier,
         )
         // TODO BLOCKER double-check if removing this weight is correct
@@ -203,8 +199,6 @@ private fun TopBlock(
     speakers: String,
     speakerHighlights: List<IntRange>,
     status: TalkStatus,
-    titleMaxLines: Int = Int.MAX_VALUE,
-    speakerMaxLines: Int = Int.MAX_VALUE,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -217,7 +211,6 @@ private fun TopBlock(
                 tags = tags,
                 textColor = textColor,
                 status = status,
-                maxLines = titleMaxLines,
                 modifier = Modifier
                     .weight(1f)
                     .semantics { heading() }
@@ -272,7 +265,6 @@ private fun TopBlock(
             text = buildHighlightedString(speakers, speakerHighlights),
             color = KotlinConfTheme.colors.secondaryText,
             style = KotlinConfTheme.typography.text2,
-            maxLines = speakerMaxLines,
         )
     }
 }
@@ -287,7 +279,6 @@ private fun TalkTitle(
     tags: Set<String>,
     textColor: Color,
     status: TalkStatus,
-    maxLines: Int,
     modifier: Modifier,
 ) {
     val isCodelab = "Codelab" in tags
@@ -312,7 +303,6 @@ private fun TalkTitle(
         },
         style = KotlinConfTheme.typography.h3,
         color = textColor,
-        maxLines = maxLines,
         inlineContent = if (hasIcon) talkCardTitleInlineContent(status) else emptyMap(),
         modifier = modifier,
     )
