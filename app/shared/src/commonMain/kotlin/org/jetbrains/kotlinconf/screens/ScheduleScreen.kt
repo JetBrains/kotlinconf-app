@@ -8,15 +8,15 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -36,6 +36,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -48,11 +49,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -219,10 +220,6 @@ fun ScheduleScreen(
             onGridViewToggle = { viewModel.setGridViewPreferred(it) },
             showGridToggle = windowSize == WindowSize.Large,
         )
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = KotlinConfTheme.colors.strokePale,
-        )
 
         ErrorLoadingContent(
             state = state,
@@ -239,7 +236,7 @@ fun ScheduleScreen(
             ) {
                 val dayInfoMap by viewModel.dayInfoMap.collectAsStateWithLifecycle()
 
-                AnimatedVisibility(!isSearch) {
+                AnimatedVisibility(!isSearch || isGridView) {
                     // Day switcher selection state calculated from the scroll state
                     val conferenceDates = days.map { it.date }
                     val computedDayIndex by derivedStateOf {
@@ -260,7 +257,8 @@ fun ScheduleScreen(
                         if (isGridView) {
                             gridSelectedDayIndex = computedDayIndex
                         } else if (gridSelectedDayIndex < days.size && gridSelectedDayIndex != computedDayIndex) {
-                            val dayItemIndex = items.indexOf(DayHeaderItem(days[gridSelectedDayIndex]))
+                            val dayItemIndex =
+                                items.indexOf(DayHeaderItem(days[gridSelectedDayIndex]))
                             if (dayItemIndex >= 0) {
                                 listState.scrollToItem(dayItemIndex)
                             }
@@ -301,7 +299,8 @@ fun ScheduleScreen(
                                     selectedIndex = selectedDayIndex,
                                     onSelect = { index ->
                                         scope.launch {
-                                            val dayItemIndex = items.indexOf(DayHeaderItem(days[index]))
+                                            val dayItemIndex =
+                                                items.indexOf(DayHeaderItem(days[index]))
                                             targetDayIndex = index
                                             listState.animateScrollToItem(dayItemIndex)
                                             targetDayIndex = null
@@ -357,7 +356,6 @@ fun ScheduleScreen(
                             onBookmark = { sessionId, isBookmarked ->
                                 viewModel.onBookmark(sessionId, isBookmarked)
                             },
-                            onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
                         )
                     } else {
                         val tags by viewModel.filterItems.collectAsStateWithLifecycle()
@@ -447,7 +445,7 @@ private val LazyListState.lastVisibleItemIndex
     get() = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
 
 @Composable
-private fun Header(
+private fun ColumnScope.Header(
     startContent: @Composable RowScope.() -> Unit,
     headerState: MainHeaderContainerState,
     onHeaderStateChange: (MainHeaderContainerState) -> Unit,
@@ -483,6 +481,10 @@ private fun Header(
             onSearchQueryChange = onSearchQueryChange,
             onClearSearch = onClearSearch,
             viewModel = viewModel,
+        )
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = KotlinConfTheme.colors.strokePale,
         )
     }
 }
@@ -802,10 +804,19 @@ private fun SessionState.toTalkStatus(): TalkStatus = when (this) {
     SessionState.Upcoming -> TalkStatus.Upcoming
 }
 
-private val TimeLabelWidth = 72.dp
+private val TimeLabelWidth = 96.dp
 private val ColumnWidth = 250.dp
 private val ScrollColumns = 2
-private val ArrowButtonSize = 40.dp
+
+@Composable
+private fun GridTimeLabel(timeSlot: TimeSlot) {
+    Text(
+        text = "${DateTimeFormatting.time(timeSlot.startsAt)} –\n${DateTimeFormatting.time(timeSlot.endsAt)}",
+        modifier = Modifier.width(TimeLabelWidth).padding(10.dp).padding(start = 14.dp),
+        style = KotlinConfTheme.typography.text2,
+        color = KotlinConfTheme.colors.secondaryText,
+    )
+}
 
 @Composable
 private fun ScheduleGrid(
@@ -815,7 +826,6 @@ private fun ScheduleGrid(
     searchMatches: Map<SessionId, SessionItem>?,
     onSession: (SessionId) -> Unit,
     onBookmark: (SessionId, Boolean) -> Unit,
-    onPrivacyNoticeNeeded: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val horizontalScrollState = rememberScrollState()
@@ -832,54 +842,54 @@ private fun ScheduleGrid(
         Row(
             Modifier
                 .fillMaxWidth()
-                .background(KotlinConfTheme.colors.mainBackgroundInverted),
+                .padding(vertical = 12.dp)
+                .background(KotlinConfTheme.colors.tooltipBackground),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // Left arrow button
-            Box(Modifier.width(TimeLabelWidth), contentAlignment = Alignment.Center) {
-                Icon(
-                    painter = painterResource(UiRes.drawable.arrow_left_24),
-                    contentDescription = "Scroll left",
-                    tint = KotlinConfTheme.colors.primaryTextInverted,
-                    modifier = Modifier
-                        .size(ArrowButtonSize)
-                        .clip(CircleShape)
-                        .clickable(enabled = canScrollLeft) {
-                            scope.launch {
-                                horizontalScrollState.animateScrollTo(
-                                    (horizontalScrollState.value - scrollAmount).coerceAtLeast(0)
-                                )
-                            }
+            Icon(
+                painter = painterResource(UiRes.drawable.arrow_left_24),
+                contentDescription = "Scroll left",
+                tint = KotlinConfTheme.colors.primaryTextInverted,
+                modifier = Modifier
+                    .clickable(enabled = canScrollLeft) {
+                        scope.launch {
+                            horizontalScrollState.animateScrollTo(
+                                (horizontalScrollState.value - scrollAmount).coerceAtLeast(0)
+                            )
                         }
-                        .alpha(if (canScrollLeft) 1f else 0.3f)
-                        .padding(8.dp),
-                )
-            }
+                    }
+                    .background(KotlinConfTheme.colors.mainBackgroundInverted)
+                    .alpha(if (canScrollLeft) 1f else 0.3f)
+                    .padding(8.dp)
+                    .size(24.dp),
+            )
+            Spacer(Modifier.width(72.dp))
             Row(
                 Modifier
                     .weight(1f)
                     .horizontalScroll(horizontalScrollState, overscrollEffect = null)
+                    .padding(vertical = 10.dp)
                     .width(venuesWidth)
             ) {
                 venues.forEach { venue ->
                     Text(
                         text = venue,
-                        style = KotlinConfTheme.typography.text2,
+                        style = KotlinConfTheme.typography.h4,
                         color = KotlinConfTheme.colors.primaryTextInverted,
                         modifier = Modifier
                             .width(ColumnWidth)
-                            .padding(horizontal = 4.dp, vertical = 8.dp),
+                            .padding(horizontal = 4.dp),
                     )
                 }
             }
             // Right arrow button
+            Spacer(Modifier.width(72.dp))
             Icon(
                 painter = painterResource(UiRes.drawable.arrow_right_24),
                 contentDescription = "Scroll right",
                 tint = KotlinConfTheme.colors.primaryTextInverted,
                 modifier = Modifier
-                    .size(ArrowButtonSize)
-                    .clip(CircleShape)
                     .clickable(enabled = canScrollRight) {
                         scope.launch {
                             horizontalScrollState.animateScrollTo(
@@ -888,8 +898,10 @@ private fun ScheduleGrid(
                             )
                         }
                     }
+                    .background(KotlinConfTheme.colors.mainBackgroundInverted)
                     .alpha(if (canScrollRight) 1f else 0.3f)
-                    .padding(8.dp),
+                    .padding(8.dp)
+                    .size(24.dp),
             )
         }
 
@@ -909,13 +921,7 @@ private fun ScheduleGrid(
                         ServiceEventGridRow(timeSlot, serviceEvents, horizontalScrollState)
                     } else if (bookmarkFilterEnabled && talks.isEmpty()) {
                         Row(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-                            Text(
-                                text = DateTimeFormatting.time(timeSlot.startsAt),
-                                modifier = Modifier.width(TimeLabelWidth)
-                                    .padding(horizontal = 12.dp),
-                                style = KotlinConfTheme.typography.text2,
-                                color = KotlinConfTheme.colors.secondaryText,
-                            )
+                            GridTimeLabel(timeSlot)
                             Text(
                                 stringResource(Res.string.schedule_label_no_bookmarks),
                                 color = KotlinConfTheme.colors.noteText,
@@ -931,7 +937,6 @@ private fun ScheduleGrid(
                             searchMatches = searchMatches,
                             onSession = onSession,
                             onBookmark = onBookmark,
-                            onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
                             horizontalScrollState = horizontalScrollState,
                         )
                     }
@@ -955,12 +960,7 @@ private fun ServiceEventGridRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Text(
-            text = DateTimeFormatting.time(timeSlot.startsAt),
-            modifier = Modifier.width(TimeLabelWidth).padding(horizontal = 12.dp, vertical = 8.dp),
-            style = KotlinConfTheme.typography.text2,
-            color = KotlinConfTheme.colors.secondaryText,
-        )
+        GridTimeLabel(timeSlot)
         BoxWithConstraints(Modifier.weight(1f)) {
             val availableWidth = maxWidth
             Row(
@@ -1012,19 +1012,13 @@ private fun TalkGridRow(
     searchMatches: Map<SessionId, SessionItem>?,
     onSession: (SessionId) -> Unit,
     onBookmark: (SessionId, Boolean) -> Unit,
-    onPrivacyNoticeNeeded: () -> Unit,
     horizontalScrollState: ScrollState,
 ) {
     val talksByVenue = talks.groupBy { it.locationLine }
     val venuesWidth = ColumnWidth * venues.size
 
     Row(Modifier.fillMaxWidth()) {
-        Text(
-            text = DateTimeFormatting.time(timeSlot.startsAt),
-            modifier = Modifier.width(TimeLabelWidth).padding(horizontal = 12.dp, vertical = 8.dp),
-            style = KotlinConfTheme.typography.text2,
-            color = KotlinConfTheme.colors.secondaryText,
-        )
+        GridTimeLabel(timeSlot)
 
         Row(
             Modifier
@@ -1048,7 +1042,6 @@ private fun TalkGridRow(
                             speakerHighlights = match?.speakerHighlights ?: emptyList(),
                             onSession = onSession,
                             onBookmark = onBookmark,
-                            onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
                             modifier = Modifier.weight(1f),
                         )
                     }
@@ -1069,7 +1062,6 @@ private fun GridSessionCard(
     speakerHighlights: List<IntRange>,
     onSession: (SessionId) -> Unit,
     onBookmark: (SessionId, Boolean) -> Unit,
-    onPrivacyNoticeNeeded: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val status = session.state.toTalkStatus()
@@ -1091,7 +1083,5 @@ private fun GridSessionCard(
         feedbackContent = null,
         modifier = modifier.fillMaxWidth().fillMaxHeight(),
         stretchContent = true,
-        titleMaxLines = Int.MAX_VALUE,
-        speakerMaxLines = Int.MAX_VALUE,
     )
 }
