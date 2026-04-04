@@ -19,8 +19,8 @@ fun windowSize(): WindowSize {
     val width = containerSize.width
     val height = containerSize.height
     return when {
-        width > 1180.dp && height >= 600.dp -> WindowSize.Large
-        width > 600.dp && height >= 480.dp -> WindowSize.Medium
+        width >= 1180.dp && height >= 600.dp -> WindowSize.Large
+        width >= 600.dp && height >= 480.dp -> WindowSize.Medium
         else -> WindowSize.Compact
     }
 }
