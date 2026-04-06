@@ -1,0 +1,154 @@
+{
+  "categories": [
+    {
+      "id": "creativity",
+      "title": "Creativity",
+      "nominees": [
+        {
+          "id": "chris-horner",
+          "name": "Chris Horner",
+          "photoUrl": "https://kotlinconf.com/static/fc99e3664ef3ad72bd5210819971bbd2/4b99c/chris-horner.jpg",
+          "bio": "A design driven developer, Chris likes building the best experiences he can. He currently works on Design Systems at Cash App. An author of Persona IM - a reimplementation of the instant messaging app seen in Persona 5 for Android using Compose UI.",
+          "description": "",
+          "winner": false
+        },
+        {
+          "id": "james-cullimore",
+          "name": "James Cullimore",
+          "photoUrl": "https://kotlinconf.com/static/7999f0a733d395a5e45c3e140b96f334/4b99c/james-cullimore.jpg",
+          "bio": "Software and mobile developer (Java, Kotlin, Android, Fullstack). Open source creator (StreamingYorkie, WiFiWizard, DontGoToBed). Built apps like hansgrohe home and lexoffice. Freelancer, Android instructor, writer, MMA practitioner.",
+          "description": "",
+          "winner": false
+        },
+        {
+          "id": "nicole-terc",
+          "name": "Nicole Terc",
+          "photoUrl": "https://kotlinconf.com/static/769a32f30ad78c18b0ef7cd947dd3bf1/5deed/nicole-terc.jpg",
+          "bio": "Mexican that self taught herself to code. Nicole has been fooling around with the mobile ecosystem for more than 10 years. She likes making things move and shine on the screen; and then talk about it. Other passions are games, stories and sheep!",
+          "description": "",
+          "winner": false
+        }
+      ]
+    },
+    {
+      "id": "online-presence",
+      "title": "Online Presence",
+      "nominees": [
+        {
+          "id": "ivan-canet",
+          "name": "Ivan Canet",
+          "photoUrl": "https://kotlinconf.com/static/260697c8890ed07134b46cd1267ad699/5deed/ivan-canet.jpg",
+          "bio": "Ivan started learning Kotlin 2017 with the intention of sharing code between Android and web clients via KotlinJS. Ivan deployed his first KotlinJS application to production in 2022. His main pastime is creating Kotlin Multiplatform libraries.",
+          "description": "",
+          "winner": false
+        },
+        {
+          "id": "jaewoong-eum",
+          "name": "Jaewoong Eum",
+          "photoUrl": "https://kotlinconf.com/static/a705b33eff9017abaed0dc28005027d6/b2476/jaewoong-eum.png",
+          "bio": "GDE for Android & Firebase (prev Kotlin), a book author, and currently works as a Senior Developer Advocate & Engineer at RevenueCat. Created over 100 open-source libraries and projects, which have achieved +15 million downloads annually.",
+          "description": "",
+          "winner": false
+        },
+        {
+          "id": "kyriakos-georgiopoulos",
+          "name": "Kyriakos Georgiopoulos",
+          "photoUrl": "https://kotlinconf.com/static/922a292d1d3381d9914c70cb7dd3a4e3/5deed/kyriakos-georgiopoulos.jpg",
+          "bio": "Staff Android Engineer at Skroutz (Greece) with 11+ years of experience. Kyriakos builds server-driven UIs and advanced Jetpack Compose animations, shares weekly content with 9K+ followers, and contributes through mentoring and public speaking.",
+          "description": "",
+          "winner": false
+        }
+      ]
+    },
+    {
+      "id": "in-person-presence",
+      "title": "In-Person Presence",
+      "nominees": [
+        {
+          "id": "armando-picon",
+          "name": "Armando Picon",
+          "photoUrl": "https://kotlinconf.com/static/db7f56456e839cb7d0e71ae59e3ad015/6f8d7/armando-picon.jpg",
+          "bio": "Peruvian mobile engineer based in Chile. Building software since 2008, mobile since 2016. Using Kotlin since 2015 (pre-1.0) and organizing meetups to help more devs adopt Kotlin and Kotlin Multiplatform.",
+          "description": "",
+          "winner": false
+        },
+        {
+          "id": "mohi-us-sunnat",
+          "name": "Mohi Us Sunnat",
+          "photoUrl": "https://kotlinconf.com/static/ebdd43e39a66514bd95337471857222c/4b99c/mohi-us-sunnat.jpg",
+          "bio": "Mohi builds apps with Kotlin, Compose, and KMP. He mentors and teaches Kotlin, organizes Droidcon Bangladesh, and leads the Kotlin User Group Bangladesh. He's also an author of a Kotlin-focused book.",
+          "description": "",
+          "winner": false
+        },
+        {
+          "id": "yinlong-liu",
+          "name": "Yinlong Liu",
+          "photoUrl": "https://kotlinconf.com/static/2b7e4ef413bb81a7fc6ae06a256b5aa6/f0f05/yinlong-liu.jpg",
+          "bio": "A KMP developer and advocate from China. Yinlong has been using KMP since 2019 and has actively promoted its adoption in China, establishing WeChat groups for communication and influencing several Chinese companies to use KMP/CMP.",
+          "description": "",
+          "winner": false
+        }
+      ]
+    },
+    {
+      "id": "education",
+      "title": "Education",
+      "nominees": [
+        {
+          "id": "dave-leeds",
+          "name": "Dave Leeds",
+          "photoUrl": "https://kotlinconf.com/static/689c6eed486387b20371058cf5c09fb4/8cbd5/dave-leeds.webp",
+          "bio": "Dave loves to teach about Kotlin through creative means, including hand-drawn cartoon illustrations and storytelling.",
+          "description": "",
+          "winner": false
+        },
+        {
+          "id": "jaesung-park",
+          "name": "Jaesung Park",
+          "photoUrl": "https://kotlinconf.com/static/ead0654a58045f7d634e90271dec37dc/a2fc5/jaesung-park.jpg",
+          "bio": "As a senior Kotlin educator with 7 years of experience, Jaesung designs curricula and trains educators, helping developers grow and build better software. Jaesung cares deeply about writing adaptable, maintainable software.",
+          "description": "",
+          "winner": false
+        },
+        {
+          "id": "matheus-leandro-ferreira",
+          "name": "Matheus Leandro Ferreira",
+          "photoUrl": "https://kotlinconf.com/static/c7426d124f04bec718d955bdf2906a3c/d0cc6/matheus-leandro-ferreira.jpg",
+          "bio": "University professor, senior software developer, and educator. Specialist in Java & Kotlin, Spring Boot, Angular, PostgreSQL, and emerging technologies. Over 21 years in software development and 11+ years in higher education.",
+          "description": "",
+          "winner": false
+        }
+      ]
+    },
+    {
+      "id": "positive-societal-impact",
+      "title": "Positive Societal Impact",
+      "nominees": [
+        {
+          "id": "eeva-jonna-panula",
+          "name": "Eeva-Jonna Panula",
+          "photoUrl": "https://kotlinconf.com/static/90abae430e30322bf5b05458ef252a72/123c6/eevis-panula.png",
+          "bio": "Eeva-Jonna (Eevis) is an accessibility specialist, senior Android developer, and Android GDE passionate about inclusive development. They share knowledge through speaking, writing, and their Inclusive Android Apps newsletter.",
+          "description": "",
+          "winner": false
+        },
+        {
+          "id": "james-cullimore",
+          "name": "James Cullimore",
+          "photoUrl": "https://kotlinconf.com/static/7999f0a733d395a5e45c3e140b96f334/4b99c/james-cullimore.jpg",
+          "bio": "Software and mobile developer (Java, Kotlin, Android, Fullstack). Open source creator (StreamingYorkie, WiFiWizard, DontGoToBed). Built apps like hansgrohe home and lexoffice. Freelancer, Android instructor, writer, MMA practitioner.",
+          "description": "",
+          "winner": false
+        },
+        {
+          "id": "vanessa-johnson",
+          "name": "Vanessa Johnson",
+          "photoUrl": "https://kotlinconf.com/static/a231bcb35ece4c9c3f410729f0cce5df/3e006/vanessa-johnson.png",
+          "bio": "Android Engineer focused on accessibility, sharing practical Android learnings, and building an open source project that explores shifting accessibility left through API design, automation, and better developer workflows.",
+          "description": "",
+          "winner": false
+        }
+      ]
+    }
+  ]
+}
