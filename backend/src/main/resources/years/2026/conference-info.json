@@ -90,6 +90,14 @@
           "logoUrlLight": "partner-logos/xebia-light.svg",
           "logoUrlDark": "partner-logos/xebia-dark.svg",
           "url": "https://xebia.com/"
+        },
+        {
+          "id": "moderne",
+          "name": "Moderne",
+          "description": "Moderne builds the tools AI coding agents use to understand codebases, find relevant code, and safely execute large-scale changes across thousands of repositories. Powered by OpenRewrite, Moderne enables fast, reliable modernization at enterprise scale.",
+          "logoUrlLight": "partner-logos/moderne-light.svg",
+          "logoUrlDark": "partner-logos/moderne-dark.svg",
+          "url": "https://www.coderemix.ai?utm_source=26_kotlinconf&utm_medium=conference&utm_campaign=26_kotlinconf"
         }
       ]
     },
