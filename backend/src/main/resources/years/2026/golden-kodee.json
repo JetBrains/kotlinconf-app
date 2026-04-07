@@ -13,7 +13,7 @@
           "winner": false
         },
         {
-          "id": "james-cullimore",
+          "id": "james-cullimore-1",
           "name": "James Cullimore",
           "photoUrl": "https://kotlinconf.com/static/7999f0a733d395a5e45c3e140b96f334/4b99c/james-cullimore.jpg",
           "bio": "Software and mobile developer (Java, Kotlin, Android, Fullstack). Open source creator (StreamingYorkie, WiFiWizard, DontGoToBed). Built apps like hansgrohe home and lexoffice. Freelancer, Android instructor, writer, MMA practitioner.",
@@ -133,7 +133,7 @@
           "winner": false
         },
         {
-          "id": "james-cullimore",
+          "id": "james-cullimore-2",
           "name": "James Cullimore",
           "photoUrl": "https://kotlinconf.com/static/7999f0a733d395a5e45c3e140b96f334/4b99c/james-cullimore.jpg",
           "bio": "Software and mobile developer (Java, Kotlin, Android, Fullstack). Open source creator (StreamingYorkie, WiFiWizard, DontGoToBed). Built apps like hansgrohe home and lexoffice. Freelancer, Android instructor, writer, MMA practitioner.",
