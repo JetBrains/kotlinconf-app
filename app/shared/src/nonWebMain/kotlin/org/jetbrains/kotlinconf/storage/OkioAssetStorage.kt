@@ -1,7 +1,6 @@
 package org.jetbrains.kotlinconf.storage
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -17,7 +16,6 @@ import org.jetbrains.kotlinconf.di.YearScope
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
 
-@Inject
 @ContributesBinding(YearScope::class)
 @SingleIn(YearScope::class)
 class OkioAssetStorage(
