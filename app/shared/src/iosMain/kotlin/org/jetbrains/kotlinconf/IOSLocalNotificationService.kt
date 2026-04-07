@@ -2,7 +2,6 @@ package org.jetbrains.kotlinconf
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.datetime.LocalDateTime
