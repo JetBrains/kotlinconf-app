@@ -52,6 +52,14 @@
       "level": "Bronze",
       "partners": [
         {
+          "id": "bloomberg",
+          "name": "Bloomberg",
+          "description": "Bloomberg's 9,000+ engineers solve complex, real-world problems. Kotlin is popular among the firm's Java and the JVM community, and increasingly, it is used to write entire application stacks.",
+          "logoUrlLight": "partner-logos/bloomberg-light.svg",
+          "logoUrlDark": "partner-logos/bloomberg-dark.svg",
+          "url": "https://www.bloomberg.com/company/engineering/"
+        },
+        {
           "id": "cirruslabs",
           "name": "Cirrus Labs",
           "description": "Leading provider of GitHub Actions runners for macOS & Linux. Cirrus Runners offers fixed pricing and unlimited minutes, high-performance CPUs for Kotlin Multiplatform, Android & Docker builds.",
