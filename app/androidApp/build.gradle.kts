@@ -36,8 +36,8 @@ android {
         applicationId = "com.jetbrains.kotlinconf"
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
-        versionCode = 70
-        versionName = "40.0.2"
+        versionCode = 71
+        versionName = "40.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
