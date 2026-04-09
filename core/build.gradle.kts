@@ -12,7 +12,7 @@ plugins {
 kotlin {
     applyDefaultHierarchyTemplate()
 
-    androidLibrary {
+    android {
         namespace = "com.jetbrains.kotlinconf.core"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
