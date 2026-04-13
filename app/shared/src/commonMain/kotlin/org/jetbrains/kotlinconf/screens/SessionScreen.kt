@@ -32,7 +32,6 @@ import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
 import org.jetbrains.kotlinconf.Speaker
-import org.jetbrains.kotlinconf.SpeakerId
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.arrow_left_24
 import org.jetbrains.kotlinconf.generated.resources.arrow_up_right_24
@@ -68,7 +67,7 @@ import org.jetbrains.kotlinconf.utils.topInsetPadding
 fun SessionScreen(
     sessionId: SessionId,
     onBack: () -> Unit,
-    onSpeaker: (SpeakerId) -> Unit,
+    onSpeaker: (Speaker) -> Unit,
     onPrivacyNoticeNeeded: () -> Unit,
     onNavigateToMap: (String) -> Unit,
     onWatchVideo: (String) -> Unit,
@@ -150,7 +149,7 @@ private fun Description(description: String) {
 @Composable
 private fun Speakers(
     speakers: List<Speaker>,
-    onSpeaker: (SpeakerId) -> Unit
+    onSpeaker: (Speaker) -> Unit
 ) {
     speakers.forEach { speaker ->
         SpeakerCard(
@@ -158,7 +157,7 @@ private fun Speakers(
             title = speaker.position,
             photoUrl = speaker.photoUrl,
             modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(),
-            onClick = { onSpeaker(speaker.id) }
+            onClick = { onSpeaker(speaker) }
         )
     }
 }

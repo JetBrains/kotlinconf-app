@@ -48,7 +48,7 @@ import org.jetbrains.kotlinconf.utils.topInsetPadding
 fun SpeakerDetailScreen(
     speakerId: SpeakerId,
     onBack: () -> Unit,
-    onSession: (SessionId) -> Unit,
+    onSession: (SessionId, String) -> Unit,
     viewModel: SpeakerDetailViewModel =
         assistedMetroViewModel<SpeakerDetailViewModel, SpeakerDetailViewModel.Factory> {
             create(speakerId)
@@ -61,7 +61,7 @@ fun SpeakerDetailScreen(
         Modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .then(if (LocalUseNativeNavigation.current) Modifier.padding(bottomInsetPadding()) else Modifier.padding(topInsetPadding()))
+            .then(if (LocalUseNativeNavigation.current) Modifier else Modifier.padding(topInsetPadding()))
     ) {
         ErrorLoadingContent(
             state = speakerState,
@@ -88,10 +88,14 @@ fun SpeakerDetailScreen(
                     }
                 },
                 compactContentHeader = {
-                    Name(currentSpeaker, Modifier.padding(vertical = 24.dp))
+                    if (!LocalUseNativeNavigation.current) {
+                        Name(currentSpeaker, Modifier.padding(vertical = 24.dp))
+                    }
                 },
                 largeContentHeader = {
-                    Name(currentSpeaker, Modifier.padding(bottom = 24.dp, top = 6.dp))
+                    if (!LocalUseNativeNavigation.current) {
+                        Name(currentSpeaker, Modifier.padding(bottom = 24.dp, top = 6.dp))
+                    }
                 },
                 unifiedContent = {
                     Description(currentSpeaker)
@@ -160,7 +164,7 @@ private fun Description(
 private fun Talks(
     sessions: List<SessionCardView>,
     viewModel: SpeakerDetailViewModel,
-    onSession: (SessionId) -> Unit,
+    onSession: (SessionId, String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
@@ -187,7 +191,7 @@ private fun Talks(
                 },
                 status = TalkStatus.Upcoming,
                 feedbackContent = null,
-                onClick = { onSession(session.id) },
+                onClick = { onSession(session.id, session.title) },
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
             )
         }

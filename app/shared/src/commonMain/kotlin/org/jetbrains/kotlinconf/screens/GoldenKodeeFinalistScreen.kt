@@ -99,28 +99,30 @@ fun GoldenKodeeFinalistScreen(
             contentAlignment = Alignment.TopCenter,
         ) {
             Column(Modifier.widthIn(max = 580.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = nominee.name,
-                        style = KotlinConfTheme.typography.h2,
-                        color = KotlinConfTheme.colors.primaryText,
-                        modifier = Modifier
-                            .semantics { heading() }
-                            .weight(1f, fill = false),
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    CardTag(
-                        label = if (nominee.winner) {
-                            stringResource(Res.string.golden_kodee_winner)
-                        } else {
-                            stringResource(Res.string.golden_kodee_finalist)
-                        },
-                        selected = nominee.winner,
-                        size = CardTagSize.Large,
-                    )
-                }
+                if (!LocalUseNativeNavigation.current) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = nominee.name,
+                            style = KotlinConfTheme.typography.h2,
+                            color = KotlinConfTheme.colors.primaryText,
+                            modifier = Modifier
+                                .semantics { heading() }
+                                .weight(1f, fill = false),
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        CardTag(
+                            label = if (nominee.winner) {
+                                stringResource(Res.string.golden_kodee_winner)
+                            } else {
+                                stringResource(Res.string.golden_kodee_finalist)
+                            },
+                            selected = nominee.winner,
+                            size = CardTagSize.Large,
+                        )
+                    }
 
-                Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(16.dp))
+                }
 
                 SpeakerAvatar(
                     photoUrl = nominee.photoUrl,

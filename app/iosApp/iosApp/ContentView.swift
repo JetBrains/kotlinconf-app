@@ -159,6 +159,7 @@ struct TabContentView: View {
                 appCoordinator: appCoordinator
             )
             .ignoresSafeArea(.all)
+            .navigationTitle(topLevelRoute.title ?? "")
             .navigationBarHidden(true)
             .navigationDestination(for: RouteWrapper.self) { wrapper in
                 DetailComposeView(
@@ -167,7 +168,8 @@ struct TabContentView: View {
                     appCoordinator: appCoordinator
                 )
                 .ignoresSafeArea(.all)
-                .navigationTitle("")
+                .navigationTitle(wrapper.route.title ?? "")
+                .navigationSubtitle(wrapper.route.subtitle ?? "")
                 .toolbarTitleDisplayMode(.inline)
             }
         }

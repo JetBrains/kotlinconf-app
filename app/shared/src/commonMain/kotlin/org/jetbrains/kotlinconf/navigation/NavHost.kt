@@ -89,7 +89,7 @@ fun navigateByLocalNotificationId(notificationId: String) {
 }
 
 fun navigateToSession(sessionId: SessionId) {
-    notificationNavRequests.trySend(NavRequest(ScheduleScreen, SessionScreen(sessionId)))
+    notificationNavRequests.trySend(NavRequest(ScheduleScreen, SessionScreen(sessionId, null)))
 }
 
 data class NavRequest(val topLevelRoute: TopLevelRoute, val targetRoute: AppRoute)
@@ -313,7 +313,7 @@ private fun EntryProviderScope<AppRoute>.screens(
             service.completeOnboarding()
         }
         ScheduleScreen(
-            onSession = { navigator.add(SessionScreen(it)) },
+            onSession = { id, title -> navigator.add(SessionScreen(id, title)) },
             onPrivacyNoticeNeeded = { navigator.add(AppPrivacyNoticePrompt) },
             tabReselections = navigator.tabReselections(forRoute = ScheduleScreen),
         )
@@ -323,15 +323,15 @@ private fun EntryProviderScope<AppRoute>.screens(
         val viewModel = metroViewModel<SpeakersViewModel>()
 //        it.searchText?.let { searchText -> viewModel.setSearchText(searchText) }
         SpeakersScreen(
-            onSpeaker = { navigator.add(SpeakerDetailScreen(it)) },
+            onSpeaker = { speaker -> navigator.add(SpeakerDetailScreen(speaker.id, speaker.name, speaker.position)) },
             viewModel = viewModel,
         )
     }
 
     entry<GoldenKodeeScreen>(metadata = noAnimationMetadata) {
         GoldenKodeeScreen(
-            onNomineeClick = { categoryId, nomineeId ->
-                navigator.add(GoldenKodeeFinalistScreen(categoryId, nomineeId))
+            onNomineeClick = { categoryId, nomineeId, name, isWinner ->
+                navigator.add(GoldenKodeeFinalistScreen(categoryId, nomineeId, name, if (isWinner) "Winner" else "Finalist"))
             },
         )
     }
@@ -371,7 +371,7 @@ private fun EntryProviderScope<AppRoute>.screens(
         SpeakerDetailScreen(
             speakerId = it.speakerId,
             onBack = onBack,
-            onSession = { sessionId -> navigator.add(SessionScreen(sessionId)) },
+            onSession = { sessionId, title -> navigator.add(SessionScreen(sessionId, title)) },
         )
     }
     entry<SessionScreen> {
@@ -380,7 +380,7 @@ private fun EntryProviderScope<AppRoute>.screens(
             sessionId = it.sessionId,
             onBack = onBack,
             onPrivacyNoticeNeeded = { navigator.add(AppPrivacyNoticePrompt) },
-            onSpeaker = { speakerId -> navigator.add(SpeakerDetailScreen(speakerId)) },
+            onSpeaker = { speaker -> navigator.add(SpeakerDetailScreen(speaker.id, speaker.name, speaker.position)) },
             onWatchVideo = { videoUrl -> urlHandler.openUri(videoUrl) },
             onNavigateToMap = { roomName ->
                 navigator.add(NestedMapScreen(roomName))
@@ -423,7 +423,7 @@ private fun EntryProviderScope<AppRoute>.screens(
             onGeneralTerms = { navigator.add(TermsOfUseScreen) },
             onWebsiteLink = { urlHandler.openUri(URLs.KOTLINCONF_HOMEPAGE) },
             onBack = onBack,
-            onSpeaker = { speakerId -> navigator.add(SpeakerDetailScreen(speakerId)) },
+            onSpeaker = { speaker -> navigator.add(SpeakerDetailScreen(speaker.id, speaker.name, speaker.position)) },
         )
     }
     entry<CodeOfConductScreen> {
@@ -512,7 +512,7 @@ internal fun ScreenContent(
                 service.completeOnboarding()
             }
             ScheduleScreen(
-                onSession = { onNavigate(SessionScreen(it)) },
+                onSession = { sessionId, title -> onNavigate(SessionScreen(sessionId, title)) },
                 onPrivacyNoticeNeeded = { onNavigate(AppPrivacyNoticePrompt) },
                 tabReselections = emptyFlow(),
             )
@@ -521,15 +521,15 @@ internal fun ScreenContent(
         is SpeakersScreen -> {
             val viewModel = metroViewModel<SpeakersViewModel>()
             SpeakersScreen(
-                onSpeaker = { onNavigate(SpeakerDetailScreen(it)) },
+                onSpeaker = { speaker -> onNavigate(SpeakerDetailScreen(speaker.id, speaker.name, speaker.position)) },
                 viewModel = viewModel,
             )
         }
 
         is GoldenKodeeScreen -> {
             GoldenKodeeScreen(
-                onNomineeClick = { categoryId, nomineeId ->
-                    onNavigate(GoldenKodeeFinalistScreen(categoryId, nomineeId))
+                onNomineeClick = { categoryId, nomineeId, name, isWinner ->
+                    onNavigate(GoldenKodeeFinalistScreen(categoryId, nomineeId, name, if (isWinner) "Winner" else "Finalist"))
                 },
             )
         }
@@ -566,7 +566,7 @@ internal fun ScreenContent(
             SpeakerDetailScreen(
                 speakerId = route.speakerId,
                 onBack = onBack,
-                onSession = { sessionId -> onNavigate(SessionScreen(sessionId)) },
+                onSession = { sessionId, title -> onNavigate(SessionScreen(sessionId, title)) },
             )
         }
 
@@ -575,7 +575,7 @@ internal fun ScreenContent(
                 sessionId = route.sessionId,
                 onBack = onBack,
                 onPrivacyNoticeNeeded = { onNavigate(AppPrivacyNoticePrompt) },
-                onSpeaker = { speakerId -> onNavigate(SpeakerDetailScreen(speakerId)) },
+                onSpeaker = { speaker -> onNavigate(SpeakerDetailScreen(speaker.id, speaker.name, speaker.position)) },
                 onWatchVideo = { videoUrl -> uriHandler.openUri(videoUrl) },
                 onNavigateToMap = { roomName -> onNavigate(NestedMapScreen(roomName)) },
             )
@@ -617,7 +617,7 @@ internal fun ScreenContent(
                 onGeneralTerms = { onNavigate(TermsOfUseScreen) },
                 onWebsiteLink = { uriHandler.openUri(URLs.KOTLINCONF_HOMEPAGE) },
                 onBack = onBack,
-                onSpeaker = { speakerId -> onNavigate(SpeakerDetailScreen(speakerId)) },
+                onSpeaker = { speaker -> onNavigate(SpeakerDetailScreen(speaker.id, speaker.name, speaker.position)) },
             )
         }
 

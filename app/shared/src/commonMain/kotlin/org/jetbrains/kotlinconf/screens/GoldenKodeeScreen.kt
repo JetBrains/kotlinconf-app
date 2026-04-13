@@ -70,7 +70,7 @@ import org.jetbrains.kotlinconf.utils.verticalInsetPadding
 
 @Composable
 fun GoldenKodeeScreen(
-    onNomineeClick: (AwardCategoryId, NomineeId) -> Unit,
+    onNomineeClick: (AwardCategoryId, NomineeId, String, Boolean) -> Unit,
 ) {
     val viewModel = metroViewModel<GoldenKodeeViewModel>()
     val categories = viewModel.categories.collectAsStateWithLifecycle().value
@@ -138,7 +138,7 @@ fun GoldenKodeeScreen(
                     ) { nominee ->
                         NomineeRow(
                             nominee = nominee,
-                            onClick = { onNomineeClick(category.id, nominee.id) },
+                            onClick = { onNomineeClick(category.id, nominee.id, nominee.name, nominee.winner) },
                         )
                     }
                 }

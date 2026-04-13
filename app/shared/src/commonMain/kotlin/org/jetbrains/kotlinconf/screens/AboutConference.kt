@@ -49,7 +49,7 @@ fun AboutConference(
     onGeneralTerms: () -> Unit,
     onWebsiteLink: () -> Unit,
     onBack: () -> Unit,
-    onSpeaker: (SpeakerId) -> Unit,
+    onSpeaker: (Speaker) -> Unit,
     viewModel: AboutConferenceViewModel = metroViewModel(),
 ) {
     val isDark = KotlinConfTheme.colors.isDark
@@ -144,7 +144,7 @@ private fun EventCard(
     location: String,
     time: String,
     day2: String = "",
-    onSpeaker: (SpeakerId) -> Unit,
+    onSpeaker: (Speaker) -> Unit,
     backgroundColor: Color = KotlinConfTheme.colors.mainBackground,
 ) {
     Column(
@@ -182,7 +182,7 @@ private fun EventCard(
                         title = speaker.position,
                         photoUrl = speaker.photoUrl,
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { onSpeaker(speaker.id) },
+                        onClick = { onSpeaker(speaker) },
                     )
                 }
             }
