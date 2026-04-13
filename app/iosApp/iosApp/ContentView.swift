@@ -217,6 +217,7 @@ struct NativeNavContentView: View {
             }
         }
         .tabBarMinimizeBehavior(.automatic)
+        .tint(Color(.accent))
     }
 }
 
