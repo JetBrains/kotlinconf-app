@@ -19,51 +19,35 @@ sealed interface TopLevelRoute : AppRoute
 
 @Serializable
 @SerialName("Schedule")
-data object ScheduleScreen : AppRoute, TopLevelRoute {
-    override val title: String get() = "Schedule"
-}
+data object ScheduleScreen : AppRoute, TopLevelRoute
 
 @Serializable
 @SerialName("Speakers")
-data object SpeakersScreen : AppRoute, TopLevelRoute {
-    override val title: String get() = "Speakers"
-}
+data object SpeakersScreen : AppRoute, TopLevelRoute
 
 @Serializable
 @SerialName("Map")
-data object MapScreen : AppRoute, TopLevelRoute {
-    override val title: String get() = "Map"
-}
+data object MapScreen : AppRoute, TopLevelRoute
 
 @Serializable
 @SerialName("GoldenKodee")
-data object GoldenKodeeScreen : AppRoute, TopLevelRoute {
-    override val title: String get() = "Golden Kodee"
-}
+data object GoldenKodeeScreen : AppRoute, TopLevelRoute
 
 @Serializable
 @SerialName("Info")
-data object InfoScreen : AppRoute, TopLevelRoute {
-    override val title: String get() = "Info"
-}
+data object InfoScreen : AppRoute, TopLevelRoute
 
 @Serializable
 @SerialName("AboutConference")
-data object AboutConferenceScreen : AppRoute {
-    override val title: String get() = "About the Conference"
-}
+data class AboutConferenceScreen(override val title: String = "") : AppRoute
 
 @Serializable
 @SerialName("CodeOfConduct")
-data object CodeOfConductScreen : AppRoute {
-    override val title: String get() = "Code of Conduct"
-}
+data class CodeOfConductScreen(override val title: String = "") : AppRoute
 
 @Serializable
 @SerialName("AboutApp")
-data object AboutAppScreen : AppRoute {
-    override val title: String get() = "About the App"
-}
+data class AboutAppScreen(override val title: String = "") : AppRoute
 
 @Serializable
 @SerialName("WelcomePrivacyNotice")
@@ -79,39 +63,27 @@ data object AppPrivacyNoticePrompt : AppRoute
 
 @Serializable
 @SerialName("Settings")
-data object SettingsScreen : AppRoute {
-    override val title: String get() = "Settings"
-}
+data class SettingsScreen(override val title: String = "") : AppRoute
 
 @Serializable
 @SerialName("VisitorPrivacyNotice")
-data object VisitorPrivacyNoticeScreen : AppRoute {
-    override val title: String get() = "Privacy Notice for Visitors"
-}
+data class VisitorPrivacyNoticeScreen(override val title: String = "") : AppRoute
 
 @Serializable
 @SerialName("AppPrivacyNotice")
-data object AppPrivacyNoticeScreen : AppRoute {
-    override val title: String get() = "App Privacy Notice"
-}
+data class AppPrivacyNoticeScreen(override val title: String = "") : AppRoute
 
 @Serializable
 @SerialName("TermsOfUse")
-data object TermsOfUseScreen : AppRoute {
-    override val title: String get() = "General Terms and Conditions"
-}
+data class TermsOfUseScreen(override val title: String = "") : AppRoute
 
 @Serializable
 @SerialName("AppTermsOfUse")
-data object AppTermsOfUseScreen : AppRoute {
-    override val title: String get() = "App Terms of Use"
-}
+data class AppTermsOfUseScreen(override val title: String = "") : AppRoute
 
 @Serializable
 @SerialName("Licenses")
-data object LicensesScreen : AppRoute {
-    override val title: String get() = "Licenses"
-}
+data class LicensesScreen(override val title: String = "") : AppRoute
 
 @Serializable
 @SerialName("License")
@@ -124,9 +96,7 @@ data class SingleLicenseScreen(
 
 @Serializable
 @SerialName("Partners")
-data object PartnersScreen : AppRoute {
-    override val title: String get() = "Partners"
-}
+data class PartnersScreen(override val title: String = "") : AppRoute
 
 @Serializable
 @SerialName("Partner")
@@ -136,12 +106,16 @@ data class PartnerDetailScreen(val partnerId: PartnerId) : AppRoute
 @SerialName("Session")
 data class SessionScreen(
     val sessionId: SessionId,
-    override val title: String?,
+    override val title: String? = null,
 ) : AppRoute
 
 @Serializable
 @SerialName("Speaker")
-data class SpeakerDetailScreen(val speakerId: SpeakerId, override val title: String, override val subtitle: String) : AppRoute
+data class SpeakerDetailScreen(
+    val speakerId: SpeakerId,
+    override val title: String = "",
+    override val subtitle: String = "",
+) : AppRoute
 
 @Serializable
 @SerialName("MapDetail")
@@ -154,8 +128,8 @@ data class NestedMapScreen(val roomName: String) : AppRoute {
 data class GoldenKodeeFinalistScreen(
     val categoryId: AwardCategoryId,
     val nomineeId: NomineeId,
-    override val title: String,
-    override val subtitle: String
+    override val title: String = "",
+    override val subtitle: String = "",
 ) : AppRoute
 
 @Serializable

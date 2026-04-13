@@ -12,6 +12,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.preloadFont
 import org.jetbrains.kotlinconf.di.WebAppGraph
 import org.jetbrains.kotlinconf.flags.Flags
+import org.jetbrains.kotlinconf.navigation.ScheduleScreen
 import org.jetbrains.kotlinconf.ui.initCoil
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.web.generated.resources.NotoColorEmoji
@@ -53,6 +54,6 @@ fun main() {
             }
         }
 
-        App(appGraph)
+        App(appGraph, ScheduleScreen)
     }
 }
