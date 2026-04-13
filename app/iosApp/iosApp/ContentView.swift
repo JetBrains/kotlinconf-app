@@ -147,6 +147,7 @@ struct TabContentView: View {
     let topLevelRoute: TopLevelRoute
     let coordinator: TabNavigationCoordinator
     let appCoordinator: AppNavigationCoordinator
+    let title: String
 
     var body: some View {
         NavigationStack(path: Binding(
@@ -159,7 +160,7 @@ struct TabContentView: View {
                 appCoordinator: appCoordinator
             )
             .ignoresSafeArea(.all)
-            .navigationTitle(topLevelRoute.title ?? "")
+            .navigationTitle(title)
             .navigationBarHidden(true)
             .navigationDestination(for: RouteWrapper.self) { wrapper in
                 DetailComposeView(
@@ -182,39 +183,44 @@ struct NativeNavContentView: View {
 
     var body: some View {
         TabView(selection: $appCoordinator.selectedTabIndex) {
-            Tab("Schedule", systemImage: "clock", value: 1) {
+            Tab(String(localized: "Schedule"), systemImage: "clock", value: 1) {
                 TabContentView(
                     topLevelRoute: ScheduleScreen(),
                     coordinator: appCoordinator.tabCoordinators[1]!,
-                    appCoordinator: appCoordinator
+                    appCoordinator: appCoordinator,
+                    title: String(localized: "Schedule")
                 )
             }
-            Tab("Speakers", systemImage: "person.2", value: 2) {
+            Tab(String(localized: "Speakers"), systemImage: "person.2", value: 2) {
                 TabContentView(
                     topLevelRoute: SpeakersScreen(),
                     coordinator: appCoordinator.tabCoordinators[2]!,
-                    appCoordinator: appCoordinator
+                    appCoordinator: appCoordinator,
+                    title: String(localized: "Speakers")
                 )
             }
-            Tab("Golden Kodee", systemImage: "trophy", value: 5) {
+            Tab(String(localized: "Golden Kodee"), systemImage: "trophy", value: 5) {
                 TabContentView(
                     topLevelRoute: GoldenKodeeScreen(),
                     coordinator: appCoordinator.tabCoordinators[5]!,
-                    appCoordinator: appCoordinator
+                    appCoordinator: appCoordinator,
+                    title: String(localized: "Golden Kodee")
                 )
             }
-            Tab("Map", systemImage: "mappin.and.ellipse", value: 3) {
+            Tab(String(localized: "Map"), systemImage: "mappin.and.ellipse", value: 3) {
                 TabContentView(
                     topLevelRoute: MapScreen(),
                     coordinator: appCoordinator.tabCoordinators[3]!,
-                    appCoordinator: appCoordinator
+                    appCoordinator: appCoordinator,
+                    title: String(localized: "Map")
                 )
             }
-            Tab("Info", systemImage: "info.circle", value: 4) {
+            Tab(String(localized: "Info"), systemImage: "info.circle", value: 4) {
                 TabContentView(
                     topLevelRoute: InfoScreen(),
                     coordinator: appCoordinator.tabCoordinators[4]!,
-                    appCoordinator: appCoordinator
+                    appCoordinator: appCoordinator,
+                    title: String(localized: "Info")
                 )
             }
         }
