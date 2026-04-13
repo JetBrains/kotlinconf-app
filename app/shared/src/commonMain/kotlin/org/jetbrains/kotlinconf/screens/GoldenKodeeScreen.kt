@@ -66,6 +66,7 @@ import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.jetbrains.kotlinconf.utils.verticalInsetPadding
 
 @Composable
 fun GoldenKodeeScreen(
@@ -99,8 +100,7 @@ fun GoldenKodeeScreen(
                 columns = StaggeredGridCells.Adaptive(340.dp),
                 contentPadding = topInsetPadding() +
                         PaddingValues(horizontal = horizontalPadding, vertical = 16.dp) +
-                        if (useNativeNavigation) topInsetPadding() else PaddingValues.Zero +
-                        bottomInsetPadding(),
+                        if (useNativeNavigation) verticalInsetPadding() else bottomInsetPadding(),
                 verticalItemSpacing = 16.dp,
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {

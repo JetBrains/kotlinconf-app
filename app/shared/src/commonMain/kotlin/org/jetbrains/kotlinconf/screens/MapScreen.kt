@@ -302,7 +302,7 @@ private fun MapWithControls(
 
         if (onHowToFindVenue != null) {
             val isLargeScreen = LocalWindowSize.current != WindowSize.Compact
-            val extraPadding = if (isLargeScreen) bottomInsetPadding() else PaddingValues(0.dp)
+            val extraPadding = if (isLargeScreen || LocalUseNativeNavigation.current) bottomInsetPadding() else PaddingValues(0.dp)
             OverlayTextButton(
                 label = stringResource(Res.string.map_how_to_find_venue),
                 icon = UiRes.drawable.arrow_up_right_24,

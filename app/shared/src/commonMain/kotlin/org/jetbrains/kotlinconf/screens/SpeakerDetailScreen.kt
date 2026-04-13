@@ -41,6 +41,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.arrow_left_24
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_back
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
+import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
@@ -60,7 +61,7 @@ fun SpeakerDetailScreen(
         Modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .then(if (LocalUseNativeNavigation.current) Modifier else Modifier.padding(topInsetPadding()))
+            .then(if (LocalUseNativeNavigation.current) Modifier.padding(bottomInsetPadding()) else Modifier.padding(topInsetPadding()))
     ) {
         ErrorLoadingContent(
             state = speakerState,

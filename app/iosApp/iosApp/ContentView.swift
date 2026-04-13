@@ -166,7 +166,7 @@ struct TabContentView: View {
                     coordinator: coordinator,
                     appCoordinator: appCoordinator
                 )
-                .ignoresSafeArea(edges: [.bottom])
+                .ignoresSafeArea(.all)
                 .navigationTitle("")
                 .toolbarTitleDisplayMode(.inline)
             }

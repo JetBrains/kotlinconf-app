@@ -16,7 +16,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 fun bottomInsetPadding() = WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom).asPaddingValues()
 
 @Composable
-fun bottomContentPadding() = WindowInsets.safeContent.only(WindowInsetsSides.Bottom).asPaddingValues()
+fun verticalInsetPadding() = WindowInsets.safeDrawing.only(WindowInsetsSides.Vertical).asPaddingValues()
 
 @Composable
 fun topInsetPadding() = WindowInsets.safeDrawing.only(WindowInsetsSides.Top).asPaddingValues()

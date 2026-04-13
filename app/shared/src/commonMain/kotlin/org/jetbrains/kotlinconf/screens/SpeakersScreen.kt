@@ -53,6 +53,7 @@ import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.jetbrains.kotlinconf.utils.verticalInsetPadding
 
 @Composable
 fun SpeakersScreen(
@@ -136,7 +137,7 @@ fun SpeakersScreen(
                 state = gridState,
                 columns = GridCells.Adaptive(300.dp),
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = (if (useNativeNavigation) topInsetPadding() else PaddingValues(0.dp)) + bottomInsetPadding(),
+                contentPadding = if (useNativeNavigation) verticalInsetPadding() else bottomInsetPadding(),
             ) {
                 if (searchState == MainHeaderContainerState.Search) {
                     item(span = { GridItemSpan(maxLineSpan) }, key = "number-of-speakers") {
