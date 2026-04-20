@@ -7,15 +7,14 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.window.ComposeViewport
-import dev.zacsweers.metro.createGraphFactory
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.preloadFont
-import org.jetbrains.kotlinconf.di.WebAppGraph
 import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.ui.initCoil
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.web.generated.resources.NotoColorEmoji
 import org.jetbrains.kotlinconf.web.generated.resources.Res
+import org.koin.core.annotation.Singleton
 import kotlin.js.ExperimentalWasmJsInterop
 
 external object Window {
@@ -24,22 +23,20 @@ external object Window {
 
 external val window: Window
 
+@Singleton
+class WebLogger : Logger {
+    override fun log(tag: String, lazyMessage: () -> String) {
+        println("[$tag] ${lazyMessage()}")
+    }
+}
+
 fun main() {
     initCoil()
 
-    val appGraph = createGraphFactory<WebAppGraph.Factory>().create(
-        platformFlags = Flags(
+    initCoreApp(
+        Flags(
             supportsNotifications = window.supportsNotifications ?: false
         )
-    )
-
-    initApp(
-        appGraph = appGraph,
-        platformLogger = object : Logger {
-            override fun log(tag: String, lazyMessage: () -> String) {
-                println("[$tag] ${lazyMessage()}")
-            }
-        },
     )
 
     @OptIn(ExperimentalComposeUiApi::class)
@@ -53,6 +50,6 @@ fun main() {
             }
         }
 
-        App(appGraph)
+        App()
     }
 }

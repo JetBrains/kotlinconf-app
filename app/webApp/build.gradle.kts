@@ -4,7 +4,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.metro)
+//    alias(libs.plugins.metro)
+    alias(libs.plugins.koin)
 }
 
 kotlin {
@@ -31,6 +32,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.app.shared)
             implementation(libs.compose.components.resources)
+            implementation(libs.koin.annotations)
         }
     }
 }

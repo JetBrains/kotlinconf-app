@@ -16,7 +16,6 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionCardView
@@ -41,16 +40,15 @@ import org.jetbrains.kotlinconf.ui.generated.resources.main_header_back
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun SpeakerDetailScreen(
     speakerId: SpeakerId,
     onBack: () -> Unit,
     onSession: (SessionId) -> Unit,
-    viewModel: SpeakerDetailViewModel =
-        assistedMetroViewModel<SpeakerDetailViewModel, SpeakerDetailViewModel.Factory> {
-            create(speakerId)
-        }
+    viewModel: SpeakerDetailViewModel = koinViewModel { parametersOf(speakerId) }
 ) {
     val speakerState = viewModel.speaker.collectAsStateWithLifecycle().value
     val sessions = viewModel.sessions.collectAsStateWithLifecycle().value

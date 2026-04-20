@@ -6,9 +6,6 @@ import com.russhwolf.settings.coroutines.getBooleanFlow
 import com.russhwolf.settings.coroutines.getStringFlow
 import com.russhwolf.settings.coroutines.getStringOrNullFlow
 import com.russhwolf.settings.set
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,11 +20,11 @@ import org.jetbrains.kotlinconf.Theme
 import org.jetbrains.kotlinconf.getPlatformId
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
+import org.koin.core.annotation.Singleton
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-@SingleIn(AppScope::class)
-@ContributesBinding(AppScope::class)
+@Singleton
 @OptIn(ExperimentalSettingsApi::class)
 class ApplicationStorageImpl(
     private val settings: ObservableSettings,

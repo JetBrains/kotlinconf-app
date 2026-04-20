@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.generated.resources.Res
@@ -47,6 +46,7 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
@@ -60,7 +60,7 @@ fun InfoScreen(
     onSlack: () -> Unit,
     onBluesky: () -> Unit,
     onSettings: () -> Unit,
-    viewModel: InfoViewModel = metroViewModel(),
+    viewModel: InfoViewModel = koinViewModel(),
 ) {
     val venueAddress = viewModel.venueAddress.collectAsStateWithLifecycle().value
     val isDark = KotlinConfTheme.colors.isDark

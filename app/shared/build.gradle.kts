@@ -14,7 +14,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinPowerAssert)
     alias(libs.plugins.kotlinSerialization)
-    alias(libs.plugins.metro)
+//    alias(libs.plugins.metro)
+    alias(libs.plugins.koin)
 }
 
 kotlin {
@@ -59,7 +60,7 @@ kotlin {
             api(libs.compose.components.resources)
             implementation(libs.compose.ui.tooling.preview)
 
-            implementation(libs.metrox.viewmodel.compose)
+//            implementation(libs.metrox.viewmodel.compose)
 
             api(libs.ktor.client.logging)
             api(libs.ktor.serialization.kotlinx.json)
@@ -86,6 +87,9 @@ kotlin {
             api(libs.kmpnotifier)
 
             implementation(libs.doistx.normalize)
+
+            implementation(libs.koin.annotations)
+            implementation(libs.koin.compose.viewmodel)
         }
 
         commonTest.dependencies {
@@ -120,7 +124,7 @@ kotlin {
             implementation(libs.android.svg)
             implementation(libs.androidx.preference)
             implementation(libs.ktor.client.okhttp)
-            implementation(libs.metrox.android)
+//            implementation(libs.metrox.android)
         }
 
         iosMain.dependencies {
@@ -168,4 +172,10 @@ aboutLibraries {
     library.duplicationMode = DuplicateMode.MERGE
     library.duplicationRule = DuplicateRule.SIMPLE
     export.outputFile = File("src/commonMain/composeResources/files/aboutlibraries.json")
+}
+
+koinCompiler {
+    debugLogs = true
+    userLogs = true
+    compileSafety = false
 }

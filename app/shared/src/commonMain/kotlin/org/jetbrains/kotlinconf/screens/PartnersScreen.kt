@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.ScrollToTopHandler
@@ -37,13 +36,14 @@ import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 fun PartnersScreen(
     onBack: () -> Unit,
     onPartnerDetail: (partnerId: PartnerId) -> Unit,
-    viewModel: PartnersViewModel = metroViewModel(),
+    viewModel: PartnersViewModel = koinViewModel(),
 ) {
     val partnerGroups by viewModel.partnerGroups.collectAsStateWithLifecycle()
     val isDark = KotlinConfTheme.colors.isDark

@@ -1,8 +1,5 @@
 package org.jetbrains.kotlinconf.flags
 
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -11,11 +8,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
+import org.koin.core.annotation.Provided
+import org.koin.core.annotation.Singleton
 
-@Inject
-@SingleIn(AppScope::class)
+@Singleton
 class FlagsManager(
-    val platformFlags: Flags,
+    @Provided val platformFlags: Flags,
     private val storage: ApplicationStorage,
     private val scope: CoroutineScope,
 ) {

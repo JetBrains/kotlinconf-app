@@ -44,7 +44,6 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.AwardCategoryId
@@ -65,12 +64,13 @@ import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun GoldenKodeeScreen(
     onNomineeClick: (AwardCategoryId, NomineeId) -> Unit,
 ) {
-    val viewModel = metroViewModel<GoldenKodeeViewModel>()
+    val viewModel = koinViewModel<GoldenKodeeViewModel>()
     val categories = viewModel.categories.collectAsStateWithLifecycle().value
 
     Column(

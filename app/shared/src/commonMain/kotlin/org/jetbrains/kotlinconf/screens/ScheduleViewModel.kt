@@ -2,9 +2,6 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -34,6 +31,7 @@ import org.jetbrains.kotlinconf.ui.components.FilterItemType
 import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import org.jetbrains.kotlinconf.utils.containsDiacritics
 import org.jetbrains.kotlinconf.utils.removeDiacritics
+import org.koin.core.annotation.KoinViewModel
 
 sealed interface ScheduleListItem
 
@@ -73,8 +71,7 @@ data class ScheduleContent(
     val lastActiveIndex: Int = -1,
 )
 
-@ContributesIntoMap(AppScope::class)
-@ViewModelKey
+@KoinViewModel
 class ScheduleViewModel(
     private val service: ConferenceService,
     private val timeProvider: TimeProvider,

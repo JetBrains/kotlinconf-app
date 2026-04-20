@@ -1,8 +1,5 @@
 package org.jetbrains.kotlinconf.network
 
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -15,13 +12,13 @@ import kotlinx.coroutines.CancellationException
 import org.jetbrains.kotlinconf.AppConfig
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
+import org.koin.core.annotation.Singleton
 import kotlin.time.Instant
 
 /**
  * Adapter to handle app-level (year-independent) backend API calls.
  */
-@Inject
-@SingleIn(AppScope::class)
+@Singleton
 class ApplicationApi(
     private val client: HttpClient,
     logger: Logger,

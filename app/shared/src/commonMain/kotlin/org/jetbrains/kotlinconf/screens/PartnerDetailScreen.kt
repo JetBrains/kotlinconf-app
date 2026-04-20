@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.ScreenWithTitle
@@ -21,15 +20,14 @@ import org.jetbrains.kotlinconf.ui.components.NetworkImage
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun PartnerDetailScreen(
     partnerId: PartnerId,
     onBack: () -> Unit,
-    viewModel: PartnerDetailViewModel =
-        assistedMetroViewModel<PartnerDetailViewModel, PartnerDetailViewModel.Factory> {
-            create(partnerId)
-        },
+    viewModel: PartnerDetailViewModel = koinViewModel { parametersOf(partnerId) }
 ) {
     val partnerState = viewModel.partner.collectAsStateWithLifecycle().value
     val isDark = KotlinConfTheme.colors.isDark

@@ -28,13 +28,13 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
-import org.jetbrains.kotlinconf.LocalAppGraph
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.URLs
+import org.jetbrains.kotlinconf.di.BaseUrl
 import org.jetbrains.kotlinconf.flags.Flags
+import org.jetbrains.kotlinconf.flags.FlagsManager
 import org.jetbrains.kotlinconf.flags.LocalFlags
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.about_app_description
@@ -54,6 +54,8 @@ import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.koin.compose.koinInject
+import org.koin.core.qualifier.named
 
 @Composable
 fun AboutAppScreen(
@@ -142,8 +144,8 @@ private fun DebugInfo(
     onDeveloperMenu: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val baseUrl = LocalAppGraph.current.baseUrl
-    val flagsManager = LocalAppGraph.current.flagsManager
+    val baseUrl = koinInject<String>(named<BaseUrl>()) //TODO LocalAppGraph.current.baseUrl
+    val flagsManager = koinInject<FlagsManager>()//LocalAppGraph.current.flagsManager
     val currentFlags = LocalFlags.current
     val platformFlags = flagsManager.platformFlags
     if (baseUrl != URLs.PRODUCTION_URL || currentFlags != platformFlags) {

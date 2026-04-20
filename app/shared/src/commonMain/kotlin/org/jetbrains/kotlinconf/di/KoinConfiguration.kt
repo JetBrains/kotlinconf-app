@@ -1,15 +1,5 @@
 package org.jetbrains.kotlinconf.di
 
-import androidx.lifecycle.ViewModel
-import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Binds
-import dev.zacsweers.metro.Provider
-import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.SingleIn
-import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
-import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
-import dev.zacsweers.metrox.viewmodel.ViewModelGraph
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpRequestRetry
@@ -22,53 +12,39 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.FakeTimeProvider
 import org.jetbrains.kotlinconf.ServerBasedTimeProvider
 import org.jetbrains.kotlinconf.TimeProvider
 import org.jetbrains.kotlinconf.URLs
 import org.jetbrains.kotlinconf.flags.Flags
-import org.jetbrains.kotlinconf.flags.FlagsManager
 import org.jetbrains.kotlinconf.network.ApplicationApi
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
-import org.jetbrains.kotlinconf.utils.BufferedDelegatingLogger
 import org.jetbrains.kotlinconf.utils.Logger
-import kotlin.reflect.KClass
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Configuration
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.KoinApplication
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Qualifier
+import org.koin.core.annotation.Singleton
 import io.ktor.client.plugins.logging.Logger as KtorLogger
 
-interface AppGraph : ViewModelGraph {
-    val conferenceService: ConferenceService
-    val flagsManager: FlagsManager
-    val timeProvider: TimeProvider
-    val logger: Logger
+@KoinApplication
+class KotlinConfKoinApp
 
-    @BaseUrl
-    val baseUrl: String
+@Module
+@ComponentScan("org.jetbrains.kotlinconf")
+@Configuration
+class AppModule {
 
-    val scope: CoroutineScope
-    val bufferedDelegatingLogger: BufferedDelegatingLogger
-    val notificationConfiguration: NotificationPlatformConfiguration
+    @Factory
+    fun defaultFlags(): Flags = Flags()
 
-    @Provides
-    @SingleIn(AppScope::class)
-    fun provideMetroViewModelFactory(
-        viewModelProviders: Map<KClass<out ViewModel>, Provider<ViewModel>>,
-        manualAssistedFactoryProviders: Map<KClass<out ManualViewModelAssistedFactory>, Provider<ManualViewModelAssistedFactory>>,
-    ): MetroViewModelFactory = object : MetroViewModelFactory() {
-        override val viewModelProviders get() = viewModelProviders
-        override val manualAssistedFactoryProviders get() = manualAssistedFactoryProviders
-    }
-
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     fun provideAppScope(): CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
-    @Binds
-    fun bindLogger(impl: BufferedDelegatingLogger): Logger
-
-    @Provides
-    @BaseUrl
-    @SingleIn(AppScope::class)
+    @Qualifier(BaseUrl::class)
+    @Singleton
     fun provideBaseUrl(
         applicationStorage: ApplicationStorage,
         platformFlags: Flags,
@@ -80,11 +56,10 @@ interface AppGraph : ViewModelGraph {
         }
     }
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     fun provideHttpClient(
         applicationStorage: ApplicationStorage,
-        @BaseUrl baseUrl: String,
+        @Qualifier(BaseUrl::class) baseUrl: String,
         logger: Logger,
     ): HttpClient {
         return HttpClient {
@@ -117,8 +92,7 @@ interface AppGraph : ViewModelGraph {
         }
     }
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     fun provideTimeProvider(
         applicationStorage: ApplicationStorage,
         logger: Lazy<Logger>,

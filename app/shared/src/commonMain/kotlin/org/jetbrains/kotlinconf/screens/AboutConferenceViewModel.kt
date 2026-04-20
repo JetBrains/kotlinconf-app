@@ -2,20 +2,15 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.jetbrains.kotlinconf.ConferenceImages
 import org.jetbrains.kotlinconf.ConferenceInfo
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.Speaker
+import org.koin.core.annotation.KoinViewModel
 
 data class AboutConferenceEvent(
     val sessionCard: SessionCardView?,
@@ -27,8 +22,7 @@ data class AboutConferenceEvent(
     val description: String?,
 )
 
-@ContributesIntoMap(AppScope::class)
-@ViewModelKey
+@KoinViewModel
 class AboutConferenceViewModel(
     service: ConferenceService,
 ) : ViewModel() {

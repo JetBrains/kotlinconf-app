@@ -6,7 +6,8 @@ import com.mmk.kmpnotifier.notification.PayloadData
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.jetbrains.kotlinconf.di.AppGraph
+import org.jetbrains.kotlinconf.di.KotlinConfKoinApp
+import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.flags.FlagsManager
 import org.jetbrains.kotlinconf.navigation.navigateToSession
 import org.jetbrains.kotlinconf.utils.BufferedDelegatingLogger
@@ -15,24 +16,32 @@ import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.NoopProdLogger
 import org.jetbrains.kotlinconf.utils.TaggedLogger
 import org.jetbrains.kotlinconf.utils.tagged
+import org.koin.core.Koin
+import org.koin.core.KoinApplication
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Singleton
+import org.koin.core.logger.Level
+import org.koin.dsl.KoinAppDeclaration
+import org.koin.dsl.includes
+import org.koin.dsl.koinApplication
+import org.koin.plugin.module.dsl.koinApplication
+import org.koin.plugin.module.dsl.startKoin
 
-fun initApp(
-    appGraph: AppGraph,
-    platformLogger: Logger,
-) {
-    initFlagsAndLogging(
-        appScope = appGraph.scope,
-        platformLogger = platformLogger,
-        bufferedDelegatingLogger = appGraph.bufferedDelegatingLogger,
-        flagsManager = appGraph.flagsManager,
-    )
-    initNotifier(
-        configuration = appGraph.notificationConfiguration,
-        logger = appGraph.bufferedDelegatingLogger,
-    )
+fun initCoreApp(platformFlags: Flags = Flags(), configuration : KoinAppDeclaration? = null) {
+    val koinApp = koinApplication<KotlinConfKoinApp> {
+        includes(configuration)
+        printLogger(level = Level.DEBUG)
+    }
+    val koin = koinApp.koin
+    //TODO Race condition
+    koin.declare(platformFlags, allowOverride = true)
+    org.koin.core.context.startKoin(koinApp)
 }
 
-private fun initFlagsAndLogging(
+@Named("initFlagsAndLogging")
+@Singleton(createdAtStart = true)
+fun initFlagsAndLogging(
     appScope: CoroutineScope,
     platformLogger: Logger,
     bufferedDelegatingLogger: BufferedDelegatingLogger,
@@ -49,9 +58,11 @@ private fun initFlagsAndLogging(
     }
 }
 
-private fun initNotifier(
+@Named("initNotifier")
+@Singleton(createdAtStart = true)
+fun initNotifier(
     configuration: NotificationPlatformConfiguration,
-    logger: Logger,
+    logger: BufferedDelegatingLogger,
 ) {
     NotifierManager.initialize(configuration)
     NotifierManager.addListener(object : Listener {

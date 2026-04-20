@@ -1,17 +1,14 @@
 package org.jetbrains.kotlinconf
 
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.SingleIn
 import kotlinx.datetime.LocalDateTime
+import org.koin.core.annotation.Singleton
 import web.notifications.Notification
 import web.notifications.NotificationPermission
 import web.notifications.granted
 import web.notifications.requestPermission
 import kotlin.js.js
 
-@SingleIn(AppScope::class)
-@ContributesBinding(AppScope::class)
+@Singleton
 class ServiceWorkerLocalNotificationService(
     private val timeProvider: TimeProvider,
 ) : LocalNotificationService {

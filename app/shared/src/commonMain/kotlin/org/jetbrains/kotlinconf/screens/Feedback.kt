@@ -32,7 +32,6 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.generated.resources.Res
@@ -48,6 +47,8 @@ import org.jetbrains.kotlinconf.ui.components.TalkStatus
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.LocalNotificationBar
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun FeedbackBlock(
@@ -143,10 +144,7 @@ private fun rememberFeedbackViewModel(
     sessionId: SessionId,
     onPrivacyNoticeNeeded: () -> Unit,
 ): FeedbackViewModel {
-    val viewModel =
-        assistedMetroViewModel<FeedbackViewModel, FeedbackViewModel.Factory>(key = sessionId.id) {
-            create(sessionId)
-        }
+    val viewModel = koinViewModel<FeedbackViewModel> { parametersOf(sessionId.id) }
 
     val shouldNavigate by viewModel.navigateToPrivacyNotice.collectAsStateWithLifecycle()
     LaunchedEffect(shouldNavigate) {

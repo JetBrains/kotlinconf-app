@@ -14,17 +14,14 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
-import dev.zacsweers.metro.binding
-import dev.zacsweers.metrox.android.BroadcastReceiverKey
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
-import org.jetbrains.kotlinconf.di.NotificationIcon
+import org.jetbrains.kotlinconf.di.BaseAndroidAppModule.Companion.NOTIFICATION_ICON
 import org.jetbrains.kotlinconf.utils.Logger
+import org.koin.core.annotation.Property
+import org.koin.core.annotation.Singleton
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 const val EXTRA_LOCAL_NOTIFICATION_ID = "localNotificationId"
 private const val EXTRA_TITLE = "title"
@@ -32,13 +29,12 @@ private const val EXTRA_MESSAGE = "message"
 private const val NOTIFICATION_CHANNEL_ID = "channel_all_notifications"
 private const val ACTION_SHOW_NOTIFICATION = "org.jetbrains.kotlinconf.SHOW_NOTIFICATION"
 
-@SingleIn(AppScope::class)
-@ContributesBinding(AppScope::class)
+@Singleton
 class AndroidLocalNotificationService(
     private val timeProvider: TimeProvider,
     private val permissionHandler: PermissionHandler,
     private val context: Context,
-    @NotificationIcon private val iconRes: Int,
+    @Property(NOTIFICATION_ICON) private val iconRes: Int,
     private val logger: Logger,
 ) : LocalNotificationService {
 
@@ -188,12 +184,9 @@ class AndroidLocalNotificationService(
     }
 }
 
-@Inject
-@BroadcastReceiverKey(AlarmBroadcastReceiver::class)
-@ContributesIntoMap(AppScope::class, binding = binding<BroadcastReceiver>())
-class AlarmBroadcastReceiver(
-    private val localNotificationService: LocalNotificationService
-) : BroadcastReceiver() {
+class AlarmBroadcastReceiver: BroadcastReceiver(), KoinComponent {
+    private val localNotificationService: LocalNotificationService by inject()
+
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != ACTION_SHOW_NOTIFICATION) return
 
