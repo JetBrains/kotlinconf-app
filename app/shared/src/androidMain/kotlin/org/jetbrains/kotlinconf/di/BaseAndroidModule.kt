@@ -6,6 +6,7 @@ import androidx.preference.PreferenceManager
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.SharedPreferencesSettings
+import org.jetbrains.kotlinconf.di.AndroidProperties.NOTIFICATION_ICON
 import org.koin.core.annotation.Configuration
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Property
@@ -35,8 +36,8 @@ class BaseAndroidAppModule {
             notificationIconResId = iconRes,
             showPushNotification = true,
         )
+}
 
-    companion object {
-        const val NOTIFICATION_ICON = "iconRes"
-    }
+object AndroidProperties {
+    const val NOTIFICATION_ICON = "iconRes"
 }

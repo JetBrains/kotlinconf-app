@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
-import org.jetbrains.kotlinconf.di.BaseAndroidAppModule.Companion.NOTIFICATION_ICON
+import org.jetbrains.kotlinconf.di.AndroidProperties.NOTIFICATION_ICON
 import org.jetbrains.kotlinconf.utils.Logger
 import org.koin.core.annotation.Property
 import org.koin.core.annotation.Singleton
