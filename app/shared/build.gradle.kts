@@ -173,9 +173,3 @@ aboutLibraries {
     library.duplicationRule = DuplicateRule.SIMPLE
     export.outputFile = File("src/commonMain/composeResources/files/aboutlibraries.json")
 }
-
-koinCompiler {
-    debugLogs = true
-    userLogs = true
-    compileSafety = false
-}

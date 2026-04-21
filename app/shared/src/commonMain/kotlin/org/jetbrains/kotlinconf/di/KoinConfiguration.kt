@@ -22,9 +22,9 @@ import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.utils.Logger
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Configuration
-import org.koin.core.annotation.Factory
 import org.koin.core.annotation.KoinApplication
 import org.koin.core.annotation.Module
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Qualifier
 import org.koin.core.annotation.Singleton
 import io.ktor.client.plugins.logging.Logger as KtorLogger
@@ -37,17 +37,14 @@ class KotlinConfKoinApp
 @Configuration
 class AppModule {
 
-    @Factory
-    fun defaultFlags(): Flags = Flags()
-
     @Singleton
     fun provideAppScope(): CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
-    @Qualifier(BaseUrl::class)
+    @BaseUrl
     @Singleton
     fun provideBaseUrl(
         applicationStorage: ApplicationStorage,
-        platformFlags: Flags,
+        @Provided platformFlags: Flags,
     ): String {
         val flags = applicationStorage.getFlagsBlocking()
         return when {
@@ -59,7 +56,7 @@ class AppModule {
     @Singleton
     fun provideHttpClient(
         applicationStorage: ApplicationStorage,
-        @Qualifier(BaseUrl::class) baseUrl: String,
+        @BaseUrl baseUrl: String,
         logger: Logger,
     ): HttpClient {
         return HttpClient {

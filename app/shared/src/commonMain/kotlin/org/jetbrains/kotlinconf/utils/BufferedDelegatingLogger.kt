@@ -12,7 +12,7 @@ import org.koin.core.annotation.Singleton
  * it forwards the buffered entries to the attached logger in order, and from
  * that point on it delegates all calls directly.
  */
-@Singleton(binds = [LogExporter::class])
+@Singleton
 class BufferedDelegatingLogger(
     private val scope: CoroutineScope,
 ) : Logger, LogExporter {

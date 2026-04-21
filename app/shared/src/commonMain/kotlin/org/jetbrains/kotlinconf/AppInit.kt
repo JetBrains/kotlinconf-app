@@ -16,34 +16,29 @@ import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.NoopProdLogger
 import org.jetbrains.kotlinconf.utils.TaggedLogger
 import org.jetbrains.kotlinconf.utils.tagged
-import org.koin.core.Koin
-import org.koin.core.KoinApplication
-import org.koin.core.annotation.Factory
+import org.koin.core.annotation.InjectedParam
 import org.koin.core.annotation.Named
 import org.koin.core.annotation.Singleton
-import org.koin.core.logger.Level
+import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.includes
-import org.koin.dsl.koinApplication
-import org.koin.plugin.module.dsl.koinApplication
 import org.koin.plugin.module.dsl.startKoin
 
-fun initCoreApp(platformFlags: Flags = Flags(), configuration : KoinAppDeclaration? = null) {
-    val koinApp = koinApplication<KotlinConfKoinApp> {
+fun initApp(platformLogger: Logger, platformFlags : Flags = Flags(), configuration : KoinAppDeclaration? = null) {
+    val koin = startKoin<KotlinConfKoinApp> {
         includes(configuration)
-        printLogger(level = Level.DEBUG)
-    }
-    val koin = koinApp.koin
-    //TODO Race condition
-    koin.declare(platformFlags, allowOverride = true)
-    org.koin.core.context.startKoin(koinApp)
+    }.koin
+    koin.declare(platformFlags)
+    koin.get<Unit>(named("initFlagsAndLogging")){ parametersOf(platformLogger) }
+    koin.get<Unit>(named("initNotifier"))
 }
 
 @Named("initFlagsAndLogging")
-@Singleton(createdAtStart = true)
+@Singleton
 fun initFlagsAndLogging(
     appScope: CoroutineScope,
-    platformLogger: Logger,
+    @InjectedParam platformLogger: Logger,
     bufferedDelegatingLogger: BufferedDelegatingLogger,
     flagsManager: FlagsManager,
 ) {
@@ -59,10 +54,10 @@ fun initFlagsAndLogging(
 }
 
 @Named("initNotifier")
-@Singleton(createdAtStart = true)
+@Singleton
 fun initNotifier(
     configuration: NotificationPlatformConfiguration,
-    logger: BufferedDelegatingLogger,
+    logger: Logger,
 ) {
     NotifierManager.initialize(configuration)
     NotifierManager.addListener(object : Listener {

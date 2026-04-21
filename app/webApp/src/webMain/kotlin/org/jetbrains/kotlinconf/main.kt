@@ -14,7 +14,6 @@ import org.jetbrains.kotlinconf.ui.initCoil
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.web.generated.resources.NotoColorEmoji
 import org.jetbrains.kotlinconf.web.generated.resources.Res
-import org.koin.core.annotation.Singleton
 import kotlin.js.ExperimentalWasmJsInterop
 
 external object Window {
@@ -23,7 +22,6 @@ external object Window {
 
 external val window: Window
 
-@Singleton
 class WebLogger : Logger {
     override fun log(tag: String, lazyMessage: () -> String) {
         println("[$tag] ${lazyMessage()}")
@@ -33,10 +31,11 @@ class WebLogger : Logger {
 fun main() {
     initCoil()
 
-    initCoreApp(
-        Flags(
+    initApp(
+        platformFlags = Flags(
             supportsNotifications = window.supportsNotifications ?: false
-        )
+        ),
+        platformLogger = WebLogger()
     )
 
     @OptIn(ExperimentalComposeUiApi::class)

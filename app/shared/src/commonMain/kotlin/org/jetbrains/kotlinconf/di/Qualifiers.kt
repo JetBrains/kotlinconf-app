@@ -10,7 +10,7 @@ annotation class Year
 annotation class FileStorageDir
 
 
-//@Qualifier
-//annotation class BaseUrl
-class BaseUrl
+@Qualifier
+annotation class BaseUrl
+//class BaseUrl
 //TODO Check to test with custom qualifier

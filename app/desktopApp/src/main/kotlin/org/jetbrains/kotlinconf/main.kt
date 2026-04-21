@@ -9,9 +9,7 @@ import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.generated.resources.desktop.Res
 import org.jetbrains.kotlinconf.generated.resources.desktop.app_name
 import org.jetbrains.kotlinconf.utils.Logger
-import org.koin.core.annotation.Singleton
 
-@Singleton
 class JvmLogger : Logger {
     override fun log(tag: String, lazyMessage: () -> String) {
         println("[$tag] ${lazyMessage()}")
@@ -19,8 +17,9 @@ class JvmLogger : Logger {
 }
 
 fun main() {
-    initCoreApp(
-        Flags(supportsNotifications = false, debugLogging = true)
+    initApp(
+        platformLogger = JvmLogger(),
+        platformFlags = Flags(supportsNotifications = false, debugLogging = true)
     )
 
     System.setProperty("apple.awt.application.appearance", "system")

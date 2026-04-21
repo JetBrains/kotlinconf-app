@@ -62,8 +62,3 @@ android {
         }
     }
 }
-
-koinCompiler {
-    userLogs = true
-    compileSafety = false
-}
