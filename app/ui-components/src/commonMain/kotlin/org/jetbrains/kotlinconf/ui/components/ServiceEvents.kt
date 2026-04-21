@@ -27,14 +27,22 @@ data class ServiceEventData(
 )
 
 @Composable
-private fun ServiceEventItem(
-    event: ServiceEventData,
-    modifier: Modifier = Modifier,
-) {
+private fun ServiceEventItem(event: ServiceEventData) {
+    if (event.title.contains("Party", ignoreCase = true)) {
+        PartyEventCard(active = event.now) {
+            ServiceEventRow(event)
+        }
+    } else {
+        ServiceEventRow(event)
+    }
+}
+
+@Composable
+private fun ServiceEventRow(event: ServiceEventData) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = modifier.padding(16.dp).semantics(mergeDescendants = true) {}
+        modifier = Modifier.padding(16.dp).semantics(mergeDescendants = true) {}
     ) {
         Text(
             text = event.title,
@@ -130,6 +138,18 @@ private fun ServiceEventBlockPreview() = PreviewHelper {
                 title = "Party",
                 now = false,
             )
+        )
+    )
+}
+
+@PreviewLightDark
+@Composable
+private fun PartyServiceEventLivePreview() = PreviewHelper {
+    ServiceEvent(
+        ServiceEventData(
+            title = "Party!",
+            now = true,
+            time = "19:00 – 22:00",
         )
     )
 }
