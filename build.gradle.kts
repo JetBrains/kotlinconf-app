@@ -11,7 +11,6 @@ plugins {
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.jib) apply false
     alias(libs.plugins.googleServices) apply false
-//    alias(libs.plugins.metro) apply false
 }
 
 apply(from = "gradle/releases.gradle.kts")

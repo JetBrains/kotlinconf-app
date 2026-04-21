@@ -30,7 +30,6 @@ kotlinxSerializationCore = "1.10.0"
 ktor = "3.4.1"
 logbackClassic = "1.5.24"
 markdown = "0.39.2"
-#metro = "0.12.0"
 multiplatform-settings = "1.3.0"
 okio = "3.16.4"
 postgresql = "42.7.8"
@@ -104,8 +103,6 @@ ktor-server-swagger = { module = "io.ktor:ktor-server-swagger", version.ref = "k
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 ktor-utils = { module = "io.ktor:ktor-utils", version.ref = "ktor" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logbackClassic" }
-#metrox-android = { module = "dev.zacsweers.metro:metrox-android", version.ref = "metro" }
-#metrox-viewmodel-compose = { module = "dev.zacsweers.metro:metrox-viewmodel-compose", version.ref = "metro" }
 multiplatform-markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "markdown" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
@@ -131,5 +128,4 @@ kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = 
 kotlinPowerAssert = { id = "org.jetbrains.kotlin.plugin.power-assert", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
-#metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 koin = { id = "io.insert-koin.compiler.plugin", version.ref = "koin-plugin" }

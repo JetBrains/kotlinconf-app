@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.googleServices)
-//    alias(libs.plugins.metro)
     alias(libs.plugins.koin)
 }
 
@@ -25,8 +24,6 @@ dependencies {
 
     implementation(libs.koin.annotations)
     implementation(libs.koin.android)
-//    implementation(libs.metrox.android)
-//    implementation(libs.metrox.viewmodel.compose)
 
     testImplementation(libs.junit)
 }
