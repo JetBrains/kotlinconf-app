@@ -259,14 +259,14 @@
       {
         "name": "Ground floor",
         "shortName": "GF",
-        "svgPathLight": "maps/ground-floor-light-v2.svg",
-        "svgPathDark": "maps/ground-floor-dark-v2.svg"
+        "svgPathLight": "maps/ground-floor-light-v3.svg",
+        "svgPathDark": "maps/ground-floor-dark-v3.svg"
       },
       {
         "name": "First floor",
         "shortName": "1F",
-        "svgPathLight": "maps/first-floor-light-v2.svg",
-        "svgPathDark": "maps/first-floor-dark-v2.svg"
+        "svgPathLight": "maps/first-floor-light-v3.svg",
+        "svgPathDark": "maps/first-floor-dark-v3.svg"
       }
     ],
     "rooms": {
