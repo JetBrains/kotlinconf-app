@@ -25,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.ScrollToTopHandler
@@ -52,6 +51,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.arrow_left_24
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_right_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AppPrivacyNoticePrompt(
@@ -59,7 +59,7 @@ fun AppPrivacyNoticePrompt(
     onAcceptNotice: () -> Unit,
     onAppTermsOfUse: () -> Unit,
     confirmationRequired: Boolean,
-    viewModel: PrivacyNoticeViewModel = metroViewModel(),
+    viewModel: PrivacyNoticeViewModel = koinViewModel(),
 ) {
     var detailsVisible by rememberSaveable { mutableStateOf(false) }
     val noticeState by viewModel.state.collectAsStateWithLifecycle()

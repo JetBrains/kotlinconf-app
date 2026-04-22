@@ -6,7 +6,8 @@ import com.mmk.kmpnotifier.notification.PayloadData
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.jetbrains.kotlinconf.di.AppGraph
+import org.jetbrains.kotlinconf.di.KotlinConfKoinApp
+import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.flags.FlagsManager
 import org.jetbrains.kotlinconf.navigation.navigateToSession
 import org.jetbrains.kotlinconf.utils.BufferedDelegatingLogger
@@ -15,26 +16,29 @@ import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.NoopProdLogger
 import org.jetbrains.kotlinconf.utils.TaggedLogger
 import org.jetbrains.kotlinconf.utils.tagged
+import org.koin.core.annotation.InjectedParam
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Singleton
+import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
+import org.koin.dsl.KoinAppDeclaration
+import org.koin.dsl.includes
+import org.koin.plugin.module.dsl.startKoin
 
-fun initApp(
-    appGraph: AppGraph,
-    platformLogger: Logger,
-) {
-    initFlagsAndLogging(
-        appScope = appGraph.scope,
-        platformLogger = platformLogger,
-        bufferedDelegatingLogger = appGraph.bufferedDelegatingLogger,
-        flagsManager = appGraph.flagsManager,
-    )
-    initNotifier(
-        configuration = appGraph.notificationConfiguration,
-        logger = appGraph.bufferedDelegatingLogger,
-    )
+fun initApp(platformLogger: Logger, platformFlags : Flags = Flags(), configuration : KoinAppDeclaration? = null) {
+    val koin = startKoin<KotlinConfKoinApp> {
+        includes(configuration)
+    }.koin
+    koin.declare(platformFlags)
+    koin.get<Unit>(named("initFlagsAndLogging")){ parametersOf(platformLogger) }
+    koin.get<Unit>(named("initNotifier"))
 }
 
-private fun initFlagsAndLogging(
+@Named("initFlagsAndLogging")
+@Singleton
+fun initFlagsAndLogging(
     appScope: CoroutineScope,
-    platformLogger: Logger,
+    @InjectedParam platformLogger: Logger,
     bufferedDelegatingLogger: BufferedDelegatingLogger,
     flagsManager: FlagsManager,
 ) {
@@ -49,7 +53,9 @@ private fun initFlagsAndLogging(
     }
 }
 
-private fun initNotifier(
+@Named("initNotifier")
+@Singleton
+fun initNotifier(
     configuration: NotificationPlatformConfiguration,
     logger: Logger,
 ) {

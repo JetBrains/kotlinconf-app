@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.LocalAppGraph
+import org.jetbrains.kotlinconf.flags.FlagsManager
 import org.jetbrains.kotlinconf.flags.LocalFlags
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.kodee_frightened
@@ -51,6 +51,7 @@ import org.jetbrains.kotlinconf.utils.LogExporter
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.koin.compose.koinInject
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -83,8 +84,6 @@ fun DeveloperMenuScreen(
             )
 
             HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
-
-            val appGraph = LocalAppGraph.current
 
             if (!showWarning) {
                 Column(
@@ -147,7 +146,7 @@ fun DeveloperMenuScreen(
                         enabled = flags.debugLogging,
                         onToggle = { flags = flags.copy(debugLogging = it) }
                     )
-                    val logExporter = appGraph.logger as? LogExporter
+                    val logExporter = koinInject<LogExporter>()
                     val clipboardManager = LocalClipboardManager.current
                     Button(
                         label = "Copy logs to clipboard",
@@ -164,7 +163,7 @@ fun DeveloperMenuScreen(
 
                 HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
-                val flagsManager = appGraph.flagsManager
+                val flagsManager = koinInject<FlagsManager>()
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.fillMaxWidth().padding(16.dp)

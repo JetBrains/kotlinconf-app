@@ -30,7 +30,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.AwardCategoryId
@@ -55,6 +54,8 @@ import org.jetbrains.kotlinconf.ui.generated.resources.main_header_back
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun GoldenKodeeFinalistScreen(
@@ -62,10 +63,7 @@ fun GoldenKodeeFinalistScreen(
     nomineeId: NomineeId,
     onBack: () -> Unit,
 ) {
-    val viewModel: GoldenKodeeFinalistViewModel =
-        assistedMetroViewModel<GoldenKodeeFinalistViewModel, GoldenKodeeFinalistViewModel.Factory> {
-            create(categoryId, nomineeId)
-        }
+    val viewModel = koinViewModel<GoldenKodeeFinalistViewModel> { parametersOf(categoryId,nomineeId) }
     val nominee = viewModel.nominee.collectAsStateWithLifecycle().value ?: return
     val year = viewModel.year.collectAsStateWithLifecycle().value
 

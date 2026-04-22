@@ -35,7 +35,6 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import com.mikepenz.aboutlibraries.entity.Library
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
@@ -60,6 +59,7 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.koin.compose.viewmodel.koinViewModel
 
 private val Library.licenseContent: String
     get() = licenses.firstOrNull()?.licenseContent ?: ""
@@ -68,7 +68,7 @@ private val Library.licenseContent: String
 fun LicensesScreen(
     onLicenseClick: (licenseName: String, licenseText: String) -> Unit,
     onBack: () -> Unit,
-    viewModel: LicensesViewModel = metroViewModel(),
+    viewModel: LicensesViewModel = koinViewModel(),
 ) {
     var searchState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
     var searchText by rememberSaveable { mutableStateOf("") }

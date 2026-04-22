@@ -1,9 +1,6 @@
 package org.jetbrains.kotlinconf
 
 import com.mmk.kmpnotifier.notification.NotifierManager
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,7 +21,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.kotlinconf.LocalNotificationId.Type
-import org.jetbrains.kotlinconf.di.YearGraph
+import org.jetbrains.kotlinconf.di.YearScope
 import org.jetbrains.kotlinconf.flags.FakeGoldenKodeeData
 import org.jetbrains.kotlinconf.flags.FlagsManager
 import org.jetbrains.kotlinconf.generated.resources.Res
@@ -38,16 +35,15 @@ import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.storage.YearlyStorage
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
+import org.koin.core.annotation.Singleton
 import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@Inject
-@SingleIn(AppScope::class)
+@Singleton
 class ConferenceService(
     private val appClient: ApplicationApi,
     private val applicationStorage: ApplicationStorage,
     private val timeProvider: TimeProvider,
-    private val yearGraphFactory: YearGraph.Factory,
     private val localNotificationService: LocalNotificationService,
     private val flagsManager: FlagsManager,
     private val scope: CoroutineScope,
@@ -59,10 +55,10 @@ class ConferenceService(
 
     private val taggedLogger = logger.tagged(LOG_TAG)
 
-    private val currentYearGraph: MutableStateFlow<YearGraph?> = MutableStateFlow(null)
+    private val currentYearScope: MutableStateFlow<YearScope?> = MutableStateFlow(null)
 
     private val currentYearlyStorage: Flow<YearlyStorage> =
-        currentYearGraph.map { it?.storage }.filterNotNull()
+        currentYearScope.map { it?.storage }.filterNotNull()
 
     init {
         applicationStorage.initialize()
@@ -83,9 +79,7 @@ class ConferenceService(
                     taggedLogger.log { "Loaded local config: $config, loading data for ${config.currentYear}" }
 
                     taggedLogger.log { "Recreating year graph" }
-                    currentYearGraph.update {
-                        yearGraphFactory.create(config.currentYear)
-                    }
+                    currentYearScope.update { YearScope(year = config.currentYear) }
 
                     taggedLogger.log { "Loading conference data" }
                     loadConferenceData()
@@ -183,7 +177,7 @@ class ConferenceService(
     }
 
     suspend fun loadConferenceData() {
-        val currentYearGraph = currentYearGraph.value ?: return
+        val currentYearGraph = currentYearScope.value ?: return
         val storage = currentYearGraph.storage
         val client = currentYearGraph.api
 
@@ -252,7 +246,7 @@ class ConferenceService(
      * @return true if the policy is signed.
      */
     suspend fun acceptPrivacyNotice(): Boolean {
-        val currentYearGraph = currentYearGraph.value ?: return false
+        val currentYearGraph = currentYearScope.value ?: return false
         val storage = currentYearGraph.storage
         val client = currentYearGraph.api
 
@@ -293,7 +287,7 @@ class ConferenceService(
             }
 
     suspend fun setNotificationSettings(settings: NotificationSettings) {
-        val currentYearGraph = currentYearGraph.value ?: return
+        val currentYearGraph = currentYearScope.value ?: return
         val storage = currentYearGraph.storage
 
         val previousSettings = getNotificationSettings().first()
@@ -325,14 +319,14 @@ class ConferenceService(
     }
 
     suspend fun isPolicySigned(): Boolean {
-        val storage = currentYearGraph.value?.storage ?: return false
+        val storage = currentYearScope.value?.storage ?: return false
         return storage.isPolicySigned().first()
     }
 
     suspend fun vote(sessionId: SessionId, rating: Score?): Boolean {
         if (!isPolicySigned()) return false
 
-        val currentYearGraph = currentYearGraph.value ?: return false
+        val currentYearGraph = currentYearScope.value ?: return false
         val storage = currentYearGraph.storage
         val client = currentYearGraph.api
 
@@ -350,7 +344,7 @@ class ConferenceService(
 
     suspend fun sendFeedback(sessionId: SessionId, feedbackValue: String): Boolean {
         if (!isPolicySigned()) return false
-        val client = currentYearGraph.value?.api ?: return false
+        val client = currentYearScope.value?.api ?: return false
         return client.sendFeedback(sessionId, feedbackValue)
     }
 
@@ -373,7 +367,7 @@ class ConferenceService(
 
     suspend fun setFavorite(sessionId: SessionId, favorite: Boolean) {
         withContext(Dispatchers.Default + NonCancellable) {
-            val currentYearGraph = currentYearGraph.value ?: return@withContext
+            val currentYearGraph = currentYearScope.value ?: return@withContext
             val storage = currentYearGraph.storage
 
             val favorites = storage.getFavorites().first().toMutableSet()
@@ -459,7 +453,7 @@ class ConferenceService(
             return
         }
 
-        val currentYearGraph = currentYearGraph.value ?: return
+        val currentYearGraph = currentYearScope.value ?: return
         val storage = currentYearGraph.storage
         val client = currentYearGraph.api
 
@@ -484,7 +478,7 @@ class ConferenceService(
     }
 
     private suspend fun verifyPolicyStatus() {
-        val currentYearGraph = currentYearGraph.value ?: return
+        val currentYearGraph = currentYearScope.value ?: return
         val storage = currentYearGraph.storage
         val client = currentYearGraph.api
 
@@ -504,7 +498,7 @@ class ConferenceService(
     }
 
     suspend fun downloadAllAssets() {
-        val currentYearGraph = currentYearGraph.value ?: return
+        val currentYearGraph = currentYearScope.value ?: return
         val storage = currentYearGraph.storage
         val client = currentYearGraph.api
 
@@ -547,7 +541,7 @@ class ConferenceService(
     suspend fun getAsset(path: String): String? {
         taggedLogger.log { "Reading asset: $path" }
 
-        val storage = currentYearGraph.filterNotNull().first().storage
+        val storage = currentYearScope.filterNotNull().first().storage
         val cached = storage.getAsset(path)
 
         if (cached != null) {
@@ -561,7 +555,7 @@ class ConferenceService(
     }
 
     suspend fun downloadAsset(path: String) {
-        val currentYearGraph = currentYearGraph.value ?: return
+        val currentYearGraph = currentYearScope.value ?: return
         val storage = currentYearGraph.storage
         val client = currentYearGraph.api
 

@@ -6,33 +6,31 @@ import androidx.preference.PreferenceManager
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.SharedPreferencesSettings
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.Qualifier
-import dev.zacsweers.metro.SingleIn
-import dev.zacsweers.metrox.android.MetroAppComponentProviders
+import org.jetbrains.kotlinconf.di.AndroidProperties.NOTIFICATION_ICON
+import org.koin.core.annotation.Configuration
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Property
+import org.koin.core.annotation.Singleton
 
-interface BaseAndroidAppGraph : AppGraph, MetroAppComponentProviders {
+@Module
+@Configuration
+class BaseAndroidAppModule {
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     fun provideApplicationContext(application: Application): Context = application
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     fun provideSettings(application: Application): ObservableSettings =
         SharedPreferencesSettings(PreferenceManager.getDefaultSharedPreferences(application))
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     @FileStorageDir
     fun provideFileStorageDir(application: Application): String =
         application.filesDir.resolve("files").absolutePath
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     fun provideNotificationPlatformConfiguration(
-        @NotificationIcon iconRes: Int,
+        @Property(NOTIFICATION_ICON) iconRes: Int,
     ): NotificationPlatformConfiguration =
          NotificationPlatformConfiguration.Android(
             notificationIconResId = iconRes,
@@ -40,5 +38,6 @@ interface BaseAndroidAppGraph : AppGraph, MetroAppComponentProviders {
         )
 }
 
-@Qualifier
-annotation class NotificationIcon
+object AndroidProperties {
+    const val NOTIFICATION_ICON = "iconRes"
+}

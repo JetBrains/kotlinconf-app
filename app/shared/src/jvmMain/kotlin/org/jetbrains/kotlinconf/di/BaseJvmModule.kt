@@ -2,43 +2,33 @@ package org.jetbrains.kotlinconf.di
 
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import com.russhwolf.settings.ObservableSettings
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.DependencyGraph
-import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.SingleIn
 import org.jetbrains.kotlinconf.EmptyLocalNotificationService
 import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.LocalNotificationService
 import org.jetbrains.kotlinconf.storage.createSettings
+import org.koin.core.annotation.Configuration
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Singleton
 
-@DependencyGraph(AppScope::class)
-interface JvmAppGraph : AppGraph {
+@Module
+@Configuration
+class BaseJvmModule {
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     fun provideSettings(): ObservableSettings = createSettings()
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     @FileStorageDir
     fun provideFileStorageDir(): String = "files"
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     fun provideLocalNotificationService(): LocalNotificationService = EmptyLocalNotificationService()
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     fun provideNotificationPlatformConfiguration(): NotificationPlatformConfiguration =
         NotificationPlatformConfiguration.Desktop(
             showPushNotification = false,
             notificationIconPath = null,
         )
-
-    @DependencyGraph.Factory
-    interface Factory {
-        fun create(
-            @Provides platformFlags: Flags = Flags(),
-        ): JvmAppGraph
-    }
 }

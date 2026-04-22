@@ -25,8 +25,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
@@ -61,6 +59,8 @@ import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import org.jetbrains.kotlinconf.utils.LocalWindowSize
 import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -71,8 +71,7 @@ fun SessionScreen(
     onPrivacyNoticeNeeded: () -> Unit,
     onNavigateToMap: (String) -> Unit,
     onWatchVideo: (String) -> Unit,
-    viewModel: SessionViewModel =
-        assistedMetroViewModel<SessionViewModel, SessionViewModel.Factory> { create(sessionId) }
+    viewModel: SessionViewModel = koinViewModel { parametersOf(sessionId) }
 ) {
     val sessionState = viewModel.session.collectAsStateWithLifecycle().value
     val speakers = viewModel.speakers.collectAsStateWithLifecycle().value
@@ -221,7 +220,7 @@ private fun RoomSection(
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
 
-    val mapViewModel: MapViewModel = metroViewModel()
+    val mapViewModel: MapViewModel = koinViewModel()
     val mapState = mapViewModel.state.collectAsStateWithLifecycle().value
 
     val mapContent = (mapState as? ErrorLoadingState.Content)?.data

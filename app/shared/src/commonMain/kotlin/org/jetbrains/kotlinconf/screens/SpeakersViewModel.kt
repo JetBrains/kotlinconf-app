@@ -2,9 +2,6 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,6 +14,7 @@ import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import org.jetbrains.kotlinconf.utils.performSearch
+import org.koin.core.annotation.KoinViewModel
 
 data class SpeakerWithHighlights(
     val speaker: Speaker,
@@ -24,8 +22,7 @@ data class SpeakerWithHighlights(
     val titleHighlights: List<IntRange> = emptyList(),
 )
 
-@ContributesIntoMap(AppScope::class)
-@ViewModelKey
+@KoinViewModel
 class SpeakersViewModel(
     private val service: ConferenceService,
 ) : ViewModel() {

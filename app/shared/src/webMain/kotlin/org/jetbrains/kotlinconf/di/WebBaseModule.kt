@@ -5,26 +5,18 @@ import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.StorageSettings
 import com.russhwolf.settings.observable.makeObservable
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.DependencyGraph
-import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.SingleIn
-import org.jetbrains.kotlinconf.flags.Flags
+import org.koin.core.annotation.Configuration
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Singleton
 
-@DependencyGraph(AppScope::class)
-interface WebAppGraph : AppGraph {
-    @DependencyGraph.Factory
-    interface Factory {
-        fun create(@Provides platformFlags: Flags): WebAppGraph
-    }
-
-    @Provides
-    @SingleIn(AppScope::class)
+@Module
+@Configuration
+class WebBaseModule {
+    @Singleton
     @OptIn(ExperimentalSettingsApi::class)
     fun provideSettings(): ObservableSettings = StorageSettings().makeObservable()
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     fun provideNotificationPlatformConfiguration(): NotificationPlatformConfiguration =
         NotificationPlatformConfiguration.Web(false, null)
 }

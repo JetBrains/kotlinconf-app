@@ -39,7 +39,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.MapData
@@ -69,6 +68,7 @@ import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.sqrt
 
 /**
@@ -84,7 +84,7 @@ private fun Offset.asSvgOffset(svg: Svg) = Offset(
 fun NestedMapScreen(
     roomName: String,
     onBack: (() -> Unit),
-    viewModel: MapViewModel = metroViewModel(),
+    viewModel: MapViewModel = koinViewModel(),
 ) {
     MapScreenImpl(
         roomName = roomName,
@@ -98,7 +98,7 @@ fun NestedMapScreen(
 @Composable
 fun MapScreen(
     onHowToFindVenue: (String) -> Unit,
-    viewModel: MapViewModel = metroViewModel(),
+    viewModel: MapViewModel = koinViewModel(),
 ) {
     MapScreenImpl(
         roomName = null,

@@ -1,12 +1,9 @@
 package org.jetbrains.kotlinconf.storage
 
-import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.coroutines.getBooleanFlow
 import com.russhwolf.settings.coroutines.getStringOrNullFlow
 import com.russhwolf.settings.set
-import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerializationException
@@ -19,11 +16,13 @@ import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.di.Year
 import org.jetbrains.kotlinconf.di.YearScope
+import org.koin.core.annotation.KoinInternalApi
+import org.koin.core.annotation.Scope
+import org.koin.core.annotation.Scoped
 
 
-@ContributesBinding(YearScope::class)
-@SingleIn(YearScope::class)
-@OptIn(ExperimentalSettingsApi::class)
+@Scope(YearScope::class)
+@Scoped
 class YearlyStorageImpl(
     @Year private val year: Int,
     private val settings: ObservableSettings,

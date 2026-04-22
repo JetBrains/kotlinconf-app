@@ -4,9 +4,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import dev.zacsweers.metro.createGraphFactory
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.di.JvmAppGraph
 import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.generated.resources.desktop.Res
 import org.jetbrains.kotlinconf.generated.resources.desktop.app_name
@@ -19,14 +17,9 @@ class JvmLogger : Logger {
 }
 
 fun main() {
-    val graph = createGraphFactory<JvmAppGraph.Factory>()
-        .create(
-            platformFlags = Flags(supportsNotifications = false, debugLogging = true)
-        )
-
     initApp(
-        appGraph = graph,
         platformLogger = JvmLogger(),
+        platformFlags = Flags(supportsNotifications = false, debugLogging = true)
     )
 
     System.setProperty("apple.awt.application.appearance", "system")
@@ -38,7 +31,7 @@ fun main() {
             alwaysOnTop = true,
             state = rememberWindowState(width = 600.dp, height = 800.dp),
         ) {
-            App(graph)
+            App()
         }
     }
 }

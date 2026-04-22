@@ -2,9 +2,6 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.utils.ErrorLoadingState
+import org.koin.core.annotation.KoinViewModel
 
 sealed class PrivacyNoticeState {
     data object Idle : PrivacyNoticeState()
@@ -21,8 +19,7 @@ sealed class PrivacyNoticeState {
     data object Done : PrivacyNoticeState()
 }
 
-@ContributesIntoMap(AppScope::class)
-@ViewModelKey
+@KoinViewModel
 class PrivacyNoticeViewModel(
     private val service: ConferenceService,
 ) : ViewModel() {

@@ -1,7 +1,5 @@
 package org.jetbrains.kotlinconf.network
 
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -29,9 +27,11 @@ import org.jetbrains.kotlinconf.di.YearScope
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
+import org.koin.core.annotation.Scope
+import org.koin.core.annotation.Scoped
 
-@Inject
-@SingleIn(YearScope::class)
+@Scope(YearScope::class)
+@Scoped
 class YearlyApi(
     @Year private val year: Int,
     private val client: HttpClient,

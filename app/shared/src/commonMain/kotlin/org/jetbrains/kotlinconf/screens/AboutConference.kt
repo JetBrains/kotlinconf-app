@@ -23,7 +23,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.ScrollToTopHandler
@@ -42,6 +41,7 @@ import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.components.SpeakerCard
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AboutConference(
@@ -50,7 +50,7 @@ fun AboutConference(
     onWebsiteLink: () -> Unit,
     onBack: () -> Unit,
     onSpeaker: (SpeakerId) -> Unit,
-    viewModel: AboutConferenceViewModel = metroViewModel(),
+    viewModel: AboutConferenceViewModel = koinViewModel(),
 ) {
     val isDark = KotlinConfTheme.colors.isDark
     val conferenceInfo = viewModel.conferenceInfo.collectAsStateWithLifecycle().value

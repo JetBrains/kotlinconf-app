@@ -3,14 +3,11 @@ package org.jetbrains.kotlinconf
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.channels.Channel
 import org.jetbrains.kotlinconf.utils.Logger
+import org.koin.core.annotation.Singleton
 
-@Inject
-@SingleIn(AppScope::class)
+@Singleton
 class PermissionHandler(
     private val logger: Logger,
 ) {

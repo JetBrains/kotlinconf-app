@@ -34,7 +34,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -83,13 +82,14 @@ import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ScheduleScreen(
     onSession: (SessionId) -> Unit,
     onPrivacyNoticeNeeded: () -> Unit,
     tabReselections: Flow<TopLevelRoute>,
-    viewModel: ScheduleViewModel = metroViewModel(),
+    viewModel: ScheduleViewModel = koinViewModel(),
 ) {
     val scope = rememberCoroutineScope()
     var bookmarkFilterEnabled by rememberSaveable { mutableStateOf(false) }

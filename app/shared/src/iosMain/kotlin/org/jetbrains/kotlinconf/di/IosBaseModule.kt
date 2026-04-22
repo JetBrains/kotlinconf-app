@@ -4,27 +4,24 @@ import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfig
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.NSUserDefaultsSettings
 import com.russhwolf.settings.ObservableSettings
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.DependencyGraph
-import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.SingleIn
-import org.jetbrains.kotlinconf.flags.Flags
+import org.koin.core.annotation.Configuration
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Singleton
 import platform.Foundation.NSApplicationSupportDirectory
 import platform.Foundation.NSSearchPathForDirectoriesInDomains
 import platform.Foundation.NSUserDefaults
 import platform.Foundation.NSUserDomainMask
 
-@DependencyGraph(AppScope::class)
-interface IosAppGraph : AppGraph {
+@Module
+@Configuration
+class IosBaseModule {
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     @OptIn(ExperimentalSettingsApi::class)
     fun provideSettings(): ObservableSettings =
         NSUserDefaultsSettings(NSUserDefaults.standardUserDefaults)
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     @FileStorageDir
     fun provideFileStorageDir(): String {
         val storageDir = NSSearchPathForDirectoriesInDomains(
@@ -33,19 +30,11 @@ interface IosAppGraph : AppGraph {
         return "$storageDir/files"
     }
 
-    @Provides
-    @SingleIn(AppScope::class)
+    @Singleton
     fun provideNotificationPlatformConfiguration(): NotificationPlatformConfiguration =
         NotificationPlatformConfiguration.Ios(
             showPushNotification = true,
             askNotificationPermissionOnStart = false,
             notificationSoundName = null,
         )
-
-    @DependencyGraph.Factory
-    interface Factory {
-        fun create(
-            @Provides platformFlags: Flags,
-        ): IosAppGraph
-    }
 }

@@ -4,10 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.entity.Library
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,6 +14,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.utils.performSearch
+import org.koin.core.annotation.KoinViewModel
 
 data class LibraryWithHighlights(
     val library: Library,
@@ -25,9 +22,8 @@ data class LibraryWithHighlights(
     val authorHighlights: List<IntRange> = emptyList(),
     val licenseHighlights: List<IntRange> = emptyList(),
 )
-
-@ContributesIntoMap(AppScope::class)
-@ViewModelKey
+//TODO Add Koin Licence
+@KoinViewModel
 class LicensesViewModel : ViewModel() {
     private var searchText = MutableStateFlow("")
     private val libraries = flow {

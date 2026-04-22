@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.googleServices)
-    alias(libs.plugins.metro)
+    alias(libs.plugins.koin)
 }
 
 kotlin {
@@ -22,8 +22,8 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
     debugImplementation(libs.compose.ui.tooling)
 
-    implementation(libs.metrox.android)
-    implementation(libs.metrox.viewmodel.compose)
+    implementation(libs.koin.annotations)
+    implementation(libs.koin.android)
 
     testImplementation(libs.junit)
 }

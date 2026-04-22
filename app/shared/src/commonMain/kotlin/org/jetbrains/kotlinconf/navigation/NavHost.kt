@@ -33,12 +33,14 @@ import androidx.navigation3.ui.NavDisplay
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.map
 import org.jetbrains.kotlinconf.ConferenceService
-import org.jetbrains.kotlinconf.LocalAppGraph
 import org.jetbrains.kotlinconf.LocalMapHandler
 import org.jetbrains.kotlinconf.LocalNotificationId
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.ThemeChangeAnimation
+import org.jetbrains.kotlinconf.TimeProvider
 import org.jetbrains.kotlinconf.URLs
+import org.jetbrains.kotlinconf.di.BaseUrl
+import org.jetbrains.kotlinconf.flags.FlagsManager
 import org.jetbrains.kotlinconf.flags.LocalFlags
 import org.jetbrains.kotlinconf.screens.AboutAppScreen
 import org.jetbrains.kotlinconf.screens.AboutConference
@@ -71,6 +73,8 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.koin.compose.koinInject
+import org.koin.core.qualifier.named
 import org.jetbrains.kotlinconf.screens.DeveloperMenuScreen as DeveloperMenuScreenContent
 
 fun navigateByLocalNotificationId(notificationId: String) {
@@ -139,7 +143,7 @@ internal fun NavHost(
         )
     }
 
-    val conferenceService = LocalAppGraph.current.conferenceService
+    val conferenceService = koinInject<ConferenceService>()
     val showGoldenKodee by remember { conferenceService.goldenKodeeData.map { it != null } }
         .collectAsStateWithLifecycle(false)
 
@@ -182,8 +186,8 @@ internal fun NavHost(
                     )
                 }
 
-                val baseUrl = LocalAppGraph.current.baseUrl
-                val flagsManager = LocalAppGraph.current.flagsManager
+                val baseUrl = koinInject<String>(named<BaseUrl>())// TODO check Type qualifier for -LocalAppGraph.current.baseUrl
+                val flagsManager = koinInject<FlagsManager>()
                 val currentFlags = LocalFlags.current
                 val platformFlags = flagsManager.platformFlags
                 if (baseUrl != URLs.PRODUCTION_URL || currentFlags != platformFlags) {
@@ -220,7 +224,7 @@ private fun DebugMarker(modifier: Modifier = Modifier) {
             maxLines = 1,
         )
         if (LocalFlags.current.useFakeTime) {
-            val dateTime by LocalAppGraph.current.timeProvider.time.collectAsStateWithLifecycle()
+            val dateTime by koinInject<TimeProvider>().time.collectAsStateWithLifecycle()
             Text(
                 text = "Fake time: ${DateTimeFormatting.dateAndTime(dateTime)}",
                 color = KotlinConfTheme.colors.orangeText,
@@ -272,7 +276,7 @@ private fun EntryProviderScope<AppRoute>.screens(
     }
 
     entry<ScheduleScreen>(metadata = noAnimationMetadata) {
-        val service: ConferenceService = LocalAppGraph.current.conferenceService
+        val service: ConferenceService = koinInject()
         LaunchedEffect(Unit) {
             service.completeOnboarding()
         }

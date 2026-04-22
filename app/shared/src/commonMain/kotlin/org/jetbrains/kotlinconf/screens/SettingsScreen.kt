@@ -27,7 +27,6 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.flags.LocalFlags
@@ -45,11 +44,12 @@ import org.jetbrains.kotlinconf.generated.resources.theme_light
 import org.jetbrains.kotlinconf.generated.resources.theme_system
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
-    viewModel: SettingsViewModel = metroViewModel(),
+    viewModel: SettingsViewModel = koinViewModel(),
 ) {
     val currentTheme by viewModel.theme.collectAsStateWithLifecycle()
 

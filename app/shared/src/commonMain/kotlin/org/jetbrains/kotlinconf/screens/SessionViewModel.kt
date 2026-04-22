@@ -2,13 +2,6 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.AssistedInject
-import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
-import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -19,11 +12,13 @@ import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.utils.ErrorLoadingState
+import org.koin.core.annotation.InjectedParam
+import org.koin.core.annotation.KoinViewModel
 
-@AssistedInject
+@KoinViewModel
 class SessionViewModel(
     private val service: ConferenceService,
-    @Assisted private val sessionId: SessionId,
+    @InjectedParam private val sessionId: SessionId,
 ) : ViewModel() {
 
     val session: StateFlow<ErrorLoadingState<SessionCardView>> = service.sessionByIdFlow(sessionId)
@@ -40,12 +35,5 @@ class SessionViewModel(
         viewModelScope.launch {
             service.setFavorite(sessionId, isBookmarked)
         }
-    }
-
-    @AssistedFactory
-    @ManualViewModelAssistedFactoryKey
-    @ContributesIntoMap(AppScope::class)
-    fun interface Factory : ManualViewModelAssistedFactory {
-        fun create(sessionId: SessionId): SessionViewModel
     }
 }
