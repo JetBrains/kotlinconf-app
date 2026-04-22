@@ -69,6 +69,7 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfDarkColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfLightColors
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
+import org.jetbrains.kotlinconf.utils.LocalWindowSize
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 import org.jetbrains.kotlinconf.screens.DeveloperMenuScreen as DeveloperMenuScreenContent
@@ -143,6 +144,16 @@ internal fun NavHost(
     val showGoldenKodee by remember { conferenceService.goldenKodeeData.map { it != null } }
         .collectAsStateWithLifecycle(false)
 
+    val windowSize = LocalWindowSize.current
+    val navigationDecorator = remember(navState, navigator, showGoldenKodee, windowSize) {
+        TopLevelNavStrategy(
+            navState = navState,
+            windowSize = windowSize,
+            showGoldenKodee = showGoldenKodee,
+            onSelectRoute = { route -> navigator.activate(route) },
+        )
+    }
+
     val isGoldenKodee = navState.topLevelRoute is GoldenKodeeScreen
 
     ThemeChangeAnimation(
@@ -171,16 +182,11 @@ internal fun NavHost(
                         WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)
                     )
             ) {
-                NavScaffold(
-                    navState = navState,
-                    navigator = navigator,
-                    showGoldenKodee = showGoldenKodee,
-                ) {
-                    NavDisplay(
-                        entries = navState.toDecoratedEntries(entryProvider),
-                        onBack = navigator::goBack,
-                    )
-                }
+                NavDisplay(
+                    entries = navState.toDecoratedEntries(entryProvider),
+                    onBack = navigator::goBack,
+                    sceneDecoratorStrategies = listOf(navigationDecorator),
+                )
 
                 val baseUrl = LocalAppGraph.current.baseUrl
                 val flagsManager = LocalAppGraph.current.flagsManager
