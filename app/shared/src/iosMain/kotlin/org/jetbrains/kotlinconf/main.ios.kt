@@ -3,12 +3,15 @@ package org.jetbrains.kotlinconf
 import androidx.compose.ui.uikit.OnFocusBehavior
 import androidx.compose.ui.window.ComposeUIViewController
 import dev.zacsweers.metro.createGraphFactory
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.useContents
 import org.jetbrains.kotlinconf.di.IosAppGraph
 import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.navigation.AppRoute
 import org.jetbrains.kotlinconf.navigation.TopLevelRoute
 import org.jetbrains.kotlinconf.utils.Logger
 import platform.Foundation.NSLog
+import platform.Foundation.NSProcessInfo
 import platform.UIKit.UIViewController
 
 @Suppress("unused") // Called from Swift
@@ -23,12 +26,19 @@ class IOSLogger : Logger {
     }
 }
 
+@OptIn(ExperimentalForeignApi::class)
+private fun isIOS26OrLater(): Boolean {
+    val majorVersion = NSProcessInfo.processInfo().operatingSystemVersion().useContents { majorVersion }
+    return majorVersion >= 26
+}
+
 private val appGraph = createGraphFactory<IosAppGraph.Factory>()
     .create(
         Flags(
             enableBackOnTopLevelScreens = false,
             rippleEnabled = false,
             hideKeyboardOnDrag = true,
+            supportsExternalNavigation = isIOS26OrLater(),
         )
     )
 

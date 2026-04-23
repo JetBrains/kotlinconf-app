@@ -65,13 +65,15 @@ fun SettingsScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            SettingsItem(
-                title = stringResource(Res.string.settings_external_navigation),
-                enabled = viewModel.externalNavigation.collectAsStateWithLifecycle().value,
-                onToggle = { enabled -> viewModel.setExternalNavigation(enabled) },
-            )
+            if (LocalFlags.current.supportsExternalNavigation) {
+                SettingsItem(
+                    title = stringResource(Res.string.settings_external_navigation),
+                    enabled = viewModel.externalNavigation.collectAsStateWithLifecycle().value,
+                    onToggle = { enabled -> viewModel.setExternalNavigation(enabled) },
+                )
 
-            Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(24.dp))
+            }
 
             if (LocalFlags.current.supportsNotifications) {
                 val notificationSettings = viewModel.notificationSettings.collectAsStateWithLifecycle().value

@@ -232,8 +232,10 @@ struct NativeNavContentView: View {
 // MARK: - ContentView
 
 struct ContentView: View {
+    @AppStorage("externalNavigation") private var useNativeNavigation = false
+
     var body: some View {
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.0, *), useNativeNavigation {
             NativeNavContentView()
         } else {
             ComposeView(topLevelRoute: ScheduleScreen())
