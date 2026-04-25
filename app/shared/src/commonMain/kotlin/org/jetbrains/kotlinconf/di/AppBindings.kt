@@ -5,7 +5,6 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
-import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
@@ -29,7 +28,6 @@ import org.jetbrains.kotlinconf.URLs
 import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.network.ApplicationApi
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
-import org.jetbrains.kotlinconf.utils.BufferedDelegatingLogger
 import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.reflect.KClass
 import io.ktor.client.plugins.logging.Logger as KtorLogger
@@ -41,8 +39,8 @@ object AppBindings {
     @Provides
     @SingleIn(AppScope::class)
     fun provideMetroViewModelFactory(
-        viewModelProviders: Map<KClass<out ViewModel>, Provider<ViewModel>>,
-        manualAssistedFactoryProviders: Map<KClass<out ManualViewModelAssistedFactory>, Provider<ManualViewModelAssistedFactory>>,
+        viewModelProviders: Map<KClass<out ViewModel>, () -> ViewModel>,
+        manualAssistedFactoryProviders: Map<KClass<out ManualViewModelAssistedFactory>, () -> ManualViewModelAssistedFactory>,
     ): MetroViewModelFactory = object : MetroViewModelFactory() {
         override val viewModelProviders get() = viewModelProviders
         override val manualAssistedFactoryProviders get() = manualAssistedFactoryProviders
