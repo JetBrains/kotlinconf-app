@@ -8,12 +8,12 @@ import kotlin.time.Instant
 
 @Serializable
 class SessionizeData(
-    val sessions: List<SessionData> = emptyList(),
-    val rooms: List<RoomData> = emptyList(),
-    val speakers: List<SpeakerData> = emptyList(),
-    val questions: List<QuestionData> = emptyList(),
-    val categories: List<CategoryData> = emptyList(),
-    val partners: List<PartnerData> = emptyList()
+    val sessions: List<SessionData> = [],
+    val rooms: List<RoomData> = [],
+    val speakers: List<SpeakerData> = [],
+    val questions: List<QuestionData> = [],
+    val categories: List<CategoryData> = [],
+    val partners: List<PartnerData> = []
 )
 
 @Serializable
@@ -28,8 +28,8 @@ data class SessionData(
     val endsAt: Instant?,
     val title: String,
     val roomId: Int?,
-    val questionAnswers: List<QuestionAnswerData> = emptyList(),
-    val categoryItems: List<Int> = emptyList(),
+    val questionAnswers: List<QuestionAnswerData> = [],
+    val categoryItems: List<Int> = [],
     val liveUrl: String? = null,
     val recordingUrl: String? = null,
 ) {
@@ -58,9 +58,9 @@ class SpeakerData(
     val isTopSpeaker: Boolean,
     val bio: String?,
     val fullName: String,
-    val links: List<LinkData> = emptyList(),
-    val categoryItems: List<Int> = emptyList(),
-    val questionAnswers: List<QuestionAnswerData> = emptyList()
+    val links: List<LinkData> = [],
+    val categoryItems: List<Int> = [],
+    val questionAnswers: List<QuestionAnswerData> = []
 )
 
 @Serializable
@@ -76,7 +76,7 @@ class CategoryData(
     val id: Int,
     val sort: Int,
     val title: String,
-    val items: List<CategoryItemData> = emptyList()
+    val items: List<CategoryItemData> = []
 )
 
 @Serializable

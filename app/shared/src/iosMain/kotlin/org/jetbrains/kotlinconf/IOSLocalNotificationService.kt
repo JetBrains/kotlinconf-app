@@ -85,7 +85,7 @@ class IOSLocalNotificationService(
 
     override fun cancel(localNotificationId: LocalNotificationId) {
         logger.log(LOG_TAG) { "Cancelling: $localNotificationId" }
-        val identifiers = listOf(localNotificationId.toString())
+        val identifiers = [localNotificationId.toString()]
         notificationCenter.removePendingNotificationRequestsWithIdentifiers(identifiers)
     }
 }

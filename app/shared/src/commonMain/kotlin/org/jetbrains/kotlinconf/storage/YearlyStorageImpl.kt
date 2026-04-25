@@ -64,13 +64,13 @@ class YearlyStorageImpl(
     override fun getGoldenKodeeCache(): Flow<GoldenKodeeData?> = settings.getStringOrNullFlow(GOLDEN_KODEE_CACHE).map { it.decodeOrNull<GoldenKodeeData>() }
     override suspend fun setGoldenKodeeCache(value: GoldenKodeeData) = settings.set(GOLDEN_KODEE_CACHE, json.encodeToString(value))
 
-    override fun getFavorites(): Flow<Set<SessionId>> = settings.getStringOrNullFlow(FAVORITES).map { it.decodeOrNull<Set<SessionId>>() ?: emptySet() }
+    override fun getFavorites(): Flow<Set<SessionId>> = settings.getStringOrNullFlow(FAVORITES).map { it.decodeOrNull<Set<SessionId>>() ?: [] }
     override suspend fun setFavorites(value: Set<SessionId>) = settings.set(FAVORITES, json.encodeToString(value))
 
     override fun getNotificationSettings(): Flow<NotificationSettings?> = settings.getStringOrNullFlow(NOTIFICATION_SETTINGS).map { it.decodeOrNull<NotificationSettings>() }
     override suspend fun setNotificationSettings(value: NotificationSettings) = settings.set(NOTIFICATION_SETTINGS, json.encodeToString(value))
 
-    override fun getVotes(): Flow<List<VoteInfo>> = settings.getStringOrNullFlow(VOTES).map { it.decodeOrNull<List<VoteInfo>>() ?: emptyList() }
+    override fun getVotes(): Flow<List<VoteInfo>> = settings.getStringOrNullFlow(VOTES).map { it.decodeOrNull<List<VoteInfo>>() ?: [] }
     override suspend fun setVotes(value: List<VoteInfo>) = settings.set(VOTES, json.encodeToString(value))
 
     override suspend fun getAsset(name: String): String? = assetStorage.read(name)

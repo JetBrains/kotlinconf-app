@@ -102,10 +102,10 @@ data class HeaderToggleOption(
     val contentDescription: String,
 )
 
-private val headerTogglePreviewOptions = listOf(
+private val headerTogglePreviewOptions = [
     HeaderToggleOption(UiRes.drawable.view_list_24, "List view"),
     HeaderToggleOption(UiRes.drawable.view_grid_24, "Grid view"),
-)
+]
 
 private class HeaderToggleSelectedIndexProvider : PreviewParameterProvider<Int> {
     override val values = headerTogglePreviewOptions.indices.asSequence()

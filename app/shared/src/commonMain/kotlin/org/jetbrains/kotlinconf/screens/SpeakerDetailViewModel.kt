@@ -42,7 +42,7 @@ class SpeakerDetailViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ErrorLoadingState.Loading)
 
     val sessions: StateFlow<List<SessionCardView>> = service.sessionsForSpeakerFlow(speakerId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), [])
 
     @AssistedFactory
     @ManualViewModelAssistedFactoryKey

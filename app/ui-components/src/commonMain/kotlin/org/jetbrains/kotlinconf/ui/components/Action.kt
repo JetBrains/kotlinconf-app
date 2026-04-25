@@ -89,7 +89,7 @@ private data class ActionPreviewParams(val size: ActionSize, val enabled: Boolea
 
 private class ActionPreviewParamsProvider : PreviewParameterProvider<ActionPreviewParams> {
     override val values = ActionSize.entries.flatMap { size ->
-        listOf(true, false).map { enabled ->
+        [true, false].map { enabled ->
             ActionPreviewParams(size, enabled)
         }
     }.asSequence()

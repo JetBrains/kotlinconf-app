@@ -75,10 +75,10 @@ object MigrationRunner {
         val classLoader = Thread.currentThread().contextClassLoader
         val pattern = Regex("""V(\d+)__(.+)\.sql""")
 
-        val url = classLoader.getResource(resourcePath) ?: return emptyList()
+        val url = classLoader.getResource(resourcePath) ?: return []
 
         val filenames: List<String> = when (url.protocol) {
-            "file" -> File(url.toURI()).list()?.toList() ?: emptyList()
+            "file" -> File(url.toURI()).list()?.toList() ?: []
             "jar" -> {
                 val jarPath = url.path.substringBefore("!")
                 JarFile(URI(jarPath).path).use { jar ->
@@ -89,7 +89,7 @@ object MigrationRunner {
                         .toList()
                 }
             }
-            else -> emptyList()
+            else -> []
         }
 
         return filenames.mapNotNull { filename ->

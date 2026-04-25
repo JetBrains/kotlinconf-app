@@ -8,6 +8,10 @@ plugins {
 }
 
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcollection-literals")
+    }
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         binaries.executable()

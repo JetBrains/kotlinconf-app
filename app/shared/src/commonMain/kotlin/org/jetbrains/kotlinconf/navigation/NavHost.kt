@@ -113,13 +113,13 @@ internal fun NavHost(
 
     val navState = rememberNavState(
         startRoute = startRoute,
-        topLevelRoutes = setOf(
+        topLevelRoutes = [
             ScheduleScreen,
             SpeakersScreen,
             GoldenKodeeScreen,
             MapScreen,
             InfoScreen,
-        ),
+        ],
         primaryTopLevelRoute = ScheduleScreen,
     )
 

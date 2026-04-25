@@ -226,9 +226,9 @@ private fun LibraryItem(
     library: Library,
     onLicenseClick: () -> Unit,
     modifier: Modifier = Modifier,
-    nameHighlights: List<IntRange> = emptyList(),
-    authorHighlights: List<IntRange> = emptyList(),
-    licenseHighlights: List<IntRange> = emptyList(),
+    nameHighlights: List<IntRange> = [],
+    authorHighlights: List<IntRange> = [],
+    licenseHighlights: List<IntRange> = [],
 ) {
     Column(
         modifier = modifier

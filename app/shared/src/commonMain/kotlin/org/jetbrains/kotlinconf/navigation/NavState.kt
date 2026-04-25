@@ -81,10 +81,10 @@ class NavState(
     fun toDecoratedEntries(
         entryProvider: (AppRoute) -> NavEntry<AppRoute>
     ): SnapshotStateList<NavEntry<AppRoute>> {
-        val decorators = listOf(
+        val decorators = [
             rememberSaveableStateHolderNavEntryDecorator<AppRoute>(),
             rememberViewModelStoreNavEntryDecorator(),
-        )
+        ]
 
         val topLevelEntries = topLevelBackStacks
             .mapValues { (route, stack) ->
@@ -94,7 +94,7 @@ class NavState(
                     entryProvider = entryProvider
                 )
             }
-            .withDefault { emptyList() }
+            .withDefault { [] }
 
         val defaultEntries = rememberDecoratedNavEntries(
             backStack = if (topLevelRoute == null) currentBackstack else defaultBackstack,
