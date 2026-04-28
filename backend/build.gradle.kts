@@ -7,6 +7,12 @@ plugins {
     alias(libs.plugins.ktor)
 }
 
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcollection-literals")
+    }
+}
+
 application {
     mainClass = "io.ktor.server.netty.EngineMain"
 

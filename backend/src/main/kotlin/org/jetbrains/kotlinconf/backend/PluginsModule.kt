@@ -71,7 +71,7 @@ fun Application.pluginsSetup() {
         allowHeader(HttpHeaders.CacheControl)
         allowCredentials = true
         allowNonSimpleContentTypes = true
-        listOf(HttpMethod.Put, HttpMethod.Get, HttpMethod.Post, HttpMethod.Delete, HttpMethod.Options).forEach {
+        [HttpMethod.Put, HttpMethod.Get, HttpMethod.Post, HttpMethod.Delete, HttpMethod.Options].forEach {
             allowMethod(it)
         }
         anyHost()

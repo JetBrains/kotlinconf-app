@@ -92,7 +92,7 @@ private fun SectionHeading(
     )
 }
 
-private val themes = listOf(Theme.SYSTEM, Theme.DARK, Theme.LIGHT)
+private val themes = [Theme.SYSTEM, Theme.DARK, Theme.LIGHT]
 
 @Composable
 private fun ThemeSelector(

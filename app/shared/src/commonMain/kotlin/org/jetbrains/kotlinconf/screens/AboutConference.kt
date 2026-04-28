@@ -92,7 +92,7 @@ fun AboutConference(
                     line1 = event.title1,
                     line2 = event.title2,
                     description = event.description ?: "",
-                    speakers = event.speakers ?: emptyList(),
+                    speakers = event.speakers ?: [],
                     location = event.sessionCard?.locationLine ?: "",
                     time = event.sessionCard?.shortTimeline ?: "",
                     onSpeaker = onSpeaker,

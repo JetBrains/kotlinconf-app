@@ -31,8 +31,8 @@ fun SpeakerCard(
     photoUrl: String,
     onClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
-    nameHighlights: List<IntRange> = emptyList(),
-    titleHighlights: List<IntRange> = emptyList(),
+    nameHighlights: List<IntRange> = [],
+    titleHighlights: List<IntRange> = [],
 ) {
     Row(
         modifier = modifier
@@ -96,9 +96,9 @@ private fun SpeakerCardPreview() = PreviewHelper {
 private fun SpeakerCardWithHighlightsPreview() = PreviewHelper {
     SpeakerCard(
         name = "John Doe",
-        nameHighlights = listOf(0..3),  // Highlight "John"
+        nameHighlights = [0..3],  // Highlight "John"
         title = "Whatever Role Name at That Company",
-        titleHighlights = listOf(9..12),  // Highlight "Role"
+        titleHighlights = [9..12],  // Highlight "Role"
         photoUrl = "https://sessionize.com/image/2e2f-0o0o0-XGxKBoqZvxxQxosrZHQHTT.png?download=sebastian-aigner.png",
         onClick = {},
     )

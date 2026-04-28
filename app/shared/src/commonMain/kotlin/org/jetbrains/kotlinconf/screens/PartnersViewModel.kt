@@ -19,5 +19,5 @@ class PartnersViewModel(
 ) : ViewModel() {
     val partnerGroups: StateFlow<List<PartnerGroup>> = service.conferenceInfo
         .mapNotNull { it?.partners }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), [])
 }

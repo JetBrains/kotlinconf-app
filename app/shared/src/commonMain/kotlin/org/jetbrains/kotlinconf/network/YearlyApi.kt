@@ -91,7 +91,7 @@ class YearlyApi(
 
     suspend fun myVotes(): List<VoteInfo> = safeApiCall {
         client.get { apiUrl("vote") }.body<Votes>().votes
-    } ?: emptyList()
+    } ?: []
 
     private suspend fun <T> safeApiCall(
         call: suspend () -> T,

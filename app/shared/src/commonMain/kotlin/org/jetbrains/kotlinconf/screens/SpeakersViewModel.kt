@@ -20,8 +20,8 @@ import org.jetbrains.kotlinconf.utils.performSearch
 
 data class SpeakerWithHighlights(
     val speaker: Speaker,
-    val nameHighlights: List<IntRange> = emptyList(),
-    val titleHighlights: List<IntRange> = emptyList(),
+    val nameHighlights: List<IntRange> = [],
+    val titleHighlights: List<IntRange> = [],
 )
 
 @ContributesIntoMap(AppScope::class)
@@ -68,7 +68,7 @@ class SpeakersViewModel(
                     produceResult = { speaker, (nameMatches, titleMatches) ->
                         SpeakerWithHighlights(speaker, nameMatches, titleMatches)
                     },
-                    selectors = listOf({ it.name }, { it.position }),
+                    selectors = [{ it.name }, { it.position }],
                 )
                 ErrorLoadingState.Content(searchResults)
             }

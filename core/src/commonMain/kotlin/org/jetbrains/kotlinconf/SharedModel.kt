@@ -6,8 +6,8 @@ import kotlin.jvm.JvmInline
 
 @Serializable
 class Conference(
-    val sessions: List<Session> = emptyList(),
-    val speakers: List<Speaker> = emptyList(),
+    val sessions: List<Session> = [],
+    val speakers: List<Speaker> = [],
 )
 
 @Serializable
@@ -74,7 +74,7 @@ enum class Score(val value: Int) {
 
 @Serializable
 class Votes(
-    val votes: List<VoteInfo> = emptyList()
+    val votes: List<VoteInfo> = []
 )
 
 @Serializable
