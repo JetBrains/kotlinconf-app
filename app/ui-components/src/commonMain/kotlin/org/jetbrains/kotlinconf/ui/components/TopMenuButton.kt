@@ -26,7 +26,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 
 @OptIn(ExperimentalFoundationApi::class)

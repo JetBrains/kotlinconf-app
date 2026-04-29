@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 @Composable
 fun SectionTitle(

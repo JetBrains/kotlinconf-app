@@ -39,7 +39,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.utils.PreviewInteractionSource
-import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 @Composable
 fun LargeSearchBar(

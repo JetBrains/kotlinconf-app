@@ -21,7 +21,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 
 private val FilterTagShape = RoundedCornerShape(size = 6.dp)

@@ -56,7 +56,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.filter_label_session_form
 import org.jetbrains.kotlinconf.ui.generated.resources.up_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 enum class FilterItemType {
     Category, Level, Format,

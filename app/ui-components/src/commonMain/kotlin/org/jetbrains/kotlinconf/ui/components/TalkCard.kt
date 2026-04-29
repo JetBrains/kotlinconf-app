@@ -63,7 +63,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_icon_desc_codel
 import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_icon_desc_education
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 @Composable
 internal fun buildHighlightedString(

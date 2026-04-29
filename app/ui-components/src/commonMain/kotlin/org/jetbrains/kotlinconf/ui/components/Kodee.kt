@@ -34,7 +34,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.kodee_small_positive_fill
 import org.jetbrains.kotlinconf.ui.generated.resources.kodee_small_positive_outline
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import org.jetbrains.kotlinconf.ui.utils.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 enum class Emotion {
     Negative, Neutral, Positive;
