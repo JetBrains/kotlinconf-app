@@ -40,7 +40,7 @@ fun MarkdownView(
     onCustomUriClick: (String) -> Unit = {},
 ) {
     MarkdownImpl(
-        loadText = { loadText().decodeToString() },
+        loadText = { loadText().decodeToString().replace(Regex("(?<!\\n)\\n(?!\\n)"), " ") },
         modifier = modifier,
         onCustomUriClick = onCustomUriClick,
     )
@@ -53,7 +53,7 @@ fun MarkdownView(
     onCustomUriClick: (String) -> Unit = {},
 ) {
     MarkdownImpl(
-        loadText = { text },
+        loadText = { text.replace(Regex("(?<!\\n)\\n(?!\\n)"), " ") },
         modifier = modifier,
         onCustomUriClick = onCustomUriClick,
     )
