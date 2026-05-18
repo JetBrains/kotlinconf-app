@@ -1,0 +1,60 @@
+product:
+  type: kmp/lib
+  platforms:
+    - android
+    - js
+    - jvm
+    - iosArm64
+    - iosSimulatorArm64
+    - wasmJs
+
+apply:
+  - ../../android.module-template.yaml
+  - ../../compose.module-template.yaml
+  - ../../ktor.module-template.yaml
+  - ../../metro.module-template.yaml
+
+aliases:
+  - nonAndroid:
+      - js
+      - jvm
+      - iosArm64
+      - iosSimulatorArm64
+      - wasmJs
+
+settings:
+  android:
+    namespace: com.jetbrains.kotlinconf.ui
+  compose:
+    resources:
+      exposedAccessors: true
+      packageName: org.jetbrains.kotlinconf.ui.generated.resources
+
+dependencies:
+  - $compose.runtime: exported
+  - $compose.foundation: exported
+  - $compose.animation: exported
+  - $libs.compose.material.ripple
+  - $compose.components.resources: exported
+  - $libs.compose.ui.tooling.preview
+
+  - $libs.coil.compose
+  - $libs.coil.network.ktor3
+  - $libs.coil.svg
+  - $libs.androidx.lifecycle.runtime.compose
+  - $libs.androidx.lifecycle.viewmodel.compose
+
+  - $libs.multiplatform.markdown.renderer
+
+dependencies@android:
+  - $ktor.client.okhttp
+  - $compose.uiTooling: runtime-only
+
+dependencies@jvm:
+  - $ktor.client.okhttp
+
+dependencies@ios:
+  - $libs.ktor.client.darwin
+
+dependencies@js:
+  - $libs.ktor.client.js

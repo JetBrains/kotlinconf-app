@@ -1,0 +1,6 @@
+*.sh text eol=lf
+*.bat text eol=crlf
+
+# Kotlin wrappers that don't have an extension
+amper text eol=lf
+kotlin text eol=lf

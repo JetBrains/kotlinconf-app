@@ -1,0 +1,57 @@
+product: jvm/app
+
+apply:
+  - ../ktor.module-template.yaml
+
+settings:
+  kotlin:
+    serialization: enabled
+  jvm:
+    mainClass: io.ktor.server.netty.EngineMain
+
+# TODO: Add JIB support
+# jib {
+#    container {
+#        mainClass = "io.ktor.server.netty.EngineMain"
+#    }
+#}
+
+dependencies:
+  - ../core
+  - $ktor.server.netty
+  - $ktor.server.auth
+  - $ktor.serialization.kotlinx.json
+  - $ktor.client.cio
+  - $ktor.client.contentNegotiation
+  - $ktor.server.statusPages
+  - $ktor.server.defaultHeaders
+  - $ktor.server.cors
+  - $ktor.server.contentNegotiation
+  - $ktor.server.callLogging
+  - $ktor.server.conditionalHeaders
+  - $ktor.server.compression
+  - $ktor.server.partialContent
+  - $ktor.server.autoHeadResponse
+  - $ktor.server.forwardedHeader
+  - $ktor.server.config.yaml
+  - $ktor.server.swagger
+
+  - $kotlin.serialization.core
+  - $kotlin.serialization.json
+
+  - $libs.exposed.core
+  - $libs.exposed.dao
+  - $libs.exposed.jdbc
+  - $libs.h2
+  - $libs.postgresql
+
+  - $libs.koin.core
+  - $libs.koin.ktor
+  - $libs.koin.slf4j
+
+  - $libs.hikaricp
+  - $libs.logback.classic
+
+test-dependencies:
+  - $ktor.server.testHost
+  - $kotlin.test.junit5

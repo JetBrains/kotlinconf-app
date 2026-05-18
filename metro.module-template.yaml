@@ -1,0 +1,8 @@
+dependencies:
+  - dev.zacsweers.metro:runtime:1.0.0
+
+settings:
+  kotlin:
+    compilerPlugins:
+      - id: dev.zacsweers.metro.compiler
+        dependency: dev.zacsweers.metro:compiler:1.0.0

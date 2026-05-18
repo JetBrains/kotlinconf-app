@@ -1,0 +1,11 @@
+modules:
+  - app/androidApp
+  - app/desktopApp
+  - app/iosApp
+  - app/shared
+  - app/ui-components
+  - app/webApp
+  - app/webApp/jsApp
+  - app/webApp/wasmApp
+  - backend
+  - core

@@ -1,0 +1,26 @@
+product: android/app
+
+apply:
+  - ../../android.module-template.yaml
+  - ../../compose.module-template.yaml
+  - ../../metro.module-template.yaml
+
+dependencies:
+  - ../shared
+  - $libs.androidx.activity.compose
+  - $libs.androidx.core.splashscreen
+  - $libs.androidx.navigation3.ui
+  - $compose.uiTooling
+  - $compose.preview
+
+  - $libs.metrox.android
+  - $libs.metrox.viewmodel.compose
+
+settings:
+  android:
+    namespace: com.jetbrains.kotlinconf
+    versionCode: 73
+    versionName: 40.0.5
+    resourcePackaging:
+      excludes:
+        - "/META-INF/{AL2.0,LGPL2.1}"

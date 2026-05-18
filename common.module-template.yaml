@@ -1,0 +1,10 @@
+settings:
+  kotlin:
+    version: 2.3.21
+    freeCompilerArgs:
+      - -Xexpect-actual-classes
+    serialization:
+      version: 1.10.0
+  jvm:
+    jdk:
+      version: 21

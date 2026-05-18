@@ -1,0 +1,7 @@
+apply: 
+  - ./common.module-template.yaml
+
+settings:
+  ktor:
+    enabled: true
+    version: 3.4.1

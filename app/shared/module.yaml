@@ -1,0 +1,112 @@
+product:
+  type: kmp/lib
+  platforms:
+    - android
+    - js
+    - jvm
+    - iosArm64
+    - iosSimulatorArm64
+    - wasmJs
+
+apply:
+  - ../../android.module-template.yaml
+  - ../../compose.module-template.yaml
+  - ../../ktor.module-template.yaml
+  - ../../metro.module-template.yaml
+
+# TODO: aboutLibraries
+# aboutLibraries {
+#    library.duplicationMode = DuplicateMode.MERGE
+#    library.duplicationRule = DuplicateRule.SIMPLE
+#    export.outputFile = File("src/commonMain/composeResources/files/aboutlibraries.json")
+#}
+
+aliases:
+  - nonAndroid:
+      - js
+      - jvm
+      - iosArm64
+      - iosSimulatorArm64
+      - wasmJs
+  - nonWeb:
+      - jvm
+      - iosArm64
+      - iosSimulatorArm64
+      - android
+
+settings:
+  android:
+    namespace: org.jetbrains.kotlinconf
+  compose:
+    resources:
+      packageName: org.jetbrains.kotlinconf.generated.resources
+  kotlin:
+    serialization: enabled
+
+settings@web:
+  kotlin:
+    optIns: [ kotlin.js.ExperimentalWasmJsInterop ]
+
+dependencies:
+  - ../../core: exported
+  - ../ui-components: exported
+  - $compose.runtime: exported
+  - $compose.foundation: exported
+  - $compose.animation: exported
+  - $compose.components.resources: exported
+  - $libs.compose.ui.tooling.preview
+
+  - $libs.metrox.viewmodel.compose
+
+  - $ktor.client.logging: exported
+  - $ktor.serialization.kotlinx.json: exported
+  - $ktor.client.contentNegotiation: exported
+  - $ktor.utils: exported
+
+  - $libs.kotlinx.datetime
+
+  - $libs.androidx.lifecycle.runtime.compose
+  - $libs.androidx.navigation3.ui
+  - $libs.androidx.lifecycle.viewmodel.navigation3
+  - $ktor.client.core
+
+  - $libs.aboutlibraries.core
+  - $libs.coil.compose
+
+  # Multiplatform Settings
+  - $libs.settings
+  - $libs.settings.serialization
+  - $libs.settings.observable
+  - $libs.settings.coroutines
+
+  - $libs.kmpnotifier: exported
+
+  - $libs.doistx.normalize
+
+test-dependencies:
+  - $libs.kotlinx.coroutines.test
+  - $libs.settings.test
+
+test-dependencies@android:
+  - $libs.settings.test
+
+dependencies@android:
+  - $libs.android.svg
+  - $libs.androidx.preference
+  - $ktor.client.okhttp
+  - $libs.metrox.android
+  - $compose.uiTooling: runtime-only
+
+dependencies@ios:
+  - $libs.kotlinx.coroutines.core
+  - $libs.ktor.client.darwin
+
+dependencies@jvm:
+  - $libs.ktor.client.okhttp
+  - $libs.slf4j.nop
+
+dependencies@web:
+  - $libs.ktor.client.js
+  - $libs.nav3.browser
+  - $libs.kotlin.browser
+  # npm(@js-joda/timezone, 2.3.0)

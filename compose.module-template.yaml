@@ -1,0 +1,7 @@
+apply:
+  - ./common.module-template.yaml
+
+settings:
+  compose:
+    enabled: true
+    version: 1.11.0-rc01

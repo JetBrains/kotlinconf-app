@@ -1,0 +1,23 @@
+product:
+  type: kmp/lib
+  platforms:
+    - android
+    - js
+    - jvm
+    - iosArm64
+    - iosSimulatorArm64
+    - wasmJs
+
+apply:
+  - ../android.module-template.yaml
+
+settings:
+  android:
+    namespace: com.jetbrains.kotlinconf.core
+  kotlin:
+    serialization: enabled
+
+dependencies:
+  - $libs.kotlinx.datetime: exported
+  - $kotlin.serialization.core: exported
+  - $kotlin.serialization.json: exported

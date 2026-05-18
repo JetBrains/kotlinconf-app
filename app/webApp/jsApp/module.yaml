@@ -1,0 +1,4 @@
+product: js/app
+
+dependencies:
+  - ..

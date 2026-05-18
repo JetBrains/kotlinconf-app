@@ -1,0 +1,4 @@
+product: wasm-js/app
+
+dependencies:
+  - ..

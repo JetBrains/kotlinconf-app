@@ -1,0 +1,10 @@
+apply:
+  - ./common.module-template.yaml
+
+settings:
+  android:
+    minSdk: 28
+    compileSdk: 36
+    targetSdk: 36
+  jvm:
+    release: 11
