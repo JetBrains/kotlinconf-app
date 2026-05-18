@@ -26,8 +26,9 @@ To build the project locally:
 1. [Set up your environment](https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-setup.html) for Kotlin Multiplatform development.
 2. Open the project in IntelliJ IDEA or Android Studio.
 3. Run the desired platform
-   * Android: use the `app.androidApp` run configuration
-   * iOS: use `KotlinConfAppScheme`
-   * Desktop: `./gradlew :app:desktopApp:hotRun -DmainClass=org.jetbrains.kotlinconf.MainKt`
-   * Web: `./gradlew :app:webApp:wasmJsBrowserDevelopmentRun`
-   * Backend: `./gradlew :backend:run`
+   * Android: use the `androidApp` run configuration
+   * iOS: use `iosApp`
+   * Desktop: `Run Module desktopApp`
+   * Web: not supported yet ([AMPER-258](https://youtrack.jetbrains.com/issue/AMPER-258))
+   * Backend: `Run Module backend`
+   * Or use `./kotlin run -m <name-of-the-module-mentioned-above>`
