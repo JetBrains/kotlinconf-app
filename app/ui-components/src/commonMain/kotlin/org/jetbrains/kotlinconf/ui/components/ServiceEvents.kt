@@ -82,7 +82,7 @@ fun ServiceEvent(
     modifier: Modifier = Modifier,
 ) {
     ServiceEvents(
-        events = listOf(event),
+        events = [event],
         modifier = modifier,
     )
 }
@@ -122,7 +122,7 @@ private fun ServiceEventPreview() = PreviewHelper {
 @Composable
 private fun ServiceEventBlockPreview() = PreviewHelper {
     ServiceEvents(
-        listOf(
+        [
             ServiceEventData(
                 title = "Lunch",
                 now = false,
@@ -138,7 +138,7 @@ private fun ServiceEventBlockPreview() = PreviewHelper {
                 title = "Party",
                 now = false,
             )
-        )
+        ]
     )
 }
 

@@ -49,7 +49,7 @@ fun main() {
         val fontFamilyResolver = LocalFontFamilyResolver.current
         LaunchedEffect(fontFamilyResolver, emojiFont) {
             if (emojiFont != null) {
-                fontFamilyResolver.preload(FontFamily(listOf(emojiFont)))
+                fontFamilyResolver.preload(FontFamily([emojiFont]))
             }
         }
 

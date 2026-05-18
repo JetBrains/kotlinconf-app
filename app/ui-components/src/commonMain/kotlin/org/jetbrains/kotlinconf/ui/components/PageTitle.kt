@@ -243,7 +243,7 @@ private fun PageTitleLightningPreview() = PreviewHelper {
     PageTitle(
         time = "May 23, 13:00 - 13:20",
         title = "My Incredible Talk About Kotlin Multiplatform",
-        tags = setOf("Lightning talk", "Intermediate", "Libraries"),
+        tags = ["Lightning talk", "Intermediate", "Libraries"],
         bookmarked = bookmarked,
         lightning = true,
         timeNote = null,
@@ -260,7 +260,7 @@ private fun PageTitleRegularPreview() = PreviewHelper {
     PageTitle(
         time = "May 21, 9:00 - 9:40",
         title = "A Wonderful Server-side Kotlin Talk",
-        tags = setOf(
+        tags = [
             "Regular talk",
             "Beginner",
             "Server-side",
@@ -270,7 +270,7 @@ private fun PageTitleRegularPreview() = PreviewHelper {
             "Tags",
             "To",
             "Display"
-        ),
+        ],
         bookmarked = bookmarked,
         lightning = false,
         timeNote = null,
@@ -287,7 +287,7 @@ internal fun PageTitleWithNotesPreview() {
         PageTitle(
             time = "May 23, 15:00 - 15:20",
             title = "Starting Soon Talk Example",
-            tags = setOf("Lightning talk", "Beginner"),
+            tags = ["Lightning talk", "Beginner"],
             bookmarked = true,
             lightning = true,
             timeNote = "in 22 min",
@@ -299,7 +299,7 @@ internal fun PageTitleWithNotesPreview() {
         PageTitle(
             time = "May 23, 14:00 - 14:40",
             title = "Live Talk Example",
-            tags = setOf("Regular talk", "Advanced"),
+            tags = ["Regular talk", "Advanced"],
             bookmarked = false,
             lightning = false,
             timeNote = null,
@@ -317,7 +317,7 @@ internal fun LargePageTitleWithPreview() {
         PageTitle(
             time = "May 23, 15:00 - 15:20",
             title = "Starting Soon Talk Example",
-            tags = setOf("Lightning talk", "Beginner"),
+            tags = ["Lightning talk", "Beginner"],
             bookmarked = true,
             lightning = true,
             timeNote = "in 22 min",

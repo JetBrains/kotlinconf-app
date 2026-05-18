@@ -133,7 +133,7 @@ class ApplicationStorageImpl(
 
     private data class Migration(val from: Int, val to: Int, val migrate: () -> Unit)
 
-    private val migrations = listOf(
+    private val migrations = [
         Migration(V2025, V2026) {
             // News were removed
             settings.remove(OldKeys.NEWS_CACHE)
@@ -156,7 +156,7 @@ class ApplicationStorageImpl(
             // Reset onboarding
             settings.remove(Keys.ONBOARDING_COMPLETE)
         },
-    )
+    ]
 
     private fun migrateKey(oldKey: String, newKey: String) {
         val value = settings.getStringOrNull(oldKey)

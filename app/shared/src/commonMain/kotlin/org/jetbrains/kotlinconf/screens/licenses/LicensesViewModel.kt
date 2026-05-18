@@ -21,9 +21,9 @@ import org.jetbrains.kotlinconf.utils.performSearch
 
 data class LibraryWithHighlights(
     val library: Library,
-    val nameHighlights: List<IntRange> = emptyList(),
-    val authorHighlights: List<IntRange> = emptyList(),
-    val licenseHighlights: List<IntRange> = emptyList(),
+    val nameHighlights: List<IntRange> = [],
+    val authorHighlights: List<IntRange> = [],
+    val licenseHighlights: List<IntRange> = [],
 )
 
 @ContributesIntoMap(AppScope::class)
@@ -55,11 +55,11 @@ class LicensesViewModel : ViewModel() {
                     produceResult = { lib, (nameMatches, authorMatches, licenseMatches) ->
                         LibraryWithHighlights(lib, nameMatches, authorMatches, licenseMatches)
                     },
-                    selectors = listOf({ it.name }, { it.author }, { it.licenseName }),
+                    selectors = [{ it.name }, { it.author }, { it.licenseName }],
                 )
                 .sortedBy { it.library.name }
         }
     }
         .flowOn(Dispatchers.Default)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), [])
 }

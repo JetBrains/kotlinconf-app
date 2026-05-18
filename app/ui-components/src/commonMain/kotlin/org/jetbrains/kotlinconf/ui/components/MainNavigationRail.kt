@@ -166,7 +166,7 @@ private class ExpandedPreviewProvider : PreviewParameterProvider<Boolean> {
 private fun MainNavigationRailPreview(
     @PreviewParameter(ExpandedPreviewProvider::class) expanded: Boolean,
 ) = PreviewHelper(paddingEnabled = false) {
-    val navRailPreviewDestinations = listOf(
+    val navRailPreviewDestinations = [
         MainNavDestination(
             label = UiRes.string.now,
             icon = UiRes.drawable.clock_28,
@@ -197,7 +197,7 @@ private fun MainNavigationRailPreview(
             iconSelected = UiRes.drawable.info_28_fill,
             route = "Info"
         ),
-    )
+    ]
 
     var currentDestination by remember { mutableStateOf(navRailPreviewDestinations[1]) }
     MainNavigationRail(

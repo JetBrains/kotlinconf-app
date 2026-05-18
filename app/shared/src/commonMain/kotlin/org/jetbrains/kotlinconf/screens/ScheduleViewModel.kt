@@ -47,9 +47,9 @@ data class NoBookmarksItem(val id: String) : ScheduleListItem
 
 data class SessionItem(
     val value: SessionCardView,
-    val tagMatches: List<String> = emptyList(),
-    val titleHighlights: List<IntRange> = emptyList(),
-    val speakerHighlights: List<IntRange> = emptyList(),
+    val tagMatches: List<String> = [],
+    val titleHighlights: List<IntRange> = [],
+    val speakerHighlights: List<IntRange> = [],
 ) : ScheduleListItem
 
 data class ServiceEventItem(
@@ -85,7 +85,7 @@ class ScheduleViewModel(
         return map { FilterItem(type = type, value = it, isSelected = false) }
     }
 
-    private val _filterItems = MutableStateFlow<List<FilterItem>>(emptyList())
+    private val _filterItems = MutableStateFlow<List<FilterItem>>([])
     val filterItems: StateFlow<List<FilterItem>> = _filterItems.asStateFlow()
 
     init {
@@ -286,9 +286,9 @@ class ScheduleViewModel(
 
     private class MatchResult(
         val matched: Boolean,
-        val tagMatches: List<String> = emptyList(),
-        val titleHighlights: List<IntRange> = emptyList(),
-        val speakerHighlights: List<IntRange> = emptyList(),
+        val tagMatches: List<String> = [],
+        val titleHighlights: List<IntRange> = [],
+        val speakerHighlights: List<IntRange> = [],
     )
 
     private fun match(

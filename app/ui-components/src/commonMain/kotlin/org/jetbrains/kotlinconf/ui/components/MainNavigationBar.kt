@@ -111,7 +111,7 @@ private fun MainNavigationBarPreview() = PreviewHelper(paddingEnabled = false) {
     }
     MainNavigationBar(
         currentDestination = currentDestination,
-        destinations = listOf(
+        destinations = [
             MainNavDestination(
                 label = UiRes.string.now,
                 icon = UiRes.drawable.clock_28,
@@ -142,7 +142,7 @@ private fun MainNavigationBarPreview() = PreviewHelper(paddingEnabled = false) {
                 iconSelected = UiRes.drawable.info_28_fill,
                 route = "Info"
             ),
-        ),
+        ],
         onSelect = { currentDestination = it },
     )
 }
