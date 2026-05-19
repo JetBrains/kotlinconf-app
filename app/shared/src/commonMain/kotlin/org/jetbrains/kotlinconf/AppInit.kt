@@ -29,7 +29,9 @@ fun initApp(platformLogger: Logger, platformFlags : Flags = Flags(), configurati
     val koin = startKoin<KotlinConfKoinApp> {
         includes(configuration)
     }.koin
+    // Declare platformFlags instance so it can be injected in FlagsManagerImpl and observed for changes in initFlagsAndLogging
     koin.declare(platformFlags)
+    // Run both init functions
     koin.get<Unit>(named("initFlagsAndLogging")){ parametersOf(platformLogger) }
     koin.get<Unit>(named("initNotifier"))
 }

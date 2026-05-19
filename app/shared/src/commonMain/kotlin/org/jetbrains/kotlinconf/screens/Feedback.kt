@@ -144,7 +144,7 @@ private fun rememberFeedbackViewModel(
     sessionId: SessionId,
     onPrivacyNoticeNeeded: () -> Unit,
 ): FeedbackViewModel {
-    val viewModel = koinViewModel<FeedbackViewModel> { parametersOf(sessionId.id) }
+    val viewModel = koinViewModel<FeedbackViewModel> { parametersOf(SessionId(sessionId.id)) }
 
     val shouldNavigate by viewModel.navigateToPrivacyNotice.collectAsStateWithLifecycle()
     LaunchedEffect(shouldNavigate) {
