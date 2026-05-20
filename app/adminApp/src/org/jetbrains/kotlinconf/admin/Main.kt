@@ -10,7 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import kotlinx.browser.localStorage
-import kotlinx.browser.window
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.attributes.*
 import org.jetbrains.compose.web.dom.*
@@ -29,7 +28,6 @@ private sealed interface Screen {
 
 @Composable
 private fun AdminApp() {
-    var baseUrl by remember { mutableStateOf(localStorage.getItem(PREF_BASE_URL) ?: window.location.origin) }
     var token by remember { mutableStateOf("") }
     var year by remember { mutableStateOf(localStorage.getItem(PREF_YEAR)?.toIntOrNull() ?: DEFAULT_YEAR) }
     var data by remember { mutableStateOf<AggregatedData?>(null) }
@@ -39,13 +37,12 @@ private fun AdminApp() {
     val scope = rememberCoroutineScope()
 
     fun load() {
-        localStorage.setItem(PREF_BASE_URL, baseUrl)
         localStorage.setItem(PREF_YEAR, year.toString())
         loading = true
         error = null
         scope.launch {
             try {
-                val api = AdminApi(baseUrl.trimEnd('/'), token)
+                val api = AdminApi(token)
                 val conference = api.conference(year)
                 val votes = api.votes(year)
                 val feedback = api.feedback(year)
@@ -63,7 +60,6 @@ private fun AdminApp() {
     H1 { Text("KotlinConf Admin") }
 
     LoadBar(
-        baseUrl = baseUrl, onBaseUrl = { baseUrl = it },
         token = token, onToken = { token = it },
         year = year, onYear = { year = it },
         loading = loading, error = error, onLoad = ::load,
@@ -87,7 +83,6 @@ private fun AdminApp() {
 
 @Composable
 private fun LoadBar(
-    baseUrl: String, onBaseUrl: (String) -> Unit,
     token: String, onToken: (String) -> Unit,
     year: Int, onYear: (Int) -> Unit,
     loading: Boolean, error: String?,
@@ -95,14 +90,6 @@ private fun LoadBar(
 ) {
     Div(attrs = { classes("card") }) {
         Div(attrs = { classes("form-grid") }) {
-            Div {
-                Label(forId = "baseUrl") { Text("Backend base URL") }
-                Input(type = InputType.Text) {
-                    id("baseUrl")
-                    value(baseUrl)
-                    onInput { onBaseUrl(it.value) }
-                }
-            }
             Div {
                 Label(forId = "token") { Text("Admin token") }
                 Input(type = InputType.Password) {
@@ -141,6 +128,5 @@ private fun LoadBar(
     }
 }
 
-private const val PREF_BASE_URL = "kc-admin-baseUrl"
 private const val PREF_YEAR = "kc-admin-year"
 private const val DEFAULT_YEAR = 2026
