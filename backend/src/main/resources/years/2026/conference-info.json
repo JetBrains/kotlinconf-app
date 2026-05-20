@@ -60,14 +60,6 @@
           "url": "https://www.bloomberg.com/company/engineering/"
         },
         {
-          "id": "cirruslabs",
-          "name": "Cirrus Labs",
-          "description": "Leading provider of GitHub Actions runners for macOS & Linux. Cirrus Runners offers fixed pricing and unlimited minutes, high-performance CPUs for Kotlin Multiplatform, Android & Docker builds.",
-          "logoUrlLight": "partner-logos/cirruslabs-light.svg",
-          "logoUrlDark": "partner-logos/cirruslabs-dark.svg",
-          "url": "https://cirruslabs.org/"
-        },
-        {
           "id": "goodnotes",
           "name": "Goodnotes",
           "description": "Goodnotes is the leading digital note-taking app used by millions worldwide and by professionals at thousands of companies to capture, develop, and transform ideas into action. Founded in 2011 as a digital handwriting pioneer, Goodnotes continues to set new standards for context-rich, AI-powered productivity and cross-platform collaboration for both individuals and teams. Goodnotes supports all natural human input methods, including handwriting, typing, and voice, while providing AI assistance that adapts to how people naturally think and work. Goodnotes was named Apple’s 2022 iPad App of the Year.",
