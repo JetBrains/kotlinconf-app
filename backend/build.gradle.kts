@@ -1,4 +1,5 @@
 import com.google.cloud.tools.jib.gradle.JibTask
+import org.gradle.language.jvm.tasks.ProcessResources
 
 plugins {
     alias(libs.plugins.kotlinJvm)
@@ -77,4 +78,21 @@ tasks.test {
 
 tasks.withType<JibTask>().configureEach {
     notCompatibleWithConfigurationCache("because https://github.com/GoogleContainerTools/jib/issues/3132")
+}
+
+// Bundle the compiled Compose HTML admin SPA into the backend's resources under "admin/",
+// so Ktor can serve it from the classpath (works in the fat jar and the jib image).
+val adminPanel: Configuration by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+}
+
+dependencies {
+    add(adminPanel.name, project(path = ":app:adminApp", configuration = "adminDistribution"))
+}
+
+tasks.named<ProcessResources>("processResources") {
+    from(adminPanel) {
+        into("admin")
+    }
 }
