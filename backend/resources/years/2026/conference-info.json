@@ -106,6 +106,14 @@
           "logoUrlLight": "partner-logos/moderne-light.svg",
           "logoUrlDark": "partner-logos/moderne-dark.svg",
           "url": "https://www.coderemix.ai?utm_source=26_kotlinconf&utm_medium=conference&utm_campaign=26_kotlinconf"
+        },
+        {
+          "id": "openai",
+          "name": "OpenAI",
+          "description": "OpenAI is an AI research and deployment company. Our mission is to ensure that artificial general intelligence benefits all of humanity.",
+          "logoUrlLight": "partner-logos/openai-light.svg",
+          "logoUrlDark": "partner-logos/openai-dark.svg",
+          "url": "https://openai.com/"
         }
       ]
     },
