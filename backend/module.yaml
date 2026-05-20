@@ -16,6 +16,7 @@ settings:
 #    }
 #}
 
+# TODO: Should somehow depend on the bundle from //app/adminApp
 dependencies:
   - ../core
   - $ktor.server.netty

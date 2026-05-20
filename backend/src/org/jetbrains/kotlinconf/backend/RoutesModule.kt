@@ -4,6 +4,7 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.jetbrains.kotlinconf.backend.routes.adminPanelRoutes
 import org.jetbrains.kotlinconf.backend.routes.adminRoutes
 import org.jetbrains.kotlinconf.backend.routes.conferenceInfoRoutes
 import org.jetbrains.kotlinconf.backend.routes.configRoutes
@@ -23,6 +24,7 @@ fun Application.routesModule() {
         }
         timeRoutes()
         adminRoutes()
+        adminPanelRoutes()
         configRoutes()
 
         // Routes without the year prefix for backwards compatibility
