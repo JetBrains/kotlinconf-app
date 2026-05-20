@@ -17,6 +17,8 @@ import org.jetbrains.kotlinconf.FeedbackInfo
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.VoteInfo
+import org.jetbrains.kotlinconf.backend.routes.AdminFeedbackInfo
+import org.jetbrains.kotlinconf.backend.routes.AdminVoteInfo
 import org.jetbrains.kotlinconf.backend.schema.Feedback
 import org.jetbrains.kotlinconf.backend.schema.MigrationRunner
 import org.jetbrains.kotlinconf.backend.schema.SignedPolicies
@@ -160,10 +162,10 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
 
     }
 
-    suspend fun getAllVotes(year: Int): List<VoteInfo> = suspendTransaction {
+    suspend fun getAllVotes(year: Int): List<AdminVoteInfo> = suspendTransaction {
         Votes.selectAll()
             .where { Votes.year eq year }
-            .map { VoteInfo(it[Votes.sessionId], Score.fromValue(it[Votes.rating])) }
+            .map { AdminVoteInfo(it[Votes.userId], it[Votes.sessionId], Score.fromValue(it[Votes.rating])) }
     }
 
     suspend fun changeVote(
@@ -226,11 +228,11 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         }
     }
 
-    suspend fun getFeedbackSummary(year: Int): List<FeedbackInfo> = suspendTransaction {
+    suspend fun getFeedbackSummary(year: Int): List<AdminFeedbackInfo> = suspendTransaction {
         Feedback.selectAll()
             .where { Feedback.year eq year }
             .map {
-                FeedbackInfo(it[Feedback.sessionId], it[Feedback.feedback])
+                AdminFeedbackInfo(it[Feedback.userId], it[Feedback.sessionId], it[Feedback.feedback])
             }
     }
 }
