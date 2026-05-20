@@ -1,0 +1,18 @@
+# This module currently can't be properly packaged because of missing gaps in the Kotlin/JS support
+product: js/app
+
+description: Server-hosted admin panel SPA
+
+dependencies:
+  - $compose.html.core
+  - //core
+  - $libs.ktor.client.js
+  - $libs.ktor.client.content.negotiation
+  - $libs.ktor.serialization.kotlinx.json
+  - $libs.kotlinx.coroutines.core
+  - $kotlin.serialization.json
+
+settings:
+  compose: enabled
+  kotlin:
+    serialization: enabled

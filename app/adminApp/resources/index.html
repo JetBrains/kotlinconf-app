@@ -1,0 +1,108 @@
+<!doctype html>
+<!-- ABOUTME: Shell page for the Compose HTML admin SPA. -->
+<!-- ABOUTME: Mounts the app on #root and loads the admin.js bundle (relative so it works under /admin/). -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KotlinConf Admin</title>
+<style>
+  :root {
+    --bg: #f7f7f8;
+    --fg: #1a1a1a;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --card: #ffffff;
+    --accent: #7f52ff;
+    --danger: #ef4444;
+    --ok: #16a34a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+    font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+  body { padding: 20px; max-width: 1400px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 16px; }
+  a.plain { color: inherit; }
+  .card { background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr 120px auto auto;
+    gap: 10px; align-items: end; }
+  .form-grid label { display: block; font-size: 12px; color: var(--muted);
+    margin-bottom: 4px; }
+  input[type=text], input[type=password], input[type=number], select {
+    width: 100%; padding: 7px 10px; border: 1px solid var(--border);
+    border-radius: 6px; font: inherit; background: white; }
+  input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  button { padding: 8px 16px; border: 0; border-radius: 6px; font: inherit;
+    font-weight: 600; background: var(--accent); color: white; cursor: pointer; }
+  button:hover { filter: brightness(1.05); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  button.secondary { background: white; color: var(--fg); border: 1px solid var(--border); }
+  button.link { background: none; border: 0; color: var(--accent); padding: 0;
+    font-weight: 600; cursor: pointer; }
+  .checkbox-row { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+  .status { display: flex; gap: 8px; flex-wrap: wrap; font-size: 13px;
+    margin-top: 10px; color: var(--muted); }
+  .status-item { padding: 4px 10px; border-radius: 999px; background: #f3f4f6;
+    border: 1px solid var(--border); }
+  .status-item.ok { color: var(--ok); border-color: #bbf7d0; background: #f0fdf4; }
+  .status-item.err { color: var(--danger); border-color: #fecaca; background: #fef2f2; }
+  .filters { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .filters input[type=text] { width: 240px; }
+  .filters input[type=number] { width: 70px; padding: 6px 8px; }
+  table { width: 100%; border-collapse: collapse; background: white;
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  thead { background: #f9fafb; }
+  th, td { padding: 8px 10px; border-bottom: 1px solid var(--border);
+    text-align: left; vertical-align: top; }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em;
+    color: var(--muted); cursor: pointer; user-select: none; white-space: nowrap; }
+  th.right { text-align: right; }
+  th .arrow { display: inline-block; width: 10px; text-align: center; color: var(--accent); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.title { font-weight: 500; max-width: 320px; }
+  td.title a { color: inherit; }
+  td.speakers { color: var(--muted); max-width: 220px; }
+  tr.session-row { cursor: pointer; }
+  tr.session-row:hover { background: #fafafa; }
+  tr.feedback-row td { background: #fafafa; padding: 12px 16px 14px;
+    font-size: 13px; color: #374151; }
+  tr.feedback-row .empty { color: var(--muted); font-style: italic; }
+  .empty-state { padding: 60px 20px; text-align: center; color: var(--muted); }
+  .toolbar { display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px; gap: 10px; flex-wrap: wrap; }
+  .row-count { color: var(--muted); font-size: 13px; }
+  .section-title { font-size: 16px; font-weight: 600; margin: 0 0 4px; }
+  .section-sub { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+  .talk-block { padding: 14px 0; border-top: 1px solid var(--border); }
+  .talk-block:first-child { border-top: 0; padding-top: 4px; }
+  .talk-head { display: flex; justify-content: space-between; align-items: baseline;
+    gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .talk-title { font-weight: 600; font-size: 15px; }
+  .talk-title a { color: inherit; }
+  .talk-speaker { color: var(--muted); font-size: 13px; margin-left: 8px; }
+  .talk-counts { font-size: 13px; color: var(--muted); white-space: nowrap;
+    font-variant-numeric: tabular-nums; }
+  .talk-counts span { margin-left: 10px; }
+  .feedback-list { margin: 6px 0 0; padding-left: 20px; list-style: none; }
+  .feedback-list li { margin: 4px 0; white-space: pre-wrap; color: #374151;
+    display: flex; gap: 8px; align-items: flex-start; }
+  .score-badge { display: inline-block; min-width: 22px; text-align: center;
+    flex-shrink: 0; color: var(--muted); font-variant-emoji: text; }
+  .pseudo-link { background: none; border: 0; color: var(--accent); padding: 0;
+    font: inherit; font-weight: 600; cursor: pointer; flex-shrink: 0; }
+  .crumbs { display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+    font-size: 13px; color: var(--muted); }
+  .user-id { font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; color: var(--muted); word-break: break-all; }
+  .user-meta { display: flex; gap: 16px; flex-wrap: wrap; align-items: baseline;
+    margin-bottom: 4px; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 999px;
+    background: #f3f4f6; border: 1px solid var(--border); font-size: 12px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="admin.js"></script>
+</body>
+</html>
