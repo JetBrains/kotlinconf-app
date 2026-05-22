@@ -26,7 +26,7 @@
           "photoUrl": "https://kotlinconf.com/static/769a32f30ad78c18b0ef7cd947dd3bf1/5deed/nicole-terc.jpg",
           "bio": "Mexican that self taught herself to code. Nicole has been fooling around with the mobile ecosystem for more than 10 years. She likes making things move and shine on the screen; and then talk about it. Other passions are games, stories and sheep!",
           "description": "",
-          "winner": false
+          "winner": true
         }
       ]
     },
@@ -48,7 +48,7 @@
           "photoUrl": "https://kotlinconf.com/static/a705b33eff9017abaed0dc28005027d6/b2476/jaewoong-eum.png",
           "bio": "GDE for Android & Firebase (prev Kotlin), a book author, and currently works as a Senior Developer Advocate & Engineer at RevenueCat. Created over 100 open-source libraries and projects, which have achieved +15 million downloads annually.",
           "description": "",
-          "winner": false
+          "winner": true
         },
         {
           "id": "kyriakos-georgiopoulos",
@@ -86,7 +86,7 @@
           "photoUrl": "https://kotlinconf.com/static/2b7e4ef413bb81a7fc6ae06a256b5aa6/f0f05/yinlong-liu.jpg",
           "bio": "A KMP developer and advocate from China. Yinlong has been using KMP since 2019 and has actively promoted its adoption in China, establishing WeChat groups for communication and influencing several Chinese companies to use KMP/CMP.",
           "description": "",
-          "winner": false
+          "winner": true
         }
       ]
     },
@@ -116,7 +116,7 @@
           "photoUrl": "https://kotlinconf.com/static/c7426d124f04bec718d955bdf2906a3c/d0cc6/matheus-leandro-ferreira.jpg",
           "bio": "University professor, senior software developer, and educator. Specialist in Java & Kotlin, Spring Boot, Angular, PostgreSQL, and emerging technologies. Over 21 years in software development and 11+ years in higher education.",
           "description": "",
-          "winner": false
+          "winner": true
         }
       ]
     },
@@ -130,7 +130,7 @@
           "photoUrl": "https://kotlinconf.com/static/90abae430e30322bf5b05458ef252a72/123c6/eevis-panula.png",
           "bio": "Eeva-Jonna (Eevis) is an accessibility specialist, senior Android developer, and Android GDE passionate about inclusive development. They share knowledge through speaking, writing, and their Inclusive Android Apps newsletter.",
           "description": "",
-          "winner": false
+          "winner": true
         },
         {
           "id": "james-cullimore-2",
