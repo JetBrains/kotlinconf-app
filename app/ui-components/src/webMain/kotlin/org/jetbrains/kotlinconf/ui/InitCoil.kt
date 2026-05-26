@@ -7,9 +7,11 @@ import coil3.intercept.Interceptor
 import coil3.request.ImageResult
 import coil3.util.DebugLogger
 
+internal expect val platformContext: PlatformContext
+
 fun initCoil() {
     SingletonImageLoader.setSafe {
-        ImageLoader.Builder(PlatformContext.INSTANCE)
+        ImageLoader.Builder(platformContext)
             .components {
                 add(SessionizeImageInterceptor())
             }
