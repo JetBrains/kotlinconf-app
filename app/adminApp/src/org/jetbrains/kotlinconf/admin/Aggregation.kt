@@ -12,7 +12,8 @@ data class FeedbackItem(val userId: String, val value: String)
 
 data class VoteCounts(val good: Int = 0, val ok: Int = 0, val bad: Int = 0) {
     val total: Int get() = good + ok + bad
-    val avg: Double get() = if (total == 0) 0.0 else (good - bad).toDouble() / total
+    val rating: Double get() = if (total == 0) 0.0 else (3 * good + 2 * ok - bad).toDouble() / total
+    val popularity: Double get() = (3 * good + 2 * ok - bad).toDouble() / (total + 20)
 }
 
 /** One row per (session, speaker), matching the original dashboard layout. */

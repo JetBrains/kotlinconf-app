@@ -13,7 +13,7 @@ import org.jetbrains.compose.web.attributes.*
 import org.jetbrains.compose.web.dom.*
 import org.jetbrains.kotlinconf.Score
 
-private enum class SortKey { TITLE, SPEAKER, GOOD, OK, BAD, TOTAL, AVG, FEEDBACK }
+private enum class SortKey { TITLE, SPEAKER, GOOD, OK, BAD, TOTAL, RATING, POPULARITY, FEEDBACK }
 
 private data class Column(val key: SortKey, val label: String, val right: Boolean)
 
@@ -24,7 +24,8 @@ private val COLUMNS = listOf(
     Column(SortKey.OK, "😐", right = true),
     Column(SortKey.BAD, "👎", right = true),
     Column(SortKey.TOTAL, "Total", right = true),
-    Column(SortKey.AVG, "Avg", right = true),
+    Column(SortKey.RATING, "Rating", right = true),
+    Column(SortKey.POPULARITY, "Pop. score", right = true),
     Column(SortKey.FEEDBACK, "Feedback", right = true),
 )
 
@@ -34,7 +35,7 @@ fun OverviewScreen(data: AggregatedData, year: Int, onOpenUser: (String) -> Unit
     var minVotes by remember { mutableStateOf(0) }
     var onlyFeedback by remember { mutableStateOf(false) }
     var hideEmpty by remember { mutableStateOf(true) }
-    var sortKey by remember { mutableStateOf(SortKey.AVG) }
+    var sortKey by remember { mutableStateOf(SortKey.RATING) }
     var sortDir by remember { mutableStateOf(-1) }
     var expanded by remember { mutableStateOf(emptySet<String>()) }
 
@@ -116,7 +117,8 @@ fun OverviewScreen(data: AggregatedData, year: Int, onOpenUser: (String) -> Unit
                         NumCell(row.counts.ok.toString())
                         NumCell(row.counts.bad.toString())
                         NumCell(row.counts.total.toString())
-                        AvgCell(row.counts)
+                        ScoreCell(row.counts, row.counts.rating, ::ratingColor)
+                        ScoreCell(row.counts, row.counts.popularity, ::popularityColor)
                         NumCell(if (row.feedback.isNotEmpty()) row.feedback.size.toString() else "")
                     }
                     if (key in expanded) {
@@ -157,12 +159,12 @@ private fun NumCell(text: String) {
 }
 
 @Composable
-private fun AvgCell(counts: VoteCounts) {
+private fun ScoreCell(counts: VoteCounts, value: Double, color: (Double) -> String) {
     Td(attrs = {
         classes("num")
-        if (counts.total > 0) style { property("background", avgColor(counts.avg)) }
+        if (counts.total > 0) style { property("background", color(value)) }
     }) {
-        Text(if (counts.total > 0) counts.avg.toFixed(2) else "—")
+        Text(if (counts.total > 0) value.toFixed(2) else "—")
     }
 }
 
@@ -185,7 +187,7 @@ private fun FeedbackByTalk(data: AggregatedData, query: String, onOpenUser: (Str
                     .lowercase().contains(query.trim().lowercase())
             }
             .sortedWith(
-                compareByDescending<FeedbackGroup> { it.feedback.size }.thenByDescending { it.counts.avg }
+                compareByDescending<FeedbackGroup> { it.feedback.size }.thenByDescending { it.counts.rating }
             )
     }
 
@@ -221,11 +223,18 @@ private fun FeedbackByTalk(data: AggregatedData, query: String, onOpenUser: (Str
                         if (group.counts.total > 0) {
                             Span(attrs = {
                                 style {
-                                    property("background", avgColor(group.counts.avg))
+                                    property("background", ratingColor(group.counts.rating))
                                     property("padding", "1px 6px")
                                     property("border-radius", "4px")
                                 }
-                            }) { Text("avg ${group.counts.avg.toFixed(2)}") }
+                            }) { Text("rating ${group.counts.rating.toFixed(2)}") }
+                            Span(attrs = {
+                                style {
+                                    property("background", popularityColor(group.counts.popularity))
+                                    property("padding", "1px 6px")
+                                    property("border-radius", "4px")
+                                }
+                            }) { Text("pop ${group.counts.popularity.toFixed(2)}") }
                         }
                     }
                 }
@@ -279,7 +288,8 @@ private fun comparatorFor(key: SortKey, dir: Int): Comparator<SessionRow> {
         SortKey.OK -> compareBy { it.counts.ok }
         SortKey.BAD -> compareBy { it.counts.bad }
         SortKey.TOTAL -> compareBy { it.counts.total }
-        SortKey.AVG -> compareBy { it.counts.avg }
+        SortKey.RATING -> compareBy { it.counts.rating }
+        SortKey.POPULARITY -> compareBy { it.counts.popularity }
         SortKey.FEEDBACK -> compareBy { it.feedback.size }
     }
     return if (dir < 0) base.reversed() else base
@@ -288,7 +298,7 @@ private fun comparatorFor(key: SortKey, dir: Int): Comparator<SessionRow> {
 private fun exportCsv(year: Int, rows: List<SessionRow>, data: AggregatedData) {
     val header = listOf(
         "session_id", "title", "speaker_id", "speaker",
-        "good", "ok", "bad", "total", "avg_score", "feedback",
+        "good", "ok", "bad", "total", "rating", "popularity", "feedback",
     )
     val lines = mutableListOf(header)
     val whitespace = Regex("\\s+")
@@ -302,7 +312,8 @@ private fun exportCsv(year: Int, rows: List<SessionRow>, data: AggregatedData) {
                 row.sessionId, row.title, row.speakerId, row.speaker,
                 row.counts.good.toString(), row.counts.ok.toString(), row.counts.bad.toString(),
                 row.counts.total.toString(),
-                if (row.counts.total > 0) row.counts.avg.toFixed(3) else "",
+                if (row.counts.total > 0) row.counts.rating.toFixed(3) else "",
+                row.counts.popularity.toFixed(3),
                 feedback,
             )
         )
@@ -315,12 +326,18 @@ private fun rowKey(row: SessionRow): String = "${row.sessionId}|${row.speakerId}
 private fun scoreTitle(score: Score?): String =
     if (score != null) "Voter rated this talk $score" else "Commenter didn't vote (or unvoted)"
 
-/** Red → soft → green based on avg in [-1, +1], matching the original dashboard shading. */
-private fun avgColor(avg: Double): String {
-    val a = avg.coerceIn(-1.0, 1.0)
+/** Red → soft → green based on a normalized score in [-1, +1], matching the original dashboard shading. */
+private fun scoreColor(normalized: Double): String {
+    val a = normalized.coerceIn(-1.0, 1.0)
     val hue = 60 + a * 60
     val light = 92 - abs(a) * 12
     return "hsl($hue 70% $light%)"
 }
+
+/** Rating ranges from -1 (all sad) to 3 (all happy); midpoint 1 means happy votes balance sad ones. */
+private fun ratingColor(rating: Double): String = scoreColor((rating - 1) / 2)
+
+/** Popularity has the same theoretical range as rating but is heavily dampened by the +20 in the denominator. */
+private fun popularityColor(popularity: Double): String = scoreColor((popularity - 1) / 2)
 
 private fun Double.toFixed(digits: Int): String = asDynamic().toFixed(digits) as String
