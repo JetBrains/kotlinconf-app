@@ -45,6 +45,8 @@ fun OverviewScreen(data: AggregatedData, year: Int, onOpenUser: (String) -> Unit
             .sortedWith(comparatorFor(sortKey, sortDir))
     }
 
+    DistributionCharts(data)
+
     Div(attrs = { classes("card") }) {
         Div(attrs = { classes("toolbar") }) {
             Div(attrs = { classes("filters") }) {
@@ -327,7 +329,7 @@ private fun scoreTitle(score: Score?): String =
     if (score != null) "Voter rated this talk $score" else "Commenter didn't vote (or unvoted)"
 
 /** Red → soft → green based on a normalized score in [-1, +1], matching the original dashboard shading. */
-private fun scoreColor(normalized: Double): String {
+internal fun scoreColor(normalized: Double): String {
     val a = normalized.coerceIn(-1.0, 1.0)
     val hue = 60 + a * 60
     val light = 92 - abs(a) * 12
@@ -335,9 +337,9 @@ private fun scoreColor(normalized: Double): String {
 }
 
 /** Rating ranges from -1 (all sad) to 3 (all happy); midpoint 1 means happy votes balance sad ones. */
-private fun ratingColor(rating: Double): String = scoreColor((rating - 1) / 2)
+internal fun ratingColor(rating: Double): String = scoreColor((rating - 1) / 2)
 
 /** Popularity has the same theoretical range as rating but is heavily dampened by the +20 in the denominator. */
-private fun popularityColor(popularity: Double): String = scoreColor((popularity - 1) / 2)
+internal fun popularityColor(popularity: Double): String = scoreColor((popularity - 1) / 2)
 
-private fun Double.toFixed(digits: Int): String = asDynamic().toFixed(digits) as String
+internal fun Double.toFixed(digits: Int): String = asDynamic().toFixed(digits) as String
