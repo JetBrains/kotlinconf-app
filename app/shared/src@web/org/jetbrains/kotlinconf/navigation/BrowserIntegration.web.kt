@@ -1,7 +1,6 @@
 package org.jetbrains.kotlinconf.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import com.github.terrakok.navigation3.browser.ChronologicalBrowserNavigation
 import com.github.terrakok.navigation3.browser.HierarchicalBrowserNavigation
@@ -85,10 +84,9 @@ private fun AppRoute.toBrowserHistoryFragment() = when (val key = this) {
 actual fun BrowserIntegration(navState: NavState) {
     val isMobile = remember { isMobileBrowser() }
     if (isMobile) {
-        HierarchicalBrowserNavigation(
-            currentDestination = remember { derivedStateOf { navState.currentBackstack.lastOrNull() } },
-            currentDestinationName = { it?.toBrowserHistoryFragment() },
-        )
+        HierarchicalBrowserNavigation {
+            navState.currentBackstack.lastOrNull()?.toBrowserHistoryFragment()
+        }
     } else {
         ChronologicalBrowserNavigation(
             backStack = navState.currentBackstack,
