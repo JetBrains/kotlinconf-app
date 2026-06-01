@@ -29,7 +29,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.app.shared)
+            implementation(project(":app:shared"))
             implementation(libs.compose.components.resources)
         }
     }
