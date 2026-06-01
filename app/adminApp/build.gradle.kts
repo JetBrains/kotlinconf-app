@@ -23,7 +23,7 @@ kotlin {
             implementation(libs.compose.html.core)
             implementation(libs.compose.runtime)
 
-            implementation(projects.core)
+            implementation(project(":core"))
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.js)

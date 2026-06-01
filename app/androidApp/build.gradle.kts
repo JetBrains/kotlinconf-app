@@ -15,7 +15,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(projects.app.shared)
+    implementation(project(":app:shared"))
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.splashscreen)
