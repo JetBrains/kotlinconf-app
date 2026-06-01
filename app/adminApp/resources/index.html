@@ -99,6 +99,19 @@
     margin-bottom: 4px; }
   .pill { display: inline-block; padding: 2px 8px; border-radius: 999px;
     background: #f3f4f6; border: 1px solid var(--border); font-size: 12px; }
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 720px) { .charts-grid { grid-template-columns: 1fr; } }
+  .chart-title { font-size: 13px; font-weight: 600; color: var(--muted);
+    margin-bottom: 8px; text-align: center; }
+  .chart-bars { display: flex; align-items: flex-end; gap: 3px; height: 160px; }
+  .chart-col { flex: 1; display: flex; flex-direction: column; align-items: center;
+    height: 100%; justify-content: flex-end; }
+  .chart-count { font-size: 11px; color: var(--muted); height: 14px;
+    font-variant-numeric: tabular-nums; }
+  .chart-bar { width: 100%; min-height: 1px; border-radius: 3px 3px 0 0;
+    border: 1px solid rgba(0,0,0,.08); border-bottom: 0; transition: height .15s; }
+  .chart-tick { font-size: 10px; color: var(--muted); margin-top: 4px;
+    font-variant-numeric: tabular-nums; }
 </style>
 </head>
 <body>
