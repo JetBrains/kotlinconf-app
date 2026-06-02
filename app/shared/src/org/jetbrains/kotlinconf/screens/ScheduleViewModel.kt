@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
@@ -85,8 +84,8 @@ class ScheduleViewModel(
         return map { FilterItem(type = type, value = it, isSelected = false) }
     }
 
-    private val _filterItems = MutableStateFlow<List<FilterItem>>(emptyList())
-    val filterItems: StateFlow<List<FilterItem>> = _filterItems.asStateFlow()
+    val filterItems: StateFlow<List<FilterItem>>
+        field = MutableStateFlow<List<FilterItem>>(emptyList())
 
     init {
         viewModelScope.launch {
@@ -94,7 +93,7 @@ class ScheduleViewModel(
                 .mapNotNull { it?.tags }
                 .distinctUntilChanged()
                 .collect { tags ->
-                    _filterItems.value =
+                    filterItems.value =
                         tags.categories.toFilterItems(FilterItemType.Category) +
                                 tags.levels.toFilterItems(FilterItemType.Level) +
                                 tags.formats.toFilterItems(FilterItemType.Format)
@@ -110,7 +109,7 @@ class ScheduleViewModel(
     private var loading = MutableStateFlow(false)
 
     fun toggleFilter(item: FilterItem, selected: Boolean) {
-        _filterItems.update { oldItems ->
+        filterItems.update { oldItems ->
             val list = oldItems.toMutableList()
 
             if (item.type == FilterItemType.Level || item.type == FilterItemType.Format) {
@@ -131,7 +130,7 @@ class ScheduleViewModel(
     }
 
     fun resetFilters() {
-        _filterItems.update {
+        filterItems.update {
             it.map { filter -> filter.copy(isSelected = false) }
         }
     }

@@ -8,7 +8,6 @@ import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -26,8 +25,8 @@ sealed class PrivacyNoticeState {
 class PrivacyNoticeViewModel(
     private val service: ConferenceService,
 ) : ViewModel() {
-    private val _state = MutableStateFlow<PrivacyNoticeState>(PrivacyNoticeState.Idle)
-    val state: StateFlow<PrivacyNoticeState> = _state.asStateFlow()
+    val state: StateFlow<PrivacyNoticeState>
+        field = MutableStateFlow<PrivacyNoticeState>(PrivacyNoticeState.Idle)
 
     private var documentLoading = MutableStateFlow(true)
     private var document = MutableStateFlow<String?>(null)
@@ -59,9 +58,9 @@ class PrivacyNoticeViewModel(
 
     fun acceptPrivacyNotice(confirmationRequired: Boolean) {
         viewModelScope.launch {
-            _state.value = PrivacyNoticeState.Loading
+            state.value = PrivacyNoticeState.Loading
 
-            _state.value = if (confirmationRequired) {
+            state.value = if (confirmationRequired) {
                 if (service.acceptPrivacyNotice()) {
                     PrivacyNoticeState.Done
                 } else {
