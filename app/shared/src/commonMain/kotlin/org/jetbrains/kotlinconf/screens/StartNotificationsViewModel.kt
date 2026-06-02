@@ -19,8 +19,8 @@ import org.jetbrains.kotlinconf.NotificationSettings
 class StartNotificationsViewModel(
     private val service: ConferenceService,
 ) : ViewModel() {
-    private val _permissionRequestComplete = MutableStateFlow<Boolean>(false)
-    val permissionHandlingDone = _permissionRequestComplete
+    val permissionHandlingDone: StateFlow<Boolean>
+        field = MutableStateFlow(false)
 
     val notificationSettings: StateFlow<NotificationSettings?> = service.getNotificationSettings()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
@@ -37,7 +37,7 @@ class StartNotificationsViewModel(
             if (settings != null && settings.hasAnyEnabled()) {
                 service.requestNotificationPermissions()
             }
-            _permissionRequestComplete.emit(true)
+            permissionHandlingDone.emit(true)
         }
     }
 }

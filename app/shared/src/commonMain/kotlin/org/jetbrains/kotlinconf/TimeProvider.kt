@@ -4,7 +4,6 @@ import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toInstant
@@ -38,8 +37,8 @@ class ServerBasedTimeProvider(private val client: ApplicationApi) : TimeProvider
         return (Clock.System.now() + offset).toLocalDateTime(EVENT_TIME_ZONE)
     }
 
-    private val _time = MutableStateFlow(Clock.System.now().toLocalDateTime(EVENT_TIME_ZONE))
-    override val time: StateFlow<LocalDateTime> = _time.asStateFlow()
+    final override val time: StateFlow<LocalDateTime>
+        field = MutableStateFlow(Clock.System.now().toLocalDateTime(EVENT_TIME_ZONE))
 
     override suspend fun run(): Nothing {
         val serverTime = client.getServerTime()
@@ -47,11 +46,11 @@ class ServerBasedTimeProvider(private val client: ApplicationApi) : TimeProvider
             val requestTime = Clock.System.now()
             offset = serverTime - requestTime
         }
-        _time.value = now()
+        time.value = now()
 
         while (true) {
             delay(60_000)
-            _time.value = now()
+            time.value = now()
         }
     }
 }
@@ -62,16 +61,16 @@ class FakeTimeProvider(
     private val freezeTime: Boolean = false,
     private val speedMultiplier: Double = 60.0,
 ) : TimeProvider {
-    private val _time = MutableStateFlow(baseTime)
-    override val time: StateFlow<LocalDateTime> = _time
-    override fun now(): LocalDateTime = _time.value
+    final override val time: StateFlow<LocalDateTime>
+        field = MutableStateFlow(baseTime)
+    override fun now(): LocalDateTime = time.value
     override suspend fun run(): Nothing {
         if (freezeTime) {
             awaitCancellation()
         } else {
             while (true) {
                 delay((60.0 / speedMultiplier).seconds)
-                _time.update { t ->
+                time.update { t ->
                     t.toInstant(EVENT_TIME_ZONE)
                         .plus(1.minutes)
                         .toLocalDateTime(EVENT_TIME_ZONE)
