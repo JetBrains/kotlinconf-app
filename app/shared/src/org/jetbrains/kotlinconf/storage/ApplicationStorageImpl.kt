@@ -23,7 +23,6 @@ import org.jetbrains.kotlinconf.Theme
 import org.jetbrains.kotlinconf.getPlatformId
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @SingleIn(AppScope::class)
@@ -119,7 +118,6 @@ class ApplicationStorageImpl(
     private fun ensureUserId() {
         val existingUserId = settings.getString(Keys.USER_ID, "")
         if (existingUserId.isBlank()) {
-            @OptIn(ExperimentalUuidApi::class)
             val generatedUserId = "${getPlatformId()}-${Uuid.random()}"
             settings.set(Keys.USER_ID, generatedUserId)
         }
