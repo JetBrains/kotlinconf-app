@@ -26,6 +26,20 @@ jobs:
       - name: Run JVM tests
         run: ./gradlew jvmTest
 
+  build-jvm-release:
+    name: Build desktop release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+      - name: Build desktop release distributable
+        run: ./gradlew :app:desktopApp:createReleaseDistributable --stacktrace
+
   build-android:
     name: Build Android
     runs-on: ubuntu-latest
