@@ -17,6 +17,10 @@ kotlin {
 compose.desktop {
     application {
         mainClass = "org.jetbrains.kotlinconf.MainKt"
+
+        buildTypes.release.proguard {
+            configurationFiles.from(project.file("compose-desktop.pro"))
+        }
     }
 }
 
