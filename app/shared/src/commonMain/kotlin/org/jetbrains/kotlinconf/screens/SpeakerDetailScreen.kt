@@ -163,7 +163,7 @@ private fun Talks(
         sessions.forEach { session ->
             TalkCard(
                 title = session.title,
-                titleHighlights = emptyList(),
+                titleHighlights = [],
                 bookmarked = session.isFavorite,
                 onBookmark = { isBookmarked ->
                     viewModel.onBookmark(
@@ -172,9 +172,9 @@ private fun Talks(
                     )
                 },
                 tags = session.tags,
-                tagHighlights = emptyList(),
+                tagHighlights = [],
                 speakers = session.speakerLine,
-                speakerHighlights = emptyList(),
+                speakerHighlights = [],
                 location = session.locationLine,
                 lightning = session.isLightning,
                 time = session.fullTimeline,

@@ -34,7 +34,7 @@ class SessionViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ErrorLoadingState.Loading)
 
     val speakers: StateFlow<List<Speaker>> = service.speakersBySessionId(sessionId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), [])
 
     fun toggleFavorite(isBookmarked: Boolean) {
         viewModelScope.launch {

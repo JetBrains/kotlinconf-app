@@ -226,7 +226,7 @@ private class MapState(
 }
 
 private val mapStateSaver = Saver<MapState, List<Float>>(
-    save = { listOf(it.scale.value, it.offsetX.value, it.offsetY.value) },
+    save = { [it.scale.value, it.offsetX.value, it.offsetY.value] },
     restore = { values ->
         val (scale, offsetX, offsetY) = values
         MapState(scale, Offset(offsetX, offsetY))

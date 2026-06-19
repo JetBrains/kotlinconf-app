@@ -110,9 +110,9 @@ class ConferenceService(
                 .collect { settings ->
                     taggedLogger.log { "Synchronizing settings to Firebase topics: $settings" }
                     val notifier = NotifierManager.getPushNotifier()
-                    listOf(
+                    [
                         settings.scheduleUpdates to PushNotificationConstants.TOPIC_SCHEDULE_UPDATES,
-                    ).forEach { (enabled, topic) ->
+                    ].forEach { (enabled, topic) ->
                         if (enabled) notifier.subscribeToTopic(topic)
                         else notifier.unSubscribeFromTopic(topic)
                     }
@@ -129,25 +129,25 @@ class ConferenceService(
             timeProvider.time,
             currentYearlyStorage.flatMapLatest { it.getVotes() },
         ) { conference, favorites, time, votes ->
-            conference?.buildAgenda(favorites, votes, time) ?: emptyList()
-        }.stateIn(scope, SharingStarted.Eagerly, emptyList())
+            conference?.buildAgenda(favorites, votes, time) ?: []
+        }.stateIn(scope, SharingStarted.Eagerly, [])
 
     val votes: StateFlow<List<VoteInfo>> =
         currentYearlyStorage.flatMapLatest { it.getVotes() }
-            .stateIn(scope, SharingStarted.Eagerly, emptyList())
+            .stateIn(scope, SharingStarted.Eagerly, [])
 
     private val sessionCards: StateFlow<List<SessionCardView>> =
         agenda.map {
             it.flatMap { it.timeSlots }.flatMap { it.sessions }
-        }.stateIn(scope, SharingStarted.Eagerly, emptyList())
+        }.stateIn(scope, SharingStarted.Eagerly, [])
 
     val speakers: StateFlow<List<Speaker>> =
         currentYearlyStorage.flatMapLatest { it.getConferenceCache() }
             .map {
-                (it?.speakers ?: emptyList())
+                (it?.speakers ?: [])
                     .filter { speaker -> speaker.photoUrl.isNotBlank() }
             }
-            .stateIn(scope, SharingStarted.Eagerly, emptyList())
+            .stateIn(scope, SharingStarted.Eagerly, [])
 
     private val speakersById: StateFlow<Map<SpeakerId, Speaker>> = speakers
         .map { speakers ->
@@ -364,7 +364,7 @@ class ConferenceService(
 
     fun speakersBySessionId(sessionId: SessionId): Flow<List<Speaker>> =
         sessionByIdFlow(sessionId).map { session ->
-            session?.speakerIds?.mapNotNull { speakerId -> speakerById(speakerId) } ?: emptyList()
+            session?.speakerIds?.mapNotNull { speakerId -> speakerById(speakerId) } ?: []
         }
 
     fun sessionsForSpeakerFlow(id: SpeakerId): Flow<List<SessionCardView>> =
@@ -508,16 +508,16 @@ class ConferenceService(
         val storage = currentYearGraph.storage
         val client = currentYearGraph.api
 
-        val docPaths = listOf(
+        val docPaths = [
             "documents/app-privacy-notice.md",
             "documents/app-terms.md",
             "documents/code-of-conduct.md",
             "documents/visitors-privacy-notice.md",
             "documents/visitors-terms.md",
-        )
+        ]
         val mapData = storage.getConferenceInfoCache().first()?.mapData
         val mapPaths =
-            mapData?.floors?.flatMap { listOf(it.svgPathLight, it.svgPathDark) } ?: emptyList()
+            mapData?.floors?.flatMap { [it.svgPathLight, it.svgPathDark] } ?: []
 
         val allFiles = (docPaths + mapPaths)
         val missing = allFiles.filter { storage.getAsset(it) == null }

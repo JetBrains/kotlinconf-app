@@ -368,7 +368,7 @@ private fun ScheduleList(
     dayInfoMap: Map<LocalDate, DayInfo>,
     onBookmark: (SessionId, Boolean) -> Unit,
     onPrivacyNoticeNeeded: () -> Unit,
-    filterItems: List<FilterItem> = emptyList(),
+    filterItems: List<FilterItem> = [],
     onToggleFilter: (FilterItem, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier,
 ) {
@@ -521,9 +521,9 @@ private fun SessionCard(
     onPrivacyNoticeNeeded: () -> Unit,
     isSearch: Boolean,
     modifier: Modifier = Modifier,
-    titleHighlights: List<IntRange> = emptyList(),
-    tagHighlights: List<String> = emptyList(),
-    speakerHighlights: List<IntRange> = emptyList(),
+    titleHighlights: List<IntRange> = [],
+    tagHighlights: List<String> = [],
+    speakerHighlights: List<IntRange> = [],
 ) {
     val status = when (session.state) {
         SessionState.Live -> TalkStatus.Live

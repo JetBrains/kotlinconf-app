@@ -409,20 +409,20 @@ private fun TalkCardLivePreview() = PreviewHelper {
     var bookmarked by remember { mutableStateOf(false) }
     TalkCard(
         title = "Asynchronous Programming With Kotlin Coroutines",
-        titleHighlights = listOf(
+        titleHighlights = [
             30..35,
-        ),
+        ],
         bookmarked = bookmarked,
         onBookmark = { bookmarked = it },
-        tags = setOf(
+        tags = [
             "Workshop", "Kotlin", "Coroutines", "Multiplatform",
             "Label", "Label", "Label", "Label", "Label",
-        ),
-        tagHighlights = listOf(
+        ],
+        tagHighlights = [
             "Kotlin", "Multiplatform",
-        ),
+        ],
         speakers = "Sebastian Aigner, Vsevolod Tolstopyatov",
-        speakerHighlights = listOf(10..15),
+        speakerHighlights = [10..15],
         location = "Auditorium 14",
         lightning = true,
         time = "9:00 – 10:00",
@@ -458,16 +458,16 @@ private fun TalkCardLivePreview() = PreviewHelper {
 private fun TalkCardUpcomingPreview() = PreviewHelper {
     TalkCard(
         title = "Asynchronous Programming With Kotlin Coroutines",
-        titleHighlights = emptyList(),
+        titleHighlights = [],
         bookmarked = false,
         onBookmark = { },
-        tags = setOf(
+        tags = [
             "Workshop", "Kotlin", "Coroutines", "Multiplatform",
             "Label", "Label", "Label", "Label", "Label",
-        ),
-        tagHighlights = listOf(),
+        ],
+        tagHighlights = [],
         speakers = "Sebastian Aigner, Vsevolod Tolstopyatov",
-        speakerHighlights = emptyList(),
+        speakerHighlights = [],
         location = "Auditorium 14",
         lightning = true,
         time = "9:00 – 10:00",

@@ -187,7 +187,7 @@ class MigrationV002Test {
             while (rs.next()) { results.add(rs.getInt("rating")) }
             results
         }
-        assertEquals(listOf(1, 2), voteRatings, "Vote ratings should be preserved")
+        assertEquals([1, 2], voteRatings, "Vote ratings should be preserved")
 
         // Verify Feedback data preserved
         val feedbackText = query("""SELECT "feedback" FROM "Feedback"""") { rs ->

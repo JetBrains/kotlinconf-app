@@ -123,11 +123,11 @@ private fun LargeSwitcherItemSelectedPreview() = PreviewHelper {
 private fun LargeSwitcherPreview() = PreviewHelper {
     var selectedIndex by remember { mutableIntStateOf(0) }
     LargeSwitcher(
-        options = listOf(
+        options = [
             LargeSwitcherOption("May 21", "Workshop day"),
             LargeSwitcherOption("May 22", "Conference day 1"),
             LargeSwitcherOption("May 23", "Conference day 2"),
-        ),
+        ],
         selectedIndex = selectedIndex,
         onSelect = { selectedIndex = it },
     )

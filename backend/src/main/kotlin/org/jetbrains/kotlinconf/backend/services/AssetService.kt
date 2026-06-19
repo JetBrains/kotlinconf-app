@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 
 private val safeFilenamePattern = Regex("""^[A-Za-z0-9][A-Za-z0-9._-]*$""")
-private val validExtensions = setOf("md", "svg")
+private val validExtensions: Set<String> = ["md", "svg"]
 
 class AssetService(
     private val config: ConferenceConfig
@@ -57,13 +57,13 @@ class AssetService(
     }
 
     internal fun validateDocuments(): Int {
-        val requiredDocuments = setOf(
+        val requiredDocuments: Set<String> = [
             "app-privacy-notice.md",
             "app-terms.md",
             "code-of-conduct.md",
             "visitors-privacy-notice.md",
             "visitors-terms.md",
-        )
+        ]
 
         var totalIssues = 0
         for (year in config.supportedYears) {

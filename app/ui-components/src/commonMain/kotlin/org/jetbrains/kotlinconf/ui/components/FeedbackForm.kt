@@ -279,7 +279,7 @@ private class FeedbackFormPreviewParameterProvider :
     PreviewParameterProvider<FeedbackFormPreviewParams> {
     override val values = sequence {
         for (emotion in Emotion.entries) {
-            for (text in listOf("", "Wow such talk")) {
+            for (text in ["", "Wow such talk"]) {
                 yield(FeedbackFormPreviewParams(emotion, text))
             }
         }

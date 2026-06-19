@@ -7,11 +7,11 @@ import org.jetbrains.kotlinconf.Nominee
 import org.jetbrains.kotlinconf.NomineeId
 
 val FakeGoldenKodeeData = GoldenKodeeData(
-    categories = listOf(
+    categories = [
         AwardCategory(
             id = AwardCategoryId("creativity"),
             title = "Creativity",
-            nominees = listOf(
+            nominees = [
                 Nominee(
                     id = NomineeId("aaron-todd"),
                     name = "Aaron Todd",
@@ -36,12 +36,12 @@ val FakeGoldenKodeeData = GoldenKodeeData(
                     description = "A creative set of animation utilities and examples showcasing the power of Jetpack Compose's animation system.\n\n[KotlinConf](https://kotlinconf.com) | [Kotlin Blog](https://blog.jetbrains.com/kotlin/)",
                     winner = true,
                 ),
-            ),
+            ],
         ),
         AwardCategory(
             id = AwardCategoryId("community-impact"),
             title = "Community Impact",
-            nominees = listOf(
+            nominees = [
                 Nominee(
                     id = NomineeId("dave-leeds"),
                     name = "Dave Leeds",
@@ -66,12 +66,12 @@ val FakeGoldenKodeeData = GoldenKodeeData(
                     description = "A curated collection of real-world Kotlin migration stories and best practices from industry leaders.\n\n[Kotlin Blog](https://blog.jetbrains.com/kotlin/) | [Kotlin on Bluesky](https://bsky.app/profile/kotlinlang.org)",
                     winner = false,
                 ),
-            ),
+            ],
         ),
         AwardCategory(
             id = AwardCategoryId("best-library"),
             title = "Best Library",
-            nominees = listOf(
+            nominees = [
                 Nominee(
                     id = NomineeId("grace-chen"),
                     name = "Grace Chen",
@@ -96,12 +96,12 @@ val FakeGoldenKodeeData = GoldenKodeeData(
                     description = "A Gradle plugin for Kotlin code coverage, supporting JVM and multiplatform projects.\n\n[Kotlin Blog](https://blog.jetbrains.com/kotlin/) | [Kotlin on Bluesky](https://bsky.app/profile/kotlinlang.org)",
                     winner = false,
                 ),
-            ),
+            ],
         ),
         AwardCategory(
             id = AwardCategoryId("rising-star"),
             title = "Rising Star",
-            nominees = listOf(
+            nominees = [
                 Nominee(
                     id = NomineeId("judy-kim"),
                     name = "Judy Kim",
@@ -126,7 +126,7 @@ val FakeGoldenKodeeData = GoldenKodeeData(
                     description = "A collection of demos and templates showcasing Kotlin/Wasm capabilities for web development.\n\n[Kotlin Blog](https://blog.jetbrains.com/kotlin/) | [KotlinConf](https://kotlinconf.com)",
                     winner = false,
                 ),
-            ),
+            ],
         ),
-    ),
+    ],
 )

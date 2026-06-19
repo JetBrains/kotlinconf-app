@@ -130,8 +130,8 @@ fun Switcher(
 private fun SwitcherShortPreview() = PreviewHelper {
     var selectedIndex by remember { mutableIntStateOf(0) }
     Switcher(
-        items = listOf("May 21", "May 22", "May 23"),
-        shortItems = listOf("M21", "M22", "M23"),
+        items = ["May 21", "May 22", "May 23"],
+        shortItems = ["M21", "M22", "M23"],
         selectedIndex = selectedIndex,
         onSelect = { selectedIndex = it },
         modifier = Modifier.width(230.dp),
@@ -144,8 +144,8 @@ private fun SwitcherShortPreview() = PreviewHelper {
 private fun SwitcherPreview() = PreviewHelper {
     var selectedIndex by remember { mutableIntStateOf(0) }
     Switcher(
-        items = listOf("May 21", "May 22", "May 23"),
-        shortItems = listOf("M21", "M22", "M23"),
+        items = ["May 21", "May 22", "May 23"],
+        shortItems = ["M21", "M22", "M23"],
         selectedIndex = selectedIndex,
         onSelect = { selectedIndex = it },
         modifier = Modifier.width(300.dp),

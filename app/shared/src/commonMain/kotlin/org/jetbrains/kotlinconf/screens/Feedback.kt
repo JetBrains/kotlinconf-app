@@ -196,7 +196,7 @@ private fun FeedbackQuestion(
     }
 }
 
-private val feedbackEmotions = listOf(Emotion.Negative, Emotion.Neutral, Emotion.Positive)
+private val feedbackEmotions = [Emotion.Negative, Emotion.Neutral, Emotion.Positive]
 
 @Composable
 private fun FeedbackEmotionSelector(

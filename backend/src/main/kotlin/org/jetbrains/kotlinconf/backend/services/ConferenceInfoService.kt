@@ -101,10 +101,10 @@ class ConferenceInfoService(
     ): Int {
         val images = info.images ?: return 0
         var issueCount = 0
-        for ((variant, path) in listOf(
+        for ((variant, path) in [
             "light" to images.kotlinConfLight,
             "dark" to images.kotlinConfDark,
-        )) {
+        ]) {
             val resourcePath = "/years/$year/$path"
             if (javaClass.getResourceAsStream(resourcePath) == null) {
                 log.warn("$year | images | Missing $variant image file: $path")
@@ -129,10 +129,10 @@ class ConferenceInfoService(
                     log.warn("$year | ${partner.name} | Missing link")
                     issueCount++
                 }
-                for ((variant, logoPath) in listOf(
+                for ((variant, logoPath) in [
                     "light" to partner.logoUrlLight,
                     "dark" to partner.logoUrlDark
-                )) {
+                ]) {
                     if (logoPath.isBlank()) {
                         log.warn("$year | ${partner.name} | Missing $variant logo path")
                         issueCount++
@@ -155,10 +155,10 @@ class ConferenceInfoService(
     ): Int {
         var issueCount = 0
         for (floor in info.mapData.floors) {
-            for ((variant, svgPath) in listOf(
+            for ((variant, svgPath) in [
                 "light" to floor.svgPathLight,
                 "dark" to floor.svgPathDark
-            )) {
+            ]) {
                 if (svgPath.isBlank()) {
                     log.warn("$year | ${floor.name} | Missing $variant map SVG path")
                     issueCount++

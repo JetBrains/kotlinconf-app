@@ -55,7 +55,7 @@ import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
-private val bottomNavDestinations: List<MainNavDestination<TopLevelRoute>> = listOf(
+private val bottomNavDestinations: List<MainNavDestination<TopLevelRoute>> = [
     MainNavDestination(
         label = Res.string.nav_destination_schedule,
         icon = Res.drawable.clock_28,
@@ -86,7 +86,7 @@ private val bottomNavDestinations: List<MainNavDestination<TopLevelRoute>> = lis
         iconSelected = Res.drawable.info_28_fill,
         route = InfoScreen,
     ),
-)
+]
 
 @Composable
 internal fun NavScaffold(

@@ -38,7 +38,7 @@ class AboutConferenceViewModel(
                 .flatMap { it.timeSlots.flatMap { it.sessions } }
                 .associateBy { it.id }
             val speakersById = speakers.associateBy { it.id }
-            val aboutBlocks = conferenceInfo?.aboutBlocks ?: emptyList()
+            val aboutBlocks = conferenceInfo?.aboutBlocks ?: []
 
             aboutBlocks.map { block ->
                 val session = block.sessionId?.let { sessionsById[it] }
@@ -53,7 +53,7 @@ class AboutConferenceViewModel(
                     description = block.description,
                 )
             }
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), [])
 
     val conferenceInfo: StateFlow<ConferenceInfo?> = service.conferenceInfo
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)

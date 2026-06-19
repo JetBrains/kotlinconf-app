@@ -6,6 +6,10 @@ plugins {
 }
 
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcollection-literals")
+    }
+
     dependencies {
         implementation(project(":app:shared"))
         implementation(compose.desktop.currentOs)

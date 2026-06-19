@@ -70,10 +70,10 @@ private fun LargeMainHeaderPreview() = PreviewHelper {
                 modifier = Modifier.width(370.dp),
             )
 
-            val options = listOf(
+            val options = [
                 HeaderToggleOption(UiRes.drawable.view_list_24, "List view"),
                 HeaderToggleOption(UiRes.drawable.view_grid_24, "Grid view"),
-            )
+            ]
             var selectedIndex by remember { mutableStateOf(1) }
             HeaderToggleButton(
                 options = options,

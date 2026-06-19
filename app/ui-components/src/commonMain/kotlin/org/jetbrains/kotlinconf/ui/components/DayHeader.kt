@@ -128,7 +128,7 @@ private data class DayHeaderPreviewParams(
 private class DayHeaderPreviewParamsProvider : PreviewParameterProvider<DayHeaderPreviewParams> {
     override val values = sequenceOf(true, false)
         .flatMap { fullWidth ->
-            listOf(false, true).map { multiDay ->
+            [false, true].map { multiDay ->
                 DayHeaderPreviewParams(fullWidth, multiDay)
             }
         }
