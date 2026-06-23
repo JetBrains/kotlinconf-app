@@ -61,6 +61,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun MinorError(
@@ -278,7 +279,7 @@ private fun NormalErrorInteractivePreview() = PreviewHelper {
         onRetry = {
             scope.launch {
                 loading = true
-                delay(1000)
+                delay(1000.milliseconds)
                 loading = false
             }
         }
