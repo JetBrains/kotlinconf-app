@@ -17,7 +17,7 @@ import org.jetbrains.kotlinconf.backend.model.CategoryItemData
 import org.jetbrains.kotlinconf.backend.model.SessionizeData
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.slf4j.LoggerFactory
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.minutes
 
 class SessionizeService(
     private val client: HttpClient,
@@ -42,7 +42,7 @@ class SessionizeService(
                 }
 
                 log.trace("Finished loading data from Sessionize.")
-                delay(TimeUnit.MINUTES.toMillis(sessionizeInterval))
+                delay(sessionizeInterval.minutes)
             }
         }
     }

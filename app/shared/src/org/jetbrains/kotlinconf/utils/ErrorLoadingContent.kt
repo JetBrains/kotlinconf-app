@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import kotlinx.coroutines.delay
 import org.jetbrains.kotlinconf.ui.components.NormalErrorWithLoading
+import kotlin.time.Duration.Companion.milliseconds
 
 sealed class ErrorLoadingState<out T : Any> {
     data object Loading : ErrorLoadingState<Nothing>()
@@ -34,7 +35,7 @@ fun <T : Any> ErrorLoadingContent(
     var delayedState by remember { mutableStateOf<ErrorLoadingState<T>?>(null)  }
     LaunchedEffect(state) {
         if (state is ErrorLoadingState.Loading || state is ErrorLoadingState.Error) {
-            delay(100)
+            delay(100.milliseconds)
             delayedState = state
         } else {
             delayedState = state
