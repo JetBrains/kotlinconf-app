@@ -12,6 +12,7 @@ import org.jetbrains.kotlinconf.network.ApplicationApi
 import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.time.Clock
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
@@ -49,7 +50,7 @@ class ServerBasedTimeProvider(private val client: ApplicationApi) : TimeProvider
         time.value = now()
 
         while (true) {
-            delay(60_000)
+            delay(60_000.milliseconds)
             time.value = now()
         }
     }
