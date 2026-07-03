@@ -106,7 +106,6 @@ The `app:shared` module defines custom intermediate source sets beyond the defau
 **Route structure** (`RoutesModule.kt`):
 - Year-agnostic: `/healthz`, `/time`, `/admin/*`, `/config`
 - Year-prefixed: `/{year}/conference`, `/{year}/conference-info`, `/{year}/schedule`, `/{year}/vote`, `/{year}/sign`, `/{year}/golden-kodee`, `/{year}/documents/*`, etc.
-- Year-less routes also registered for backwards compatibility (default year: 2025).
 
 **Data flow**: `SessionizeService` polls the Sessionize API on a configurable interval and caches schedule data in-memory. `KotlinConfRepository` handles all DB operations (users, votes, feedback, signed policies) using `suspendTransaction`.
 

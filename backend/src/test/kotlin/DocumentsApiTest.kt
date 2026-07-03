@@ -34,16 +34,6 @@ class DocumentsApiTest {
     }
 
     @Test
-    fun `single document endpoint without year returns document for current year`() = runTest {
-        val response = client.get("/documents/code-of-conduct.md")
-        assertEquals(HttpStatusCode.OK, response.status)
-
-        val content = response.bodyAsText()
-        assertTrue(content.contains("Code of Conduct"))
-        assertTrue(content.contains("2025"))
-    }
-
-    @Test
     fun `single document endpoint with archived year returns archived document`() = runTest {
         val response = client.get("/2024/documents/code-of-conduct.md")
         assertEquals(HttpStatusCode.OK, response.status)
