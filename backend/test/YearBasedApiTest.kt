@@ -38,15 +38,6 @@ class YearBasedApiTest {
     }
 
     @Test
-    fun `conference endpoint without year returns current year data`() = runTest {
-        val response = client.get("/conference")
-        assertEquals(HttpStatusCode.OK, response.status)
-
-        // Verify that we have some sessions
-        assertNotEquals(0, response.body<Conference>().sessions.size)
-    }
-
-    @Test
     fun `conference endpoint with current year returns data`() = runTest {
         val response = client.get("/2025/conference")
         assertEquals(HttpStatusCode.OK, response.status)
@@ -81,7 +72,7 @@ class YearBasedApiTest {
     fun `vote POST on archived year returns 403`() = runTest {
         // First sign up a user
         val userId = "test-user-${System.currentTimeMillis()}"
-        client.post("/sign") {
+        client.post("/2025/sign") {
             setBody(userId)
             contentType(ContentType.Text.Plain)
         }
@@ -99,7 +90,7 @@ class YearBasedApiTest {
     fun `feedback POST on archived year returns 403`() = runTest {
         // First sign up a user
         val userId = "test-user-feedback-${System.currentTimeMillis()}"
-        client.post("/sign") {
+        client.post("/2025/sign") {
             setBody(userId)
             contentType(ContentType.Text.Plain)
         }

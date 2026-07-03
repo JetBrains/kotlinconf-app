@@ -23,17 +23,14 @@ internal suspend fun ApplicationCall.validatePrincipal(database: KotlinConfRepos
     return principal
 }
 
-private const val DEFAULT_YEAR = 2025
-
 val ARCHIVED_YEAR_FORBIDDEN = HttpStatusCode(403, "Forbidden: Archived Year")
 
 /**
- * Gets the year for this request.
- * - If "year" path parameter is absent: returns [DEFAULT_YEAR] (the archive year for backwards-compatible routes)
- * - If "year" path parameter exists: validates and returns it (throws NotFound if invalid)
+ * Gets the year for this request from the "year" path parameter, then validates and returns it
+ * (throws NotFound if the parameter is missing or invalid).
  */
 internal fun RoutingContext.getYearFromPath(config: ConferenceConfig): Int {
-    val yearParam = call.parameters["year"] ?: return DEFAULT_YEAR
+    val yearParam = call.parameters["year"] ?: throw NotFound()
 
     val year = yearParam.toIntOrNull() ?: throw NotFound()
 

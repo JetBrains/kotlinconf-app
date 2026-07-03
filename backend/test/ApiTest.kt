@@ -27,13 +27,13 @@ class ApiTest {
     @Test
     fun testConferenceCallRepeatable() = runTest {
         repeat(10) {
-            client.get("/conference").body<Conference>()
+            client.get("/2025/conference").body<Conference>()
         }
     }
 
     @Test
     fun testWorkshopPartsAreMerged() = runTest {
-        val conference = client.get("/conference").body<Conference>()
+        val conference = client.get("/2025/conference").body<Conference>()
         val workshops = conference.sessions.filter { it.tags?.contains("Workshop") == true }
 
         for (workshop in workshops) {

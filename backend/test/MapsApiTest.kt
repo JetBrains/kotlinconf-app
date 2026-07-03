@@ -100,10 +100,12 @@ class MapsApiTest {
         val mapData = info.mapData
 
         for (floor in mapData.floors) {
-            val lightResponse = client.get(floor.svgPathLight)
+            // Map SVG paths in conference-info are relative (the client prepends the year prefix),
+            // so fetch them under the /{year} prefix.
+            val lightResponse = client.get("/2025/${floor.svgPathLight}")
             assertEquals(HttpStatusCode.OK, lightResponse.status, "Failed to fetch ${floor.svgPathLight}")
 
-            val darkResponse = client.get(floor.svgPathDark)
+            val darkResponse = client.get("/2025/${floor.svgPathDark}")
             assertEquals(HttpStatusCode.OK, darkResponse.status, "Failed to fetch ${floor.svgPathDark}")
         }
     }

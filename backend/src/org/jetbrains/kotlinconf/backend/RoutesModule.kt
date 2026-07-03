@@ -27,9 +27,6 @@ fun Application.routesModule() {
         adminPanelRoutes()
         configRoutes()
 
-        // Routes without the year prefix for backwards compatibility
-        yearBasedRoutes()
-
         // Routes with year prefix: /{year}/...
         route("/{year}") {
             yearBasedRoutes()
@@ -38,10 +35,8 @@ fun Application.routesModule() {
 }
 
 /**
- * Registers all year-based routes.
- * Route handlers will check for the "year" path parameter:
- * - If present: validate and use that year
- * - If absent: use 2025 (temporary, will be removed soon)
+ * Registers all year-based routes under the "/{year}" path prefix.
+ * Route handlers read the "year" path parameter, then validate and use that year.
  */
 private fun Route.yearBasedRoutes() {
     userRoutes()
