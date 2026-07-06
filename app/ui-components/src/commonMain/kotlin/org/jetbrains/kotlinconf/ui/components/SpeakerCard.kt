@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
@@ -22,7 +23,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.kodee_emotion_neutral
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 @Composable
 fun SpeakerCard(
@@ -35,8 +35,7 @@ fun SpeakerCard(
     titleHighlights: List<IntRange> = emptyList(),
 ) {
     Row(
-        modifier = modifier
-            .clip(KotlinConfTheme.shapes.roundedCornerMd)
+        modifier = modifier.clip(KotlinConfTheme.shapes.roundedCornerMd)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -72,8 +71,7 @@ fun SpeakerAvatar(
             .crossfade(true)
             .build(),
         contentDescription = null,
-        modifier = modifier
-            .clip(KotlinConfTheme.shapes.roundedCornerMd)
+        modifier = modifier.clip(KotlinConfTheme.shapes.roundedCornerMd)
             .background(KotlinConfTheme.colors.tileBackground),
         contentScale = ContentScale.Crop,
         error = painterResource(UiRes.drawable.kodee_emotion_neutral),
@@ -96,10 +94,11 @@ private fun SpeakerCardPreview() = PreviewHelper {
 private fun SpeakerCardWithHighlightsPreview() = PreviewHelper {
     SpeakerCard(
         name = "John Doe",
-        nameHighlights = listOf(0..3),  // Highlight "John"
+        nameHighlights = listOf(0..3), // Highlight "John"
         title = "Whatever Role Name at That Company",
-        titleHighlights = listOf(9..12),  // Highlight "Role"
-        photoUrl = "https://sessionize.com/image/2e2f-0o0o0-XGxKBoqZvxxQxosrZHQHTT.png?download=sebastian-aigner.png",
+        titleHighlights = listOf(9..12), // Highlight "Role"
+        photoUrl =
+            "https://sessionize.com/image/2e2f-0o0o0-XGxKBoqZvxxQxosrZHQHTT.png?download=sebastian-aigner.png",
         onClick = {},
     )
 }

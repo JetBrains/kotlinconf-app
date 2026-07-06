@@ -1,8 +1,10 @@
 // ABOUTME: SQL-based database migration runner that discovers and applies numbered .sql files.
 // ABOUTME: Tracks applied migrations in a schema_migrations table for idempotent startup.
-
 package org.jetbrains.kotlinconf.backend.schema
 
+import java.io.File
+import java.net.URI
+import java.util.jar.JarFile
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
@@ -10,9 +12,6 @@ import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.slf4j.LoggerFactory
-import java.io.File
-import java.net.URI
-import java.util.jar.JarFile
 
 data class Migration(val version: Int, val name: String, val sql: String)
 
@@ -38,8 +37,7 @@ object MigrationRunner {
             if (migration.version !in applied) {
                 log.info("Applying migration V{}: {}", migration.version, migration.name)
                 transaction(database) {
-                    val statements = migration.sql
-                        .lines()
+                    val statements = migration.sql.lines()
                         .filter { !it.trimStart().startsWith("--") }
                         .joinToString("\n")
                         .split(";")
@@ -82,7 +80,8 @@ object MigrationRunner {
             "jar" -> {
                 val jarPath = url.path.substringBefore("!")
                 JarFile(URI(jarPath).path).use { jar ->
-                    jar.entries().asSequence()
+                    jar.entries()
+                        .asSequence()
                         .map { it.name }
                         .filter { it.startsWith("$resourcePath/") && it.endsWith(".sql") }
                         .map { it.substringAfterLast("/") }
@@ -99,7 +98,8 @@ object MigrationRunner {
                 val sql = classLoader.getResource("$resourcePath/$filename")!!.readText()
                 Migration(version, name, sql)
             }
-        }.sortedBy { it.version }
+        }
+            .sortedBy { it.version }
     }
 
     internal fun appliedVersions(database: Database? = null): Set<Int> {

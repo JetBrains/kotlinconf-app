@@ -1,10 +1,10 @@
 package org.jetbrains.kotlinconf.backend.model
 
+import kotlin.time.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
-import kotlin.time.Instant
 
 @Serializable
 class SessionizeData(
@@ -13,7 +13,7 @@ class SessionizeData(
     val speakers: List<SpeakerData> = emptyList(),
     val questions: List<QuestionData> = emptyList(),
     val categories: List<CategoryData> = emptyList(),
-    val partners: List<PartnerData> = emptyList()
+    val partners: List<PartnerData> = emptyList(),
 )
 
 @Serializable
@@ -23,7 +23,8 @@ data class SessionData(
     val isPlenumSession: Boolean,
     val speakers: List<SpeakerId>,
     @SerialName("description")
-    var descriptionText: String? = "",
+    var descriptionText: String? =
+        "",
     val startsAt: Instant?,
     val endsAt: Instant?,
     val title: String,
@@ -44,7 +45,7 @@ data class SessionData(
 class RoomData(
     val name: String,
     val id: Int,
-    val sort: Int
+    val sort: Int,
 )
 
 @Serializable
@@ -60,7 +61,7 @@ class SpeakerData(
     val fullName: String,
     val links: List<LinkData> = emptyList(),
     val categoryItems: List<Int> = emptyList(),
-    val questionAnswers: List<QuestionAnswerData> = emptyList()
+    val questionAnswers: List<QuestionAnswerData> = emptyList(),
 )
 
 @Serializable
@@ -68,7 +69,7 @@ class QuestionData(
     val question: String,
     val id: Int,
     val sort: Int,
-    val questionType: String
+    val questionType: String,
 )
 
 @Serializable
@@ -76,34 +77,34 @@ class CategoryData(
     val id: Int,
     val sort: Int,
     val title: String,
-    val items: List<CategoryItemData> = emptyList()
+    val items: List<CategoryItemData> = emptyList(),
 )
 
 @Serializable
 class QuestionAnswerData(
     val questionId: Int,
-    val answerValue: String
+    val answerValue: String,
 )
 
 @Serializable
 class LinkData(
     val linkType: String,
     val title: String,
-    val url: String
+    val url: String,
 )
 
 @Serializable
 class CategoryItemData(
     val name: String,
     val id: Int,
-    val sort: Int
+    val sort: Int,
 )
 
 @Serializable
 class PartnerData(
     val name: String,
     val logo: String,
-    val description: String
+    val description: String,
 )
 
 @Serializable

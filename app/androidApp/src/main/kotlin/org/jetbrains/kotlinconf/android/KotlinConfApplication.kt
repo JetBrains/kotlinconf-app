@@ -11,14 +11,14 @@ import org.jetbrains.kotlinconf.utils.AndroidLogger
 class KotlinConfApplication : Application(), MetroApplication {
 
     private val appGraph: AndroidAppGraph by lazy {
-        createGraphFactory<AndroidAppGraph.Factory>().create(
-            application = this,
-            iconRes = R.drawable.kotlinconf_notification_icon,
-        )
+        createGraphFactory<AndroidAppGraph.Factory>()
+            .create(
+                application = this,
+                iconRes = R.drawable.kotlinconf_notification_icon,
+            )
     }
 
-    override val appComponentProviders: MetroAppComponentProviders
-        get() = appGraph
+    override val appComponentProviders: MetroAppComponentProviders get() = appGraph
 
     override fun onCreate() {
         super.onCreate()

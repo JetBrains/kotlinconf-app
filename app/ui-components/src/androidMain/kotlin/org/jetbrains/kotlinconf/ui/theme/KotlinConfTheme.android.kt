@@ -10,8 +10,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 
 actual object LocalAppTheme {
     private var default: Int? = null
-    actual val current: Boolean
-        @Composable get() = (LocalConfiguration.current.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES
+    actual val current: Boolean @Composable
+    get() = (LocalConfiguration.current.uiMode and UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES
 
     @Composable
     actual infix fun provides(value: Boolean?): ProvidedValue<*> {
@@ -21,7 +21,7 @@ actual object LocalAppTheme {
             default = configuration.uiMode
         }
 
-        val new = when(value) {
+        val new = when (value) {
             true -> (configuration.uiMode and UI_MODE_NIGHT_MASK.inv()) or UI_MODE_NIGHT_YES
             false -> (configuration.uiMode and UI_MODE_NIGHT_MASK.inv()) or UI_MODE_NIGHT_NO
             null -> default!!

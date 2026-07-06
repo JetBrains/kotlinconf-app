@@ -28,7 +28,6 @@ import platform.darwin.NSObject
 // * scrollsToTop property set to true
 // * scrollViewShouldScrollToTop should return true
 // * current position shouldn't be at 0
-
 @Composable
 actual fun ScrollToTopHandler(scrollState: ScrollState) {
     val coroutineScope = rememberCoroutineScope()
@@ -121,9 +120,6 @@ private fun UIScrollView(
                 setContentOffset(CGPointMake(0.0, 100.0)) // Enable scroll-to-top
             }
         },
-        modifier = Modifier
-            .alpha(0f)
-            .height(1.dp)
-            .fillMaxWidth()
+        modifier = Modifier.alpha(0f).height(1.dp).fillMaxWidth(),
     )
 }

@@ -11,11 +11,11 @@ import io.ktor.client.request.header
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
 import io.ktor.http.encodedPath
+import kotlin.time.Instant
 import kotlinx.coroutines.CancellationException
 import org.jetbrains.kotlinconf.AppConfig
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
-import kotlin.time.Instant
 
 /**
  * Adapter to handle app-level (year-independent) backend API calls.

@@ -1,6 +1,5 @@
 // ABOUTME: Builds a CSV from table rows and triggers a browser download.
 // ABOUTME: Prepends a UTF-8 BOM so Excel opens non-ASCII feedback text correctly.
-
 package org.jetbrains.kotlinconf.admin
 
 import kotlinx.browser.document
@@ -22,9 +21,10 @@ fun downloadCsv(filename: String, rows: List<List<String>>) {
     URL.revokeObjectURL(url)
 }
 
-private fun csvEscape(value: String): String =
-    if (value.any { it == '"' || it == ',' || it == '\n' || it == '\r' }) {
-        "\"" + value.replace("\"", "\"\"") + "\""
-    } else {
-        value
-    }
+private fun csvEscape(value: String): String = if (
+    value.any { it == '"' || it == ',' || it == '\n' || it == '\r' }
+) {
+    "\"" + value.replace("\"", "\"\"") + "\""
+} else {
+    value
+}

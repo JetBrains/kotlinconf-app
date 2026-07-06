@@ -13,25 +13,28 @@ import org.jetbrains.kotlinconf.generated.resources.notifications_session_remind
 import org.jetbrains.kotlinconf.generated.resources.notifications_session_reminders_title
 import org.jetbrains.kotlinconf.ui.components.SettingsItem
 
-
 @Composable
 fun NotificationSettings(
     notificationSettings: NotificationSettings,
     onChangeSettings: (NotificationSettings) -> Unit,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         SettingsItem(
             title = stringResource(Res.string.notifications_session_reminders_title),
             enabled = notificationSettings.sessionReminders,
-            onToggle = { enabled -> onChangeSettings(notificationSettings.copy(sessionReminders = enabled)) },
+            onToggle = { enabled ->
+                onChangeSettings(notificationSettings.copy(sessionReminders = enabled))
+            },
             note = stringResource(Res.string.notifications_session_reminders_description),
         )
         SettingsItem(
             title = stringResource(Res.string.notifications_schedule_update_title),
             enabled = notificationSettings.scheduleUpdates,
-            onToggle = { enabled -> onChangeSettings(notificationSettings.copy(scheduleUpdates = enabled)) },
+            onToggle = { enabled ->
+                onChangeSettings(notificationSettings.copy(scheduleUpdates = enabled))
+            },
             note = stringResource(Res.string.notifications_schedule_update_description),
         )
     }

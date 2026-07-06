@@ -10,11 +10,11 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 /**
  * A simple text component that uses defaults from [KotlinConfTheme],
@@ -74,7 +74,9 @@ fun Text(
 
 private data class TypographyStylePreviewParams(
     val name: String,
-    val style: @Composable () -> TextStyle,
+    val style:
+        @Composable
+        () -> TextStyle,
 )
 
 private class TypographyStylePreviewProvider :
@@ -94,7 +96,8 @@ private class TypographyStylePreviewProvider :
 @PreviewLightDark
 @Composable
 private fun TextStylePreview(
-    @PreviewParameter(TypographyStylePreviewProvider::class) params: TypographyStylePreviewParams,
+    @PreviewParameter(TypographyStylePreviewProvider::class)
+    params: TypographyStylePreviewParams,
 ) = PreviewHelper {
     Text(
         text = "This is a text demo in the kotlinconf-app codebase",

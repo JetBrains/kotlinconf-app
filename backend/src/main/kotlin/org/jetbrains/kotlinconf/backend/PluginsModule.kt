@@ -25,7 +25,6 @@ import org.jetbrains.kotlinconf.backend.utils.SecretInvalidError
 import org.jetbrains.kotlinconf.backend.utils.ServiceUnavailable
 import org.jetbrains.kotlinconf.backend.utils.Unauthorized
 
-
 fun Application.pluginsSetup() {
     val config = environment.config
     val serviceConfig = config.config("service")
@@ -71,9 +70,16 @@ fun Application.pluginsSetup() {
         allowHeader(HttpHeaders.CacheControl)
         allowCredentials = true
         allowNonSimpleContentTypes = true
-        listOf(HttpMethod.Put, HttpMethod.Get, HttpMethod.Post, HttpMethod.Delete, HttpMethod.Options).forEach {
-            allowMethod(it)
-        }
+        listOf(
+                HttpMethod.Put,
+                HttpMethod.Get,
+                HttpMethod.Post,
+                HttpMethod.Delete,
+                HttpMethod.Options,
+            )
+            .forEach {
+                allowMethod(it)
+            }
         anyHost()
     }
 

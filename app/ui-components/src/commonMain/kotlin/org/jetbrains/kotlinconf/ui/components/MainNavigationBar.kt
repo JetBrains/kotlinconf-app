@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -35,7 +36,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.team_28
 import org.jetbrains.kotlinconf.ui.generated.resources.team_28_fill
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import org.jetbrains.kotlinconf.ui.utils.WidePreviewLightDark
 
 @Composable
@@ -48,12 +48,10 @@ private fun MainNavigationButton(
     modifier: Modifier = Modifier,
 ) {
     val iconColor by animateColorAsState(
-        if (selected) KotlinConfTheme.colors.primaryText
-        else KotlinConfTheme.colors.secondaryText
+        if (selected) KotlinConfTheme.colors.primaryText else KotlinConfTheme.colors.secondaryText,
     )
     Icon(
-        modifier = modifier
-            .clip(KotlinConfTheme.shapes.roundedCornerMd)
+        modifier = modifier.clip(KotlinConfTheme.shapes.roundedCornerMd)
             .selectable(
                 selected = selected,
                 enabled = true,
@@ -86,10 +84,7 @@ fun <T : Any> MainNavigationBar(
                 contentDescription = destination.label.let { stringResource(it) },
                 selected = destination == currentDestination,
                 onClick = { onSelect(destination) },
-                modifier = Modifier
-                    .widthIn(max = 150.dp)
-                    .fillMaxWidth()
-                    .weight(1f, fill = false),
+                modifier = Modifier.widthIn(max = 150.dp).fillMaxWidth().weight(1f, fill = false),
             )
         }
     }
@@ -105,7 +100,7 @@ private fun MainNavigationBarPreview() = PreviewHelper(paddingEnabled = false) {
                 label = UiRes.string.now,
                 icon = UiRes.drawable.clock_28,
                 iconSelected = UiRes.drawable.clock_28_fill,
-                route = "Schedule"
+                route = "Schedule",
             )
         )
     }
@@ -116,31 +111,31 @@ private fun MainNavigationBarPreview() = PreviewHelper(paddingEnabled = false) {
                 label = UiRes.string.now,
                 icon = UiRes.drawable.clock_28,
                 iconSelected = UiRes.drawable.clock_28_fill,
-                route = "Schedule"
+                route = "Schedule",
             ),
             MainNavDestination(
                 label = UiRes.string.now,
                 icon = UiRes.drawable.team_28,
                 iconSelected = UiRes.drawable.team_28_fill,
-                route = "Speakers"
+                route = "Speakers",
             ),
             MainNavDestination(
                 label = UiRes.string.now,
                 icon = UiRes.drawable.award_28,
                 iconSelected = UiRes.drawable.award_28_fill,
-                route = "GoldenKodee"
+                route = "GoldenKodee",
             ),
             MainNavDestination(
                 label = UiRes.string.now,
                 icon = UiRes.drawable.location_28,
                 iconSelected = UiRes.drawable.location_28_fill,
-                route = "Map"
+                route = "Map",
             ),
             MainNavDestination(
                 label = UiRes.string.now,
                 icon = UiRes.drawable.info_28,
                 iconSelected = UiRes.drawable.info_28_fill,
-                route = "Info"
+                route = "Info",
             ),
         ),
         onSelect = { currentDestination = it },

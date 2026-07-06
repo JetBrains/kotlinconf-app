@@ -50,16 +50,15 @@ fun SpeakerDetailScreen(
     viewModel: SpeakerDetailViewModel =
         assistedMetroViewModel<SpeakerDetailViewModel, SpeakerDetailViewModel.Factory> {
             create(speakerId)
-        }
+        },
 ) {
     val speakerState = viewModel.speaker.collectAsStateWithLifecycle().value
     val sessions = viewModel.sessions.collectAsStateWithLifecycle().value
 
     Column(
-        Modifier
-            .fillMaxSize()
+        Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .padding(topInsetPadding()),
     ) {
         ErrorLoadingContent(
             state = speakerState,
@@ -79,7 +78,7 @@ fun SpeakerDetailScreen(
                                 contentDescription = stringResource(UiRes.string.main_header_back),
                                 onClick = onBack,
                             )
-                        }
+                        },
                     )
                     HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
                 },
@@ -119,7 +118,7 @@ private fun Name(
             selectable = true,
             modifier = Modifier.semantics {
                 heading()
-            }
+            },
         )
         Spacer(Modifier.height(4.dp))
         Text(
@@ -139,8 +138,7 @@ private fun Description(
     Column(modifier) {
         SpeakerAvatar(
             photoUrl = currentSpeaker.photoUrl,
-            modifier = Modifier.widthIn(max = 300.dp)
-                .aspectRatio(1f)
+            modifier = Modifier.widthIn(max = 300.dp).aspectRatio(1f),
         )
         Spacer(Modifier.height(24.dp))
         Text(
@@ -168,7 +166,7 @@ private fun Talks(
                 onBookmark = { isBookmarked ->
                     viewModel.onBookmark(
                         session.id,
-                        isBookmarked
+                        isBookmarked,
                     )
                 },
                 tags = session.tags,

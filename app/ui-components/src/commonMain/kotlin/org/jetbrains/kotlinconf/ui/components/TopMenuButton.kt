@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -26,8 +27,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -43,11 +42,10 @@ private fun TopMenuButtonImpl(
     BasicTooltipBox(
         positionProvider = rememberTooltipPositionProvider(),
         tooltip = { Tooltip(contentDescription) },
-        state = rememberBasicTooltipState()
+        state = rememberBasicTooltipState(),
     ) {
         Icon(
-            modifier = modifier
-                .padding(if (large) 0.dp else 6.dp)
+            modifier = modifier.padding(if (large) 0.dp else 6.dp)
                 .size(if (large) 40.dp else 36.dp)
                 .clip(CircleShape)
                 .then(interactionModifier)
@@ -73,12 +71,11 @@ fun TopMenuButton(
     large: Boolean = false,
 ) {
     val backgroundColor by animateColorAsState(
-        if (selected) KotlinConfTheme.colors.primaryBackground
-        else Color.Transparent
+        if (selected) KotlinConfTheme.colors.primaryBackground else Color.Transparent,
     )
     val iconColor by animateColorAsState(
         if (selected) KotlinConfTheme.colors.primaryTextWhiteFixed
-        else KotlinConfTheme.colors.primaryText
+        else KotlinConfTheme.colors.primaryText,
     )
 
     TopMenuButtonImpl(
@@ -142,7 +139,7 @@ private fun TopMenuButtonLargeUnselectedPreview() = PreviewHelper {
         "Bookmark",
         selected = selected,
         { selected = it },
-        large = true
+        large = true,
     )
 }
 
@@ -155,6 +152,6 @@ private fun TopMenuButtonLargeSelectedPreview() = PreviewHelper {
         "Bookmark",
         selected = selected,
         { selected = it },
-        large = true
+        large = true,
     )
 }

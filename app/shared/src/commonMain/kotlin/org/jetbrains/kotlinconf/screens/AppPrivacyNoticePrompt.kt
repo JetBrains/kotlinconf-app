@@ -30,10 +30,10 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.document_error_no_data
 import org.jetbrains.kotlinconf.generated.resources.kodee_privacy
 import org.jetbrains.kotlinconf.generated.resources.privacy_notice_accept
 import org.jetbrains.kotlinconf.generated.resources.privacy_notice_back
-import org.jetbrains.kotlinconf.generated.resources.document_error_no_data
 import org.jetbrains.kotlinconf.generated.resources.privacy_notice_description
 import org.jetbrains.kotlinconf.generated.resources.privacy_notice_read_action
 import org.jetbrains.kotlinconf.generated.resources.privacy_notice_reject
@@ -45,12 +45,12 @@ import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MarkdownView
 import org.jetbrains.kotlinconf.ui.components.Text
-import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_left_24
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_right_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.utils.FadingAnimationSpec
 
 @Composable
@@ -73,14 +73,13 @@ fun AppPrivacyNoticePrompt(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .background(color = KotlinConfTheme.colors.mainBackground)
-            .windowInsetsPadding(WindowInsets.safeDrawing)
+        modifier = Modifier.background(color = KotlinConfTheme.colors.mainBackground)
+            .windowInsetsPadding(WindowInsets.safeDrawing),
     ) {
         AnimatedContent(
             targetState = detailsVisible,
             modifier = Modifier.weight(1f),
-            transitionSpec = { FadingAnimationSpec }
+            transitionSpec = { FadingAnimationSpec },
         ) { detailsVis ->
             if (detailsVis) {
                 Column {
@@ -92,7 +91,7 @@ fun AppPrivacyNoticePrompt(
                                 contentDescription = stringResource(Res.string.privacy_notice_back),
                                 onClick = { detailsVisible = false },
                             )
-                        }
+                        },
                     )
                     HorizontalDivider(
                         thickness = 1.dp,
@@ -107,7 +106,8 @@ fun AppPrivacyNoticePrompt(
                     ) { content ->
                         MarkdownView(
                             text = content,
-                            modifier = Modifier.padding(horizontal = 12.dp).verticalScroll(scrollState),
+                            modifier = Modifier.padding(horizontal = 12.dp)
+                                .verticalScroll(scrollState),
                             onCustomUriClick = { uri ->
                                 if (uri == "app-terms.md") {
                                     onAppTermsOfUse()
@@ -124,19 +124,17 @@ fun AppPrivacyNoticePrompt(
             } else {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(24.dp),
-                    modifier = Modifier
-                        .padding(horizontal = 12.dp, vertical = 16.dp)
-                        .verticalScroll(rememberScrollState())
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
+                        .verticalScroll(rememberScrollState()),
                 ) {
                     Image(
                         imageVector = vectorResource(Res.drawable.kodee_privacy),
                         contentDescription = null,
-                        modifier = Modifier.fillMaxWidth()
-                            .size(160.dp)
+                        modifier = Modifier.fillMaxWidth().size(160.dp),
                     )
                     Text(
                         stringResource(Res.string.privacy_notice_title),
-                        style = KotlinConfTheme.typography.h1
+                        style = KotlinConfTheme.typography.h1,
                     )
                     Text(
                         stringResource(Res.string.privacy_notice_description),
@@ -147,7 +145,7 @@ fun AppPrivacyNoticePrompt(
                         icon = UiRes.drawable.arrow_right_24,
                         size = ActionSize.Large,
                         enabled = true,
-                        onClick = { detailsVisible = true }
+                        onClick = { detailsVisible = true },
                     )
                 }
                 Spacer(Modifier.weight(1f))
@@ -156,7 +154,7 @@ fun AppPrivacyNoticePrompt(
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
         ) {
             Button(
                 label = stringResource(Res.string.privacy_notice_reject),

@@ -26,7 +26,9 @@ import androidx.compose.ui.layout.ContentScale
 fun ThemeChangeAnimation(
     isDarkTheme: Boolean,
     enabled: Boolean,
-    content: @Composable (appliedIsDarkTheme: Boolean) -> Unit,
+    content:
+        @Composable
+        (appliedIsDarkTheme: Boolean) -> Unit,
 ) {
     var appliedIsDarkTheme by remember { mutableStateOf(isDarkTheme) }
     val graphicsLayer = rememberGraphicsLayer()
@@ -47,8 +49,7 @@ fun ThemeChangeAnimation(
 
     Box(Modifier.fillMaxSize()) {
         Box(
-            Modifier
-                .fillMaxSize()
+            Modifier.fillMaxSize()
                 .then(
                     if (enabled) {
                         Modifier.drawWithContent {
@@ -59,8 +60,8 @@ fun ThemeChangeAnimation(
                         }
                     } else {
                         Modifier
-                    }
-                )
+                    },
+                ),
         ) {
             content(appliedIsDarkTheme)
         }
@@ -69,12 +70,11 @@ fun ThemeChangeAnimation(
             Image(
                 bitmap = bmp,
                 contentDescription = null,
-                modifier = Modifier
-                    .fillMaxHeight(fraction = bitmapVisibility.value)
+                modifier = Modifier.fillMaxHeight(fraction = bitmapVisibility.value)
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter),
                 contentScale = ContentScale.Crop,
-                alignment = Alignment.BottomCenter
+                alignment = Alignment.BottomCenter,
             )
         }
     }

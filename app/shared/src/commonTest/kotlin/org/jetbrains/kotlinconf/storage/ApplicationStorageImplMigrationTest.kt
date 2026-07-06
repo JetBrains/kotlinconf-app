@@ -5,15 +5,15 @@ import com.russhwolf.settings.MapSettings
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.observable.makeObservable
 import com.russhwolf.settings.set
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.runTest
-import org.jetbrains.kotlinconf.utils.Logger
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runTest
+import org.jetbrains.kotlinconf.utils.Logger
 
 class ApplicationStorageImplMigrationTest {
 
@@ -34,13 +34,14 @@ class ApplicationStorageImplMigrationTest {
         this["storageVersion"] = ApplicationStorageImpl.V2025
         this["newsCache"] = "{\"dummy\":\"value\"}"
         this["notificationSettings"] = """
-            {
-              "sessionReminders": true,
-              "scheduleUpdates": false,
-              "jetBrainsNews": true,
-              "kotlinConfNews": "true"
-            }
-        """.trimIndent()
+        {
+          "sessionReminders": true,
+          "scheduleUpdates": false,
+          "jetBrainsNews": true,
+          "kotlinConfNews": "true"
+        }
+        """
+            .trimIndent()
     }
 
     /**
@@ -68,7 +69,10 @@ class ApplicationStorageImplMigrationTest {
         storage.initialize()
 
         // Storage version should be successfully updated to the current version
-        assertEquals(ApplicationStorageImpl.LATEST_STORAGE_VERSION, settings.getInt("storageVersion", 0))
+        assertEquals(
+            ApplicationStorageImpl.LATEST_STORAGE_VERSION,
+            settings.getInt("storageVersion", 0),
+        )
     }
 
     @Test
@@ -147,7 +151,10 @@ class ApplicationStorageImplMigrationTest {
 
         // storageVersion and userId should always exist after init
         assertEquals(setOf("storageVersion", "userId"), settings.keys)
-        assertEquals(ApplicationStorageImpl.LATEST_STORAGE_VERSION, settings.getInt("storageVersion", 0))
+        assertEquals(
+            ApplicationStorageImpl.LATEST_STORAGE_VERSION,
+            settings.getInt("storageVersion", 0),
+        )
     }
 
     @Test
@@ -162,6 +169,9 @@ class ApplicationStorageImplMigrationTest {
 
         // storageVersion and userId should always exist after init
         assertEquals(setOf("storageVersion", "userId"), settings.keys)
-        assertEquals(ApplicationStorageImpl.LATEST_STORAGE_VERSION, settings.getInt("storageVersion", 0))
+        assertEquals(
+            ApplicationStorageImpl.LATEST_STORAGE_VERSION,
+            settings.getInt("storageVersion", 0),
+        )
     }
 }

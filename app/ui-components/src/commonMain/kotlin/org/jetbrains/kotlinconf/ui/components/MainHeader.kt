@@ -6,7 +6,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -50,10 +49,8 @@ fun MainHeaderSearchBar(
     hasAdditionalInputs: Boolean = false,
 ) {
     Row(
-        modifier = modifier
-            .height(48.dp)
-            .fillMaxWidth()
-            .background(KotlinConfTheme.colors.mainBackground),
+        modifier =
+            modifier.height(48.dp).fillMaxWidth().background(KotlinConfTheme.colors.mainBackground),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TopMenuButton(
@@ -104,14 +101,18 @@ fun MainHeaderSearchBar(
 fun MainHeaderTitleBar(
     title: String,
     modifier: Modifier = Modifier,
-    startContent: @Composable RowScope.() -> Unit = {},
-    endContent: @Composable RowScope.() -> Unit = {},
+    startContent:
+        @Composable
+        RowScope.() -> Unit =
+        {},
+    endContent:
+        @Composable
+        RowScope.() -> Unit =
+        {},
 ) {
     Box(
-        modifier = modifier
-            .height(48.dp)
-            .fillMaxWidth()
-            .background(KotlinConfTheme.colors.mainBackground),
+        modifier =
+            modifier.height(48.dp).fillMaxWidth().background(KotlinConfTheme.colors.mainBackground),
         contentAlignment = Alignment.Center,
     ) {
         Row(Modifier.align(Alignment.CenterStart)) {
@@ -138,19 +139,23 @@ enum class MainHeaderContainerState {
 fun MainHeaderContainer(
     state: MainHeaderContainerState,
     modifier: Modifier = Modifier,
-    titleContent: @Composable () -> Unit = {},
-    searchContent: @Composable () -> Unit = {},
+    titleContent:
+        @Composable
+        () -> Unit =
+        {},
+    searchContent:
+        @Composable
+        () -> Unit =
+        {},
 ) {
     AnimatedContent(
         targetState = state,
         transitionSpec = {
             (fadeIn(tween(50)) + slideIntoContainer(SlideDirection.Down)) togetherWith
-                    (fadeOut(tween(50)) + slideOutOfContainer(SlideDirection.Up))
+                (fadeOut(tween(50)) + slideOutOfContainer(SlideDirection.Up))
         },
-        modifier = modifier
-            .height(48.dp)
-            .fillMaxWidth()
-            .background(KotlinConfTheme.colors.mainBackground),
+        modifier =
+            modifier.height(48.dp).fillMaxWidth().background(KotlinConfTheme.colors.mainBackground),
     ) { target ->
         when (target) {
             MainHeaderContainerState.Title -> titleContent()
@@ -197,7 +202,7 @@ private fun MainHeaderSchedulePreview() = PreviewHelper(paddingEnabled = false) 
                         onClick = { state = MainHeaderContainerState.Search },
                         contentDescription = "Search",
                     )
-                }
+                },
             )
         },
         searchContent = {
@@ -208,7 +213,7 @@ private fun MainHeaderSchedulePreview() = PreviewHelper(paddingEnabled = false) 
                 onClear = {},
                 hasAdditionalInputs = bookmarkFilter,
             )
-        }
+        },
     )
 }
 
@@ -228,7 +233,7 @@ private fun MainHeaderSpeakerPreview() = PreviewHelper(paddingEnabled = false) {
                         onClick = { state = MainHeaderContainerState.Search },
                         contentDescription = "Search",
                     )
-                }
+                },
             )
         },
         searchContent = {
@@ -239,7 +244,7 @@ private fun MainHeaderSpeakerPreview() = PreviewHelper(paddingEnabled = false) {
                 onClear = {},
                 hasAdditionalInputs = false,
             )
-        }
+        },
     )
 }
 
@@ -259,7 +264,7 @@ private fun MainHeaderSearchStatePreview() = PreviewHelper(paddingEnabled = fals
                 onClear = {},
                 hasAdditionalInputs = false,
             )
-        }
+        },
     )
 }
 
@@ -274,7 +279,7 @@ private fun MainHeaderBackPreview() = PreviewHelper(paddingEnabled = false) {
                 contentDescription = "Back",
                 onClick = {},
             )
-        }
+        },
     )
 }
 

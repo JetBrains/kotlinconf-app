@@ -60,8 +60,6 @@ import org.jetbrains.kotlinconf.ui.components.CardTagSize
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.utils.LocalWindowSize
-import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
@@ -74,8 +72,7 @@ fun GoldenKodeeScreen(
     val categories = viewModel.categories.collectAsStateWithLifecycle().value
 
     Column(
-        Modifier.fillMaxSize()
-            .background(color = KotlinConfTheme.colors.mainBackground)
+        Modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground),
     ) {
         val backdropAlpha = remember { Animatable(0f) }
         LaunchedEffect(Unit) {
@@ -83,9 +80,7 @@ fun GoldenKodeeScreen(
         }
 
         BoxWithConstraints(
-            Modifier
-                .fillMaxSize()
-                .clipToBounds()
+            Modifier.fillMaxSize().clipToBounds(),
         ) {
             if (backdropAlpha.value > 0) {
                 RadialBackdrop(Modifier.graphicsLayer { alpha = backdropAlpha.value })
@@ -96,8 +91,8 @@ fun GoldenKodeeScreen(
                 modifier = Modifier.align(Alignment.Center).fillMaxSize(),
                 columns = StaggeredGridCells.Adaptive(340.dp),
                 contentPadding = topInsetPadding() +
-                        PaddingValues(horizontal = horizontalPadding, vertical = 16.dp) +
-                        bottomInsetPadding(),
+                PaddingValues(horizontal = horizontalPadding, vertical = 16.dp) +
+                bottomInsetPadding(),
                 verticalItemSpacing = 16.dp,
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
@@ -123,9 +118,7 @@ fun GoldenKodeeScreen(
                             text = category.title,
                             style = KotlinConfTheme.typography.h2,
                             color = KotlinConfTheme.colors.primaryText,
-                            modifier = Modifier
-                                .padding(top = 16.dp)
-                                .semantics { heading() },
+                            modifier = Modifier.padding(top = 16.dp).semantics { heading() },
                         )
                     }
 
@@ -154,7 +147,7 @@ private fun RadialBackdrop(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 160_000, easing = LinearEasing),
+            animation = tween(durationMillis = 160_000, easing = LinearEasing)
         ),
     )
     val density = LocalDensity.current
@@ -167,14 +160,12 @@ private fun RadialBackdrop(
         Image(
             painter = painterResource(Res.drawable.golden_kodee_backdrop),
             contentDescription = null,
-            modifier = modifier
-                .requiredSize(backdropSizeDp)
-                .graphicsLayer {
-                    transformOrigin = TransformOrigin.Center
-                    translationX = -width / 1.9f
-                    translationY = -height / 1.9f
-                    rotationZ = rotation
-                },
+            modifier = modifier.requiredSize(backdropSizeDp).graphicsLayer {
+                transformOrigin = TransformOrigin.Center
+                translationX = -width / 1.9f
+                translationY = -height / 1.9f
+                rotationZ = rotation
+            },
         )
     }
 }
@@ -186,8 +177,7 @@ private fun NomineeRow(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
             .border(1.dp, Color(0x4DC969FF), KotlinConfTheme.shapes.roundedCornerMd)
             .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .background(Color(0xFF59017B))
@@ -196,7 +186,7 @@ private fun NomineeRow(
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             SpeakerAvatar(
                 photoUrl = nominee.photoUrl,

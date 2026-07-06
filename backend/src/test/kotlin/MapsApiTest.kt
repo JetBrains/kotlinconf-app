@@ -6,12 +6,12 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.TestApplication
-import kotlinx.coroutines.test.runTest
-import org.jetbrains.kotlinconf.ConferenceInfo
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.test.runTest
+import org.jetbrains.kotlinconf.ConferenceInfo
 
 class MapsApiTest {
     val app = TestApplication {
@@ -103,10 +103,18 @@ class MapsApiTest {
             // Map SVG paths in conference-info are relative (the client prepends the year prefix),
             // so fetch them under the /{year} prefix.
             val lightResponse = client.get("/2025/${floor.svgPathLight}")
-            assertEquals(HttpStatusCode.OK, lightResponse.status, "Failed to fetch ${floor.svgPathLight}")
+            assertEquals(
+                HttpStatusCode.OK,
+                lightResponse.status,
+                "Failed to fetch ${floor.svgPathLight}",
+            )
 
             val darkResponse = client.get("/2025/${floor.svgPathDark}")
-            assertEquals(HttpStatusCode.OK, darkResponse.status, "Failed to fetch ${floor.svgPathDark}")
+            assertEquals(
+                HttpStatusCode.OK,
+                darkResponse.status,
+                "Failed to fetch ${floor.svgPathDark}",
+            )
         }
     }
 }

@@ -13,13 +13,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +35,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.metroViewModel
+import kotlin.math.sqrt
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.MapData
@@ -69,7 +65,6 @@ import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
-import kotlin.math.sqrt
 
 /**
  * Converts an offset containing x and y percentage locations within the SVG (0f..1f)
@@ -77,7 +72,7 @@ import kotlin.math.sqrt
  */
 private fun Offset.asSvgOffset(svg: Svg) = Offset(
     svg.width / 2 - svg.width * this.x,
-    svg.height / 2 - svg.height * this.y
+    svg.height / 2 - svg.height * this.y,
 )
 
 @Composable
@@ -130,7 +125,7 @@ private fun MapScreenImpl(
                         onClick = onBack,
                     )
                 }
-            }
+            },
         )
         HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
@@ -151,8 +146,8 @@ private fun MapScreenImpl(
             var floorIndex by rememberSaveable { mutableStateOf(initialFloorIndex) }
             val floor = mapData.floors.getOrNull(floorIndex) ?: return@ErrorLoadingContent
 
-            val svgPath =
-                if (KotlinConfTheme.colors.isDark) floor.svgPathDark else floor.svgPathLight
+            val svgPath = if (KotlinConfTheme.colors.isDark) floor.svgPathDark
+            else floor.svgPathLight
             val svgData = content.svgsByPath[svgPath] ?: return@ErrorLoadingContent
 
             Column(Modifier.fillMaxSize()) {
@@ -166,15 +161,17 @@ private fun MapScreenImpl(
 
                 val svg = remember(svgData) { Svg(svgData) }
                 val containerSize = LocalWindowInfo.current.containerSize
-                val scaleAdjustment =
-                    remember { sqrt(containerSize.width / svg.width * (containerSize.height / svg.height)) }
+                val scaleAdjustment = remember {
+                    sqrt(containerSize.width / svg.width * (containerSize.height / svg.height))
+                }
 
                 val venueAddress = mapData.venueAddress
                 MapWithControls(
                     svg = svg,
                     initialZoom = mapData.initialZoom * scaleAdjustment,
                     initialOffset = initialOffset.asSvgOffset(svg),
-                    zoomRange = (mapData.minZoom * scaleAdjustment)..(mapData.maxZoom * scaleAdjustment),
+                    zoomRange = (mapData.minZoom * scaleAdjustment)..(mapData.maxZoom *
+                        scaleAdjustment),
                     onHowToFindVenue = if (onHowToFindVenue != null && venueAddress != null) {
                         { onHowToFindVenue(venueAddress) }
                     } else {
@@ -197,9 +194,8 @@ fun StaticMap(
     val offset = Offset(room.offsetX, room.offsetY)
 
     val floor = mapData.floors[floorIndex]
-    val svgData =
-        svgsByPath[if (KotlinConfTheme.colors.isDark) floor.svgPathDark else floor.svgPathLight]
-            ?: return
+    val svgData = svgsByPath[
+        if (KotlinConfTheme.colors.isDark) floor.svgPathDark else floor.svgPathLight] ?: return
     val svg = remember(svgData) { Svg(svgData) }
 
     BoxWithConstraints {
@@ -230,7 +226,7 @@ private val mapStateSaver = Saver<MapState, List<Float>>(
     restore = { values ->
         val (scale, offsetX, offsetY) = values
         MapState(scale, Offset(offsetX, offsetY))
-    }
+    },
 )
 
 @Composable
@@ -263,10 +259,8 @@ private fun MapWithControls(
         val buttonEdgePadding = 12.dp
 
         Column(
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(end = buttonEdgePadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.align(Alignment.CenterEnd).padding(end = buttonEdgePadding),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             OverlayIconButton(
                 icon = Res.drawable.plus_24,
@@ -303,9 +297,8 @@ private fun MapWithControls(
                 label = stringResource(Res.string.map_how_to_find_venue),
                 icon = UiRes.drawable.arrow_up_right_24,
                 onClick = onHowToFindVenue,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(PaddingValues(bottom = buttonEdgePadding) + extraPadding)
+                modifier = Modifier.align(Alignment.BottomCenter)
+                    .padding(PaddingValues(bottom = buttonEdgePadding) + extraPadding),
             )
         }
     }
@@ -328,19 +321,18 @@ private fun Map(
     val interactiveModifiers = if (!interactive) {
         Modifier
     } else {
-        Modifier
-            .transformable(rememberTransformableState { zoomChange, panChange, _ ->
+        Modifier.transformable(rememberTransformableState { zoomChange, panChange, _ ->
                 scope.launch {
                     state.scale.snapTo((state.scale.value * zoomChange).coerceIn(zoomRange))
                     state.offsetX.snapTo(
                         (state.offsetX.value + panChange.x / state.scale.value).coerceIn(
-                            validOffsetX
-                        )
+                            validOffsetX,
+                        ),
                     )
                     state.offsetY.snapTo(
                         (state.offsetY.value + panChange.y / state.scale.value).coerceIn(
-                            validOffsetY
-                        )
+                            validOffsetY,
+                        ),
                     )
                 }
             })
@@ -352,12 +344,12 @@ private fun Map(
                         } else {
                             val newScale = (state.scale.value * 2f).coerceIn(zoomRange)
 
-                            val newOffsetX =
-                                (state.offsetX.value + (size.width / 2 - tapOffset.x) / 2 / state.scale.value)
-                                    .coerceIn(validOffsetX)
-                            val newOffsetY =
-                                (state.offsetY.value + (size.height / 2 - tapOffset.y) / 2 / state.scale.value)
-                                    .coerceIn(validOffsetY)
+                            val newOffsetX = (state.offsetX.value +
+                                    (size.width / 2 - tapOffset.x) / 2 / state.scale.value)
+                                .coerceIn(validOffsetX)
+                            val newOffsetY = (state.offsetY.value +
+                                    (size.height / 2 - tapOffset.y) / 2 / state.scale.value)
+                                .coerceIn(validOffsetY)
 
                             scope.launch {
                                 launch { state.scale.animateTo(newScale, spec) }
@@ -365,16 +357,13 @@ private fun Map(
                                 launch { state.offsetY.animateTo(newOffsetY, spec) }
                             }
                         }
-                    }
+                    },
                 )
             }
     }
 
     Canvas(
-        modifier
-            .fillMaxSize()
-            .clipToBounds()
-            .then(interactiveModifiers)
+        modifier.fillMaxSize().clipToBounds().then(interactiveModifiers),
     ) {
         translate(
             left = state.offsetX.value + (size.width - svg.width) / 2,
@@ -384,7 +373,7 @@ private fun Map(
                 scale = state.scale.value,
                 pivot = Offset(
                     svg.width / 2 - state.offsetX.value,
-                    svg.height / 2 - state.offsetY.value
+                    svg.height / 2 - state.offsetY.value,
                 ),
             ) {
                 svg.renderTo(this)

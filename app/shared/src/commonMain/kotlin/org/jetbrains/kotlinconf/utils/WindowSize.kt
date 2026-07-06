@@ -6,7 +6,9 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 
 enum class WindowSize {
-    Compact, Medium, Large
+    Compact,
+    Medium,
+    Large
 }
 
 val LocalWindowSize = compositionLocalOf<WindowSize> {

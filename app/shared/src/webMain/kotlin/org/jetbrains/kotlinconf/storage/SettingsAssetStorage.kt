@@ -15,8 +15,7 @@ class SettingsAssetStorage(
 ) : AssetStorage {
     private val prefix = "${year}_file_"
 
-    override suspend fun read(key: String): String? =
-        settings.getStringOrNull("$prefix$key")
+    override suspend fun read(key: String): String? = settings.getStringOrNull("$prefix$key")
 
     override suspend fun write(key: String, content: String) {
         settings.set("$prefix$key", content)

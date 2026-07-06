@@ -1,13 +1,13 @@
 package org.jetbrains.kotlinconf.storage
 
-import kotlinx.coroutines.test.runTest
-import org.jetbrains.kotlinconf.utils.Logger
 import java.io.File
 import java.nio.file.Files
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.test.runTest
+import org.jetbrains.kotlinconf.utils.Logger
 
 class OkioAssetStorageTest {
 
@@ -56,7 +56,10 @@ class OkioAssetStorageTest {
 
             val yearDir = File(tempDir, "2025")
             assertTrue(yearDir.exists(), "Year directory should exist")
-            assertTrue(File(yearDir, "testfile.md").exists(), "File should be inside year directory")
+            assertTrue(
+                File(yearDir, "testfile.md").exists(),
+                "File should be inside year directory",
+            )
         } finally {
             tempDir.deleteRecursively()
         }

@@ -14,10 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 data class ServiceEventData(
     val title: String,
@@ -42,7 +42,7 @@ private fun ServiceEventRow(event: ServiceEventData) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier.padding(16.dp).semantics(mergeDescendants = true) {}
+        modifier = Modifier.padding(16.dp).semantics(mergeDescendants = true) {},
     ) {
         Text(
             text = event.title,
@@ -93,9 +93,8 @@ fun ServiceEvents(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier
-            .clip(KotlinConfTheme.shapes.roundedCornerMd)
-            .background(KotlinConfTheme.colors.tileBackground)
+        modifier.clip(KotlinConfTheme.shapes.roundedCornerMd)
+            .background(KotlinConfTheme.colors.tileBackground),
     ) {
         events.forEachIndexed { index, event ->
             if (index > 0) {
@@ -137,7 +136,7 @@ private fun ServiceEventBlockPreview() = PreviewHelper {
             ServiceEventData(
                 title = "Party",
                 now = false,
-            )
+            ),
         )
     )
 }

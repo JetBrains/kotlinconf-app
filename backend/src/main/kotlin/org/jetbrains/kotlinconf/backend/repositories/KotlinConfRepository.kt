@@ -5,7 +5,6 @@ import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.config.ApplicationConfig
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.exposed.v1.core.and
-import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insert
@@ -13,7 +12,6 @@ import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
-import org.jetbrains.kotlinconf.FeedbackInfo
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.VoteInfo
@@ -25,7 +23,6 @@ import org.jetbrains.kotlinconf.backend.schema.SignedPolicies
 import org.jetbrains.kotlinconf.backend.schema.Users
 import org.jetbrains.kotlinconf.backend.schema.Votes
 import org.slf4j.LoggerFactory
-import kotlin.time.Clock
 
 internal class KotlinConfRepository(config: ApplicationConfig) {
     private val log = LoggerFactory.getLogger("KotlinConfRepository")
@@ -47,7 +44,8 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
             }
         } else {
             log.info("Host not found, using fallback")
-            hikariConfig.jdbcUrl = "jdbc:h2:file:./kotlinconfg;MODE=PostgreSQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
+            hikariConfig.jdbcUrl =
+                "jdbc:h2:file:./kotlinconfg;MODE=PostgreSQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
             hikariConfig.validate()
         }
 
@@ -68,7 +66,7 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
             // List all tables in public schema with exact casing
             val tables = mutableListOf<Pair<String, String>>()
             exec(
-                "SELECT table_name, table_schema FROM information_schema.tables WHERE table_schema IN ('public', 'PUBLIC') ORDER BY table_name"
+                "SELECT table_name, table_schema FROM information_schema.tables WHERE table_schema IN ('public', 'PUBLIC') ORDER BY table_name",
             ) { rs ->
                 while (rs.next()) {
                     tables.add(rs.getString("table_name") to rs.getString("table_schema"))
@@ -120,7 +118,8 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
     }
 
     suspend fun createUser(
-        uuidValue: String, timestampValue: LocalDateTime
+        uuidValue: String,
+        timestampValue: LocalDateTime,
     ): Boolean = suspendTransaction {
         val count = Users.selectAll().where { Users.userId eq uuidValue }.count()
         if (count != 0L) return@suspendTransaction false
@@ -134,7 +133,9 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
     }
 
     suspend fun signPolicy(
-        uuidValue: String, yearValue: Int, timestampValue: LocalDateTime
+        uuidValue: String,
+        yearValue: Int,
+        timestampValue: LocalDateTime,
     ): Boolean = suspendTransaction {
         val count = SignedPolicies.selectAll()
             .where { (SignedPolicies.userId eq uuidValue) and (SignedPolicies.year eq yearValue) }
@@ -157,15 +158,21 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
     }
 
     suspend fun getVotes(uuid: String, year: Int): List<VoteInfo> = suspendTransaction {
-        Votes.selectAll().where { (Votes.userId eq uuid) and (Votes.year eq year) }
+        Votes.selectAll()
+            .where { (Votes.userId eq uuid) and (Votes.year eq year) }
             .map { VoteInfo(it[Votes.sessionId], Score.fromValue(it[Votes.rating])) }
-
     }
 
     suspend fun getAllVotes(year: Int): List<AdminVoteInfo> = suspendTransaction {
         Votes.selectAll()
             .where { Votes.year eq year }
-            .map { AdminVoteInfo(it[Votes.userId], it[Votes.sessionId], Score.fromValue(it[Votes.rating])) }
+            .map {
+                AdminVoteInfo(
+                    it[Votes.userId],
+                    it[Votes.sessionId],
+                    Score.fromValue(it[Votes.rating]),
+                )
+            }
     }
 
     suspend fun changeVote(
@@ -184,8 +191,8 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
             val count = Votes.selectAll()
                 .where {
                     (Votes.userId eq userIdValue) and
-                            (Votes.sessionId eq sessionIdValue) and
-                            (Votes.year eq yearValue)
+                        (Votes.sessionId eq sessionIdValue) and
+                        (Votes.year eq yearValue)
                 }
                 .count()
 
@@ -200,9 +207,13 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
                 return@suspendTransaction
             }
 
-            Votes.update({ (Votes.userId eq userIdValue) and (Votes.sessionId eq sessionIdValue) and (Votes.year eq yearValue) }) {
-                it[rating] = scoreValue.value
-            }
+            Votes.update({
+                (Votes.userId eq userIdValue) and
+                    (Votes.sessionId eq sessionIdValue) and
+                    (Votes.year eq yearValue)
+            }) {
+                    it[rating] = scoreValue.value
+                }
         }
     }
 
@@ -224,7 +235,9 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
 
     suspend fun deleteVote(uuid: String, sessionId: SessionId, year: Int) {
         suspendTransaction {
-            Votes.deleteWhere { (userId eq uuid) and (Votes.sessionId eq sessionId) and (Votes.year eq year) }
+            Votes.deleteWhere {
+                (userId eq uuid) and (Votes.sessionId eq sessionId) and (Votes.year eq year)
+            }
         }
     }
 
@@ -232,7 +245,11 @@ internal class KotlinConfRepository(config: ApplicationConfig) {
         Feedback.selectAll()
             .where { Feedback.year eq year }
             .map {
-                AdminFeedbackInfo(it[Feedback.userId], it[Feedback.sessionId], it[Feedback.feedback])
+                AdminFeedbackInfo(
+                    it[Feedback.userId],
+                    it[Feedback.sessionId],
+                    it[Feedback.feedback],
+                )
             }
     }
 }

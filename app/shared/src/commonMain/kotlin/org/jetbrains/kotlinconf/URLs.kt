@@ -24,5 +24,4 @@ object URLs {
 
     // Other
     const val JUNIE_LANDING_PAGE = "https://www.jetbrains.com/junie/"
-
 }

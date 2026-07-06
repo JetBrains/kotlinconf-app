@@ -27,7 +27,7 @@ internal class RippleNodeFactory : IndicationNodeFactory {
                     hoveredAlpha = 0.08f,
                     pressedAlpha = 0.1f,
                 )
-            }
+            },
         )
     }
 

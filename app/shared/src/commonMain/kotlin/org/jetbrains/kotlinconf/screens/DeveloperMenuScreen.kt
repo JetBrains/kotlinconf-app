@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -51,7 +52,6 @@ import org.jetbrains.kotlinconf.utils.LogExporter
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
-import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun DeveloperMenuScreen(
@@ -66,10 +66,9 @@ fun DeveloperMenuScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
-            Modifier
-                .fillMaxSize()
+            Modifier.fillMaxSize()
                 .background(color = KotlinConfTheme.colors.mainBackground)
-                .padding(topInsetPadding() + bottomInsetPadding())
+                .padding(topInsetPadding() + bottomInsetPadding()),
         ) {
             MainHeaderTitleBar(
                 title = "Developer Menu",
@@ -79,7 +78,7 @@ fun DeveloperMenuScreen(
                         contentDescription = stringResource(UiRes.string.main_header_back),
                         onClick = onBack,
                     )
-                }
+                },
             )
 
             HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
@@ -89,10 +88,8 @@ fun DeveloperMenuScreen(
             if (!showWarning) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier
-                        .verticalScroll(contentScrollState)
-                        .padding(12.dp)
-                        .weight(1f)
+                    modifier =
+                        Modifier.verticalScroll(contentScrollState).padding(12.dp).weight(1f),
                 ) {
                     Text(
                         "Modifying any of these settings will move you from the production backend to the staging backend automatically.",
@@ -103,49 +100,50 @@ fun DeveloperMenuScreen(
                         title = "Enable back on top-level screens",
                         note = "Allow users to use back navigation between top-level destinations",
                         enabled = flags.enableBackOnTopLevelScreens,
-                        onToggle = { flags = flags.copy(enableBackOnTopLevelScreens = it) }
+                        onToggle = { flags = flags.copy(enableBackOnTopLevelScreens = it) },
                     )
 
                     SettingsItem(
                         title = "Supports notifications",
                         note = "Whether this device should display notification settings",
                         enabled = flags.supportsNotifications,
-                        onToggle = { flags = flags.copy(supportsNotifications = it) }
+                        onToggle = { flags = flags.copy(supportsNotifications = it) },
                     )
 
                     SettingsItem(
                         title = "Ripple enabled",
                         note = "Show ripple animations on tapped elements",
                         enabled = flags.rippleEnabled,
-                        onToggle = { flags = flags.copy(rippleEnabled = it) }
+                        onToggle = { flags = flags.copy(rippleEnabled = it) },
                     )
 
                     SettingsItem(
                         title = "Hide keyboard on drag",
                         note = "Hides the keyboard when the content is scrolled",
                         enabled = flags.hideKeyboardOnDrag,
-                        onToggle = { flags = flags.copy(hideKeyboardOnDrag = it) }
+                        onToggle = { flags = flags.copy(hideKeyboardOnDrag = it) },
                     )
 
                     SettingsItem(
                         title = "Use fake Golden Kodee data",
                         note = "Show hardcoded Golden Kodee award data with sample links instead of data from the server.",
                         enabled = flags.useFakeGoldenKodeeData,
-                        onToggle = { flags = flags.copy(useFakeGoldenKodeeData = it) }
+                        onToggle = { flags = flags.copy(useFakeGoldenKodeeData = it) },
                     )
 
                     SettingsItem(
                         title = "Use fake time (requires restart)",
-                        note = "Simulate a date and time in the middle of the conference. Useful for testing voting and feedback features which are only available for sessions that already started. Fake time passes at 20x speed, so you'll see how the schedule changes and receive reminder notifications much quicker. Fake time restarts from the same point on every app start.",
+                        note =
+                            "Simulate a date and time in the middle of the conference. Useful for testing voting and feedback features which are only available for sessions that already started. Fake time passes at 20x speed, so you'll see how the schedule changes and receive reminder notifications much quicker. Fake time restarts from the same point on every app start.",
                         enabled = flags.useFakeTime,
-                        onToggle = { flags = flags.copy(useFakeTime = it) }
+                        onToggle = { flags = flags.copy(useFakeTime = it) },
                     )
 
                     SettingsItem(
                         title = "Enable debug logging (requires restart)",
                         note = "Store logs in memory for debugging purposes. Logs can be copied to clipboard.",
                         enabled = flags.debugLogging,
-                        onToggle = { flags = flags.copy(debugLogging = it) }
+                        onToggle = { flags = flags.copy(debugLogging = it) },
                     )
                     val logExporter = appGraph.logger as? LogExporter
                     val clipboardManager = LocalClipboardManager.current
@@ -167,7 +165,7 @@ fun DeveloperMenuScreen(
                 val flagsManager = appGraph.flagsManager
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
                 ) {
                     Button(
                         label = "Reset all",
@@ -176,7 +174,7 @@ fun DeveloperMenuScreen(
                             onBack()
                         },
                         modifier = Modifier.weight(1f),
-                        primary = false
+                        primary = false,
                     )
 
                     Button(
@@ -196,11 +194,10 @@ fun DeveloperMenuScreen(
 
         AnimatedVisibility(showWarning, modifier = Modifier.fillMaxSize()) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
                     .background(KotlinConfTheme.colors.mainBackground)
                     .padding(24.dp),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -210,7 +207,7 @@ fun DeveloperMenuScreen(
                         contentDescription = null,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                             .padding(bottom = 12.dp)
-                            .sizeIn(maxWidth = 300.dp, maxHeight = 300.dp)
+                            .sizeIn(maxWidth = 300.dp, maxHeight = 300.dp),
                     )
                     Spacer(Modifier.height(24.dp))
                     Text(
@@ -223,7 +220,7 @@ fun DeveloperMenuScreen(
                         text = "DO NOT USE THIS MENU while you're trying to use the app at the conference. The Developer Menu is available only for testing purposes. Changing settings here may lead to data loss, unpredictable behavior, bugs, and making Kodee sad. ",
                         style = KotlinConfTheme.typography.text1.copy(textAlign = TextAlign.Center),
                         color = KotlinConfTheme.colors.primaryText,
-                        modifier = Modifier.widthIn(max = 440.dp)
+                        modifier = Modifier.widthIn(max = 440.dp),
                     )
                     Spacer(Modifier.height(24.dp))
 

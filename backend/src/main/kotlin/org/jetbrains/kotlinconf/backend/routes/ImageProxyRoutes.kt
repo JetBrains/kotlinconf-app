@@ -22,6 +22,11 @@ fun Route.imageProxyRoutes() {
         // just hope that Sessionize keeps serving these images for previous years
         getYearFromPath(config)
 
-        call.respond(sessionize.fetchImage(config.imagesUrl, call.parameters["imageId"] ?: error("No imageId")))
+        call.respond(
+            sessionize.fetchImage(
+                config.imagesUrl,
+                call.parameters["imageId"] ?: error("No imageId"),
+            ),
+        )
     }
 }

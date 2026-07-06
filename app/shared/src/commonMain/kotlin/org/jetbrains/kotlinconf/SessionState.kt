@@ -9,10 +9,11 @@ enum class SessionState {
     ;
 
     companion object {
-        fun from(startsAt: LocalDateTime, endsAt: LocalDateTime, now: LocalDateTime): SessionState = when {
-            startsAt <= now && now < endsAt -> Live
-            endsAt <= now -> Past
-            else -> Upcoming
-        }
+        fun from(startsAt: LocalDateTime, endsAt: LocalDateTime, now: LocalDateTime): SessionState =
+            when {
+                startsAt <= now && now < endsAt -> Live
+                endsAt <= now -> Past
+                else -> Upcoming
+            }
     }
 }

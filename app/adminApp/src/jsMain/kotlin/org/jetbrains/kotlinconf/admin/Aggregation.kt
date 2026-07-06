@@ -1,6 +1,5 @@
 // ABOUTME: Pure functions that join conference data with votes and feedback for the admin views.
 // ABOUTME: DOM-free so the dashboard math (counts, averages, per-user grouping) stays readable.
-
 package org.jetbrains.kotlinconf.admin
 
 import org.jetbrains.kotlinconf.Conference
@@ -85,8 +84,8 @@ fun aggregate(
         val sid = s.id.id
         val counts = countsBySession[sid]?.toImmutable() ?: VoteCounts()
         val fb = feedbackBySession[sid].orEmpty()
-        val speakerIds: List<String?> =
-            if (s.speakerIds.isNotEmpty()) s.speakerIds.map { it.id } else listOf(null)
+        val speakerIds: List<String?> = if (s.speakerIds.isNotEmpty()) s.speakerIds.map { it.id }
+        else listOf(null)
         for (speakerId in speakerIds) {
             val speaker = speakerId?.let { speakersById[it] }
             rows.add(
@@ -127,22 +126,20 @@ fun AggregatedData.feedbackGroups(): List<FeedbackGroup> {
     return bySession.values.toList()
 }
 
-fun AggregatedData.votesForUser(userId: String): List<UserVote> =
-    votes.asSequence()
-        .filter { it.userId == userId }
-        .map { UserVote(it.sessionId.id, titleOf(it.sessionId.id), it.score) }
-        .sortedBy { it.title.lowercase() }
-        .toList()
+fun AggregatedData.votesForUser(userId: String): List<UserVote> = votes.asSequence()
+    .filter { it.userId == userId }
+    .map { UserVote(it.sessionId.id, titleOf(it.sessionId.id), it.score) }
+    .sortedBy { it.title.lowercase() }
+    .toList()
 
-fun AggregatedData.feedbackForUser(userId: String): List<UserFeedback> =
-    feedback.asSequence()
-        .filter { it.userId == userId }
-        .map { UserFeedback(it.sessionId.id, titleOf(it.sessionId.id), it.value) }
-        .sortedBy { it.title.lowercase() }
-        .toList()
+fun AggregatedData.feedbackForUser(userId: String): List<UserFeedback> = feedback.asSequence()
+    .filter { it.userId == userId }
+    .map { UserFeedback(it.sessionId.id, titleOf(it.sessionId.id), it.value) }
+    .sortedBy { it.title.lowercase() }
+    .toList()
 
-private fun AggregatedData.titleOf(sessionId: String): String =
-    sessionsById[sessionId]?.title ?: sessionId
+private fun AggregatedData.titleOf(sessionId: String): String = sessionsById[sessionId]?.title
+    ?: sessionId
 
 private class MutableVoteCounts(var good: Int = 0, var ok: Int = 0, var bad: Int = 0) {
     fun toImmutable() = VoteCounts(good, ok, bad)

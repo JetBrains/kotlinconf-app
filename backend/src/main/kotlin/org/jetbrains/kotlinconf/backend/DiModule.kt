@@ -10,7 +10,6 @@ import org.jetbrains.kotlinconf.backend.di.configModule
 import org.jetbrains.kotlinconf.backend.di.repositoryModule
 import org.jetbrains.kotlinconf.backend.di.serviceModule
 import org.koin.dsl.module
-import org.koin.dsl.onClose
 import org.koin.ktor.ext.getKoin
 import org.koin.ktor.plugin.Koin
 
@@ -24,7 +23,7 @@ fun Application.diModule() {
                 single<CoroutineScope> { this@diModule }
                 single { createClient() } onClose { it?.close() }
                 single { environment.config }
-            }
+            },
         )
     }
 

@@ -12,7 +12,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +41,12 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -57,11 +61,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.loading
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.theme.UI
-import androidx.compose.ui.tooling.preview.PreviewLightDark
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun MinorError(
@@ -70,12 +69,9 @@ fun MinorError(
 ) {
     ErrorText(
         message,
-        modifier
-            .fillMaxWidth()
-            .padding(32.dp)
-            .semantics {
-                liveRegion = LiveRegionMode.Assertive
-            }
+        modifier.fillMaxWidth().padding(32.dp).semantics {
+            liveRegion = LiveRegionMode.Assertive
+        },
     )
 }
 
@@ -98,7 +94,7 @@ fun MajorError(
             message = message,
             modifier = Modifier.semantics {
                 liveRegion = LiveRegionMode.Assertive
-            }
+            },
         )
     }
 }
@@ -126,10 +122,11 @@ fun NormalErrorWithLoading(
             transitionSpec = {
                 val animIn = fadeIn(
                     animationSpec = tween(220, delayMillis = 100)
-                ) + expandVertically(
-                    expandFrom = Alignment.CenterVertically,
-                    animationSpec = tween(100, easing = EaseInCubic)
-                )
+                ) +
+                    expandVertically(
+                        expandFrom = Alignment.CenterVertically,
+                        animationSpec = tween(100, easing = EaseInCubic),
+                    )
                 val animOut = fadeOut(animationSpec = tween(90))
                 animIn togetherWith animOut
             },
@@ -161,7 +158,7 @@ private fun ErrorText(
         modifier = modifier.widthIn(max = 220.dp),
         style = KotlinConfTheme.typography.text1.copy(
             textAlign = TextAlign.Center,
-        )
+        ),
     )
 }
 
@@ -186,7 +183,7 @@ fun Loading(
                         animationSpec = infiniteRepeatable(
                             animation = tween(durationMillis = 1000, easing = LinearEasing),
                             repeatMode = RepeatMode.Restart,
-                        )
+                        ),
                     )
                 } finally {
                     withContext(NonCancellable) {
@@ -194,17 +191,15 @@ fun Loading(
                             targetValue = animationProgress.value + 1.25f * PI.toFloat(),
                             animationSpec = tween(durationMillis = 800, easing = EaseOutCubic),
                         ) {
-                            lastValue = value
-                        }
+                                lastValue = value
+                            }
                     }
                 }
             }
         }
 
         Canvas(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(95f / 80f),
+            modifier = Modifier.fillMaxWidth().aspectRatio(95f / 80f),
         ) {
             val scaleFactor = size.width / 95.dp.toPx() * density
 
@@ -241,7 +236,6 @@ fun Loading(
     }
 }
 
-
 @PreviewLightDark
 @Composable
 private fun LoadingEnabledPreview() = PreviewHelper {
@@ -262,7 +256,7 @@ private fun NormalErrorLoadingPreview() = PreviewHelper {
         isLoading = true,
         loadingText = "Loading...",
         retryText = "Retry",
-        onRetry = {}
+        onRetry = {},
     )
 }
 
@@ -282,7 +276,7 @@ private fun NormalErrorInteractivePreview() = PreviewHelper {
                 delay(1000.milliseconds)
                 loading = false
             }
-        }
+        },
     )
 }
 
@@ -293,7 +287,7 @@ private fun NormalErrorIdlePreview() = PreviewHelper {
         message = "Error message",
         isLoading = false,
         loadingText = "Loading...",
-        retryText = "Retry"
+        retryText = "Retry",
     )
 }
 
@@ -301,7 +295,7 @@ private fun NormalErrorIdlePreview() = PreviewHelper {
 @Composable
 private fun MinorErrorPreview() = PreviewHelper {
     MinorError(
-        message = "Minor error message"
+        message = "Minor error message",
     )
 }
 
@@ -309,6 +303,6 @@ private fun MinorErrorPreview() = PreviewHelper {
 @Composable
 private fun MajorErrorPreview() = PreviewHelper {
     MajorError(
-        message = "Major error message"
+        message = "Major error message",
     )
 }

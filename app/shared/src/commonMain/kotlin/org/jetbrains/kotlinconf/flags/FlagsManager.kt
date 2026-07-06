@@ -19,9 +19,8 @@ class FlagsManager(
     private val storage: ApplicationStorage,
     private val scope: CoroutineScope,
 ) {
-    val flags: StateFlow<Flags> = storage.getFlags()
-        .filterNotNull()
-        .stateIn(scope, SharingStarted.Eagerly, platformFlags)
+    val flags: StateFlow<Flags> =
+        storage.getFlags().filterNotNull().stateIn(scope, SharingStarted.Eagerly, platformFlags)
 
     suspend fun initAndGetFlags(): Flags {
         val storedFlags = storage.getFlags().first()

@@ -1,5 +1,10 @@
 package org.jetbrains.kotlinconf
 
+import kotlin.time.Clock
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,23 +15,20 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.kotlinconf.network.ApplicationApi
 import org.jetbrains.kotlinconf.utils.Logger
-import kotlin.time.Clock
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 interface TimeProvider {
     fun now(): LocalDateTime
+
     val time: StateFlow<LocalDateTime>
+
     suspend fun run(): Nothing
 
     fun getNotificationTime(notificationTime: LocalDateTime): LocalDateTime = notificationTime
     fun getNotificationDelay(notificationTime: LocalDateTime): Duration = notificationTime - now()
 }
 
-operator fun LocalDateTime.minus(other: LocalDateTime): Duration =
-    toInstant(EVENT_TIME_ZONE) - other.toInstant(EVENT_TIME_ZONE)
+operator fun LocalDateTime.minus(other: LocalDateTime): Duration = toInstant(EVENT_TIME_ZONE) -
+    other.toInstant(EVENT_TIME_ZONE)
 
 operator fun LocalDateTime.minus(duration: Duration): LocalDateTime =
     (toInstant(EVENT_TIME_ZONE) - duration).toLocalDateTime(EVENT_TIME_ZONE)
@@ -64,7 +66,9 @@ class FakeTimeProvider(
 ) : TimeProvider {
     final override val time: StateFlow<LocalDateTime>
         field = MutableStateFlow(baseTime)
+
     override fun now(): LocalDateTime = time.value
+
     override suspend fun run(): Nothing {
         if (freezeTime) {
             awaitCancellation()
@@ -83,8 +87,9 @@ class FakeTimeProvider(
         }
     }
 
-    override fun getNotificationTime(notificationTime: LocalDateTime): LocalDateTime =
-        (Clock.System.now() + getNotificationDelay(notificationTime)).toLocalDateTime(EVENT_TIME_ZONE)
+    override fun getNotificationTime(notificationTime: LocalDateTime): LocalDateTime = (Clock.System
+            .now() + getNotificationDelay(notificationTime))
+        .toLocalDateTime(EVENT_TIME_ZONE)
 
     override fun getNotificationDelay(notificationTime: LocalDateTime): Duration =
         (notificationTime - now()) / speedMultiplier

@@ -17,7 +17,9 @@ internal fun ApplicationCall.checkAdminKey(adminSecret: String) {
     }
 }
 
-internal suspend fun ApplicationCall.validatePrincipal(database: KotlinConfRepository): KotlinConfPrincipal? {
+internal suspend fun ApplicationCall.validatePrincipal(
+    database: KotlinConfRepository,
+): KotlinConfPrincipal? {
     val principal = principal<KotlinConfPrincipal>() ?: return null
     if (!database.validateUser(principal.token)) return null
     return principal

@@ -26,7 +26,7 @@ data class MapContent(
 @ViewModelKey
 class MapViewModel(
     private val service: ConferenceService,
-    logger: Logger
+    logger: Logger,
 ) : ViewModel() {
     private var loading = MutableStateFlow(false)
 
@@ -49,32 +49,34 @@ class MapViewModel(
     }
 
     val state: StateFlow<ErrorLoadingState<MapContent>> = combine(
-        service.mapData, loading,
-    ) { mapData, loading ->
-        when {
-            loading -> ErrorLoadingState.Loading
-            mapData == null -> ErrorLoadingState.Error
-            else -> {
-                val allSvgPaths = buildList {
-                    mapData.floors.forEach {
-                        add(it.svgPathLight)
-                        add(it.svgPathDark)
+            service.mapData,
+            loading,
+        ) { mapData, loading ->
+            when {
+                loading -> ErrorLoadingState.Loading
+                mapData == null -> ErrorLoadingState.Error
+                else -> {
+                    val allSvgPaths = buildList {
+                        mapData.floors.forEach {
+                            add(it.svgPathLight)
+                            add(it.svgPathDark)
+                        }
                     }
-                }
-                val svgFilesByPath = allSvgPaths.associateWith { service.getAsset(it) }
+                    val svgFilesByPath = allSvgPaths.associateWith { service.getAsset(it) }
 
-                if (svgFilesByPath.values.any { it == null }) {
-                    ErrorLoadingState.Error
-                } else {
-                    @Suppress("UNCHECKED_CAST")
-                    ErrorLoadingState.Content(
-                        MapContent(
-                            mapData = mapData,
-                            svgsByPath = svgFilesByPath as Map<String, String>,
+                    if (svgFilesByPath.values.any { it == null }) {
+                        ErrorLoadingState.Error
+                    } else {
+                        @Suppress("UNCHECKED_CAST")
+                        ErrorLoadingState.Content(
+                            MapContent(
+                                mapData = mapData,
+                                svgsByPath = svgFilesByPath as Map<String, String>,
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ErrorLoadingState.Loading)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ErrorLoadingState.Loading)
 }

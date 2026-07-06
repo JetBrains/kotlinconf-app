@@ -1,6 +1,5 @@
 // ABOUTME: Exposed table definition for signed privacy policies per user per year.
 // ABOUTME: Tracks which users have accepted policies for each conference year.
-
 package org.jetbrains.kotlinconf.backend.schema
 
 import org.jetbrains.exposed.v1.core.Column

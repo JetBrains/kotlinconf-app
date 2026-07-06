@@ -9,7 +9,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -43,6 +42,7 @@ import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import org.jetbrains.compose.resources.painterResource
@@ -63,7 +63,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_icon_desc_codel
 import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_icon_desc_education
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 @Composable
 internal fun buildHighlightedString(
@@ -91,7 +90,9 @@ internal fun buildHighlightedString(
 }
 
 enum class TalkStatus {
-    Past, Live, Upcoming,
+    Past,
+    Live,
+    Upcoming,
 }
 
 @Composable
@@ -110,7 +111,9 @@ fun TalkCard(
     timeNote: String?,
     status: TalkStatus,
     onClick: () -> Unit,
-    feedbackContent: (@Composable () -> Unit)?,
+    feedbackContent:
+        (@Composable
+        () -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor by animateColorAsState(
@@ -124,21 +127,19 @@ fun TalkCard(
         animationSpec = tween(1000),
     )
     val borderColor by animateColorAsState(
-        if (bookmarked) KotlinConfTheme.colors.strokeHalf
-        else KotlinConfTheme.colors.strokePale,
+        if (bookmarked) KotlinConfTheme.colors.strokeHalf else KotlinConfTheme.colors.strokePale,
         animationSpec = tween(1000),
     )
 
     Column(
-        modifier
-            .border(
+        modifier.border(
                 width = 1.dp,
                 color = borderColor,
-                shape = KotlinConfTheme.shapes.roundedCornerMd
+                shape = KotlinConfTheme.shapes.roundedCornerMd,
             )
             .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .clickable(onClick = onClick)
-            .background(backgroundColor)
+            .background(backgroundColor),
     ) {
         TopBlock(
             title = title,
@@ -172,7 +173,7 @@ fun TalkCard(
         ) {
             Column(
                 // Prevent clicks on the non-interactive elements of the feedback area
-                Modifier.clickable(interactionSource = null, indication = null, onClick = {})
+                Modifier.clickable(interactionSource = null, indication = null, onClick = {}),
             ) {
                 HorizontalDivider(
                     thickness = 1.dp,
@@ -208,26 +209,21 @@ private fun TopBlock(
                 tags = tags,
                 textColor = textColor,
                 status = status,
-                modifier = Modifier
-                    .weight(1f)
-                    .semantics { heading() }
+                modifier = Modifier.weight(1f).semantics { heading() },
             )
 
             Spacer(Modifier.width(8.dp))
 
             val iconColor by animateColorAsState(
                 if (bookmarked) KotlinConfTheme.colors.orangeText
-                else KotlinConfTheme.colors.primaryText
+                else KotlinConfTheme.colors.primaryText,
             )
             val stateDesc = stringResource(
-                resource = if (bookmarked)
-                    UiRes.string.action_state_description_bookmarked
-                else
-                    UiRes.string.action_state_description_not_bookmarked
+                resource = if (bookmarked) UiRes.string.action_state_description_bookmarked
+                else UiRes.string.action_state_description_not_bookmarked,
             )
             Icon(
-                modifier = Modifier
-                    .toggleable(
+                modifier = Modifier.toggleable(
                         value = bookmarked,
                         onValueChange = onBookmark,
                         role = Role.Switch,
@@ -239,13 +235,12 @@ private fun TopBlock(
                         stateDescription = stateDesc
                     },
                 painter = painterResource(
-                    if (bookmarked) UiRes.drawable.bookmark_24_fill
-                    else UiRes.drawable.bookmark_24
+                    if (bookmarked) UiRes.drawable.bookmark_24_fill else UiRes.drawable.bookmark_24,
                 ),
                 contentDescription = stringResource(
                     if (bookmarked) UiRes.string.action_remove_session_from_bookmarks
                     else UiRes.string.action_bookmark_session,
-                    title
+                    title,
                 ),
                 tint = iconColor,
             )
@@ -334,7 +329,7 @@ private fun InlineIconContent(status: TalkStatus, placeholder: String) {
                 eduPlaceholder -> UiRes.drawable.session_education
                 codelabPlaceholder -> UiRes.drawable.session_codelab
                 else -> UiRes.drawable.session_codelab // Shouldn't happen, but let's not throw
-            }
+            },
         ),
         contentDescription = when (placeholder) {
             eduPlaceholder -> stringResource(UiRes.string.talk_card_icon_desc_education)
@@ -357,7 +352,7 @@ private fun TimeBlock(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier.padding(16.dp),
     ) {
         Text(
             text = location,
@@ -391,7 +386,7 @@ private fun TimeBlock(
 
         AnimatedContent(
             targetState = time,
-            transitionSpec = { fadeIn() togetherWith fadeOut() }
+            transitionSpec = { fadeIn() togetherWith fadeOut() },
         ) {
             Text(
                 text = it,
@@ -415,11 +410,19 @@ private fun TalkCardLivePreview() = PreviewHelper {
         bookmarked = bookmarked,
         onBookmark = { bookmarked = it },
         tags = setOf(
-            "Workshop", "Kotlin", "Coroutines", "Multiplatform",
-            "Label", "Label", "Label", "Label", "Label",
+            "Workshop",
+            "Kotlin",
+            "Coroutines",
+            "Multiplatform",
+            "Label",
+            "Label",
+            "Label",
+            "Label",
+            "Label",
         ),
         tagHighlights = listOf(
-            "Kotlin", "Multiplatform",
+            "Kotlin",
+            "Multiplatform",
         ),
         speakers = "Sebastian Aigner, Vsevolod Tolstopyatov",
         speakerHighlights = listOf(10..15),
@@ -460,10 +463,17 @@ private fun TalkCardUpcomingPreview() = PreviewHelper {
         title = "Asynchronous Programming With Kotlin Coroutines",
         titleHighlights = emptyList(),
         bookmarked = false,
-        onBookmark = { },
+        onBookmark = {},
         tags = setOf(
-            "Workshop", "Kotlin", "Coroutines", "Multiplatform",
-            "Label", "Label", "Label", "Label", "Label",
+            "Workshop",
+            "Kotlin",
+            "Coroutines",
+            "Multiplatform",
+            "Label",
+            "Label",
+            "Label",
+            "Label",
+            "Label",
         ),
         tagHighlights = listOf(),
         speakers = "Sebastian Aigner, Vsevolod Tolstopyatov",

@@ -2,7 +2,6 @@ package org.jetbrains.kotlinconf.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,6 +45,7 @@ import org.jetbrains.kotlinconf.screens.AppPrivacyNotice
 import org.jetbrains.kotlinconf.screens.AppPrivacyNoticePrompt
 import org.jetbrains.kotlinconf.screens.AppTermsOfUse
 import org.jetbrains.kotlinconf.screens.CodeOfConduct
+import org.jetbrains.kotlinconf.screens.DeveloperMenuScreen as DeveloperMenuScreenContent
 import org.jetbrains.kotlinconf.screens.GoldenKodeeFinalistScreen
 import org.jetbrains.kotlinconf.screens.GoldenKodeeScreen
 import org.jetbrains.kotlinconf.screens.InfoScreen
@@ -71,13 +71,12 @@ import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 import org.jetbrains.kotlinconf.utils.getStoreUrl
 import org.jetbrains.kotlinconf.utils.topInsetPadding
-import org.jetbrains.kotlinconf.screens.DeveloperMenuScreen as DeveloperMenuScreenContent
 
 fun navigateByLocalNotificationId(notificationId: String) {
     LocalNotificationId.parse(notificationId)?.let {
         when (it.type) {
-            LocalNotificationId.Type.SessionStart, LocalNotificationId.Type.SessionEnd ->
-                navigateToSession(SessionId(it.id))
+            LocalNotificationId.Type.SessionStart,
+            LocalNotificationId.Type.SessionEnd -> navigateToSession(SessionId(it.id))
         }
     }
 }
@@ -164,12 +163,11 @@ internal fun NavHost(
             colors = colors,
         ) {
             Box(
-                Modifier
-                    .fillMaxSize()
+                Modifier.fillMaxSize()
                     .background(KotlinConfTheme.colors.mainBackground)
                     .windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)
-                    )
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal),
+                    ),
             ) {
                 NavScaffold(
                     navState = navState,
@@ -188,12 +186,11 @@ internal fun NavHost(
                 val platformFlags = flagsManager.platformFlags
                 if (baseUrl != URLs.PRODUCTION_URL || currentFlags != platformFlags) {
                     DebugMarker(
-                        Modifier
-                            .align(Alignment.TopCenter)
+                        Modifier.align(Alignment.TopCenter)
                             .padding(topInsetPadding())
                             .clip(KotlinConfTheme.shapes.roundedCornerMd)
                             .clickable { navigator.add(AboutAppScreen) }
-                            .padding(8.dp)
+                            .padding(8.dp),
                     )
                 }
             }
@@ -209,9 +206,7 @@ private fun DebugMarker(modifier: Modifier = Modifier) {
         modifier = modifier,
     ) {
         Box(
-            Modifier.size(10.dp)
-                .clip(CircleShape)
-                .background(KotlinConfTheme.colors.orangeText)
+            Modifier.size(10.dp).clip(CircleShape).background(KotlinConfTheme.colors.orangeText),
         )
         Text(
             text = "Testing",
@@ -233,10 +228,9 @@ private fun DebugMarker(modifier: Modifier = Modifier) {
 
 private val noAnimationTransition = EnterTransition.None togetherWith ExitTransition.None
 
-private val noAnimationMetadata =
-    NavDisplay.transitionSpec { noAnimationTransition } +
-            NavDisplay.popTransitionSpec { noAnimationTransition } +
-            NavDisplay.predictivePopTransitionSpec { noAnimationTransition }
+private val noAnimationMetadata = NavDisplay.transitionSpec { noAnimationTransition } +
+    NavDisplay.popTransitionSpec { noAnimationTransition } +
+    NavDisplay.predictivePopTransitionSpec { noAnimationTransition }
 
 private fun EntryProviderScope<AppRoute>.screens(
     navigator: Navigator,
@@ -267,7 +261,7 @@ private fun EntryProviderScope<AppRoute>.screens(
         StartNotificationsScreen(
             onDone = {
                 navigator.set(ScheduleScreen)
-            }
+            },
         )
     }
 
@@ -285,7 +279,7 @@ private fun EntryProviderScope<AppRoute>.screens(
 
     entry<SpeakersScreen>(metadata = noAnimationMetadata) {
         SpeakersScreen(
-            onSpeaker = { navigator.add(SpeakerDetailScreen(it)) }
+            onSpeaker = { navigator.add(SpeakerDetailScreen(it)) },
         )
     }
 
@@ -354,12 +348,16 @@ private fun EntryProviderScope<AppRoute>.screens(
         AboutAppScreen(
             onBack = onBack,
             onGitHubRepo = { uriHandler.openUri(URLs.GITHUB_REPO) },
-            onRateApp = { getStoreUrl()?.let { uriHandler.openUri(it) } },
+            onRateApp = {
+                getStoreUrl()?.let { uriHandler.openUri(it) }
+            },
             onPrivacyNotice = { navigator.add(AppPrivacyNoticeScreen) },
             onTermsOfUse = { navigator.add(AppTermsOfUseScreen) },
             onLicenses = { navigator.add(LicensesScreen) },
             onJunie = { uriHandler.openUri(URLs.JUNIE_LANDING_PAGE) },
-            onDeveloperMenu = { skipDelay -> navigator.add(DeveloperMenuScreen(skipWarningDelay = skipDelay)) },
+            onDeveloperMenu = { skipDelay ->
+                navigator.add(DeveloperMenuScreen(skipWarningDelay = skipDelay))
+            },
         )
     }
     entry<LicensesScreen> {
@@ -422,7 +420,7 @@ private fun EntryProviderScope<AppRoute>.screens(
             onBack = onBack,
             onPartnerDetail = { partnerId ->
                 navigator.add(PartnerDetailScreen(partnerId))
-            }
+            },
         )
     }
     entry<PartnerDetailScreen> {

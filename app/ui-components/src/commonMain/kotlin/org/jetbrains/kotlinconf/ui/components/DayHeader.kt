@@ -20,6 +20,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
@@ -29,24 +30,21 @@ import org.jetbrains.kotlinconf.ui.theme.JetBrainsSans
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.theme.UI.white60
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
-private val DayDateStyle
-    @Composable
-    get() = TextStyle(
-        fontFamily = JetBrainsSans,
-        fontWeight = FontWeight.Bold,
-        fontSize = 58.sp,
-        textAlign = TextAlign.Center,
-    )
+private val DayDateStyle @Composable
+get() = TextStyle(
+    fontFamily = JetBrainsSans,
+    fontWeight = FontWeight.Bold,
+    fontSize = 58.sp,
+    textAlign = TextAlign.Center,
+)
 
-private val DayHeaderStyle
-    @Composable
-    get() = TextStyle(
-        fontFamily = JetBrainsSans,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 22.sp,
-    )
+private val DayHeaderStyle @Composable
+get() = TextStyle(
+    fontFamily = JetBrainsSans,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 22.sp,
+)
 
 @Composable
 fun DayHeader(
@@ -60,14 +58,10 @@ fun DayHeader(
 ) {
     val cornerRadius by animateDpAsState(if (fullWidth) 0.dp else 16.dp)
     Row(
-        modifier = modifier
-            .graphicsLayer {
-                shape = RoundedCornerShape(cornerRadius)
-                clip = true
-            }
-            .background(colorGradient)
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+        modifier = modifier.graphicsLayer {
+            shape = RoundedCornerShape(cornerRadius)
+            clip = true
+        }.background(colorGradient).fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)
             .semantics(mergeDescendants = true) {
                 heading()
             },
@@ -77,7 +71,7 @@ fun DayHeader(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy((-10).dp)
+                verticalArrangement = Arrangement.spacedBy((-10).dp),
             ) {
                 Text(
                     month,
@@ -126,12 +120,11 @@ private data class DayHeaderPreviewParams(
 )
 
 private class DayHeaderPreviewParamsProvider : PreviewParameterProvider<DayHeaderPreviewParams> {
-    override val values = sequenceOf(true, false)
-        .flatMap { fullWidth ->
-            listOf(false, true).map { multiDay ->
-                DayHeaderPreviewParams(fullWidth, multiDay)
-            }
+    override val values = sequenceOf(true, false).flatMap { fullWidth ->
+        listOf(false, true).map { multiDay ->
+            DayHeaderPreviewParams(fullWidth, multiDay)
         }
+    }
 
     override fun getDisplayName(index: Int): String {
         val params = values.elementAt(index)
@@ -144,7 +137,8 @@ private class DayHeaderPreviewParamsProvider : PreviewParameterProvider<DayHeade
 @PreviewLightDark
 @Composable
 private fun DayHeaderPreview(
-    @PreviewParameter(DayHeaderPreviewParamsProvider::class) params: DayHeaderPreviewParams,
+    @PreviewParameter(DayHeaderPreviewParamsProvider::class)
+    params: DayHeaderPreviewParams,
 ) = PreviewHelper(paddingEnabled = !params.fullWidth) {
     if (params.multiDay) {
         DayHeader("MAY", "22", "Code", "Labs", fullWidth = params.fullWidth, day2 = "23")

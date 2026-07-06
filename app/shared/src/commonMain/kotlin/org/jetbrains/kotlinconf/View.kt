@@ -6,7 +6,7 @@ import org.jetbrains.kotlinconf.utils.DateTimeFormatting
 
 data class Day(
     val date: LocalDate,
-    val timeSlots: List<TimeSlot>
+    val timeSlots: List<TimeSlot>,
 )
 
 data class TimeSlot(
@@ -24,8 +24,7 @@ fun Conference.buildAgenda(
     now: LocalDateTime,
 ): List<Day> {
     val votesBySessionId = votes.associateBy { it.sessionId }
-    return sessions
-        .groupBy { it.startsAt.date }
+    return sessions.groupBy { it.startsAt.date }
         .map { (date, sessions) ->
             Day(
                 date = date,
@@ -34,7 +33,7 @@ fun Conference.buildAgenda(
                     now = now,
                     favorites = favorites,
                     votes = votesBySessionId,
-                )
+                ),
             )
         }
         .sortedBy { it.date }
@@ -51,21 +50,23 @@ fun List<Session>.groupByTime(
     favorites: Set<SessionId>,
     votes: Map<SessionId, VoteInfo>,
 ): List<TimeSlot> {
-    val slots: List<SlotTimes> =
-        filterNot { it.isLightning }
-            .sortedBy { it.startsAt }
-            .map { SlotTimes(it.startsAt, it.endsAt) }
+    val slots: List<SlotTimes> = filterNot { it.isLightning }
+        .sortedBy { it.startsAt }
+        .map { SlotTimes(it.startsAt, it.endsAt) }
 
-    val slotsToSessions: Map<SlotTimes, MutableList<SessionCardView>> =
-        slots.associateWith { mutableListOf() }
+    val slotsToSessions: Map<SlotTimes, MutableList<SessionCardView>> = slots.associateWith {
+        mutableListOf()
+    }
 
     val speakersById = conference.speakers.associateBy { it.id }
 
     this.forEach { session ->
-        val slot = slots.find { (start, end) -> session.startsAt >= start && session.endsAt <= end } ?: return@forEach
-        slotsToSessions.getValue(slot).add(
-            session.asSessionCard(speakersById, now, favorites, votes[session.id])
-        )
+        val slot = slots.find { (start, end) -> session.startsAt >= start && session.endsAt <= end }
+            ?: return@forEach
+        slotsToSessions.getValue(slot)
+            .add(
+                session.asSessionCard(speakersById, now, favorites, votes[session.id]),
+            )
     }
 
     return slotsToSessions.mapNotNull { (slot, sessions) ->

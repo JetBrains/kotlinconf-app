@@ -93,7 +93,9 @@ internal fun NavScaffold(
     navState: NavState,
     navigator: Navigator,
     showGoldenKodee: Boolean,
-    content: @Composable (() -> Unit)
+    content:
+        @Composable
+        (() -> Unit),
 ) {
     val onSelectRoute: (TopLevelRoute) -> Unit = { route ->
         navigator.activate(route)
@@ -109,16 +111,14 @@ internal fun NavScaffold(
 
     val windowSize = LocalWindowSize.current
 
-    val showLargeNavigation = windowSize != WindowSize.Compact &&
-            navState.topLevelRoute != null
+    val showLargeNavigation = windowSize != WindowSize.Compact && navState.topLevelRoute != null
     val showCompactNavigation = windowSize == WindowSize.Compact &&
-            navState.topLevelRoute != null &&
-            navState.currentBackstack.size == 1 &&
-            !isKeyboardOpen()
+        navState.topLevelRoute != null &&
+        navState.currentBackstack.size == 1 &&
+        !isKeyboardOpen()
 
     Row(
-        Modifier.fillMaxSize()
-            .background(color = KotlinConfTheme.colors.mainBackground)
+        Modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground),
     ) {
         val enterAnimSpec = tween<IntSize>(delayMillis = AnimationConstants.DefaultDurationMillis)
 
@@ -219,10 +219,9 @@ private fun NotificationBar() {
             text = message ?: "",
             color = KotlinConfTheme.colors.primaryTextInverted,
             style = KotlinConfTheme.typography.text2.copy(textAlign = TextAlign.Center),
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
                 .background(color = KotlinConfTheme.colors.mainBackgroundInverted)
-                .padding(vertical = 16.dp, horizontal = 10.dp)
+                .padding(vertical = 16.dp, horizontal = 10.dp),
         )
     }
 }

@@ -26,7 +26,7 @@ fun HideKeyboardOnDragHandler(listState: LazyListState) {
 
 @Composable
 fun HideKeyboardOnDragHandler(gridState: LazyGridState) {
-   HideKeyboardOnDragHandlerImpl(gridState.interactionSource)
+    HideKeyboardOnDragHandlerImpl(gridState.interactionSource)
 }
 
 @Composable
@@ -35,8 +35,7 @@ private fun HideKeyboardOnDragHandlerImpl(interactionSource: InteractionSource) 
         val keyboard = LocalSoftwareKeyboardController.current
         val focusManager = LocalFocusManager.current
         LaunchedEffect(interactionSource) {
-            interactionSource.interactions
-                .distinctUntilChanged()
+            interactionSource.interactions.distinctUntilChanged()
                 .filterIsInstance<DragInteraction>()
                 .map { dragInteraction -> dragInteraction is DragInteraction.Start }
                 .collect {

@@ -20,11 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.Brand
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import org.jetbrains.kotlinconf.ui.utils.WidePreviewLightDark
 
 private val LargeSwitcherItemShape = RoundedCornerShape(percent = 100)
@@ -47,14 +47,13 @@ private fun LargeSwitcherItem(
     )
 
     Row(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
             .heightIn(min = 48.dp)
             .clip(LargeSwitcherItemShape)
             .selectable(
                 selected = selected,
                 onClick = { onClick() },
-                role = Role.Tab
+                role = Role.Tab,
             )
             .background(
                 Brand.colorGradient,
@@ -88,10 +87,8 @@ fun LargeSwitcher(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .selectableGroup(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        modifier = modifier.fillMaxWidth().selectableGroup(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         options.forEachIndexed { index, option ->
             LargeSwitcherItem(
@@ -116,7 +113,6 @@ private fun LargeSwitcherItemUnselectedPreview() = PreviewHelper {
 private fun LargeSwitcherItemSelectedPreview() = PreviewHelper {
     LargeSwitcherItem("May 22", "Conference day 2", {}, selected = true)
 }
-
 
 @Composable
 @WidePreviewLightDark

@@ -9,9 +9,8 @@ class Shapes(
     val roundedCornerMd: RoundedCornerShape,
 )
 
-internal val KotlinConfShapes: Shapes
-    @Composable
-    get() = Shapes(
-        roundedCornerSm = RoundedCornerShape(8.dp),
-        roundedCornerMd = RoundedCornerShape(16.dp),
-    )
+internal val KotlinConfShapes: Shapes @Composable
+get() = Shapes(
+    roundedCornerSm = RoundedCornerShape(8.dp),
+    roundedCornerMd = RoundedCornerShape(16.dp),
+)

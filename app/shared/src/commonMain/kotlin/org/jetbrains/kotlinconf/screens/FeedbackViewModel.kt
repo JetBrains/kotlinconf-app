@@ -27,8 +27,8 @@ class FeedbackViewModel(
     @Assisted private val sessionId: SessionId,
 ) : ViewModel() {
 
-    val selectedEmotion: StateFlow<Emotion?> = service.votes
-        .map { vote -> vote.find { it.sessionId == sessionId }?.score?.toEmotion() }
+    val selectedEmotion: StateFlow<Emotion?> =
+        service.votes.map { vote -> vote.find { it.sessionId == sessionId }?.score?.toEmotion() }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val feedbackExpanded: StateFlow<Boolean>

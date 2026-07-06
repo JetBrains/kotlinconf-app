@@ -1,15 +1,15 @@
 package org.jetbrains.kotlinconf.backend.services
 
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.serialization.json.Json
-import org.jetbrains.kotlinconf.ConferenceInfo
 import org.jetbrains.kotlinconf.ConferenceImages
+import org.jetbrains.kotlinconf.ConferenceInfo
 import org.jetbrains.kotlinconf.PartnerInfo
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.slf4j.LoggerFactory
-import java.util.concurrent.ConcurrentHashMap
 
 class ConferenceInfoService(
-    private val config: ConferenceConfig
+    private val config: ConferenceConfig,
 ) {
     private val log = LoggerFactory.getLogger("ConferenceInfoService")
     private val json = Json { ignoreUnknownKeys = true }
@@ -64,7 +64,7 @@ class ConferenceInfoService(
                             logoUrlDark = "$baseUrl/${partner.logoUrlDark}",
                             url = partner.url,
                         )
-                    }
+                    },
                 )
             },
         )
@@ -81,9 +81,9 @@ class ConferenceInfoService(
             }
 
             val issueCount = validateImages(info, year) +
-                    validatePartnerData(info, year) +
-                    validateMapAssets(info, year) +
-                    validateMapData(info, year)
+                validatePartnerData(info, year) +
+                validateMapAssets(info, year) +
+                validateMapData(info, year)
 
             if (issueCount == 0) {
                 log.info("All conference data for year $year is valid")
@@ -101,10 +101,11 @@ class ConferenceInfoService(
     ): Int {
         val images = info.images ?: return 0
         var issueCount = 0
-        for ((variant, path) in listOf(
-            "light" to images.kotlinConfLight,
-            "dark" to images.kotlinConfDark,
-        )) {
+        for ((variant, path) in
+            listOf(
+                "light" to images.kotlinConfLight,
+                "dark" to images.kotlinConfDark,
+            )) {
             val resourcePath = "/years/$year/$path"
             if (javaClass.getResourceAsStream(resourcePath) == null) {
                 log.warn("$year | images | Missing $variant image file: $path")
@@ -129,10 +130,11 @@ class ConferenceInfoService(
                     log.warn("$year | ${partner.name} | Missing link")
                     issueCount++
                 }
-                for ((variant, logoPath) in listOf(
-                    "light" to partner.logoUrlLight,
-                    "dark" to partner.logoUrlDark
-                )) {
+                for ((variant, logoPath) in
+                    listOf(
+                        "light" to partner.logoUrlLight,
+                        "dark" to partner.logoUrlDark,
+                    )) {
                     if (logoPath.isBlank()) {
                         log.warn("$year | ${partner.name} | Missing $variant logo path")
                         issueCount++
@@ -155,10 +157,11 @@ class ConferenceInfoService(
     ): Int {
         var issueCount = 0
         for (floor in info.mapData.floors) {
-            for ((variant, svgPath) in listOf(
-                "light" to floor.svgPathLight,
-                "dark" to floor.svgPathDark
-            )) {
+            for ((variant, svgPath) in
+                listOf(
+                    "light" to floor.svgPathLight,
+                    "dark" to floor.svgPathDark,
+                )) {
                 if (svgPath.isBlank()) {
                     log.warn("$year | ${floor.name} | Missing $variant map SVG path")
                     issueCount++
@@ -197,7 +200,9 @@ class ConferenceInfoService(
         }
         for ((roomName, room) in mapData.rooms) {
             if (room.floorIndex !in floorRange) {
-                log.warn("$year | Room '$roomName' | floorIndex ${room.floorIndex} is out of range [0, $floorCount)")
+                log.warn(
+                    "$year | Room '$roomName' | floorIndex ${room.floorIndex} is out of range [0, $floorCount)",
+                )
                 issueCount++
             }
             if (room.offsetX !in offsetRange) {

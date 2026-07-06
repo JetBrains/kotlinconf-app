@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 internal class PreviewInteractionSource(interaction: Interaction) : MutableInteractionSource {
     override val interactions = MutableStateFlow(interaction)
+
     override suspend fun emit(interaction: Interaction) {}
     override fun tryEmit(interaction: Interaction) = true
 

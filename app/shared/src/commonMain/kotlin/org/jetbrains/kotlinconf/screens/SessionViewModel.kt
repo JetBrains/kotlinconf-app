@@ -28,8 +28,7 @@ class SessionViewModel(
 
     val session: StateFlow<ErrorLoadingState<SessionCardView>> = service.sessionByIdFlow(sessionId)
         .map { session ->
-            if (session != null) ErrorLoadingState.Content(session)
-            else ErrorLoadingState.Error
+            if (session != null) ErrorLoadingState.Content(session) else ErrorLoadingState.Error
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ErrorLoadingState.Loading)
 

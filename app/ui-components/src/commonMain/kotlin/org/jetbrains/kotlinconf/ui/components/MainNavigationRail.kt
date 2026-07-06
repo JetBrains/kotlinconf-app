@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
@@ -46,7 +47,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.team_28
 import org.jetbrains.kotlinconf.ui.generated.resources.team_28_fill
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 @Composable
 private fun NavRailMenuItem(
@@ -59,12 +59,10 @@ private fun NavRailMenuItem(
     modifier: Modifier = Modifier,
 ) {
     val contentColor by animateColorAsState(
-        if (selected) KotlinConfTheme.colors.primaryText
-        else KotlinConfTheme.colors.secondaryText
+        if (selected) KotlinConfTheme.colors.primaryText else KotlinConfTheme.colors.secondaryText,
     )
 
-    val itemModifier = modifier
-        .clip(KotlinConfTheme.shapes.roundedCornerMd)
+    val itemModifier = modifier.clip(KotlinConfTheme.shapes.roundedCornerMd)
         .fillMaxWidth()
         .selectable(
             selected = selected,
@@ -133,14 +131,11 @@ fun <T : Any> MainNavigationRail(
         if (expanded) 220.dp else 140.dp,
         animationSpec = spring(
             visibilityThreshold = Dp.VisibilityThreshold,
-            stiffness = Spring.StiffnessLow
+            stiffness = Spring.StiffnessLow,
         ),
     )
     Column(
-        modifier = modifier
-            .width(width)
-            .padding(12.dp)
-            .animateContentSize(),
+        modifier = modifier.width(width).padding(12.dp).animateContentSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         destinations.forEach { destination ->
@@ -158,44 +153,46 @@ fun <T : Any> MainNavigationRail(
 
 private class ExpandedPreviewProvider : PreviewParameterProvider<Boolean> {
     override val values = sequenceOf(false, true)
+
     override fun getDisplayName(index: Int) = if (index == 0) "collapsed" else "expanded"
 }
 
 @PreviewLightDark
 @Composable
 private fun MainNavigationRailPreview(
-    @PreviewParameter(ExpandedPreviewProvider::class) expanded: Boolean,
+    @PreviewParameter(ExpandedPreviewProvider::class)
+    expanded: Boolean,
 ) = PreviewHelper(paddingEnabled = false) {
     val navRailPreviewDestinations = listOf(
         MainNavDestination(
             label = UiRes.string.now,
             icon = UiRes.drawable.clock_28,
             iconSelected = UiRes.drawable.clock_28_fill,
-            route = "Schedule"
+            route = "Schedule",
         ),
         MainNavDestination(
             label = UiRes.string.now,
             icon = UiRes.drawable.team_28,
             iconSelected = UiRes.drawable.team_28_fill,
-            route = "Speakers"
+            route = "Speakers",
         ),
         MainNavDestination(
             label = UiRes.string.now,
             icon = UiRes.drawable.award_28,
             iconSelected = UiRes.drawable.award_28_fill,
-            route = "GoldenKodee"
+            route = "GoldenKodee",
         ),
         MainNavDestination(
             label = UiRes.string.now,
             icon = UiRes.drawable.location_28,
             iconSelected = UiRes.drawable.location_28_fill,
-            route = "Map"
+            route = "Map",
         ),
         MainNavDestination(
             label = UiRes.string.now,
             icon = UiRes.drawable.info_28,
             iconSelected = UiRes.drawable.info_28_fill,
-            route = "Info"
+            route = "Info",
         ),
     )
 

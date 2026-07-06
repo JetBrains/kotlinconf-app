@@ -8,12 +8,12 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.TestApplication
-import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.Serializable
-import org.jetbrains.kotlinconf.SessionId
-import org.jetbrains.kotlinconf.Score
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.Serializable
+import org.jetbrains.kotlinconf.Score
+import org.jetbrains.kotlinconf.SessionId
 
 /**
  * The admin endpoints /vote/all and /feedback/summary expose the voting user's

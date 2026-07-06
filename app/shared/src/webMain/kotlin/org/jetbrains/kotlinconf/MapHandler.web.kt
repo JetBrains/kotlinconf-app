@@ -2,10 +2,10 @@ package org.jetbrains.kotlinconf
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import kotlin.js.js
 import web.window.WindowTarget
 import web.window._blank
 import web.window.window
-import kotlin.js.js
 
 @Composable
 actual fun rememberMapHandler(): MapHandler = remember { WebMapHandler }

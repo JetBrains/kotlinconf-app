@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.screens
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,7 +27,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.LocalAppGraph
@@ -53,7 +51,6 @@ import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.getStoreUrl
-import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
 fun AboutAppScreen(
@@ -92,8 +89,14 @@ fun AboutAppScreen(
                 )
             }
 
-            PageMenuItem(stringResource(Res.string.about_app_link_privacy_notice), onClick = onPrivacyNotice)
-            PageMenuItem(stringResource(Res.string.about_app_link_terms_of_use), onClick = onTermsOfUse)
+            PageMenuItem(
+                stringResource(Res.string.about_app_link_privacy_notice),
+                onClick = onPrivacyNotice,
+            )
+            PageMenuItem(
+                stringResource(Res.string.about_app_link_terms_of_use),
+                onClick = onTermsOfUse,
+            )
             PageMenuItem(stringResource(Res.string.about_app_link_licenses), onClick = onLicenses)
 
             Spacer(Modifier.height(8.dp))
@@ -105,8 +108,7 @@ fun AboutAppScreen(
                 text = appVersion,
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.primaryText,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally)
                     .clip(KotlinConfTheme.shapes.roundedCornerMd)
                     .clickable {
                         clipboardManager.setText(AnnotatedString(appVersion))
@@ -117,12 +119,12 @@ fun AboutAppScreen(
                             onDeveloperMenu(false)
                         }
                     }
-                    .padding(16.dp)
+                    .padding(16.dp),
             )
 
             DebugInfo(
                 onDeveloperMenu = { onDeveloperMenu(true) },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally),
             )
 
             Image(
@@ -131,7 +133,7 @@ fun AboutAppScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
                     .clip(KotlinConfTheme.shapes.roundedCornerMd)
                     .clickable { onJunie() }
-                    .padding(8.dp)
+                    .padding(8.dp),
             )
         }
     }
@@ -157,7 +159,7 @@ private fun DebugInfo(
                 )
                 .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             val highlightColor = KotlinConfTheme.colors.orangeText
 

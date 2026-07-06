@@ -42,14 +42,16 @@ class DocumentsViewModel(
     }
 
     val state: StateFlow<ErrorLoadingState<String>> = combine(
-        document, loading
-    ) { doc, loading ->
-        when {
-            loading -> ErrorLoadingState.Loading
-            doc != null -> ErrorLoadingState.Content(doc)
-            else -> ErrorLoadingState.Error
+            document,
+            loading,
+        ) { doc, loading ->
+            when {
+                loading -> ErrorLoadingState.Loading
+                doc != null -> ErrorLoadingState.Content(doc)
+                else -> ErrorLoadingState.Error
+            }
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ErrorLoadingState.Loading)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ErrorLoadingState.Loading)
 
     @AssistedFactory
     @ManualViewModelAssistedFactoryKey

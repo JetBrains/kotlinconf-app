@@ -22,6 +22,7 @@ import com.mikepenz.markdown.model.State
 import com.mikepenz.markdown.model.markdownAnimations
 import com.mikepenz.markdown.model.markdownPadding
 import com.mikepenz.markdown.model.parseMarkdownFlow
+import kotlin.random.Random
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -31,7 +32,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import kotlin.random.Random
 
 @Composable
 fun MarkdownView(
@@ -61,11 +61,10 @@ fun MarkdownView(
 
 private class MarkdownViewModel(loadText: suspend () -> String) : ViewModel() {
     @OptIn(ExperimentalCoroutinesApi::class)
-    val markdownState: StateFlow<State> =
-        flow { emit(loadText()) }
-            .flatMapLatest { parseMarkdownFlow(it) }
-            .flowOn(Dispatchers.Default)
-            .stateIn(viewModelScope, SharingStarted.Eagerly, State.Loading())
+    val markdownState: StateFlow<State> = flow { emit(loadText()) }
+        .flatMapLatest { parseMarkdownFlow(it) }
+        .flowOn(Dispatchers.Default)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, State.Loading())
 }
 
 @Composable
@@ -119,7 +118,7 @@ private fun MarkdownImpl(
                     style = SpanStyle(
                         color = KotlinConfTheme.colors.primaryText,
                         textDecoration = TextDecoration.Underline,
-                    ),
+                    )
                 ),
             ),
             animations = markdownAnimations { this },

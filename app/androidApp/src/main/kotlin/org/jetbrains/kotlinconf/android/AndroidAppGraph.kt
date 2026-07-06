@@ -4,9 +4,9 @@ import android.app.Application
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
-import org.jetbrains.kotlinconf.flags.Flags
-import org.jetbrains.kotlinconf.di.NotificationIcon
 import org.jetbrains.kotlinconf.di.BaseAndroidAppGraph
+import org.jetbrains.kotlinconf.di.NotificationIcon
+import org.jetbrains.kotlinconf.flags.Flags
 
 @DependencyGraph(AppScope::class)
 interface AndroidAppGraph : BaseAndroidAppGraph {

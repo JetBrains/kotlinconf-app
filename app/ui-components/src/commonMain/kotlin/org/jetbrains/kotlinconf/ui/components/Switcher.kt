@@ -24,10 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 private val SwitcherItemShape = RoundedCornerShape(percent = 50)
 
@@ -40,21 +40,17 @@ private fun SwitcherItem(
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor by animateColorAsState(
-        if (selected) Color.Transparent
-        else KotlinConfTheme.colors.tileBackground,
+        if (selected) Color.Transparent else KotlinConfTheme.colors.tileBackground,
     )
     val textColor by animateColorAsState(
-        if (selected) KotlinConfTheme.colors.primaryText
-        else KotlinConfTheme.colors.secondaryText,
+        if (selected) KotlinConfTheme.colors.primaryText else KotlinConfTheme.colors.secondaryText,
     )
     val strokeColor by animateColorAsState(
-        if (selected) KotlinConfTheme.colors.strokeAccent
-        else Color.Transparent,
+        if (selected) KotlinConfTheme.colors.strokeAccent else Color.Transparent,
     )
 
     Box(
-        modifier = modifier
-            .heightIn(min = 40.dp)
+        modifier = modifier.heightIn(min = 40.dp)
             .clip(SwitcherItemShape)
             .border(
                 width = 2.dp,
@@ -64,7 +60,7 @@ private fun SwitcherItem(
             .selectable(
                 selected = selected,
                 onClick = { onClick() },
-                role = Role.Tab
+                role = Role.Tab,
             )
             .background(backgroundColor)
             .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -108,7 +104,7 @@ fun Switcher(
 
         Row(
             modifier = Modifier.selectableGroup(),
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             displayItems.forEachIndexed { index, label ->
                 SwitcherItem(
@@ -137,7 +133,6 @@ private fun SwitcherShortPreview() = PreviewHelper {
         modifier = Modifier.width(230.dp),
     )
 }
-
 
 @Composable
 @PreviewLightDark

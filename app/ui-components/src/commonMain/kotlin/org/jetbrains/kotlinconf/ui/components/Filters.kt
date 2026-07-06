@@ -42,6 +42,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
@@ -56,10 +57,11 @@ import org.jetbrains.kotlinconf.ui.generated.resources.filter_label_session_form
 import org.jetbrains.kotlinconf.ui.generated.resources.up_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 enum class FilterItemType {
-    Category, Level, Format,
+    Category,
+    Level,
+    Format,
 }
 
 data class FilterItem(
@@ -77,26 +79,24 @@ fun Filters(
     var isExpanded by rememberSaveable { mutableStateOf(false) }
 
     Column(
-        modifier = modifier
-            .clip(KotlinConfTheme.shapes.roundedCornerMd)
+        modifier = modifier.clip(KotlinConfTheme.shapes.roundedCornerMd)
             .background(KotlinConfTheme.colors.tileBackground),
     ) {
         val stateDesc = stringResource(
             if (isExpanded) UiRes.string.action_state_description_expanded
-            else UiRes.string.action_state_description_collapsed
+            else UiRes.string.action_state_description_collapsed,
         )
         val filterByTagsText = stringResource(UiRes.string.filter_by_tags)
 
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .toggleable(
+            modifier = Modifier.toggleable(
                     enabled = true,
                     value = isExpanded,
                     onValueChange = { isExpanded = it },
                     indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
+                    interactionSource = remember { MutableInteractionSource() },
                 )
                 .heightIn(min = 46.dp)
                 .padding(vertical = 11.dp)
@@ -104,7 +104,7 @@ fun Filters(
                 .semantics {
                     stateDescription = stateDesc
                     contentDescription = filterByTagsText
-                }
+                },
         ) {
             val iconRotation by animateFloatAsState(if (isExpanded) 0f else 180f)
             Action(
@@ -121,7 +121,8 @@ fun Filters(
             AnimatedVisibility(
                 visible = !isExpanded && count > 0,
                 enter = fadeIn() + expandHorizontally(clip = false, expandFrom = Alignment.Start),
-                exit = fadeOut() + shrinkHorizontally(clip = false, shrinkTowards = Alignment.Start),
+                exit =
+                    fadeOut() + shrinkHorizontally(clip = false, shrinkTowards = Alignment.Start),
             ) {
                 Row {
                     Spacer(Modifier.width(8.dp))
@@ -129,12 +130,12 @@ fun Filters(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier.size(24.dp)
                             .clip(CircleShape)
-                            .background(KotlinConfTheme.colors.primaryBackground)
+                            .background(KotlinConfTheme.colors.primaryBackground),
                     ) {
                         val tagCountContentDescription = pluralStringResource(
                             UiRes.plurals.filter_by_tags_tag_count,
                             count,
-                            count
+                            count,
                         )
                         Text(
                             text = count.toString(),
@@ -142,7 +143,7 @@ fun Filters(
                             style = KotlinConfTheme.typography.text2,
                             modifier = Modifier.semantics {
                                 contentDescription = tagCountContentDescription
-                            }
+                            },
                         )
                     }
                 }
@@ -200,7 +201,7 @@ private fun FilterItemGroup(
             color = KotlinConfTheme.colors.noteText,
             modifier = Modifier.semantics {
                 heading()
-            }
+            },
         )
         FlowRow(
             modifier = if (isExclusive) Modifier.selectableGroup() else Modifier,

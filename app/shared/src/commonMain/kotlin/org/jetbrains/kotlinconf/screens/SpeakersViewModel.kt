@@ -48,32 +48,34 @@ class SpeakersViewModel(
     }
 
     val speakers: StateFlow<ErrorLoadingState<List<SpeakerWithHighlights>>> = combine(
-        service.speakers, searchText, loading
-    ) { speakers, searchText, loading ->
-        when {
-            loading -> ErrorLoadingState.Loading
+            service.speakers,
+            searchText,
+            loading,
+        ) { speakers, searchText, loading ->
+            when {
+                loading -> ErrorLoadingState.Loading
 
-            searchText.isBlank() -> {
-                val allSpeakers = speakers.map { SpeakerWithHighlights(it) }
-                if (allSpeakers.isNotEmpty()) {
-                    ErrorLoadingState.Content(allSpeakers)
-                } else {
-                    ErrorLoadingState.Error
+                searchText.isBlank() -> {
+                    val allSpeakers = speakers.map { SpeakerWithHighlights(it) }
+                    if (allSpeakers.isNotEmpty()) {
+                        ErrorLoadingState.Content(allSpeakers)
+                    } else {
+                        ErrorLoadingState.Error
+                    }
+                }
+
+                else -> {
+                    val searchResults = speakers.performSearch(
+                        searchText = searchText,
+                        produceResult = { speaker, (nameMatches, titleMatches) ->
+                            SpeakerWithHighlights(speaker, nameMatches, titleMatches)
+                        },
+                        selectors = listOf({ it.name }, { it.position }),
+                    )
+                    ErrorLoadingState.Content(searchResults)
                 }
             }
-
-            else -> {
-                val searchResults = speakers.performSearch(
-                    searchText = searchText,
-                    produceResult = { speaker, (nameMatches, titleMatches) ->
-                        SpeakerWithHighlights(speaker, nameMatches, titleMatches)
-                    },
-                    selectors = listOf({ it.name }, { it.position }),
-                )
-                ErrorLoadingState.Content(searchResults)
-            }
         }
-    }
         .flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ErrorLoadingState.Loading)
 }

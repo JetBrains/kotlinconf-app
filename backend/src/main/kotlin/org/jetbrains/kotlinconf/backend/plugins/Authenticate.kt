@@ -5,7 +5,6 @@ import io.ktor.server.application.createRouteScopedPlugin
 import io.ktor.server.auth.authentication
 import io.ktor.server.request.header
 
-
 val BearerChecker = createRouteScopedPlugin("BearerChecker") {
     val bearer = "Bearer "
     onCall { call ->

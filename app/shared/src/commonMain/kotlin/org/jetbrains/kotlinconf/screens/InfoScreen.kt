@@ -48,7 +48,6 @@ import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
-
 @Composable
 fun InfoScreen(
     onAboutConf: () -> Unit,
@@ -69,14 +68,13 @@ fun InfoScreen(
     Column(
         Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .padding(topInsetPadding()),
     ) {
         MainHeaderTitleBar(stringResource(Res.string.info_title))
         HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
 
         Column(
-            Modifier
-                .verticalScroll(rememberScrollState())
+            Modifier.verticalScroll(rememberScrollState())
                 .fillMaxSize()
                 .padding(PaddingValues(12.dp) + bottomInsetPadding()),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -86,9 +84,7 @@ fun InfoScreen(
                 AsyncImage(
                     model = logoUrl,
                     contentDescription = null,
-                    modifier = Modifier
-                        .padding(24.dp)
-                        .widthIn(max = 360.dp)
+                    modifier = Modifier.padding(24.dp).widthIn(max = 360.dp),
                 )
             }
             PageMenuItem(stringResource(Res.string.info_link_about_conf), onClick = onAboutConf)
@@ -102,9 +98,12 @@ fun InfoScreen(
             PageMenuItem(stringResource(Res.string.info_link_about_app), onClick = onAboutApp)
             PageMenuItem(stringResource(Res.string.info_link_settings), onClick = onSettings)
             PageMenuItem(stringResource(Res.string.info_link_partners), onClick = onOurPartners)
-            PageMenuItem(stringResource(Res.string.info_link_code_of_conduct), onClick = onCodeOfConduct)
+            PageMenuItem(
+                stringResource(Res.string.info_link_code_of_conduct),
+                onClick = onCodeOfConduct,
+            )
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 SocialSquare(
                     image = vectorResource(Res.drawable.twitter),
@@ -139,8 +138,7 @@ private fun SocialSquare(
     Image(
         imageVector = image,
         contentDescription = description,
-        modifier = modifier
-            .clip(KotlinConfTheme.shapes.roundedCornerMd)
+        modifier = modifier.clip(KotlinConfTheme.shapes.roundedCornerMd)
             .clickable(onClick = onClick)
             .background(KotlinConfTheme.colors.tileBackground)
             .padding(vertical = 32.dp)

@@ -44,7 +44,7 @@ private fun initFlagsAndLogging(
             when {
                 flags.debugLogging -> DebugLogger(platformLogger)
                 else -> NoopProdLogger()
-            }
+            },
         )
     }
 }

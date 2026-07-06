@@ -1,6 +1,5 @@
 // ABOUTME: Histogram charts for the admin overview: how talk ratings and popularity scores are distributed.
 // ABOUTME: Each talk is counted once (deduped by session) and bucketed into 15 groups spanning 0.0–3.0.
-
 package org.jetbrains.kotlinconf.admin
 
 import androidx.compose.runtime.Composable
@@ -50,18 +49,28 @@ private fun Histogram(title: String, buckets: IntArray, color: (Double) -> Strin
             buckets.forEachIndexed { index, count ->
                 val lo = index * BUCKET_WIDTH
                 val hi = lo + BUCKET_WIDTH
-                Div(attrs = {
-                    classes("chart-col")
-                    attr("title", "${lo.toFixed(1)}–${hi.toFixed(1)}: $count talk" + if (count == 1) "" else "s")
-                }) {
-                    Div(attrs = { classes("chart-count") }) { Text(if (count > 0) count.toString() else "") }
-                    Div(attrs = {
-                        classes("chart-bar")
-                        style {
-                            property("height", "${100.0 * count / max}%")
-                            property("background", color(lo + BUCKET_WIDTH / 2))
-                        }
-                    }) {}
+                Div(
+                    attrs = {
+                        classes("chart-col")
+                        attr(
+                            "title",
+                            "${lo.toFixed(1)}–${hi.toFixed(1)}: $count talk" +
+                            if (count == 1) "" else "s",
+                        )
+                    },
+                ) {
+                    Div(attrs = { classes("chart-count") }) {
+                        Text(if (count > 0) count.toString() else "")
+                    }
+                    Div(
+                        attrs = {
+                            classes("chart-bar")
+                            style {
+                                property("height", "${100.0 * count / max}%")
+                                property("background", color(lo + BUCKET_WIDTH / 2))
+                            }
+                        },
+                    ) {}
                     Div(attrs = { classes("chart-tick") }) { Text(lo.toFixed(1)) }
                 }
             }

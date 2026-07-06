@@ -70,10 +70,9 @@ fun GoldenKodeeFinalistScreen(
     val year = viewModel.year.collectAsStateWithLifecycle().value
 
     Column(
-        Modifier
-            .fillMaxSize()
+        Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .padding(topInsetPadding()),
     ) {
         MainHeaderTitleBar(
             title = stringResource(Res.string.golden_kodee_title),
@@ -100,9 +99,7 @@ fun GoldenKodeeFinalistScreen(
                         text = nominee.name,
                         style = KotlinConfTheme.typography.h2,
                         color = KotlinConfTheme.colors.primaryText,
-                        modifier = Modifier
-                            .semantics { heading() }
-                            .weight(1f, fill = false),
+                        modifier = Modifier.semantics { heading() }.weight(1f, fill = false),
                     )
                     Spacer(Modifier.width(8.dp))
                     CardTag(
@@ -120,10 +117,7 @@ fun GoldenKodeeFinalistScreen(
 
                 SpeakerAvatar(
                     photoUrl = nominee.photoUrl,
-                    modifier = Modifier
-                        .widthIn(max = 400.dp)
-                        .fillMaxWidth()
-                        .aspectRatio(1f),
+                    modifier = Modifier.widthIn(max = 400.dp).fillMaxWidth().aspectRatio(1f),
                 )
 
                 Spacer(Modifier.height(24.dp))
@@ -157,14 +151,10 @@ fun GoldenKodeeFinalistScreen(
 @Composable
 private fun CompactWinnerBanner(year: String) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(KotlinConfTheme.shapes.roundedCornerMd)
+        modifier = Modifier.fillMaxWidth().clip(KotlinConfTheme.shapes.roundedCornerMd),
     ) {
         Image(
-            modifier = Modifier
-                .background(Color(0xFF59017B))
-                .matchParentSize(),
+            modifier = Modifier.background(Color(0xFF59017B)).matchParentSize(),
             painter = painterResource(Res.drawable.golden_kodee_winner_background),
             contentDescription = null,
             contentScale = ContentScale.Crop,
@@ -180,7 +170,7 @@ private fun CompactWinnerBanner(year: String) {
 
         Column(
             modifier = Modifier.padding(top = 12.dp).padding(horizontal = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             textContent()
 
@@ -189,7 +179,7 @@ private fun CompactWinnerBanner(year: String) {
             Image(
                 painter = painterResource(Res.drawable.golden_kodee_winner),
                 contentDescription = null,
-                modifier = Modifier.size(190.dp)
+                modifier = Modifier.size(190.dp),
             )
         }
     }
@@ -199,18 +189,15 @@ private fun CompactWinnerBanner(year: String) {
 private fun LargeWinnerBanner(year: String) {
     Box {
         Box(
-            modifier = Modifier
-                .heightIn(min = 135.dp)
+            modifier = Modifier.heightIn(min = 135.dp)
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .clip(KotlinConfTheme.shapes.roundedCornerMd)
+                .clip(KotlinConfTheme.shapes.roundedCornerMd),
         ) {
             Image(
                 painter = painterResource(Res.drawable.golden_kodee_winner_background),
                 contentDescription = null,
-                modifier = Modifier
-                    .background(Color(0xFF59017B))
-                    .matchParentSize(),
+                modifier = Modifier.background(Color(0xFF59017B)).matchParentSize(),
                 contentScale = ContentScale.Crop,
             )
 
@@ -235,12 +222,9 @@ private fun LargeWinnerBanner(year: String) {
         Image(
             painter = painterResource(Res.drawable.golden_kodee_winner),
             contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .size(190.dp)
-                .graphicsLayer {
-                    translationX = 10.dp.toPx()
-                }
+            modifier = Modifier.align(Alignment.BottomEnd).size(190.dp).graphicsLayer {
+                translationX = 10.dp.toPx()
+            },
         )
     }
 }

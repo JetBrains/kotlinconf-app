@@ -17,10 +17,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 private val ButtonShape = RoundedCornerShape(percent = 100)
 
@@ -34,28 +34,22 @@ fun Button(
     primaryBackground: Color = KotlinConfTheme.colors.primaryBackground,
 ) {
     val backgroundColor by animateColorAsState(
-        if (primary) primaryBackground
-        else Color.Transparent
+        if (primary) primaryBackground else Color.Transparent,
     )
     val borderColor by animateColorAsState(
-        if (primary) Color.Transparent
-        else KotlinConfTheme.colors.strokeHalf
+        if (primary) Color.Transparent else KotlinConfTheme.colors.strokeHalf,
     )
     val textColor by animateColorAsState(
         if (primary) KotlinConfTheme.colors.primaryTextWhiteFixed
-        else KotlinConfTheme.colors.primaryText
+        else KotlinConfTheme.colors.primaryText,
     )
     val alpha by animateFloatAsState(if (enabled) 1f else 0.5f)
 
     Box(
-        modifier = modifier
-            .graphicsLayer { this.alpha = alpha }
-            .heightIn(min = 56.dp)
-            .border(width = 1.dp, color = borderColor, shape = ButtonShape)
-            .clip(ButtonShape)
+        modifier = modifier.graphicsLayer { this.alpha = alpha }.heightIn(min = 56.dp)
+            .border(width = 1.dp, color = borderColor, shape = ButtonShape).clip(ButtonShape)
             .clickable(enabled = enabled, onClick = onClick, role = Role.Button)
-            .background(backgroundColor)
-            .padding(horizontal = 32.dp),
+            .background(backgroundColor).padding(horizontal = 32.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(
@@ -69,11 +63,11 @@ fun Button(
 @PreviewLightDark
 @Composable
 private fun ButtonPrimaryPreview() = PreviewHelper {
-    Button("Primary", { }, primary = true)
+    Button("Primary", {}, primary = true)
 }
 
 @PreviewLightDark
 @Composable
 private fun ButtonSecondaryPreview() = PreviewHelper {
-    Button("Secondary", { }, primary = false)
+    Button("Secondary", {}, primary = false)
 }

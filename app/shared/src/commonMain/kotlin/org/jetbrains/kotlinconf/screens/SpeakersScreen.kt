@@ -36,7 +36,6 @@ import org.jetbrains.kotlinconf.generated.resources.speakers_error_no_data
 import org.jetbrains.kotlinconf.generated.resources.speakers_number_of_results
 import org.jetbrains.kotlinconf.generated.resources.speakers_title
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
-import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
@@ -48,6 +47,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_hint
 import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
@@ -77,7 +77,7 @@ fun SpeakersScreen(
     Column(
         Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .padding(topInsetPadding()),
     ) {
         MainHeaderContainer(
             state = searchState,
@@ -88,9 +88,11 @@ fun SpeakersScreen(
                         TopMenuButton(
                             icon = UiRes.drawable.search_24,
                             onClick = { searchState = MainHeaderContainerState.Search },
-                            contentDescription = stringResource(UiRes.string.main_header_search_hint)
+                            contentDescription = stringResource(
+                                UiRes.string.main_header_search_hint,
+                            ),
                         )
-                    }
+                    },
                 )
             },
             searchContent = {
@@ -112,7 +114,7 @@ fun SpeakersScreen(
                     },
                     onClear = { searchText = "" },
                 )
-            }
+            },
         )
 
         HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
@@ -138,15 +140,14 @@ fun SpeakersScreen(
                             text = pluralStringResource(
                                 Res.plurals.speakers_number_of_results,
                                 speakers.size,
-                                speakers.size
+                                speakers.size,
                             ),
                             color = KotlinConfTheme.colors.secondaryText,
                             style = KotlinConfTheme.typography.text2,
-                            modifier = Modifier
-                                .animateItem()
+                            modifier = Modifier.animateItem()
                                 .padding(horizontal = 12.dp)
                                 .padding(top = 12.dp, bottom = 4.dp)
-                                .semantics { liveRegion = LiveRegionMode.Polite }
+                                .semantics { liveRegion = LiveRegionMode.Polite },
                         )
                     }
                 }
@@ -158,10 +159,7 @@ fun SpeakersScreen(
                         title = speaker.position,
                         titleHighlights = speakerWithHighlights.titleHighlights,
                         photoUrl = speaker.photoUrl,
-                        modifier = Modifier
-                            .animateItem()
-                            .fillMaxWidth()
-                            .padding(12.dp),
+                        modifier = Modifier.animateItem().fillMaxWidth().padding(12.dp),
                         onClick = { onSpeaker(speaker.id) },
                     )
                 }

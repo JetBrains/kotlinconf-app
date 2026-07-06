@@ -5,12 +5,12 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.TestApplication
-import kotlinx.coroutines.test.runTest
-import org.jetbrains.kotlinconf.GoldenKodeeData
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
+import kotlinx.coroutines.test.runTest
+import org.jetbrains.kotlinconf.GoldenKodeeData
 
 class GoldenKodeeApiTest {
     val app = TestApplication {
@@ -70,7 +70,11 @@ class GoldenKodeeApiTest {
         val data = client.get("/2025/golden-kodee").body<GoldenKodeeData>()
 
         for (category in data.categories) {
-            assertNotEquals(0, category.nominees.size, "Category '${category.title}' has no nominees")
+            assertNotEquals(
+                0,
+                category.nominees.size,
+                "Category '${category.title}' has no nominees",
+            )
         }
     }
 
@@ -81,7 +85,10 @@ class GoldenKodeeApiTest {
         for (category in data.categories) {
             for (nominee in category.nominees) {
                 assertTrue(nominee.name.isNotBlank(), "Nominee ${nominee.id} has blank name")
-                assertTrue(nominee.photoUrl.isNotBlank(), "Nominee ${nominee.id} has blank photoUrl")
+                assertTrue(
+                    nominee.photoUrl.isNotBlank(),
+                    "Nominee ${nominee.id} has blank photoUrl",
+                )
             }
         }
     }
@@ -92,7 +99,10 @@ class GoldenKodeeApiTest {
 
         for (category in data.categories) {
             val winners = category.nominees.count { it.winner }
-            assertTrue(winners <= 1, "Category '${category.title}' should have at most one winner, but has $winners")
+            assertTrue(
+                winners <= 1,
+                "Category '${category.title}' should have at most one winner, but has $winners",
+            )
         }
     }
 }

@@ -3,6 +3,7 @@ package org.jetbrains.kotlinconf.backend.services
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,12 +18,11 @@ import org.jetbrains.kotlinconf.backend.model.CategoryItemData
 import org.jetbrains.kotlinconf.backend.model.SessionizeData
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.slf4j.LoggerFactory
-import kotlin.time.Duration.Companion.minutes
 
 class SessionizeService(
     private val client: HttpClient,
     scope: CoroutineScope,
-    config: ConferenceConfig
+    config: ConferenceConfig,
 ) {
     private val conference = MutableSharedFlow<Conference>(replay = 1)
 
@@ -36,10 +36,11 @@ class SessionizeService(
             while (true) {
                 log.trace("Synchronizing to Sessionize…")
                 runCatching {
-                    synchronizeWithSessionize(sessionizeUrl)
-                }.onFailure { cause ->
-                    log.error("Failed to synchronize to Sessionize: ${cause.message}", cause)
-                }
+                        synchronizeWithSessionize(sessionizeUrl)
+                    }
+                    .onFailure { cause ->
+                        log.error("Failed to synchronize to Sessionize: ${cause.message}", cause)
+                    }
 
                 log.trace("Finished loading data from Sessionize.")
                 delay(sessionizeInterval.minutes)
@@ -50,16 +51,14 @@ class SessionizeService(
     suspend fun synchronizeWithSessionize(
         sessionizeUrl: String,
     ) {
-        val updatedValue = client.get(sessionizeUrl)
-            .body<SessionizeData>()
-            .toConference()
+        val updatedValue = client.get(sessionizeUrl).body<SessionizeData>().toConference()
 
         conference.emit(updatedValue)
     }
 
     suspend fun fetchImage(
         imagesUrl: String,
-        imageId: String
+        imageId: String,
     ): ByteArray {
         return client.get("$imagesUrl/$imageId").body<ByteArray>()
     }
@@ -67,9 +66,7 @@ class SessionizeService(
     suspend fun getConferenceData(): Conference = conference.first()
 
     private fun SessionizeData.toConference(): Conference {
-        val tags: Map<Int, CategoryItemData> = categories
-            .flatMap { it.items }
-            .associateBy { it.id }
+        val tags: Map<Int, CategoryItemData> = categories.flatMap { it.items }.associateBy { it.id }
 
         fun findRoom(id: Int) = rooms.find { it.id == id }?.name ?: "unknown"
 
@@ -85,11 +82,13 @@ class SessionizeService(
                 title = it.displayTitle,
                 description = it.descriptionText ?: "",
                 speakerIds = it.speakers,
-                location = (it.roomId?.let<Int, String> { findRoom(it) } ?: "unknown").removeSuffix(" (Lightning talks)"),
+                location = (it.roomId?.let<Int, String> { findRoom(it) } ?: "unknown").removeSuffix(
+                    " (Lightning talks)",
+                ),
                 startsAt = startsAt.toLocalDateTime(EVENT_TIME_ZONE),
                 endsAt = endsAt.toLocalDateTime(EVENT_TIME_ZONE),
                 tags = tags,
-                videoUrl = it.recordingUrl
+                videoUrl = it.recordingUrl,
             )
         }.mergeWorkshops()
 
@@ -99,7 +98,7 @@ class SessionizeService(
                 it.fullName,
                 it.tagLine ?: "",
                 it.bio ?: "",
-                it.profilePicture ?: ""
+                it.profilePicture ?: "",
             )
         }
 
@@ -125,7 +124,7 @@ class SessionizeService(
                 first.location,
                 startTime,
                 endTime,
-                first.tags
+                first.tags,
             )
         }
 

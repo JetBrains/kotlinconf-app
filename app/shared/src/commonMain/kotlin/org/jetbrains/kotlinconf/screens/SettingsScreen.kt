@@ -30,9 +30,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.kotlinconf.flags.LocalFlags
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.Theme
+import org.jetbrains.kotlinconf.flags.LocalFlags
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.settings_notifications_title
 import org.jetbrains.kotlinconf.generated.resources.settings_theme_dark
@@ -64,14 +64,15 @@ fun SettingsScreen(
             Spacer(Modifier.height(24.dp))
 
             if (LocalFlags.current.supportsNotifications) {
-                val notificationSettings = viewModel.notificationSettings.collectAsStateWithLifecycle().value
+                val notificationSettings =
+                    viewModel.notificationSettings.collectAsStateWithLifecycle().value
                 if (notificationSettings != null) {
                     SectionHeading(stringResource(Res.string.settings_notifications_title))
                     NotificationSettings(
                         notificationSettings = notificationSettings,
                         onChangeSettings = { newSettings ->
                             viewModel.setNotificationSettings(newSettings)
-                        }
+                        },
                     )
                 }
             }
@@ -87,8 +88,7 @@ private fun SectionHeading(
     Text(
         text = text,
         style = KotlinConfTheme.typography.h2,
-        modifier = modifier.semantics { heading() }
-            .padding(top = 16.dp, bottom = 12.dp)
+        modifier = modifier.semantics { heading() }.padding(top = 16.dp, bottom = 12.dp),
     )
 }
 
@@ -98,11 +98,11 @@ private val themes = listOf(Theme.SYSTEM, Theme.DARK, Theme.LIGHT)
 private fun ThemeSelector(
     currentTheme: Theme,
     onThemeChange: (Theme) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier.selectableGroup()
+        modifier = modifier.selectableGroup(),
     ) {
         themes.forEach { theme ->
             ThemeBox(
@@ -120,41 +120,38 @@ private fun ThemeBox(
     theme: Theme,
     isSelected: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .selectable(
-                selected = isSelected,
-                onClick = onClick,
-                role = Role.RadioButton,
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() },
-            )
+        modifier = modifier.selectable(
+            selected = isSelected,
+            onClick = onClick,
+            role = Role.RadioButton,
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() },
+        ),
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .then(
+            modifier = Modifier.then(
                     if (isSelected) {
-                        Modifier
-                            .border(
-                                width = 2.dp,
-                                color = KotlinConfTheme.colors.primaryBackground,
-                                shape = RoundedCornerShape(20.dp)
-                            )
-                    } else Modifier
+                        Modifier.border(
+                            width = 2.dp,
+                            color = KotlinConfTheme.colors.primaryBackground,
+                            shape = RoundedCornerShape(20.dp),
+                        )
+                    } else Modifier,
                 )
                 .padding(6.dp)
                 .border(
                     width = 2.dp,
                     color = KotlinConfTheme.colors.strokePale,
-                    shape = KotlinConfTheme.shapes.roundedCornerMd
+                    shape = KotlinConfTheme.shapes.roundedCornerMd,
                 )
                 .clip(KotlinConfTheme.shapes.roundedCornerMd)
                 .heightIn(max = 112.dp)
-                .aspectRatio(1f)
+                .aspectRatio(1f),
         ) {
             Image(
                 painter = painterResource(
@@ -162,10 +159,10 @@ private fun ThemeBox(
                         Theme.SYSTEM -> Res.drawable.theme_system
                         Theme.LIGHT -> Res.drawable.theme_light
                         Theme.DARK -> Res.drawable.theme_dark
-                    }
+                    },
                 ),
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             )
         }
         Spacer(Modifier.height(8.dp))
@@ -175,10 +172,10 @@ private fun ThemeBox(
                     Theme.SYSTEM -> Res.string.settings_theme_system
                     Theme.LIGHT -> Res.string.settings_theme_light
                     Theme.DARK -> Res.string.settings_theme_dark
-                }
+                },
             ),
             style = KotlinConfTheme.typography.text2,
-            color = KotlinConfTheme.colors.primaryText
+            color = KotlinConfTheme.colors.primaryText,
         )
     }
 }

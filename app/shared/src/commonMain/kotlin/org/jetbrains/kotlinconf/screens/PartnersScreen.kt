@@ -38,7 +38,6 @@ import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
-
 @Composable
 fun PartnersScreen(
     onBack: () -> Unit,
@@ -51,7 +50,7 @@ fun PartnersScreen(
     Column(
         Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .padding(topInsetPadding()),
     ) {
         MainHeaderTitleBar(
             title = stringResource(Res.string.partners_title),
@@ -61,7 +60,7 @@ fun PartnersScreen(
                     contentDescription = stringResource(UiRes.string.main_header_back),
                     onClick = onBack,
                 )
-            }
+            },
         )
 
         HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
@@ -87,7 +86,7 @@ fun PartnersScreen(
                                 style = KotlinConfTheme.typography.h1,
                                 modifier = Modifier.fillMaxWidth()
                                     .background(KotlinConfTheme.colors.mainBackground)
-                                    .padding(vertical = 12.dp)
+                                    .padding(vertical = 12.dp),
                             )
                         }
                         items(group.partners) { partner ->
@@ -95,7 +94,7 @@ fun PartnersScreen(
                             PartnerCard(
                                 name = partner.name,
                                 logoUrl = logoUrl,
-                                onClick = { onPartnerDetail(partner.id) }
+                                onClick = { onPartnerDetail(partner.id) },
                             )
                         }
                     }

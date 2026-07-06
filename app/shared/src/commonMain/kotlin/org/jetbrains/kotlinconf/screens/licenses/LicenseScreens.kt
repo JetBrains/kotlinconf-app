@@ -61,8 +61,7 @@ import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
-private val Library.licenseContent: String
-    get() = licenses.firstOrNull()?.licenseContent ?: ""
+private val Library.licenseContent: String get() = licenses.firstOrNull()?.licenseContent ?: ""
 
 @Composable
 fun LicensesScreen(
@@ -88,10 +87,9 @@ fun LicensesScreen(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .padding(topInsetPadding()),
     ) {
         MainHeaderContainer(
             state = searchState,
@@ -109,9 +107,11 @@ fun LicensesScreen(
                         TopMenuButton(
                             icon = UiRes.drawable.search_24,
                             onClick = { searchState = MainHeaderContainerState.Search },
-                            contentDescription = stringResource(UiRes.string.main_header_search_hint)
+                            contentDescription = stringResource(
+                                UiRes.string.main_header_search_hint,
+                            ),
                         )
-                    }
+                    },
                 )
             },
             searchContent = {
@@ -133,7 +133,7 @@ fun LicensesScreen(
                     },
                     onClear = { searchText = "" },
                 )
-            }
+            },
         )
 
         HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
@@ -145,10 +145,8 @@ fun LicensesScreen(
                 onLicenseClick(library.licenseName, library.licenseContent)
             },
             listState = listState,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(PaddingValues(horizontal = 12.dp))
-                .clipToBounds(),
+            modifier =
+                Modifier.fillMaxSize().padding(PaddingValues(horizontal = 12.dp)).clipToBounds(),
         )
     }
 }
@@ -193,15 +191,14 @@ private fun LibraryList(
                         text = pluralStringResource(
                             Res.plurals.licenses_number_of_results,
                             libraries.size,
-                            libraries.size
+                            libraries.size,
                         ),
                         color = KotlinConfTheme.colors.secondaryText,
                         style = KotlinConfTheme.typography.text2,
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp)
+                        modifier = Modifier.padding(horizontal = 12.dp)
                             .padding(bottom = 4.dp)
                             .semantics { liveRegion = LiveRegionMode.Polite }
-                            .animateItem()
+                            .animateItem(),
                     )
                 }
             }
@@ -231,8 +228,7 @@ private fun LibraryItem(
     licenseHighlights: List<IntRange> = emptyList(),
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
             .background(
                 color = KotlinConfTheme.colors.tileBackground,
                 shape = KotlinConfTheme.shapes.roundedCornerMd,
@@ -249,7 +245,7 @@ private fun LibraryItem(
                 text = highlightText(library.name, nameHighlights),
                 style = KotlinConfTheme.typography.h3,
                 color = KotlinConfTheme.colors.primaryText,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
             Text(
                 text = library.artifactVersion ?: "",

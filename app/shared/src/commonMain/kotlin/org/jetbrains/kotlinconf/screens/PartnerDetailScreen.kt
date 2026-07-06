@@ -50,7 +50,7 @@ fun PartnerDetailScreen(
                     contentDescription = partner.name,
                     modifier = Modifier.fillMaxWidth()
                         .height(180.dp)
-                        .padding(horizontal = 32.dp, vertical = 16.dp)
+                        .padding(horizontal = 32.dp, vertical = 16.dp),
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))

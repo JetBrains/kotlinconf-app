@@ -14,8 +14,7 @@ actual class Svg actual constructor(svgString: String) {
         }
     }
 
-    actual val width: Float
-        get() = svg.documentWidth
-    actual val height: Float
-        get() = svg.documentHeight
+    actual val width: Float get() = svg.documentWidth
+
+    actual val height: Float get() = svg.documentHeight
 }

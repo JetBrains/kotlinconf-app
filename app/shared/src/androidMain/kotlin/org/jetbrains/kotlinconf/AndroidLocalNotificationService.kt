@@ -50,7 +50,11 @@ class AndroidLocalNotificationService(
     private val alarmManager = context.getSystemService<AlarmManager>()
 
     init {
-        val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, "All notifications", IMPORTANCE_HIGH)
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL_ID,
+            "All notifications",
+            IMPORTANCE_HIGH,
+        )
         notificationManager.createNotificationChannel(channel)
     }
 
@@ -67,7 +71,10 @@ class AndroidLocalNotificationService(
     override suspend fun requestPermission(): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true
 
-        val permissions = listOfNotNull(Manifest.permission.POST_NOTIFICATIONS, getRelevantAlarmPermission())
+        val permissions = listOfNotNull(
+            Manifest.permission.POST_NOTIFICATIONS,
+            getRelevantAlarmPermission(),
+        )
         return permissionHandler.requestPermissions(permissions.toTypedArray())
     }
 
@@ -98,7 +105,7 @@ class AndroidLocalNotificationService(
         title: String,
         message: String,
         localNotificationId: LocalNotificationId,
-        time: LocalDateTime
+        time: LocalDateTime,
     ) {
         alarmManager ?: return
 
@@ -112,22 +119,32 @@ class AndroidLocalNotificationService(
             context,
             localNotificationId.hashCode(),
             intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
 
         val triggerTime = timeProvider.getNotificationTime(time).toInstant(EVENT_TIME_ZONE)
         val triggerAtMillis = triggerTime.toEpochMilliseconds()
 
         val alarmPermission = getRelevantAlarmPermission()
-        if (alarmPermission != null &&
-            ContextCompat.checkSelfPermission(context, alarmPermission) != PackageManager.PERMISSION_GRANTED
+        if (
+            alarmPermission != null &&
+            ContextCompat.checkSelfPermission(context, alarmPermission) !=
+                PackageManager.PERMISSION_GRANTED
         ) {
-            logger.log(LOG_TAG) { "No ${alarmPermission}} permission to schedule notification $localNotificationId" }
+            logger.log(LOG_TAG) {
+                "No ${alarmPermission}} permission to schedule notification $localNotificationId"
+            }
             return
         }
 
-        logger.log(LOG_TAG) { "Setting alarm for notification $localNotificationId, $triggerTime ($triggerAtMillis)" }
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+        logger.log(LOG_TAG) {
+            "Setting alarm for notification $localNotificationId, $triggerTime ($triggerAtMillis)"
+        }
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            triggerAtMillis,
+            pendingIntent,
+        )
     }
 
     private fun showNotification(
@@ -135,22 +152,24 @@ class AndroidLocalNotificationService(
         message: String,
         localNotificationId: LocalNotificationId,
     ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
-            != PackageManager.PERMISSION_GRANTED
+        if (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) !=
+                PackageManager.PERMISSION_GRANTED
         ) {
             logger.log(LOG_TAG) { "Skipping notification $localNotificationId, no permission" }
             return
         }
 
-        val mainActivityIntent = Intent(context, Class.forName("org.jetbrains.kotlinconf.android.MainActivity"))
+        val mainActivityIntent =
+            Intent(context, Class.forName("org.jetbrains.kotlinconf.android.MainActivity"))
             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             .putExtra(EXTRA_LOCAL_NOTIFICATION_ID, localNotificationId.toString())
         val pendingIntent = PendingIntent.getActivity(
             context,
             localNotificationId.hashCode(),
             mainActivityIntent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
 
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
@@ -181,7 +200,7 @@ class AndroidLocalNotificationService(
             context,
             localNotificationId.hashCode(),
             intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE,
         )
         pendingIntent?.let { alarmManager?.cancel(it) }
         logger.log(LOG_TAG) { "Canceled scheduled notification $localNotificationId" }
@@ -192,7 +211,7 @@ class AndroidLocalNotificationService(
 @BroadcastReceiverKey(AlarmBroadcastReceiver::class)
 @ContributesIntoMap(AppScope::class, binding = binding<BroadcastReceiver>())
 class AlarmBroadcastReceiver(
-    private val localNotificationService: LocalNotificationService
+    private val localNotificationService: LocalNotificationService,
 ) : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != ACTION_SHOW_NOTIFICATION) return

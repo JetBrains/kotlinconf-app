@@ -2,10 +2,7 @@ package org.jetbrains.kotlinconf.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.EaseInCubic
 import androidx.compose.animation.core.EaseInExpo
-import androidx.compose.animation.core.EaseOutBounce
 import androidx.compose.animation.core.EaseOutCubic
 import androidx.compose.animation.core.EaseOutExpo
 import androidx.compose.animation.core.LinearEasing
@@ -53,6 +50,12 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.floor
+import kotlin.math.sin
+import kotlin.random.Random
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.vectorResource
@@ -61,12 +64,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.kodee_emotion_positive
 import org.jetbrains.kotlinconf.ui.generated.resources.kodee_small_positive_filled
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import kotlin.math.abs
-import kotlin.math.cos
-import kotlin.math.floor
-import kotlin.math.sin
-import kotlin.random.Random
-import kotlin.time.Duration.Companion.seconds
 
 private const val TwoPi: Float = 6.2831855f
 
@@ -79,14 +76,14 @@ private val PartyPalette = listOf(
     Color(0xFF00D1FF),
 )
 
-private fun partyLightColor(color: Color, darkTheme: Boolean): Color =
-    if (darkTheme) color else lerp(color, Color.White, 0.38f)
+private fun partyLightColor(color: Color, darkTheme: Boolean): Color = if (darkTheme) color
+else lerp(color, Color.White, 0.38f)
 
-private fun partyLightAlpha(alpha: Float, darkTheme: Boolean): Float =
-    if (darkTheme) alpha else (alpha * 1.08f).coerceAtMost(1f)
+private fun partyLightAlpha(alpha: Float, darkTheme: Boolean): Float = if (darkTheme) alpha
+else (alpha * 1.08f).coerceAtMost(1f)
 
-private fun partyLightScrimAlpha(alpha: Float, darkTheme: Boolean): Float =
-    if (darkTheme) 0f else (alpha * 0.32f).coerceAtMost(0.26f)
+private fun partyLightScrimAlpha(alpha: Float, darkTheme: Boolean): Float = if (darkTheme) 0f
+else (alpha * 0.32f).coerceAtMost(0.26f)
 
 @Composable
 private fun PartyAnimation(
@@ -111,7 +108,9 @@ private val CannonCooldown = 10.seconds
 fun PartyEventCard(
     active: Boolean,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
+    content:
+        @Composable
+        () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val intensity = remember { Animatable(0f) }
@@ -351,7 +350,10 @@ private fun PartyLights(
     }
 }
 
-private enum class KodeeStyle { Bouncer, Dancer }
+private enum class KodeeStyle {
+    Bouncer,
+    Dancer
+}
 
 private data class KodeeSpec(
     val xF: Float,
@@ -396,16 +398,15 @@ private fun PartyKodees(
             Image(
                 painter = kodeePainter,
                 contentDescription = null,
-                modifier = Modifier
-                    .layout { measurable, constraints ->
-                        val sizePx = sizeDp.roundToPx()
-                        val placeable = measurable.measure(Constraints.fixed(sizePx, sizePx))
-                        val px = (constraints.maxWidth * k.xF).toInt() - sizePx / 2
-                        val py = (constraints.maxHeight * k.yF).toInt() - sizePx / 2
-                        layout(constraints.maxWidth, constraints.maxHeight) {
-                            placeable.place(px, py)
-                        }
+                modifier = Modifier.layout { measurable, constraints ->
+                    val sizePx = sizeDp.roundToPx()
+                    val placeable = measurable.measure(Constraints.fixed(sizePx, sizePx))
+                    val px = (constraints.maxWidth * k.xF).toInt() - sizePx / 2
+                    val py = (constraints.maxHeight * k.yF).toInt() - sizePx / 2
+                    layout(constraints.maxWidth, constraints.maxHeight) {
+                        placeable.place(px, py)
                     }
+                }
                     .graphicsLayer {
                         val i = intensity()
                         val phase = t + k.phase
@@ -436,7 +437,12 @@ private fun PartyKodees(
     }
 }
 
-private enum class ConfettiShape { Rectangle, Circle, Triangle, Strip }
+private enum class ConfettiShape {
+    Rectangle,
+    Circle,
+    Triangle,
+    Strip
+}
 
 private data class ConfettiParticle(
     val xF: Float,
@@ -462,8 +468,7 @@ private val ConfettiParticles: List<ConfettiParticle> = run {
     val shapes = ConfettiShape.entries
     val count = 56
     List(count) { index ->
-        val revealThreshold = ConfettiStart +
-            (1f - ConfettiStart) * (index.toFloat() / count)
+        val revealThreshold = ConfettiStart + (1f - ConfettiStart) * (index.toFloat() / count)
         ConfettiParticle(
             xF = rng.nextFloat(),
             sizeDp = 5f + rng.nextFloat() * 7f,
@@ -653,9 +658,7 @@ private fun KodeeCannon(
 @Composable
 private fun PartyAnimationPreview() = PreviewHelper {
     PartyAnimation(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp),
+        modifier = Modifier.fillMaxWidth().height(200.dp),
         intensity = { 1f },
     )
 }
@@ -664,9 +667,7 @@ private fun PartyAnimationPreview() = PreviewHelper {
 @Composable
 private fun PartyAnimationBaselinePreview() = PreviewHelper {
     PartyAnimation(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp),
+        modifier = Modifier.fillMaxWidth().height(200.dp),
         intensity = { 0f },
     )
 }

@@ -27,12 +27,24 @@ import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 
 @Composable
 fun AdaptiveDetailLayout(
-    compactHeader: @Composable () -> Unit,
-    compactContentHeader: @Composable ColumnScope.() -> Unit,
-    largeContentHeader: @Composable ColumnScope.() -> Unit,
-    unifiedContent: @Composable ColumnScope.() -> Unit,
-    largeMainContent: @Composable ColumnScope.() -> Unit,
-    largeSideContent: @Composable ColumnScope.() -> Unit,
+    compactHeader:
+        @Composable
+        () -> Unit,
+    compactContentHeader:
+        @Composable
+        ColumnScope.() -> Unit,
+    largeContentHeader:
+        @Composable
+        ColumnScope.() -> Unit,
+    unifiedContent:
+        @Composable
+        ColumnScope.() -> Unit,
+    largeMainContent:
+        @Composable
+        ColumnScope.() -> Unit,
+    largeSideContent:
+        @Composable
+        ColumnScope.() -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -41,10 +53,8 @@ fun AdaptiveDetailLayout(
     ScrollToTopHandler(scrollState)
     HideKeyboardOnDragHandler(scrollState)
 
-    val contentModifier = Modifier
-        .verticalScroll(scrollState)
-        .padding(bottom = 24.dp)
-        .padding(bottomInsetPadding())
+    val contentModifier =
+        Modifier.verticalScroll(scrollState).padding(bottom = 24.dp).padding(bottomInsetPadding())
 
     when (LocalWindowSize.current) {
         WindowSize.Compact -> {
@@ -60,13 +70,11 @@ fun AdaptiveDetailLayout(
         WindowSize.Medium -> {
             Box(modifier) {
                 Row(
-                    contentModifier
-                        .padding(start = 56.dp, top = 24.dp)
-                        .padding(horizontal = 24.dp)
+                    contentModifier.padding(start = 56.dp, top = 24.dp).padding(horizontal = 24.dp),
                 ) {
                     Spacer(Modifier.weight(1f))
                     Column(
-                        Modifier.widthIn(max = 640.dp)
+                        Modifier.widthIn(max = 640.dp),
                     ) {
                         largeContentHeader()
                         unifiedContent()
@@ -80,14 +88,10 @@ fun AdaptiveDetailLayout(
                         contentDescription = stringResource(UiRes.string.main_header_back),
                         onClick = onBack,
                         large = true,
-                        modifier = Modifier
-                            .padding(start = 24.dp, top = 24.dp)
+                        modifier = Modifier.padding(start = 24.dp, top = 24.dp),
                     )
                     Spacer(
-                        Modifier
-                            .padding(horizontal = 24.dp)
-                            .widthIn(max = 640.dp)
-                            .fillMaxWidth()
+                        Modifier.padding(horizontal = 24.dp).widthIn(max = 640.dp).fillMaxWidth(),
                     )
                     Spacer(Modifier.weight(1f))
                 }
@@ -97,9 +101,7 @@ fun AdaptiveDetailLayout(
         WindowSize.Large -> {
             Box(modifier) {
                 Column(
-                    contentModifier
-                        .padding(start = 56.dp, top = 24.dp)
-                        .padding(horizontal = 24.dp)
+                    contentModifier.padding(start = 56.dp, top = 24.dp).padding(horizontal = 24.dp),
                 ) {
                     largeContentHeader()
                     Row {
@@ -117,8 +119,7 @@ fun AdaptiveDetailLayout(
                     contentDescription = stringResource(UiRes.string.main_header_back),
                     onClick = onBack,
                     large = true,
-                    modifier = Modifier
-                        .padding(start = 24.dp, top = 24.dp)
+                    modifier = Modifier.padding(start = 24.dp, top = 24.dp),
                 )
             }
         }

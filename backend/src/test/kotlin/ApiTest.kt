@@ -5,10 +5,10 @@ import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.config.*
 import io.ktor.server.testing.*
-import kotlinx.coroutines.test.runTest
-import org.jetbrains.kotlinconf.Conference
 import kotlin.test.Test
 import kotlin.test.assertFalse
+import kotlinx.coroutines.test.runTest
+import org.jetbrains.kotlinconf.Conference
 
 class ApiTest {
     val app = TestApplication {

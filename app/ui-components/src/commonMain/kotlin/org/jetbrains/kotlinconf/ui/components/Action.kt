@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
@@ -20,10 +21,10 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_right_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 enum class ActionSize {
-    Medium, Large,
+    Medium,
+    Large,
 }
 
 @Composable
@@ -37,27 +38,25 @@ fun Action(
     iconRotation: Float = 0f,
 ) {
     val color by animateColorAsState(
-        if (enabled) KotlinConfTheme.colors.primaryText
-        else KotlinConfTheme.colors.noteText,
+        if (enabled) KotlinConfTheme.colors.primaryText else KotlinConfTheme.colors.noteText,
         ColorSpringSpec,
     )
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .then(
-                if (onClick != null) {
-                    Modifier.clickable(
-                        onClick = onClick,
-                        enabled = enabled,
-                        interactionSource = null,
-                        indication = null,
-                        role = Role.Button,
-                    )
-                } else {
-                    Modifier
-                }
-            )
+        modifier = modifier.then(
+            if (onClick != null) {
+                Modifier.clickable(
+                    onClick = onClick,
+                    enabled = enabled,
+                    interactionSource = null,
+                    indication = null,
+                    role = Role.Button,
+                )
+            } else {
+                Modifier
+            },
+        ),
     ) {
         Text(
             text = label,
@@ -70,12 +69,11 @@ fun Action(
             modifier = Modifier.weight(1f, fill = false),
         )
         Icon(
-            modifier = Modifier
-                .size(
+            modifier = Modifier.size(
                     when (size) {
                         ActionSize.Medium -> 20.dp
                         ActionSize.Large -> 24.dp
-                    }
+                    },
                 )
                 .graphicsLayer { rotationZ = iconRotation },
             painter = painterResource(icon),
@@ -104,7 +102,8 @@ private class ActionPreviewParamsProvider : PreviewParameterProvider<ActionPrevi
 @PreviewLightDark
 @Composable
 private fun ActionPreview(
-    @PreviewParameter(ActionPreviewParamsProvider::class) params: ActionPreviewParams,
+    @PreviewParameter(ActionPreviewParamsProvider::class)
+    params: ActionPreviewParams,
 ) = PreviewHelper {
     Action(
         label = "Action",

@@ -29,5 +29,4 @@ class TimeService {
             (start + offset).timestamp
         }
     }
-
 }

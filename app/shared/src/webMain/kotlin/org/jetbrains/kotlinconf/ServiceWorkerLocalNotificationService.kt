@@ -3,20 +3,20 @@ package org.jetbrains.kotlinconf
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import kotlin.js.js
 import kotlinx.datetime.LocalDateTime
 import web.notifications.Notification
 import web.notifications.NotificationPermission
 import web.notifications.granted
 import web.notifications.requestPermission
-import kotlin.js.js
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class ServiceWorkerLocalNotificationService(
     private val timeProvider: TimeProvider,
 ) : LocalNotificationService {
-    override suspend fun requestPermission(): Boolean =
-        Notification.requestPermission() == NotificationPermission.granted
+    override suspend fun requestPermission(): Boolean = Notification.requestPermission() ==
+        NotificationPermission.granted
 
     override fun post(
         localNotificationId: LocalNotificationId,
@@ -46,10 +46,9 @@ private fun registerNotificationByServiceWorker(
     delay: Long,
     notificationId: String,
     title: String,
-    message: String
-): Unit =
-    js(
-        """{
+    message: String,
+): Unit = js(
+    """{
         if (typeof navigator === "undefined" || navigator.serviceWorker == null || !navigator.serviceWorker.ready) return;
         navigator.serviceWorker.ready.then(function (registration) {
           registration.active.postMessage({
@@ -60,12 +59,11 @@ private fun registerNotificationByServiceWorker(
             delay: Number(delay),
           });
         });
-        }"""
-    )
+        }""",
+)
 
-private fun cancelNotificationByServiceWorker(notificationId: String): Unit =
-    js(
-        """{
+private fun cancelNotificationByServiceWorker(notificationId: String): Unit = js(
+    """{
         if (typeof navigator === "undefined" || navigator.serviceWorker == null || !navigator.serviceWorker.ready) return;
         navigator.serviceWorker.ready.then(function (registration) {
           registration.active.postMessage({
@@ -73,5 +71,5 @@ private fun cancelNotificationByServiceWorker(notificationId: String): Unit =
             notificationId: notificationId,
           });
         });
-        }"""
-    )
+        }""",
+)

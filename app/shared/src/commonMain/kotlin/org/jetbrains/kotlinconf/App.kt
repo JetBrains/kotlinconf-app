@@ -29,9 +29,8 @@ fun App(
         Theme.DARK -> true
     }
 
-    val isOnboardingComplete = service.isOnboardingComplete()
-        .collectAsStateWithLifecycle(initialValue = null)
-        .value
+    val isOnboardingComplete =
+        service.isOnboardingComplete().collectAsStateWithLifecycle(initialValue = null).value
 
     val flags by appGraph.flagsManager.flags.collectAsStateWithLifecycle()
     CompositionLocalProvider(
@@ -48,7 +47,6 @@ fun App(
     }
 }
 
-public val LocalAppGraph: ProvidableCompositionLocal<AppGraph> =
-    staticCompositionLocalOf {
-        error("No AppGraph registered")
-    }
+public val LocalAppGraph: ProvidableCompositionLocal<AppGraph> = staticCompositionLocalOf {
+    error("No AppGraph registered")
+}

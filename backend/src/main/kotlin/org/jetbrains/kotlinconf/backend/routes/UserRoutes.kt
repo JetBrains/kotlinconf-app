@@ -6,12 +6,12 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
+import kotlin.time.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.kotlinconf.backend.repositories.KotlinConfRepository
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.koin.ktor.ext.inject
-import kotlin.time.Clock
 
 /*
 POST http://localhost:8080/{year}/sign

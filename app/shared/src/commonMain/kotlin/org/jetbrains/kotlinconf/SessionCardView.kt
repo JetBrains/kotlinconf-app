@@ -1,10 +1,10 @@
 package org.jetbrains.kotlinconf
 
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.kotlinconf.ui.components.Emotion
 import org.jetbrains.kotlinconf.utils.DateTimeFormatting
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
 
 data class SessionCardView(
     val id: SessionId,
@@ -29,11 +29,9 @@ data class SessionCardView(
 
 val SessionCardView.isLive get() = state == SessionState.Live
 
-val SessionCardView.isServiceEvent: Boolean
-    get() = speakerIds.isEmpty() && tags.isEmpty()
+val SessionCardView.isServiceEvent: Boolean get() = speakerIds.isEmpty() && tags.isEmpty()
 
-val Session.isLightning: Boolean
-    get() = endsAt - startsAt <= LIGHTNING_TALK_LIMIT
+val Session.isLightning: Boolean get() = endsAt - startsAt <= LIGHTNING_TALK_LIMIT
 
 // Maximum duration of a talk for it to be considered a lighting talk
 private val LIGHTNING_TALK_LIMIT: Duration = 15.minutes

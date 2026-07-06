@@ -4,14 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.jetbrains.kotlinconf.ConferenceImages
 import org.jetbrains.kotlinconf.ConferenceInfo
 import org.jetbrains.kotlinconf.ConferenceService
 import org.jetbrains.kotlinconf.SessionCardView
@@ -33,9 +31,10 @@ class AboutConferenceViewModel(
     service: ConferenceService,
 ) : ViewModel() {
     val events: StateFlow<List<AboutConferenceEvent>> =
-        combine(service.agenda, service.speakers, service.conferenceInfo) { agenda, speakers, conferenceInfo ->
-            val sessionsById = agenda
-                .flatMap { it.timeSlots.flatMap { it.sessions } }
+        combine(service.agenda, service.speakers, service.conferenceInfo) { agenda,
+        speakers,
+        conferenceInfo ->
+            val sessionsById = agenda.flatMap { it.timeSlots.flatMap { it.sessions } }
                 .associateBy { it.id }
             val speakersById = speakers.associateBy { it.id }
             val aboutBlocks = conferenceInfo?.aboutBlocks ?: emptyList()
@@ -53,8 +52,9 @@ class AboutConferenceViewModel(
                     description = block.description,
                 )
             }
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    val conferenceInfo: StateFlow<ConferenceInfo?> = service.conferenceInfo
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+    val conferenceInfo: StateFlow<ConferenceInfo?> =
+        service.conferenceInfo.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 }

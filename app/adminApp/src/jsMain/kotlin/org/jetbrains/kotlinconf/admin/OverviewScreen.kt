@@ -1,6 +1,5 @@
 // ABOUTME: The overview dashboard: per-session vote tallies, filters, sorting, CSV export, and feedback.
 // ABOUTME: Each feedback comment links to the commenter's user page via their pseudo-name.
-
 package org.jetbrains.kotlinconf.admin
 
 import androidx.compose.runtime.Composable
@@ -13,7 +12,17 @@ import org.jetbrains.compose.web.attributes.*
 import org.jetbrains.compose.web.dom.*
 import org.jetbrains.kotlinconf.Score
 
-private enum class SortKey { TITLE, SPEAKER, GOOD, OK, BAD, TOTAL, RATING, POPULARITY, FEEDBACK }
+private enum class SortKey {
+    TITLE,
+    SPEAKER,
+    GOOD,
+    OK,
+    BAD,
+    TOTAL,
+    RATING,
+    POPULARITY,
+    FEEDBACK
+}
 
 private data class Column(val key: SortKey, val label: String, val right: Boolean)
 
@@ -40,8 +49,7 @@ fun OverviewScreen(data: AggregatedData, year: Int, onOpenUser: (String) -> Unit
     var expanded by remember { mutableStateOf(emptySet<String>()) }
 
     val visible = remember(data, query, minVotes, onlyFeedback, hideEmpty, sortKey, sortDir) {
-        data.rows
-            .filter { row -> matchesFilters(row, query, minVotes, onlyFeedback, hideEmpty) }
+        data.rows.filter { row -> matchesFilters(row, query, minVotes, onlyFeedback, hideEmpty) }
             .sortedWith(comparatorFor(sortKey, sortDir))
     }
 
@@ -64,22 +72,40 @@ fun OverviewScreen(data: AggregatedData, year: Int, onOpenUser: (String) -> Unit
                     }
                 }
                 Label(attrs = { classes("checkbox-row") }) {
-                    Input(type = InputType.Checkbox) { checked(onlyFeedback); onInput { onlyFeedback = it.value } }
+                    Input(type = InputType.Checkbox) {
+                        checked(onlyFeedback)
+                        onInput { onlyFeedback = it.value }
+                    }
                     Text("With feedback only")
                 }
                 Label(attrs = { classes("checkbox-row") }) {
-                    Input(type = InputType.Checkbox) { checked(hideEmpty); onInput { hideEmpty = it.value } }
+                    Input(type = InputType.Checkbox) {
+                        checked(hideEmpty)
+                        onInput { hideEmpty = it.value }
+                    }
                     Text("Hide 0-vote talks")
                 }
             }
-            Div(attrs = { style { property("display", "flex"); property("gap", "10px"); property("align-items", "center") } }) {
+            Div(
+                attrs = {
+                    style {
+                        property("display", "flex")
+                        property("gap", "10px")
+                        property("align-items", "center")
+                    }
+                },
+            ) {
                 Span(attrs = { classes("row-count") }) {
                     Text("${visible.size} row" + if (visible.size == 1) "" else "s")
                 }
-                Button(attrs = {
-                    classes("secondary")
-                    onClick { exportCsv(year, visible, data) }
-                }) { Text("Download CSV") }
+                Button(
+                    attrs = {
+                        classes("secondary")
+                        onClick { exportCsv(year, visible, data) }
+                    },
+                ) {
+                    Text("Download CSV")
+                }
             }
         }
 
@@ -87,20 +113,25 @@ fun OverviewScreen(data: AggregatedData, year: Int, onOpenUser: (String) -> Unit
             Thead {
                 Tr {
                     COLUMNS.forEach { column ->
-                        Th(attrs = {
-                            if (column.right) classes("right")
-                            onClick {
-                                if (sortKey == column.key) {
-                                    sortDir = -sortDir
-                                } else {
-                                    sortKey = column.key
-                                    sortDir = if (column.right) -1 else 1
+                        Th(
+                            attrs = {
+                                if (column.right) classes("right")
+                                onClick {
+                                    if (sortKey == column.key) {
+                                        sortDir = -sortDir
+                                    } else {
+                                        sortKey = column.key
+                                        sortDir = if (column.right) -1 else 1
+                                    }
                                 }
-                            }
-                        }) {
+                            },
+                        ) {
                             Text("${column.label} ")
                             Span(attrs = { classes("arrow") }) {
-                                Text(if (sortKey == column.key) (if (sortDir == -1) "▾" else "▴") else "")
+                                Text(
+                                    if (sortKey == column.key) (if (sortDir == -1) "▾" else "▴")
+                                    else "",
+                                )
                             }
                         }
                     }
@@ -109,10 +140,14 @@ fun OverviewScreen(data: AggregatedData, year: Int, onOpenUser: (String) -> Unit
             Tbody {
                 visible.forEach { row ->
                     val key = rowKey(row)
-                    Tr(attrs = {
-                        classes("session-row")
-                        onClick { expanded = if (key in expanded) expanded - key else expanded + key }
-                    }) {
+                    Tr(
+                        attrs = {
+                            classes("session-row")
+                            onClick {
+                                expanded = if (key in expanded) expanded - key else expanded + key
+                            }
+                        },
+                    ) {
                         Td(attrs = { classes("title") }) { TitleCell(row) }
                         Td(attrs = { classes("speakers") }) { Text(row.speaker) }
                         NumCell(row.counts.good.toString())
@@ -145,11 +180,16 @@ fun OverviewScreen(data: AggregatedData, year: Int, onOpenUser: (String) -> Unit
 private fun TitleCell(row: SessionRow) {
     val url = row.videoUrl
     if (url != null) {
-        A(href = url, attrs = {
-            target(ATarget.Blank)
-            attr("rel", "noopener")
-            onClick { it.stopPropagation() }
-        }) { Text(row.title) }
+        A(
+            href = url,
+            attrs = {
+                target(ATarget.Blank)
+                attr("rel", "noopener")
+                onClick { it.stopPropagation() }
+            },
+        ) {
+            Text(row.title)
+        }
     } else {
         Text(row.title)
     }
@@ -162,10 +202,12 @@ private fun NumCell(text: String) {
 
 @Composable
 private fun ScoreCell(counts: VoteCounts, value: Double, color: (Double) -> String) {
-    Td(attrs = {
-        classes("num")
-        if (counts.total > 0) style { property("background", color(value)) }
-    }) {
+    Td(
+        attrs = {
+            classes("num")
+            if (counts.total > 0) style { property("background", color(value)) }
+        },
+    ) {
         Text(if (counts.total > 0) value.toFixed(2) else "—")
     }
 }
@@ -176,7 +218,9 @@ private fun ExpandedFeedback(row: SessionRow, data: AggregatedData, onOpenUser: 
         Span(attrs = { classes("empty") }) { Text("No feedback text for this talk.") }
         return
     }
-    Div { Text("${row.feedback.size} feedback item" + (if (row.feedback.size == 1) "" else "s") + ":") }
+    Div {
+        Text("${row.feedback.size} feedback item" + (if (row.feedback.size == 1) "" else "s") + ":")
+    }
     FeedbackList(row.sessionId, row.feedback, data, onOpenUser)
 }
 
@@ -185,11 +229,13 @@ private fun FeedbackByTalk(data: AggregatedData, query: String, onOpenUser: (Str
     val groups = remember(data, query) {
         data.feedbackGroups()
             .filter { group ->
-                query.isBlank() || (group.title + " " + group.speakers.joinToString(" "))
-                    .lowercase().contains(query.trim().lowercase())
+                query.isBlank() ||
+                    (group.title + " " + group.speakers.joinToString(" ")).lowercase()
+                        .contains(query.trim().lowercase())
             }
             .sortedWith(
-                compareByDescending<FeedbackGroup> { it.feedback.size }.thenByDescending { it.counts.rating }
+                compareByDescending<FeedbackGroup> { it.feedback.size }
+                    .thenByDescending { it.counts.rating },
             )
     }
 
@@ -199,7 +245,9 @@ private fun FeedbackByTalk(data: AggregatedData, query: String, onOpenUser: (Str
             Text("All free-text comments, grouped by session. Respects the search filter above.")
         }
         if (groups.isEmpty()) {
-            Div(attrs = { classes("empty-state") }) { Text("No feedback comments in the current view.") }
+            Div(attrs = { classes("empty-state") }) {
+                Text("No feedback comments in the current view.")
+            }
             return@Div
         }
         groups.forEach { group ->
@@ -209,13 +257,23 @@ private fun FeedbackByTalk(data: AggregatedData, query: String, onOpenUser: (Str
                         Span(attrs = { classes("talk-title") }) {
                             val url = group.videoUrl
                             if (url != null) {
-                                A(href = url, attrs = { target(ATarget.Blank); attr("rel", "noopener") }) { Text(group.title) }
+                                A(
+                                    href = url,
+                                    attrs = {
+                                        target(ATarget.Blank)
+                                        attr("rel", "noopener")
+                                    },
+                                ) {
+                                    Text(group.title)
+                                }
                             } else {
                                 Text(group.title)
                             }
                         }
                         if (group.speakers.isNotEmpty()) {
-                            Span(attrs = { classes("talk-speaker") }) { Text("— " + group.speakers.joinToString(", ")) }
+                            Span(attrs = { classes("talk-speaker") }) {
+                                Text("— " + group.speakers.joinToString(", "))
+                            }
                         }
                     }
                     Div(attrs = { classes("talk-counts") }) {
@@ -223,20 +281,31 @@ private fun FeedbackByTalk(data: AggregatedData, query: String, onOpenUser: (Str
                         Span { Text("😐 ${group.counts.ok}") }
                         Span { Text("👎 ${group.counts.bad}") }
                         if (group.counts.total > 0) {
-                            Span(attrs = {
-                                style {
-                                    property("background", ratingColor(group.counts.rating))
-                                    property("padding", "1px 6px")
-                                    property("border-radius", "4px")
-                                }
-                            }) { Text("rating ${group.counts.rating.toFixed(2)}") }
-                            Span(attrs = {
-                                style {
-                                    property("background", popularityColor(group.counts.popularity))
-                                    property("padding", "1px 6px")
-                                    property("border-radius", "4px")
-                                }
-                            }) { Text("pop ${group.counts.popularity.toFixed(2)}") }
+                            Span(
+                                attrs = {
+                                    style {
+                                        property("background", ratingColor(group.counts.rating))
+                                        property("padding", "1px 6px")
+                                        property("border-radius", "4px")
+                                    }
+                                },
+                            ) {
+                                Text("rating ${group.counts.rating.toFixed(2)}")
+                            }
+                            Span(
+                                attrs = {
+                                    style {
+                                        property(
+                                            "background",
+                                            popularityColor(group.counts.popularity),
+                                        )
+                                        property("padding", "1px 6px")
+                                        property("border-radius", "4px")
+                                    }
+                                },
+                            ) {
+                                Text("pop ${group.counts.popularity.toFixed(2)}")
+                            }
                         }
                     }
                 }
@@ -248,15 +317,30 @@ private fun FeedbackByTalk(data: AggregatedData, query: String, onOpenUser: (Str
 
 /** A list of comments; each shows the commenter's score badge and a link to their user page. */
 @Composable
-fun FeedbackList(sessionId: String, items: List<FeedbackItem>, data: AggregatedData, onOpenUser: (String) -> Unit) {
+fun FeedbackList(
+    sessionId: String,
+    items: List<FeedbackItem>,
+    data: AggregatedData,
+    onOpenUser: (String) -> Unit,
+) {
     Ul(attrs = { classes("feedback-list") }) {
         items.forEach { item ->
             Li {
                 val score = data.scoreByUserSession[userSessionKey(item.userId, sessionId)]
-                Span(attrs = { classes("score-badge"); attr("title", scoreTitle(score)) }) {
+                Span(
+                    attrs = {
+                        classes("score-badge")
+                        attr("title", scoreTitle(score))
+                    },
+                ) {
                     Text(score?.emoji() ?: "—")
                 }
-                Button(attrs = { classes("pseudo-link"); onClick { onOpenUser(item.userId) } }) {
+                Button(
+                    attrs = {
+                        classes("pseudo-link")
+                        onClick { onOpenUser(item.userId) }
+                    },
+                ) {
                     Text(pseudoName(item.userId))
                 }
                 Text(" " + item.value)
@@ -299,8 +383,17 @@ private fun comparatorFor(key: SortKey, dir: Int): Comparator<SessionRow> {
 
 private fun exportCsv(year: Int, rows: List<SessionRow>, data: AggregatedData) {
     val header = listOf(
-        "session_id", "title", "speaker_id", "speaker",
-        "good", "ok", "bad", "total", "rating", "popularity", "feedback",
+        "session_id",
+        "title",
+        "speaker_id",
+        "speaker",
+        "good",
+        "ok",
+        "bad",
+        "total",
+        "rating",
+        "popularity",
+        "feedback",
     )
     val lines = mutableListOf(header)
     val whitespace = Regex("\\s+")
@@ -311,8 +404,13 @@ private fun exportCsv(year: Int, rows: List<SessionRow>, data: AggregatedData) {
         }.replace(whitespace, " ")
         lines.add(
             listOf(
-                row.sessionId, row.title, row.speakerId, row.speaker,
-                row.counts.good.toString(), row.counts.ok.toString(), row.counts.bad.toString(),
+                row.sessionId,
+                row.title,
+                row.speakerId,
+                row.speaker,
+                row.counts.good.toString(),
+                row.counts.ok.toString(),
+                row.counts.bad.toString(),
                 row.counts.total.toString(),
                 if (row.counts.total > 0) row.counts.rating.toFixed(3) else "",
                 row.counts.popularity.toFixed(3),
@@ -325,8 +423,8 @@ private fun exportCsv(year: Int, rows: List<SessionRow>, data: AggregatedData) {
 
 private fun rowKey(row: SessionRow): String = "${row.sessionId}|${row.speakerId}"
 
-private fun scoreTitle(score: Score?): String =
-    if (score != null) "Voter rated this talk $score" else "Commenter didn't vote (or unvoted)"
+private fun scoreTitle(score: Score?): String = if (score != null) "Voter rated this talk $score"
+else "Commenter didn't vote (or unvoted)"
 
 /** Red → soft → green based on a normalized score in [-1, +1], matching the original dashboard shading. */
 internal fun scoreColor(normalized: Double): String {

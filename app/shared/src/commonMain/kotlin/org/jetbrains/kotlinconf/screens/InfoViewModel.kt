@@ -17,11 +17,9 @@ import org.jetbrains.kotlinconf.ConferenceService
 class InfoViewModel(
     service: ConferenceService,
 ) : ViewModel() {
-    val venueAddress: StateFlow<String?> = service.conferenceInfo
-        .map { it?.mapData?.venueAddress }
+    val venueAddress: StateFlow<String?> = service.conferenceInfo.map { it?.mapData?.venueAddress }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
-    val images: StateFlow<ConferenceImages?> = service.conferenceInfo
-        .map { it?.images }
+    val images: StateFlow<ConferenceImages?> = service.conferenceInfo.map { it?.images }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 }

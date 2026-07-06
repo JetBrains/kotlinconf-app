@@ -18,8 +18,8 @@ import io.ktor.http.isSuccess
 import kotlinx.coroutines.CancellationException
 import org.jetbrains.kotlinconf.Conference
 import org.jetbrains.kotlinconf.ConferenceInfo
-import org.jetbrains.kotlinconf.GoldenKodeeData
 import org.jetbrains.kotlinconf.FeedbackInfo
+import org.jetbrains.kotlinconf.GoldenKodeeData
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.VoteInfo
@@ -111,9 +111,10 @@ class YearlyApi(
     }
 
     private fun HttpRequestBuilder.apiUrl(path: String) {
-        userId.value.takeIf { it.isNotBlank() }?.let {
-            header(HttpHeaders.Authorization, "Bearer $it")
-        }
+        userId.value.takeIf { it.isNotBlank() }
+            ?.let {
+                header(HttpHeaders.Authorization, "Bearer $it")
+            }
         header(HttpHeaders.CacheControl, "no-cache")
         url {
             encodedPath = "$year/$path"

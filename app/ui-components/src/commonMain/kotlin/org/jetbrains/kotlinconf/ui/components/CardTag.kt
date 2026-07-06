@@ -15,17 +15,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 private val CardTagShape = RoundedCornerShape(size = 4.dp)
 
 enum class CardTagSize {
-    Normal, Large,
+    Normal,
+    Large,
 }
 
 @Composable
@@ -47,12 +48,11 @@ fun CardTag(
     )
 
     Box(
-        modifier = modifier
-            .heightIn(
+        modifier = modifier.heightIn(
                 min = when (size) {
                     CardTagSize.Normal -> 20.dp
                     CardTagSize.Large -> 24.dp
-                }
+                },
             )
             .clip(CardTagShape)
             .background(backgroundColor)
@@ -60,7 +60,7 @@ fun CardTag(
                 horizontal = when (size) {
                     CardTagSize.Normal -> 4.dp
                     CardTagSize.Large -> 8.dp
-                }
+                },
             ),
         contentAlignment = Alignment.Center,
     ) {
@@ -74,13 +74,15 @@ fun CardTag(
 
 private class CardTagSizeProvider : PreviewParameterProvider<CardTagSize> {
     override val values = sequenceOf(CardTagSize.Normal, CardTagSize.Large)
+
     override fun getDisplayName(index: Int) = values.elementAt(index).name
 }
 
 @PreviewLightDark
 @Composable
 private fun CardTagUnselectedPreview(
-    @PreviewParameter(CardTagSizeProvider::class) size: CardTagSize,
+    @PreviewParameter(CardTagSizeProvider::class)
+    size: CardTagSize,
 ) = PreviewHelper {
     var selected by remember { mutableStateOf(false) }
     CardTag("Label", selected = selected, Modifier.clickable { selected = !selected }, size = size)
@@ -89,7 +91,8 @@ private fun CardTagUnselectedPreview(
 @PreviewLightDark
 @Composable
 private fun CardTagSelectedPreview(
-    @PreviewParameter(CardTagSizeProvider::class) size: CardTagSize,
+    @PreviewParameter(CardTagSizeProvider::class)
+    size: CardTagSize,
 ) = PreviewHelper {
     var selected by remember { mutableStateOf(true) }
     CardTag("Label", selected = selected, Modifier.clickable { selected = !selected }, size = size)

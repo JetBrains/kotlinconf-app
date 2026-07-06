@@ -1,14 +1,14 @@
 package org.jetbrains.kotlinconf.backend.services
 
+import java.util.concurrent.ConcurrentHashMap
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.slf4j.LoggerFactory
-import java.util.concurrent.ConcurrentHashMap
 
 private val safeFilenamePattern = Regex("""^[A-Za-z0-9][A-Za-z0-9._-]*$""")
 private val validExtensions = setOf("md", "svg")
 
 class AssetService(
-    private val config: ConferenceConfig
+    private val config: ConferenceConfig,
 ) {
     enum class AssetType(val folder: String) {
         Map("maps"),
@@ -71,8 +71,14 @@ class AssetService(
             for (name in requiredDocuments) {
                 val content = loadAsset(year, AssetType.Document, name)
                 when {
-                    content == null -> { log.error("Missing document '$name' for year $year"); issueCount++ }
-                    content.isBlank() -> { log.error("Empty document '$name' for year $year"); issueCount++ }
+                    content == null -> {
+                        log.error("Missing document '$name' for year $year")
+                        issueCount++
+                    }
+                    content.isBlank() -> {
+                        log.error("Empty document '$name' for year $year")
+                        issueCount++
+                    }
                 }
             }
             if (issueCount == 0) {

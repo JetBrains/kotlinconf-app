@@ -38,6 +38,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import org.jetbrains.compose.resources.painterResource
@@ -52,7 +53,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.session_codelab
 import org.jetbrains.kotlinconf.ui.generated.resources.session_education
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 private const val iconId = "iconId'"
 private const val eduPlaceholder = "[e]"
@@ -82,7 +82,7 @@ private fun InlineIconContent(placeholder: String) {
                     eduPlaceholder -> UiRes.drawable.session_education
                     codelabPlaceholder -> UiRes.drawable.session_codelab
                     else -> UiRes.drawable.session_codelab // Shouldn't happen, but let's not throw
-                }
+                },
             ),
             contentDescription = null,
             tint = KotlinConfTheme.colors.accentText,
@@ -128,7 +128,7 @@ private fun RowScope.TimeBlock(
     lightning: Boolean,
     time: String,
     timeNote: String?,
-    isLive: Boolean
+    isLive: Boolean,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -146,7 +146,7 @@ private fun RowScope.TimeBlock(
         Text(
             text = time,
             style = KotlinConfTheme.typography.h3,
-            color = KotlinConfTheme.colors.primaryText
+            color = KotlinConfTheme.colors.primaryText,
         )
     }
 
@@ -169,13 +169,11 @@ private fun RowScope.TimeBlock(
 @Composable
 private fun EndButtons(bookmarked: Boolean, onBookmark: (Boolean) -> Unit, large: Boolean) {
     val iconTint by animateColorAsState(
-        if (bookmarked) KotlinConfTheme.colors.orangeText
-        else KotlinConfTheme.colors.primaryText
+        if (bookmarked) KotlinConfTheme.colors.orangeText else KotlinConfTheme.colors.primaryText,
     )
 
     Icon(
-        modifier = Modifier
-            .size(if (large) 40.dp else 24.dp)
+        modifier = Modifier.size(if (large) 40.dp else 24.dp)
             .wrapContentSize(unbounded = true)
             .toggleable(
                 value = bookmarked,
@@ -186,7 +184,7 @@ private fun EndButtons(bookmarked: Boolean, onBookmark: (Boolean) -> Unit, large
             )
             .padding(12.dp),
         painter = painterResource(
-            if (bookmarked) UiRes.drawable.bookmark_24_fill else UiRes.drawable.bookmark_24
+            if (bookmarked) UiRes.drawable.bookmark_24_fill else UiRes.drawable.bookmark_24,
         ),
         contentDescription = stringResource(UiRes.string.action_bookmark),
         tint = iconTint,
@@ -269,7 +267,7 @@ private fun PageTitleRegularPreview() = PreviewHelper {
             "Fictional",
             "Tags",
             "To",
-            "Display"
+            "Display",
         ),
         bookmarked = bookmarked,
         lightning = false,
@@ -292,7 +290,7 @@ internal fun PageTitleWithNotesPreview() {
             lightning = true,
             timeNote = "in 22 min",
             isLive = false,
-            onBookmark = { },
+            onBookmark = {},
             large = false,
         )
         Spacer(Modifier.height(16.dp))
@@ -304,7 +302,7 @@ internal fun PageTitleWithNotesPreview() {
             lightning = false,
             timeNote = null,
             isLive = true,
-            onBookmark = { },
+            onBookmark = {},
             large = false,
         )
     }
@@ -322,9 +320,8 @@ internal fun LargePageTitleWithPreview() {
             lightning = true,
             timeNote = "in 22 min",
             isLive = false,
-            onBookmark = { },
+            onBookmark = {},
             large = true,
         )
     }
 }
-

@@ -7,10 +7,8 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
 import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
-import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -36,8 +34,7 @@ class SpeakerDetailViewModel(
 
     val speaker: StateFlow<ErrorLoadingState<Speaker>> = service.speakerByIdFlow(speakerId)
         .map { speaker ->
-            if (speaker != null) ErrorLoadingState.Content(speaker)
-            else ErrorLoadingState.Error
+            if (speaker != null) ErrorLoadingState.Content(speaker) else ErrorLoadingState.Error
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ErrorLoadingState.Loading)
 

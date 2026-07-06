@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
@@ -32,8 +33,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.view_grid_24
 import org.jetbrains.kotlinconf.ui.generated.resources.view_list_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
-
 
 private val HeaderToggleItemWidth = 48.dp
 private val HeaderToggleItemHeight = 40.dp
@@ -47,28 +46,26 @@ fun HeaderToggleButton(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier
-            .border(1.dp, KotlinConfTheme.colors.strokePale, CircleShape)
-            .size(width = HeaderToggleItemWidth * options.size, height = HeaderToggleItemHeight)
+        modifier.border(1.dp, KotlinConfTheme.colors.strokePale, CircleShape)
+            .size(width = HeaderToggleItemWidth * options.size, height = HeaderToggleItemHeight),
     ) {
         val offsetX by animateDpAsState(
             targetValue = HeaderToggleItemWidth * selectedIndex,
-            animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+            animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
         )
         Box(
-            Modifier
-                .offset(x = offsetX)
+            Modifier.offset(x = offsetX)
                 .clip(CircleShape)
                 .background(KotlinConfTheme.colors.primaryBackground)
                 .size(width = HeaderToggleItemWidth, height = HeaderToggleItemHeight)
-                .align(Alignment.CenterStart)
+                .align(Alignment.CenterStart),
         )
         Row {
             options.forEachIndexed { index, option ->
                 val selected = index == selectedIndex
                 val iconColor by animateColorAsState(
                     if (selected) KotlinConfTheme.colors.primaryTextWhiteFixed
-                    else KotlinConfTheme.colors.primaryText
+                    else KotlinConfTheme.colors.primaryText,
                 )
 
                 BasicTooltipBox(
@@ -80,8 +77,7 @@ fun HeaderToggleButton(
                         painter = painterResource(option.icon),
                         contentDescription = option.contentDescription,
                         tint = iconColor,
-                        modifier = Modifier
-                            .clip(CircleShape)
+                        modifier = Modifier.clip(CircleShape)
                             .selectable(
                                 selected = selected,
                                 enabled = true,
@@ -89,7 +85,7 @@ fun HeaderToggleButton(
                                 role = Role.Tab,
                             )
                             .padding(horizontal = 12.dp, vertical = 8.dp)
-                            .size(24.dp)
+                            .size(24.dp),
                     )
                 }
             }
@@ -109,13 +105,15 @@ private val headerTogglePreviewOptions = listOf(
 
 private class HeaderToggleSelectedIndexProvider : PreviewParameterProvider<Int> {
     override val values = headerTogglePreviewOptions.indices.asSequence()
+
     override fun getDisplayName(index: Int) = "selected=$index"
 }
 
 @PreviewLightDark
 @Composable
 private fun HeaderToggleButtonPreview(
-    @PreviewParameter(HeaderToggleSelectedIndexProvider::class) selectedIndex: Int,
+    @PreviewParameter(HeaderToggleSelectedIndexProvider::class)
+    selectedIndex: Int,
 ) = PreviewHelper {
     HeaderToggleButton(
         options = headerTogglePreviewOptions,

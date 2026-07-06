@@ -1,8 +1,8 @@
 package org.jetbrains.kotlinconf
 
+import kotlin.jvm.JvmInline
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
 
 @Serializable
 class Conference(
@@ -53,7 +53,7 @@ data class VoteInfo(
 @Serializable
 class FeedbackInfo(
     val sessionId: SessionId,
-    val value: String
+    val value: String,
 )
 
 @Serializable
@@ -74,7 +74,7 @@ enum class Score(val value: Int) {
 
 @Serializable
 class Votes(
-    val votes: List<VoteInfo> = emptyList()
+    val votes: List<VoteInfo> = emptyList(),
 )
 
 @Serializable

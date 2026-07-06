@@ -18,52 +18,50 @@ class Typography(
     val h3: TextStyle,
     val h4: TextStyle,
     val text1: TextStyle,
-    val text2: TextStyle
+    val text2: TextStyle,
 )
 
-internal val KotlinConfTypography: Typography
-    @Composable
-    get() = Typography(
-        h1 = TextStyle(
-            fontFamily = JetBrainsSans,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 30.sp,
-            lineHeight = 32.sp,
-        ),
-        h2 = TextStyle(
-            fontFamily = JetBrainsSans,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 22.sp,
-            lineHeight = 28.sp,
-        ),
-        h3 = TextStyle(
-            fontWeight = FontWeight.SemiBold,
-            fontFamily = JetBrainsSans,
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
-        ),
-        h4 = TextStyle(
-            fontWeight = FontWeight.SemiBold,
-            fontFamily = JetBrainsSans,
-            fontSize = 13.sp,
-            lineHeight = 20.sp,
-        ),
-        text1 = TextStyle(
-            fontFamily = JetBrainsSans,
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
-        ),
-        text2 = TextStyle(
-            fontFamily = JetBrainsSans,
-            fontSize = 13.sp,
-            lineHeight = 20.sp,
-        ),
-    )
+internal val KotlinConfTypography: Typography @Composable
+get() = Typography(
+    h1 = TextStyle(
+        fontFamily = JetBrainsSans,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 30.sp,
+        lineHeight = 32.sp,
+    ),
+    h2 = TextStyle(
+        fontFamily = JetBrainsSans,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 22.sp,
+        lineHeight = 28.sp,
+    ),
+    h3 = TextStyle(
+        fontWeight = FontWeight.SemiBold,
+        fontFamily = JetBrainsSans,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+    ),
+    h4 = TextStyle(
+        fontWeight = FontWeight.SemiBold,
+        fontFamily = JetBrainsSans,
+        fontSize = 13.sp,
+        lineHeight = 20.sp,
+    ),
+    text1 = TextStyle(
+        fontFamily = JetBrainsSans,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+    ),
+    text2 = TextStyle(
+        fontFamily = JetBrainsSans,
+        fontSize = 13.sp,
+        lineHeight = 20.sp,
+    ),
+)
 
-internal val JetBrainsSans: FontFamily
-    @Composable
-    get() = FontFamily(
-        Font(UiRes.font.jetbrains_sans_bold, FontWeight.Bold, FontStyle.Normal),
-        Font(UiRes.font.jetbrains_sans_semibold, FontWeight.SemiBold, FontStyle.Normal),
-        Font(UiRes.font.jetbrains_sans_regular, FontWeight.Normal, FontStyle.Normal),
-    )
+internal val JetBrainsSans: FontFamily @Composable
+get() = FontFamily(
+    Font(UiRes.font.jetbrains_sans_bold, FontWeight.Bold, FontStyle.Normal),
+    Font(UiRes.font.jetbrains_sans_semibold, FontWeight.SemiBold, FontStyle.Normal),
+    Font(UiRes.font.jetbrains_sans_regular, FontWeight.Normal, FontStyle.Normal),
+)

@@ -7,13 +7,13 @@ import com.github.terrakok.navigation3.browser.HierarchicalBrowserNavigation
 import com.github.terrakok.navigation3.browser.buildBrowserHistoryFragment
 import com.github.terrakok.navigation3.browser.getBrowserHistoryFragmentName
 import com.github.terrakok.navigation3.browser.getBrowserHistoryFragmentParameters
+import kotlin.js.ExperimentalWasmJsInterop
+import kotlin.js.js
 import org.jetbrains.kotlinconf.AwardCategoryId
 import org.jetbrains.kotlinconf.NomineeId
 import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SpeakerId
-import kotlin.js.ExperimentalWasmJsInterop
-import kotlin.js.js
 
 @OptIn(ExperimentalWasmJsInterop::class)
 private fun isMobileBrowser(): Boolean = js(
@@ -25,7 +25,7 @@ private fun isMobileBrowser(): Boolean = js(
             return window.innerWidth <= 820;
           }
           return /Mobi|Android|iPhone|iPad|iPod|IEMobile|Opera Mini|CriOS/i.test(navigator.userAgent);
-      }"""
+      }""",
 )
 
 private fun AppRoute.toBrowserHistoryFragment() = when (val key = this) {
@@ -49,32 +49,32 @@ private fun AppRoute.toBrowserHistoryFragment() = when (val key = this) {
     InfoScreen -> buildBrowserHistoryFragment("info")
     is NestedMapScreen -> buildBrowserHistoryFragment(
         "map_detail",
-        mapOf("roomName" to key.roomName)
+        mapOf("roomName" to key.roomName),
     )
 
     is PartnerDetailScreen -> buildBrowserHistoryFragment(
         "partner",
-        mapOf("partnerId" to key.partnerId.id)
+        mapOf("partnerId" to key.partnerId.id),
     )
 
     is SessionScreen -> buildBrowserHistoryFragment(
         "session",
-        mapOf("sessionId" to key.sessionId.id)
+        mapOf("sessionId" to key.sessionId.id),
     )
 
     is SpeakerDetailScreen -> buildBrowserHistoryFragment(
         "speaker",
-        mapOf("speakerId" to key.speakerId.id)
+        mapOf("speakerId" to key.speakerId.id),
     )
 
     is SingleLicenseScreen -> buildBrowserHistoryFragment(
         "license",
-        mapOf("licenseName" to key.licenseName, "licenseText" to key.licenseText)
+        mapOf("licenseName" to key.licenseName, "licenseText" to key.licenseText),
     )
 
     is GoldenKodeeFinalistScreen -> buildBrowserHistoryFragment(
         "golden_kodee_finalist",
-        mapOf("categoryId" to key.categoryId.id, "nomineeId" to key.nomineeId.id)
+        mapOf("categoryId" to key.categoryId.id, "nomineeId" to key.nomineeId.id),
     )
 
     GoldenKodeeScreen -> buildBrowserHistoryFragment("golden_kodee")
@@ -131,13 +131,16 @@ actual fun BrowserIntegration(navState: NavState) {
                         val categoryId = params["categoryId"]
                         val nomineeId = params["nomineeId"]
                         if (categoryId != null && nomineeId != null) {
-                            GoldenKodeeFinalistScreen(AwardCategoryId(categoryId), NomineeId(nomineeId))
+                            GoldenKodeeFinalistScreen(
+                                AwardCategoryId(categoryId),
+                                NomineeId(nomineeId),
+                            )
                         } else null
                     }
 
                     else -> null
                 }
-            }
+            },
         )
     }
 }

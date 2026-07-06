@@ -6,7 +6,6 @@ import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.entity.Library
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,22 +43,22 @@ class LicensesViewModel : ViewModel() {
     }
 
     val licensesState: StateFlow<List<LibraryWithHighlights>> = combine(
-        libraries, searchText
-    ) { libs, searchText ->
-        if (searchText.isBlank()) {
-            libs.map { LibraryWithHighlights(it) }
-        } else {
-            libs
-                .performSearch(
-                    searchText = searchText,
-                    produceResult = { lib, (nameMatches, authorMatches, licenseMatches) ->
-                        LibraryWithHighlights(lib, nameMatches, authorMatches, licenseMatches)
-                    },
-                    selectors = listOf({ it.name }, { it.author }, { it.licenseName }),
-                )
-                .sortedBy { it.library.name }
+            libraries,
+            searchText,
+        ) { libs, searchText ->
+            if (searchText.isBlank()) {
+                libs.map { LibraryWithHighlights(it) }
+            } else {
+                libs.performSearch(
+                        searchText = searchText,
+                        produceResult = { lib, (nameMatches, authorMatches, licenseMatches) ->
+                            LibraryWithHighlights(lib, nameMatches, authorMatches, licenseMatches)
+                        },
+                        selectors = listOf({ it.name }, { it.author }, { it.licenseName }),
+                    )
+                    .sortedBy { it.library.name }
+            }
         }
-    }
         .flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 }

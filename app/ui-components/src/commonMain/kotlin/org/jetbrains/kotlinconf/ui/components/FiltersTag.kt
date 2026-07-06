@@ -18,11 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
-
 
 private val FilterTagShape = RoundedCornerShape(size = 6.dp)
 
@@ -45,14 +44,12 @@ fun FilterTag(
         ColorSpringSpec,
     )
     val strokeColor by animateColorAsState(
-        if (selected) Color.Transparent
-        else KotlinConfTheme.colors.strokeFull,
+        if (selected) Color.Transparent else KotlinConfTheme.colors.strokeFull,
         ColorSpringSpec,
     )
 
     Box(
-        modifier = modifier
-            .clip(FilterTagShape)
+        modifier = modifier.clip(FilterTagShape)
             .border(
                 width = 1.dp,
                 color = strokeColor,
@@ -71,7 +68,7 @@ fun FilterTag(
                         onValueChange = { onSelect(it) },
                         role = Role.Checkbox,
                     )
-                }
+                },
             )
             .background(backgroundColor)
             .padding(horizontal = 12.dp, vertical = 10.dp),

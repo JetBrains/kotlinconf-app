@@ -9,7 +9,6 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -23,6 +22,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,11 +41,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.foundation.relocation.BringIntoViewRequester
-import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
@@ -59,7 +59,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.feedback_form_type_someth
 import org.jetbrains.kotlinconf.ui.theme.Brand
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 @Composable
 fun FeedbackForm(
@@ -76,71 +75,65 @@ fun FeedbackForm(
     val focused by interactionSource.collectIsFocusedAsState()
 
     val verticalBorderColor by animateColorAsState(
-        if (focused) KotlinConfTheme.colors.strokeInputFocus
-        else Color.Transparent,
+        if (focused) KotlinConfTheme.colors.strokeInputFocus else Color.Transparent,
         animationSpec = spring(stiffness = StiffnessHigh),
     )
     val horizontalBorderColor by animateColorAsState(
-        if (focused) KotlinConfTheme.colors.strokeInputFocus
-        else KotlinConfTheme.colors.strokePale,
+        if (focused) KotlinConfTheme.colors.strokeInputFocus else KotlinConfTheme.colors.strokePale,
         animationSpec = spring(stiffness = StiffnessHigh),
     )
     val fieldBackgroundColor by animateColorAsState(
-        if (past) KotlinConfTheme.colors.mainBackground
-        else KotlinConfTheme.colors.tileBackground,
+        if (past) KotlinConfTheme.colors.mainBackground else KotlinConfTheme.colors.tileBackground,
     )
 
-    Column(modifier.fillMaxWidth().onKeyEvent { true }) {
+    Column(
+        modifier.fillMaxWidth().onKeyEvent { true },
+    ) {
         BasicTextField(
             value = feedbackText,
             onValueChange = onFeedbackTextChange,
             interactionSource = interactionSource,
-            textStyle = KotlinConfTheme.typography.text1
-                .copy(color = KotlinConfTheme.colors.primaryText),
+            textStyle =
+                KotlinConfTheme.typography.text1.copy(color = KotlinConfTheme.colors.primaryText),
             cursorBrush = SolidColor(KotlinConfTheme.colors.primaryText),
             decorationBox = { innerTextField ->
                 Box(
-                    Modifier
-                        .drawWithContent {
-                            drawContent()
+                    Modifier.drawWithContent {
+                        drawContent()
 
-                            val lineWidth = 1.dp.toPx()
-                            val halfLineWidth = lineWidth / 2
+                        val lineWidth = 1.dp.toPx()
+                        val halfLineWidth = lineWidth / 2
 
-                            // Top
-                            drawLine(
-                                horizontalBorderColor,
-                                Offset(0f + halfLineWidth, 0f + halfLineWidth),
-                                Offset(size.width - halfLineWidth, 0f + halfLineWidth),
-                                lineWidth
-                            )
-                            // Bottom
-                            drawLine(
-                                horizontalBorderColor,
-                                Offset(0f + halfLineWidth, size.height - halfLineWidth),
-                                Offset(size.width - halfLineWidth, size.height - halfLineWidth),
-                                lineWidth
-                            )
-                            // Start
-                            drawLine(
-                                verticalBorderColor,
-                                Offset(0f + halfLineWidth, 0f + halfLineWidth),
-                                Offset(0f + halfLineWidth, size.height - halfLineWidth),
-                                lineWidth
-                            )
-                            // End
-                            drawLine(
-                                verticalBorderColor,
-                                Offset(size.width - halfLineWidth, 0f + halfLineWidth),
-                                Offset(size.width - halfLineWidth, size.height - halfLineWidth),
-                                lineWidth
-                            )
-                        }
-                        .background(fieldBackgroundColor)
-                        .fillMaxWidth()
-                        .heightIn(min = 132.dp)
-                        .padding(16.dp)
-                        .animateContentSize(spring(), alignment = Alignment.Center)
+                        // Top
+                        drawLine(
+                            horizontalBorderColor,
+                            Offset(0f + halfLineWidth, 0f + halfLineWidth),
+                            Offset(size.width - halfLineWidth, 0f + halfLineWidth),
+                            lineWidth,
+                        )
+                        // Bottom
+                        drawLine(
+                            horizontalBorderColor,
+                            Offset(0f + halfLineWidth, size.height - halfLineWidth),
+                            Offset(size.width - halfLineWidth, size.height - halfLineWidth),
+                            lineWidth,
+                        )
+                        // Start
+                        drawLine(
+                            verticalBorderColor,
+                            Offset(0f + halfLineWidth, 0f + halfLineWidth),
+                            Offset(0f + halfLineWidth, size.height - halfLineWidth),
+                            lineWidth,
+                        )
+                        // End
+                        drawLine(
+                            verticalBorderColor,
+                            Offset(size.width - halfLineWidth, 0f + halfLineWidth),
+                            Offset(size.width - halfLineWidth, size.height - halfLineWidth),
+                            lineWidth,
+                        )
+                    }.background(fieldBackgroundColor).fillMaxWidth().heightIn(min = 132.dp)
+                        .padding(16.dp).animateContentSize(spring(), alignment = Alignment.Center),
                 ) {
                     innerTextField()
                     androidx.compose.animation.AnimatedVisibility(
@@ -148,18 +141,17 @@ fun FeedbackForm(
                         enter = fadeIn(tween(10)),
                         exit = fadeOut(tween(10)),
                     ) {
-                        Text(
-                            text = stringResource(UiRes.string.feedback_form_type_something),
-                            style = KotlinConfTheme.typography.text1,
-                            color = KotlinConfTheme.colors.placeholderText
-                        )
-                    }
+                            Text(
+                                text = stringResource(UiRes.string.feedback_form_type_something),
+                                style = KotlinConfTheme.typography.text1,
+                                color = KotlinConfTheme.colors.placeholderText,
+                            )
+                        }
                 }
-            }
+            },
         )
         Row(
-            modifier = Modifier
-                .bringIntoViewRequester(bringIntoViewRequester)
+            modifier = Modifier.bringIntoViewRequester(bringIntoViewRequester)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
         ) {
             Action(
@@ -185,8 +177,7 @@ fun FeedbackForm(
 
         KodeeAdvice(
             emotion = emotion,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp)
                 .padding(bottom = 12.dp)
                 .widthIn(max = 400.dp)
                 .align(Alignment.CenterHorizontally),
@@ -210,25 +201,23 @@ private fun KodeeAdvice(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
-            Modifier
-                .weight(1f)
+            Modifier.weight(1f)
                 .animateContentSize(
                     alignment = Alignment.Center,
                     animationSpec = spring(
                         stiffness = StiffnessHigh,
                         visibilityThreshold = IntSize.VisibilityThreshold,
-                    )
-                )
+                    ),
+                ),
         ) {
             val arrowWidth = 11.dp
             AnimatedContent(
                 targetState = bubbleText,
                 transitionSpec = {
                     fadeIn(animationSpec = tween(220, delayMillis = 90)) togetherWith
-                            fadeOut(animationSpec = tween(90))
+                        fadeOut(animationSpec = tween(90))
                 },
-                modifier = Modifier
-                    .weight(1f)
+                modifier = Modifier.weight(1f)
                     .drawBehind {
                         val aw = arrowWidth.toPx()
                         val ah = aw * 2
@@ -263,9 +252,7 @@ private fun KodeeAdvice(
         }
         KodeeEmotion(
             emotion = emotion,
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .size(72.dp)
+            modifier = Modifier.align(Alignment.CenterVertically).size(72.dp),
         )
     }
 }
@@ -295,8 +282,17 @@ private class FeedbackFormPreviewParameterProvider :
 @PreviewLightDark
 @Composable
 private fun FeedbackFormPreview(
-    @PreviewParameter(FeedbackFormPreviewParameterProvider::class) params: FeedbackFormPreviewParams,
+    @PreviewParameter(FeedbackFormPreviewParameterProvider::class)
+    params: FeedbackFormPreviewParams,
 ) = PreviewHelper {
     var text by remember(params.text) { mutableStateOf(params.text) }
-    FeedbackForm(text, { text = it }, params.emotion, { _, _ -> }, {}, past = false, bringIntoViewRequester = BringIntoViewRequester())
+    FeedbackForm(
+        text,
+        { text = it },
+        params.emotion,
+        { _, _ -> },
+        {},
+        past = false,
+        bringIntoViewRequester = BringIntoViewRequester(),
+    )
 }

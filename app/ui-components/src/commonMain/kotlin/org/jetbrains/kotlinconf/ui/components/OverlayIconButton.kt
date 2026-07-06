@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -21,7 +22,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 @Composable
 fun OverlayIconButton(
@@ -32,17 +32,14 @@ fun OverlayIconButton(
     contentDescription: String? = null,
 ) {
     val strokeColor by animateColorAsState(
-        if (enabled) KotlinConfTheme.colors.strokeHalf
-        else KotlinConfTheme.colors.strokePale
+        if (enabled) KotlinConfTheme.colors.strokeHalf else KotlinConfTheme.colors.strokePale,
     )
     val iconColor by animateColorAsState(
-        if (enabled) KotlinConfTheme.colors.primaryText
-        else KotlinConfTheme.colors.placeholderText
+        if (enabled) KotlinConfTheme.colors.primaryText else KotlinConfTheme.colors.placeholderText,
     )
 
     Box(
-        modifier
-            .size(48.dp)
+        modifier.size(48.dp)
             .aspectRatio(1f)
             .clip(CircleShape)
             .border(1.dp, strokeColor, CircleShape)
@@ -54,7 +51,7 @@ fun OverlayIconButton(
             painter = painterResource(icon),
             contentDescription = contentDescription,
             tint = iconColor,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
         )
     }
 }

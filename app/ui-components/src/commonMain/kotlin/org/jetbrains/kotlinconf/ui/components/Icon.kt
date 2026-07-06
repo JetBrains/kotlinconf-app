@@ -18,13 +18,13 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 /**
  * Based on the Material 3 Icon implementation.
@@ -40,8 +40,7 @@ fun Icon(
         if (tint == Color.Unspecified) null else ColorFilter.tint(tint)
     }
     Box(
-        modifier
-            .toolingGraphicsLayer()
+        modifier.toolingGraphicsLayer()
             .defaultSizeFor(painter)
             .paint(painter, colorFilter = colorFilter, contentScale = ContentScale.Fit)
             .then(
@@ -52,8 +51,8 @@ fun Icon(
                     }
                 } else {
                     Modifier
-                }
-            )
+                },
+            ),
     )
 }
 
@@ -77,7 +76,7 @@ private fun Modifier.defaultSizeFor(painter: Painter) = this.then(
         Modifier.size(24.dp)
     } else {
         Modifier
-    }
+    },
 )
 
 private fun Size.isInfinite() = width.isInfinite() && height.isInfinite()

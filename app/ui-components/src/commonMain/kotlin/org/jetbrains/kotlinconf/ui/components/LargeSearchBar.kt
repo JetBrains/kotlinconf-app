@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
@@ -39,7 +40,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.utils.PreviewInteractionSource
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 @Composable
 fun LargeSearchBar(
@@ -59,12 +59,11 @@ fun LargeSearchBar(
             focused -> KotlinConfTheme.colors.strokeInputFocus
             hovered -> KotlinConfTheme.colors.strokeHalf
             else -> KotlinConfTheme.colors.strokePale
-        }
+        },
     )
 
     Row(
-        modifier = modifier
-            .border(
+        modifier = modifier.border(
                 width = 1.dp,
                 color = strokeColor,
                 shape = KotlinConfTheme.shapes.roundedCornerSm,
@@ -76,9 +75,7 @@ fun LargeSearchBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            modifier = Modifier
-                .padding(start = 8.dp)
-                .size(24.dp),
+            modifier = Modifier.padding(start = 8.dp).size(24.dp),
             painter = painterResource(UiRes.drawable.search_24),
             contentDescription = null,
             tint = KotlinConfTheme.colors.primaryText,
@@ -123,13 +120,15 @@ fun LargeSearchBar(
 
 private class SearchValueProvider : PreviewParameterProvider<String> {
     override val values = sequenceOf("", "Kotlin")
+
     override fun getDisplayName(index: Int) = if (index == 0) "empty" else "with input"
 }
 
 @PreviewLightDark
 @Composable
 private fun LargeSearchBarPreview(
-    @PreviewParameter(SearchValueProvider::class) searchValue: String,
+    @PreviewParameter(SearchValueProvider::class)
+    searchValue: String,
 ) = PreviewHelper {
     LargeSearchBar(
         searchValue = searchValue,

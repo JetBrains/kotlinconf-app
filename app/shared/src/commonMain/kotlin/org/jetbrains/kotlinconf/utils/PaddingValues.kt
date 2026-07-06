@@ -24,6 +24,6 @@ operator fun PaddingValues.plus(other: PaddingValues): PaddingValues {
         start = calculateStartPadding(layoutDir) + other.calculateStartPadding(layoutDir),
         top = calculateTopPadding() + other.calculateTopPadding(),
         end = calculateEndPadding(layoutDir) + other.calculateEndPadding(layoutDir),
-        bottom = calculateBottomPadding() + other.calculateBottomPadding()
+        bottom = calculateBottomPadding() + other.calculateBottomPadding(),
     )
 }

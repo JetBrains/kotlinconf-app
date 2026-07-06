@@ -25,8 +25,7 @@ class PartnerDetailViewModel(
 ) : ViewModel() {
     val partner: StateFlow<ErrorLoadingState<PartnerInfo>> = service.getPartner(partnerId)
         .map { partner ->
-            if (partner != null) ErrorLoadingState.Content(partner)
-            else ErrorLoadingState.Error
+            if (partner != null) ErrorLoadingState.Content(partner) else ErrorLoadingState.Error
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ErrorLoadingState.Loading)
 

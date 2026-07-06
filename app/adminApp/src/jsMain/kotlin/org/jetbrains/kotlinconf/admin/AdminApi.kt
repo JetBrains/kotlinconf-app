@@ -1,6 +1,5 @@
 // ABOUTME: Ktor JS client for the admin JSON endpoints, authenticated with the admin bearer token.
 // ABOUTME: Calls are origin-absolute (e.g. /2026/vote/all) so they hit the API, not the /admin shell.
-
 package org.jetbrains.kotlinconf.admin
 
 import io.ktor.client.HttpClient

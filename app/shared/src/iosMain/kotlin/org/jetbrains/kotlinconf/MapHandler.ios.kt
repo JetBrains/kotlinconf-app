@@ -21,7 +21,7 @@ private object IosMapHandler : MapHandler {
     override fun openNavigation(address: String) {
         val nsAddress = NSString.create(string = address)
         val encodedAddress = nsAddress.stringByAddingPercentEncodingWithAllowedCharacters(
-            NSCharacterSet.URLQueryAllowedCharacterSet
+            NSCharacterSet.URLQueryAllowedCharacterSet,
         ) ?: ""
 
         val url = NSURL(string = "geo-navigation:///place?address=$encodedAddress")

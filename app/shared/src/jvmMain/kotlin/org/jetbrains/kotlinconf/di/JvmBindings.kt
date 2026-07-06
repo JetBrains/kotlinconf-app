@@ -26,13 +26,14 @@ object JvmBindings {
 
     @Provides
     @SingleIn(AppScope::class)
-    fun provideLocalNotificationService(): LocalNotificationService = EmptyLocalNotificationService()
+    fun provideLocalNotificationService(): LocalNotificationService =
+        EmptyLocalNotificationService()
 
     @Provides
     @SingleIn(AppScope::class)
     fun provideNotificationPlatformConfiguration(): NotificationPlatformConfiguration =
         NotificationPlatformConfiguration.Desktop(
-            showPushNotification = false,
-            notificationIconPath = null,
-        )
+        showPushNotification = false,
+        notificationIconPath = null,
+    )
 }

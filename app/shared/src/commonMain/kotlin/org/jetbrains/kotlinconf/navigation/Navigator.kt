@@ -14,8 +14,9 @@ class Navigator(
         onBufferOverflow = BufferOverflow.DROP_LATEST,
     )
 
-    fun tabReselections(forRoute: TopLevelRoute): Flow<TopLevelRoute> =
-        _tabReselections.filter { it == forRoute }
+    fun tabReselections(forRoute: TopLevelRoute): Flow<TopLevelRoute> = _tabReselections.filter {
+        it == forRoute
+    }
 
     fun goBack() {
         val currentBackstack = state.currentBackstack

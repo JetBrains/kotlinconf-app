@@ -18,14 +18,16 @@ class PermissionHandler(
 
     fun initialize(activity: ComponentActivity) {
         this.activity = activity
-        permissionLauncher = activity
-            .registerForActivityResult<Array<String>, Map<String, @JvmSuppressWildcards Boolean>>(
-                RequestMultiplePermissions()
+        permissionLauncher =
+            activity.registerForActivityResult<Array<String>, Map<String, @JvmSuppressWildcards
+                    Boolean>>(
+                RequestMultiplePermissions(),
             ) { result ->
-                val allGranted = result.all<String, @JvmSuppressWildcards Boolean> { it.value }
-                logger.log("PermissionHandler") { "Permission result: $allGranted" }
-                permissionResult.trySend(allGranted)
-            }
+                    val allGranted = result.all<String, @JvmSuppressWildcards
+                        Boolean> { it.value }
+                    logger.log("PermissionHandler") { "Permission result: $allGranted" }
+                    permissionResult.trySend(allGranted)
+                }
     }
 
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>

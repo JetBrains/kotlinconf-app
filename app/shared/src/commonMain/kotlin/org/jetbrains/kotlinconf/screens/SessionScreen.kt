@@ -72,7 +72,7 @@ fun SessionScreen(
     onNavigateToMap: (String) -> Unit,
     onWatchVideo: (String) -> Unit,
     viewModel: SessionViewModel =
-        assistedMetroViewModel<SessionViewModel, SessionViewModel.Factory> { create(sessionId) }
+        assistedMetroViewModel<SessionViewModel, SessionViewModel.Factory> { create(sessionId) },
 ) {
     val sessionState = viewModel.session.collectAsStateWithLifecycle().value
     val speakers = viewModel.speakers.collectAsStateWithLifecycle().value
@@ -84,7 +84,6 @@ fun SessionScreen(
             .background(color = KotlinConfTheme.colors.mainBackground)
             .padding(topInsetPadding()),
     ) { session ->
-
         AdaptiveDetailLayout(
             compactHeader = {
                 MainHeaderTitleBar(
@@ -99,7 +98,7 @@ fun SessionScreen(
                 )
                 HorizontalDivider(
                     thickness = 1.dp,
-                    color = KotlinConfTheme.colors.strokePale
+                    color = KotlinConfTheme.colors.strokePale,
                 )
             },
             compactContentHeader = {
@@ -147,7 +146,7 @@ private fun Description(description: String) {
 @Composable
 private fun Speakers(
     speakers: List<Speaker>,
-    onSpeaker: (SpeakerId) -> Unit
+    onSpeaker: (SpeakerId) -> Unit,
 ) {
     speakers.forEach { speaker ->
         SpeakerCard(
@@ -155,7 +154,7 @@ private fun Speakers(
             title = speaker.position,
             photoUrl = speaker.photoUrl,
             modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(),
-            onClick = { onSpeaker(speaker.id) }
+            onClick = { onSpeaker(speaker.id) },
         )
     }
 }
@@ -178,7 +177,7 @@ private fun Feedback(
 @Composable
 private fun VideoLink(
     session: SessionCardView,
-    onWatchVideo: (String) -> Unit
+    onWatchVideo: (String) -> Unit,
 ) {
     if (session.videoUrl != null) {
         PageMenuItem(
@@ -242,7 +241,7 @@ private fun RoomSection(
                 val iconRotation by animateFloatAsState(if (isExpanded) 180f else 0f)
                 val stateDesc = stringResource(
                     if (isExpanded) Res.string.session_room_state_description_expanded
-                    else Res.string.session_room_state_description_collapsed
+                    else Res.string.session_room_state_description_collapsed,
                 )
                 Action(
                     label = roomName,
@@ -251,11 +250,9 @@ private fun RoomSection(
                     enabled = true,
                     onClick = { isExpanded = !isExpanded },
                     iconRotation = iconRotation,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .semantics {
-                            stateDescription = stateDesc
-                        }
+                    modifier = Modifier.fillMaxWidth().semantics {
+                        stateDescription = stateDesc
+                    },
                 )
             }
 
@@ -269,8 +266,7 @@ private fun RoomSection(
                     mapData = mapData,
                     room = room,
                     svgsByPath = mapContent.svgsByPath,
-                    modifier = Modifier
-                        .padding(top = 8.dp)
+                    modifier = Modifier.padding(top = 8.dp)
                         .clip(KotlinConfTheme.shapes.roundedCornerMd)
                         .background(KotlinConfTheme.colors.tileBackground)
                         .clickable {

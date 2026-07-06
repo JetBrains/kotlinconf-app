@@ -22,8 +22,9 @@ object AndroidBindings {
 
     @Provides
     @SingleIn(AppScope::class)
-    fun provideSettings(application: Application): ObservableSettings =
-        SharedPreferencesSettings(PreferenceManager.getDefaultSharedPreferences(application))
+    fun provideSettings(application: Application): ObservableSettings = SharedPreferencesSettings(
+        PreferenceManager.getDefaultSharedPreferences(application),
+    )
 
     @Provides
     @SingleIn(AppScope::class)
@@ -35,9 +36,8 @@ object AndroidBindings {
     @SingleIn(AppScope::class)
     fun provideNotificationPlatformConfiguration(
         @NotificationIcon iconRes: Int,
-    ): NotificationPlatformConfiguration =
-        NotificationPlatformConfiguration.Android(
-            notificationIconResId = iconRes,
-            showPushNotification = true,
-        )
+    ): NotificationPlatformConfiguration = NotificationPlatformConfiguration.Android(
+        notificationIconResId = iconRes,
+        showPushNotification = true,
+    )
 }

@@ -1,11 +1,11 @@
 import io.ktor.server.config.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.jetbrains.kotlinconf.backend.services.ArchivedDataService
 import org.jetbrains.kotlinconf.backend.services.AssetService
 import org.jetbrains.kotlinconf.backend.services.ConferenceInfoService
 import org.jetbrains.kotlinconf.backend.services.GoldenKodeeService
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 /**
  * Runs the same data validations that run on server startup,

@@ -39,25 +39,24 @@ val LocalTypography = compositionLocalOf<Typography> {
 }
 
 object KotlinConfTheme {
-    val colors: Colors
-        @Composable
-        @ReadOnlyComposable
-        get() = LocalColors.current
+    val colors: Colors @Composable
+    @ReadOnlyComposable
+    get() = LocalColors.current
 
-    val shapes: Shapes
-        @Composable
-        @ReadOnlyComposable
-        get() = LocalShapes.current
+    val shapes: Shapes @Composable
+    @ReadOnlyComposable
+    get() = LocalShapes.current
 
-    val typography: Typography
-        @Composable
-        @ReadOnlyComposable
-        get() = LocalTypography.current
+    val typography: Typography @Composable
+    @ReadOnlyComposable
+    get() = LocalTypography.current
 }
 
 // Exposes custom theme value to Compose resources, https://youtrack.jetbrains.com/issue/CMP-4197
 expect object LocalAppTheme {
-    val current: Boolean @Composable get
+    val current: Boolean
+        @Composable
+        get
 
     @Composable
     infix fun provides(value: Boolean?): ProvidedValue<*>
@@ -67,7 +66,9 @@ expect object LocalAppTheme {
 fun KotlinConfTheme(
     colors: Colors = if (isSystemInDarkTheme()) KotlinConfDarkColors else KotlinConfLightColors,
     rippleEnabled: Boolean = true,
-    content: @Composable () -> Unit,
+    content:
+        @Composable
+        () -> Unit,
 ) {
     CompositionLocalProvider(
         LocalColors provides colors,

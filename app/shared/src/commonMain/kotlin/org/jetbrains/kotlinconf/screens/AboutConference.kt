@@ -73,7 +73,7 @@ fun AboutConference(
                 Text(
                     text = conferenceInfo.aboutHeader,
                     style = KotlinConfTheme.typography.h1,
-                    modifier = Modifier.semantics { heading() }
+                    modifier = Modifier.semantics { heading() },
                 )
                 Text(text = conferenceInfo.aboutDescription)
             }
@@ -106,8 +106,7 @@ fun AboutConference(
             AsyncImage(
                 model = logoUrl,
                 contentDescription = stringResource(Res.string.kotlinconf_by_jetbrains_description),
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-                    .widthIn(max = 360.dp)
+                modifier = Modifier.align(Alignment.CenterHorizontally).widthIn(max = 360.dp),
             )
             Spacer(modifier = Modifier.height(64.dp))
         }
@@ -148,8 +147,7 @@ private fun EventCard(
     backgroundColor: Color = KotlinConfTheme.colors.mainBackground,
 ) {
     Column(
-        modifier = Modifier
-            .background(backgroundColor)
+        modifier = Modifier.background(backgroundColor)
             .border(
                 width = 1.dp,
                 color = KotlinConfTheme.colors.strokePale,
@@ -164,7 +162,7 @@ private fun EventCard(
             line2 = line2,
             modifier = Modifier.fillMaxWidth(),
             day2 = day2,
-            fullWidth = true
+            fullWidth = true,
         )
 
         if (description.isNotEmpty()) {
@@ -193,7 +191,7 @@ private fun EventCard(
 
             Row(
                 modifier = Modifier.padding(16.dp).fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(location, style = KotlinConfTheme.typography.text2)
                 Text(time, style = KotlinConfTheme.typography.text2)

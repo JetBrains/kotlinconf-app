@@ -1,6 +1,5 @@
 // ABOUTME: Entry point and top-level state for the Compose HTML admin SPA.
 // ABOUTME: Holds the load form, fetched data, and which screen (overview vs. a single user) is shown.
-
 package org.jetbrains.kotlinconf.admin
 
 import androidx.compose.runtime.Composable
@@ -23,13 +22,16 @@ fun main() {
 
 private sealed interface Screen {
     data object Overview : Screen
+
     data class User(val userId: String) : Screen
 }
 
 @Composable
 private fun AdminApp() {
     var token by remember { mutableStateOf("") }
-    var year by remember { mutableStateOf(localStorage.getItem(PREF_YEAR)?.toIntOrNull() ?: DEFAULT_YEAR) }
+    var year by remember {
+        mutableStateOf(localStorage.getItem(PREF_YEAR)?.toIntOrNull() ?: DEFAULT_YEAR)
+    }
     var data by remember { mutableStateOf<AggregatedData?>(null) }
     var loading by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
@@ -60,9 +62,13 @@ private fun AdminApp() {
     H1 { Text("KotlinConf Admin") }
 
     LoadBar(
-        token = token, onToken = { token = it },
-        year = year, onYear = { year = it },
-        loading = loading, error = error, onLoad = ::load,
+        token = token,
+        onToken = { token = it },
+        year = year,
+        onYear = { year = it },
+        loading = loading,
+        error = error,
+        onLoad = ::load,
     )
 
     val loaded = data ?: return
@@ -83,9 +89,12 @@ private fun AdminApp() {
 
 @Composable
 private fun LoadBar(
-    token: String, onToken: (String) -> Unit,
-    year: Int, onYear: (Int) -> Unit,
-    loading: Boolean, error: String?,
+    token: String,
+    onToken: (String) -> Unit,
+    year: Int,
+    onYear: (Int) -> Unit,
+    loading: Boolean,
+    error: String?,
     onLoad: () -> Unit,
 ) {
     Div(attrs = { classes("card") }) {
@@ -100,10 +109,12 @@ private fun LoadBar(
             }
             Div {
                 Label(forId = "year") { Text("Year") }
-                Select(attrs = {
-                    id("year")
-                    onChange { event -> event.value?.toIntOrNull()?.let(onYear) }
-                }) {
+                Select(
+                    attrs = {
+                        id("year")
+                        onChange { event -> event.value?.toIntOrNull()?.let(onYear) }
+                    },
+                ) {
                     listOf(2026, 2025).forEach { option ->
                         Option(option.toString(), attrs = { if (option == year) selected() }) {
                             Text(option.toString())
@@ -112,10 +123,12 @@ private fun LoadBar(
                 }
             }
             Div {
-                Button(attrs = {
-                    if (loading || token.isBlank()) disabled()
-                    onClick { onLoad() }
-                }) {
+                Button(
+                    attrs = {
+                        if (loading || token.isBlank()) disabled()
+                        onClick { onLoad() }
+                    },
+                ) {
                     Text(if (loading) "Loading…" else "Load data")
                 }
             }

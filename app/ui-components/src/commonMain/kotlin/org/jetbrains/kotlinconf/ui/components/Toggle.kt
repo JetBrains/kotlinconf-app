@@ -25,10 +25,10 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 private val ToggleBackgroundShape = RoundedCornerShape(percent = 100)
 private val ToggleThumbShape = CircleShape
@@ -45,14 +45,12 @@ fun Toggle(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     val toggleColor by animateColorAsState(
-        if (enabled) KotlinConfTheme.colors.toggleOn
-        else KotlinConfTheme.colors.toggleOff
+        if (enabled) KotlinConfTheme.colors.toggleOn else KotlinConfTheme.colors.toggleOff,
     )
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
-            .toggleable(
+        modifier = modifier.toggleable(
                 value = enabled,
                 enabled = true,
                 role = Role.Switch,
@@ -73,13 +71,12 @@ fun Toggle(
                     interactionSource = interactionSource,
                     indication = LocalIndication.current,
                 )
-                .background(toggleColor)
+                .background(toggleColor),
         )
         val xOffset by animateDpAsState(if (enabled) ToggleWidth / 4 else -ToggleWidth / 4)
         val thumbCenterColor = KotlinConfTheme.colors.mainBackground
         Box(
-            Modifier
-                .offset(x = xOffset)
+            Modifier.offset(x = xOffset)
                 .size(ToggleHeight)
                 .wrapContentSize(unbounded = true)
                 .size(ThumbSize)
@@ -96,9 +93,9 @@ fun Toggle(
                 .drawBehind {
                     drawCircle(
                         color = thumbCenterColor,
-                        radius = (size.minDimension / 2) - 2.dp.toPx()
+                        radius = (size.minDimension / 2) - 2.dp.toPx(),
                     )
-                }
+                },
         )
     }
 }

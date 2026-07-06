@@ -20,10 +20,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 @Composable
 fun SettingsItem(
@@ -36,8 +36,7 @@ fun SettingsItem(
     val interactionSource = remember { MutableInteractionSource() }
 
     Row(
-        modifier
-            .fillMaxWidth()
+        modifier.fillMaxWidth()
             .clip(KotlinConfTheme.shapes.roundedCornerMd)
             .background(KotlinConfTheme.colors.tileBackground)
             .toggleable(
@@ -54,7 +53,7 @@ fun SettingsItem(
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         ) {
             Text(
                 text = title,
@@ -71,9 +70,7 @@ fun SettingsItem(
         Toggle(
             enabled = enabled,
             onToggle = onToggle,
-            modifier = Modifier
-                .focusProperties { canFocus = false }
-                .clearAndSetSemantics {},
+            modifier = Modifier.focusProperties { canFocus = false }.clearAndSetSemantics {},
             interactionSource = interactionSource,
         )
     }
@@ -96,7 +93,8 @@ private fun SettingsItemWithNotePreview() = PreviewHelper {
     var enabled by remember { mutableStateOf(false) }
     SettingsItem(
         title = "Conference schedule updates",
-        note = "We recommend keeping this setting enabled to receive timely notifications about any changes or important information.",
+        note =
+            "We recommend keeping this setting enabled to receive timely notifications about any changes or important information.",
         enabled = enabled,
         onToggle = { enabled = it },
     )

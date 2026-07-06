@@ -42,7 +42,7 @@ class MainActivity(
                     val systemBarStyle = SystemBarStyle.auto(
                         lightScrim = Color.TRANSPARENT,
                         darkScrim = Color.TRANSPARENT,
-                        detectDarkMode = { isDarkMode }
+                        detectDarkMode = { isDarkMode },
                     )
                     enableEdgeToEdge(
                         statusBarStyle = systemBarStyle,

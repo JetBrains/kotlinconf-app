@@ -20,7 +20,6 @@ import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.di.Year
 import org.jetbrains.kotlinconf.di.YearScope
 
-
 @ContributesBinding(YearScope::class)
 @SingleIn(YearScope::class)
 @OptIn(ExperimentalSettingsApi::class)
@@ -55,23 +54,42 @@ class YearlyStorageImpl(
     override fun isPolicySigned(): Flow<Boolean> = settings.getBooleanFlow(POLICY_SIGNED, false)
     override suspend fun setPolicySigned(value: Boolean) = settings.set(POLICY_SIGNED, value)
 
-    override fun getConferenceCache(): Flow<Conference?> = settings.getStringOrNullFlow(CONFERENCE_CACHE).map { it.decodeOrNull<Conference>() }
-    override suspend fun setConferenceCache(value: Conference) = settings.set(CONFERENCE_CACHE, json.encodeToString(value))
+    override fun getConferenceCache(): Flow<Conference?> = settings.getStringOrNullFlow(
+            CONFERENCE_CACHE,
+        )
+        .map { it.decodeOrNull<Conference>() }
+    override suspend fun setConferenceCache(value: Conference) =
+        settings.set(CONFERENCE_CACHE, json.encodeToString(value))
 
-    override fun getConferenceInfoCache(): Flow<ConferenceInfo?> = settings.getStringOrNullFlow(CONFERENCE_INFO_CACHE).map { it.decodeOrNull<ConferenceInfo>() }
-    override suspend fun setConferenceInfoCache(value: ConferenceInfo) = settings.set(CONFERENCE_INFO_CACHE, json.encodeToString(value))
+    override fun getConferenceInfoCache(): Flow<ConferenceInfo?> = settings.getStringOrNullFlow(
+            CONFERENCE_INFO_CACHE,
+        )
+        .map { it.decodeOrNull<ConferenceInfo>() }
+    override suspend fun setConferenceInfoCache(value: ConferenceInfo) =
+        settings.set(CONFERENCE_INFO_CACHE, json.encodeToString(value))
 
-    override fun getGoldenKodeeCache(): Flow<GoldenKodeeData?> = settings.getStringOrNullFlow(GOLDEN_KODEE_CACHE).map { it.decodeOrNull<GoldenKodeeData>() }
-    override suspend fun setGoldenKodeeCache(value: GoldenKodeeData) = settings.set(GOLDEN_KODEE_CACHE, json.encodeToString(value))
+    override fun getGoldenKodeeCache(): Flow<GoldenKodeeData?> = settings.getStringOrNullFlow(
+            GOLDEN_KODEE_CACHE,
+        )
+        .map { it.decodeOrNull<GoldenKodeeData>() }
+    override suspend fun setGoldenKodeeCache(value: GoldenKodeeData) =
+        settings.set(GOLDEN_KODEE_CACHE, json.encodeToString(value))
 
-    override fun getFavorites(): Flow<Set<SessionId>> = settings.getStringOrNullFlow(FAVORITES).map { it.decodeOrNull<Set<SessionId>>() ?: emptySet() }
-    override suspend fun setFavorites(value: Set<SessionId>) = settings.set(FAVORITES, json.encodeToString(value))
+    override fun getFavorites(): Flow<Set<SessionId>> = settings.getStringOrNullFlow(FAVORITES)
+        .map { it.decodeOrNull<Set<SessionId>>() ?: emptySet() }
+    override suspend fun setFavorites(value: Set<SessionId>) =
+        settings.set(FAVORITES, json.encodeToString(value))
 
-    override fun getNotificationSettings(): Flow<NotificationSettings?> = settings.getStringOrNullFlow(NOTIFICATION_SETTINGS).map { it.decodeOrNull<NotificationSettings>() }
-    override suspend fun setNotificationSettings(value: NotificationSettings) = settings.set(NOTIFICATION_SETTINGS, json.encodeToString(value))
+    override fun getNotificationSettings(): Flow<NotificationSettings?> = settings
+        .getStringOrNullFlow(NOTIFICATION_SETTINGS)
+        .map { it.decodeOrNull<NotificationSettings>() }
+    override suspend fun setNotificationSettings(value: NotificationSettings) =
+        settings.set(NOTIFICATION_SETTINGS, json.encodeToString(value))
 
-    override fun getVotes(): Flow<List<VoteInfo>> = settings.getStringOrNullFlow(VOTES).map { it.decodeOrNull<List<VoteInfo>>() ?: emptyList() }
-    override suspend fun setVotes(value: List<VoteInfo>) = settings.set(VOTES, json.encodeToString(value))
+    override fun getVotes(): Flow<List<VoteInfo>> = settings.getStringOrNullFlow(VOTES)
+        .map { it.decodeOrNull<List<VoteInfo>>() ?: emptyList() }
+    override suspend fun setVotes(value: List<VoteInfo>) =
+        settings.set(VOTES, json.encodeToString(value))
 
     override suspend fun getAsset(name: String): String? = assetStorage.read(name)
     override suspend fun setAsset(name: String, content: String) = assetStorage.write(name, content)

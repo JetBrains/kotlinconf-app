@@ -11,11 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 @Composable
 fun PartnerCard(
@@ -25,14 +25,13 @@ fun PartnerCard(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
+        modifier = modifier.clip(RoundedCornerShape(16.dp))
             .background(KotlinConfTheme.colors.tileBackground)
             .clickable(onClick = onClick)
             .fillMaxWidth()
             .height(180.dp)
             .padding(36.dp),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         AsyncImage(
             model = logoUrl,

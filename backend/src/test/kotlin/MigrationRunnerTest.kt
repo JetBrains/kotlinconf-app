@@ -1,12 +1,11 @@
 // ABOUTME: Tests for the SQL migration runner mechanics (discovery, application, idempotency).
 // ABOUTME: Uses in-memory H2 with PostgreSQL compatibility mode.
-
-import org.jetbrains.exposed.v1.jdbc.Database
-import org.jetbrains.kotlinconf.backend.schema.MigrationRunner
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.kotlinconf.backend.schema.MigrationRunner
 
 class MigrationRunnerTest {
     private lateinit var database: Database
@@ -15,7 +14,7 @@ class MigrationRunnerTest {
     fun setup() {
         database = Database.connect(
             "jdbc:h2:mem:test_runner_${System.nanoTime()};MODE=PostgreSQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1",
-            "org.h2.Driver"
+            "org.h2.Driver",
         )
     }
 
@@ -27,7 +26,7 @@ class MigrationRunnerTest {
         assertEquals(
             migrations.sortedBy { it.version },
             migrations,
-            "Migrations should be sorted by version"
+            "Migrations should be sorted by version",
         )
     }
 
@@ -53,7 +52,11 @@ class MigrationRunnerTest {
 
     @Test
     fun `currentVersion reflects applied state`() {
-        assertEquals(0, MigrationRunner.currentVersion(database), "Should be 0 before any migrations")
+        assertEquals(
+            0,
+            MigrationRunner.currentVersion(database),
+            "Should be 0 before any migrations",
+        )
         MigrationRunner.migrate(database)
         assertTrue(MigrationRunner.currentVersion(database) > 0, "Should be > 0 after migrations")
     }

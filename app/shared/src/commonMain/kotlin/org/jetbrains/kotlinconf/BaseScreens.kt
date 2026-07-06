@@ -14,8 +14,6 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.document_error_no_data
-import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
-import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MarkdownView
@@ -25,6 +23,8 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_left_24
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_back
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
+import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
@@ -34,13 +34,14 @@ fun ScreenWithTitle(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     contentScrollState: ScrollState = rememberScrollState(),
-    content: @Composable ColumnScope.() -> Unit,
+    content:
+        @Composable
+        ColumnScope.() -> Unit,
 ) {
     Column(
-        modifier
-            .fillMaxSize()
+        modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .padding(topInsetPadding()),
     ) {
         MainHeaderTitleBar(
             title = title,
@@ -50,18 +51,17 @@ fun ScreenWithTitle(
                     contentDescription = stringResource(UiRes.string.main_header_back),
                     onClick = onBack,
                 )
-            }
+            },
         )
 
         HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
 
         Column(
-            Modifier
-                .fillMaxSize()
+            Modifier.fillMaxSize()
                 .background(color = KotlinConfTheme.colors.mainBackground)
                 .padding(horizontal = 12.dp)
                 .verticalScroll(contentScrollState)
-                .padding(bottomInsetPadding())
+                .padding(bottomInsetPadding()),
         ) {
             content()
         }
@@ -76,7 +76,10 @@ fun MarkdownScreenWithTitle(
     onBack: () -> Unit,
     onReload: () -> Unit,
     onCustomUriClick: (String) -> Unit = {},
-    endContent: @Composable ColumnScope.() -> Unit = {},
+    endContent:
+        @Composable
+        ColumnScope.() -> Unit =
+        {},
 ) {
     val scrollState = rememberScrollState()
     ScrollToTopHandler(scrollState)
@@ -85,7 +88,7 @@ fun MarkdownScreenWithTitle(
             Text(
                 header,
                 style = KotlinConfTheme.typography.h1,
-                modifier = Modifier.padding(top = 24.dp, bottom = 12.dp)
+                modifier = Modifier.padding(top = 24.dp, bottom = 12.dp),
             )
         }
 

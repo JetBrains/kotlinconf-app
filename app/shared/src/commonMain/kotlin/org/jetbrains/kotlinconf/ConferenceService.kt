@@ -4,6 +4,7 @@ import com.mmk.kmpnotifier.notification.NotifierManager
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,7 +39,6 @@ import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.storage.YearlyStorage
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
-import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Inject
@@ -61,8 +61,8 @@ class ConferenceService(
 
     private val currentYearGraph: MutableStateFlow<YearGraph?> = MutableStateFlow(null)
 
-    private val currentYearlyStorage: Flow<YearlyStorage> =
-        currentYearGraph.map { it?.storage }.filterNotNull()
+    private val currentYearlyStorage: Flow<YearlyStorage> = currentYearGraph.map { it?.storage }
+        .filterNotNull()
 
     init {
         applicationStorage.initialize()
@@ -77,27 +77,27 @@ class ConferenceService(
         }
 
         scope.launch {
-            applicationStorage.getConfig()
-                .filterNotNull()
-                .collect { config ->
-                    taggedLogger.log { "Loaded local config: $config, loading data for ${config.currentYear}" }
-
-                    taggedLogger.log { "Recreating year graph" }
-                    currentYearGraph.update {
-                        yearGraphFactory.create(config.currentYear)
-                    }
-
-                    taggedLogger.log { "Loading conference data" }
-                    loadConferenceData()
-
-                    taggedLogger.log { "Preloading assets" }
-                    downloadAllAssets()
-
-                    verifyPolicyStatus()
-                    syncVotes()
-
-                    taggedLogger.log { "ConferenceService init successful" }
+            applicationStorage.getConfig().filterNotNull().collect { config ->
+                taggedLogger.log {
+                    "Loaded local config: $config, loading data for ${config.currentYear}"
                 }
+
+                taggedLogger.log { "Recreating year graph" }
+                currentYearGraph.update {
+                    yearGraphFactory.create(config.currentYear)
+                }
+
+                taggedLogger.log { "Loading conference data" }
+                loadConferenceData()
+
+                taggedLogger.log { "Preloading assets" }
+                downloadAllAssets()
+
+                verifyPolicyStatus()
+                syncVotes()
+
+                taggedLogger.log { "ConferenceService init successful" }
+            }
         }
 
         scope.launch {
@@ -105,76 +105,69 @@ class ConferenceService(
         }
 
         scope.launch {
-            currentYearlyStorage.flatMapLatest { it.getNotificationSettings() }
-                .filterNotNull()
+            currentYearlyStorage.flatMapLatest { it.getNotificationSettings() }.filterNotNull()
                 .collect { settings ->
                     taggedLogger.log { "Synchronizing settings to Firebase topics: $settings" }
                     val notifier = NotifierManager.getPushNotifier()
                     listOf(
-                        settings.scheduleUpdates to PushNotificationConstants.TOPIC_SCHEDULE_UPDATES,
-                    ).forEach { (enabled, topic) ->
-                        if (enabled) notifier.subscribeToTopic(topic)
-                        else notifier.unSubscribeFromTopic(topic)
-                    }
+                            settings.scheduleUpdates to PushNotificationConstants
+                                .TOPIC_SCHEDULE_UPDATES,
+                        )
+                        .forEach { (enabled, topic) ->
+                            if (enabled) notifier.subscribeToTopic(topic)
+                            else notifier.unSubscribeFromTopic(topic)
+                        }
                 }
         }
     }
 
     private val userId = applicationStorage.userId
 
-    val agenda: StateFlow<List<Day>> =
-        combine(
+    val agenda: StateFlow<List<Day>> = combine(
             currentYearlyStorage.flatMapLatest { it.getConferenceCache() },
             currentYearlyStorage.flatMapLatest { it.getFavorites() },
             timeProvider.time,
             currentYearlyStorage.flatMapLatest { it.getVotes() },
         ) { conference, favorites, time, votes ->
             conference?.buildAgenda(favorites, votes, time) ?: emptyList()
-        }.stateIn(scope, SharingStarted.Eagerly, emptyList())
+        }
+        .stateIn(scope, SharingStarted.Eagerly, emptyList())
 
-    val votes: StateFlow<List<VoteInfo>> =
-        currentYearlyStorage.flatMapLatest { it.getVotes() }
-            .stateIn(scope, SharingStarted.Eagerly, emptyList())
+    val votes: StateFlow<List<VoteInfo>> = currentYearlyStorage.flatMapLatest { it.getVotes() }
+        .stateIn(scope, SharingStarted.Eagerly, emptyList())
 
-    private val sessionCards: StateFlow<List<SessionCardView>> =
-        agenda.map {
-            it.flatMap { it.timeSlots }.flatMap { it.sessions }
-        }.stateIn(scope, SharingStarted.Eagerly, emptyList())
+    private val sessionCards: StateFlow<List<SessionCardView>> = agenda.map {
+        it.flatMap { it.timeSlots }.flatMap { it.sessions }
+    }.stateIn(scope, SharingStarted.Eagerly, emptyList())
 
     val speakers: StateFlow<List<Speaker>> =
         currentYearlyStorage.flatMapLatest { it.getConferenceCache() }
-            .map {
-                (it?.speakers ?: emptyList())
-                    .filter { speaker -> speaker.photoUrl.isNotBlank() }
-            }
-            .stateIn(scope, SharingStarted.Eagerly, emptyList())
+        .map {
+            (it?.speakers ?: emptyList()).filter { speaker -> speaker.photoUrl.isNotBlank() }
+        }.stateIn(scope, SharingStarted.Eagerly, emptyList())
 
-    private val speakersById: StateFlow<Map<SpeakerId, Speaker>> = speakers
-        .map { speakers ->
-            speakers.associateBy { it.id }
-        }
-        .stateIn(scope, SharingStarted.Eagerly, emptyMap())
+    private val speakersById: StateFlow<Map<SpeakerId, Speaker>> = speakers.map { speakers ->
+        speakers.associateBy { it.id }
+    }.stateIn(scope, SharingStarted.Eagerly, emptyMap())
 
     val conferenceInfo: StateFlow<ConferenceInfo?> =
         currentYearlyStorage.flatMapLatest { it.getConferenceInfoCache() }
-            .stateIn(scope, SharingStarted.Eagerly, null)
-
-    val mapData: StateFlow<MapData?> = conferenceInfo
-        .map { it?.mapData }
         .stateIn(scope, SharingStarted.Eagerly, null)
 
-    val goldenKodeeData: StateFlow<GoldenKodeeData?> =
-        combine(
+    val mapData: StateFlow<MapData?> = conferenceInfo.map { it?.mapData }
+        .stateIn(scope, SharingStarted.Eagerly, null)
+
+    val goldenKodeeData: StateFlow<GoldenKodeeData?> = combine(
             currentYearlyStorage.flatMapLatest { it.getGoldenKodeeCache() },
             flagsManager.flags,
         ) { data, flags ->
             if (flags.useFakeGoldenKodeeData) FakeGoldenKodeeData else data
-        }.stateIn(scope, SharingStarted.Eagerly, null)
+        }
+        .stateIn(scope, SharingStarted.Eagerly, null)
 
-    val currentYear: StateFlow<Int?> =
-        applicationStorage.getConfig()
-            .map { it?.currentYear }
-            .stateIn(scope, SharingStarted.Eagerly, null)
+    val currentYear: StateFlow<Int?> = applicationStorage.getConfig()
+        .map { it?.currentYear }
+        .stateIn(scope, SharingStarted.Eagerly, null)
 
     fun getTheme(): Flow<Theme> = applicationStorage.getTheme()
 
@@ -220,9 +213,11 @@ class ConferenceService(
                 val newSession = newSessions[sessionId] ?: return@forEach
                 val oldSession = oldSessions[sessionId] ?: return@forEach
 
-                if (oldSession.startsAt != newSession.startsAt ||
+                if (
+                    oldSession.startsAt != newSession.startsAt ||
                     oldSession.endsAt != newSession.endsAt ||
-                    oldSession.location != newSession.location) {
+                    oldSession.location != newSession.location
+                ) {
                     cancelNotifications(sessionId)
                     if (remindersEnabled) {
                         scheduleNotification(
@@ -278,19 +273,20 @@ class ConferenceService(
      * Request permissions to send notifications.
      * @return true if permission was granted, false otherwise
      */
-    suspend fun requestNotificationPermissions(): Boolean =
-        localNotificationService.requestPermission()
-            .also { taggedLogger.log { "Notification permissions granted: $it" } }
+    suspend fun requestNotificationPermissions(): Boolean = localNotificationService
+        .requestPermission()
+        .also { taggedLogger.log { "Notification permissions granted: $it" } }
 
     fun getNotificationSettings(): Flow<NotificationSettings> =
         currentYearlyStorage.flatMapLatest { it.getNotificationSettings() }
-            .map {
-                // No stored value yet, create settings with everything enabled by default
-                it ?: NotificationSettings(
+        .map {
+            // No stored value yet, create settings with everything enabled by default
+            it
+                ?: NotificationSettings(
                     sessionReminders = true,
                     scheduleUpdates = true,
                 )
-            }
+        }
 
     suspend fun setNotificationSettings(settings: NotificationSettings) {
         val currentYearGraph = currentYearGraph.value ?: return
@@ -304,8 +300,7 @@ class ConferenceService(
 
             if (settings.sessionReminders) {
                 // Re-schedule notifications for all favorite sessions
-                favorites
-                    .mapNotNull { sessionId -> sessionByIdFlow(sessionId).first() }
+                favorites.mapNotNull { sessionId -> sessionByIdFlow(sessionId).first() }
                     .forEach { session ->
                         scheduleNotification(
                             start = session.startsAt,
@@ -356,20 +351,18 @@ class ConferenceService(
 
     fun speakerById(speakerId: SpeakerId): Speaker? = speakersById.value[speakerId]
 
-    fun speakerByIdFlow(speakerId: SpeakerId): Flow<Speaker?> =
-        speakersById.map { it[speakerId] }
+    fun speakerByIdFlow(speakerId: SpeakerId): Flow<Speaker?> = speakersById.map { it[speakerId] }
 
     fun sessionByIdFlow(sessionId: SessionId): Flow<SessionCardView?> =
         sessionCards.map { sessions -> sessions.find { it.id == sessionId } }
 
-    fun speakersBySessionId(sessionId: SessionId): Flow<List<Speaker>> =
-        sessionByIdFlow(sessionId).map { session ->
+    fun speakersBySessionId(sessionId: SessionId): Flow<List<Speaker>> = sessionByIdFlow(sessionId)
+        .map { session ->
             session?.speakerIds?.mapNotNull { speakerId -> speakerById(speakerId) } ?: emptyList()
         }
 
     fun sessionsForSpeakerFlow(id: SpeakerId): Flow<List<SessionCardView>> =
         sessionCards.map { sessions -> sessions.filter { id in it.speakerIds } }
-
 
     suspend fun setFavorite(sessionId: SessionId, favorite: Boolean) {
         withContext(Dispatchers.Default + NonCancellable) {
@@ -452,7 +445,6 @@ class ConferenceService(
         localNotificationService.cancel(LocalNotificationId(Type.SessionEnd, sessionId.id))
     }
 
-
     private suspend fun syncVotes() {
         if (!isPolicySigned()) {
             taggedLogger.log { "Can't sync votes, policy not signed" }
@@ -467,17 +459,16 @@ class ConferenceService(
 
         val apiVotes = client.myVotes().associateBy { it.sessionId }
         val localVotes = storage.getVotes().first().associateBy { it.sessionId }
-        val mergedVotes = (apiVotes.keys union localVotes.keys)
-            .mapNotNull { sessionId ->
-                val localVote = localVotes[sessionId]
-                val apiVote = apiVotes[sessionId]
+        val mergedVotes = (apiVotes.keys union localVotes.keys).mapNotNull { sessionId ->
+            val localVote = localVotes[sessionId]
+            val apiVote = apiVotes[sessionId]
 
-                if (localVote?.score != apiVote?.score) {
-                    client.vote(sessionId, localVote?.score)
-                }
-
-                localVote ?: apiVote
+            if (localVote?.score != apiVote?.score) {
+                client.vote(sessionId, localVote?.score)
             }
+
+            localVote ?: apiVote
+        }
         storage.setVotes(mergedVotes)
 
         taggedLogger.log { "Synchronized votes successfully" }
@@ -516,8 +507,8 @@ class ConferenceService(
             "documents/visitors-terms.md",
         )
         val mapData = storage.getConferenceInfoCache().first()?.mapData
-        val mapPaths =
-            mapData?.floors?.flatMap { listOf(it.svgPathLight, it.svgPathDark) } ?: emptyList()
+        val mapPaths = mapData?.floors?.flatMap { listOf(it.svgPathLight, it.svgPathDark) }
+            ?: emptyList()
 
         val allFiles = (docPaths + mapPaths)
         val missing = allFiles.filter { storage.getAsset(it) == null }
@@ -576,12 +567,8 @@ class ConferenceService(
     }
 
     fun getPartner(partnerId: PartnerId): Flow<PartnerInfo?> {
-        return conferenceInfo
-            .filterNotNull()
-            .map { info ->
-                info.partners
-                    .flatMap { it.partners }
-                    .firstOrNull { it.id == partnerId }
-            }
+        return conferenceInfo.filterNotNull().map { info ->
+            info.partners.flatMap { it.partners }.firstOrNull { it.id == partnerId }
+        }
     }
 }

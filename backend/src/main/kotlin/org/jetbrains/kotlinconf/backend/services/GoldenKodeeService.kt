@@ -1,13 +1,13 @@
 package org.jetbrains.kotlinconf.backend.services
 
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinconf.GoldenKodeeData
 import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.slf4j.LoggerFactory
-import java.util.concurrent.ConcurrentHashMap
 
 class GoldenKodeeService(
-    private val config: ConferenceConfig
+    private val config: ConferenceConfig,
 ) {
     private val log = LoggerFactory.getLogger("GoldenKodeeService")
     private val json = Json { ignoreUnknownKeys = true }
@@ -67,7 +67,9 @@ class GoldenKodeeService(
                         issueCount++
                     }
                     if (nominee.photoUrl.isBlank()) {
-                        log.warn("$year | Golden Kodee nominee '${nominee.name}' in '${category.title}' has blank photoUrl")
+                        log.warn(
+                            "$year | Golden Kodee nominee '${nominee.name}' in '${category.title}' has blank photoUrl",
+                        )
                         issueCount++
                     }
                 }

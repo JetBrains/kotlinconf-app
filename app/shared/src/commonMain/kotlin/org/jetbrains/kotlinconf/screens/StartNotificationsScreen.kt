@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.screens
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,30 +47,27 @@ fun StartNotificationsScreen(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .windowInsetsPadding(WindowInsets.safeDrawing)
+            .windowInsetsPadding(WindowInsets.safeDrawing),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(24.dp),
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.verticalScroll(rememberScrollState())
                 .padding(horizontal = 12.dp, vertical = 16.dp)
-                .weight(1f)
+                .weight(1f),
         ) {
             Image(
                 imageVector = vectorResource(Res.drawable.kodee_notifications),
                 contentDescription = null,
-                modifier = Modifier.fillMaxWidth()
-                    .size(160.dp)
+                modifier = Modifier.fillMaxWidth().size(160.dp),
             )
             Text(
                 stringResource(Res.string.notifications_title),
                 style = KotlinConfTheme.typography.h1,
                 modifier = Modifier.semantics {
                     heading()
-                }
+                },
             )
             Text(
                 stringResource(Res.string.notifications_description),
@@ -80,14 +76,14 @@ fun StartNotificationsScreen(
             if (notificationSettings != null) {
                 NotificationSettings(
                     notificationSettings = notificationSettings,
-                    onChangeSettings = { viewModel.setNotificationSettings(it) }
+                    onChangeSettings = { viewModel.setNotificationSettings(it) },
                 )
             }
         }
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
         ) {
             Button(
                 label = stringResource(Res.string.notifications_lets_get_started),

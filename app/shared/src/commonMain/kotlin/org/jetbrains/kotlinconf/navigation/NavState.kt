@@ -21,9 +21,12 @@ fun rememberNavState(
 
     val topLevelBackstacks: Map<TopLevelRoute, SnapshotStateList<AppRoute>> = buildMap {
         topLevelRoutes.forEach { route ->
-            put(route, rememberSerializable(serializer = SnapshotStateListSerializer()) {
-                mutableStateListOf(route)
-            })
+            put(
+                route,
+                rememberSerializable(serializer = SnapshotStateListSerializer()) {
+                    mutableStateListOf(route)
+                },
+            )
         }
     }
 
@@ -67,7 +70,8 @@ class NavState(
             val oldRoute = topLevelRoute
 
             // Save current backstack to the old route's storage
-            val oldStorage = if (oldRoute != null) topLevelBackStacks[oldRoute]!! else defaultBackstack
+            val oldStorage = if (oldRoute != null) topLevelBackStacks[oldRoute]!!
+            else defaultBackstack
             oldStorage.clear()
             oldStorage.addAll(currentBackstack)
 
@@ -79,21 +83,20 @@ class NavState(
 
     @Composable
     fun toDecoratedEntries(
-        entryProvider: (AppRoute) -> NavEntry<AppRoute>
+        entryProvider: (AppRoute) -> NavEntry<AppRoute>,
     ): SnapshotStateList<NavEntry<AppRoute>> {
         val decorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator<AppRoute>(),
             rememberViewModelStoreNavEntryDecorator(),
         )
 
-        val topLevelEntries = topLevelBackStacks
-            .mapValues { (route, stack) ->
-                rememberDecoratedNavEntries(
-                    backStack = if (route == topLevelRoute) currentBackstack else stack,
-                    entryDecorators = decorators,
-                    entryProvider = entryProvider
-                )
-            }
+        val topLevelEntries = topLevelBackStacks.mapValues { (route, stack) ->
+            rememberDecoratedNavEntries(
+                backStack = if (route == topLevelRoute) currentBackstack else stack,
+                entryDecorators = decorators,
+                entryProvider = entryProvider,
+            )
+        }
             .withDefault { emptyList() }
 
         val defaultEntries = rememberDecoratedNavEntries(
@@ -105,7 +108,8 @@ class NavState(
         return when (val topRoute = topLevelRoute) {
             null -> defaultEntries
             primaryTopLevelRoute -> topLevelEntries.getValue(primaryTopLevelRoute)
-            else -> topLevelEntries.getValue(primaryTopLevelRoute) + topLevelEntries.getValue(topRoute)
+            else -> topLevelEntries.getValue(primaryTopLevelRoute) +
+                topLevelEntries.getValue(topRoute)
         }.toMutableStateList()
     }
 }

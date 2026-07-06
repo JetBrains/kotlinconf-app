@@ -17,7 +17,7 @@ import org.jetbrains.kotlinconf.PartnerGroup
 class PartnersViewModel(
     service: ConferenceService,
 ) : ViewModel() {
-    val partnerGroups: StateFlow<List<PartnerGroup>> = service.conferenceInfo
-        .mapNotNull { it?.partners }
+    val partnerGroups: StateFlow<List<PartnerGroup>> =
+        service.conferenceInfo.mapNotNull { it?.partners }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 }

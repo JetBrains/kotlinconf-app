@@ -89,20 +89,17 @@ class ScheduleViewModel(
 
     init {
         viewModelScope.launch {
-            service.conferenceInfo
-                .mapNotNull { it?.tags }
-                .distinctUntilChanged()
+            service.conferenceInfo.mapNotNull { it?.tags }.distinctUntilChanged()
                 .collect { tags ->
-                    filterItems.value =
-                        tags.categories.toFilterItems(FilterItemType.Category) +
-                                tags.levels.toFilterItems(FilterItemType.Level) +
-                                tags.formats.toFilterItems(FilterItemType.Format)
+                    filterItems.value = tags.categories.toFilterItems(FilterItemType.Category) +
+                        tags.levels.toFilterItems(FilterItemType.Level) +
+                        tags.formats.toFilterItems(FilterItemType.Format)
                 }
         }
     }
 
-    val dayInfoMap: StateFlow<Map<LocalDate, DayInfo>> = service.conferenceInfo
-        .mapNotNull { info -> info?.days }
+    val dayInfoMap: StateFlow<Map<LocalDate, DayInfo>> =
+        service.conferenceInfo.mapNotNull { info -> info?.days }
         .map { days -> days.associateBy { it.date } }
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyMap())
 
@@ -140,49 +137,50 @@ class ScheduleViewModel(
     }
 
     val uiState: StateFlow<ErrorLoadingState<ScheduleContent>> = combine(
-        service.agenda,
-        searchParams,
-        filterItems,
-        loading,
-    ) { agenda, searchParams, tags, loading ->
-        when {
-            loading -> ErrorLoadingState.Loading
+            service.agenda,
+            searchParams,
+            filterItems,
+            loading,
+        ) { agenda, searchParams, tags, loading ->
+            when {
+                loading -> ErrorLoadingState.Loading
 
-            searchParams.isSearch -> {
-                val searchItems = buildSearchItems(
-                    days = agenda,
-                    searchQuery = searchParams.searchQuery,
-                    selectedTags = tags.filter { it.isSelected }.map { it.value },
-                )
-                ErrorLoadingState.Content(ScheduleContent(agenda, searchItems))
-            }
-
-            else -> {
-                val (items, firstActiveIndex, lastActiveIndex) = buildNonSearchItems(
-                    now = timeProvider.now(),
-                    days = agenda,
-                    isBookmarkedOnly = searchParams.isBookmarkedOnly,
-                )
-                if (items.isEmpty()) {
-                    ErrorLoadingState.Error
-                } else {
-                    ErrorLoadingState.Content(
-                        ScheduleContent(
-                            days = agenda,
-                            items = items,
-                            firstActiveIndex = firstActiveIndex,
-                            lastActiveIndex = lastActiveIndex,
-                        )
+                searchParams.isSearch -> {
+                    val searchItems = buildSearchItems(
+                        days = agenda,
+                        searchQuery = searchParams.searchQuery,
+                        selectedTags = tags.filter { it.isSelected }.map { it.value },
                     )
+                    ErrorLoadingState.Content(ScheduleContent(agenda, searchItems))
+                }
+
+                else -> {
+                    val (items, firstActiveIndex, lastActiveIndex) =
+                        buildNonSearchItems(
+                            now = timeProvider.now(),
+                            days = agenda,
+                            isBookmarkedOnly = searchParams.isBookmarkedOnly,
+                        )
+                    if (items.isEmpty()) {
+                        ErrorLoadingState.Error
+                    } else {
+                        ErrorLoadingState.Content(
+                            ScheduleContent(
+                                days = agenda,
+                                items = items,
+                                firstActiveIndex = firstActiveIndex,
+                                lastActiveIndex = lastActiveIndex,
+                            )
+                        )
+                    }
                 }
             }
         }
-    }
         .flowOn(Dispatchers.Default)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = ErrorLoadingState.Loading
+            initialValue = ErrorLoadingState.Loading,
         )
 
     private fun buildSearchItems(
@@ -190,29 +188,31 @@ class ScheduleViewModel(
         searchQuery: String,
         selectedTags: List<String>,
     ): List<SessionItem> = buildList {
-        for (day in days) {
-            for (timeSlot in day.timeSlots) {
-                for (session in timeSlot.sessions) {
-                    val result = match(
-                        session = session,
-                        searchRegex = Regex.escape(searchQuery).toRegex(RegexOption.IGNORE_CASE),
-                        diacriticsSearch = searchQuery.containsDiacritics(),
-                        tags = selectedTags,
-                    )
-                    if (result.matched) {
-                        add(
-                            SessionItem(
-                                value = session,
-                                tagMatches = result.tagMatches,
-                                titleHighlights = result.titleHighlights,
-                                speakerHighlights = result.speakerHighlights,
-                            )
+            for (day in days) {
+                for (timeSlot in day.timeSlots) {
+                    for (session in timeSlot.sessions) {
+                        val result = match(
+                            session = session,
+                            searchRegex =
+                                Regex.escape(searchQuery).toRegex(RegexOption.IGNORE_CASE),
+                            diacriticsSearch = searchQuery.containsDiacritics(),
+                            tags = selectedTags,
                         )
+                        if (result.matched) {
+                            add(
+                                SessionItem(
+                                    value = session,
+                                    tagMatches = result.tagMatches,
+                                    titleHighlights = result.titleHighlights,
+                                    speakerHighlights = result.speakerHighlights,
+                                )
+                            )
+                        }
                     }
                 }
             }
         }
-    }.sortedBy { it.value.state == SessionState.Past }
+        .sortedBy { it.value.state == SessionState.Past }
 
     private fun buildNonSearchItems(
         days: List<Day>,
@@ -234,9 +234,10 @@ class ScheduleViewModel(
                     var activeTimeSlot = false
 
                     if (firstActiveIndex == -1) { // We didn't find the active slot yet
-                        if (index == 0 && // This is the first slot of the day AND
+                        if (
+                            index == 0 && // This is the first slot of the day AND
                             ((seenPastSlot && now < timeSlot.startsAt) || // There was a slot in the past before and this one is still upcoming OR
-                                    (day.date == now.date && now < timeSlot.startsAt)) // This is today and the day didn't start yet
+                                (day.date == now.date && now < timeSlot.startsAt)) // This is today and the day didn't start yet
                         ) {
                             firstActiveIndex = lastIndex // We'll consider the DayHeader and this first slot active
                             activeTimeSlot = true
@@ -251,14 +252,16 @@ class ScheduleViewModel(
 
                     add(TimeSlotTitleItem(timeSlot))
 
-                    val (serviceEvents, allTalks) = timeSlot.sessions.partition { it.isServiceEvent }
+                    val (serviceEvents, allTalks) =
+                        timeSlot.sessions.partition { it.isServiceEvent }
                     if (serviceEvents.size == 1) {
                         add(ServiceEventItem(serviceEvents.first()))
                     } else if (serviceEvents.size > 1) {
                         add(ServiceEventGroupItem(serviceEvents))
                     }
 
-                    val validTalks = if (isBookmarkedOnly) allTalks.filter { it.isFavorite } else allTalks
+                    val validTalks = if (isBookmarkedOnly) allTalks.filter { it.isFavorite }
+                    else allTalks
                     validTalks.forEach { session ->
                         add(SessionItem(session))
                     }
@@ -338,5 +341,4 @@ class ScheduleViewModel(
             }
         }
     }
-
 }

@@ -12,16 +12,16 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.TestApplication
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.jetbrains.kotlinconf.Conference
 import org.jetbrains.kotlinconf.FeedbackInfo
 import org.jetbrains.kotlinconf.Score
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.VoteInfo
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
-import kotlin.test.assertTrue
 
 class YearBasedApiTest {
     val app = TestApplication {

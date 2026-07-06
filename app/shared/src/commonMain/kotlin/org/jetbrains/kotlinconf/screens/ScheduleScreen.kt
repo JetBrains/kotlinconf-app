@@ -1,6 +1,5 @@
 package org.jetbrains.kotlinconf.screens
 
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -145,10 +144,9 @@ fun ScheduleScreen(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .padding(topInsetPadding()),
     ) {
         Header(
             startContent = {
@@ -163,7 +161,7 @@ fun ScheduleScreen(
             searchQuery = searchQuery,
             onSearchQueryChange = { searchQuery = it },
             onClearSearch = { viewModel.resetFilters() },
-            viewModel = viewModel
+            viewModel = viewModel,
         )
         HorizontalDivider(
             thickness = 1.dp,
@@ -213,9 +211,8 @@ fun ScheduleScreen(
                                 targetDayIndex = null
                             }
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 8.dp)
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 8.dp),
                     )
                 }
 
@@ -233,7 +230,7 @@ fun ScheduleScreen(
                     onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
                     filterItems = tags,
                     onToggleFilter = { item, selected -> viewModel.toggleFilter(item, selected) },
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
         }
@@ -244,8 +241,8 @@ fun ScheduleScreen(
 private fun NowButtonContent(content: ScheduleContent, listState: LazyListState) {
     val scope = rememberCoroutineScope()
     var nowScrolling by remember { mutableStateOf(false) }
-    val nowButtonState =
-        derivedStateOf { computeNowButtonState(content, listState, nowScrolling) }.value
+    val nowButtonState = derivedStateOf { computeNowButtonState(content, listState, nowScrolling) }
+        .value
 
     if (nowButtonState != null) {
         NowButton(
@@ -259,7 +256,7 @@ private fun NowButtonContent(content: ScheduleContent, listState: LazyListState)
                         nowScrolling = false
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -286,8 +283,8 @@ private fun computeNowButtonState(
         return NowButtonState.Before
     }
 
-    val firstMostlyVisible =
-        firstVisible + (if (listState.firstVisibleItemScrollOffset > 50) 1 else 0)
+    val firstMostlyVisible = firstVisible +
+        (if (listState.firstVisibleItemScrollOffset > 50) 1 else 0)
     if (firstMostlyVisible > lastActiveIndex) {
         return NowButtonState.After
     }
@@ -295,12 +292,14 @@ private fun computeNowButtonState(
     return NowButtonState.Current
 }
 
-private val LazyListState.lastVisibleItemIndex
-    get() = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+private val LazyListState.lastVisibleItemIndex get() = layoutInfo.visibleItemsInfo.lastOrNull()
+    ?.index ?: -1
 
 @Composable
 private fun Header(
-    startContent: @Composable RowScope.() -> Unit,
+    startContent:
+        @Composable
+        RowScope.() -> Unit,
     headerState: MainHeaderContainerState,
     onHeaderStateChange: (MainHeaderContainerState) -> Unit,
     bookmarkFilterEnabled: Boolean,
@@ -321,14 +320,16 @@ private fun Header(
                         icon = UiRes.drawable.bookmark_24,
                         selected = bookmarkFilterEnabled,
                         onToggle = { onBookmarkFilter(it) },
-                        contentDescription = stringResource(Res.string.schedule_action_filter_bookmarked),
+                        contentDescription = stringResource(
+                            Res.string.schedule_action_filter_bookmarked,
+                        ),
                     )
                     TopMenuButton(
                         icon = UiRes.drawable.search_24,
                         onClick = { onHeaderStateChange(MainHeaderContainerState.Search) },
                         contentDescription = stringResource(Res.string.schedule_action_search),
                     )
-                }
+                },
             )
         },
         searchContent = {
@@ -355,7 +356,7 @@ private fun Header(
                 onClear = onClearSearch,
                 hasAdditionalInputs = filterItems.any { it.isSelected },
             )
-        }
+        },
     )
 }
 
@@ -393,15 +394,14 @@ private fun ScheduleList(
                     text = pluralStringResource(
                         Res.plurals.schedule_number_of_results,
                         scheduleItems.size,
-                        scheduleItems.size
+                        scheduleItems.size,
                     ),
                     color = KotlinConfTheme.colors.secondaryText,
                     style = KotlinConfTheme.typography.text2,
-                    modifier = Modifier
-                        .padding(horizontal = 12.dp)
+                    modifier = Modifier.padding(horizontal = 12.dp)
                         .padding(bottom = 4.dp)
                         .semantics { liveRegion = LiveRegionMode.Polite }
-                        .animateItem()
+                        .animateItem(),
                 )
             }
         }
@@ -435,10 +435,9 @@ private fun ScheduleList(
                             line1 = dayInfo?.line1 ?: "",
                             line2 = dayInfo?.line2 ?: "",
                             fullWidth = true,
-                            modifier = Modifier
-                                .fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth()
                                 .padding(vertical = 16.dp)
-                                .semantics { heading() }
+                                .semantics { heading() },
                         )
                     }
 
@@ -446,10 +445,9 @@ private fun ScheduleList(
                         Text(
                             text = item.value.title,
                             style = KotlinConfTheme.typography.h2,
-                            modifier = Modifier
-                                .padding(horizontal = 12.dp)
+                            modifier = Modifier.padding(horizontal = 12.dp)
                                 .padding(top = 24.dp, bottom = 8.dp)
-                                .semantics { heading() }
+                                .semantics { heading() },
                         )
                     }
 
@@ -463,9 +461,8 @@ private fun ScheduleList(
                             onBookmark = onBookmark,
                             onSession = onSession,
                             onPrivacyNoticeNeeded = onPrivacyNoticeNeeded,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 8.dp)
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(horizontal = 12.dp, vertical = 8.dp),
                         )
                     }
 

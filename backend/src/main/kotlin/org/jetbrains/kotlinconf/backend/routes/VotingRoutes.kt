@@ -4,6 +4,7 @@ import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlin.time.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -18,7 +19,6 @@ import org.jetbrains.kotlinconf.backend.utils.ConferenceConfig
 import org.jetbrains.kotlinconf.backend.utils.NotFound
 import org.jetbrains.kotlinconf.backend.utils.Unauthorized
 import org.koin.ktor.ext.inject
-import kotlin.time.Clock
 
 private val COME_BACK_LATER = HttpStatusCode(477, "Come Back Later")
 
@@ -99,7 +99,11 @@ fun Route.votingRoutes() {
             val timestamp = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
             val result = repository.setFeedback(
-                principal.token, feedback.sessionId, feedback.value, timestamp, year
+                principal.token,
+                feedback.sessionId,
+                feedback.value,
+                timestamp,
+                year,
             )
 
             if (result) {

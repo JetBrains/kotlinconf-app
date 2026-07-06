@@ -2,7 +2,6 @@ package org.jetbrains.kotlinconf.utils
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.binding
 import kotlinx.coroutines.CoroutineScope
@@ -49,7 +48,9 @@ class BufferedDelegatingLogger(
     override fun getAllLogs(): String? = (delegate as? LogExporter)?.getAllLogs()
 
     fun attach(realLogger: Logger) {
-        require(delegate == null) { "Logger delegate was already set, this should only happen once" }
+        require(delegate == null) {
+            "Logger delegate was already set, this should only happen once"
+        }
 
         delegate = realLogger
 

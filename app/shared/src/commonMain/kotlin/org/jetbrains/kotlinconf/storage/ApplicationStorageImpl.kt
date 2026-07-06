@@ -9,6 +9,7 @@ import com.russhwolf.settings.set
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,13 +18,12 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinconf.AppConfig
-import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.Theme
+import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.getPlatformId
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
-import kotlin.uuid.Uuid
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -48,22 +48,29 @@ class ApplicationStorageImpl(
         }
     }
 
-    override val userId = settings
-        .getStringFlow(Keys.USER_ID, "")
+    override val userId = settings.getStringFlow(Keys.USER_ID, "")
         .stateIn(appScope, SharingStarted.Eagerly, "")
 
-    override fun isOnboardingComplete(): Flow<Boolean> = settings.getBooleanFlow(Keys.ONBOARDING_COMPLETE, false)
-    override suspend fun setOnboardingComplete(value: Boolean) = settings.set(Keys.ONBOARDING_COMPLETE, value)
+    override fun isOnboardingComplete(): Flow<Boolean> =
+        settings.getBooleanFlow(Keys.ONBOARDING_COMPLETE, false)
+    override suspend fun setOnboardingComplete(value: Boolean) =
+        settings.set(Keys.ONBOARDING_COMPLETE, value)
 
-    override fun getTheme(): Flow<Theme> = settings.getStringOrNullFlow(Keys.THEME).map { Theme.entries.firstOrNull { entry -> entry.name == it } ?: Theme.SYSTEM }
+    override fun getTheme(): Flow<Theme> = settings.getStringOrNullFlow(Keys.THEME)
+        .map { Theme.entries.firstOrNull { entry -> entry.name == it } ?: Theme.SYSTEM }
     override suspend fun setTheme(value: Theme) = settings.set(Keys.THEME, value.name)
 
-    override fun getFlagsBlocking(): Flags? = settings.getStringOrNull(Keys.FLAGS)?.decodeOrNull<Flags>()
-    override fun getFlags(): Flow<Flags?> = settings.getStringOrNullFlow(Keys.FLAGS).map { it.decodeOrNull<Flags>() }
-    override suspend fun setFlags(value: Flags) = settings.set(Keys.FLAGS, json.encodeToString(value))
+    override fun getFlagsBlocking(): Flags? = settings.getStringOrNull(Keys.FLAGS)
+        ?.decodeOrNull<Flags>()
+    override fun getFlags(): Flow<Flags?> = settings.getStringOrNullFlow(Keys.FLAGS)
+        .map { it.decodeOrNull<Flags>() }
+    override suspend fun setFlags(value: Flags) =
+        settings.set(Keys.FLAGS, json.encodeToString(value))
 
-    override fun getConfig(): Flow<AppConfig?> = settings.getStringOrNullFlow(Keys.CONFIG).map { it.decodeOrNull<AppConfig>() ?: DEFAULT_CONFIG }
-    override suspend fun setConfig(config: AppConfig) = settings.set(Keys.CONFIG, json.encodeToString(config))
+    override fun getConfig(): Flow<AppConfig?> = settings.getStringOrNullFlow(Keys.CONFIG)
+        .map { it.decodeOrNull<AppConfig>() ?: DEFAULT_CONFIG }
+    override suspend fun setConfig(config: AppConfig) =
+        settings.set(Keys.CONFIG, json.encodeToString(config))
 
     override fun initialize() {
         ensureCurrentVersion()
@@ -76,7 +83,9 @@ class ApplicationStorageImpl(
         taggedLogger.log { "Storage version is $version" }
 
         if (version == 0) {
-            taggedLogger.log { "Unknown previous storage version, performing destructive migration" }
+            taggedLogger.log {
+                "Unknown previous storage version, performing destructive migration"
+            }
             destructiveUpgrade()
             return
         }
@@ -105,7 +114,9 @@ class ApplicationStorageImpl(
                 return
             }
 
-            taggedLogger.log { "Running migration from ${nextMigration.from} to ${nextMigration.to}" }
+            taggedLogger.log {
+                "Running migration from ${nextMigration.from} to ${nextMigration.to}"
+            }
 
             nextMigration.migrate()
             version = nextMigration.to

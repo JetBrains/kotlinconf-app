@@ -3,7 +3,6 @@ package org.jetbrains.kotlinconf.di
 import androidx.lifecycle.ViewModel
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
-import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
@@ -15,9 +14,11 @@ import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger as KtorLogger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
+import kotlin.reflect.KClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -29,8 +30,6 @@ import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.network.ApplicationApi
 import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.utils.Logger
-import kotlin.reflect.KClass
-import io.ktor.client.plugins.logging.Logger as KtorLogger
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -40,7 +39,8 @@ object AppBindings {
     @SingleIn(AppScope::class)
     fun provideMetroViewModelFactory(
         viewModelProviders: Map<KClass<out ViewModel>, () -> ViewModel>,
-        manualAssistedFactoryProviders: Map<KClass<out ManualViewModelAssistedFactory>, () -> ManualViewModelAssistedFactory>,
+        manualAssistedFactoryProviders:
+            Map<KClass<out ManualViewModelAssistedFactory>, () -> ManualViewModelAssistedFactory>,
     ): MetroViewModelFactory = object : MetroViewModelFactory() {
         override val viewModelProviders get() = viewModelProviders
         override val manualAssistedFactoryProviders get() = manualAssistedFactoryProviders

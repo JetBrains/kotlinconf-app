@@ -22,16 +22,20 @@ interface IosBindings {
         @Provides
         @SingleIn(AppScope::class)
         @OptIn(ExperimentalSettingsApi::class)
-        fun provideSettings(): ObservableSettings =
-            NSUserDefaultsSettings(NSUserDefaults.standardUserDefaults)
+        fun provideSettings(): ObservableSettings = NSUserDefaultsSettings(
+            NSUserDefaults.standardUserDefaults,
+        )
 
         @Provides
         @SingleIn(AppScope::class)
         @FileStorageDir
         fun provideFileStorageDir(): String {
             val storageDir = NSSearchPathForDirectoriesInDomains(
-                NSApplicationSupportDirectory, NSUserDomainMask, true
-            ).first() as String
+                    NSApplicationSupportDirectory,
+                    NSUserDomainMask,
+                    true,
+                )
+                .first() as String
             return "$storageDir/files"
         }
 
@@ -39,9 +43,9 @@ interface IosBindings {
         @SingleIn(AppScope::class)
         fun provideNotificationPlatformConfiguration(): NotificationPlatformConfiguration =
             NotificationPlatformConfiguration.Ios(
-                showPushNotification = true,
-                askNotificationPermissionOnStart = false,
-                notificationSoundName = null,
-            )
+            showPushNotification = true,
+            askNotificationPermissionOnStart = false,
+            notificationSoundName = null,
+        )
     }
 }

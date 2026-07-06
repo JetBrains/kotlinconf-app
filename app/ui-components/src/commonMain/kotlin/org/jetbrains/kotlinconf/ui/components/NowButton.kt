@@ -7,7 +7,6 @@ import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
@@ -41,7 +41,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.arrow_down_16
 import org.jetbrains.kotlinconf.ui.generated.resources.now
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 private val NowButtonShape = RoundedCornerShape(
     topEndPercent = 50,
@@ -49,7 +48,9 @@ private val NowButtonShape = RoundedCornerShape(
 )
 
 enum class NowButtonState {
-    Before, Current, After,
+    Before,
+    Current,
+    After,
 }
 
 @Composable
@@ -67,7 +68,7 @@ fun NowButton(
         minHeight = 36.dp,
         textStyle = KotlinConfTheme.typography.text2,
         shape = NowButtonShape,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -86,7 +87,7 @@ fun FloatingNowButton(
         minHeight = 48.dp,
         textStyle = KotlinConfTheme.typography.text1,
         shape = CircleShape,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -115,8 +116,7 @@ private fun NowButtonImpl(
     val startPadding by animateDpAsState(if (active) 6.dp else 0.dp)
 
     Row(
-        modifier = modifier
-            .clip(shape)
+        modifier = modifier.clip(shape)
             .clickable(onClick = onClick, enabled = enabled)
             .background(background)
             .sizeIn(minWidth = minWidth, minHeight = minHeight)
@@ -134,17 +134,16 @@ private fun NowButtonImpl(
             targetState = time,
             transitionSpec = {
                 (fadeIn() + expandHorizontally(clip = false, expandFrom = Alignment.Start)) togetherWith
-                        (fadeOut() + shrinkHorizontally(clip = false, shrinkTowards = Alignment.Start))
+                    (fadeOut() + shrinkHorizontally(clip = false, shrinkTowards = Alignment.Start))
             },
-            modifier = Modifier.height(16.dp)
+            modifier = Modifier.height(16.dp),
         ) { targetTime ->
             if (targetTime == Current) return@AnimatedContent
             Spacer(Modifier.width(2.dp))
             Icon(
                 painter = painterResource(UiRes.drawable.arrow_down_16),
                 contentDescription = null,
-                modifier = Modifier
-                    .size(16.dp)
+                modifier = Modifier.size(16.dp)
                     .graphicsLayer { rotationZ = if (targetTime == Before) 0f else 180f },
                 tint = textColor,
             )
@@ -154,13 +153,15 @@ private fun NowButtonImpl(
 
 private class NowButtonStateProvider : PreviewParameterProvider<NowButtonState> {
     override val values = NowButtonState.entries.asSequence()
+
     override fun getDisplayName(index: Int) = NowButtonState.entries[index].name
 }
 
 @PreviewLightDark
 @Composable
 private fun NowButtonPreview(
-    @PreviewParameter(NowButtonStateProvider::class) state: NowButtonState,
+    @PreviewParameter(NowButtonStateProvider::class)
+    state: NowButtonState,
 ) = PreviewHelper {
     NowButton(state, {})
 }
@@ -168,7 +169,8 @@ private fun NowButtonPreview(
 @PreviewLightDark
 @Composable
 private fun FloatingNowButtonPreview(
-    @PreviewParameter(NowButtonStateProvider::class) state: NowButtonState,
+    @PreviewParameter(NowButtonStateProvider::class)
+    state: NowButtonState,
 ) = PreviewHelper {
     FloatingNowButton(state, {})
 }

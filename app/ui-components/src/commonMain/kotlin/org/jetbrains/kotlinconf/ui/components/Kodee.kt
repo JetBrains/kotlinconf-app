@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
@@ -34,10 +35,11 @@ import org.jetbrains.kotlinconf.ui.generated.resources.kodee_small_positive_fill
 import org.jetbrains.kotlinconf.ui.generated.resources.kodee_small_positive_outline
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 enum class Emotion {
-    Negative, Neutral, Positive;
+    Negative,
+    Neutral,
+    Positive
 }
 
 @Composable
@@ -134,35 +136,41 @@ fun KodeeEmotion(
 
 private class EmotionProvider : PreviewParameterProvider<Emotion> {
     override val values = Emotion.entries.asSequence()
+
     override fun getDisplayName(index: Int) = values.elementAt(index).name
 }
 
 @PreviewLightDark
 @Composable
 private fun KodeeIconSmallSelectedPreview(
-    @PreviewParameter(EmotionProvider::class) emotion: Emotion,
+    @PreviewParameter(EmotionProvider::class)
+    emotion: Emotion,
 ) = PreviewHelper { KodeeIconSmall(emotion, true) }
 
 @PreviewLightDark
 @Composable
 private fun KodeeIconSmallUnselectedPreview(
-    @PreviewParameter(EmotionProvider::class) emotion: Emotion,
+    @PreviewParameter(EmotionProvider::class)
+    emotion: Emotion,
 ) = PreviewHelper { KodeeIconSmall(emotion, false) }
 
 @PreviewLightDark
 @Composable
 private fun KodeeIconLargeSelectedPreview(
-    @PreviewParameter(EmotionProvider::class) emotion: Emotion,
+    @PreviewParameter(EmotionProvider::class)
+    emotion: Emotion,
 ) = PreviewHelper { KodeeIconLarge(emotion, true) }
 
 @PreviewLightDark
 @Composable
 private fun KodeeIconLargeUnselectedPreview(
-    @PreviewParameter(EmotionProvider::class) emotion: Emotion,
+    @PreviewParameter(EmotionProvider::class)
+    emotion: Emotion,
 ) = PreviewHelper { KodeeIconLarge(emotion, false) }
 
 @PreviewLightDark
 @Composable
 private fun KodeeEmotionPreview(
-    @PreviewParameter(EmotionProvider::class) emotion: Emotion,
+    @PreviewParameter(EmotionProvider::class)
+    emotion: Emotion,
 ) = PreviewHelper { KodeeEmotion(emotion) }

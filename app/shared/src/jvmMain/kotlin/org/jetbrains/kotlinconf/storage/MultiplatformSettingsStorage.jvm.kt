@@ -23,11 +23,12 @@ fun createSettings(): ObservableSettings {
     }
 
     return PropertiesSettings(
-        delegate = props,
-        onModify = { props ->
-            propsFile.writer(StandardCharsets.UTF_8).use { writer ->
-                props.store(writer, null)
-            }
-        }
-    ).makeObservable()
+            delegate = props,
+            onModify = { props ->
+                propsFile.writer(StandardCharsets.UTF_8).use { writer ->
+                    props.store(writer, null)
+                }
+            },
+        )
+        .makeObservable()
 }

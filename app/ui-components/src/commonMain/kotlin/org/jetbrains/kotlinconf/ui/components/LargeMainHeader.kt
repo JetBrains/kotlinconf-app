@@ -24,20 +24,21 @@ import org.jetbrains.kotlinconf.ui.utils.WidePreviewLightDark
 @Composable
 fun LargeMainHeader(
     title: String,
-    endContent: @Composable () -> Unit = {},
+    endContent:
+        @Composable
+        () -> Unit =
+        {},
     modifier: Modifier = Modifier,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .heightIn(min = 56.dp)
-            .padding(horizontal = 24.dp),
+        modifier = modifier.heightIn(min = 56.dp).padding(horizontal = 24.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text(
             text = title,
             style = KotlinConfTheme.typography.h1,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
 
         endContent()
@@ -55,7 +56,7 @@ private fun LargeMainHeaderPreview() = PreviewHelper {
                 contentDescription = "Bookmarked",
                 selected = false,
                 large = true,
-                onToggle = { }
+                onToggle = {},
             )
 
             var searchValue by remember { mutableStateOf("") }
@@ -80,6 +81,6 @@ private fun LargeMainHeaderPreview() = PreviewHelper {
                 selectedIndex = selectedIndex,
                 onSelect = { selectedIndex = it },
             )
-        }
+        },
     )
 }

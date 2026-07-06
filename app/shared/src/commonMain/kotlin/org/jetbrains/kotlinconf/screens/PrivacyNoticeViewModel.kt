@@ -32,14 +32,16 @@ class PrivacyNoticeViewModel(
     private var document = MutableStateFlow<String?>(null)
 
     val documentState: StateFlow<ErrorLoadingState<String>> = combine(
-        document, documentLoading
-    ) { doc, loading ->
-        when {
-            loading -> ErrorLoadingState.Loading
-            doc != null -> ErrorLoadingState.Content(doc)
-            else -> ErrorLoadingState.Error
+            document,
+            documentLoading,
+        ) { doc, loading ->
+            when {
+                loading -> ErrorLoadingState.Loading
+                doc != null -> ErrorLoadingState.Content(doc)
+                else -> ErrorLoadingState.Error
+            }
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ErrorLoadingState.Loading)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ErrorLoadingState.Loading)
 
     init {
         refreshDocument()

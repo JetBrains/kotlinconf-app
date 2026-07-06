@@ -3,6 +3,7 @@ package org.jetbrains.kotlinconf
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import kotlin.coroutines.resume
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.number
@@ -16,7 +17,6 @@ import platform.UserNotifications.UNCalendarNotificationTrigger
 import platform.UserNotifications.UNMutableNotificationContent
 import platform.UserNotifications.UNNotificationRequest
 import platform.UserNotifications.UNUserNotificationCenter
-import kotlin.coroutines.resume
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -33,7 +33,8 @@ class IOSLocalNotificationService(
 
     override suspend fun requestPermission(): Boolean {
         return suspendCancellableCoroutine<Boolean> { continuation ->
-            notificationCenter.requestAuthorizationWithOptions(UNAuthorizationOptionAlert) { granted, error ->
+            notificationCenter.requestAuthorizationWithOptions(UNAuthorizationOptionAlert) { granted,
+            error ->
                 continuation.resume(granted)
             }
         }
@@ -43,7 +44,7 @@ class IOSLocalNotificationService(
         localNotificationId: LocalNotificationId,
         title: String,
         message: String,
-        time: LocalDateTime?
+        time: LocalDateTime?,
     ) {
         logger.log(LOG_TAG) { "Posting: $time, $localNotificationId, $title, $message" }
 
@@ -71,7 +72,11 @@ class IOSLocalNotificationService(
         } else {
             null
         }
-        val request = UNNotificationRequest.requestWithIdentifier(localNotificationId.toString(), content, trigger)
+        val request = UNNotificationRequest.requestWithIdentifier(
+            localNotificationId.toString(),
+            content,
+            trigger,
+        )
         notificationCenter.addNotificationRequest(request) { error: NSError? ->
             logger.log(LOG_TAG) {
                 if (error == null) {

@@ -96,8 +96,7 @@ fun FeedbackPanel(
     val selectedEmotion by viewModel.selectedEmotion.collectAsStateWithLifecycle()
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
             .border(
                 width = 1.dp,
                 color = KotlinConfTheme.colors.strokePale,
@@ -143,10 +142,11 @@ private fun rememberFeedbackViewModel(
     sessionId: SessionId,
     onPrivacyNoticeNeeded: () -> Unit,
 ): FeedbackViewModel {
-    val viewModel =
-        assistedMetroViewModel<FeedbackViewModel, FeedbackViewModel.Factory>(key = sessionId.id) {
-            create(sessionId)
-        }
+    val viewModel = assistedMetroViewModel<FeedbackViewModel, FeedbackViewModel.Factory>(
+        key = sessionId.id,
+    ) {
+        create(sessionId)
+    }
 
     val shouldNavigate by viewModel.navigateToPrivacyNotice.collectAsStateWithLifecycle()
     LaunchedEffect(shouldNavigate) {
@@ -158,7 +158,7 @@ private fun rememberFeedbackViewModel(
 
     LifecycleResumeEffect(viewModel) {
         viewModel.onReturnedFromPrivacyNotice()
-        onPauseOrDispose { }
+        onPauseOrDispose {}
     }
 
     return viewModel
@@ -186,7 +186,7 @@ private fun FeedbackQuestion(
             Text(
                 text = stringResource(
                     if ("Workshop" in tags) Res.string.feedback_how_was_the_workshop
-                    else Res.string.feedback_how_was_the_talk
+                    else Res.string.feedback_how_was_the_talk,
                 ),
                 style = KotlinConfTheme.typography.text2,
                 color = KotlinConfTheme.colors.primaryText,
@@ -203,7 +203,9 @@ private fun FeedbackEmotionSelector(
     viewModel: FeedbackViewModel,
     modifier: Modifier = Modifier,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
-    content: @Composable (emotion: Emotion, selected: Boolean, modifier: Modifier) -> Unit,
+    content:
+        @Composable
+        (emotion: Emotion, selected: Boolean, modifier: Modifier) -> Unit,
 ) {
     val selectedEmotion by viewModel.selectedEmotion.collectAsStateWithLifecycle()
     val hapticFeedback = LocalHapticFeedback.current
@@ -221,9 +223,9 @@ private fun FeedbackEmotionSelector(
                     indication = null,
                     interactionSource = null,
                 ) {
-                    hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
-                    viewModel.selectEmotion(emotion)
-                },
+                        hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
+                        viewModel.selectEmotion(emotion)
+                    },
             )
         }
     }
@@ -243,11 +245,12 @@ private fun FeedbackFormSection(
         val focusRequester = remember { FocusRequester() }
         val bringIntoViewRequester = remember { BringIntoViewRequester() }
 
-
         val windowSize = LocalWindowInfo.current.containerSize
         if (!focusRequested) {
             LaunchedEffect(Unit) {
-                bringIntoViewRequester.bringIntoView(Rect(0f, 0f, windowSize.width.toFloat(), windowSize.height / 2f))
+                bringIntoViewRequester.bringIntoView(
+                    Rect(0f, 0f, windowSize.width.toFloat(), windowSize.height / 2f)
+                )
                 focusRequester.requestFocus()
                 focusRequested = true
             }
