@@ -47,6 +47,10 @@ class IOSLocalNotificationService(
     ) {
         logger.log(LOG_TAG) { "Posting: $time, $localNotificationId, $title, $message" }
 
+        if (time == null) {
+            cancelStartNotificationIfPostingSessionEnd(localNotificationId)
+        }
+
         val content = UNMutableNotificationContent().apply {
             setTitle(title)
             setBody(message)
@@ -81,6 +85,18 @@ class IOSLocalNotificationService(
                 }
             }
         }
+    }
+
+    private fun cancelStartNotificationIfPostingSessionEnd(localNotificationId: LocalNotificationId) {
+        if (localNotificationId.type != LocalNotificationId.Type.SessionEnd) return
+
+        val startNotificationId = LocalNotificationId(
+            type = LocalNotificationId.Type.SessionStart,
+            id = localNotificationId.id,
+        )
+        val identifiers = listOf(startNotificationId.toString())
+        notificationCenter.removeDeliveredNotificationsWithIdentifiers(identifiers)
+        logger.log(LOG_TAG) { "Canceled delivered start notification $startNotificationId before posting end notification $localNotificationId" }
     }
 
     override fun cancel(localNotificationId: LocalNotificationId) {
