@@ -3,6 +3,8 @@
 rootProject.name = "KotlinConfApp"
 
 pluginManagement {
+    val kotlin_repo_url: String? by settings
+
     repositories {
         google {
             mavenContent {
@@ -15,10 +17,23 @@ pluginManagement {
         }
         gradlePluginPortal()
         mavenCentral()
+
+        kotlin_repo_url?.also { maven(it) }
     }
 }
 
 dependencyResolutionManagement {
+    val kotlin_version: String? by settings
+    val kotlin_repo_url: String? by settings
+
+    versionCatalogs {
+        create("libs") {
+            kotlin_version?.let {
+                version("kotlin", it)
+            }
+        }
+    }
+
     repositories {
         google {
             mavenContent {
@@ -29,6 +44,8 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+
+        kotlin_repo_url?.also { maven(it) }
     }
 }
 
