@@ -26,8 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 private val SwitcherItemShape = RoundedCornerShape(percent = 50)
 
@@ -82,15 +81,15 @@ private fun SwitcherItem(
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun SwitcherItemNormalPreview() = PreviewHelper {
+private fun SwitcherItemNormalPreview() {
     SwitcherItem("Normal item", selected = false, {}, {})
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun SwitcherItemSelectedPreview() = PreviewHelper {
+private fun SwitcherItemSelectedPreview() {
     SwitcherItem("Selected item", selected = true, {}, {})
 }
 
@@ -126,8 +125,8 @@ fun Switcher(
 }
 
 @Composable
-@PreviewLightDark
-private fun SwitcherShortPreview() = PreviewHelper {
+@ComponentPreview
+private fun SwitcherShortPreview() {
     var selectedIndex by remember { mutableIntStateOf(0) }
     Switcher(
         items = listOf("May 21", "May 22", "May 23"),
@@ -140,8 +139,8 @@ private fun SwitcherShortPreview() = PreviewHelper {
 
 
 @Composable
-@PreviewLightDark
-private fun SwitcherPreview() = PreviewHelper {
+@ComponentPreview
+private fun SwitcherPreview() {
     var selectedIndex by remember { mutableIntStateOf(0) }
     Switcher(
         items = listOf("May 21", "May 22", "May 23"),

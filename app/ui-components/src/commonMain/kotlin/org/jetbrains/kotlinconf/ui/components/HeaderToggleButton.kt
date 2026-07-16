@@ -31,8 +31,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.view_grid_24
 import org.jetbrains.kotlinconf.ui.generated.resources.view_list_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 
 private val HeaderToggleItemWidth = 48.dp
@@ -112,11 +111,11 @@ private class HeaderToggleSelectedIndexProvider : PreviewParameterProvider<Int> 
     override fun getDisplayName(index: Int) = "selected=$index"
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun HeaderToggleButtonPreview(
     @PreviewParameter(HeaderToggleSelectedIndexProvider::class) selectedIndex: Int,
-) = PreviewHelper {
+) {
     HeaderToggleButton(
         options = headerTogglePreviewOptions,
         selectedIndex = selectedIndex,

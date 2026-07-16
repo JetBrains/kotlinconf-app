@@ -33,8 +33,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.kodee_small_neutral_outli
 import org.jetbrains.kotlinconf.ui.generated.resources.kodee_small_positive_filled
 import org.jetbrains.kotlinconf.ui.generated.resources.kodee_small_positive_outline
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 enum class Emotion {
     Negative, Neutral, Positive;
@@ -137,32 +136,32 @@ private class EmotionProvider : PreviewParameterProvider<Emotion> {
     override fun getDisplayName(index: Int) = values.elementAt(index).name
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun KodeeIconSmallSelectedPreview(
     @PreviewParameter(EmotionProvider::class) emotion: Emotion,
-) = PreviewHelper { KodeeIconSmall(emotion, true) }
+) { KodeeIconSmall(emotion, true) }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun KodeeIconSmallUnselectedPreview(
     @PreviewParameter(EmotionProvider::class) emotion: Emotion,
-) = PreviewHelper { KodeeIconSmall(emotion, false) }
+) { KodeeIconSmall(emotion, false) }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun KodeeIconLargeSelectedPreview(
     @PreviewParameter(EmotionProvider::class) emotion: Emotion,
-) = PreviewHelper { KodeeIconLarge(emotion, true) }
+) { KodeeIconLarge(emotion, true) }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun KodeeIconLargeUnselectedPreview(
     @PreviewParameter(EmotionProvider::class) emotion: Emotion,
-) = PreviewHelper { KodeeIconLarge(emotion, false) }
+) { KodeeIconLarge(emotion, false) }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun KodeeEmotionPreview(
     @PreviewParameter(EmotionProvider::class) emotion: Emotion,
-) = PreviewHelper { KodeeEmotion(emotion) }
+) { KodeeEmotion(emotion) }

@@ -45,8 +45,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.now
 import org.jetbrains.kotlinconf.ui.generated.resources.team_28
 import org.jetbrains.kotlinconf.ui.generated.resources.team_28_fill
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 @Composable
 private fun NavRailMenuItem(
@@ -161,11 +160,11 @@ private class ExpandedPreviewProvider : PreviewParameterProvider<Boolean> {
     override fun getDisplayName(index: Int) = if (index == 0) "collapsed" else "expanded"
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun MainNavigationRailPreview(
     @PreviewParameter(ExpandedPreviewProvider::class) expanded: Boolean,
-) = PreviewHelper(paddingEnabled = false) {
+) {
     val navRailPreviewDestinations = listOf(
         MainNavDestination(
             label = UiRes.string.now,

@@ -55,9 +55,8 @@ import org.jetbrains.kotlinconf.ui.generated.resources.kodee_error_loading_anim_
 import org.jetbrains.kotlinconf.ui.generated.resources.kodee_error_lost
 import org.jetbrains.kotlinconf.ui.generated.resources.loading
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.theme.UI
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -242,21 +241,21 @@ fun Loading(
 }
 
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun LoadingEnabledPreview() = PreviewHelper {
+private fun LoadingEnabledPreview() {
     Loading(enabled = true)
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun LoadingDisabledPreview() = PreviewHelper {
+private fun LoadingDisabledPreview() {
     Loading(enabled = false)
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun NormalErrorLoadingPreview() = PreviewHelper {
+private fun NormalErrorLoadingPreview() {
     NormalErrorWithLoading(
         message = "Error message",
         isLoading = true,
@@ -266,9 +265,9 @@ private fun NormalErrorLoadingPreview() = PreviewHelper {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun NormalErrorInteractivePreview() = PreviewHelper {
+private fun NormalErrorInteractivePreview() {
     var scope = rememberCoroutineScope()
     var loading by remember { mutableStateOf(false) }
     NormalErrorWithLoading(
@@ -286,9 +285,9 @@ private fun NormalErrorInteractivePreview() = PreviewHelper {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun NormalErrorIdlePreview() = PreviewHelper {
+private fun NormalErrorIdlePreview() {
     NormalErrorWithLoading(
         message = "Error message",
         isLoading = false,
@@ -297,17 +296,17 @@ private fun NormalErrorIdlePreview() = PreviewHelper {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun MinorErrorPreview() = PreviewHelper {
+private fun MinorErrorPreview() {
     MinorError(
         message = "Minor error message"
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun MajorErrorPreview() = PreviewHelper {
+private fun MajorErrorPreview() {
     MajorError(
         message = "Major error message"
     )

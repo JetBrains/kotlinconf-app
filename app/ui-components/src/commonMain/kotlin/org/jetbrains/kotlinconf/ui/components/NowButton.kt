@@ -40,8 +40,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_down_16
 import org.jetbrains.kotlinconf.ui.generated.resources.now
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 private val NowButtonShape = RoundedCornerShape(
     topEndPercent = 50,
@@ -157,18 +156,18 @@ private class NowButtonStateProvider : PreviewParameterProvider<NowButtonState> 
     override fun getDisplayName(index: Int) = NowButtonState.entries[index].name
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun NowButtonPreview(
     @PreviewParameter(NowButtonStateProvider::class) state: NowButtonState,
-) = PreviewHelper {
+) {
     NowButton(state, {})
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun FloatingNowButtonPreview(
     @PreviewParameter(NowButtonStateProvider::class) state: NowButtonState,
-) = PreviewHelper {
+) {
     FloatingNowButton(state, {})
 }

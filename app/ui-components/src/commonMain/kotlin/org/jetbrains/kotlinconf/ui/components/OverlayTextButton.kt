@@ -17,8 +17,7 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_up_right_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 private val ActionButtonShape = RoundedCornerShape(100)
 
@@ -49,9 +48,9 @@ fun OverlayTextButton(
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun ActionButtonPreview() = PreviewHelper {
+private fun ActionButtonPreview() {
     OverlayTextButton(
         label = "How to find the venue",
         icon = UiRes.drawable.arrow_up_right_24,

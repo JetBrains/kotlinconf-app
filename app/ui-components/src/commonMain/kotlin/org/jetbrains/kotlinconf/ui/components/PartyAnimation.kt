@@ -50,7 +50,7 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
@@ -60,7 +60,6 @@ import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.kodee_emotion_positive
 import org.jetbrains.kotlinconf.ui.generated.resources.kodee_small_positive_filled
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.floor
@@ -649,9 +648,9 @@ private fun KodeeCannon(
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun PartyAnimationPreview() = PreviewHelper {
+private fun PartyAnimationPreview() {
     PartyAnimation(
         modifier = Modifier
             .fillMaxWidth()
@@ -660,9 +659,9 @@ private fun PartyAnimationPreview() = PreviewHelper {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun PartyAnimationBaselinePreview() = PreviewHelper {
+private fun PartyAnimationBaselinePreview() {
     PartyAnimation(
         modifier = Modifier
             .fillMaxWidth()
