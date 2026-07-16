@@ -13,8 +13,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 /**
  * A simple text component that uses defaults from [KotlinConfTheme],
@@ -91,11 +90,11 @@ private class TypographyStylePreviewProvider :
     override fun getDisplayName(index: Int) = values.elementAt(index).name
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun TextStylePreview(
     @PreviewParameter(TypographyStylePreviewProvider::class) params: TypographyStylePreviewParams,
-) = PreviewHelper {
+) {
     Text(
         text = "This is a text demo in the kotlinconf-app codebase",
         style = params.style(),

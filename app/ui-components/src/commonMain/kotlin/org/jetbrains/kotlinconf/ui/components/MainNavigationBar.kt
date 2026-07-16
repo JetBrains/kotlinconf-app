@@ -34,9 +34,8 @@ import org.jetbrains.kotlinconf.ui.generated.resources.now
 import org.jetbrains.kotlinconf.ui.generated.resources.team_28
 import org.jetbrains.kotlinconf.ui.generated.resources.team_28_fill
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
-import org.jetbrains.kotlinconf.ui.utils.WidePreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
+import org.jetbrains.kotlinconf.ui.utils.WideComponentPreview
 
 @Composable
 private fun MainNavigationButton(
@@ -95,10 +94,10 @@ fun <T : Any> MainNavigationBar(
     }
 }
 
-@PreviewLightDark
-@WidePreviewLightDark
+@ComponentPreview
+@WideComponentPreview
 @Composable
-private fun MainNavigationBarPreview() = PreviewHelper(paddingEnabled = false) {
+private fun MainNavigationBarPreview() {
     var currentDestination by remember {
         mutableStateOf(
             MainNavDestination(

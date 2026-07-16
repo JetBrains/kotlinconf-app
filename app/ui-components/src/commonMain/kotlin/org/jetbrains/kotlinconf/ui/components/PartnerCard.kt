@@ -14,8 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 @Composable
 fun PartnerCard(
@@ -41,8 +40,8 @@ fun PartnerCard(
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun PartnerCardPreview() = PreviewHelper {
+private fun PartnerCardPreview() {
     PartnerCard("Kodee", "https://example.com/logo.png", {})
 }

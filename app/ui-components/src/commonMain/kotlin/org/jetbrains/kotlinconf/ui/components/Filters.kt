@@ -55,8 +55,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.filter_label_level
 import org.jetbrains.kotlinconf.ui.generated.resources.filter_label_session_format
 import org.jetbrains.kotlinconf.ui.generated.resources.up_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 enum class FilterItemType {
     Category, Level, Format,
@@ -219,9 +218,9 @@ private fun FilterItemGroup(
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun FiltersPreview() = PreviewHelper {
+private fun FiltersPreview() {
     fun <T> MutableList<T>.replace(old: T, new: T) {
         val index = indexOf(old)
         if (index >= 0) {

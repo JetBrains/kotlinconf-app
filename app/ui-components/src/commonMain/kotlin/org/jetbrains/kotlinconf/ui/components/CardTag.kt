@@ -19,8 +19,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 private val CardTagShape = RoundedCornerShape(size = 4.dp)
 
@@ -77,20 +76,20 @@ private class CardTagSizeProvider : PreviewParameterProvider<CardTagSize> {
     override fun getDisplayName(index: Int) = values.elementAt(index).name
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun CardTagUnselectedPreview(
     @PreviewParameter(CardTagSizeProvider::class) size: CardTagSize,
-) = PreviewHelper {
+) {
     var selected by remember { mutableStateOf(false) }
     CardTag("Label", selected = selected, Modifier.clickable { selected = !selected }, size = size)
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun CardTagSelectedPreview(
     @PreviewParameter(CardTagSizeProvider::class) size: CardTagSize,
-) = PreviewHelper {
+) {
     var selected by remember { mutableStateOf(true) }
     CardTag("Label", selected = selected, Modifier.clickable { selected = !selected }, size = size)
 }

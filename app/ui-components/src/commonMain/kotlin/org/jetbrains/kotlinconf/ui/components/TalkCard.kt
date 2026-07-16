@@ -62,8 +62,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.session_education
 import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_icon_desc_codelab
 import org.jetbrains.kotlinconf.ui.generated.resources.talk_card_icon_desc_education
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 @Composable
 internal fun buildHighlightedString(
@@ -403,9 +402,9 @@ private fun TimeBlock(
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun TalkCardLivePreview() = PreviewHelper {
+private fun TalkCardLivePreview() {
     var bookmarked by remember { mutableStateOf(false) }
     TalkCard(
         title = "Asynchronous Programming With Kotlin Coroutines",
@@ -453,9 +452,9 @@ private fun TalkCardLivePreview() = PreviewHelper {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun TalkCardUpcomingPreview() = PreviewHelper {
+private fun TalkCardUpcomingPreview() {
     TalkCard(
         title = "Asynchronous Programming With Kotlin Coroutines",
         titleHighlights = emptyList(),

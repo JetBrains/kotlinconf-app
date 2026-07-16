@@ -20,8 +20,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 @Composable
 fun OverlayIconButton(
@@ -59,9 +58,9 @@ fun OverlayIconButton(
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun IconButtonPreviewEnabled() = PreviewHelper {
+private fun IconButtonPreviewEnabled() {
     OverlayIconButton(
         icon = UiRes.drawable.bookmark_24,
         enabled = true,
@@ -70,9 +69,9 @@ private fun IconButtonPreviewEnabled() = PreviewHelper {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun IconButtonPreviewDisabled() = PreviewHelper {
+private fun IconButtonPreviewDisabled() {
     OverlayIconButton(
         icon = UiRes.drawable.bookmark_24,
         enabled = false,
