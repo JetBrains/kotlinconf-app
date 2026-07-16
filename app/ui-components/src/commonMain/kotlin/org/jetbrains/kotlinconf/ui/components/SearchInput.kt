@@ -15,8 +15,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 @Composable
 internal fun SearchInput(
@@ -57,9 +56,9 @@ internal fun SearchInput(
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun SearchInputEmptyPreview() = PreviewHelper {
+private fun SearchInputEmptyPreview() {
     SearchInput(
         searchValue = "",
         onSearchValueChange = {},
@@ -68,9 +67,9 @@ private fun SearchInputEmptyPreview() = PreviewHelper {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun SearchInputWithTextPreview() = PreviewHelper {
+private fun SearchInputWithTextPreview() {
     SearchInput(
         searchValue = "Kotlin",
         onSearchValueChange = {},

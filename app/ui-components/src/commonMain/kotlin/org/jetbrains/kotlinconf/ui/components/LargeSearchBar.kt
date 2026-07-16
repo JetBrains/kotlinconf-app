@@ -37,9 +37,8 @@ import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_clear
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_hint
 import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.utils.PreviewInteractionSource
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 @Composable
 fun LargeSearchBar(
@@ -126,11 +125,11 @@ private class SearchValueProvider : PreviewParameterProvider<String> {
     override fun getDisplayName(index: Int) = if (index == 0) "empty" else "with input"
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun LargeSearchBarPreview(
     @PreviewParameter(SearchValueProvider::class) searchValue: String,
-) = PreviewHelper {
+) {
     LargeSearchBar(
         searchValue = searchValue,
         onSearchValueChange = {},

@@ -23,8 +23,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 /**
  * Based on the Material 3 Icon implementation.
@@ -82,9 +81,9 @@ private fun Modifier.defaultSizeFor(painter: Painter) = this.then(
 
 private fun Size.isInfinite() = width.isInfinite() && height.isInfinite()
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun IconPreview() = PreviewHelper {
+private fun IconPreview() {
     Icon(
         painter = painterResource(UiRes.drawable.bookmark_24),
         contentDescription = null,
@@ -92,9 +91,9 @@ private fun IconPreview() = PreviewHelper {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun TintedIconPreview() = PreviewHelper {
+private fun TintedIconPreview() {
     Icon(
         painter = painterResource(UiRes.drawable.bookmark_24),
         contentDescription = null,

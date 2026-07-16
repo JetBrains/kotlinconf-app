@@ -18,8 +18,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
 import org.jetbrains.kotlinconf.ui.generated.resources.view_grid_24
 import org.jetbrains.kotlinconf.ui.generated.resources.view_list_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import org.jetbrains.kotlinconf.ui.utils.WidePreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.WideComponentPreview
 
 @Composable
 fun LargeMainHeader(
@@ -45,8 +44,8 @@ fun LargeMainHeader(
 }
 
 @Composable
-@WidePreviewLightDark
-private fun LargeMainHeaderPreview() = PreviewHelper {
+@WideComponentPreview
+private fun LargeMainHeaderPreview() {
     LargeMainHeader(
         "Main",
         endContent = {

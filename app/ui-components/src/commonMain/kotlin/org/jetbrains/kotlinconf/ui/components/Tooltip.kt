@@ -15,8 +15,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupPositionProvider
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 @Composable
 fun Tooltip(
@@ -53,8 +52,8 @@ fun rememberTooltipPositionProvider(): PopupPositionProvider {
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun TooltipPreview() = PreviewHelper {
+private fun TooltipPreview() {
     Tooltip("Tooltip")
 }

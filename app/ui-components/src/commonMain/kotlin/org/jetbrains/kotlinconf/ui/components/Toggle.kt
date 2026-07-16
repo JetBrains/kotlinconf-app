@@ -27,8 +27,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 private val ToggleBackgroundShape = RoundedCornerShape(percent = 100)
 private val ToggleThumbShape = CircleShape
@@ -103,16 +102,16 @@ fun Toggle(
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun ToggleOffPreview() = PreviewHelper {
+private fun ToggleOffPreview() {
     var state by remember { mutableStateOf(false) }
     Toggle(state, { state = it })
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun ToggleOnPreview() = PreviewHelper {
+private fun ToggleOnPreview() {
     var state by remember { mutableStateOf(true) }
     Toggle(state, { state = it })
 }

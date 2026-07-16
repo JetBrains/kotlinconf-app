@@ -16,8 +16,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.now
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 
 @Composable
@@ -45,7 +44,7 @@ fun NowLabel(
 }
 
 @Composable
-@PreviewLightDark
-private fun NowLabelPreview() = PreviewHelper {
+@ComponentPreview
+private fun NowLabelPreview() {
     NowLabel()
 }

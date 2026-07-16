@@ -27,9 +27,8 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.kotlinconf.ui.theme.Brand.colorGradient
 import org.jetbrains.kotlinconf.ui.theme.JetBrainsSans
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import org.jetbrains.kotlinconf.ui.theme.UI.white60
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 private val DayDateStyle
     @Composable
@@ -141,11 +140,11 @@ private class DayHeaderPreviewParamsProvider : PreviewParameterProvider<DayHeade
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun DayHeaderPreview(
     @PreviewParameter(DayHeaderPreviewParamsProvider::class) params: DayHeaderPreviewParams,
-) = PreviewHelper(paddingEnabled = !params.fullWidth) {
+) {
     if (params.multiDay) {
         DayHeader("MAY", "22", "Code", "Labs", fullWidth = params.fullWidth, day2 = "23")
     } else {

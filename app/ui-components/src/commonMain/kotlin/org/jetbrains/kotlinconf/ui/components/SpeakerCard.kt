@@ -21,8 +21,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.kodee_emotion_neutral
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 @Composable
 fun SpeakerCard(
@@ -80,9 +79,9 @@ fun SpeakerAvatar(
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun SpeakerCardPreview() = PreviewHelper {
+private fun SpeakerCardPreview() {
     SpeakerCard(
         name = "John Doe",
         title = "Whatever Role Name at That Company",
@@ -91,9 +90,9 @@ private fun SpeakerCardPreview() = PreviewHelper {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun SpeakerCardWithHighlightsPreview() = PreviewHelper {
+private fun SpeakerCardWithHighlightsPreview() {
     SpeakerCard(
         name = "John Doe",
         nameHighlights = listOf(0..3),  // Highlight "John"

@@ -25,8 +25,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.bookmark_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -119,23 +118,23 @@ fun TopMenuButton(
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun TopMenuButtonUnselectedPreview() = PreviewHelper {
+private fun TopMenuButtonUnselectedPreview() {
     var selected by remember { mutableStateOf(false) }
     TopMenuButton(UiRes.drawable.bookmark_24, "Bookmark", selected = selected, { selected = it })
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun TopMenuButtonSelectedPreview() = PreviewHelper {
+private fun TopMenuButtonSelectedPreview() {
     var selected by remember { mutableStateOf(true) }
     TopMenuButton(UiRes.drawable.bookmark_24, "Bookmark", selected = selected, { selected = it })
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun TopMenuButtonLargeUnselectedPreview() = PreviewHelper {
+private fun TopMenuButtonLargeUnselectedPreview() {
     var selected by remember { mutableStateOf(false) }
     TopMenuButton(
         UiRes.drawable.bookmark_24,
@@ -146,9 +145,9 @@ private fun TopMenuButtonLargeUnselectedPreview() = PreviewHelper {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun TopMenuButtonLargeSelectedPreview() = PreviewHelper {
+private fun TopMenuButtonLargeSelectedPreview() {
     var selected by remember { mutableStateOf(true) }
     TopMenuButton(
         UiRes.drawable.bookmark_24,

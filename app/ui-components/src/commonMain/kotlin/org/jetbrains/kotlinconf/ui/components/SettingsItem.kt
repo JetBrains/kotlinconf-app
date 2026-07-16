@@ -22,8 +22,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 @Composable
 fun SettingsItem(
@@ -79,9 +78,9 @@ fun SettingsItem(
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun SettingsItemSimplePreview() = PreviewHelper {
+private fun SettingsItemSimplePreview() {
     var enabled by remember { mutableStateOf(true) }
     SettingsItem(
         title = "Kodee containment",
@@ -90,9 +89,9 @@ private fun SettingsItemSimplePreview() = PreviewHelper {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun SettingsItemWithNotePreview() = PreviewHelper {
+private fun SettingsItemWithNotePreview() {
     var enabled by remember { mutableStateOf(false) }
     SettingsItem(
         title = "Conference schedule updates",

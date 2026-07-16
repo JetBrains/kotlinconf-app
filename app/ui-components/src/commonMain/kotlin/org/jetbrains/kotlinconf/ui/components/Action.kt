@@ -19,8 +19,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.arrow_right_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 enum class ActionSize {
     Medium, Large,
@@ -101,11 +100,11 @@ private class ActionPreviewParamsProvider : PreviewParameterProvider<ActionPrevi
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun ActionPreview(
     @PreviewParameter(ActionPreviewParamsProvider::class) params: ActionPreviewParams,
-) = PreviewHelper {
+) {
     Action(
         label = "Action",
         icon = UiRes.drawable.arrow_right_24,

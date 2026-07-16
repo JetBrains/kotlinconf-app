@@ -51,8 +51,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.lightning_16_fill
 import org.jetbrains.kotlinconf.ui.generated.resources.session_codelab
 import org.jetbrains.kotlinconf.ui.generated.resources.session_education
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 private const val iconId = "iconId'"
 private const val eduPlaceholder = "[e]"
@@ -236,9 +235,9 @@ private fun Tags(tags: Set<String>) {
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun PageTitleLightningPreview() = PreviewHelper {
+private fun PageTitleLightningPreview() {
     var bookmarked by remember { mutableStateOf(false) }
     PageTitle(
         time = "May 23, 13:00 - 13:20",
@@ -253,9 +252,9 @@ private fun PageTitleLightningPreview() = PreviewHelper {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun PageTitleRegularPreview() = PreviewHelper {
+private fun PageTitleRegularPreview() {
     var bookmarked by remember { mutableStateOf(false) }
     PageTitle(
         time = "May 21, 9:00 - 9:40",
@@ -280,51 +279,47 @@ private fun PageTitleRegularPreview() = PreviewHelper {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 internal fun PageTitleWithNotesPreview() {
-    PreviewHelper {
-        PageTitle(
-            time = "May 23, 15:00 - 15:20",
-            title = "Starting Soon Talk Example",
-            tags = setOf("Lightning talk", "Beginner"),
-            bookmarked = true,
-            lightning = true,
-            timeNote = "in 22 min",
-            isLive = false,
-            onBookmark = { },
-            large = false,
-        )
-        Spacer(Modifier.height(16.dp))
-        PageTitle(
-            time = "May 23, 14:00 - 14:40",
-            title = "Live Talk Example",
-            tags = setOf("Regular talk", "Advanced"),
-            bookmarked = false,
-            lightning = false,
-            timeNote = null,
-            isLive = true,
-            onBookmark = { },
-            large = false,
-        )
-    }
+    PageTitle(
+        time = "May 23, 15:00 - 15:20",
+        title = "Starting Soon Talk Example",
+        tags = setOf("Lightning talk", "Beginner"),
+        bookmarked = true,
+        lightning = true,
+        timeNote = "in 22 min",
+        isLive = false,
+        onBookmark = { },
+        large = false,
+    )
+    Spacer(Modifier.height(16.dp))
+    PageTitle(
+        time = "May 23, 14:00 - 14:40",
+        title = "Live Talk Example",
+        tags = setOf("Regular talk", "Advanced"),
+        bookmarked = false,
+        lightning = false,
+        timeNote = null,
+        isLive = true,
+        onBookmark = { },
+        large = false,
+    )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 internal fun LargePageTitleWithPreview() {
-    PreviewHelper {
-        PageTitle(
-            time = "May 23, 15:00 - 15:20",
-            title = "Starting Soon Talk Example",
-            tags = setOf("Lightning talk", "Beginner"),
-            bookmarked = true,
-            lightning = true,
-            timeNote = "in 22 min",
-            isLive = false,
-            onBookmark = { },
-            large = true,
-        )
-    }
+    PageTitle(
+        time = "May 23, 15:00 - 15:20",
+        title = "Starting Soon Talk Example",
+        tags = setOf("Lightning talk", "Beginner"),
+        bookmarked = true,
+        lightning = true,
+        timeNote = "in 22 min",
+        isLive = false,
+        onBookmark = { },
+        large = true,
+    )
 }
 

@@ -58,8 +58,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.feedback_form_skip_commen
 import org.jetbrains.kotlinconf.ui.generated.resources.feedback_form_type_something
 import org.jetbrains.kotlinconf.ui.theme.Brand
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 @Composable
 fun FeedbackForm(
@@ -292,11 +291,11 @@ private class FeedbackFormPreviewParameterProvider :
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
 private fun FeedbackFormPreview(
     @PreviewParameter(FeedbackFormPreviewParameterProvider::class) params: FeedbackFormPreviewParams,
-) = PreviewHelper {
+) {
     var text by remember(params.text) { mutableStateOf(params.text) }
     FeedbackForm(text, { text = it }, params.emotion, { _, _ -> }, {}, past = false, bringIntoViewRequester = BringIntoViewRequester())
 }

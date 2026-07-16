@@ -23,9 +23,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.Brand
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
-import org.jetbrains.kotlinconf.ui.utils.WidePreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
+import org.jetbrains.kotlinconf.ui.utils.WideComponentPreview
 
 private val LargeSwitcherItemShape = RoundedCornerShape(percent = 100)
 
@@ -105,22 +104,22 @@ fun LargeSwitcher(
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun LargeSwitcherItemUnselectedPreview() = PreviewHelper {
+private fun LargeSwitcherItemUnselectedPreview() {
     LargeSwitcherItem("May 21", "Conference day 1", {}, selected = false)
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun LargeSwitcherItemSelectedPreview() = PreviewHelper {
+private fun LargeSwitcherItemSelectedPreview() {
     LargeSwitcherItem("May 22", "Conference day 2", {}, selected = true)
 }
 
 
 @Composable
-@WidePreviewLightDark
-private fun LargeSwitcherPreview() = PreviewHelper {
+@WideComponentPreview
+private fun LargeSwitcherPreview() {
     var selectedIndex by remember { mutableIntStateOf(0) }
     LargeSwitcher(
         options = listOf(

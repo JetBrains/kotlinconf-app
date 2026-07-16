@@ -5,8 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 @Composable
 fun ParagraphTitle(
@@ -26,8 +25,8 @@ fun ParagraphTitle(
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun ParagraphTitlePreview() = PreviewHelper {
+private fun ParagraphTitlePreview() {
     ParagraphTitle("Title")
 }

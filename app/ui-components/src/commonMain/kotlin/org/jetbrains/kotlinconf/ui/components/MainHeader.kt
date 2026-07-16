@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.ui.generated.resources.UiRes
@@ -38,7 +37,7 @@ import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_clear
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_hint
 import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
-import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
+import org.jetbrains.kotlinconf.ui.utils.ComponentPreview
 
 @Composable
 fun MainHeaderSearchBar(
@@ -159,9 +158,9 @@ fun MainHeaderContainer(
     }
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun MainHeaderSchedulePreview() = PreviewHelper(paddingEnabled = false) {
+private fun MainHeaderSchedulePreview() {
     // Example with Now button, bookmark and search action
     var nowState by remember { mutableStateOf(NowButtonState.Before) }
     var state by remember { mutableStateOf(MainHeaderContainerState.Title) }
@@ -212,9 +211,9 @@ private fun MainHeaderSchedulePreview() = PreviewHelper(paddingEnabled = false) 
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun MainHeaderSpeakerPreview() = PreviewHelper(paddingEnabled = false) {
+private fun MainHeaderSpeakerPreview() {
     var state by remember { mutableStateOf(MainHeaderContainerState.Title) }
     var search by remember { mutableStateOf("") }
     MainHeaderContainer(
@@ -243,9 +242,9 @@ private fun MainHeaderSpeakerPreview() = PreviewHelper(paddingEnabled = false) {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun MainHeaderSearchStatePreview() = PreviewHelper(paddingEnabled = false) {
+private fun MainHeaderSearchStatePreview() {
     var state by remember { mutableStateOf(MainHeaderContainerState.Search) }
     var search by remember { mutableStateOf("") }
     MainHeaderContainer(
@@ -263,9 +262,9 @@ private fun MainHeaderSearchStatePreview() = PreviewHelper(paddingEnabled = fals
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun MainHeaderBackPreview() = PreviewHelper(paddingEnabled = false) {
+private fun MainHeaderBackPreview() {
     MainHeaderTitleBar(
         title = "Privacy notice",
         startContent = {
@@ -278,8 +277,8 @@ private fun MainHeaderBackPreview() = PreviewHelper(paddingEnabled = false) {
     )
 }
 
-@PreviewLightDark
+@ComponentPreview
 @Composable
-private fun MainHeaderTitleOnlyPreview() = PreviewHelper(paddingEnabled = false) {
+private fun MainHeaderTitleOnlyPreview() {
     MainHeaderTitleBar(title = "Info")
 }
