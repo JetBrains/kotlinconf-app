@@ -143,6 +143,8 @@ class AndroidLocalNotificationService(
             return
         }
 
+        cancelStartNotificationIfShowingSessionEnd(localNotificationId)
+
         val mainActivityIntent = Intent(context, Class.forName("org.jetbrains.kotlinconf.android.MainActivity"))
             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             .putExtra(EXTRA_LOCAL_NOTIFICATION_ID, localNotificationId.toString())
@@ -164,6 +166,17 @@ class AndroidLocalNotificationService(
 
         logger.log(LOG_TAG) { "Showing notification: $localNotificationId, $notification" }
         notificationManager.notify(localNotificationId.hashCode(), notification)
+    }
+
+    private fun cancelStartNotificationIfShowingSessionEnd(localNotificationId: LocalNotificationId) {
+        if (localNotificationId.type != LocalNotificationId.Type.SessionEnd) return
+
+        val startNotificationId = LocalNotificationId(
+            type = LocalNotificationId.Type.SessionStart,
+            id = localNotificationId.id,
+        )
+        notificationManager.cancel(startNotificationId.hashCode())
+        logger.log(LOG_TAG) { "Canceled start notification $startNotificationId before showing end notification $localNotificationId" }
     }
 
     override fun cancel(localNotificationId: LocalNotificationId) {
