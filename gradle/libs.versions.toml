@@ -6,10 +6,16 @@ android-minSdk = "28"
 android-svg = "1.4"
 android-targetSdk = "37"
 androidx-activity = "1.13.0"
+androidx-benchmark-macro = "1.5.0-rc02"
 androidx-core-splashscreen = "1.2.0"
 androidx-lifecycle = "2.11.0-beta01"
 androidx-navigation3 = "1.1.1"
 androidx-preference = "1.2.1"
+androidx-profileinstaller = "1.4.1"
+androidx-test-core = "1.7.0"
+androidx-test-espresso-core = "3.7.0"
+androidx-test-ext-junit = "1.3.0"
+androidx-test-uiautomator = "2.4.0"
 coil = "3.5.0"
 compose-multiplatform = "1.11.1"
 doistx-normalize = "1.3.3"
@@ -46,6 +52,12 @@ androidx-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecy
 androidx-lifecycle-viewmodel-navigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "androidx-lifecycle" }
 androidx-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "androidx-navigation3" }
 androidx-preference = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preference" }
+androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "androidx-benchmark-macro" }
+androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "androidx-profileinstaller" }
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidx-test-core" }
+androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-test-espresso-core" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidx-test-ext-junit" }
+androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "androidx-test-uiautomator" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil" }
@@ -117,6 +129,7 @@ nav3-browser = { module = "com.github.terrakok:navigation3-browser", version.ref
 [plugins]
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlibraries" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidTest = { id = "com.android.test", version.ref = "agp" }
 androidMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
@@ -129,3 +142,4 @@ kotlinPowerAssert = { id = "org.jetbrains.kotlin.plugin.power-assert", version.r
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
+androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidx-benchmark-macro" }
