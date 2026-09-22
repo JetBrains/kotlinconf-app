@@ -8,13 +8,14 @@ KMP + Compose Multiplatform (Android, iOS, Desktop, Web) + Ktor Server (JVM).
 - **Dependencies:** `libs.versions.toml` (`$libs.*`). For new KMP libraries, query the `klibs` MCP server.
 
 ### 1. Compose Hot Reload (Primary Loop for Client & UI)
-**Start CHR in background before starting tasks:**
+**Reuse the existing CHR session.** Check MCP `status` and `list_windows` before launching anything. Only when no app is connected and no app process is still running, start CHR in the background:
 ```bash
 ./kotlin run --compose-hot-reload
 ```
-- **Auto-compile & instant feedback:** File changes compile automatically on save. Check MCP `status` (`lastErrorDetails`) or call `reload` for compiler diagnostics — faster than running `./kotlin build`.
+- **Compile & reload:** Inspect `status.buildContinuous`. When false, call `reload` after edits; when true, use `await_reload`. Check `lastErrorDetails` for compiler diagnostics. A successful compilation with `reloaded: false` does not prove the running UI reflects the edit; verify the changed UI.
 - **UI verification:** Use `take_screenshot`, `get_semantic_tree`, `get_ui_error`, `click`, `type`, `scroll`.
-- **Stopping:** Kill processes via PID in `build/hot-reload-app.pid`.
+- **Restarting:** If a reload leaves stale UI (including after adding resources), use MCP `restart` on the existing session, then fetch fresh window and semantic node IDs. Do not run a second `./kotlin run --compose-hot-reload` alongside the first.
+- **Stopping / recovery:** The `build/hot-reload-app.pid` file is Java properties: read its `pid=` entry, stop that app, and wait for it to exit before relaunching. If the file is missing or MCP is disconnected, inspect processes scoped to this repository before starting another app. Concurrent instances share discovery/log files and can cause stale window IDs and request timeouts. Never kill unrelated Java processes.
 
 ### 2. Targeted Commands (Non-shared / Backend / Platform / Tests)
 *Use only when changing non-shared code, platform actuals, backend, or running tests:*
