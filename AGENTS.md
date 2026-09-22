@@ -13,7 +13,7 @@ KMP + Compose Multiplatform (Android, iOS, Desktop, Web) + Ktor Server (JVM).
 ./kotlin run --compose-hot-reload
 ```
 - **Compile & reload:** Inspect `status.buildContinuous`. When false, call `reload` after edits; when true, use `await_reload`. Check `lastErrorDetails` for compiler diagnostics. A successful compilation with `reloaded: false` does not prove the running UI reflects the edit; verify the changed UI.
-- **UI verification:** Use `take_screenshot`, `get_semantic_tree`, `get_ui_error`, `click`, `type`, `scroll`.
+- **UI verification:** Reuse the MCP connection and navigate directly to the changed UI. Confirm with `take_screenshot` and `get_ui_error`; stop once verified. Batch independent checks and fetch `get_semantic_tree` only when needed for navigation or fresh node IDs. A verification-only retry needs no rebuild or restart if the app already reflects the edits.
 - **Restarting:** If a reload leaves stale UI (including after adding resources), use MCP `restart` on the existing session, then fetch fresh window and semantic node IDs. Do not run a second `./kotlin run --compose-hot-reload` alongside the first.
 - **Stopping / recovery:** The `build/hot-reload-app.pid` file is Java properties: read its `pid=` entry, stop that app, and wait for it to exit before relaunching. If the file is missing or MCP is disconnected, inspect processes scoped to this repository before starting another app. Concurrent instances share discovery/log files and can cause stale window IDs and request timeouts. Never kill unrelated Java processes.
 
