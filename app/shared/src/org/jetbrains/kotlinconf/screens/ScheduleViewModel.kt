@@ -231,6 +231,12 @@ class ScheduleViewModel(
                 }
                 add(DayHeaderItem(day))
 
+                // A break can overlap a full-day workshop. Prefer the most
+                // recently started slot for the Now button during that break.
+                val currentSlot = day.timeSlots
+                    .filter { now in it.startsAt..<it.endsAt }
+                    .maxWithOrNull(compareBy<TimeSlot> { it.startsAt }.thenByDescending { it.endsAt })
+
                 day.timeSlots.forEachIndexed { index, timeSlot ->
                     var activeTimeSlot = false
 
@@ -242,8 +248,8 @@ class ScheduleViewModel(
                             firstActiveIndex = lastIndex // We'll consider the DayHeader and this first slot active
                             activeTimeSlot = true
                         } else if (
-                            (seenPastSlot && now < timeSlot.startsAt) || // There was a slot in the past before and this one is still upcoming OR
-                            (now in timeSlot.startsAt..<timeSlot.endsAt) // We're in this slot right now
+                            (currentSlot == null && seenPastSlot && now < timeSlot.startsAt) ||
+                            timeSlot == currentSlot
                         ) {
                             firstActiveIndex = lastIndex + 1 // This is the active slot, starting with its title
                             activeTimeSlot = true
@@ -265,7 +271,7 @@ class ScheduleViewModel(
                     }
 
                     if (last() is TimeSlotTitleItem && isBookmarkedOnly) {
-                        add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}"))
+                        add(NoBookmarksItem(id = "empty-${timeSlot.startsAt}-${timeSlot.endsAt}"))
                     }
 
                     if (activeTimeSlot) { // This was the active slot

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +19,11 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.kotlinconf.ui.generated.resources.Res
+import org.jetbrains.kotlinconf.ui.generated.resources.coffee_24
+import org.jetbrains.kotlinconf.ui.generated.resources.meal_24
+import org.jetbrains.kotlinconf.ui.generated.resources.pause_24
 
 data class ServiceEventData(
     val title: String,
@@ -44,6 +50,21 @@ private fun ServiceEventRow(event: ServiceEventData) {
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.padding(16.dp).semantics(mergeDescendants = true) {}
     ) {
+        val breakIcon = when {
+            event.title.contains("coffee") -> Res.drawable.coffee_24
+            listOf("breakfast", "lunch", "dinner").any { event.title.contains(it) } ->
+                Res.drawable.meal_24
+            event.title.contains("break") -> Res.drawable.pause_24
+            else -> null
+        }
+        if (breakIcon != null) {
+            Icon(
+                painter = painterResource(breakIcon),
+                contentDescription = null,
+                tint = KotlinConfTheme.colors.primaryText,
+                modifier = Modifier.size(24.dp),
+            )
+        }
         Text(
             text = event.title,
             style = KotlinConfTheme.typography.h3,

@@ -415,7 +415,7 @@ private fun ScheduleList(
                     is ServiceEventGroupItem -> it.value.map { it.id.id }
                     is ServiceEventItem -> it.value.id.id
                     is SessionItem -> it.value.id.id
-                    is TimeSlotTitleItem -> it.value.startsAt.toString()
+                    is TimeSlotTitleItem -> "slot-${it.value.startsAt}-${it.value.endsAt}"
                     is NoBookmarksItem -> it.id
                 }
             },

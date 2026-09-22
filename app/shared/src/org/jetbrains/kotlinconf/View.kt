@@ -51,35 +51,39 @@ fun List<Session>.groupByTime(
     favorites: Set<SessionId>,
     votes: Map<SessionId, VoteInfo>,
 ): List<TimeSlot> {
-    val slots: List<SlotTimes> =
-        filterNot { it.isLightning }
-            .sortedBy { it.startsAt }
+    val talkSlots: List<SlotTimes> =
+        filterNot { it.isLightning || (it.speakerIds.isEmpty() && it.tags.isNullOrEmpty()) }
             .map { SlotTimes(it.startsAt, it.endsAt) }
+            .distinct()
 
-    val slotsToSessions: Map<SlotTimes, MutableList<SessionCardView>> =
-        slots.associateWith { mutableListOf() }
+    val slotsToSessions = mutableMapOf<SlotTimes, MutableList<SessionCardView>>()
 
     val speakersById = conference.speakers.associateBy { it.id }
 
     this.forEach { session ->
-        val slot = slots.find { (start, end) -> session.startsAt >= start && session.endsAt <= end } ?: return@forEach
-        slotsToSessions.getValue(slot).add(
+        val exactSlot = SlotTimes(session.startsAt, session.endsAt)
+        val isServiceEvent = session.speakerIds.isEmpty() && session.tags.isNullOrEmpty()
+        // Only lightning talks share a containing talk's slot. Breaks and regular
+        // sessions retain their own times, even inside a full-day workshop.
+        val slot = if (session.isLightning && !isServiceEvent) {
+            talkSlots.filter { (start, end) -> session.startsAt >= start && session.endsAt <= end }
+                .minByOrNull { it.endsAt - it.startsAt } ?: exactSlot
+        } else exactSlot
+        slotsToSessions.getOrPut(slot) { mutableListOf() }.add(
             session.asSessionCard(speakersById, now, favorites, votes[session.id])
         )
     }
 
-    return slotsToSessions.mapNotNull { (slot, sessions) ->
-        if (sessions.isNotEmpty()) {
+    return slotsToSessions.entries
+        .sortedWith(compareBy({ it.key.startsAt }, { it.key.endsAt }))
+        .map { (slot, sessions) ->
             TimeSlot(
                 startsAt = slot.startsAt,
                 endsAt = slot.endsAt,
                 state = SessionState.from(slot.startsAt, slot.endsAt, now),
                 sessions = sessions.sortedBy { it.isLightning },
             )
-        } else {
-            null
         }
-    }
 }
 
 fun Session.asSessionCard(
