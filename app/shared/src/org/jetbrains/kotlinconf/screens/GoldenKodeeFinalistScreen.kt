@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -36,6 +38,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.AwardCategoryId
 import org.jetbrains.kotlinconf.NomineeId
 import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_finalist
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_title
 import org.jetbrains.kotlinconf.generated.resources.golden_kodee_winner
@@ -73,50 +76,53 @@ fun GoldenKodeeFinalistScreen(
         Modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .then(if (LocalUseNativeNavigation.current) Modifier else Modifier.padding(topInsetPadding()))
     ) {
-        MainHeaderTitleBar(
-            title = stringResource(Res.string.golden_kodee_title),
-            startContent = {
-                TopMenuButton(
-                    icon = UiRes.drawable.arrow_left_24,
-                    contentDescription = stringResource(UiRes.string.main_header_back),
-                    onClick = onBack,
-                )
-            },
-        )
-        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+        if (!LocalUseNativeNavigation.current) {
+            MainHeaderTitleBar(
+                title = stringResource(Res.string.golden_kodee_title),
+                startContent = {
+                    TopMenuButton(
+                        icon = UiRes.drawable.arrow_left_24,
+                        contentDescription = stringResource(UiRes.string.main_header_back),
+                        onClick = onBack,
+                    )
+                },
+            )
+            HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+        }
 
         Box(
             Modifier.fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 12.dp, vertical = 16.dp)
-                .padding(bottomInsetPadding()),
+                .padding(PaddingValues(horizontal = 12.dp, vertical = 16.dp) + (if (LocalUseNativeNavigation.current) topInsetPadding() else PaddingValues(0.dp)) + bottomInsetPadding()),
             contentAlignment = Alignment.TopCenter,
         ) {
             Column(Modifier.widthIn(max = 580.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = nominee.name,
-                        style = KotlinConfTheme.typography.h2,
-                        color = KotlinConfTheme.colors.primaryText,
-                        modifier = Modifier
-                            .semantics { heading() }
-                            .weight(1f, fill = false),
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    CardTag(
-                        label = if (nominee.winner) {
-                            stringResource(Res.string.golden_kodee_winner)
-                        } else {
-                            stringResource(Res.string.golden_kodee_finalist)
-                        },
-                        selected = nominee.winner,
-                        size = CardTagSize.Large,
-                    )
-                }
+                if (!LocalUseNativeNavigation.current) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = nominee.name,
+                            style = KotlinConfTheme.typography.h2,
+                            color = KotlinConfTheme.colors.primaryText,
+                            modifier = Modifier
+                                .semantics { heading() }
+                                .weight(1f, fill = false),
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        CardTag(
+                            label = if (nominee.winner) {
+                                stringResource(Res.string.golden_kodee_winner)
+                            } else {
+                                stringResource(Res.string.golden_kodee_finalist)
+                            },
+                            selected = nominee.winner,
+                            size = CardTagSize.Large,
+                        )
+                    }
 
-                Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(16.dp))
+                }
 
                 SpeakerAvatar(
                     photoUrl = nominee.photoUrl,

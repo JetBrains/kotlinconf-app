@@ -59,19 +59,22 @@ import org.jetbrains.kotlinconf.ui.components.CardTag
 import org.jetbrains.kotlinconf.ui.components.CardTagSize
 import org.jetbrains.kotlinconf.ui.components.SpeakerAvatar
 import org.jetbrains.kotlinconf.ui.components.Text
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.LocalWindowSize
 import org.jetbrains.kotlinconf.utils.WindowSize
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.jetbrains.kotlinconf.utils.verticalInsetPadding
 
 @Composable
 fun GoldenKodeeScreen(
-    onNomineeClick: (AwardCategoryId, NomineeId) -> Unit,
+    onNomineeClick: (AwardCategoryId, NomineeId, String, Boolean) -> Unit,
 ) {
     val viewModel = metroViewModel<GoldenKodeeViewModel>()
     val categories = viewModel.categories.collectAsStateWithLifecycle().value
+    val useNativeNavigation = LocalUseNativeNavigation.current
 
     Column(
         Modifier.fillMaxSize()
@@ -97,7 +100,7 @@ fun GoldenKodeeScreen(
                 columns = StaggeredGridCells.Adaptive(340.dp),
                 contentPadding = topInsetPadding() +
                         PaddingValues(horizontal = horizontalPadding, vertical = 16.dp) +
-                        bottomInsetPadding(),
+                        if (useNativeNavigation) verticalInsetPadding() else bottomInsetPadding(),
                 verticalItemSpacing = 16.dp,
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
@@ -135,7 +138,7 @@ fun GoldenKodeeScreen(
                     ) { nominee ->
                         NomineeRow(
                             nominee = nominee,
-                            onClick = { onNomineeClick(category.id, nominee.id) },
+                            onClick = { onNomineeClick(category.id, nominee.id, nominee.name, nominee.winner) },
                         )
                     }
                 }

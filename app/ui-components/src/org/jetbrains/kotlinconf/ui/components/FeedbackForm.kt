@@ -60,6 +60,7 @@ import org.jetbrains.kotlinconf.ui.theme.Brand
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.theme.keyboardOptions
 
 @Composable
 fun FeedbackForm(
@@ -98,6 +99,7 @@ fun FeedbackForm(
             textStyle = KotlinConfTheme.typography.text1
                 .copy(color = KotlinConfTheme.colors.primaryText),
             cursorBrush = SolidColor(KotlinConfTheme.colors.primaryText),
+            keyboardOptions = keyboardOptions(),
             decorationBox = { innerTextField ->
                 Box(
                     Modifier

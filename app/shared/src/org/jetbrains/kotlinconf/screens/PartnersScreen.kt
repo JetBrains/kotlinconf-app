@@ -21,6 +21,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.PartnerId
 import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.generated.resources.partners_error
 import org.jetbrains.kotlinconf.generated.resources.partners_title
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
@@ -51,20 +52,22 @@ fun PartnersScreen(
     Column(
         Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .then(if (LocalUseNativeNavigation.current) Modifier else Modifier.padding(topInsetPadding()))
     ) {
-        MainHeaderTitleBar(
-            title = stringResource(Res.string.partners_title),
-            startContent = {
-                TopMenuButton(
-                    icon = UiRes.drawable.arrow_left_24,
-                    contentDescription = stringResource(UiRes.string.main_header_back),
-                    onClick = onBack,
-                )
-            }
-        )
+        if (!LocalUseNativeNavigation.current) {
+            MainHeaderTitleBar(
+                title = stringResource(Res.string.partners_title),
+                startContent = {
+                    TopMenuButton(
+                        icon = UiRes.drawable.arrow_left_24,
+                        contentDescription = stringResource(UiRes.string.main_header_back),
+                        onClick = onBack,
+                    )
+                }
+            )
 
-        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+            HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+        }
 
         AnimatedContent(
             targetState = partnerGroups.isNotEmpty(),
@@ -77,7 +80,7 @@ fun PartnersScreen(
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
-                    contentPadding = PaddingValues(vertical = 12.dp) + bottomInsetPadding(),
+                    contentPadding = PaddingValues(vertical = 12.dp) + (if (LocalUseNativeNavigation.current) topInsetPadding() else PaddingValues(0.dp)) + bottomInsetPadding(),
                     state = lazyListState,
                 ) {
                     for (group in partnerGroups) {

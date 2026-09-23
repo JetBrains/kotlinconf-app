@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:KotlinConf.xcodeproj">
+      location = "group:module.xcodeproj">
    </FileRef>
 </Workspace>

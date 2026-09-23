@@ -19,6 +19,7 @@ import dev.zacsweers.metrox.android.ActivityKey
 import org.jetbrains.kotlinconf.App
 import org.jetbrains.kotlinconf.EXTRA_LOCAL_NOTIFICATION_ID
 import org.jetbrains.kotlinconf.PermissionHandler
+import org.jetbrains.kotlinconf.navigation.ScheduleScreen
 import org.jetbrains.kotlinconf.navigation.navigateByLocalNotificationId
 
 @ActivityKey(MainActivity::class)
@@ -38,6 +39,7 @@ class MainActivity(
         setContent {
             App(
                 appGraph = appGraph,
+                topLevelRoute = ScheduleScreen,
                 onThemeChange = { isDarkMode ->
                     val systemBarStyle = SystemBarStyle.auto(
                         lightScrim = Color.TRANSPARENT,

@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.SolidColor
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.ui.theme.PreviewHelper
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import org.jetbrains.kotlinconf.ui.theme.keyboardOptions
 
 @Composable
 internal fun SearchInput(
@@ -42,6 +43,7 @@ internal fun SearchInput(
             textStyle = KotlinConfTheme.typography.text1
                 .copy(color = KotlinConfTheme.colors.primaryText),
             cursorBrush = SolidColor(KotlinConfTheme.colors.primaryText),
+            keyboardOptions = keyboardOptions(),
         )
         androidx.compose.animation.AnimatedVisibility(
             searchValue.isEmpty(),

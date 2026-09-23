@@ -10,6 +10,7 @@ import org.jetbrains.kotlinconf.di.JvmAppGraph
 import org.jetbrains.kotlinconf.flags.Flags
 import org.jetbrains.kotlinconf.generated.resources.desktop.Res
 import org.jetbrains.kotlinconf.generated.resources.desktop.app_name
+import org.jetbrains.kotlinconf.navigation.ScheduleScreen
 import org.jetbrains.kotlinconf.utils.Logger
 
 class JvmLogger : Logger {
@@ -38,7 +39,7 @@ fun main() {
             alwaysOnTop = true,
             state = rememberWindowState(width = 600.dp, height = 800.dp),
         ) {
-            App(graph)
+            App(graph, ScheduleScreen)
         }
     }
 }

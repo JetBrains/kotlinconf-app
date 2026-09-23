@@ -30,20 +30,20 @@ private fun isMobileBrowser(): Boolean = js(
 )
 
 private fun AppRoute.toBrowserHistoryFragment() = when (val key = this) {
-    AboutAppScreen -> buildBrowserHistoryFragment("about_app")
-    AboutConferenceScreen -> buildBrowserHistoryFragment("about_conference")
+    is AboutAppScreen -> buildBrowserHistoryFragment("about_app")
+    is AboutConferenceScreen -> buildBrowserHistoryFragment("about_conference")
     AppPrivacyNoticePrompt -> buildBrowserHistoryFragment("privacy_notice_prompt")
-    AppPrivacyNoticeScreen -> buildBrowserHistoryFragment("app_privacy_notice")
-    AppTermsOfUseScreen -> buildBrowserHistoryFragment("app_terms_of_use")
-    CodeOfConductScreen -> buildBrowserHistoryFragment("code_of_conduct")
+    is AppPrivacyNoticeScreen -> buildBrowserHistoryFragment("app_privacy_notice")
+    is AppTermsOfUseScreen -> buildBrowserHistoryFragment("app_terms_of_use")
+    is CodeOfConductScreen -> buildBrowserHistoryFragment("code_of_conduct")
     is DeveloperMenuScreen -> buildBrowserHistoryFragment("developer_menu")
-    LicensesScreen -> buildBrowserHistoryFragment("licenses")
-    PartnersScreen -> buildBrowserHistoryFragment("partners")
-    SettingsScreen -> buildBrowserHistoryFragment("settings")
+    is LicensesScreen -> buildBrowserHistoryFragment("licenses")
+    is PartnersScreen -> buildBrowserHistoryFragment("partners")
+    is SettingsScreen -> buildBrowserHistoryFragment("settings")
     StartNotificationsScreen -> buildBrowserHistoryFragment("notifications")
     StartPrivacyNoticeScreen -> buildBrowserHistoryFragment("privacy_notice")
-    TermsOfUseScreen -> buildBrowserHistoryFragment("terms_of_use")
-    VisitorPrivacyNoticeScreen -> buildBrowserHistoryFragment("visitor_privacy_notice")
+    is TermsOfUseScreen -> buildBrowserHistoryFragment("terms_of_use")
+    is VisitorPrivacyNoticeScreen -> buildBrowserHistoryFragment("visitor_privacy_notice")
     ScheduleScreen -> buildBrowserHistoryFragment("schedule")
     SpeakersScreen -> buildBrowserHistoryFragment("speakers")
     MapScreen -> buildBrowserHistoryFragment("map")
@@ -98,20 +98,20 @@ actual fun BrowserIntegration(navState: NavState) {
                 val params = getBrowserHistoryFragmentParameters(fragment)
 
                 when (name) {
-                    "about_app" -> AboutAppScreen
-                    "about_conference" -> AboutConferenceScreen
+                    "about_app" -> AboutAppScreen()
+                    "about_conference" -> AboutConferenceScreen()
                     "privacy_notice_prompt" -> AppPrivacyNoticePrompt
-                    "app_privacy_notice" -> AppPrivacyNoticeScreen
-                    "app_terms_of_use" -> AppTermsOfUseScreen
-                    "code_of_conduct" -> CodeOfConductScreen
+                    "app_privacy_notice" -> AppPrivacyNoticeScreen()
+                    "app_terms_of_use" -> AppTermsOfUseScreen()
+                    "code_of_conduct" -> CodeOfConductScreen()
                     "developer_menu" -> DeveloperMenuScreen()
-                    "licenses" -> LicensesScreen
-                    "partners" -> PartnersScreen
-                    "settings" -> SettingsScreen
+                    "licenses" -> LicensesScreen()
+                    "partners" -> PartnersScreen()
+                    "settings" -> SettingsScreen()
                     "notifications" -> StartNotificationsScreen
                     "privacy_notice" -> StartPrivacyNoticeScreen
-                    "terms_of_use" -> TermsOfUseScreen
-                    "visitor_privacy_notice" -> VisitorPrivacyNoticeScreen
+                    "terms_of_use" -> TermsOfUseScreen()
+                    "visitor_privacy_notice" -> VisitorPrivacyNoticeScreen()
                     "schedule" -> ScheduleScreen
                     "speakers" -> SpeakersScreen
                     "map" -> MapScreen

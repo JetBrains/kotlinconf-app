@@ -42,6 +42,7 @@ import org.jetbrains.kotlinconf.generated.resources.slack
 import org.jetbrains.kotlinconf.generated.resources.twitter
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
@@ -63,22 +64,25 @@ fun InfoScreen(
     viewModel: InfoViewModel = metroViewModel(),
 ) {
     val venueAddress = viewModel.venueAddress.collectAsStateWithLifecycle().value
+    val useNativeNavigation = LocalUseNativeNavigation.current
     val isDark = KotlinConfTheme.colors.isDark
     val images = viewModel.images.collectAsStateWithLifecycle().value
     val logoUrl = if (isDark) images?.kotlinConfDark else images?.kotlinConfLight
     Column(
         Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .then(if (useNativeNavigation) Modifier else Modifier.padding(topInsetPadding()))
     ) {
-        MainHeaderTitleBar(stringResource(Res.string.info_title))
-        HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
+        if (!useNativeNavigation) {
+            MainHeaderTitleBar(stringResource(Res.string.info_title))
+            HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
+        }
 
         Column(
             Modifier
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
-                .padding(PaddingValues(12.dp) + bottomInsetPadding()),
+                .padding(PaddingValues(12.dp) + (if (useNativeNavigation) topInsetPadding() else PaddingValues(0.dp)) + bottomInsetPadding()),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

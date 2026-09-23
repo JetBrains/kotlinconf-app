@@ -4,8 +4,10 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -19,6 +21,7 @@ import org.jetbrains.kotlinconf.utils.ErrorLoadingState
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.MarkdownView
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.components.TopMenuButton
 import org.jetbrains.kotlinconf.ui.generated.resources.Res as UiRes
@@ -36,24 +39,27 @@ fun ScreenWithTitle(
     contentScrollState: ScrollState = rememberScrollState(),
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val useNativeNavigation = LocalUseNativeNavigation.current
     Column(
         modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .then(if (useNativeNavigation) Modifier else Modifier.padding(topInsetPadding()))
     ) {
-        MainHeaderTitleBar(
-            title = title,
-            startContent = {
-                TopMenuButton(
-                    icon = UiRes.drawable.arrow_left_24,
-                    contentDescription = stringResource(UiRes.string.main_header_back),
-                    onClick = onBack,
-                )
-            }
-        )
+        if (!useNativeNavigation) {
+            MainHeaderTitleBar(
+                title = title,
+                startContent = {
+                    TopMenuButton(
+                        icon = UiRes.drawable.arrow_left_24,
+                        contentDescription = stringResource(UiRes.string.main_header_back),
+                        onClick = onBack,
+                    )
+                }
+            )
 
-        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+            HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+        }
 
         Column(
             Modifier
@@ -61,7 +67,7 @@ fun ScreenWithTitle(
                 .background(color = KotlinConfTheme.colors.mainBackground)
                 .padding(horizontal = 12.dp)
                 .verticalScroll(contentScrollState)
-                .padding(bottomInsetPadding())
+                .padding((if (useNativeNavigation) topInsetPadding() else PaddingValues(0.dp)) + bottomInsetPadding())
         ) {
             content()
         }

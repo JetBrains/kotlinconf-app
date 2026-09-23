@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.metroViewModel
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.MapData
@@ -118,21 +119,24 @@ private fun MapScreenImpl(
     modifier: Modifier = Modifier,
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle().value
+    val useNativeNavigation = LocalUseNativeNavigation.current
 
     Column(modifier.fillMaxSize().background(color = KotlinConfTheme.colors.mainBackground)) {
-        MainHeaderTitleBar(
-            title = stringResource(Res.string.map_title),
-            startContent = {
-                if (onBack != null) {
-                    TopMenuButton(
-                        icon = Res.drawable.arrow_left_24,
-                        contentDescription = stringResource(Res.string.navigate_back),
-                        onClick = onBack,
-                    )
+        if (!useNativeNavigation) {
+            MainHeaderTitleBar(
+                title = stringResource(Res.string.map_title),
+                startContent = {
+                    if (onBack != null) {
+                        TopMenuButton(
+                            icon = Res.drawable.arrow_left_24,
+                            contentDescription = stringResource(Res.string.navigate_back),
+                            onClick = onBack,
+                        )
+                    }
                 }
-            }
-        )
-        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+            )
+            HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+        }
 
         ErrorLoadingContent(
             state = state,
@@ -298,7 +302,7 @@ private fun MapWithControls(
 
         if (onHowToFindVenue != null) {
             val isLargeScreen = LocalWindowSize.current != WindowSize.Compact
-            val extraPadding = if (isLargeScreen) bottomInsetPadding() else PaddingValues(0.dp)
+            val extraPadding = if (isLargeScreen || LocalUseNativeNavigation.current) bottomInsetPadding() else PaddingValues(0.dp)
             OverlayTextButton(
                 label = stringResource(Res.string.map_how_to_find_venue),
                 icon = UiRes.drawable.arrow_up_right_24,

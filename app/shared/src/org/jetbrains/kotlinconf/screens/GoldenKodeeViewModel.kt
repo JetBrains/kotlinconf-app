@@ -20,4 +20,5 @@ class GoldenKodeeViewModel(
     val categories: StateFlow<List<AwardCategory>> = conferenceService.goldenKodeeData
         .map { it?.categories ?: emptyList() }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
 }

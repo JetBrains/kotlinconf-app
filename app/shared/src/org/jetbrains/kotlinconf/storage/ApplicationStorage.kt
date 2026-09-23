@@ -15,6 +15,9 @@ interface ApplicationStorage {
     fun getTheme(): Flow<Theme>
     suspend fun setTheme(value: Theme)
 
+    fun isExternalNavigation(): Flow<Boolean>
+    suspend fun setExternalNavigation(value: Boolean)
+
     fun getFlagsBlocking(): Flags?
     fun getFlags(): Flow<Flags?>
     suspend fun setFlags(value: Flags)

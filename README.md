@@ -32,3 +32,17 @@ To build the project locally:
    * Web: not supported yet ([AMPER-258](https://youtrack.jetbrains.com/issue/AMPER-258))
    * Backend: `Run Module backend`
    * Or use `./kotlin run -m <name-of-the-module-mentioned-above>`
+
+## Liquid Glass demo
+
+The `kotlin-toolchain-nadc-lg` branch combines Kotlin Toolchain with the native iOS navigation from `lg-nav`.
+
+With Xcode 26 or newer installed, build and run on an iOS 26+ simulator:
+
+```bash
+./kotlin build -m iosApp -p iosSimulatorArm64
+./kotlin run -m iosApp -p iosSimulatorArm64
+```
+
+For Xcode, open `app/iosApp/module.xcworkspace` and select the `app` scheme.
+Complete onboarding, then enable **System navigation** in the app settings to use the native Liquid Glass tabs and navigation. Older iOS versions use Compose navigation.

@@ -16,7 +16,7 @@
                BlueprintIdentifier = "7555FF7A242A565900829871"
                BuildableName = "KotlinConf.app"
                BlueprintName = "iosApp"
-               ReferencedContainer = "container:KotlinConf.xcodeproj">
+               ReferencedContainer = "container:module.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,7 +45,7 @@
             BlueprintIdentifier = "7555FF7A242A565900829871"
             BuildableName = "KotlinConf.app"
             BlueprintName = "iosApp"
-            ReferencedContainer = "container:KotlinConf.xcodeproj">
+            ReferencedContainer = "container:module.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>

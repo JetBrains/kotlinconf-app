@@ -12,6 +12,7 @@ data class Flags(
     val useFakeTime:  Boolean = false,
     val useFakeGoldenKodeeData: Boolean = false,
     val debugLogging: Boolean = false,
+    val supportsExternalNavigation: Boolean = false,
 )
 
 val LocalFlags = compositionLocalOf<Flags> {

@@ -30,13 +30,13 @@ import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
 import org.jetbrains.kotlinconf.ScrollToTopHandler
-import org.jetbrains.kotlinconf.SpeakerId
+import org.jetbrains.kotlinconf.Speaker
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.speakers_error_no_data
 import org.jetbrains.kotlinconf.generated.resources.speakers_number_of_results
 import org.jetbrains.kotlinconf.generated.resources.speakers_title
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
-import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainer
 import org.jetbrains.kotlinconf.ui.components.MainHeaderContainerState
 import org.jetbrains.kotlinconf.ui.components.MainHeaderSearchBar
@@ -48,18 +48,21 @@ import org.jetbrains.kotlinconf.ui.generated.resources.Res as UiRes
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_search_hint
 import org.jetbrains.kotlinconf.ui.generated.resources.search_24
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
+import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
+import org.jetbrains.kotlinconf.utils.verticalInsetPadding
 
 @Composable
 fun SpeakersScreen(
-    onSpeaker: (SpeakerId) -> Unit,
+    onSpeaker: (Speaker) -> Unit,
     viewModel: SpeakersViewModel = metroViewModel(),
 ) {
     var searchState by rememberSaveable { mutableStateOf(MainHeaderContainerState.Title) }
     var searchText by rememberSaveable { mutableStateOf("") }
 
     val uiState = viewModel.speakers.collectAsStateWithLifecycle().value
+    val useNativeNavigation = LocalUseNativeNavigation.current
 
     val gridState = rememberLazyGridState()
 
@@ -77,45 +80,47 @@ fun SpeakersScreen(
     Column(
         Modifier.fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .then(if (useNativeNavigation) Modifier else Modifier.padding(topInsetPadding()))
     ) {
-        MainHeaderContainer(
-            state = searchState,
-            titleContent = {
-                MainHeaderTitleBar(
-                    title = stringResource(Res.string.speakers_title),
-                    endContent = {
-                        TopMenuButton(
-                            icon = UiRes.drawable.search_24,
-                            onClick = { searchState = MainHeaderContainerState.Search },
-                            contentDescription = stringResource(UiRes.string.main_header_search_hint)
-                        )
-                    }
-                )
-            },
-            searchContent = {
-                NavigationBackHandler(
-                    state = rememberNavigationEventState(NavigationEventInfo.None),
-                    isBackEnabled = true,
-                    onBackCompleted = {
-                        searchState = MainHeaderContainerState.Title
-                        searchText = ""
-                    },
-                )
+        if (!useNativeNavigation) {
+            MainHeaderContainer(
+                state = searchState,
+                titleContent = {
+                    MainHeaderTitleBar(
+                        title = stringResource(Res.string.speakers_title),
+                        endContent = {
+                            TopMenuButton(
+                                icon = UiRes.drawable.search_24,
+                                onClick = { searchState = MainHeaderContainerState.Search },
+                                contentDescription = stringResource(UiRes.string.main_header_search_hint)
+                            )
+                        }
+                    )
+                },
+                searchContent = {
+                    NavigationBackHandler(
+                        state = rememberNavigationEventState(NavigationEventInfo.None),
+                        isBackEnabled = true,
+                        onBackCompleted = {
+                            searchState = MainHeaderContainerState.Title
+                            searchText = ""
+                        },
+                    )
 
-                MainHeaderSearchBar(
-                    searchValue = searchText,
-                    onSearchValueChange = { searchText = it },
-                    onClose = {
-                        searchState = MainHeaderContainerState.Title
-                        searchText = ""
-                    },
-                    onClear = { searchText = "" },
-                )
-            }
-        )
+                    MainHeaderSearchBar(
+                        searchValue = searchText,
+                        onSearchValueChange = { searchText = it },
+                        onClose = {
+                            searchState = MainHeaderContainerState.Title
+                            searchText = ""
+                        },
+                        onClear = { searchText = "" },
+                    )
+                }
+            )
 
-        HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
+            HorizontalDivider(1.dp, KotlinConfTheme.colors.strokePale)
+        }
 
         ErrorLoadingContent(
             state = uiState,
@@ -130,7 +135,7 @@ fun SpeakersScreen(
                 state = gridState,
                 columns = GridCells.Adaptive(300.dp),
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = bottomInsetPadding(),
+                contentPadding = if (useNativeNavigation) verticalInsetPadding() else bottomInsetPadding(),
             ) {
                 if (searchState == MainHeaderContainerState.Search) {
                     item(span = { GridItemSpan(maxLineSpan) }, key = "number-of-speakers") {
@@ -162,7 +167,7 @@ fun SpeakersScreen(
                             .animateItem()
                             .fillMaxWidth()
                             .padding(12.dp),
-                        onClick = { onSpeaker(speaker.id) },
+                        onClick = { onSpeaker(speaker) },
                     )
                 }
             }

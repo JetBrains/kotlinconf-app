@@ -27,6 +27,7 @@ import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.schedule_in_x_minutes
 import org.jetbrains.kotlinconf.generated.resources.speaker_detail_error_not_found
 import org.jetbrains.kotlinconf.generated.resources.speaker_detail_title
+import org.jetbrains.kotlinconf.navigation.LocalUseNativeNavigation
 import org.jetbrains.kotlinconf.ui.AdaptiveDetailLayout
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
@@ -40,13 +41,14 @@ import org.jetbrains.kotlinconf.ui.generated.resources.arrow_left_24
 import org.jetbrains.kotlinconf.ui.generated.resources.main_header_back
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.ErrorLoadingContent
+import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.topInsetPadding
 
 @Composable
 fun SpeakerDetailScreen(
     speakerId: SpeakerId,
     onBack: () -> Unit,
-    onSession: (SessionId) -> Unit,
+    onSession: (SessionId, String) -> Unit,
     viewModel: SpeakerDetailViewModel =
         assistedMetroViewModel<SpeakerDetailViewModel, SpeakerDetailViewModel.Factory> {
             create(speakerId)
@@ -59,7 +61,7 @@ fun SpeakerDetailScreen(
         Modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
-            .padding(topInsetPadding())
+            .then(if (LocalUseNativeNavigation.current) Modifier else Modifier.padding(topInsetPadding()))
     ) {
         ErrorLoadingContent(
             state = speakerState,
@@ -71,23 +73,29 @@ fun SpeakerDetailScreen(
 
             AdaptiveDetailLayout(
                 compactHeader = {
-                    MainHeaderTitleBar(
-                        title = stringResource(Res.string.speaker_detail_title),
-                        startContent = {
-                            TopMenuButton(
-                                icon = UiRes.drawable.arrow_left_24,
-                                contentDescription = stringResource(UiRes.string.main_header_back),
-                                onClick = onBack,
-                            )
-                        }
-                    )
-                    HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+                    if (!LocalUseNativeNavigation.current) {
+                        MainHeaderTitleBar(
+                            title = stringResource(Res.string.speaker_detail_title),
+                            startContent = {
+                                TopMenuButton(
+                                    icon = UiRes.drawable.arrow_left_24,
+                                    contentDescription = stringResource(UiRes.string.main_header_back),
+                                    onClick = onBack,
+                                )
+                            }
+                        )
+                        HorizontalDivider(thickness = 1.dp, color = KotlinConfTheme.colors.strokePale)
+                    }
                 },
                 compactContentHeader = {
-                    Name(currentSpeaker, Modifier.padding(vertical = 24.dp))
+                    if (!LocalUseNativeNavigation.current) {
+                        Name(currentSpeaker, Modifier.padding(vertical = 24.dp))
+                    }
                 },
                 largeContentHeader = {
-                    Name(currentSpeaker, Modifier.padding(bottom = 24.dp, top = 6.dp))
+                    if (!LocalUseNativeNavigation.current) {
+                        Name(currentSpeaker, Modifier.padding(bottom = 24.dp, top = 6.dp))
+                    }
                 },
                 unifiedContent = {
                     Description(currentSpeaker)
@@ -156,7 +164,7 @@ private fun Description(
 private fun Talks(
     sessions: List<SessionCardView>,
     viewModel: SpeakerDetailViewModel,
-    onSession: (SessionId) -> Unit,
+    onSession: (SessionId, String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
@@ -183,7 +191,7 @@ private fun Talks(
                 },
                 status = TalkStatus.Upcoming,
                 feedbackContent = null,
-                onClick = { onSession(session.id) },
+                onClick = { onSession(session.id, session.title) },
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
             )
         }
