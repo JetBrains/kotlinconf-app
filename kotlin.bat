@@ -17,9 +17,9 @@
 setlocal
 
 @rem The version of the Kotlin Toolchain distribution to provision and use
-set kotlin_cli_version=0.13.0-dev-4420
+set kotlin_cli_version=0.13.0
 @rem Establish chain of trust from here by specifying the exact checksum of the Kotlin Toolchain distribution to be run
-set kotlin_cli_sha256=f9b42d59990c1b807a512ca4be916e446aadee99a06a297f38ec19275cf10793
+set kotlin_cli_sha256=fa82b9872dcfa04d26c8f800f33d597c99fbffd747a0e9bbce3a9e4424b3a588
 
 if not defined KOTLIN_CLI_DOWNLOAD_ROOT set KOTLIN_CLI_DOWNLOAD_ROOT=https://packages.jetbrains.team/maven/p/amper/amper
 if not defined KOTLIN_CLI_BOOTSTRAP_CACHE_DIR set KOTLIN_CLI_BOOTSTRAP_CACHE_DIR=%LOCALAPPDATA%\JetBrains\Kotlin\cli
@@ -40,13 +40,14 @@ set sha=%~4
 set sha_size=%~5
 set show_banner_on_cache_miss=%~6
 
+setlocal enableDelayedExpansion
+
 set flag_file=%target_dir%\.flag
 if exist "%flag_file%" (
     set /p current_flag=<"%flag_file%"
-    if "%current_flag%" == "%sha%" exit /b
+    if "!current_flag!" == "%sha%" exit /b
 )
 
-setlocal enableDelayedExpansion
 set NL=^
 
 
@@ -74,6 +75,9 @@ Welcome to !NL! ^
 @rem  - we need to support both .zip and .tar.gz archives (for the Kotlin Toolchain distribution and the JRE)
 @rem  - tar should be present in all Windows machines since 2018 (and usable from both cmd and powershell)
 @rem  - tar requires the destination dir to exist
+@rem  - native commands like tar don't raise PowerShell errors on failure, so we have to check $LASTEXITCODE.
+@rem    The extraction must never be left half-done with the .flag file in place, because the .flag file marks the
+@rem    target dir as complete, and subsequent runs would then skip the extraction and use the broken directory.
 @rem  - We use (New-Object Net.WebClient).DownloadFile instead of Invoke-WebRequest for performance. See the issue
 @rem    https://github.com/PowerShell/PowerShell/issues/16914, which is still not fixed in Windows PowerShell 5.1
 @rem  - DownloadFile requires the directories in the destination file's path to exist
@@ -81,6 +85,7 @@ set download_and_extract_ps1= ^
 Set-StrictMode -Version 3.0; ^
 $ErrorActionPreference = 'Stop'; ^
  ^
+$temp_file = $null; ^
 $createdNew = $false; ^
 $lock = New-Object System.Threading.Mutex($true, ('Global\kotlin-cli-bootstrap.' + '%target_dir%'.GetHashCode().ToString()), [ref]$createdNew); ^
 if (-not $createdNew) { ^
@@ -117,14 +122,22 @@ try { ^
         if (Test-Path '%target_dir%') { ^
             Remove-Item '%target_dir%' -Recurse; ^
         } ^
-        if ($temp_file -like '*.zip') { ^
-            Add-Type -A 'System.IO.Compression.FileSystem'; ^
-            [IO.Compression.ZipFile]::ExtractToDirectory($temp_file, '%target_dir%'); ^
-        } else { ^
-            [void](New-Item '%target_dir%' -ItemType Directory -Force); ^
-            tar -xzf $temp_file -C '%target_dir%'; ^
+        try { ^
+            if ($temp_file -like '*.zip') { ^
+                Add-Type -A 'System.IO.Compression.FileSystem'; ^
+                [IO.Compression.ZipFile]::ExtractToDirectory($temp_file, '%target_dir%'); ^
+            } else { ^
+                [void](New-Item '%target_dir%' -ItemType Directory -Force); ^
+                tar -xzf $temp_file -C '%target_dir%'; ^
+                if ($LASTEXITCODE -ne 0) { ^
+                    throw \"tar failed to extract %moniker% (exit code $LASTEXITCODE)\"; ^
+                } ^
+            } ^
+        } catch { ^
+            Remove-Item '%flag_file%' -Force -ErrorAction Ignore; ^
+            Remove-Item '%target_dir%' -Recurse -Force -ErrorAction Ignore; ^
+            throw; ^
         } ^
-        Remove-Item $temp_file; ^
  ^
         Set-Content '%flag_file%' -Value '%sha%'; ^
         Write-Host 'Download complete.'; ^
@@ -132,6 +145,9 @@ try { ^
     } ^
 } ^
 finally { ^
+    if ($temp_file) { ^
+        Remove-Item $temp_file -Force -ErrorAction Ignore; ^
+    } ^
     $lock.ReleaseMutex(); ^
 }
 
