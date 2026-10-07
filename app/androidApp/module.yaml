@@ -18,6 +18,7 @@ dependencies:
 
 settings:
   android:
+    applicationId: com.jetbrains.kotlinconf
     namespace: com.jetbrains.kotlinconf
     versionCode: 73
     versionName: 40.0.5
