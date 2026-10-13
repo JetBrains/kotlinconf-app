@@ -37,6 +37,113 @@ For the source code and more technical details, visit the GitHub repository.</st
     <string name="info_link_description_twitter">Twitter</string>
     <string name="info_link_description_slack">Slack</string>
     <string name="info_link_description_bluesky">Bluesky</string>
+    <string name="info_link_wrapped_title">Your KotlinConf %1$s, Wrapped</string>
+    <string name="info_link_wrapped_subtitle">Your bookmarks, ratings and explorations, in one story</string>
+
+    <string name="wrapped_loading">Wrapping up your year…</string>
+    <string name="wrapped_close">Close</string>
+    <string name="wrapped_tap_hint">Tap to continue</string>
+    <string name="wrapped_duration">%1$sh %2$smin</string>
+
+    <string name="wrapped_intro_eyebrow">KotlinConf %1$s</string>
+    <string name="wrapped_intro_title">Your conference, Wrapped</string>
+    <string name="wrapped_intro_body">Let’s look back at what you did this year.</string>
+    <string name="wrapped_intro_body_ongoing">The conference isn’t over yet, but here’s your story so far.</string>
+
+    <string name="wrapped_event_title">The conference by the numbers</string>
+    <string name="wrapped_event_talks">talks</string>
+    <string name="wrapped_event_speakers">speakers</string>
+    <string name="wrapped_event_days">days</string>
+    <string name="wrapped_event_rooms">rooms</string>
+    <string name="wrapped_event_hours">of content</string>
+    <string name="wrapped_event_top_topics">Hottest topics</string>
+
+    <string name="wrapped_bookmarks_title">You bookmarked</string>
+    <plurals name="wrapped_bookmarks_count">
+        <item quantity="one">session</item>
+        <item quantity="other">sessions</item>
+    </plurals>
+    <string name="wrapped_bookmarks_body">That’s %1$d percent of all talks, about %2$s of content.</string>
+    <plurals name="wrapped_bookmarks_lightning">
+        <item quantity="one">%1$d of them is a lightning talk</item>
+        <item quantity="other">%1$d of them are lightning talks</item>
+    </plurals>
+    <string name="wrapped_bookmarks_early">Your earliest pick starts at %1$s</string>
+
+    <string name="wrapped_topic_title">Your top topic</string>
+    <plurals name="wrapped_topic_body">
+        <item quantity="one">It shows up in %1$d of your bookmarks</item>
+        <item quantity="other">It shows up in %1$d of your bookmarks</item>
+    </plurals>
+
+    <string name="wrapped_day_title">Your busiest day</string>
+    <plurals name="wrapped_day_body">
+        <item quantity="one">%1$d bookmarked session on a single day</item>
+        <item quantity="other">%1$d bookmarked sessions on a single day</item>
+    </plurals>
+
+    <string name="wrapped_speakers_title">Speakers you keep coming back to</string>
+    <plurals name="wrapped_speakers_count">
+        <item quantity="one">%1$d talk bookmarked</item>
+        <item quantity="other">%1$d talks bookmarked</item>
+    </plurals>
+
+    <string name="wrapped_votes_title">You rated</string>
+    <plurals name="wrapped_votes_count">
+        <item quantity="one">talk</item>
+        <item quantity="other">talks</item>
+    </plurals>
+    <string name="wrapped_votes_positive">%1$d percent of your ratings were positive</string>
+    <string name="wrapped_votes_good">Great</string>
+    <string name="wrapped_votes_ok">OK</string>
+    <string name="wrapped_votes_bad">Not for me</string>
+
+    <string name="wrapped_usage_title">Your explorer stats</string>
+    <plurals name="wrapped_usage_launches">
+        <item quantity="one">You opened the app %1$d time</item>
+        <item quantity="other">You opened the app %1$d times</item>
+    </plurals>
+    <plurals name="wrapped_usage_session_views">
+        <item quantity="one">session detail viewed</item>
+        <item quantity="other">session details viewed</item>
+    </plurals>
+    <plurals name="wrapped_usage_unique_sessions">
+        <item quantity="one">across %1$d session</item>
+        <item quantity="other">across %1$d different sessions</item>
+    </plurals>
+    <plurals name="wrapped_usage_speaker_views">
+        <item quantity="one">%1$d speaker profile viewed</item>
+        <item quantity="other">%1$d speaker profiles viewed</item>
+    </plurals>
+    <string name="wrapped_usage_most_viewed">You kept coming back to</string>
+    <plurals name="wrapped_usage_most_viewed_count">
+        <item quantity="one">%1$d visit</item>
+        <item quantity="other">%1$d visits</item>
+    </plurals>
+
+    <string name="wrapped_empty_title">A quiet conference so far</string>
+    <string name="wrapped_empty_body">Bookmark sessions, rate talks and explore the schedule. Your Wrapped fills up as you go.</string>
+
+    <string name="wrapped_personality_title">Your attendee type</string>
+    <string name="wrapped_personality_planner">The Planner</string>
+    <string name="wrapped_personality_planner_body">You mapped out your conference ahead of time, one bookmark at a time.</string>
+    <string name="wrapped_personality_reviewer">The Reviewer</string>
+    <string name="wrapped_personality_reviewer_body">You don’t just attend talks, you rate them. Speakers thank you.</string>
+    <string name="wrapped_personality_explorer">The Explorer</string>
+    <string name="wrapped_personality_explorer_body">You browsed far and wide before choosing. Curiosity is your superpower.</string>
+    <string name="wrapped_personality_lightning_fan">The Lightning Fan</string>
+    <string name="wrapped_personality_lightning_fan_body">Short, sharp and to the point: you love a good lightning talk.</string>
+    <string name="wrapped_personality_free_spirit">The Free Spirit</string>
+    <string name="wrapped_personality_free_spirit_body">No plan, no problem. You go wherever the hallway track takes you.</string>
+
+    <string name="wrapped_outro_title">That’s a wrap!</string>
+    <string name="wrapped_outro_bookmarked">bookmarked</string>
+    <string name="wrapped_outro_rated">rated</string>
+    <string name="wrapped_outro_body">Thanks for being part of KotlinConf %1$s. See you next time!</string>
+    <string name="wrapped_share">Copy summary</string>
+    <string name="wrapped_share_copied">Copied!</string>
+    <string name="wrapped_done">Done</string>
+    <string name="wrapped_share_text">My KotlinConf %1$s Wrapped: %2$d sessions bookmarked, %3$d talks rated, %4$d sessions explored. Attendee type: %5$s. #KotlinConf</string>
 
     <string name="about_conference_title">About the conference</string>
 

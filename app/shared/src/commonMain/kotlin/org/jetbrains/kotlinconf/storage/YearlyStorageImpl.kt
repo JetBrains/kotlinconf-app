@@ -19,6 +19,7 @@ import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.VoteInfo
 import org.jetbrains.kotlinconf.di.Year
 import org.jetbrains.kotlinconf.di.YearScope
+import org.jetbrains.kotlinconf.wrapped.UsageStats
 
 
 @ContributesBinding(YearScope::class)
@@ -51,6 +52,7 @@ class YearlyStorageImpl(
     val FAVORITES = key("favorites")
     val NOTIFICATION_SETTINGS = key("notificationSettings")
     val VOTES = key("votes")
+    val USAGE_STATS = key("usageStats")
 
     override fun isPolicySigned(): Flow<Boolean> = settings.getBooleanFlow(POLICY_SIGNED, false)
     override suspend fun setPolicySigned(value: Boolean) = settings.set(POLICY_SIGNED, value)
@@ -72,6 +74,9 @@ class YearlyStorageImpl(
 
     override fun getVotes(): Flow<List<VoteInfo>> = settings.getStringOrNullFlow(VOTES).map { it.decodeOrNull<List<VoteInfo>>() ?: emptyList() }
     override suspend fun setVotes(value: List<VoteInfo>) = settings.set(VOTES, json.encodeToString(value))
+
+    override fun getUsageStats(): Flow<UsageStats> = settings.getStringOrNullFlow(USAGE_STATS).map { it.decodeOrNull<UsageStats>() ?: UsageStats() }
+    override suspend fun setUsageStats(value: UsageStats) = settings.set(USAGE_STATS, json.encodeToString(value))
 
     override suspend fun getAsset(name: String): String? = assetStorage.read(name)
     override suspend fun setAsset(name: String, content: String) = assetStorage.write(name, content)

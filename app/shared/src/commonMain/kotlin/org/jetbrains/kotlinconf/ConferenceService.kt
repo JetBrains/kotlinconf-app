@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.getString
@@ -38,6 +40,7 @@ import org.jetbrains.kotlinconf.storage.ApplicationStorage
 import org.jetbrains.kotlinconf.storage.YearlyStorage
 import org.jetbrains.kotlinconf.utils.Logger
 import org.jetbrains.kotlinconf.utils.tagged
+import org.jetbrains.kotlinconf.wrapped.UsageStats
 import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -64,6 +67,10 @@ class ConferenceService(
     private val currentYearlyStorage: Flow<YearlyStorage> =
         currentYearGraph.map { it?.storage }.filterNotNull()
 
+    // Declared before init, since the coroutines started there record the app launch
+    private val usageStatsMutex = Mutex()
+    private var appLaunchRecorded = false
+
     init {
         applicationStorage.initialize()
 
@@ -86,6 +93,8 @@ class ConferenceService(
                     currentYearGraph.update {
                         yearGraphFactory.create(config.currentYear)
                     }
+
+                    recordAppLaunch()
 
                     taggedLogger.log { "Loading conference data" }
                     loadConferenceData()
@@ -175,6 +184,35 @@ class ConferenceService(
         applicationStorage.getConfig()
             .map { it?.currentYear }
             .stateIn(scope, SharingStarted.Eagerly, null)
+
+    /** On-device usage counters for the current year, used by the Wrapped summary. */
+    val usageStats: StateFlow<UsageStats> =
+        currentYearlyStorage.flatMapLatest { it.getUsageStats() }
+            .stateIn(scope, SharingStarted.Eagerly, UsageStats())
+
+    private fun recordAppLaunch() {
+        // Only count once per process, even if the config is reloaded
+        if (appLaunchRecorded) return
+        appLaunchRecorded = true
+        updateUsageStats { it.withAppLaunch() }
+    }
+
+    fun recordSessionView(sessionId: SessionId) {
+        updateUsageStats { it.withSessionView(sessionId) }
+    }
+
+    fun recordSpeakerView(speakerId: SpeakerId) {
+        updateUsageStats { it.withSpeakerView(speakerId) }
+    }
+
+    private fun updateUsageStats(transform: (UsageStats) -> UsageStats) {
+        scope.launch {
+            usageStatsMutex.withLock {
+                val storage = currentYearGraph.value?.storage ?: return@withLock
+                storage.setUsageStats(transform(storage.getUsageStats().first()))
+            }
+        }
+    }
 
     fun getTheme(): Flow<Theme> = applicationStorage.getTheme()
 

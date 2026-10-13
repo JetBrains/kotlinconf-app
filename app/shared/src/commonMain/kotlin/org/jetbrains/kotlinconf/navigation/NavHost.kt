@@ -61,6 +61,7 @@ import org.jetbrains.kotlinconf.screens.SpeakersScreen
 import org.jetbrains.kotlinconf.screens.StartNotificationsScreen
 import org.jetbrains.kotlinconf.screens.VisitorPrivacyNotice
 import org.jetbrains.kotlinconf.screens.VisitorTermsOfUse
+import org.jetbrains.kotlinconf.screens.WrappedScreen
 import org.jetbrains.kotlinconf.screens.licenses.LicensesScreen
 import org.jetbrains.kotlinconf.screens.licenses.SingleLicenseScreen
 import org.jetbrains.kotlinconf.ui.components.Text
@@ -325,6 +326,7 @@ private fun EntryProviderScope<AppRoute>.screens(
             onSlack = { uriHandler.openUri(URLs.SLACK) },
             onBluesky = { uriHandler.openUri(URLs.BLUESKY) },
             onSettings = { navigator.add(SettingsScreen) },
+            onWrapped = { navigator.add(WrappedScreen) },
         )
     }
 
@@ -392,6 +394,9 @@ private fun EntryProviderScope<AppRoute>.screens(
     }
     entry<SettingsScreen> {
         SettingsScreen(onBack = onBack)
+    }
+    entry<WrappedScreen> {
+        WrappedScreen(onBack = onBack)
     }
     entry<VisitorPrivacyNoticeScreen> {
         VisitorPrivacyNotice(onBack = onBack)

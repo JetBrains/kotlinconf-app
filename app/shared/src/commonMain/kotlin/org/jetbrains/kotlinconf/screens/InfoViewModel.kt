@@ -24,4 +24,6 @@ class InfoViewModel(
     val images: StateFlow<ConferenceImages?> = service.conferenceInfo
         .map { it?.images }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    val year: StateFlow<Int?> = service.currentYear
 }

@@ -25,6 +25,9 @@ class SessionViewModel(
     private val service: ConferenceService,
     @Assisted private val sessionId: SessionId,
 ) : ViewModel() {
+    init {
+        service.recordSessionView(sessionId)
+    }
 
     val session: StateFlow<ErrorLoadingState<SessionCardView>> = service.sessionByIdFlow(sessionId)
         .map { session ->

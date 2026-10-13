@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,15 +20,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import dev.zacsweers.metrox.viewmodel.metroViewModel
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.kotlinconf.generated.resources.Res
+import org.jetbrains.kotlinconf.generated.resources.arrow_right_24
 import org.jetbrains.kotlinconf.generated.resources.arrow_up_right_24
 import org.jetbrains.kotlinconf.generated.resources.bluesky
 import org.jetbrains.kotlinconf.generated.resources.info_link_about_app
@@ -37,12 +44,16 @@ import org.jetbrains.kotlinconf.generated.resources.info_link_description_twitte
 import org.jetbrains.kotlinconf.generated.resources.info_link_how_to_find_venue
 import org.jetbrains.kotlinconf.generated.resources.info_link_partners
 import org.jetbrains.kotlinconf.generated.resources.info_link_settings
+import org.jetbrains.kotlinconf.generated.resources.info_link_wrapped_subtitle
+import org.jetbrains.kotlinconf.generated.resources.info_link_wrapped_title
 import org.jetbrains.kotlinconf.generated.resources.info_title
 import org.jetbrains.kotlinconf.generated.resources.slack
 import org.jetbrains.kotlinconf.generated.resources.twitter
 import org.jetbrains.kotlinconf.ui.components.HorizontalDivider
+import org.jetbrains.kotlinconf.ui.components.Icon
 import org.jetbrains.kotlinconf.ui.components.MainHeaderTitleBar
 import org.jetbrains.kotlinconf.ui.components.PageMenuItem
+import org.jetbrains.kotlinconf.ui.components.Text
 import org.jetbrains.kotlinconf.ui.theme.KotlinConfTheme
 import org.jetbrains.kotlinconf.utils.bottomInsetPadding
 import org.jetbrains.kotlinconf.utils.plus
@@ -60,9 +71,11 @@ fun InfoScreen(
     onSlack: () -> Unit,
     onBluesky: () -> Unit,
     onSettings: () -> Unit,
+    onWrapped: () -> Unit,
     viewModel: InfoViewModel = metroViewModel(),
 ) {
     val venueAddress = viewModel.venueAddress.collectAsStateWithLifecycle().value
+    val year = viewModel.year.collectAsStateWithLifecycle().value
     val isDark = KotlinConfTheme.colors.isDark
     val images = viewModel.images.collectAsStateWithLifecycle().value
     val logoUrl = if (isDark) images?.kotlinConfDark else images?.kotlinConfLight
@@ -90,6 +103,9 @@ fun InfoScreen(
                         .padding(24.dp)
                         .widthIn(max = 360.dp)
                 )
+            }
+            if (year != null) {
+                WrappedCard(year = year, onClick = onWrapped)
             }
             PageMenuItem(stringResource(Res.string.info_link_about_conf), onClick = onAboutConf)
             if (venueAddress != null) {
@@ -125,6 +141,47 @@ fun InfoScreen(
                     onClick = onBluesky,
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun WrappedCard(
+    year: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier
+            .fillMaxWidth()
+            .clip(KotlinConfTheme.shapes.roundedCornerMd)
+            .clickable(onClick = onClick)
+            .background(
+                Brush.linearGradient(
+                    listOf(Color(0xFF8F00E7), Color(0xFFC202D7), Color(0xFFE00189))
+                )
+            )
+            .padding(20.dp),
+    ) {
+        Text(
+            text = stringResource(Res.string.info_link_wrapped_title, year.toString()),
+            style = KotlinConfTheme.typography.h2,
+            color = KotlinConfTheme.colors.primaryTextWhiteFixed,
+        )
+        Spacer(Modifier.height(8.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = stringResource(Res.string.info_link_wrapped_subtitle),
+                style = KotlinConfTheme.typography.text2,
+                color = Color(0xCCFFFFFF),
+                modifier = Modifier.weight(1f),
+            )
+            Icon(
+                painter = painterResource(Res.drawable.arrow_right_24),
+                contentDescription = null,
+                tint = KotlinConfTheme.colors.primaryTextWhiteFixed,
+                modifier = Modifier.size(24.dp),
+            )
         }
     }
 }

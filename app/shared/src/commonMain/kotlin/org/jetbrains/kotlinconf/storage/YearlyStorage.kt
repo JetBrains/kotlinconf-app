@@ -7,6 +7,7 @@ import org.jetbrains.kotlinconf.GoldenKodeeData
 import org.jetbrains.kotlinconf.NotificationSettings
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.VoteInfo
+import org.jetbrains.kotlinconf.wrapped.UsageStats
 
 interface YearlyStorage {
     fun isPolicySigned(): Flow<Boolean>
@@ -29,6 +30,9 @@ interface YearlyStorage {
 
     fun getVotes(): Flow<List<VoteInfo>>
     suspend fun setVotes(value: List<VoteInfo>)
+
+    fun getUsageStats(): Flow<UsageStats>
+    suspend fun setUsageStats(value: UsageStats)
 
     suspend fun getAsset(name: String): String?
     suspend fun setAsset(name: String, content: String)

@@ -28,6 +28,9 @@ class SpeakerDetailViewModel(
     private val service: ConferenceService,
     @Assisted speakerId: SpeakerId,
 ) : ViewModel() {
+    init {
+        service.recordSpeakerView(speakerId)
+    }
     fun onBookmark(sessionId: SessionId, bookmarked: Boolean) {
         viewModelScope.launch {
             service.setFavorite(sessionId, bookmarked)

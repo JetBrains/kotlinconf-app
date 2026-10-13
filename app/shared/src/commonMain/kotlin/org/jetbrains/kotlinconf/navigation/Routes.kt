@@ -63,6 +63,10 @@ data object AppPrivacyNoticePrompt : AppRoute
 data object SettingsScreen : AppRoute
 
 @Serializable
+@SerialName("Wrapped")
+data object WrappedScreen : AppRoute
+
+@Serializable
 @SerialName("VisitorPrivacyNotice")
 data object VisitorPrivacyNoticeScreen : AppRoute
 
