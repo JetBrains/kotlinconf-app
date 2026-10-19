@@ -121,6 +121,7 @@ kotlin {
             implementation(libs.androidx.preference)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.metrox.android)
+            implementation(libs.androidx.profileinstaller)
         }
 
         iosMain.dependencies {

@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.googleServices)
     alias(libs.plugins.metro)
+    alias(libs.plugins.androidx.baselineprofile)
 }
 
 kotlin {
@@ -26,6 +27,7 @@ dependencies {
     implementation(libs.metrox.viewmodel.compose)
 
     testImplementation(libs.junit)
+    baselineProfile(project(":benchmarks"))
 }
 
 android {
@@ -58,4 +60,13 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+baselineProfile {
+    // Don't build on every iteration of a full assemble.
+    // Instead enable generation directly for the release build variant.
+    automaticGenerationDuringBuild = false
+
+    // Make use of Dex Layout Optimizations via Startup Profiles
+    dexLayoutOptimization = true
 }

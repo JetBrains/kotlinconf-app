@@ -42,3 +42,5 @@ include(":app:androidApp")
 include(":app:desktopApp")
 include(":app:webApp")
 include(":app:adminApp")
+
+include(":benchmarks")

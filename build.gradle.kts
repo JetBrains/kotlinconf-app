@@ -17,6 +17,8 @@ plugins {
     alias(libs.plugins.jib) apply false
     alias(libs.plugins.googleServices) apply false
     alias(libs.plugins.metro) apply false
+    alias(libs.plugins.androidx.baselineprofile) apply false
+    alias(libs.plugins.androidTest) apply false
 }
 
 // Pin Node.js to the last 22.x LTS. Node 24/25 prebuilt linux-x64 binaries
