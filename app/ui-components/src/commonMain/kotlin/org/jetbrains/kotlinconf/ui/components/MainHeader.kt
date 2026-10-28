@@ -24,6 +24,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -48,12 +54,26 @@ fun MainHeaderSearchBar(
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
     hasAdditionalInputs: Boolean = false,
+    searchBarFocusRequester: FocusRequester? = null,
 ) {
+
+    fun KeyEvent.isEscPressed(): Boolean =
+        this.type == KeyEventType.KeyDown && this.key == Key.Escape
+
     Row(
         modifier = modifier
             .height(48.dp)
             .fillMaxWidth()
-            .background(KotlinConfTheme.colors.mainBackground),
+            .background(KotlinConfTheme.colors.mainBackground)
+            .onPreviewKeyEvent { event ->
+                if (event.isEscPressed()) {
+                    onClose()
+                    onSearchValueChange("")
+                    true
+                } else {
+                    false
+                }
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TopMenuButton(
@@ -66,7 +86,7 @@ fun MainHeaderSearchBar(
         )
 
         var focusRequested by rememberSaveable { mutableStateOf(false) }
-        val focusRequester = remember { FocusRequester() }
+        val focusRequester = searchBarFocusRequester ?: remember { FocusRequester() }
         if (!focusRequested) {
             LaunchedEffect(Unit) {
                 focusRequester.requestFocus()
