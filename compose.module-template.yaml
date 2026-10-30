@@ -4,4 +4,4 @@ apply:
 settings:
   compose:
     enabled: true
-    version: 1.11.0-rc01
+    version: 1.12.1

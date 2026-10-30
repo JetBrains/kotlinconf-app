@@ -36,7 +36,7 @@ dependencies:
   - $compose.animation: exported
   - $libs.compose.material.ripple
   - $compose.components.resources: exported
-  - $libs.compose.ui.tooling.preview
+  - $compose.preview
 
   - $libs.coil.compose
   - $libs.coil.network.ktor3

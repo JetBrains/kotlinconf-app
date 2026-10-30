@@ -54,7 +54,7 @@ dependencies:
   - $compose.foundation: exported
   - $compose.animation: exported
   - $compose.components.resources: exported
-  - $libs.compose.ui.tooling.preview
+  - $compose.preview
 
   - $libs.metrox.viewmodel.compose
 
