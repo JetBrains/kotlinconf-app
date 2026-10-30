@@ -1,10 +1,6 @@
 [versions]
 aboutlibraries = "13.2.1"
-agp = "9.1.0"
-android-compileSdk = "37"
-android-minSdk = "28"
 android-svg = "1.4"
-android-targetSdk = "37"
 androidx-activity = "1.13.0"
 androidx-core-splashscreen = "1.2.0"
 androidx-lifecycle = "2.11.0"
