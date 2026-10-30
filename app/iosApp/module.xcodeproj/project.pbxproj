@@ -112,7 +112,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7555FFA5242A565B00829871 /* Build configuration list for PBXNativeTarget "iosApp" */;
 			buildPhases = (
-				7DD487BF26F99029DCE5BF3F /* Build Kotlin with Amper */,
+				7DD487BF26F99029DCE5BF3F /* Build Kotlin */,
 				7555FF77242A565900829871 /* Sources */,
 				7555FF78242A565900829871 /* Frameworks */,
 				7555FF79242A565900829871 /* Resources */,
@@ -142,7 +142,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7555FF76242A565900829871 /* Build configuration list for PBXProject "KotlinConf" */;
+			buildConfigurationList = 7555FF76242A565900829871 /* Build configuration list for PBXProject "module" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -180,7 +180,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7DD487BF26F99029DCE5BF3F /* Build Kotlin with Amper */ = {
+		7DD487BF26F99029DCE5BF3F /* Build Kotlin */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -188,12 +188,12 @@
 			);
 			inputPaths = (
 			);
-			name = "Build Kotlin with Amper";
+			name = "Build Kotlin";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# !AMPER KMP INTEGRATION STEP!\n# This script is managed by the Kotlin Toolchain, do not edit manually!\n\"${KOTLIN_CLI_WRAPPER_PATH}\" tool xcode-integration\n";
+			shellScript = "# !KOTLIN INTEGRATION STEP!\n# This script is managed by the Kotlin Toolchain, do not edit manually!\n\"${KOTLIN_CLI_WRAPPER_PATH}\" tool xcode-integration\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -353,7 +353,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
-                    "@loader_path/Frameworks",
+					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 40.0.5;
 				OTHER_LDFLAGS = (
@@ -398,7 +398,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
-                    "@loader_path/Frameworks",
+					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 40.0.5;
 				OTHER_LDFLAGS = (
@@ -423,7 +423,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7555FF76242A565900829871 /* Build configuration list for PBXProject "KotlinConf" */ = {
+		7555FF76242A565900829871 /* Build configuration list for PBXProject "module" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7555FFA3242A565B00829871 /* Debug */,
