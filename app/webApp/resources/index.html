@@ -105,12 +105,12 @@
             }
         </script>
 
-        <script type="application/javascript" src="kotlinconf-app.js"></script>
-
         <script type="application/javascript">
             if ("serviceWorker" in navigator) {
                 window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
             }
         </script>
+
+        {{kotlin.scripts}}
     </body>
 </html>
