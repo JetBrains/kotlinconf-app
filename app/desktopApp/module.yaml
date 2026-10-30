@@ -6,6 +6,8 @@ apply:
 
 settings:
   jvm:
+    jdk:
+      version: 21
     mainClass: org.jetbrains.kotlinconf.MainKt
   compose:
     resources:
