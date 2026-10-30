@@ -17,9 +17,9 @@
 set -e -u
 
 # The version of the Kotlin Toolchain (and CLI) distribution to provision and use
-kotlin_cli_version=0.11.1
+kotlin_cli_version=0.14.0-dev-4576
 # Establish chain of trust from here by specifying exact checksum of Kotlin Toolchain (and CLI) distribution to be run
-kotlin_cli_sha256=0ded2a434f6bf193b24e2a6d56c3ba443f4232721155a65aaa8372789412112f
+kotlin_cli_sha256=104a3c2c3a6ab9f608e3a479cfff2a9d46b90ed4be3502fb176562677257a32d
 
 KOTLIN_CLI_DOWNLOAD_ROOT="${KOTLIN_CLI_DOWNLOAD_ROOT:-https://packages.jetbrains.team/maven/p/amper/amper}"
 
@@ -66,6 +66,9 @@ download_and_extract() {
   cache_dir="$5"
   extract_dir="$6"
   show_banner_on_cache_miss="$7"
+  # Optional name of a function to run on the extracted files before the extraction dir is marked as complete.
+  # It is called with the extraction directory as single argument.
+  post_process="${8:-}"
 
   if [ -e "$extract_dir/.flag" ] && [ "$(cat "$extract_dir/.flag")" = "${file_sha}" ]; then
     # Everything is up-to-date in $extract_dir, do nothing
@@ -78,6 +81,7 @@ download_and_extract() {
   short_sha=$(echo "$file_sha" | cut -c1-32) # cannot use the ${short_sha:0:32} syntax in regular /bin/sh
   download_lock_file="$cache_dir/download-${short_sha}.lock"
   process_lock_file="$cache_dir/download-${short_sha}.$$.lock"
+  temp_file="$cache_dir/download-${short_sha}.$$.bin"
   echo $$ >"$process_lock_file"
   while ! ln "$process_lock_file" "$download_lock_file" 2>/dev/null; do
     lock_owner=$(cat "$download_lock_file" 2>/dev/null || true)
@@ -95,8 +99,14 @@ download_and_extract() {
     fi
   done
 
-  # shellcheck disable=SC2064
-  trap "rm -f \"$download_lock_file\"" EXIT
+
+  # An extraction left half-done must never keep the .flag file, which marks $extract_dir as complete: subsequent runs
+  # would skip the extraction and use the broken directory.
+  cleanup_incomplete_provisioning() {
+    rm -f "$download_lock_file" "$temp_file"
+    rm -rf "$extract_dir"
+  }
+  trap cleanup_incomplete_provisioning EXIT
   rm -f "$process_lock_file"
 
   unlock_and_cleanup() {
@@ -136,7 +146,6 @@ EOF
 
   echo "Downloading $moniker..."
 
-  temp_file="$cache_dir/download-file-$$.bin"
   rm -f "$temp_file"
   if command -v curl >/dev/null 2>&1; then
     if [ -t 1 ]; then CURL_PROGRESS="--progress-bar"; else CURL_PROGRESS="--silent --show-error"; fi
@@ -170,6 +179,12 @@ EOF
   esac
 
   rm -f "$temp_file"
+
+  # Note: a failing post-processing triggers the EXIT trap, which removes the incomplete extraction dir.
+  # This is why we run it before writing the .flag file, which marks the extraction dir as complete.
+  if [ -n "$post_process" ]; then
+    "$post_process" "$extract_dir"
+  fi
 
   echo "$file_sha" >"$extract_dir/.flag"
 
@@ -250,6 +265,7 @@ fi
 
 # ********** System detection **********
 
+# /!\ Careful: the cache dir needs to stay aligned with the other wrapper and with AmperUserCacheRoot
 kernelName=$(uname -s)
 case "$kernelName" in
   Darwin* )

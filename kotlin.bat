@@ -17,11 +17,13 @@
 setlocal
 
 @rem The version of the Kotlin Toolchain distribution to provision and use
-set kotlin_cli_version=0.11.1
+set kotlin_cli_version=0.14.0-dev-4576
 @rem Establish chain of trust from here by specifying the exact checksum of the Kotlin Toolchain distribution to be run
-set kotlin_cli_sha256=0ded2a434f6bf193b24e2a6d56c3ba443f4232721155a65aaa8372789412112f
+set kotlin_cli_sha256=104a3c2c3a6ab9f608e3a479cfff2a9d46b90ed4be3502fb176562677257a32d
 
 if not defined KOTLIN_CLI_DOWNLOAD_ROOT set KOTLIN_CLI_DOWNLOAD_ROOT=https://packages.jetbrains.team/maven/p/amper/amper
+
+@rem /!\ Careful: this needs to stay aligned with the other wrapper and with AmperUserCacheRoot
 if not defined KOTLIN_CLI_BOOTSTRAP_CACHE_DIR set KOTLIN_CLI_BOOTSTRAP_CACHE_DIR=%LOCALAPPDATA%\JetBrains\Kotlin\cli
 @rem remove trailing \ if present
 if [%KOTLIN_CLI_BOOTSTRAP_CACHE_DIR:~-1%] EQU [\] set KOTLIN_CLI_BOOTSTRAP_CACHE_DIR=%KOTLIN_CLI_BOOTSTRAP_CACHE_DIR:~0,-1%
@@ -40,13 +42,14 @@ set sha=%~4
 set sha_size=%~5
 set show_banner_on_cache_miss=%~6
 
+setlocal enableDelayedExpansion
+
 set flag_file=%target_dir%\.flag
 if exist "%flag_file%" (
     set /p current_flag=<"%flag_file%"
-    if "%current_flag%" == "%sha%" exit /b
+    if "!current_flag!" == "%sha%" exit /b
 )
 
-setlocal enableDelayedExpansion
 set NL=^
 
 
@@ -74,6 +77,9 @@ Welcome to !NL! ^
 @rem  - we need to support both .zip and .tar.gz archives (for the Kotlin Toolchain distribution and the JRE)
 @rem  - tar should be present in all Windows machines since 2018 (and usable from both cmd and powershell)
 @rem  - tar requires the destination dir to exist
+@rem  - native commands like tar don't raise PowerShell errors on failure, so we have to check $LASTEXITCODE.
+@rem    The extraction must never be left half-done with the .flag file in place, because the .flag file marks the
+@rem    target dir as complete, and subsequent runs would then skip the extraction and use the broken directory.
 @rem  - We use (New-Object Net.WebClient).DownloadFile instead of Invoke-WebRequest for performance. See the issue
 @rem    https://github.com/PowerShell/PowerShell/issues/16914, which is still not fixed in Windows PowerShell 5.1
 @rem  - DownloadFile requires the directories in the destination file's path to exist
@@ -81,6 +87,7 @@ set download_and_extract_ps1= ^
 Set-StrictMode -Version 3.0; ^
 $ErrorActionPreference = 'Stop'; ^
  ^
+$temp_file = $null; ^
 $createdNew = $false; ^
 $lock = New-Object System.Threading.Mutex($true, ('Global\kotlin-cli-bootstrap.' + '%target_dir%'.GetHashCode().ToString()), [ref]$createdNew); ^
 if (-not $createdNew) { ^
@@ -117,14 +124,22 @@ try { ^
         if (Test-Path '%target_dir%') { ^
             Remove-Item '%target_dir%' -Recurse; ^
         } ^
-        if ($temp_file -like '*.zip') { ^
-            Add-Type -A 'System.IO.Compression.FileSystem'; ^
-            [IO.Compression.ZipFile]::ExtractToDirectory($temp_file, '%target_dir%'); ^
-        } else { ^
-            [void](New-Item '%target_dir%' -ItemType Directory -Force); ^
-            tar -xzf $temp_file -C '%target_dir%'; ^
+        try { ^
+            if ($temp_file -like '*.zip') { ^
+                Add-Type -A 'System.IO.Compression.FileSystem'; ^
+                [IO.Compression.ZipFile]::ExtractToDirectory($temp_file, '%target_dir%'); ^
+            } else { ^
+                [void](New-Item '%target_dir%' -ItemType Directory -Force); ^
+                tar -xzf $temp_file -C '%target_dir%'; ^
+                if ($LASTEXITCODE -ne 0) { ^
+                    throw \"tar failed to extract %moniker% (exit code $LASTEXITCODE)\"; ^
+                } ^
+            } ^
+        } catch { ^
+            Remove-Item '%flag_file%' -Force -ErrorAction Ignore; ^
+            Remove-Item '%target_dir%' -Recurse -Force -ErrorAction Ignore; ^
+            throw; ^
         } ^
-        Remove-Item $temp_file; ^
  ^
         Set-Content '%flag_file%' -Value '%sha%'; ^
         Write-Host 'Download complete.'; ^
@@ -132,6 +147,9 @@ try { ^
     } ^
 } ^
 finally { ^
+    if ($temp_file) { ^
+        Remove-Item $temp_file -Force -ErrorAction Ignore; ^
+    } ^
     $lock.ReleaseMutex(); ^
 }
 
@@ -175,7 +193,7 @@ if exist "%wrapper_candidate%" (
 
 if exist "%project_dir%\project.yaml" (
     @rem Found project.yaml but no wrapper alongside it
-    echo WARNING: Found a project.yaml in '%project_dir%', but the wrapper script is missing; using Kotlin Toolchain v$kotlin_cli_version. >&2
+    echo WARNING: Found a project.yaml in '%project_dir%', but the wrapper script is missing; using Kotlin Toolchain v%kotlin_cli_version%. >&2
     exit /b 1
 )
 
@@ -253,5 +271,12 @@ if "%PROCESSOR_ARCHITECTURE%"=="ARM64" (
 rem We use busybox here because it doesn't reinterpret the user-passed command-line arguments (that we pass via %*).
 rem Also this way we can use the unified launcher script (.sh)
 set KOTLIN_CLI_WRAPPER_PATH=%~f0
-"%busybox_exe%" sh "%kotlin_cli_target_dir%\bin\launcher.sh" %*
-exit /B %ERRORLEVEL%
+
+rem The '& call' after the app run is to avoid the "Terminate batch job (Y/N)?" prompt
+"%busybox_exe%" sh "%kotlin_cli_target_dir%\bin\launcher.sh" %* & call :exitWithErrorLevel
+
+:exitWithErrorLevel
+@rem We use "%COMSPEC%" /d /c exit so that and/or operators work properly when calling kotlin.bat directly from a script
+@rem without the `call` command. With a plain `exit /B %ERRORLEVEL%`, using `kotlin.bat && echo success` would print
+@rem 'success' even in case of failure. Consumers would have to use `call kotlin.bat && echo success` for it to work.`
+"%COMSPEC%" /d /c exit %ERRORLEVEL%
