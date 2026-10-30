@@ -79,6 +79,3 @@ settings-serialization = { module = "com.russhwolf:multiplatform-settings-serial
 settings-test = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatform-settings" }
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j-nop" }
 nav3-browser = { module = "com.github.terrakok:navigation3-browser", version.ref = "nav3-browser" }
-
-[plugins]
-metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
