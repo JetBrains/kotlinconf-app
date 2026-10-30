@@ -5,7 +5,7 @@ product:
     - iosSimulatorArm64
 
 apply:
-  - ../../compose.module-template.yaml
+  - //compose.module-template.yaml
 
 dependencies:
-  - ../shared
+  - //app/shared

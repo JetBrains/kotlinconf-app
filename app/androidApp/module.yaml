@@ -1,12 +1,12 @@
 product: android/app
 
 apply:
-  - ../../android.module-template.yaml
-  - ../../compose.module-template.yaml
-  - ../../metro.module-template.yaml
+  - //android.module-template.yaml
+  - //compose.module-template.yaml
+  - //metro.module-template.yaml
 
 dependencies:
-  - ../shared
+  - //app/shared
   - $libs.androidx.activity.compose
   - $libs.androidx.core.splashscreen
   - $libs.androidx.navigation3.ui

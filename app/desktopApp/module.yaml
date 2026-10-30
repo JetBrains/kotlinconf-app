@@ -1,8 +1,8 @@
 product: jvm/app
 
 apply:
-  - ../../compose.module-template.yaml
-  - ../../metro.module-template.yaml
+  - //compose.module-template.yaml
+  - //metro.module-template.yaml
 
 settings:
   jvm:
@@ -14,7 +14,7 @@ settings:
       packageName: org.jetbrains.kotlinconf.generated.resources.desktop
 
 dependencies:
-  - ../shared
+  - //app/shared
   - $compose.desktop.currentOs
   - $compose.components.resources
   - $libs.kotlinx.coroutines.swing

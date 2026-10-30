@@ -9,10 +9,10 @@ product:
     - wasmJs
 
 apply:
-  - ../../android.module-template.yaml
-  - ../../compose.module-template.yaml
-  - ../../ktor.module-template.yaml
-  - ../../metro.module-template.yaml
+  - //android.module-template.yaml
+  - //compose.module-template.yaml
+  - //ktor.module-template.yaml
+  - //metro.module-template.yaml
 
 aliases:
   - nonAndroid:

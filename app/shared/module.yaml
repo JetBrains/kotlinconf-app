@@ -9,10 +9,10 @@ product:
     - wasmJs
 
 apply:
-  - ../../android.module-template.yaml
-  - ../../compose.module-template.yaml
-  - ../../ktor.module-template.yaml
-  - ../../metro.module-template.yaml
+  - //android.module-template.yaml
+  - //compose.module-template.yaml
+  - //ktor.module-template.yaml
+  - //metro.module-template.yaml
 
 # TODO: aboutLibraries
 # aboutLibraries {
@@ -48,8 +48,8 @@ settings@web:
     optIns: [ kotlin.js.ExperimentalWasmJsInterop ]
 
 dependencies:
-  - ../../core: exported
-  - ../ui-components: exported
+  - //core: exported
+  - //app/ui-components: exported
   - $compose.runtime: exported
   - $compose.foundation: exported
   - $compose.animation: exported

@@ -3,8 +3,8 @@ product:
   platforms: [ wasmJs, js ]
 
 apply:
-  - ../../compose.module-template.yaml
-  - ../../metro.module-template.yaml
+  - //compose.module-template.yaml
+  - //metro.module-template.yaml
 
 # TODO: Support for apps from kotlinconf-app.js
 
@@ -14,5 +14,5 @@ settings:
       packageName: org.jetbrains.kotlinconf.web.generated.resources
 
 dependencies:
-  - ../shared
+  - //app/shared
   - $compose.components.resources

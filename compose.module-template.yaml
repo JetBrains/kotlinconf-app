@@ -1,5 +1,5 @@
 apply:
-  - ./common.module-template.yaml
+  - //common.module-template.yaml
 
 settings:
   compose:
