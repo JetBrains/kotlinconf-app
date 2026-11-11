@@ -12,13 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Set up JDK 21
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v6
       with:
         distribution: 'zulu'
         java-version: 21
 
     - name: Check out code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Run Gradle Tasks
       run: ./gradlew app:webApp:composeCompatibilityBrowserDistribution
@@ -30,7 +30,7 @@ jobs:
         done
 
     - name: Upload Pages artifact
-      uses: actions/upload-pages-artifact@v3
+      uses: actions/upload-pages-artifact@v5
       with:
         path: app/webApp/build/dist/composeWebCompatibility/productionExecutable/
 
@@ -53,4 +53,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
