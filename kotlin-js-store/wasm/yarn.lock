@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@js-joda/core/-/core-3.2.0.tgz#3e61e21b7b2b8a6be746df1335cf91d70db2a273"
   integrity sha512-PMqgJ0sw5B7FKb2d5bWYIoxjri+QlW/Pys7+Rw82jSH0QN3rB05jZ/VrrsUdh1w4+i2kw9JOejXGq/KhDOX7Kg==
 
-"@js-joda/timezone@2.22.0":
-  version "2.22.0"
-  resolved "https://registry.yarnpkg.com/@js-joda/timezone/-/timezone-2.22.0.tgz#dc0eea2b33c6bac4404240ce91095573543f5d3e"
-  integrity sha512-9UNXxEztbcofD6XvV7xPrbzB2nE/AWaHr/XfugRZgVqg2vCZOVPnD8QI7GW164EFIWMw0c97Gs6STJ5dh0J99Q==
+"@js-joda/timezone@3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@js-joda/timezone/-/timezone-3.2.1.tgz#7a65acfa23e4d1069b3b7bd8384d8062982d766a"
+  integrity sha512-0a0y7kcaIrbEGyOozsbqO25ac64PEDQNezXnOmmmrWww93LgKQrHERoey0Kt85LbEkjyLTfChOWM1pJ1fAVSfQ==
 
 ws@8.18.0:
   version "8.18.0"
