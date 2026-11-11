@@ -2,7 +2,7 @@ package org.jetbrains.kotlinconf.screens
 
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.skiaCanvas
 import io.ktor.utils.io.core.toByteArray
 import org.jetbrains.skia.Data
 import org.jetbrains.skia.svg.SVGDOM
@@ -15,7 +15,7 @@ actual class Svg actual constructor(svgString: String) {
 
     actual fun renderTo(scope: DrawScope) {
         scope.drawIntoCanvas { canvas ->
-            svg.render(canvas.nativeCanvas)
+            svg.render(canvas.skiaCanvas)
         }
     }
 }

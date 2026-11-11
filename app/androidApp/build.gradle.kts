@@ -30,7 +30,11 @@ dependencies {
 
 android {
     namespace = "com.jetbrains.kotlinconf"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk {
+        version = release(libs.versions.android.compileSdk.get().toInt()) {
+            minorApiLevel = libs.versions.android.compileSdkMinor.get().toInt()
+        }
+    }
 
     defaultConfig {
         applicationId = "com.jetbrains.kotlinconf"
