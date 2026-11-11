@@ -140,7 +140,7 @@ kotlin {
         webMain.dependencies {
             implementation(libs.ktor.client.js)
             implementation(libs.nav3.browser)
-            npm("@js-joda/timezone", "2.22.0")
+            npm("@js-joda/timezone", "3.2.1")
             implementation(libs.kotlin.browser)
         }
     }
