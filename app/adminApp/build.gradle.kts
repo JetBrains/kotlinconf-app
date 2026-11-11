@@ -37,7 +37,7 @@ kotlin {
 }
 
 // Expose the production browser bundle so the backend can package and serve it as static resources.
-val adminDistribution: Configuration by configurations.creating {
+val adminDistribution: Configuration = configurations.create("adminDistribution") {
     isCanBeConsumed = true
     isCanBeResolved = false
 }
