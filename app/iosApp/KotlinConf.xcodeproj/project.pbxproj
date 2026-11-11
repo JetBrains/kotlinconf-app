@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
+		1ADB02C2B23A0EB7DFE4831C /* KotlinMultiplatformLinkedPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 5B823C86A1BA58948C34329F /* KotlinMultiplatformLinkedPackage */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		67BC00EF2EA288B00073676F /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 67BC00EE2EA288B00073676F /* AppIcon.icon */; };
 		9A06FA002A556EB7005FAD4A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A06F9FF2A556EB7005FAD4A /* ContentView.swift */; };
@@ -51,6 +52,7 @@
 			files = (
 				EB0C46412D7B1B6A008B2EB1 /* FirebaseMessaging in Frameworks */,
 				EB0C463F2D7B1B6A008B2EB1 /* FirebaseCore in Frameworks */,
+				1ADB02C2B23A0EB7DFE4831C /* KotlinMultiplatformLinkedPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +125,9 @@
 			dependencies = (
 			);
 			name = iosApp;
+			packageProductDependencies = (
+				5B823C86A1BA58948C34329F /* KotlinMultiplatformLinkedPackage */,
+			);
 			productName = iosApp;
 			productReference = 7555FF7B242A565900829871 /* KotlinConf.app */;
 			productType = "com.apple.product-type.application";
@@ -154,6 +159,7 @@
 			mainGroup = 7555FF72242A565900829871;
 			packageReferences = (
 				EB0C463D2D7B1B6A008B2EB1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				9B26F370FB739E7A10F123CA /* XCLocalSwiftPackageReference "KotlinMultiplatformLinkedPackage" */,
 			);
 			productRefGroup = 7555FF7C242A565900829871 /* Products */;
 			projectDirPath = "";
@@ -442,18 +448,29 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		9B26F370FB739E7A10F123CA /* XCLocalSwiftPackageReference "KotlinMultiplatformLinkedPackage" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = KotlinMultiplatformLinkedPackage;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		EB0C463D2D7B1B6A008B2EB1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 11.9.0;
+				minimumVersion = 12.14.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5B823C86A1BA58948C34329F /* KotlinMultiplatformLinkedPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KotlinMultiplatformLinkedPackage;
+		};
 		EB0C463E2D7B1B6A008B2EB1 /* FirebaseCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EB0C463D2D7B1B6A008B2EB1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

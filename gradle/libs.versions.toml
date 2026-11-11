@@ -20,7 +20,7 @@ h2 = "2.3.232"
 hikaricp = "7.0.2"
 jib = "3.4.5"
 junit = "4.13.2"
-kmpnotifier = "1.6.1"
+kmpnotifier = "2.0.2"
 koin = "4.2.2"
 kotlin = "2.5.0-RC"
 kotlin-browser = "2026.11.1"
@@ -65,7 +65,8 @@ exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "e
 h2 = { module = "com.h2database:h2", version.ref = "h2" }
 hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
 junit = { module = "junit:junit", version.ref = "junit" }
-kmpnotifier = { module = "io.github.mirzemehdi:kmpnotifier", version.ref = "kmpnotifier" }
+kmpnotifier-local = { module = "io.github.mirzemehdi:kmpnotifier-local", version.ref = "kmpnotifier" }
+kmpnotifier-push-firebase = { module = "io.github.mirzemehdi:kmpnotifier-push-firebase", version.ref = "kmpnotifier" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 koin-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }

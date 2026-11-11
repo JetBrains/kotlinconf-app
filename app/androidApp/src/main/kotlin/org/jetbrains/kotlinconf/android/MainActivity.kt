@@ -10,8 +10,8 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.mmk.kmpnotifier.KMPNotifier
 import com.mmk.kmpnotifier.extensions.onCreateOrOnNewIntent
-import com.mmk.kmpnotifier.notification.NotifierManager
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.binding
@@ -74,7 +74,7 @@ class MainActivity(
             }
 
             // Process push notifications
-            NotifierManager.onCreateOrOnNewIntent(intent)
+            KMPNotifier.onCreateOrOnNewIntent(intent)
         } catch (e: Exception) {
             return
         }

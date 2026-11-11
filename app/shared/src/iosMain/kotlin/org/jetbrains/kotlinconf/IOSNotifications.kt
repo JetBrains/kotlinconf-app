@@ -1,8 +1,8 @@
 package org.jetbrains.kotlinconf
 
-import com.mmk.kmpnotifier.extensions.onApplicationDidReceiveRemoteNotification
+import com.mmk.kmpnotifier.KMPNotifier
 import com.mmk.kmpnotifier.extensions.onNotificationClicked
-import com.mmk.kmpnotifier.notification.NotifierManager
+import com.mmk.kmpnotifier.push.firebase.onApplicationDidReceiveRemoteNotification
 import org.jetbrains.kotlinconf.navigation.navigateByLocalNotificationId
 import platform.UserNotifications.UNNotificationContent
 import platform.UserNotifications.UNNotificationResponse
@@ -18,10 +18,10 @@ fun handleNotificationResponse(response: UNNotificationResponse) {
     }
 
     // Process push notifications
-    NotifierManager.onNotificationClicked(content)
+    KMPNotifier.onNotificationClicked(content)
 }
 
 @Suppress("unused") // Called from Swift
 fun handleRemoteNotification(userInfo: Map<Any?, *>) {
-    NotifierManager.onApplicationDidReceiveRemoteNotification(userInfo)
+    KMPNotifier.onApplicationDidReceiveRemoteNotification(userInfo)
 }
