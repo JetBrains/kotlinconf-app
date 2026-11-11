@@ -87,7 +87,8 @@ kotlin {
             implementation(libs.settings.observable)
             implementation(libs.settings.coroutines)
 
-            api(libs.kmpnotifier)
+            api(libs.kmpnotifier.local)
+            api(libs.kmpnotifier.push.firebase)
 
             implementation(libs.doistx.normalize)
         }

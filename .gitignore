@@ -38,6 +38,7 @@ captures
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 android-build
+.build/
 
 app/desktopApp/files
 /tmp/

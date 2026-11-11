@@ -1,6 +1,7 @@
 package org.jetbrains.kotlinconf
 
-import com.mmk.kmpnotifier.notification.NotifierManager
+import com.mmk.kmpnotifier.KMPNotifier
+import com.mmk.kmpnotifier.push.firebase.firebasePushNotifier
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -109,7 +110,7 @@ class ConferenceService(
                 .filterNotNull()
                 .collect { settings ->
                     taggedLogger.log { "Synchronizing settings to Firebase topics: $settings" }
-                    val notifier = NotifierManager.getPushNotifier()
+                    val notifier = KMPNotifier.firebasePushNotifier
                     listOf(
                         settings.scheduleUpdates to PushNotificationConstants.TOPIC_SCHEDULE_UPDATES,
                     ).forEach { (enabled, topic) ->

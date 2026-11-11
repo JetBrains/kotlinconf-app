@@ -1,9 +1,11 @@
 package org.jetbrains.kotlinconf
 
-import com.mmk.kmpnotifier.notification.NotifierManager
-import com.mmk.kmpnotifier.notification.NotifierManager.Listener
+import com.mmk.kmpnotifier.KMPNotifier
 import com.mmk.kmpnotifier.notification.PayloadData
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
+import com.mmk.kmpnotifier.push.PushListener
+import com.mmk.kmpnotifier.push.firebase.FirebasePush
+import com.mmk.kmpnotifier.push.firebase.addPushListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlinconf.di.AppGraph
@@ -53,10 +55,10 @@ private fun initNotifier(
     configuration: NotificationPlatformConfiguration,
     logger: Logger,
 ) {
-    NotifierManager.initialize(configuration)
-    NotifierManager.addListener(object : Listener {
-        var taggedLogger: TaggedLogger = logger.tagged("KMPNotifier")
+    val taggedLogger: TaggedLogger = logger.tagged("KMPNotifier")
 
+    KMPNotifier.initialize(configuration, FirebasePush)
+    KMPNotifier.addListener(object : KMPNotifier.Listener {
         override fun onNotificationClicked(data: PayloadData) {
             super.onNotificationClicked(data)
             taggedLogger.log { "Notification clicked with $data" }
@@ -70,7 +72,8 @@ private fun initNotifier(
 
             taggedLogger.log { "No data to navigate with, ignoring notification" }
         }
-
+    })
+    KMPNotifier.addPushListener(object : PushListener {
         override fun onNewToken(token: String) {
             taggedLogger.log { "New token received: $token" }
         }
