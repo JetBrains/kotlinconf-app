@@ -98,6 +98,8 @@ private fun MarkdownImpl(
                 inlineCodeBackground = KotlinConfTheme.colors.mainBackground,
                 dividerColor = KotlinConfTheme.colors.strokePale,
                 tableBackground = KotlinConfTheme.colors.mainBackground,
+                highlightText = KotlinConfTheme.colors.primaryTextWhiteFixed,
+                highlightBackground = KotlinConfTheme.colors.primaryBackground,
             ),
             typography = DefaultMarkdownTypography(
                 text = KotlinConfTheme.typography.text1,
