@@ -99,14 +99,14 @@ kotlin {
             implementation(libs.kotlinx.coroutines.test)
         }
 
-        val nonAndroidMain by creating {
+        val nonAndroidMain = create("nonAndroidMain") {
             dependsOn(commonMain.get())
         }
         configure(listOf(iosMain, jvmMain, webMain)) {
             get().dependsOn(nonAndroidMain)
         }
 
-        val nonWebMain by creating {
+        val nonWebMain = create("nonWebMain") {
             dependsOn(commonMain.get())
             dependencies {
                 implementation(libs.okio)

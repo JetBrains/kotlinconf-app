@@ -53,7 +53,7 @@ kotlin {
             implementation(libs.multiplatform.markdown.renderer)
         }
 
-        val nonAndroidMain by creating {
+        val nonAndroidMain = create("nonAndroidMain") {
             dependsOn(commonMain.get())
         }
         configure(listOf(iosMain, jvmMain, webMain)) {

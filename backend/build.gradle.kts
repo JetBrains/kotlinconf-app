@@ -82,7 +82,7 @@ tasks.withType<JibTask>().configureEach {
 
 // Bundle the compiled Compose HTML admin SPA into the backend's resources under "admin/",
 // so Ktor can serve it from the classpath (works in the fat jar and the jib image).
-val adminPanel: Configuration by configurations.creating {
+val adminPanel: Configuration = configurations.create("adminPanel") {
     isCanBeConsumed = false
     isCanBeResolved = true
 }
