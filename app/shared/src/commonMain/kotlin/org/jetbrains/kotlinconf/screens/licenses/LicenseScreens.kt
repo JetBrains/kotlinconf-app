@@ -18,11 +18,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
@@ -41,6 +43,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.kotlinconf.HideKeyboardOnDragHandler
 import org.jetbrains.kotlinconf.ScreenWithTitle
 import org.jetbrains.kotlinconf.ScrollToTopHandler
+import org.jetbrains.kotlinconf.searchShortcut
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.licenses_number_of_results
 import org.jetbrains.kotlinconf.generated.resources.licenses_title
@@ -87,11 +90,19 @@ fun LicensesScreen(
         viewModel.setSearchText(searchText)
     }
 
+    val searchBarFocusRequester = remember { FocusRequester() }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
             .padding(topInsetPadding())
+            .searchShortcut {
+                if (searchState != MainHeaderContainerState.Search) {
+                    searchState = MainHeaderContainerState.Search
+                }
+                // ensure the field is focused
+                searchBarFocusRequester.requestFocus()
+            }
     ) {
         MainHeaderContainer(
             state = searchState,
@@ -132,6 +143,7 @@ fun LicensesScreen(
                         searchText = ""
                     },
                     onClear = { searchText = "" },
+                    searchBarFocusRequester = searchBarFocusRequester,
                 )
             }
         )

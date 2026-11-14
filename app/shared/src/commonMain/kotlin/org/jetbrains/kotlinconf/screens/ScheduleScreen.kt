@@ -25,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
@@ -46,6 +47,7 @@ import org.jetbrains.kotlinconf.ScrollToTopHandler
 import org.jetbrains.kotlinconf.SessionCardView
 import org.jetbrains.kotlinconf.SessionId
 import org.jetbrains.kotlinconf.SessionState
+import org.jetbrains.kotlinconf.searchShortcut
 import org.jetbrains.kotlinconf.generated.resources.Res
 import org.jetbrains.kotlinconf.generated.resources.nav_destination_schedule
 import org.jetbrains.kotlinconf.generated.resources.schedule_action_filter_bookmarked
@@ -144,11 +146,19 @@ fun ScheduleScreen(
         viewModel.setSearchParams(params)
     }
 
+    val searchBarFocusRequester = remember { FocusRequester() }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = KotlinConfTheme.colors.mainBackground)
             .padding(topInsetPadding())
+            .searchShortcut {
+                if (headerState != MainHeaderContainerState.Search) {
+                    headerState = MainHeaderContainerState.Search
+                }
+                // ensure the field is focused
+                searchBarFocusRequester.requestFocus()
+            }
     ) {
         Header(
             startContent = {
@@ -163,7 +173,8 @@ fun ScheduleScreen(
             searchQuery = searchQuery,
             onSearchQueryChange = { searchQuery = it },
             onClearSearch = { viewModel.resetFilters() },
-            viewModel = viewModel
+            searchBarFocusRequester = searchBarFocusRequester,
+            viewModel = viewModel,
         )
         HorizontalDivider(
             thickness = 1.dp,
@@ -308,6 +319,7 @@ private fun Header(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     onClearSearch: () -> Unit,
+    searchBarFocusRequester: FocusRequester,
     viewModel: ScheduleViewModel,
 ) {
     MainHeaderContainer(
@@ -354,6 +366,7 @@ private fun Header(
                 },
                 onClear = onClearSearch,
                 hasAdditionalInputs = filterItems.any { it.isSelected },
+                searchBarFocusRequester = searchBarFocusRequester,
             )
         }
     )
